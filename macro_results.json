@@ -1,0 +1,92 @@
+[
+  {
+    "model_name": "smollm-135m",
+    "hf_id": "HuggingFaceTB/SmolLM-135M",
+    "tier": "tiny",
+    "param_count": 134515008,
+    "perplexity": {
+      "python": 5.02
+    },
+    "tokens_per_sec": 6116.3,
+    "load_time_s": 0.61,
+    "eval_time_s": 11.63,
+    "peak_memory_gb": 0.27,
+    "timestamp": "2026-03-03T15:12:27.472526+00:00"
+  },
+  {
+    "model_name": "smollm-135m",
+    "hf_id": "HuggingFaceTB/SmolLM-135M",
+    "tier": "tiny",
+    "param_count": 134515008,
+    "perplexity": {
+      "python": 5.02
+    },
+    "tokens_per_sec": 7569.1,
+    "load_time_s": 0.5,
+    "eval_time_s": 1.29,
+    "peak_memory_gb": 0.27,
+    "timestamp": "2026-03-03T15:12:34.213435+00:00"
+  },
+  {
+    "model_name": "qwen-coder-0.5b",
+    "hf_id": "mlx-community/Qwen2.5-Coder-0.5B-Instruct-4bit",
+    "tier": "small",
+    "param_count": 77252992,
+    "perplexity": {
+      "python": 4.09
+    },
+    "tokens_per_sec": 2773.6,
+    "load_time_s": 9.9,
+    "eval_time_s": 3.22,
+    "peak_memory_gb": 0.04,
+    "timestamp": "2026-03-03T15:12:47.649676+00:00"
+  },
+  {
+    "model_name": "smollm-135m",
+    "hf_id": "HuggingFaceTB/SmolLM-135M",
+    "tier": "tiny",
+    "param_count": 134515008,
+    "perplexity": {
+      "python": 5.45
+    },
+    "tokens_per_sec": 5661.1,
+    "load_time_s": 0.59,
+    "eval_time_s": 26.88,
+    "peak_memory_gb": 0.27,
+    "backend": "local",
+    "arch": "",
+    "timestamp": "2026-03-03T16:19:48.087227+00:00"
+  },
+  {
+    "model_name": "smollm-135m",
+    "hf_id": "HuggingFaceTB/SmolLM-135M",
+    "tier": "tiny",
+    "param_count": 134515008,
+    "perplexity": {
+      "python": 5.45
+    },
+    "tokens_per_sec": 3070.1,
+    "load_time_s": 0.51,
+    "eval_time_s": 0.81,
+    "peak_memory_gb": 0.27,
+    "backend": "local",
+    "arch": "",
+    "timestamp": "2026-03-03T16:23:15.717753+00:00"
+  },
+  {
+    "model_name": "smollm-135m",
+    "hf_id": "HuggingFaceTB/SmolLM-135M",
+    "tier": "tiny",
+    "param_count": 134515008,
+    "perplexity": {
+      "python": 5.45
+    },
+    "tokens_per_sec": 5806.2,
+    "load_time_s": 0.43,
+    "eval_time_s": 0.43,
+    "peak_memory_gb": 0.27,
+    "backend": "local",
+    "arch": "",
+    "timestamp": "2026-03-03T16:47:34.406097+00:00"
+  }
+]
