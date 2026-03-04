@@ -65,11 +65,23 @@ class CharDataset:
 
 
 def domain_split(docs: list[str], method: str = "binary") -> dict[str, list[str]]:
-    """Split docs into domains. 'binary': a-m vs n-z by first character."""
+    """Split docs into domains by first character.
+
+    Methods:
+      'binary': a-m vs n-z (2 domains)
+      'quintary': a-e, f-j, k-o, p-t, u-z (5 domains)
+    """
     if method == "binary":
         d0 = [d for d in docs if d[0].lower() <= "m"]
         d1 = [d for d in docs if d[0].lower() > "m"]
         return {"a_m": d0, "n_z": d1}
+    if method == "quintary":
+        ranges = [("a", "e"), ("f", "j"), ("k", "o"), ("p", "t"), ("u", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
     raise ValueError(f"Unknown split method: {method}")
 
 

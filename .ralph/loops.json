@@ -1,0 +1,52 @@
+{
+  "loops": [
+    {
+      "id": "pure-gull",
+      "pid": 94378,
+      "started": "2026-03-04T00:22:15.848050Z",
+      "prompt": "Let's research LoRA approaches that could work with MoE - research via notebooklm and reference t...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/pure-gull",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/pure-gull"
+    },
+    {
+      "id": "smart-deer",
+      "pid": 95010,
+      "started": "2026-03-04T00:22:47.191718Z",
+      "prompt": "Let's research novel routing mechanisms that could work with MoE - research via notebooklm and re...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/smart-deer",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/smart-deer"
+    },
+    {
+      "id": "zippy-otter",
+      "pid": 95784,
+      "started": "2026-03-04T00:23:34.518763Z",
+      "prompt": "Let's research novel freezing mechanisms combating forgetting that could work with MoE - research...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/zippy-otter",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/zippy-otter"
+    },
+    {
+      "id": "zesty-jay",
+      "pid": 96236,
+      "started": "2026-03-04T00:24:16.927169Z",
+      "prompt": "Let's research novel reduction/negation of forgetting that could work with MoE - research via not...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/zesty-jay",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/zesty-jay"
+    },
+    {
+      "id": "quick-lark",
+      "pid": 98334,
+      "started": "2026-03-04T00:26:50.507315Z",
+      "prompt": "Let's research novel composition approaches similar to LoRA as a new means/new standard that coul...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/quick-lark",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/quick-lark"
+    },
+    {
+      "id": "noble-ivy",
+      "pid": 3360,
+      "started": "2026-03-04T00:32:48.338177Z",
+      "prompt": "Let's research unique novel approaches for MoE and approaches to 'reverse' the training to fully ...",
+      "worktree_path": "/Users/tom/Code/tomsiwik/llm/.worktrees/noble-ivy",
+      "workspace": "/Users/tom/Code/tomsiwik/llm/.worktrees/noble-ivy"
+    }
+  ]
+}

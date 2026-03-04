@@ -76,29 +76,69 @@ Experiments 1-3 revealed that **standard LoRA A matrices do NOT self-route**:
 **Root cause**: Routing and computation are fundamentally different tasks.
 Coupling them in a single matrix forces a compromise that satisfies neither.
 
-## The Fix: Decoupled Contrastive Routing Keys
+## What We Learned: Contrastive Routing Keys Fail at Micro Scale
 
-Add a thin **routing key** `K_i` per expert, trained contrastively at registration time:
+Experiment 1b tested InfoNCE-trained routing keys K_i to replace softmax
+router calibration. **All three kill thresholds exceeded:**
 
-- **K_i (d_in, d_key)**: routing discriminator — trained with InfoNCE loss
-- **A_i, B_i**: computation — frozen, unchanged from original training
+- Routing accuracy: 53.3% (target >85%, kill <70%) — barely above random
+- Composition quality: +141% worse than joint (target <5%, kill >10%)
+- Linear probe beats contrastive: 59.8% vs 53.3% — contrastive loss adds nothing
+- Tau sweep (0.05-1.0): no temperature helps
 
-Expert quality preserved. Routing keys are calibrated on ~50 samples/domain
-in ~50 optimization steps (~seconds). Adding expert N+1 only requires
-recalibrating routing keys.
+**Root cause**: MATH.md Assumption 6 falsified — at d=64 with a-m vs n-z
+character-level tokenization, domains are NOT distinguishable in hidden state
+space. Even a linear probe only gets ~60%. The character-level representations
+don't carry enough domain-discriminative signal.
+
+**Key insight: task-routing > identity-routing.** The softmax router works
+(+0.2% vs joint) because it routes by reconstruction quality — which groups
+minimize prediction error — not by domain identity. At micro scale with
+similar domains, task-aligned routing (reconstruction loss) dominates
+identity-aligned routing (contrastive loss).
+
+**Not necessarily dead at macro scale**: with larger models (d=256+), real
+domains (Python vs JavaScript), and BPE tokenization creating domain-specific
+tokens, hidden states will carry much stronger domain signal. Deferred to
+macro validation.
+
+## The Routing Story So Far
+
+1. **A-matrix self-routing**: Dead. A matrices don't discriminate (~50%).
+2. **Contrastive keys (K_i)**: Dead at micro scale. Domains indistinguishable at d=64.
+3. **Softmax router calibration**: Works (+0.2% vs joint, ~100 steps mixed data).
+   Routes by task quality, not domain identity. Validated baseline for composition.
+4. **Sparse routing (top-1)**: Dead at micro scale. Phase transition between k=1
+   (+200% degradation) and k=2 (within 1.6%). Hard selection amplifies flat
+   probability distribution — C_1=0.285 means 71% of information silenced.
+   k=2 validated as optimal sparsity. Capacity-bound (8K params/group), not
+   mechanism-bound — Switch Transformer uses k=1 at scale with large experts.
+5. **Shared/unique decomposition**: Dead for nonlinear groups. Weight-space
+   decomposition is exact, but ReLU applied separately to shared and unique
+   groups loses information (+5.7% vs joint, worse than concatenation at -0.2%).
+   54% of fine-tuning knowledge is shared. Concatenation remains optimal.
 
 ## What Remains
 
 1. ~~Self-routing validation~~: A matrices don't discriminate (Exp 1, DONE).
-2. **Contrastive routing**: Calibrate K_i keys, target >85% accuracy (Exp 1b).
-3. **Sparse routing**: Show top-1 expert selection matches full CAT quality
-   at 1/N compute (Exp 2).
-4. **Procrustes decomposition**: Separate shared/unique, eliminate dilution,
-   route the residuals (Exp 3).
-5. **Scale to N experts**: 5+ languages, verify subspaces stay orthogonal (Exp 4).
+2. ~~Contrastive routing~~: KILLED at micro scale — domains indistinguishable
+   at d=64 (Exp 1b, DONE). Deferred to macro validation with real domains.
+3. ~~Sparse routing~~: KILLED at micro scale — top-1 catastrophic (+200% vs
+   top-2), phase transition not gradual. k=2 validated as optimal. Deferred
+   to macro scale (capacity-bound, 8K params/group insufficient). (Exp 2, DONE)
+4. ~~Procrustes decomposition~~: KILLED — nonlinearity breaks weight-space
+   decomposition (+5.7% vs joint, worse than concatenation). 54% shared
+   knowledge found but can't be cleanly separated in nonlinear capsules.
+   May work for linear components (LoRA). (Exp 3, DONE)
+5. ~~Scale to N experts~~: Composition scales to N=5 with +1.6% degradation.
+   Orthogonality degrades gracefully (cos 0.000→0.112, well under 0.5 concern).
+   Calibration scales linearly (200 steps for N=5). **Micro arena exhausted.**
+   (Exp 4, DONE)
 6. **Beat 1.5B**: The ultimate claim — 0.5B + experts > 1.5B monolithic (Exp 5).
+   This is the macro-scale transition. All micro-validated mechanisms carry forward:
+   softmax routing, k=2 minimum sparsity, concatenation composition, shared attention.
 
-## Architecture: Contrastive Expert Library
+## Architecture: Expert Library with Softmax Routing (Validated)
 
 ```
 Input tokens
@@ -108,18 +148,35 @@ Base model W₀ (frozen)
      │
      ▼
 Per layer:
-  Expert Library: [expert_1, expert_2, ..., expert_N]
-  Each expert_i = (A_i, B_i, K_i)
+  Expert Library: [group_1, group_2, ..., group_N]
+  Each group_i = capsule pool (rank-1 capsules)
 
-  1. Score:   s_i = ||x @ K_i||²      (routing via K, not A)
-  2. Select:  top-k experts by score
-  3. Apply:   δ = Σ_selected  w_i · (x @ A_i) @ B_i   (computation via A@B)
+  1. Score:   s = x @ W_r^T          (softmax router, trained on reconstruction loss)
+  2. Select:  top-k groups by score
+  3. Apply:   δ = Σ_selected  w_i · group_i(x)
   4. Output:  base(x) + scale · δ
 ```
 
 Key properties:
-- Adding expert N+1 = store (A, B), recalibrate K. No retraining of experts.
-- Routing cost = N × d_key dot products per token. Negligible for N < 100.
-- Each expert activates at full strength. No dilution.
-- Routing keys are ~25% parameter overhead (d_key=8 vs rank=16).
-- Experts can be hot-swapped, versioned, A/B tested.
+- Softmax router routes by task quality, not domain identity (+0.2% vs joint).
+- Shared attention is the composition bottleneck (independent comp fails +13.5%).
+- Calibration: ~100 steps on mixed-domain data (scales linearly with N).
+- Each group activates at full strength. No dilution.
+- k=2 is optimal sparsity at micro scale (k=1 catastrophic, k=2/4/8 within 1.6%).
+- Minimum "routing bandwidth" of k=2 required — soft averaging smooths routing uncertainty.
+- **Scales to N=5**: +1.6% vs joint at N=5 (vs -0.2% at N=2). Subspaces remain
+  orthogonal (cos=0.112 mean, 0.167 max). Protocol validated across domain counts.
+
+## Architecture: Contrastive Expert Library (Deferred to Macro)
+
+```
+Per layer:
+  Each expert_i = (A_i, B_i, K_i)    -- K_i routing key
+  1. Score:   s_i = ||x @ K_i||²     (routing via contrastive key)
+  ...
+```
+
+Contrastive keys require domain-discriminative hidden states. Validated at
+micro scale: domains (a-m vs n-z at d=64) are indistinguishable, so keys
+converge to near-random. Re-evaluate at macro scale with distinct domains
+(Python vs JavaScript) where BPE creates domain-specific tokens.
