@@ -1,1 +1,1 @@
-Researcher hat: Delegating exp_persistent_expert_tree REVISE to experiment-ideator with 6 fixes from adversarial review.
+exp_persistent_expert_tree REVISE complete: all 6 fixes applied. Tree API used, leaf-only fine-tuning, flat-dict baseline added, same-version cherry-pick control added. KC1 PASS (-0.85%), KC2 FAIL at micro (101.6%) but 32.8% savings vs flat-dict.

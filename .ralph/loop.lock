@@ -1,5 +1,0 @@
-{
-  "pid": 10367,
-  "started": "2026-03-07T11:31:14.517207Z",
-  "prompt": "You are continuing LoRA MoE research on RunPod. SSH is configured: 'ssh runpod' works. Use tools/..."
-}

@@ -1,31 +1,26 @@
 #!/usr/bin/env python3
 """compose — Plug-and-Play LoRA Composition CLI.
 
-Register, compose, route, and serve LoRA adapters on any base model.
+Built on vLLM for production serving with fused MoE-LoRA kernels.
+Our additions: hash-ring routing for zero-shot expert selection,
+expert registry for plug-and-play adapter management.
 
 Usage:
     compose init --base Qwen/Qwen2.5-0.5B       # init registry
-    compose add expert.safetensors --name python  # register adapter
+    compose add adapter_dir/ --name python        # register adapter
     compose list                                  # show expert registry
-    compose calibrate --steps 100                 # train softmax router
-    compose serve --port 8080                     # serve with routing
-    compose bench                                 # benchmark composition
+    compose serve --port 8080                     # launch vLLM multi-LoRA
+    compose generate "def fib(n):"                # generate with routing
     compose remove python                         # remove adapter
-    compose export merged.safetensors             # export merged weights
 """
 
 import argparse
 import hashlib
 import json
-import os
 import sys
 import time
 from bisect import bisect_right
 from pathlib import Path
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
 REGISTRY_FILE = "compose_registry.json"
 
@@ -33,6 +28,7 @@ REGISTRY_FILE = "compose_registry.json"
 # ── Registry ────────────────────────────────────────────────────────────
 
 class ExpertRegistry:
+    """Manages the expert adapter registry (JSON file)."""
     def __init__(self, registry_dir="."):
         self.dir = Path(registry_dir)
         self.file = self.dir / REGISTRY_FILE
@@ -42,20 +38,22 @@ class ExpertRegistry:
         if self.file.exists():
             with open(self.file) as f:
                 return json.load(f)
-        return {"base_model": None, "experts": {}, "router": None}
+        return {"base_model": None, "experts": {}}
 
     def save(self):
+        self.dir.mkdir(parents=True, exist_ok=True)
         with open(self.file, "w") as f:
             json.dump(self.data, f, indent=2)
 
     def init(self, base_model):
-        self.data = {"base_model": base_model, "experts": {}, "router": None}
+        self.data = {"base_model": base_model, "experts": {}}
         self.save()
         print(f"Registry initialized with base: {base_model}")
 
     def add(self, name, path, domain=None, rank=None):
+        path = str(Path(path).resolve())
         self.data["experts"][name] = {
-            "path": str(path),
+            "path": path,
             "domain": domain,
             "rank": rank,
             "added": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -82,11 +80,23 @@ class ExpertRegistry:
             print(f"{name:<20} {info.get('domain',''):<15} {info.get('rank',''):<6} {info['path']}")
         print(f"\n{len(self.data['experts'])} experts registered")
 
+    def vllm_lora_modules(self):
+        """Format experts as vLLM --lora-modules args."""
+        return [f"{name}={info['path']}" for name, info in self.data["experts"].items()]
+
 
 # ── Hash Ring Router ────────────────────────────────────────────────────
 
 class HashRingRouter:
-    """Consistent hash ring for zero-shot expert routing."""
+    """Consistent hash ring for zero-shot expert routing.
+
+    This is our unique contribution — vLLM's Semantic Router requires
+    explicit category->adapter YAML config. Hash ring routing enables
+    plug-and-play: add an expert, it immediately receives ~1/N traffic
+    with no configuration or retraining.
+
+    Validated at N=20: 5.3% displacement when adding expert #21.
+    """
     def __init__(self, expert_names, virtual_nodes=150):
         self.expert_names = list(expert_names)
         self.virtual_nodes = virtual_nodes
@@ -99,8 +109,9 @@ class HashRingRouter:
         self._hashes = [h for h, _ in self.ring]
         self._names = [n for _, n in self.ring]
 
-    def route(self, token_text, top_k=2):
-        h = int(hashlib.md5(token_text.encode()).hexdigest(), 16)
+    def route(self, text, top_k=2):
+        """Route text to top-k experts via consistent hashing."""
+        h = int(hashlib.md5(text.encode()).hexdigest(), 16)
         idx = bisect_right(self._hashes, h) % len(self.ring)
         experts = []
         seen = set()
@@ -114,281 +125,117 @@ class HashRingRouter:
         return experts
 
 
-# ── Softmax Router ──────────────────────────────────────────────────────
-
-class LearnedRouter(nn.Module):
-    def __init__(self, hidden_dim, n_experts, top_k=2):
-        super().__init__()
-        self.gate = nn.Linear(hidden_dim, n_experts)
-        self.top_k = top_k
-        self.expert_names = []
-
-    def forward(self, hidden_states):
-        logits = self.gate(hidden_states)
-        topk_vals, topk_idx = logits.topk(self.top_k, dim=-1)
-        weights = F.softmax(topk_vals, dim=-1)
-        return weights, topk_idx
-
-
-# ── LoRA Expert Loader ──────────────────────────────────────────────────
-
-class ExpertLoader:
-    """Loads and caches LoRA expert states with LRU eviction."""
-    def __init__(self, registry, cache_size=8):
-        self.registry = registry
-        self.cache_size = cache_size
-        self.cache = {}  # name -> (state_dict, last_access)
-        self.access_count = 0
-        self.stats = {"hits": 0, "misses": 0, "loads": 0, "evictions": 0}
-
-    def load(self, name):
-        self.access_count += 1
-        if name in self.cache:
-            self.stats["hits"] += 1
-            state, _ = self.cache[name]
-            self.cache[name] = (state, self.access_count)
-            return state
-
-        self.stats["misses"] += 1
-        self.stats["loads"] += 1
-
-        # Load from disk
-        info = self.registry.data["experts"][name]
-        path = info["path"]
-
-        if path.endswith(".safetensors"):
-            from safetensors.torch import load_file
-            state = load_file(path)
-        elif path.endswith(".pt") or path.endswith(".pth"):
-            state = torch.load(path, map_location="cpu", weights_only=True)
-        elif path.endswith(".bin"):
-            state = torch.load(path, map_location="cpu", weights_only=True)
-        else:
-            # Try as directory (peft adapter)
-            adapter_path = Path(path)
-            if (adapter_path / "adapter_model.safetensors").exists():
-                from safetensors.torch import load_file
-                state = load_file(str(adapter_path / "adapter_model.safetensors"))
-            elif (adapter_path / "adapter_model.bin").exists():
-                state = torch.load(str(adapter_path / "adapter_model.bin"),
-                                  map_location="cpu", weights_only=True)
-            else:
-                raise FileNotFoundError(f"No adapter found at {path}")
-
-        # Evict if cache full
-        if len(self.cache) >= self.cache_size:
-            oldest = min(self.cache, key=lambda k: self.cache[k][1])
-            del self.cache[oldest]
-            self.stats["evictions"] += 1
-
-        self.cache[name] = (state, self.access_count)
-        return state
-
-    def merge_experts(self, names, weights=None):
-        """Merge multiple expert states with optional weights."""
-        if weights is None:
-            weights = [1.0 / len(names)] * len(names)
-
-        states = [self.load(n) for n in names]
-        merged = {}
-        for key in states[0]:
-            merged[key] = sum(w * s[key].float() for w, s in zip(weights, states))
-        return merged
-
-
-# ── Compose Engine ──────────────────────────────────────────────────────
-
-class ComposeEngine:
-    """Main composition engine: base model + LoRA experts + router."""
-    def __init__(self, registry_dir="."):
-        self.registry = ExpertRegistry(registry_dir)
-        self.loader = ExpertLoader(self.registry)
-        self.base_model = None
-        self.tokenizer = None
-        self.router = None
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    def load_base(self):
-        from transformers import AutoModelForCausalLM, AutoTokenizer
-        from peft import LoraConfig, get_peft_model
-
-        model_name = self.registry.data["base_model"]
-        hf_home = os.environ.get("HF_HOME", None)
-
-        print(f"Loading base model: {model_name}")
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, cache_dir=hf_home, trust_remote_code=True)
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-
-        self.base_model = AutoModelForCausalLM.from_pretrained(
-            model_name, cache_dir=hf_home, trust_remote_code=True,
-            torch_dtype=torch.float32).to(self.device)
-
-        # Wrap with LoRA scaffold (rank from first expert or default)
-        experts = self.registry.data["experts"]
-        rank = 16
-        if experts:
-            first = next(iter(experts.values()))
-            rank = first.get("rank", 16) or 16
-
-        cfg = LoraConfig(r=rank, lora_alpha=rank,
-                        target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                                       "up_proj", "gate_proj", "down_proj"],
-                        lora_dropout=0.0, bias="none", task_type="CAUSAL_LM")
-        self.base_model = get_peft_model(self.base_model, cfg)
-        self.base_model.eval()
-        print(f"  Loaded on {self.device}")
-
-    def route_and_generate(self, text, max_new_tokens=100, top_k=2):
-        """Route input to experts and generate."""
-        if self.base_model is None:
-            self.load_base()
-
-        expert_names = list(self.registry.data["experts"].keys())
-        if not expert_names:
-            raise ValueError("No experts registered")
-
-        # Hash-ring routing (zero-shot)
-        hr = HashRingRouter(expert_names)
-        selected = hr.route(text, top_k=top_k)
-        print(f"  Routed to: {selected}")
-
-        # Merge selected experts
-        merged_state = self.loader.merge_experts(selected)
-        self.base_model.load_state_dict(merged_state, strict=False)
-
-        # Generate
-        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
-        with torch.no_grad():
-            out = self.base_model.generate(
-                **inputs, max_new_tokens=max_new_tokens,
-                do_sample=True, temperature=0.7, top_p=0.9,
-                pad_token_id=self.tokenizer.pad_token_id)
-        return self.tokenizer.decode(out[0], skip_special_tokens=True)
-
-    def benchmark(self, n_prompts=20):
-        """Benchmark composition quality and latency."""
-        if self.base_model is None:
-            self.load_base()
-
-        expert_names = list(self.registry.data["experts"].keys())
-        n_experts = len(expert_names)
-
-        test_prompts = [
-            "def fibonacci(n):",
-            "function quickSort(arr) {",
-            "The patient presents with acute",
-            "Under Section 42 of the Act,",
-            "Calculate the integral of",
-        ]
-
-        results = {"experts": n_experts, "prompts": []}
-
-        for prompt in test_prompts[:n_prompts]:
-            hr = HashRingRouter(expert_names)
-            selected = hr.route(prompt, top_k=min(2, n_experts))
-
-            t0 = time.perf_counter()
-            merged = self.loader.merge_experts(selected)
-            merge_ms = (time.perf_counter() - t0) * 1000
-
-            self.base_model.load_state_dict(merged, strict=False)
-            inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
-
-            t0 = time.perf_counter()
-            with torch.no_grad():
-                out = self.base_model(**inputs)
-            fwd_ms = (time.perf_counter() - t0) * 1000
-
-            results["prompts"].append({
-                "prompt": prompt[:50],
-                "experts": selected,
-                "merge_ms": round(merge_ms, 2),
-                "forward_ms": round(fwd_ms, 2),
-            })
-
-        results["cache_stats"] = self.loader.stats
-        avg_merge = sum(p["merge_ms"] for p in results["prompts"]) / len(results["prompts"])
-        avg_fwd = sum(p["forward_ms"] for p in results["prompts"]) / len(results["prompts"])
-        results["avg_merge_ms"] = round(avg_merge, 2)
-        results["avg_forward_ms"] = round(avg_fwd, 2)
-        results["overhead_pct"] = round(avg_merge / avg_fwd * 100, 1)
-
-        print(f"\n  Benchmark Results:")
-        print(f"    Experts: {n_experts}")
-        print(f"    Avg merge: {avg_merge:.1f}ms")
-        print(f"    Avg forward: {avg_fwd:.1f}ms")
-        print(f"    Overhead: {results['overhead_pct']}%")
-        print(f"    Cache: {self.loader.stats}")
-
-        return results
-
-
-# ── CLI ─────────────────────────────────────────────────────────────────
+# ── CLI Commands ────────────────────────────────────────────────────────
 
 def cmd_init(args):
     reg = ExpertRegistry(args.dir)
     reg.init(args.base)
 
+
 def cmd_add(args):
     reg = ExpertRegistry(args.dir)
     reg.add(args.name, args.path, domain=args.domain, rank=args.rank)
+
 
 def cmd_remove(args):
     reg = ExpertRegistry(args.dir)
     reg.remove(args.name)
 
+
 def cmd_list(args):
     reg = ExpertRegistry(args.dir)
     reg.list_experts()
 
-def cmd_bench(args):
-    engine = ComposeEngine(args.dir)
-    results = engine.benchmark(n_prompts=args.prompts)
-    out_path = Path(args.dir) / "bench_results.json"
-    with open(out_path, "w") as f:
-        json.dump(results, f, indent=2)
-    print(f"\n  Saved to {out_path}")
-
-def cmd_generate(args):
-    engine = ComposeEngine(args.dir)
-    output = engine.route_and_generate(args.prompt, max_new_tokens=args.max_tokens, top_k=args.top_k)
-    print(f"\n{output}")
 
 def cmd_serve(args):
-    """Simple HTTP server for compose inference."""
-    try:
-        from http.server import HTTPServer, BaseHTTPRequestHandler
-    except ImportError:
-        print("http.server not available")
+    """Launch vLLM with registered LoRA adapters.
+
+    Uses vLLM's native multi-LoRA serving with fused MoE-LoRA kernel.
+    Adapters are hot-swapped per request via the model= parameter.
+    """
+    import subprocess
+
+    reg = ExpertRegistry(args.dir)
+    if not reg.data["experts"]:
+        print("No experts registered. Use 'compose add' first.")
         return
 
-    engine = ComposeEngine(args.dir)
-    engine.load_base()
+    base_model = reg.data["base_model"]
+    lora_modules = reg.vllm_lora_modules()
 
-    class Handler(BaseHTTPRequestHandler):
-        def do_POST(self):
-            length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length))
-            prompt = body.get("prompt", "")
-            max_tokens = body.get("max_tokens", 100)
-            top_k = body.get("top_k", 2)
+    cmd = [
+        sys.executable, "-m", "vllm.entrypoints.openai.api_server",
+        "--model", base_model,
+        "--port", str(args.port),
+        "--enable-lora",
+        "--lora-modules", *lora_modules,
+    ]
 
-            output = engine.route_and_generate(prompt, max_new_tokens=max_tokens, top_k=top_k)
+    if args.max_loras:
+        cmd.extend(["--max-loras", str(args.max_loras)])
+    if args.max_lora_rank:
+        cmd.extend(["--max-lora-rank", str(args.max_lora_rank)])
 
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps({"output": output}).encode())
+    print(f"Starting vLLM with {len(lora_modules)} LoRA adapters...")
+    print(f"  Base: {base_model}")
+    for m in lora_modules:
+        print(f"  Adapter: {m}")
+    print(f"  Port: {args.port}")
+    first_expert = next(iter(reg.data["experts"]))
+    print(f"\nAPI usage (OpenAI-compatible):")
+    print(f"  curl http://localhost:{args.port}/v1/completions \\")
+    print(f"    -H 'Content-Type: application/json' \\")
+    print(f"    -d '{{\"model\": \"{first_expert}\", \"prompt\": \"def fib(n):\"}}'")
 
-        def log_message(self, format, *a):
-            print(f"  {self.address_string()} - {format % a}")
+    try:
+        subprocess.run(cmd)
+    except FileNotFoundError:
+        print("\nvLLM not installed. Install with: pip install 'lora-compose[serve]'")
 
-    server = HTTPServer(("0.0.0.0", args.port), Handler)
-    print(f"Serving on port {args.port}...")
-    print(f"  POST /generate {{\"prompt\": \"...\", \"max_tokens\": 100, \"top_k\": 2}}")
-    server.serve_forever()
+
+def cmd_generate(args):
+    """Generate text using vLLM offline inference with hash-ring routing."""
+    try:
+        from vllm import LLM, SamplingParams
+        from vllm.lora.request import LoRARequest
+    except ImportError:
+        print("vLLM not installed. Install with: pip install 'lora-compose[serve]'")
+        return
+
+    reg = ExpertRegistry(args.dir)
+    if not reg.data["experts"]:
+        print("No experts registered.")
+        return
+
+    expert_names = list(reg.data["experts"].keys())
+
+    # Route via hash ring
+    router = HashRingRouter(expert_names)
+    selected = router.route(args.prompt, top_k=1)[0]
+    info = reg.data["experts"][selected]
+    print(f"  Routed to: {selected} ({info.get('domain', 'unknown')})")
+
+    llm = LLM(model=reg.data["base_model"], enable_lora=True,
+              max_lora_rank=info.get("rank", 16) or 16)
+    params = SamplingParams(max_tokens=args.max_tokens, temperature=0.7, top_p=0.9)
+
+    lora_req = LoRARequest(selected, 1, info["path"])
+    outputs = llm.generate([args.prompt], params, lora_request=lora_req)
+    print(outputs[0].outputs[0].text)
+
+
+def cmd_route(args):
+    """Show which expert(s) would handle a given prompt."""
+    reg = ExpertRegistry(args.dir)
+    if not reg.data["experts"]:
+        print("No experts registered.")
+        return
+
+    router = HashRingRouter(list(reg.data["experts"].keys()))
+    selected = router.route(args.prompt, top_k=args.top_k)
+    for i, name in enumerate(selected):
+        info = reg.data["experts"][name]
+        print(f"  #{i+1}: {name} ({info.get('domain', 'unknown')}) -> {info['path']}")
 
 
 def main():
@@ -396,30 +243,32 @@ def main():
     parser.add_argument("--dir", default=".", help="Registry directory")
     sub = parser.add_subparsers(dest="command")
 
-    p = sub.add_parser("init", help="Initialize registry")
-    p.add_argument("--base", required=True, help="Base model name/path")
+    p = sub.add_parser("init", help="Initialize registry with base model")
+    p.add_argument("--base", required=True, help="Base model name (e.g. Qwen/Qwen2.5-0.5B)")
 
-    p = sub.add_parser("add", help="Register an adapter")
-    p.add_argument("path", help="Path to adapter weights")
+    p = sub.add_parser("add", help="Register a LoRA adapter")
+    p.add_argument("path", help="Path to adapter (dir with adapter_model.safetensors, or .pt/.safetensors file)")
     p.add_argument("--name", required=True, help="Expert name")
     p.add_argument("--domain", help="Domain description")
     p.add_argument("--rank", type=int, help="LoRA rank")
 
     p = sub.add_parser("remove", help="Remove an adapter")
-    p.add_argument("name", help="Expert name")
+    p.add_argument("name", help="Expert name to remove")
 
     sub.add_parser("list", help="List registered experts")
 
-    p = sub.add_parser("bench", help="Benchmark composition")
-    p.add_argument("--prompts", type=int, default=20, help="Number of test prompts")
+    p = sub.add_parser("serve", help="Launch vLLM multi-LoRA server")
+    p.add_argument("--port", type=int, default=8080)
+    p.add_argument("--max-loras", type=int, help="Max concurrent LoRA adapters in memory")
+    p.add_argument("--max-lora-rank", type=int, help="Max LoRA rank to support")
 
-    p = sub.add_parser("generate", help="Generate with routing")
+    p = sub.add_parser("generate", help="Generate text (vLLM offline, hash-ring routing)")
     p.add_argument("prompt", help="Input prompt")
     p.add_argument("--max-tokens", type=int, default=100)
-    p.add_argument("--top-k", type=int, default=2)
 
-    p = sub.add_parser("serve", help="Start HTTP server")
-    p.add_argument("--port", type=int, default=8080)
+    p = sub.add_parser("route", help="Show which expert(s) handle a prompt")
+    p.add_argument("prompt", help="Input prompt")
+    p.add_argument("--top-k", type=int, default=2)
 
     args = parser.parse_args()
     if not args.command:
@@ -428,8 +277,8 @@ def main():
 
     handlers = {
         "init": cmd_init, "add": cmd_add, "remove": cmd_remove,
-        "list": cmd_list, "bench": cmd_bench, "generate": cmd_generate,
-        "serve": cmd_serve,
+        "list": cmd_list, "serve": cmd_serve, "generate": cmd_generate,
+        "route": cmd_route,
     }
     handlers[args.command](args)
 

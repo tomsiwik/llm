@@ -1,4 +1,4 @@
-# Persistent Expert Tree: Mathematical Foundations
+# Persistent Expert Tree: Mathematical Foundations (v2)
 
 ## 1. Persistent Binary Tree via Path Copying
 
@@ -70,6 +70,20 @@ At D=3, updating 4 of 8 leaves (one subtree):
   P(J) = {root, child, grandchild_0, grandchild_1} = 4 gates
   New = 4 gates + 4 leaves = 8 nodes (out of 15 total). Sharing = 7/15 = 47%.
 
+### 1.4 Leaf-Only Fine-Tuning Requirement
+
+Path copying provides structural sharing ONLY when updates are restricted to
+specific leaves. The fine-tuning protocol MUST:
+
+1. **Freeze non-tree parameters** (embeddings, attention, norms, lm_head)
+2. **Freeze gates** (routing parameters are recalibrated separately)
+3. **Freeze non-target leaves** (leaves shared with other versions)
+4. **Train only the target leaves** (the path-copied independent copies)
+
+If all parameters are trained (full fine-tuning), every parameter diverges
+from base, destroying structural sharing entirely. This was the v1 bug:
+full fine-tuning produced 200% overhead with 0% savings vs full copy.
+
 ---
 
 ## 2. Memory Analysis
@@ -84,50 +98,62 @@ At d=64, n_c=32:
 params_gate = 65
 params_leaf = 2 * 64 * 32 = 4,096
 
-Total per layer:
+Total per layer (tree only):
   gates:  7 * 65 = 455
   leaves: 8 * 4,096 = 32,768
-  ratio:  leaves/gates = 71.9x
+  tree total: 33,223
+  ratio: leaves/tree = 98.6%
 ```
 
-### 2.2 Persistent vs Full-Copy Storage
+### 2.2 Persistent vs Full-Copy vs Flat-Dict Storage
 
-For V versions, each updating m leaves from a common base:
+For 4 versions (v0 base, v1 update leaves 0-3, v2 update leaves 4-7,
+v3 cross-version compose), each updating m=4 leaves from common base:
 
-**Full copy**: V * (I * params_gate + L * params_leaf) per layer
+**Full copy** (4 complete trees per layer):
+  4 * 33,223 = 132,892 per layer
 
-**Persistent (path-copy)**:
-  Base:    I * params_gate + L * params_leaf  (one full copy)
-  Per version delta: |P(J)| * params_gate + m * params_leaf
-  Total: base + V * delta
+**Flat dict** (3 snapshots of tree params: v0, v1, v2):
+  3 * 33,223 = 99,669 per layer
 
-**Overhead vs single mutable tree**:
+**Persistent (path-copy)**: Count unique module instances across all versions.
+  v0: 7 gates + 8 leaves = 15 nodes (base)
+  v1: ~5 new gates + 4 new leaves = 9 new nodes (leaves 0-3 + path union)
+  v2: ~5 new gates + 4 new leaves = 9 new nodes (leaves 4-7 + path union)
+  v3: 7 new gates + 0 new leaves = 7 new nodes (compose: fresh gates, shared leaves)
+  Total unique: 15 + 9 + 9 + 7 = 40 nodes (theoretical)
+  Actual measured: 38 unique nodes, sharing_ratio = 1.58
+
+**Measured at micro scale (4 layers):**
 ```
-overhead = V * delta / base
-         = V * (|P(J)| * params_gate + m * params_leaf) /
-               (I * params_gate + L * params_leaf)
-```
+Persistent total:  267,864 params
+Full-copy total:   531,568 params
+Flat-dict total:   398,676 params
+Base (1 tree):     132,892 params
 
-At D=3, m=4 (half the leaves), V=2 versions:
-```
-delta = 4 * 65 + 4 * 4096 = 260 + 16384 = 16644
-base  = 7 * 65 + 8 * 4096 = 455 + 32768 = 33223
-overhead = 2 * 16644 / 33223 = 100.2% per layer
-```
-
-The overhead is dominated by leaf parameters (98.4% of delta).
-
-### 2.3 Savings vs Full Copy
-
-```
-savings = 1 - (base + V * delta) / ((V+1) * base)
-        = 1 - (1 + V * delta/base) / (V+1)
+Overhead vs mutable (1 tree):    101.6%
+Savings vs full-copy (4 trees):  49.6%
+Savings vs flat-dict (3 snaps):  32.8%
 ```
 
-At V=2, delta/base = 0.501:
+### 2.3 Why KC2 Fails at Micro
+
+KC2 requires overhead < 15%. With 4 versions updating half the leaves each:
+
 ```
-savings = 1 - (1 + 2*0.501) / 3 = 1 - 2.002/3 = 33.3%
+overhead = (persistent - base) / base
+         = (267,864 - 132,892) / 132,892
+         = 101.6%
 ```
+
+This fails because leaves are 98.6% of tree parameters. Each version that
+updates 4 leaves adds ~4 * 4,096 = 16,384 leaf params + ~5 * 65 = 325
+gate params = 16,709 new params per version. Three additional versions add
+~50,127 new params against a base of 33,223 per layer.
+
+The overhead is dominated by the leaf/tree ratio. As this ratio decreases
+(which happens at macro scale with LoRA adapters), path-copying overhead
+shrinks proportionally.
 
 ### 2.4 Scaling to Macro (LoRA Adapters)
 
@@ -144,14 +170,15 @@ params_base_layer ~ 896^2 * 12 ~ 9.6M (Qwen 0.5B)
 adapter_fraction = 28672 / 9.6M = 0.3%
 ```
 
-Persistent overhead per version (m=4 adapters + 4 gates):
+Persistent overhead per version (m=4 adapters + ~5 gates):
 ```
-delta_macro = 4 * 28672 + 4 * (896+1) = 114688 + 3588 = 118276
-overhead_macro = 118276 / 9.6M = 1.2% per version
+delta_macro = 4 * 28672 + 5 * (896+1) = 114688 + 4485 = 119173
+overhead_macro = 119173 / 9.6M = 1.2% per version
 ```
 
-At macro scale, KC2 (<15%) passes easily: even 12 concurrent versions
-would stay under 15% overhead.
+At macro scale, KC2 (<15%) passes trivially: even 12 concurrent versions
+would stay under 15% overhead. The 32.8% savings vs flat-dict demonstrated
+at micro scale would scale even better (fewer parameters change per version).
 
 ---
 
@@ -172,95 +199,74 @@ Example: M = {0:v1, 1:v1, 2:v1, 3:v1, 4:v2, 5:v2, 6:v2, 7:v2}
 
 ### 3.2 Why Cross-Version Works
 
-Since v1 and v2 share the same base v0, their leaf parameters are
-perturbations of the same initialization:
+With leaf-only fine-tuning, versions share the same non-leaf parameters
+(embeddings, attention, norms, lm_head) exactly. Version differences are
+confined to specific leaf modules. This means:
 
-```
-leaves_v1[i] = leaves_v0[i] + delta_v1[i]    (training delta)
-leaves_v2[i] = leaves_v0[i] + delta_v2[i]
-```
+1. **Shared context**: All versions process inputs through identical
+   embedding and attention layers. The routing context is the same.
 
-Cross-version composition mixes deltas from different training runs.
-This works because:
-
-1. **Orthogonality**: LoRA adapters are naturally orthogonal (cos~0.0002
-   at d=896). Different training runs produce non-interfering deltas.
-
-2. **Leaf independence**: Each leaf is an independent expert. The tree
-   routing (gates) determines which leaf handles each token. The leaf
-   parameters don't depend on other leaves' values.
+2. **Leaf independence**: Each leaf is an independent expert module.
+   Taking leaf i from v1 and leaf j from v2 is well-defined because
+   neither leaf depends on the other's parameters.
 
 3. **Gate recalibration**: After composition, gates are retrained on mixed
-   data (100 steps). This is the same calibration protocol proven to work
-   for same-version composition.
+   data (100 steps). This adapts routing to the new leaf combination.
 
-### 3.3 Comparison: Cross-Version vs Same-Version
+### 3.3 Four Baselines Compared
 
-Same-version composition (weight averaging):
-```
-leaves_avg[i] = (leaves_v1[i] + leaves_v2[i]) / 2
-              = leaves_v0[i] + (delta_v1[i] + delta_v2[i]) / 2
-```
-
-Cross-version composition (cherry-pick):
-```
-leaves_cross[i] = { leaves_v1[i]  if i in A
-                  { leaves_v2[i]  if i in B
-```
-
-Key difference: weight averaging blends ALL leaf parameters (including
-leaves that were irrelevant to their domain), while cross-version
-cherry-picking preserves each domain's specialized parameters intact.
-
-Prediction: cross-version should be equal or BETTER than same-version
-weight averaging, because it avoids the information loss from averaging
-specialized parameters with unspecialized ones.
+1. **Joint training** (upper bound): Train all params on all domains, 500 steps.
+2. **Same-version avg**: Average leaf params from v1 and v2, recalibrate gates.
+3. **Same-version cherry-pick** (control): All leaves from v1 only, recalibrate.
+   Isolates the effect of version-crossing from cherry-picking.
+4. **Cross-version cherry-pick**: Leaves 0-3 from v1, 4-7 from v2, recalibrate.
 
 ### 3.4 Empirical Validation
 
 Measured across 3 seeds (42, 123, 7):
 ```
-Same-version (calibrated):  mean 0.5563
-Cross-version (calibrated): mean 0.5572
-Cross vs Same:              +0.16% (within noise)
+Joint training:                0.5238
+Same-version avg (calibrated): 0.5247 (+0.17% vs joint)
+Same-version pick (calibrated):0.5276 (+0.72% vs joint)
+Cross-version (calibrated):    0.5231 (-0.13% vs joint)
+Cross vs Same-pick:            -0.85% (BETTER than same-version)
 ```
 
-Per-seed: +0.11%, -0.63%, +1.00%. No systematic direction.
-Kill criterion (>5%): PASSES with 30x margin.
+Per-seed cross vs same-pick: +0.08%, -1.65%, -0.97%.
+Kill criterion (>5%): PASSES with 60x margin.
+
+Notable: cross-version composition is BETTER than same-version cherry-pick.
+This is expected because cross-version gets domain-specialized leaves (A from
+v1 trained on A data, B from v2 trained on B data), while same-version
+cherry-pick uses v1 leaves that were only trained on domain A data.
 
 ---
 
 ## 4. Rollback Fidelity
 
-### 4.1 Guarantee
+### 4.1 Guarantee with Structural Sharing
 
-With parameter-level snapshots (not structural sharing during training),
-rollback is exact:
+With the persistent tree API, `set_version(v)` swaps the module reference
+lists to version v's gates and leaves. Since leaf-only fine-tuning does
+NOT modify shared nodes (non-target leaves are frozen), rollback is exact:
 
 ```
-restore(model, snapshot_v0) => output(model, x) == output_v0(x)
+set_version(v0) => output(model, x) == output_v0(x)
 ```
 
 Measured: max absolute difference = 0.00e+00 across all seeds.
-Rollback is numerically exact (bit-identical outputs).
 
-### 4.2 With Structural Sharing (Theoretical)
+### 4.2 Requirement: Freeze Shared Nodes
 
-If using true persistent data structures with structural sharing DURING
-training, shared nodes would be mutated by gradient updates. This requires
-either:
+Rollback fidelity REQUIRES that shared nodes (those referenced by multiple
+versions) are never mutated during training. The protocol enforces this by:
 
-(a) Copy-on-write: detect when a shared node is about to be modified and
-    copy it first. Overhead: O(1) check per parameter update.
+1. Path-copying target leaves (creating independent copies for training)
+2. Freezing all non-target leaves (preventing gradient flow to shared nodes)
+3. Freezing all non-tree parameters (preserving shared context)
 
-(b) Freeze shared nodes: zero gradients for shared parameters during
-    fine-tuning. Only version-specific nodes receive gradient updates.
-
-(c) Snapshot-and-restore: use the parameter snapshot approach (as we do).
-    No sharing during training; sharing only for storage/inference.
-
-Option (c) is simplest and matches the macro use case (LoRA adapters are
-stored and loaded, not structurally shared during training).
+Violation of these constraints (e.g., full model fine-tuning) would corrupt
+shared references and destroy rollback fidelity.
 
 ---
 
@@ -277,35 +283,37 @@ stored and loaded, not structurally shared during training).
 Params: 3 gates + 4 leaves = 7 nodes
 ```
 
-### 5.2 Update L0 -> v1 (path copy)
+### 5.2 Update L0, L1 -> v1 (batch path copy, leaf-only fine-tune)
 ```
-Path(0) = {gate_0, gate_1}  (root and left child)
+Path({0,1}) = {gate_0, gate_1}  (root and left child)
 
 v1.gates  = [gate_0', gate_1', gate_2]   -- gate_2 shared with v0
-v1.leaves = [L0', L1, L2, L3]            -- L1, L2, L3 shared with v0
+v1.leaves = [L0', L1', L2, L3]           -- L2, L3 shared with v0
 
-New nodes: 2 gates + 1 leaf = 3 (out of 7)
-Shared:    1 gate + 3 leaves = 4 (57%)
+New nodes: 2 gates + 2 leaves = 4 (out of 7)
+Shared:    1 gate + 2 leaves = 3 (43%)
+Training:  only L0', L1' receive gradients; L2, L3 frozen
 ```
 
-### 5.3 Update L3 -> v2 (from v0)
+### 5.3 Update L2, L3 -> v2 (from v0, leaf-only fine-tune)
 ```
-Path(3) = {gate_0, gate_2}  (root and right child)
+Path({2,3}) = {gate_0, gate_2}  (root and right child)
 
 v2.gates  = [gate_0'', gate_1, gate_2'']  -- gate_1 shared with v0
-v2.leaves = [L0, L1, L2, L3'']            -- L0, L1, L2 shared with v0
+v2.leaves = [L0, L1, L2'', L3'']          -- L0, L1 shared with v0
 
-New nodes: 2 gates + 1 leaf = 3
+New nodes: 2 gates + 2 leaves = 4
+Training:  only L2'', L3'' receive gradients; L0, L1 frozen
 ```
 
-### 5.4 Cross-Version Compose: L0 from v1, L3 from v2 -> v3
+### 5.4 Cross-Version Compose: L0,L1 from v1, L2,L3 from v2 -> v3
 ```
-v3.gates  = [gate_0''', gate_1''', gate_2''']  -- all recalibrated
-v3.leaves = [L0', L1, L2, L3'']
+v3.gates  = [gate_0''', gate_1''', gate_2''']  -- all fresh (recalibrated)
+v3.leaves = [L0', L1', L2'', L3'']              -- shared from v1 and v2
 
-L0' from v1 (domain A specialist)
-L3'' from v2 (domain B specialist)
-L1, L2 from v0 (shared base)
+L0', L1' from v1 (domain A specialists)
+L2'', L3'' from v2 (domain B specialists)
+New: 3 gates only (leaves are shared references)
 ```
 
 ### 5.5 Memory Accounting (d=64, n_c=32)
@@ -313,13 +321,16 @@ L1, L2 from v0 (shared base)
 ```
 Per gate: 65 params, per leaf: 4096 params
 
-v0: 3*65 + 4*4096 = 195 + 16384 = 16579
-v1: 2*65 + 1*4096 = 130 + 4096  = 4226 (new) + 12353 (shared)
-v2: 2*65 + 1*4096 = 130 + 4096  = 4226 (new) + 12353 (shared)
+v0: 3*65 + 4*4096 = 195 + 16384 = 16579  (base)
+v1: 2*65 + 2*4096 = 130 + 8192  = 8322   (new nodes)
+v2: 2*65 + 2*4096 = 130 + 8192  = 8322   (new nodes)
+v3: 3*65 + 0*4096 = 195 + 0     = 195    (new gates, shared leaves)
 
-Persistent total: 16579 + 4226 + 4226 = 25031
-Full-copy total:  3 * 16579 = 49737
-Savings: 1 - 25031/49737 = 49.7%
+Persistent total: 16579 + 8322 + 8322 + 195 = 33418
+Full-copy total:  4 * 16579 = 66316
+Flat-dict total:  3 * 16579 = 49737
 
-Overhead vs single tree: (25031 - 16579) / 16579 = 51.0%
+Overhead vs base:        (33418 - 16579) / 16579 = 101.6%
+Savings vs full-copy:    1 - 33418/66316 = 49.6%
+Savings vs flat-dict:    1 - 33418/49737 = 32.8%
 ```

@@ -1,4 +1,4 @@
-# Persistent Expert Tree: Research Digest
+# Persistent Expert Tree: Research Digest (v2)
 
 ## Hypothesis
 
@@ -22,34 +22,49 @@ and binary trees have efficient persistent representations via path copying.
 
 ### How It Works
 
-1. **Version snapshots**: Each tree state (gates + leaves) is stored as a
-   version. Multiple versions share most of their parameters via structural
-   sharing (same module instances referenced by multiple versions).
+1. **Version creation via path copying**: `update_leaves([0,1,2,3])` creates
+   a new version by deep-copying only the target leaves and their O(D)
+   ancestor gates. All other nodes are shared references from the parent
+   version.
 
-2. **Path copying**: Updating a leaf creates a new version by copying only
-   the O(D) ancestor gates on the root-to-leaf path. All other nodes are
-   shared with the parent version.
+2. **Leaf-only fine-tuning**: Only target leaves receive gradients. Non-target
+   leaves (shared with other versions) and all non-tree parameters (embeddings,
+   attention, norms, lm_head) are frozen. This preserves structural sharing.
 
-3. **Cross-version composition**: Cherry-pick leaves from different versions
-   to create a composed tree. Example: take Python expert from v1 (fine-tuned
-   last week) and Math expert from v2 (fine-tuned yesterday).
+3. **Cross-version composition**: `compose_versions({0:v1, 4:v2})` cherry-picks
+   leaves from different versions to create a new composed version. Gates are
+   fresh copies for recalibration.
 
-4. **Rollback**: Switch to any previous version by restoring its parameter
-   snapshot. Numerically exact (0.00 max diff).
+4. **Rollback**: `set_version(0)` switches back to v0. Because shared nodes
+   were never mutated during training, rollback is numerically exact.
 
 ### Why It Exists
 
 The contribution protocol allows anyone to train and upload domain experts.
-But composition is currently point-in-time: you compose whatever versions
-are available NOW. This creates several problems:
+Version management becomes critical when:
 
-- **Version incompatibility**: Can't compose expert-v3 with expert-v1
-- **No rollback**: If a new expert version degrades quality, can't undo
-- **No composition history**: Can't reproduce a past composition exactly
-- **Version sprawl**: N experts x M versions = N*M storage if fully copied
+- **Asynchronous updates**: Expert A was updated yesterday, Expert B last week.
+  Cross-version composition mixes the best of each.
+- **Rollback**: If a new expert version degrades quality, revert instantly.
+- **Composition history**: Reproduce any past composition exactly.
+- **Storage efficiency**: Path copying shares unchanged parameters across versions
+  instead of storing full copies.
 
-The persistent tree solves all four by treating composition as an operation
-on an immutable version graph, sharing structure between versions.
+### v2 Changes (Adversarial Review Response)
+
+The v1 experiment had 6 issues. All are fixed:
+
+1. **Memory reporting corrected**: v1 claimed 100% overhead; actual data showed
+   200%. Now reports from `memory_report()` API: 101.6% (persistent tree with
+   4 versions) vs 200% (flat-dict with 3 snapshots).
+2. **Tree API used**: All versioning uses `update_leaves()`, `compose_versions()`,
+   `set_active_version()`. No manual parameter surgery.
+3. **Leaf-only fine-tuning**: Only target leaves are trainable. Non-target leaves
+   are frozen to preserve structural sharing.
+4. **`memory_report()` used**: Measures actual structural sharing (sharing_ratio=1.58).
+5. **Flat-dict baseline added**: Shows persistent tree saves 32.8% vs naive checkpointing.
+6. **Same-version cherry-pick control added**: Isolates version-crossing effect
+   by cherry-picking from a single version.
 
 ---
 
@@ -76,64 +91,72 @@ versioning to the HME structure.
 merging. Our cross-version composition sidesteps merging entirely by keeping
 domain parameters separate (cherry-picking, not averaging).
 
-**subtree_grafting (this project)**: Prior experiment that grafts domain-
-specific subtrees onto a shared root. Persistent versioning generalizes
-grafting by allowing any mix of expert versions, not just left/right subtree
-assignment.
-
 ---
 
 ## Empirical Results
 
-### Cross-Version vs Same-Version Composition (3 seeds)
+### Cross-Version vs Same-Version Composition (3 seeds, leaf-only fine-tuning)
 
-| Metric | Same-Version | Cross-Version | Delta |
-|--------|-------------|---------------|-------|
-| **Mean val loss** | **0.5563** | **0.5572** | **+0.16%** |
-| Seed 42 | 0.5553 | 0.5559 | +0.11% |
-| Seed 123 | 0.5534 | 0.5499 | -0.63% |
-| Seed 7 | 0.5603 | 0.5659 | +1.00% |
+| Metric | Joint | Same-Avg | Same-Pick | Cross-Version |
+|--------|-------|----------|-----------|---------------|
+| **Mean val loss** | **0.5238** | **0.5247** | **0.5276** | **0.5231** |
+| Seed 42 | 0.5266 | 0.5274 | 0.5242 | 0.5246 |
+| Seed 123 | 0.5169 | 0.5150 | 0.5207 | 0.5121 |
+| Seed 7 | 0.5279 | 0.5317 | 0.5378 | 0.5326 |
 
-**KC1 (cross-version <=5% worse): PASS.** Mean delta is +0.16%, 30x below
-the 5% kill threshold. Cross-version composition is statistically
-indistinguishable from same-version.
+**Cross vs Same-Pick**: -0.85% mean (per seed: +0.08%, -1.65%, -0.97%).
+Cross-version composition is slightly BETTER than same-version cherry-pick.
 
-### Composition Quality vs Joint Training
+**KC1 (cross-version <=5% worse): PASS.** Mean delta is -0.85%, 60x below
+the 5% kill threshold. Cross-version composition is as good or better than
+same-version.
 
-| Model | Mean Val Loss | vs Joint |
-|-------|-------------|----------|
-| Joint training (500 steps) | 0.5270 | baseline |
-| Same-version (avg + calibrate) | 0.5563 | +5.56% |
-| Cross-version (cherry-pick + calibrate) | 0.5572 | +5.73% |
+### Why Cross-Version Outperforms Same-Version Cherry-Pick
 
-Both composition methods show ~5.5% gap vs joint training, consistent with
-the composition gap measured in the hierarchical_tree experiment (+0.17%
-for tree vs +0.26% for flat). The gap is architectural, not version-related.
+Same-version cherry-pick uses ALL leaves from v1, which was trained only on
+domain A. Leaves 4-7 in v1 are still at their v0 (base) values -- they
+never saw domain B data. Cross-version gives leaves 4-7 from v2, which WAS
+trained on domain B. This domain-appropriate specialization explains the
+-0.85% advantage.
 
-### Memory Overhead
+### Memory Overhead (Tree API `memory_report()`)
 
 | Metric | Value |
 |--------|-------|
-| Base model params | 203,932 |
-| Per leaf (CapsuleGroup) | 4,096 |
-| Per gate (TreeGate) | 65 |
-| Leaf/total ratio | 64.2% |
-| Gate/total ratio | 0.9% |
+| Versions | 4 (v0 base, v1, v2, v3 compose) |
+| Unique nodes per layer | 38 |
+| Total node references | 60 |
+| Sharing ratio | 1.58 (37% of references are shared) |
+| Total persistent params | 267,864 |
+| Total full-copy params | 531,568 |
+| Flat-dict params (3 snaps) | 398,676 |
+| Base params | 132,892 |
 
-**Path-copy overhead per version (4 of 8 leaves):**
-- 4 leaves x 4,096 = 16,384 params
-- ~4 gates x 65 = 260 params
-- Total delta: 16,644 params (8.2% of base per layer)
-- Including non-tree params: effectively 100% if full model is snapshotted
+**Overhead vs mutable (1 tree)**: 101.6%
+**Savings vs full copy (4 trees)**: 49.6%
+**Savings vs flat-dict (3 snapshots)**: 32.8%
 
-**KC2 (overhead <=15%): FAIL at micro scale.** At micro scale, leaves comprise
-64.2% of all parameters, so storing even one version's leaf deltas exceeds
-15%. However, this is a property of the micro architecture, not the mechanism.
+**KC2 (overhead <=15%): FAIL at micro scale.** The tree overhead is 101.6%,
+far above the 15% threshold. This is because leaves are 98.6% of tree
+parameters. Each version updating 4 leaves adds ~16,700 new params against
+a base of 33,223 per layer.
 
-**Projected KC2 at macro scale (LoRA adapters):**
+### Flat-Dict Baseline Comparison
 
-| Base Model | d | LoRA r | Adapter/Base ratio | Overhead/version |
-|------------|---|--------|-------------------|-----------------|
+| Storage Method | Params | Overhead vs Base | Savings vs Full |
+|---------------|--------|-----------------|-----------------|
+| Base (1 tree) | 132,892 | 0% | N/A |
+| Full copy (4 trees) | 531,568 | 300% | 0% |
+| Flat dict (3 snapshots) | 398,676 | 200% | 25% |
+| **Persistent tree (4 versions)** | **267,864** | **101.6%** | **49.6%** |
+
+The persistent tree saves 32.8% vs flat-dict checkpointing, demonstrating
+that structural sharing provides real memory benefits even at micro scale.
+
+### Projected KC2 at Macro Scale (LoRA Adapters)
+
+| Base Model | d | LoRA r | Adapter/Base | Overhead/version |
+|------------|---|--------|-------------|-----------------|
 | Qwen 0.5B | 896 | 16 | 0.3% | 1.2% |
 | Qwen 7B | 4096 | 16 | 0.06% | 0.24% |
 | Qwen 72B | 8192 | 16 | 0.015% | 0.06% |
@@ -142,34 +165,33 @@ At macro scale, KC2 passes trivially: even 50+ versions would stay under 15%.
 
 ### Rollback Fidelity
 
-| Seed | Max abs diff after rollback to v0 |
+| Seed | Max abs diff after set_version(0) |
 |------|----------------------------------|
 | 42 | 0.00e+00 |
 | 123 | 0.00e+00 |
 | 7 | 0.00e+00 |
 
-Rollback is numerically exact across all seeds.
+Rollback is numerically exact across all seeds. This is guaranteed by the
+leaf-only fine-tuning protocol: shared nodes are never mutated.
 
 ---
 
-## Parameter Comparison
+## Parameter Breakdown
 
-| Component | Persistent Tree (v0) | Hierarchical Tree |
-|-----------|---------------------|-------------------|
-| Total params | 204,060 | 203,932 |
-| Tree gates/layer | 455 | 455 |
-| Tree leaves/layer | 32,768 | 32,768 |
-| Routing cost | O(D * beam) | O(D * beam) |
-| Version overhead | O(D + m) nodes per version | N/A |
-
-The persistent tree adds 128 parameters (nn.Module bookkeeping) vs the
-base hierarchical tree. Functionally identical at v0.
+| Component | Count | % of Total |
+|-----------|-------|-----------|
+| Total model params | 203,932 | 100% |
+| Tree params (all) | 132,892 | 65.2% |
+| Tree leaves | 131,072 | 98.6% of tree |
+| Tree gates | 1,820 | 1.4% of tree |
+| Non-tree (embed, attn, norm, head) | 71,040 | 34.8% |
+| Trainable during fine-tuning | 65,536 | 32.1% (target leaves only) |
 
 ---
 
 ## Micro-Scale Limitations
 
-1. **Leaf/total ratio too high.** At micro scale, leaves are 64.2% of all
+1. **Leaf/total ratio too high.** At micro scale, leaves are 98.6% of tree
    parameters, making per-version overhead large. At macro scale with LoRA
    adapters, this ratio drops to <1%, making path-copying nearly free.
 
@@ -180,14 +202,13 @@ base hierarchical tree. Functionally identical at v0.
    compose v1+v2. Real versioning involves deeper chains: v0 -> v1 -> v2 ->
    v3, with intermediate rollbacks and branching.
 
-4. **No concurrent modification.** We don't test the scenario where two
+4. **No concurrent modification.** We do not test the scenario where two
    contributors fine-tune the same leaf independently (requiring conflict
-   resolution). This would be the analog of git merge conflicts.
+   resolution).
 
-5. **Snapshot-based, not structurally shared during training.** The current
-   implementation snapshots parameters rather than using true structural
-   sharing with copy-on-write. This is practical but doesn't demonstrate
-   the theoretical memory savings during training.
+5. **Gate-only calibration.** Cross-version composition recalibrates gates
+   (100 steps). Whether this is sufficient at macro scale with more diverse
+   domain distributions is untested.
 
 ---
 
@@ -195,47 +216,48 @@ base hierarchical tree. Functionally identical at v0.
 
 ### At Micro Scale (tested)
 
-- **Cross-version composition >5% worse.** SURVIVED. Mean +0.16%, well
-  within threshold. All 3 seeds pass individually (max: +1.00%).
+- **Cross-version composition >5% worse.** SURVIVED. Mean -0.85% (cross
+  is actually BETTER). All 3 seeds pass individually.
 
-- **Memory overhead >15%.** KILLED at micro scale. Full model snapshots
-  require 100% overhead per version because leaves dominate the parameter
-  count (64.2%). The persistent structure overhead (gates only) is just
-  0.9%, but leaves must also be stored.
+- **Memory overhead >15%.** KILLED at micro scale. 101.6% overhead because
+  leaves dominate parameters (98.6%). Structural sharing provides 32.8%
+  savings vs flat-dict and 49.6% vs full copy, but not enough to meet the
+  15% threshold with 4 versions.
 
 ### At Macro Scale (untested, projected)
 
-- **LoRA version overhead.** Projected to be 0.3-1.2% per version at
-  Qwen 0.5B-72B, well within the 15% threshold. The mechanism's value
-  increases with scale because the adapter/base ratio shrinks.
+- **LoRA version overhead.** Projected 1.2% per version at Qwen 0.5B. The
+  persistent structure's value increases with scale because the adapter/base
+  ratio shrinks.
 
-- **Cross-version interference at diverse domains.** If Python-v3 and
-  Medical-v1 were trained on different base checkpoints (not just
-  different fine-tuning runs from the same base), cross-version
-  composition would face distributional shift. Same-base is the
-  assumption; violating it would likely fail.
+- **Cross-version interference at diverse domains.** If experts were trained
+  on different base checkpoints (not the same frozen base), cross-version
+  composition would face distributional shift. Same-base is a requirement.
 
-- **Gate recalibration cost scaling.** Cross-version composition requires
-  gate recalibration (100 steps). If the number of mixed versions grows
-  large, recalibration cost might scale unfavorably. Untested beyond 2
-  versions mixed.
+- **Rollback fidelity with gradient leakage.** If the freezing protocol is
+  violated (shared nodes receive gradients), rollback breaks. The protocol
+  is simple but must be enforced.
 
 ---
 
 ## Summary
 
-The persistent expert tree validates that **cross-version composition
-works**: mixing experts fine-tuned at different times from the same base
-produces quality indistinguishable from same-version composition (+0.16%,
+The persistent expert tree validates that **cross-version composition works**:
+mixing experts fine-tuned at different times from the same base produces
+quality equal to or BETTER than same-version composition (-0.85% mean,
 well within 5% threshold). Rollback is exact (0.00 max diff).
 
-The mechanism is sound but **KC2 fails at micro scale** due to the high
-leaf/total parameter ratio (64.2%). At macro scale with LoRA adapters
-(0.3% adapter/base ratio), the same path-copying mechanism would cost
-only 1.2% per version -- well within the 15% threshold.
+**v2 improvements over v1**: The experiment now uses the persistent tree API
+throughout, fine-tunes only target leaves (preserving structural sharing),
+measures memory via `memory_report()`, and compares against both flat-dict
+and full-copy baselines.
+
+**KC2 fails at micro scale** (101.6% overhead) but the persistent tree saves
+32.8% vs flat-dict checkpointing, demonstrating real structural sharing. At
+macro scale with LoRA adapters (0.3% adapter/base ratio), the same mechanism
+would cost only 1.2% per version.
 
 **Practical implication**: The contribution protocol can safely support
-versioned experts. Contributors can update their experts independently,
-and the composition system can cherry-pick any combination of expert
-versions. The persistent tree structure provides rollback, composition
-history, and storage efficiency that scales favorably with model size.
+versioned experts with structural sharing. The persistent tree saves memory
+proportional to the amount of structure shared between versions, with
+savings scaling favorably as model size increases.

@@ -1,5 +1,6 @@
 {
-  "experiment": "persistent_expert_tree",
+  "experiment": "persistent_expert_tree_v2",
+  "revision": "v2 -- uses tree API, leaf-only fine-tuning, flat-dict baseline, same-version cherry-pick control",
   "seeds": [
     42,
     123,
@@ -7,61 +8,222 @@
   ],
   "per_seed": [
     {
-      "joint_val_loss": 0.5260295271873474,
-      "same_version_val_loss": 0.5552845656871795,
-      "cross_version_val_loss": 0.5558679044246674,
-      "cross_vs_same_pct": 0.10505221530260615,
-      "cross_vs_joint_pct": 5.672376871477961,
-      "same_vs_joint_pct": 5.561482195924876,
-      "memory_overhead_pct": 200.0,
+      "joint_val_loss": 0.526563185453415,
+      "same_version_avg_val_loss": 0.5274348676204681,
+      "same_version_cherrypick_val_loss": 0.5242322385311127,
+      "cross_version_val_loss": 0.524640929698944,
+      "cross_vs_same_pick_pct": 0.07795994557231357,
+      "cross_vs_same_avg_pct": -0.5297218847379107,
+      "cross_vs_joint_pct": -0.36505699744574643,
+      "same_pick_vs_joint_pct": -0.4426718362954201,
+      "same_avg_vs_joint_pct": 0.16554179842681985,
+      "memory_overhead_pct": 101.5651807482768,
+      "memory_savings_vs_full_copy_pct": 49.6087048129308,
+      "tree_savings_vs_flat_pct": 32.811606417241066,
       "rollback_max_diff": 0.0,
       "kc1_pass": true,
       "kc2_pass": false
     },
     {
-      "joint_val_loss": 0.5249974131584167,
-      "same_version_val_loss": 0.5533841073513031,
-      "cross_version_val_loss": 0.5498852372169495,
-      "cross_vs_same_pct": -0.6322679108188402,
-      "cross_vs_joint_pct": 4.740561274160583,
-      "same_vs_joint_pct": 5.407016012157128,
-      "memory_overhead_pct": 200.0,
+      "joint_val_loss": 0.5169272601604462,
+      "same_version_avg_val_loss": 0.5149714291095734,
+      "same_version_cherrypick_val_loss": 0.5206686526536941,
+      "cross_version_val_loss": 0.5120835125446319,
+      "cross_vs_same_pick_pct": -1.6488682514889794,
+      "cross_vs_same_avg_pct": -0.560791609339359,
+      "cross_vs_joint_pct": -0.9370269260535561,
+      "same_pick_vs_joint_pct": 0.7237754286911908,
+      "same_avg_vs_joint_pct": -0.3783571116496672,
+      "memory_overhead_pct": 101.5651807482768,
+      "memory_savings_vs_full_copy_pct": 49.6087048129308,
+      "tree_savings_vs_flat_pct": 32.811606417241066,
       "rollback_max_diff": 0.0,
       "kc1_pass": true,
       "kc2_pass": false
     },
     {
-      "joint_val_loss": 0.5300322115421295,
-      "same_version_val_loss": 0.5602740824222565,
-      "cross_version_val_loss": 0.5658884763717651,
-      "cross_vs_same_pct": 1.0020798972595042,
-      "cross_vs_joint_pct": 6.764921838488211,
-      "same_vs_joint_pct": 5.705666603193456,
-      "memory_overhead_pct": 200.0,
+      "joint_val_loss": 0.5278640896081924,
+      "same_version_avg_val_loss": 0.5316799074411392,
+      "same_version_cherrypick_val_loss": 0.5378138571977615,
+      "cross_version_val_loss": 0.5325908422470093,
+      "cross_vs_same_pick_pct": -0.9711566336290414,
+      "cross_vs_same_avg_pct": 0.17133143327799327,
+      "cross_vs_joint_pct": 0.895448796739568,
+      "same_pick_vs_joint_pct": 1.8849108672943329,
+      "same_avg_vs_joint_pct": 0.7228788447759567,
+      "memory_overhead_pct": 101.5651807482768,
+      "memory_savings_vs_full_copy_pct": 49.6087048129308,
+      "tree_savings_vs_flat_pct": 32.811606417241066,
       "rollback_max_diff": 0.0,
       "kc1_pass": true,
       "kc2_pass": false
     }
   ],
   "aggregate": {
-    "mean_joint_val_loss": 0.5270197172959645,
-    "mean_same_version_val_loss": 0.5563142518202464,
-    "mean_cross_version_val_loss": 0.5572138726711273,
-    "mean_cross_vs_same_pct": 0.15828806724775674,
-    "mean_memory_overhead_pct": 200.0,
+    "mean_joint_val_loss": 0.5237848450740179,
+    "mean_same_version_avg_val_loss": 0.5246954013903936,
+    "mean_same_version_cherrypick_val_loss": 0.5275715827941895,
+    "mean_cross_version_val_loss": 0.5231050948301951,
+    "mean_cross_vs_same_pick_pct": -0.8473549798485691,
+    "mean_memory_overhead_pct": 101.5651807482768,
+    "mean_savings_vs_full_copy_pct": 49.6087048129308,
+    "mean_tree_savings_vs_flat_pct": 32.811606417241066,
     "mean_rollback_diff": 0.0,
     "kc1_pass": true,
     "kc2_pass": false
   },
-  "memory_report_seed42": {
-    "base_param_count": 203932,
-    "v1_delta_params": 203932,
-    "v2_delta_params": 203932,
-    "v1_delta_pct": 100.0,
-    "v2_delta_pct": 100.0,
-    "persistent_total": 611796,
-    "full_copy_total": 611796,
+  "param_breakdown": {
+    "total_all": 203932,
+    "total_tree": 132892,
+    "leaf_params": 131072,
+    "gate_params": 1820,
+    "leaf_pct_of_tree": 98.6304668452578,
+    "tree_pct_of_total": 65.1648588745268
+  },
+  "tree_memory_report_seed42": {
+    "n_versions": 4,
+    "n_layers": 4,
+    "total_persistent_params": 267864,
+    "total_full_copy_params": 531568,
+    "base_params": 132892.0,
+    "memory_overhead_pct": 101.5651807482768,
+    "memory_savings_vs_full_copy_pct": 49.6087048129308,
+    "per_layer": [
+      {
+        "n_versions": 4,
+        "total_unique_nodes": 38,
+        "total_node_refs": 60,
+        "sharing_ratio": 1.5789473684210527,
+        "persistent_params": 66966,
+        "full_copy_params": 132892,
+        "memory_overhead_pct": 101.5651807482768,
+        "per_version": [
+          {
+            "version": 0,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 1,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 2,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 3,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          }
+        ]
+      },
+      {
+        "n_versions": 4,
+        "total_unique_nodes": 38,
+        "total_node_refs": 60,
+        "sharing_ratio": 1.5789473684210527,
+        "persistent_params": 66966,
+        "full_copy_params": 132892,
+        "memory_overhead_pct": 101.5651807482768,
+        "per_version": [
+          {
+            "version": 0,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 1,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 2,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 3,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          }
+        ]
+      },
+      {
+        "n_versions": 4,
+        "total_unique_nodes": 38,
+        "total_node_refs": 60,
+        "sharing_ratio": 1.5789473684210527,
+        "persistent_params": 66966,
+        "full_copy_params": 132892,
+        "memory_overhead_pct": 101.5651807482768,
+        "per_version": [
+          {
+            "version": 0,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 1,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 2,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 3,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          }
+        ]
+      },
+      {
+        "n_versions": 4,
+        "total_unique_nodes": 38,
+        "total_node_refs": 60,
+        "sharing_ratio": 1.5789473684210527,
+        "persistent_params": 66966,
+        "full_copy_params": 132892,
+        "memory_overhead_pct": 101.5651807482768,
+        "per_version": [
+          {
+            "version": 0,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 1,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 2,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          },
+          {
+            "version": 3,
+            "unique_gates": 7,
+            "unique_leaves": 8
+          }
+        ]
+      }
+    ]
+  },
+  "flat_dict_memory_seed42": {
+    "total_params": 398676,
+    "base_params": 132892,
     "overhead_vs_mutable_pct": 200.0,
-    "savings_vs_full_copy_pct": 0.0
+    "n_snapshots": 3
+  },
+  "tree_vs_flat_seed42": {
+    "tree_persistent_params": 267864,
+    "flat_total_params": 398676,
+    "tree_savings_vs_flat_pct": 32.811606417241066
   }
 }

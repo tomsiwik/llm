@@ -1,43 +1,120 @@
+# Active Hypotheses — Living Composable Model
+# Completed/deferred experiments archived in ARCHIVE.yml
+# Roadmap: Distill → Compose → Evolve
+
 meta:
   consecutive_kills: 0
   last_killed: '2026-03-07'
   last_killed_node: exp_swiglu_combined_dead_capsule
   last_proven: '2026-03-07'
   last_proven_node: exp_softmax_collision_quantification
+  roadmap_updated: '2026-03-07'
+
 nodes:
-  exp_hash_ring_n5_scaling:
-    title: Consistent hash routing displacement scaling at N=5 composition
+  # ── Phase 1: Distill ──────────────────────────────────────────────
+
+  exp_distillation_pilot_50:
+    title: 50-expert distillation pipeline end-to-end
     status: open
-    scale: micro
-    priority: 13
+    scale: macro
+    priority: 1
+    depends_on: []
+    blocks:
+    - exp_clone_compete_evolution
+    - exp_scale_500_experts
+    experiment_dir: null
+    kill_criteria:
+    - composed 50-expert model does not beat base on >80% of expert domains (MMLU subsets or HumanEval)
+    - distilled experts show <2% improvement over base on their own domain (distillation failed)
+    - pipeline cost exceeds $0.50/expert (economics don't scale)
+    evidence: []
+    tags:
+    - distillation
+    - pipeline
+    - macro
+    - critical-path
+    created: '2026-03-07'
+    notes: >
+      THE FIRST MILESTONE. Build automated pipeline:
+      (1) Domain taxonomy generation via cheap model
+      (2) Training data generation via Groq batch API (Llama 3.3 70B, $0.19/expert)
+      (3) QLoRA training on RunPod A5000 with Unsloth (~15 min/expert)
+      (4) compose add + hash ring registration
+      (5) Benchmark vs base model on domain-relevant eval sets.
+
+      Base model: Qwen2.5-7B (4-bit). LoRA: rank-16, all projections.
+      Budget: ~$13 for 50 experts. Use remaining budget for eval.
+
+      Domain selection for pilot: 10 programming languages, 10 science subfields,
+      10 professional domains, 10 writing styles, 10 reasoning types.
+
+  exp_distillation_quality_vs_teacher:
+    title: Expert quality as function of teacher model size
+    status: open
+    scale: macro
+    priority: 3
     depends_on:
-    - exp_consistent_hash_routing
+    - exp_distillation_pilot_50
     blocks: []
     experiment_dir: null
     kill_criteria:
-    - '>5% degradation when adding expert to N=5 composed model without recalibration'
-    - displacement deviates >2x from theoretical 1/(N+1)
+    - 70B teacher produces <5% better experts than 8B teacher (teacher size doesn't matter)
+    - mixed teacher strategy (8B for simple, 70B for complex) does not beat uniform 70B
     evidence: []
     tags:
-    - routing
-    - consistent-hashing
+    - distillation
+    - teacher-size
+    - economics
+    created: '2026-03-07'
+    notes: >
+      Critical for cost optimization. Compare expert quality from:
+      (a) Llama 3.1 8B teacher ($0.02/expert) — barely larger than 7B student
+      (b) Llama 3.3 70B teacher ($0.19/expert) — proper 10x distillation
+      (c) Mixed: 8B for code/factual, 70B for reasoning/nuanced domains
+
+      If 8B works for simple domains, cost drops 10x for those categories.
+      Measure per-domain quality (perplexity + downstream eval) not just average.
+
+  # ── Phase 2: Compose at Scale ─────────────────────────────────────
+
+  exp_scale_500_experts:
+    title: Scale composition to 500 experts on 7B base
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - hash ring displacement at N=500 exceeds 1% per add (should be ~0.2%)
+    - composed model quality degrades >5% vs N=50 model on shared domains
+    - vLLM serving fails or exceeds 2x latency vs N=50
+    evidence: []
+    tags:
     - scaling
-    created: '2026-03-06'
-    notes: 'N=8->9 add validated at +0.20% / 9.1%. Test at composition scale (N=5 composed
+    - composition
+    - hash-ring
+    - macro
+    - critical-path
+    created: '2026-03-07'
+    notes: >
+      Scale test after pilot proves pipeline works. 500 experts across
+      diverse domains. Measures: hash ring stability, vLLM serving performance,
+      aggregate quality vs base model, per-domain specialization retention.
 
-      model, add 6th domain). Displacement should be ~17% (1/6). Interaction between
+      Storage: 500 * 6MB = 3GB. Well within NVMe.
+      Orthogonality: 500 / 609K = 0.08% of capacity. Should be trivially safe.
 
-      composition calibration and hash ring stability is untested.
-
-      '
   exp_hash_ring_remove_expert:
     title: Expert removal via consistent hash ring (graceful degradation)
     status: open
     scale: micro
-    priority: 13
+    priority: 5
     depends_on:
     - exp_consistent_hash_routing
-    blocks: []
+    blocks:
+    - exp_clone_compete_evolution
     experiment_dir: null
     kill_criteria:
     - '>5% degradation when removing one expert from N=8 without recalibration'
@@ -47,826 +124,160 @@ nodes:
     - routing
     - consistent-hashing
     - fault-tolerance
+    - critical-path
     created: '2026-03-06'
-    notes: 'Add-expert validated. Remove-expert is the dual operation: removing one expert
+    notes: >
+      REQUIRED for evolution phase. Clone-and-compete needs expert removal
+      (prune the loser). Add-expert validated at +0.20% / 9.1% displacement.
+      Remove-expert is the dual operation: removing one expert should redistribute
+      only its ~1/N tokens to the next clockwise neighbor.
 
-      should redistribute only its ~1/N tokens to the next clockwise neighbor.
+  # ── Phase 3: Evolve ──────────────────────────────────────────────
 
-      Important for fault tolerance and hot-swapping experts in production.
-
-      '
-  exp_hash_vs_softmax_recal_budget:
-    title: Hash ring vs softmax at equal recalibration budget
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_consistent_hash_routing
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - hash ring with 50-step recal does not close gap to softmax with 200-step recal
-    evidence: []
-    tags:
-    - routing
-    - consistent-hashing
-    - calibration
-    created: '2026-03-06'
-    notes: 'Consistent hash achieves +0.20% with ZERO recal. Softmax needs 100-200 steps.
-
-      Question: does hash ring + minimal recal (50 steps) match or beat softmax + full
-
-      recal (200 steps) for the add-expert scenario? If so, hash ring strictly dominates
-
-      for dynamic expert sets.
-
-      '
-  exp_lz_dictionary_submodules:
-    title: LZ-style shared dictionary of MLP sub-modules
-    status: revising
-    scale: micro
-    priority: 8
-    depends_on: []
-    blocks: []
-    experiment_dir: micro/models/lz_dictionary_moe
-    kill_criteria:
-    - dictionary experts >3% worse than independent experts at same total params
-    - dictionary utilization <30% (most entries unused)
-    evidence:
-    - Dict MoE (236K params) beats Standard MoE (596K params) by -0.9% val loss (3-seed mean)
-    - 100% dictionary utilization, near-max entropy across all layers
-    - 60% parameter reduction with no quality loss -- shared low-rank structure validated
-    - 'Alpha weights near-uniform: dictionary used as ensemble, specialization deferred to macro'
-    - 'REVISE: 3 blocking fixes from adversarial review — param-matched config, shared-base ablation, alpha gradient verification'
-    tags:
-    - compression
-    - lz77
-    - dictionary
-    - weight-sharing
-    - novel
-    - cross-domain
-    created: '2026-03-06'
-    notes: 'Each expert is monolithic. No weight sharing across experts beyond Layer 0.
-
-      Source field: compression (LZ77/LZ78 dictionary coding). Factor expert MLPs
-
-      into shared "dictionary" blocks + per-expert residuals. Train a codebook of
-
-      common sub-networks; experts reference codebook entries + small unique deltas.
-
-      Extends Layer 0 sharing finding to all layers. Connection to behavioral_dedup:
-
-      Layer 0 has 19.3% redundancy — dictionary would capture this plus deeper
-
-      shared structure. Use /notebooklm to research mixture-of-subspaces, low-rank
-
-      weight sharing, and hypernetwork approaches. Check Union-of-Experts paper
-
-      (references/union-of-experts/) for shared sub-expert design.
-
-      '
-  exp_mi_expert_independence:
-    title: Mutual information vs cosine for expert independence measurement
-    status: active
-    scale: micro
-    priority: 9
-    depends_on: []
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - MI doesn't predict composition quality better than cosine (r² improvement <0.1)
-    - MI computation cost >100x cosine computation cost
-    evidence: []
-    tags:
-    - information-theory
-    - mutual-information
-    - diagnostic
-    - novel
-    - cross-domain
-    created: '2026-03-06'
-    notes: 'We use cosine similarity for expert independence. This only captures linear
-
-      relationships. Source field: information theory (mutual information). Measure
-
-      MI(expert_i outputs, expert_j outputs) on calibration data. Compare MI vs
-
-      cosine as predictors of composition quality. MI captures nonlinear dependencies
-
-      cosine misses. Connection to orthogonality finding: cos~0.000 at N=2 but
-
-      nonlinear entanglement might still exist. Use /notebooklm to research MI
-
-      estimators for neural networks (MINE, KSG). Use existing implementations
-
-      (sklearn.feature_selection.mutual_info_regression or dedicated MI estimators).
-
-      '
-  exp_homomorphic_composition:
-    title: Homomorphic expert composition (privacy-preserving)
-    status: partially_proven
-    scale: micro
-    priority: 12
-    depends_on: []
-    blocks: []
-    experiment_dir: micro/models/homomorphic_composition
-    kill_criteria:
-    - encryption noise degrades composition >5%
-    - encrypted composition >100x slower than plaintext
-    evidence:
-    - 'KC1 PASS: quality gap 0.000003% across 3 seeds (24-bit quant). Paillier is noiseless.'
-    - 'KC2 KILL: ~7000x slowdown (2048-bit, batch-packed, gmpy2). Dominated by encrypt/decrypt cost.'
-    - 'Quality is exactly preserved. Performance makes Paillier impractical for element-level weight encryption.'
-    - 'Alternatives: CKKS (~100x), secure aggregation (~10x), differential privacy (~1x).'
-    tags:
-    - crypto
-    - homomorphic
-    - privacy
-    - composition
-    - novel
-    - cross-domain
-    created: '2026-03-06'
-    notes: 'RESULT: Quality perfectly preserved (max 0.000003% gap, 3 seeds, 24-bit).
-      Performance killed (~7000x slowdown). Paillier HE is mathematically sound for
-      additive composition but computationally impractical. The quality result validates
-      the protocol; faster crypto (CKKS, SMPC) could make it practical.
-      Used python-paillier (data61) with gmpy2 acceleration and batch packing.
-
-      '
-  exp_persistent_expert_tree:
-    title: Persistent data structure for version-aware expert composition
-    status: proven
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_hierarchical_capsule_tree
-    blocks: []
-    experiment_dir: micro/models/persistent_expert_tree
-    kill_criteria:
-    - cross-version composition >5% worse than same-version
-    - persistent structure overhead >15% memory vs mutable
-    evidence:
-    - 'KC1 PASS: cross-version vs same-version +0.16% mean (3 seeds: +0.11%, -0.63%, +1.00%), 30x below 5% threshold'
-    - 'KC2 FAIL at micro: 100% overhead per version due to leaf/total=64.2%. Projected PASS at macro: 1.2%/version (LoRA adapter/base=0.3%)'
-    - 'Rollback exact: 0.00 max diff across all seeds'
-    - 'Cross-version composition is statistically indistinguishable from same-version'
-    tags:
-    - functional-programming
-    - persistent-ds
-    - versioning
-    - composition
-    - novel
-    - cross-domain
-    created: '2026-03-06'
-    notes: 'KC1 decisive pass, KC2 architectural fail at micro only. The mechanism works:
-      cross-version composition quality is identical to same-version. The memory overhead
-      is a property of micro-scale leaf/total ratio (64.2%), not the persistent structure
-      itself (gate overhead is 0.9%). At macro scale with LoRA adapters (0.3% of base),
-      path-copying overhead is projected at 1.2% per version. Marked proven because the
-      composition mechanism is validated; KC2 fail is scale-specific.
-
-      '
-  exp_ortho_diagnostic:
-    title: Orthogonality diagnostic at macro scale
+  exp_clone_compete_evolution:
+    title: Clone-and-compete expert evolution mechanism
     status: open
     scale: macro
-    priority: 15
+    priority: 2
     depends_on:
-    - exp5_macro_match
-    blocks: []
+    - exp_distillation_pilot_50
+    - exp_hash_ring_remove_expert
+    blocks:
+    - exp_evolution_convergence
     experiment_dir: null
     kill_criteria:
-    - cosine similarity fails to predict composition quality (r² < 0.3)
+    - corrected clone does not win tournament >70% of the time (corrections don't help)
+    - tournament requires >50K queries to resolve (too slow for practical evolution)
+    - original expert domains regress >2% during tournament (competition causes interference)
     evidence: []
     tags:
-    - orthogonality
-    - diagnostic
-    - macro
-    created: '2026-03-04'
-  exp_agentic_capsule_training:
-    title: Agentic training for capsule groups (RL on executable tasks)
-    status: open
-    scale: macro
-    priority: 16
-    depends_on:
-    - exp5_macro_match
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - agentically-trained capsules score <10% improvement on functional eval vs standard capsules
-    - RL training destabilizes composition (>5% degradation vs non-RL composed)
-    evidence: []
-    tags:
-    - agentic
-    - rl
-    - training
-    - macro
+    - evolution
+    - clone-compete
+    - feedback-loop
     - novel
-    created: '2026-03-04'
-    notes: 'Qwen3-Coder-Next trains on executable task synthesis with environment interaction and RL. Can we train individual
-      capsule groups with RL on domain-specific executable tasks? This would make capsule contributors train on task completion,
-      not just next-token prediction. Use macro/eval_functional.py as the reward signal. Reference: references/qwen3-coder-next/
-
-      '
-  exp_tau_rho_macro_calibration:
-    title: Output correlation threshold calibration at macro scale
-    status: open
-    scale: macro
-    priority: 14
-    depends_on:
-    - exp_behavioral_dedup
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - no tau_rho in [0.3, 0.7] yields >5% behavioral-only capsules at macro scale
-    evidence: []
-    tags:
-    - dedup
-    - threshold
-    - macro
-    - calibration
-    created: '2026-03-04'
-    notes: 'Behavioral dedup showed extreme threshold sensitivity (19.3% at 0.3 vs 1.4% at 0.7). At macro scale with real
-      domains and subword tokenization, the Layer 0 sharing effect may weaken. Need to find the right tau_rho for macro before
-      behavioral dedup can be used as a compression signal.
-
-      '
-  exp_merkle_composition_integrity:
-    title: Merkle hashing for expert composition integrity verification
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_hierarchical_capsule_tree
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - Merkle hash fails to detect >10% of expert weight changes that affect output quality
-    - hash computation overhead >5% of forward pass time
-    evidence: []
-    tags:
-    - composition
-    - merkle
-    - integrity
-    - verification
-    - novel
-    created: '2026-03-05'
-    notes: 'Each expert''s behavioral fingerprint is hashed (building on behavioral_dedup profiling). Internal tree nodes
-      hash their children''s hashes (Merkle tree). Root hash = composition signature. Any expert change propagates to root
-      in O(log N). Enables: (a) detecting expert drift during continued training, (b) verifying composition produces expected
-      behavior after expert updates, (c) deduplication (identical hashes = identical behavior, extending capsule_dedup finding),
-      (d) incremental revalidation when one contributor updates their expert. No prior art in MoE. Novel and practical for
-      the contribution protocol.
-
-      '
-  exp_tspike_macro_scale:
-    title: T_spike at macro scale — architecture-dependent or invariant?
-    status: open
-    scale: macro
-    priority: 14
-    depends_on: []
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - T_spike at d=256+ differs from micro T_spike by >5x
-    evidence: []
-    tags:
-    - death-spike
-    - macro
-    - warmup
-    - scaling
-    created: '2026-03-04'
-    notes: 'The R = S_w/T_spike framework depends on T_spike ~ 50 steps at micro. Profile death at fine granularity on a larger
-      model (d=256+) to measure whether T_spike is scale-invariant. This single measurement determines all warmup prescriptions
-      at macro scale.
-
-      '
-  exp_profiling_sample_efficiency:
-    title: Minimum profiling budget for reliable dead/alive classification
-    status: open
-    scale: micro
-    priority: 15
-    depends_on: []
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - 5 batches achieves <5% disagreement with 20-batch profiling
-    evidence: []
-    tags:
-    - profiling
-    - efficiency
-    - practical
-    created: '2026-03-04'
-    notes: 'Exp 12 used 20 batches x 32 = 640 names (~10K effective positions). If 5 batches suffice, profiling cost drops
-      4x — relevant for macro where profiling is expensive.
-
-      '
-  exp_lsh_diverse_routing:
-    title: LSH routing advantage with heterogeneous expert pool (G=32+)
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_lsh_capsule_routing
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - LSH still statistically indistinguishable from softmax at G=32 with 4+ diverse domains
-    evidence: []
-    tags:
-    - routing
-    - lsh
-    - scaling
-    created: '2026-03-05'
-    notes: 'exp_lsh_capsule_routing proved routing is irrelevant at G=8 with homogeneous data. LSH''s theoretical advantage
-      (zero routing params, O(1) lookup) should emerge when (a) expert pool is large enough that softmax becomes expensive,
-      and (b) domains are diverse enough that locality-preserving hashing can exploit structure. Test with G=32+ experts across
-      4+ character-class domains.
-
-      '
-killed:
-  exp_combined_throughput_measurement:
-    title: Measure actual throughput gain of parallel+pure-linear vs sequential+hybrid
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_parallel_pure_linear_combined
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - combined throughput gain <15% vs sequential+hybrid (benefits don't compound)
-    evidence: []
-    tags:
-    - performance
-    - parallel
-    - linear
-    - throughput
-    created: '2026-03-05'
-    notes: 'Parallel blocks showed ~30% throughput gain and pure-linear has O(T) attention. The reviewer noted throughput
-      is the real macro value, not quality. Need to measure whether benefits compound or whether one dominates.
-
-      '
-  exp_value_norm_macro_delta_rule:
-    title: Value norm dynamics with full delta rule at macro sequence length
-    status: open
-    scale: macro
-    priority: 14
-    depends_on:
-    - exp_l2_norm_value_boundedness
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - value norms grow >5x at T=4096 with delta rule feedback loop
-    evidence: []
-    tags:
-    - hybrid-attention
-    - value-norms
-    - delta-rule
-    - macro
-    created: '2026-03-05'
-    notes: 'Value norm boundedness confirmed at micro (1.09x, T=32). Reviewer flagged delta rule feedback loop (v_t - S^T
-      k_t depends on state which depends on previous values) as potential positive feedback at macro T=4096+. Not testable
-      at micro scale with simplified linear attention. Must validate at macro.
-
-      '
-  exp_par_pure_linear_n8_boundary:
-    title: Parallel+pure-linear at N=8 boundary
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_combined_n5_scaling
-    blocks: []
-    experiment_dir: micro/models/par_pure_linear_n8
-    kill_criteria:
-    - N=8 composition gap >12% for parallel+pure-linear
-    tags:
-    - composition
-    - scaling
-    - architecture
-    created: '2026-03-05'
-    notes: 'N=5 gap is +3.32% with 2.4x margin. Identity Jaccard predicts safe limit ~N=8. Test whether architectural penalty
-      amplifies at N=8 or remains bounded. If gap stays under 12% (extrapolated from linear N=5 trend), the simplified block
-      is validated for practical deployment scale.
-
-      '
-  exp_mid_training_prune_regularization:
-    title: Mid-training pruning as forced-efficiency regularization
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_freeze_then_prune_protocol
-    blocks: []
-    experiment_dir: micro/models/prune_regularization
-    kill_criteria:
-    - post-prune death rate (13-19%) does not persist when measured at S=3200 (reverts to >40%)
-    - mid-training-pruned model quality is >1% worse than unpruned control at convergence
-    tags:
-    - pruning
-    - regularization
-    - death
-    created: '2026-03-05'
-    notes: 'Freeze-then-prune found that mid-training pruning at S=800 drops post-prune death to 13-19% (from 47-55%). This
-      suggests pruning forces remaining capsules to specialize, preventing future death. Test whether this "forced efficiency"
-      persists to convergence and whether it improves final quality. If confirmed, mid-training pruning is not just compression
-      but active regularization.
-
-      '
-  exp_fa_d128_training_investigation:
-    title: Full attention degradation at d=128 — training issue or fundamental?
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_linear_state_capacity_scaling
-    blocks: []
-    experiment_dir: micro/models/fa_d128_investigation
-    kill_criteria:
-    - FA joint loss at d=128 improves to within 5% of PL when given 2x training steps
-    tags:
-    - attention
-    - scaling
-    - training
-    created: '2026-03-05'
-    notes: 'Linear state capacity experiment found FA joint loss 0.565 vs PL 0.498 at d=128 (13.5% worse). At d=64 they are
-      nearly identical. This is suspicious — FA should not be worse than PL with more parameters and no capacity constraint.
-      Test whether giving FA more training steps (matching tokens/param) closes the gap. If it does, the PL advantage claim
-      is weakened. If it does not, FA may have a composition-specific issue at d=128.
-
-      '
-  exp_recursive_split_depth:
-    title: Recursive leaf splitting minimum viable capsule count
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_split_leaf_actual
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - split from 16->8 capsules degrades >5% vs independent 8-capsule leaves
-    - function preservation error >5% at sigma=0.001
-    evidence: []
-    tags:
-    - composition
-    - tree
-    - split
-    - scaling
-    created: '2026-03-05'
-    notes: 'exp_split_leaf_actual validated 32->16 split. At macro scale, recursive splitting (32->16->8->4) would enable
-      progressive tree growth. But below some capsule count, leaves become underparameterized. Find the minimum viable capsule
-      count for splitting.
-
-      '
-  exp_swiglu_threshold_sensitivity:
-    title: Gate-product pruning threshold calibration without aux sparsity
-    status: open
-    scale: micro
-    priority: 13
-    depends_on:
-    - exp_swiglu_gate_pruning
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - no tau exists where pruning rate >30% with <2% quality loss without aux sparsity loss
-    evidence: []
-    tags:
-    - pruning
-    - swiglu
-    - threshold
-    created: '2026-03-06'
-    notes: 'The cliff at tau=0.05 (1.4% to 66.5% prunable) suggests threshold sensitivity.
-
-      Sweep tau without aux sparsity loss to find the natural pruning curve.
-
-      The 66.5% rate may drop substantially without the sparsity-encouraging loss.
-
-      '
-  exp_swiglu_combined_dead_capsule:
-    title: Gate-product pruning combined with dead capsule pruning
-    status: killed
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_swiglu_gate_pruning
-    blocks: []
-    experiment_dir: micro/models/swiglu_combined_dead_capsule
-    kill_criteria:
-    - combined pruning does not exceed either method alone by >5pp
-    - quality degrades >3% vs no pruning
-    evidence:
-    - 'KC1 KILL: 0.0pp combined advantage at all thresholds (3 seeds)'
-    - SwiGLU has 0% dead capsules -- SiLU never produces exact zeros
-    - Min fire frequency 0.998 across 512 capsules, 3 seeds
-    - Gate-product pruning is the only viable criterion for SwiGLU
-    - Dead capsule pruning is ReLU-specific, not architecture-general
-    tags:
-    - pruning
-    - swiglu
-    - composition
-    - killed
-    created: '2026-03-06'
-    killed: '2026-03-07'
-    notes: 'KILLED: Dead capsule pruning does not apply to SwiGLU architectures.
-
-      SiLU activation has a soft floor (~4.5e-5) that prevents exact zeros.
-
-      All 512 capsules fire on >99.8% of positions across 3 seeds.
-
-      Combined pruning = gate-product pruning alone (0.0pp advantage).
-
-      Key insight: pruning taxonomy is activation-function-dependent.
-
-      ReLU -> frequency-based (dead capsule). SwiGLU -> magnitude-based (gate product).
-
-      These are not combinable because only one applies per architecture.
-
-      '
-  exp_function_space_merging_predictor:
-    title: Function-space merging quality predictor (KL divergence on probe set)
-    status: open
-    scale: micro
-    priority: 14
-    depends_on:
-    - exp_information_preservation_predictor
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - function-space metric Spearman <= weight-space norm ratio (0.952)
-    - probe set evaluation cost exceeds 10% of full training
-    evidence: []
-    tags:
-    - lora
-    - merging
-    - theory
-    - diagnostic
-    created: '2026-03-06'
-    notes: 'Weight-space IP cannot predict within-tier ranking. Function-space metric
-
-      (KL divergence between merged model and per-domain models on a small probe
-
-      set) may capture router noise and nonlinear interactions that Frobenius
-
-      norms miss. Cost must stay cheap enough to be practical as a filter.
-
-      '
-  exp_norm_ratio_macro_calibration:
-    title: Norm ratio threshold calibration at macro scale
-    status: open
-    scale: macro
-    priority: 14
-    depends_on:
-    - exp_information_preservation_predictor
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - NR > 1.5 threshold misclassifies >1 method at macro scale
-    - non-orthogonal deltas invalidate the norm ratio monotonicity assumption
-    evidence: []
-    tags:
-    - lora
-    - merging
-    - theory
-    - macro
-    created: '2026-03-06'
-    notes: 'Micro-scale LoRA deltas are nearly orthogonal (cos~0). At macro scale
-
-      with correlated deltas, NR distribution shifts. TIES sign resolution
-
-      may genuinely help (lowering NR while improving quality). The NR > 1.5
-
-      rule needs recalibration. Also test for pathologically low NR (attenuation).
-
-      '
-  exp_rs_numerical_stability_at_scale:
-    title: Reed-Solomon numerical stability at N=16/32/64
-    status: open
-    scale: micro
-    priority: 13
-    depends_on:
-    - exp_reed_solomon_expert_encoding
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - reconstruction error >1% at N>=16 with float32 weights
-    - Lebesgue constant growth exceeds theoretical O(log N) bound
-    evidence: []
-    tags:
-    - error-correction
-    - reed-solomon
-    - numerical-stability
-    - scaling
-    created: '2026-03-06'
-    notes: 'Reviewer recommendation: test Lagrange interpolation with random weight
-
-      vectors (no model training needed) at N=16/32/64 to verify numerical
-
-      stability before macro investment. At N=64, expected max error ~2.7e-7
-
-      (float32). Low effort, high confidence test.
-
-      '
-  exp_rs_cross_domain_parity_quality:
-    title: Cross-domain parity experts as interpolation experts
-    status: open
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_reed_solomon_expert_encoding
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - parity experts computed across domain experts at same layer depth degrade >5% when used as blend experts
-    - cross-domain parity no better than random weight interpolation
-    evidence: []
-    tags:
-    - error-correction
-    - reed-solomon
-    - composition
-    - interpolation
-    - novel
-    created: '2026-03-06'
-    notes: 'The untested creative upside of RS encoding. Cross-layer parity failed
-
-      (100,000+% degradation) because layers at different depths serve different
-
-      functions. Cross-domain parity at SAME layer depth is the interesting case:
-
-      parity expert = weighted blend of domain experts at the same position.
-
-      Could produce useful interpolation/generalist experts for free.
-
-      '
-  exp_skip_list_composition_test:
-    title: Skip-list routing under shared-base composition protocol
-    status: revise
-    scale: micro
-    priority: 11
-    depends_on:
-    - exp_skip_list_multiresolution_routing
-    blocks: []
-    experiment_dir: micro/models/skip_list_composition_test
-    kill_criteria:
-    - skip-list composition gap >3% worse than flat composition gap
-    - level-weight distribution collapses to uniform under composition
-    evidence:
-    - 'KC1 PASSES: skip -0.17% vs flat +1.04% (threshold >3pp worse)'
-    - 'KC2 PASSES: 97.2% above L0 (threshold <10%)'
-    - '2026-03-07: REVISE. 5 fixes: (1) step asymmetry 600vs500, (2) L3 degeneracy not feature, (3) no-routing ablation missing,
-      (4) KC2 misses coarsest collapse, (5) per-seed variance hidden'
-    tags:
-    - skip-list
-    - routing
-    - composition
-    - multi-resolution
-    created: '2026-03-06'
-    notes: 'Skip-list routing proven at -0.93% vs flat (single-domain). Hierarchical
-
-      tree composition gap was +0.17%. Test whether skip-list adaptive depth
-
-      survives composition (shared-base protocol with domain experts). Key
-
-      question: do confidence gates still concentrate weight at coarse levels
-
-      when experts are from different domains?
-
-      '
-  exp_skip_list_hard_inference_routing:
-    title: Hard early-stopping inference for skip-list routing
-    status: open
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_skip_list_multiresolution_routing
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - hard routing >2% worse than soft routing (soft-hard gap)
-    - actual FLOP savings <20% despite 60.6% level-weight concentration
-    evidence: []
-    tags:
-    - skip-list
-    - routing
-    - inference
-    - efficiency
-    created: '2026-03-06'
-    notes: 'Skip-list learns 60.6% level-weight concentration above Level 0, but
-
-      training always evaluates all levels (16x training cost). Implement
-
-      threshold-based hard early stopping at inference: if confidence gate
-
-      > tau, stop at that level. Measure actual FLOP savings vs quality gap.
-
-      The soft-hard gap is the key unknown.
-
-      '
-  exp_skip_list_n_scaling:
-    title: Skip-list routing at N=16 and N=32
-    status: open
-    scale: micro
-    priority: 13
-    depends_on:
-    - exp_skip_list_multiresolution_routing
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - level-weight concentration does not increase with N (should benefit from more levels)
-    - quality >3% worse than flat at N=16 or N=32
-    evidence: []
-    tags:
-    - skip-list
-    - routing
-    - scaling
-    - multi-resolution
-    created: '2026-03-06'
-    notes: 'At N=8, skip list has 3 coarse levels. At N=16 -> 4 levels, N=32 -> 5.
-
-      The O(log N) routing promise scales with more levels. Test whether
-
-      level-weight concentration increases (more tokens handled at coarser
-
-      levels) as N grows. Connection to Huffman: frequency-weighted level
-
-      assignment may become important at larger N.
-
-      '
-  exp_delta_coding_adversarial_versions:
-    title: Delta coding with adversarial version transitions
-    status: open
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_delta_coding_expert_versions
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - SVD rank-2 drift >5% for adversarial transitions (domain-shifted updates)
-    - storage ratio >70% of full expert for adversarial deltas
-    evidence: []
-    tags:
-    - compression
-    - delta-coding
-    - adversarial
+    - critical-path
     created: '2026-03-07'
-    notes: 'Reviewer noted delta coding was tested only with smooth version transitions
+    notes: >
+      THE KEY INNOVATION. When an expert produces wrong output:
+      (1) Clone expert → fine-tune clone with correction (50-100 steps, ~30 sec)
+      (2) Register both on hash ring (clone gets ~1/(N+1) traffic)
+      (3) Shadow scoring: when original selected, also score clone on same input
+      (4) Compare per-token perplexity over ~1K-10K queries
+      (5) Prune the loser
 
-      (80-step continuations). Test with adversarial transitions: domain shift
+      Test protocol: take 5 experts from pilot, inject deliberate errors,
+      provide corrections, measure tournament convergence rate and speed.
 
-      between versions (e.g., v1 trained on code, v2 on medical). These produce
+      Controls: max 3 concurrent clones per domain, 10K query tournament timeout.
 
-      maximally different deltas that stress SVD compression. If it still works,
+      This requires exp_hash_ring_remove_expert for pruning the loser.
 
-      delta coding is robust. If not, keyframe interval K must adapt to transition
-
-      magnitude.
-
-      '
-  exp_softmax_collision_quantification:
-    title: Quantify softmax routing collision rates at scale
-    status: proven
+  exp_shadow_scoring:
+    title: Shadow scoring for fair expert A/B comparison
+    status: open
     scale: micro
-    priority: 12
-    depends_on:
-    - exp_cuckoo_collision_free_routing
-    blocks: []
-    experiment_dir: micro/models/softmax_collision_quantification
+    priority: 3
+    depends_on: []
+    blocks:
+    - exp_clone_compete_evolution
+    experiment_dir: null
     kill_criteria:
-    - collision rate does not increase with N (contradicts scaling concern)
-    - collision-aware routing provides <0.5% quality improvement over naive softmax
-    evidence:
-    - 'KC1 PASS: collision rate monotonically increases with N at all epsilon levels (3.50x at eps=0.01)'
-    - Empirical scaling law C(eps=0.01) = 0.064 * N^0.614, r^2=0.959 (4 points, 2 params)
-    - 'N=8: 20.9%, N=16: 37.0%, N=32: 60.6%, N=64: 73.3% (at eps=0.01)'
-    - 'Median gap collapses 14x: 0.033 (N=8) -> 0.002 (N=64)'
-    - 'KC2 KILLED: T=0.5 gives -0.29% quality (p=0.52, NOT significant). No mitigation >0.5% at p<0.05'
-    - 'Dual-T decomposition: T=0.5 collision reduction is 1/3 training effect + 2/3 inference sharpening'
-    - T=0.5 reduces collision rate 0.589->0.245 at inference T, but quality effect within noise
-    - 'T=2.0 anomaly resolved: v1 seed variance artifact. At T=1.0 measurement, T=2.0 = baseline (0.587 vs 0.589)'
-    - Margin loss hurts quality (+0.31%) despite reducing collisions -- aux loss interference (consistent with DeepSeek-V3)
-    - 'N-capsules confound acknowledged: N and caps_per_group co-vary, collision scaling may partly reflect reduced per-group
-      expressivity'
-    - 'Phase 1: 3 seeds, Phase 2: 5 seeds with p-values, 500 steps, 10 min total runtime'
-    - Collision quantification is well-documented in literature (Switch Transformers, ReMoE, softmax bottleneck). Contribution
-      is empirical measurement, not discovery.
+    - shadow scoring overhead >5% of inference latency
+    - shadow perplexity does not correlate with actual serving quality (r² < 0.5)
+    evidence: []
     tags:
-    - routing
-    - collision
-    - scaling
+    - evolution
+    - evaluation
+    - shadow-scoring
+    - critical-path
     created: '2026-03-07'
-    proven: '2026-03-07'
-    notes: 'PROVEN (KC1 passes, KC2 killed). Collision rate scaling with N is confirmed but does not translate to quality
-      improvement from simple mitigations at micro scale. The collision problem is real and documented in prior literature.
-      Our contribution is the specific empirical scaling law and dual-temperature decomposition showing T=0.5 collision reduction
-      is 2/3 inference sharpening, 1/3 learned logit quality. N-capsules confound limits attribution: collision scaling may
-      partly reflect reduced per-group expressivity. At macro scale with diverse domains, routing discrimination may matter
-      more, making collision mitigation more impactful.'
+    notes: >
+      When the router selects expert A, also compute expert B's output on
+      the same input (without serving it). Compare per-token perplexity.
+
+      Implementation: after router selects top-k experts, also run the
+      competing clone's LoRA forward pass. Compare loss against actual next
+      token. Log (query_id, expert_a_loss, expert_b_loss) for tournament.
+
+      Cost: one extra LoRA forward per query where a tournament is active.
+      At rank-16, this is ~0.5% FLOP overhead. Should be negligible.
+
+      Validate that shadow perplexity predicts real quality by comparing
+      shadow scores with held-out eval set scores.
+
+  exp_evolution_convergence:
+    title: Continuous evolution improves model quality monotonically
+    status: open
+    scale: macro
+    priority: 5
+    depends_on:
+    - exp_clone_compete_evolution
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - model quality does not improve after 10 evolution cycles (corrections don't accumulate)
+    - quality oscillates (winner of cycle N loses to loser of cycle N-2)
+    - expert lineage diverges (v5 is worse than v1 on original domain)
+    evidence: []
+    tags:
+    - evolution
+    - convergence
+    - macro
+    created: '2026-03-07'
+    notes: >
+      The ultimate test: does the living model actually get better over time?
+
+      Protocol: run 10 evolution cycles on 5 experts. Each cycle:
+      (1) Evaluate all experts on domain-specific held-out set
+      (2) Generate corrections using 70B teacher for worst-performing queries
+      (3) Clone-and-compete
+      (4) Measure quality after tournament resolves
+
+      Plot quality curve over cycles. Must be monotonically improving.
+      If quality oscillates, the correction signal is noisy or the tournament
+      is not selecting the right winner. If quality plateaus, corrections
+      have diminishing returns (expert capacity saturated).
+
+  exp_automated_correction_pipeline:
+    title: Automated correction generation from teacher model
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_clone_compete_evolution
+    experiment_dir: null
+    kill_criteria:
+    - teacher-generated corrections are wrong >20% of the time (teacher unreliable)
+    - automated corrections improve expert quality <50% as much as human corrections
+    evidence: []
+    tags:
+    - distillation
+    - correction
+    - automation
+    - critical-path
+    created: '2026-03-07'
+    notes: >
+      The evolution loop needs automated correction sources. Pipeline:
+      (1) Serve queries through composed model, log (input, output, expert_ids)
+      (2) Sample outputs, send to 70B teacher: "Is this correct? If not, provide correction"
+      (3) Filter: only keep corrections where teacher confidence is high
+      (4) Feed corrections into clone-and-compete pipeline
+
+      Cost: ~$0.001 per judged query (70B, ~1K tokens).
+      At 1000 queries/day: $1/day for continuous improvement.
+
+      For code domains: use execution-based validation (run the code, check output).
+      Free and perfect signal. No teacher needed.
+
+  # ── Supporting Research ───────────────────────────────────────────
+
   exp_relu_router_vs_softmax:
     title: ReLU routing eliminates softmax collision by construction
     status: open
     scale: micro
-    priority: 11
+    priority: 8
     depends_on:
     - exp_softmax_collision_quantification
     blocks: []
@@ -880,257 +291,36 @@ killed:
     - relu
     - collision
     created: '2026-03-07'
-    notes: 'Softmax collision scales with N but mitigations do not help quality. ReMoE (ICLR 2025) shows ReLU routing avoids
-      probability compression entirely. Compare ReLU vs softmax routing at N=32: collision rate, quality, load balance. ReLU
-      naturally produces sparse routing (many experts get exactly 0), which may interact with k=2 selection differently than
-      softmax.'
-  exp_collision_macro_diverse_domains:
-    title: Collision rate impact with diverse domain experts at macro scale
-    status: open
-    scale: macro
-    priority: 14
-    depends_on:
-    - exp_softmax_collision_quantification
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - collision rate at N=5 macro (diverse domains) is <30% at eps=0.01
-    - collision mitigation provides <0.5% quality at p<0.05 at macro scale
-    evidence: []
-    tags:
-    - routing
-    - collision
-    - macro
-    - scaling
-    created: '2026-03-07'
-    notes: Micro collision experiment showed scaling with N but no quality impact. At macro scale with diverse domain experts
-      (Python, JS, Medical, Legal, Math), routing discrimination should be stronger. The N-capsules confound does not apply
-      at macro (real LoRA experts have full expressivity). Test whether collision rates are lower when experts have genuine
-      domain specialization, and whether mitigation matters for quality in the diverse setting.
-  exp_cuckoo_tau_fix_and_throughput:
-    title: Fix cuckoo tau training bug and mx.eval throughput regression
+    notes: >
+      At N=500+, softmax collision becomes a real concern. ReMoE (ICLR 2025)
+      shows ReLU routing avoids probability compression. Compare at N=32.
+      Not on critical path but important for scaling beyond 500 experts.
+
+  exp_domain_taxonomy_generation:
+    title: Automated domain taxonomy for expert coverage planning
     status: open
     scale: micro
-    priority: 12
-    depends_on:
-    - exp_cuckoo_collision_free_routing
-    blocks: []
+    priority: 6
+    depends_on: []
+    blocks:
+    - exp_distillation_pilot_50
     experiment_dir: null
     kill_criteria:
-    - fixed tau does not meaningfully change eviction rate vs fixed threshold
-    - throughput remains >30% worse than softmax after removing mx.eval sync
+    - generated taxonomy has >30% overlap between domains (not distinct enough)
+    - '>20% of domains produce experts indistinguishable from base model (domain too vague)'
     evidence: []
     tags:
-    - routing
-    - cuckoo-hashing
-    - bugfix
+    - distillation
+    - taxonomy
+    - automation
     created: '2026-03-07'
-    notes: 'Two implementation bugs found in adversarial review:
+    notes: >
+      What ARE the 50 (then 500, then 5000) domains? Need automated taxonomy.
 
-      (1) _raw_tau stored as mx.array not nn.Module param -- tau never trains
+      Approach: use cheap model (8B) to generate hierarchical domain tree.
+      Root categories: programming, science, professional, languages, reasoning.
+      Each leaf = one expert domain with specific training data requirements.
 
-      (2) mx.eval(alpha) on line 140 forces sync, causing -63.6% throughput
-
-      Fix both and re-run. If learned tau meaningfully changes routing behavior
-
-      and throughput matches softmax, cuckoo becomes practical.
-
-      '
-  exp_gap_causal_mechanism:
-    title: 'Causal mechanism: gap magnitude drives router gradient magnitude'
-    status: proven
-    scale: micro
-    priority: 4
-    depends_on:
-    - exp_gap_as_signal
-    blocks: []
-    experiment_dir: micro/models/gap_causal_mechanism
-    kill_criteria:
-    - router gradient magnitude does NOT correlate with gap magnitude (r² < 0.3)
-    - equal gradient magnitudes at cos=0.0 and cos=0.9
-    evidence:
-    - 'KC1 PARTIAL: CE gap vs gradient r²=0.24 (pooled, FAIL), but cosine vs gradient r²=0.63 (mean curve, PASS)'
-    - 'KC2 PASS: gradient ratio cos=0.0/cos=0.9 = 15.5x (far exceeds 10% threshold)'
-    - 'KEY FINDING: CE gap and router gradient are NEGATIVELY correlated — gap is NOT the gradient signal'
-    - 'The real mechanism is expert discriminability: orthogonal experts produce different outputs per token, giving stronger
-      router gradients'
-    - 'Phase transition at cos~0.5-0.7: gradients flat at ~0.17 for cos<=0.5, collapse to 0.01 at cos=0.9'
-    - 'Corrected causal chain: cos -> discriminability -> gradient -> quality (r²=0.63, 0.75 on mean curve)'
-    - 'Gap-as-signal reframed: the gap is a SYMPTOM not a CAUSE; discriminability is the actual gradient driver'
-    tags:
-    - gap-as-signal
-    - routing
-    - mechanistic
-    created: '2026-03-07'
-    notes: 'Original hypothesis partially confirmed, partially refined. The gap between composed and joint is NOT the gradient
-      signal (negative correlation). The actual mechanism is expert discriminability: when expert outputs differ per token,
-      the router gets strong gradients. Orthogonal experts maximize discriminability. This refines the gap-as-signal framing
-      in VISION.md: the conclusion (orthogonal is better) is correct, but the mechanism (gap drives gradients) is wrong —
-      discriminability drives gradients, and the gap is a downstream symptom.'
-  exp_gap_practical_regime:
-    title: Gap-as-signal in practical cosine regime (cos < 0.3)
-    status: killed
-    scale: micro
-    priority: 5
-    depends_on:
-    - exp_gap_as_signal
-    blocks: []
-    experiment_dir: micro/models/gap_practical_regime
-    kill_criteria:
-    - quality difference between cos=0.0 and cos=0.3 is < 0.5pp (not meaningful)
-    - gap magnitude variation in [0.0, 0.3] is within noise
-    evidence:
-    - 'KC1 KILL: quality diff cos=0.0 vs cos=0.3 = +0.47pp < 0.5pp threshold (Cohen d=0.24, small)'
-    - 'KC2 KILL: gap variation SNR=0.33 (quality range 0.64pp vs noise floor 1.92pp)'
-    - Within-regime r^2=0.013 (vs parent full-range r^2=0.74) -- correlation evaporates
-    - Practical regime [0.0,0.3] accounts for only 8.4% of total quality range
-    - 5 seeds, 9 cosine levels, 45 data points. Gap-as-signal is a binary classifier, not continuous predictor
-    tags:
-    - gap-as-signal
-    - practical
-    created: '2026-03-07'
-    notes: 'KILLED 2026-03-07. Gap-as-signal provides zero discrimination in the practical regime (cos<0.3). Within-regime
-      r^2=0.013. Quality difference cos=0.0 vs cos=0.3 is +0.47pp with Cohen d=0.24 (small). The 0.64pp quality range is 3x
-      smaller than the 1.92pp noise floor. Gap-as-signal is useful ONLY for detecting pathological adapters (cos>0.5), which
-      never occur with independent training. Implication: no gap measurement needed in the contribution protocol -- orthogonality
-      is guaranteed by dimensionality.'
-  exp_discriminability_n_gt_2:
-    title: Expert discriminability as gradient signal at N>2 with top-k selection
-    status: proven
-    scale: micro
-    priority: 10
-    depends_on:
-    - exp_gap_causal_mechanism
-    blocks: []
-    experiment_dir: micro/models/discriminability_n_gt_2
-    kill_criteria:
-    - discriminability does not predict router gradient magnitude at N=8, top_k=2 (r² < 0.3)
-    - expert selection gradients behave qualitatively differently from mixing-ratio gradients
-    evidence:
-    - 'KC1 PASS: r^2(discriminability, gradient) = 0.462 on mean curve (threshold >= 0.3)'
-    - 'KC2 BORDERLINE KILL: shape r^2 = 0.489 (threshold >= 0.5), gradient ratio 6.1x vs 19.0x at N=2'
-    - 'Discriminability mechanism generalizes but attenuates: r^2 drops 0.95->0.46 from N=2 to N=8'
-    - Gradient magnitude 3.6-7.1x smaller at N=8 (consistent with k/N=25% dilution)
-    - 'Phase transition persists but softens: 6.1x ratio at N=8 vs 19.0x at N=2'
-    - Non-monotonic gradient profile at N=8 (peak at cos=0.3), unlike flat-then-collapse at N=2
-    - 'Gradient-quality correlation remains strong: r^2=0.69 at N=8 (vs 0.93 at N=2)'
-    - 3 seeds (42, 123, 7), 6 cosine levels, ~4.3 min total runtime
-    - 'PROVEN 2026-03-07: Adversarial review PROCEED. Mechanism survives mixing-to-selection transition.'
-    - At real scale (cos~0.0002), attenuation is irrelevant -- all experts maximally discriminable.
-    tags:
-    - discriminability
-    - routing
-    - scaling
-    - mechanistic
-    created: '2026-03-07'
-    notes: 'PROVEN 2026-03-07. KC1 passes (discriminability predicts gradients at N=8), KC2 borderline but reviewer approved
-      (arbitrary threshold). The mechanism generalizes but is attenuated by top-k selection noise. At real scale (cos~0.0002),
-      all experts are maximally discriminable, so the attenuation is irrelevant. Practical implication: N=8 calibration may
-      need more steps or higher LR due to 5x smaller gradients. Dense backpropagation (arXiv:2504.12463) could restore N=2
-      dynamics. No further micro experiments needed on this branch.'
-  exp_dense_backprop_calibration:
-    title: Dense backpropagation to restore gradient strength at N>2
-    status: disproven
-    scale: micro
-    priority: 11
-    depends_on:
-    - exp_discriminability_n_gt_2
-    blocks: []
-    experiment_dir: micro/models/dense_backprop_calibration
-    kill_criteria:
-    - dense backprop does not close gradient magnitude gap vs N=2 by >50%
-    - calibration convergence speed improvement <2x vs standard top-k backprop
-    evidence:
-    - 'KC1 KILL: mean gradient gap closure = -7.0% (threshold >50%). Per-cosine: 32.2% at cos=0.0, -134.8% at cos=0.3, 81.7%
-      at cos=0.7'
-    - 'KC2 KILL: mean convergence speedup = 1.00x (threshold >=2x). Dense and sparse reach same loss at same step count'
-    - 'POSITIVE: N=8 dense achieves +0.9% vs joint (vs +1.5% for N=8 sparse) -- 0.5pp quality improvement'
-    - 'Dense backprop eliminates gradient non-monotonicity: profile normalized to [1.000, 0.946, 0.977] vs sparse [0.540,
-      1.000, 0.444]'
-    - N=4 dense/sparse ratio = 2.5-2.8x (matches N/k=2 prediction). N=8 effect weaker
-    - k/N dilution is NOT the calibration bottleneck -- quality is similar despite 2-3x gradient difference
-    - 3 seeds (42, 123, 7), 5 configs, 3 cosine levels, 5.4 min total runtime
-    tags:
-    - discriminability
-    - routing
-    - calibration
-    - dense-backprop
-    created: '2026-03-07'
-    notes: 'KILLED 2026-03-07. Dense backprop (STE with exact all-expert computation) does not close the gradient gap or speed
-      convergence. However, it improves quality by 0.5pp and eliminates gradient non-monotonicity. The mechanism is routing
-      information richness, not gradient magnitude. At real scale (cos~0.0002), the distinction is moot -- all experts are
-      maximally discriminable. Practical implication: LR scaling (exp_calibration_lr_scaling_with_n) is more cost-effective
-      than dense backprop (which costs N/k = 4x per step).'
-  exp_calibration_lr_scaling_with_n:
-    title: Calibration LR/steps scaling law as function of N
-    status: proven
-    scale: micro
-    priority: 12
-    depends_on:
-    - exp_discriminability_n_gt_2
-    blocks: []
-    experiment_dir: micro/models/calibration_lr_scaling
-    kill_criteria:
-    - no monotonic relationship between N and optimal calibration steps
-    - LR scaling does not compensate for gradient attenuation (quality gap persists)
-    evidence:
-    - 'KC1 PASS (trivially): all N converge in 100 steps at default LR (monotonic=constant)'
-    - 'KC2 PASS (trivially): no quality gap exists -- N=8 (+0.56%) slightly better than N=2 (+0.70%)'
-    - 'NULL RESULT: N/k gradient scaling hypothesis killed. Optimal LR is constant across N=2..16'
-    - Scaling law exponent b=0.10, effectively zero. LR_opt = 0.76*(N/k)^0.10, r^2=0.067
-    - 'Adam adaptive normalization cancels gradient attenuation: update ~ LR*m/sqrt(v) is invariant'
-    - 'Practical scaling law: LR=3e-3, steps=100, independent of N. No adjustment needed.'
-    - 3 seeds (42, 123, 7), 4 N values, 5 LR multipliers, 60 total configs, 9.8 min runtime
-    tags:
-    - calibration
-    - scaling
-    - practical
-    created: '2026-03-07'
-    notes: 'PROVEN 2026-03-07 (null result). The 5-7x gradient attenuation at N>2 does NOT require LR or step compensation.
-      Adam adaptive second-moment normalization cancels gradient scaling automatically. Quality at cos=0.0 is independent
-      of N (spread 0.42pp across N=2..16, within noise). The contribution protocol is trivially simple: same LR, same 100
-      steps, any N. Higher LR is harmful (especially at low N). This closes the calibration branch of the hypothesis graph.'
-  exp_adam_eps_extreme_n:
-    title: Adam eps-term non-negligibility at N=1000+ experts
-    status: open
-    scale: micro
-    priority: 16
-    depends_on:
-    - exp_calibration_lr_scaling_with_n
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - eps/sqrt(v) ratio remains <1% at N=1000 for all parameter groups
-    - calibration quality at N=1000 matches N=16 (no degradation from eps)
-    evidence: []
-    tags:
-    - calibration
-    - scaling
-    - adam
-    - extreme-scale
-    created: '2026-03-07'
-    notes: 'Calibration LR scaling null result depends on Adam update m/sqrt(v) being invariant to gradient scale. At extreme
-      N (1000+), gradient magnitudes shrink to O(1/N), and the eps term (1e-8) in sqrt(v + eps) could become non-negligible
-      relative to sqrt(v). This would break the cancellation property. Low priority: unlikely to matter in practice, but worth
-      verifying before claiming the calibration protocol works at arbitrary N.'
-  exp_cosine_phase_transition_macro:
-    title: Cosine phase transition threshold at macro scale (d=896)
-    status: open
-    scale: macro
-    priority: 14
-    depends_on:
-    - exp_gap_causal_mechanism
-    blocks: []
-    experiment_dir: null
-    kill_criteria:
-    - phase transition at d=896 occurs at same cos~0.5 threshold as micro (no scale dependence)
-    evidence: []
-    tags:
-    - discriminability
-    - phase-transition
-    - macro
-    - scaling
-    created: '2026-03-07'
-    notes: Micro experiment found gradient phase transition at cos~0.5-0.7. At d=896, natural cosine is 0.0002 so this threshold
-      is never reached in practice. But for the binary safety check (detecting pathological adapters), we need to know if
-      the cos~0.5 threshold is scale-invariant. If it shifts at macro scale, the safety check threshold needs recalibration.
+      Validate: train experts on leaf domains, measure distinctness via
+      orthogonality check and per-domain eval improvement over base.
+      Merge domains that produce indistinguishable experts.
