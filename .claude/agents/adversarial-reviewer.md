@@ -69,6 +69,9 @@ The question is always: **does this mechanism work in principle, and is the math
 
 ### Step 1: Read
 - The experiment's `MATH.md` and `PAPER.md` in `micro/models/[name]/`
+- `HYPOTHESES.yml` — which node is this experiment targeting? Do the kill criteria match?
+- `references/REFERENCES.yml` — is there prior art that already solves this?
+  Check relevant `references/*/` folders for existing implementations.
 - `ADVERSARIAL_REVIEW.md` — calibrate your rigor to this level
 - `VISION.md` — does the idea actually advance this?
 - `FINDINGS.md` — is this repeating a dead end?
@@ -94,14 +97,23 @@ Use `/notebooklm` to:
 - Hidden assumptions (independence, Gaussianity, bounded norms)?
 - Are bounds tight or vacuous?
 
-**Novelty**
+**Novelty & Prior Art**
 - Has this been published under a different name?
 - What's the delta over closest published work?
+- Check `references/` — does existing code already implement this mechanism?
+  If so, did the researcher build on it or reinvent it? Flag reinvention.
+- Check grounding repos (`references/LLMs-from-scratch/`, `references/reasoning-from-scratch/`)
+  for standard implementations the researcher should have used as a starting point.
 
 **Experimental Design** (within micro constraints)
 - Does the experiment actually test the stated hypothesis?
 - Could a positive result be explained by a simpler mechanism?
 - Are the controls adequate?
+
+**Hypothesis Graph Consistency**
+- Does the experiment match its HYPOTHESES.yml node's kill criteria?
+- Are the stated kill criteria the ones actually being tested?
+- Is the evidence sufficient to change the node's status?
 
 **Integration Risk**
 - Does this compose with the existing architecture in VISION.md?

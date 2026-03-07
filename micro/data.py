@@ -82,6 +82,42 @@ def domain_split(docs: list[str], method: str = "binary") -> dict[str, list[str]
             key = f"{lo}_{hi}"
             result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
         return result
+    if method == "quaternary":
+        ranges = [("a", "f"), ("g", "m"), ("n", "s"), ("t", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
+    if method == "ternary":
+        ranges = [("a", "h"), ("i", "p"), ("q", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
+    if method == "senary":
+        ranges = [("a", "d"), ("e", "h"), ("i", "l"), ("m", "p"), ("q", "t"), ("u", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
+    if method == "septenary":
+        ranges = [("a", "d"), ("e", "g"), ("h", "k"), ("l", "n"), ("o", "r"), ("s", "u"), ("v", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
+    if method == "octonary":
+        ranges = [("a", "c"), ("d", "f"), ("g", "i"), ("j", "l"),
+                  ("m", "o"), ("p", "r"), ("s", "u"), ("v", "z")]
+        result = {}
+        for lo, hi in ranges:
+            key = f"{lo}_{hi}"
+            result[key] = [d for d in docs if lo <= d[0].lower() <= hi]
+        return result
     raise ValueError(f"Unknown split method: {method}")
 
 

@@ -1,0 +1,67 @@
+{
+  "experiment": "persistent_expert_tree",
+  "seeds": [
+    42,
+    123,
+    7
+  ],
+  "per_seed": [
+    {
+      "joint_val_loss": 0.5260295271873474,
+      "same_version_val_loss": 0.5552845656871795,
+      "cross_version_val_loss": 0.5558679044246674,
+      "cross_vs_same_pct": 0.10505221530260615,
+      "cross_vs_joint_pct": 5.672376871477961,
+      "same_vs_joint_pct": 5.561482195924876,
+      "memory_overhead_pct": 200.0,
+      "rollback_max_diff": 0.0,
+      "kc1_pass": true,
+      "kc2_pass": false
+    },
+    {
+      "joint_val_loss": 0.5249974131584167,
+      "same_version_val_loss": 0.5533841073513031,
+      "cross_version_val_loss": 0.5498852372169495,
+      "cross_vs_same_pct": -0.6322679108188402,
+      "cross_vs_joint_pct": 4.740561274160583,
+      "same_vs_joint_pct": 5.407016012157128,
+      "memory_overhead_pct": 200.0,
+      "rollback_max_diff": 0.0,
+      "kc1_pass": true,
+      "kc2_pass": false
+    },
+    {
+      "joint_val_loss": 0.5300322115421295,
+      "same_version_val_loss": 0.5602740824222565,
+      "cross_version_val_loss": 0.5658884763717651,
+      "cross_vs_same_pct": 1.0020798972595042,
+      "cross_vs_joint_pct": 6.764921838488211,
+      "same_vs_joint_pct": 5.705666603193456,
+      "memory_overhead_pct": 200.0,
+      "rollback_max_diff": 0.0,
+      "kc1_pass": true,
+      "kc2_pass": false
+    }
+  ],
+  "aggregate": {
+    "mean_joint_val_loss": 0.5270197172959645,
+    "mean_same_version_val_loss": 0.5563142518202464,
+    "mean_cross_version_val_loss": 0.5572138726711273,
+    "mean_cross_vs_same_pct": 0.15828806724775674,
+    "mean_memory_overhead_pct": 200.0,
+    "mean_rollback_diff": 0.0,
+    "kc1_pass": true,
+    "kc2_pass": false
+  },
+  "memory_report_seed42": {
+    "base_param_count": 203932,
+    "v1_delta_params": 203932,
+    "v2_delta_params": 203932,
+    "v1_delta_pct": 100.0,
+    "v2_delta_pct": 100.0,
+    "persistent_total": 611796,
+    "full_copy_total": 611796,
+    "overhead_vs_mutable_pct": 200.0,
+    "savings_vs_full_copy_pct": 0.0
+  }
+}

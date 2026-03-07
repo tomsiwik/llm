@@ -1,1 +1,1 @@
-Micro arena LOOP_COMPLETE. All 5 experiments done: (1) A-matrix self-routing killed, (2) contrastive keys killed, (3) sparse top-1 killed / k=2 validated, (4) Procrustes decomposition killed, (5) N=5 scaling passed. Validated protocol: softmax routing by task quality, k=2 minimum sparsity, concatenation composition, shared attention. Next phase: macro scale (0.5B + LoRA experts vs 1.5B monolithic).
+Researcher hat: Delegating exp_persistent_expert_tree REVISE to experiment-ideator with 6 fixes from adversarial review.

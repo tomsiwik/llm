@@ -1,8 +1,8 @@
 # Loop Summary
 
-**Status:** Completed successfully
-**Iterations:** 4
-**Duration:** 27m 2s
+**Status:** Stopped: max runtime exceeded
+**Iterations:** 1
+**Duration:** 5h 12m 16s
 
 ## Tasks
 
@@ -14,4 +14,4 @@ _No events recorded._
 
 ## Final Commit
 
-5b2b295: chore: trash
+889933c: chore: auto-commit before merge (loop primary)

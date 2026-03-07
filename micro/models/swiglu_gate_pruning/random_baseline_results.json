@@ -1,0 +1,92 @@
+{
+  "42": {
+    "unpruned_loss": 0.5508755147457123,
+    "gate_product": {
+      "pct_pruned": 77.1484375,
+      "pruned_loss": 0.5688768565654755,
+      "delta_pct": 3.2677694575103313
+    },
+    "random": [
+      {
+        "random_seed": 0,
+        "pct_pruned": 76.5625,
+        "pruned_loss": 0.6058972835540771,
+        "delta_pct": 9.988058524213633
+      },
+      {
+        "random_seed": 1,
+        "pct_pruned": 76.5625,
+        "pruned_loss": 0.5927220761775971,
+        "delta_pct": 7.596373465827658
+      },
+      {
+        "random_seed": 2,
+        "pct_pruned": 76.5625,
+        "pruned_loss": 0.604424637556076,
+        "delta_pct": 9.720730251567336
+      }
+    ],
+    "random_mean_delta": 9.101720747202876,
+    "actual_fraction": 0.771484375
+  },
+  "123": {
+    "unpruned_loss": 0.5714387238025666,
+    "gate_product": {
+      "pct_pruned": 26.3671875,
+      "pruned_loss": 0.5754411578178406,
+      "delta_pct": 0.7004135086681409
+    },
+    "random": [
+      {
+        "random_seed": 0,
+        "pct_pruned": 25.78125,
+        "pruned_loss": 0.5755867421627044,
+        "delta_pct": 0.7258903163816818
+      },
+      {
+        "random_seed": 1,
+        "pct_pruned": 25.78125,
+        "pruned_loss": 0.5729161441326142,
+        "delta_pct": 0.2585439642970468
+      },
+      {
+        "random_seed": 2,
+        "pct_pruned": 25.78125,
+        "pruned_loss": 0.5789811730384826,
+        "delta_pct": 1.3199051659862668
+      }
+    ],
+    "random_mean_delta": 0.7681131488883318,
+    "actual_fraction": 0.263671875
+  },
+  "7": {
+    "unpruned_loss": 0.553919643163681,
+    "gate_product": {
+      "pct_pruned": 82.2265625,
+      "pruned_loss": 0.5604401290416717,
+      "delta_pct": 1.1771537547845947
+    },
+    "random": [
+      {
+        "random_seed": 0,
+        "pct_pruned": 82.03125,
+        "pruned_loss": 0.5656027376651764,
+        "delta_pct": 2.109167754869292
+      },
+      {
+        "random_seed": 1,
+        "pct_pruned": 82.03125,
+        "pruned_loss": 0.5656677722930908,
+        "delta_pct": 2.1209085603664515
+      },
+      {
+        "random_seed": 2,
+        "pct_pruned": 82.03125,
+        "pruned_loss": 0.5651496112346649,
+        "delta_pct": 2.0273641149182815
+      }
+    ],
+    "random_mean_delta": 2.0858134767180085,
+    "actual_fraction": 0.822265625
+  }
+}

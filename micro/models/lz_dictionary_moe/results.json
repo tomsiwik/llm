@@ -1,0 +1,164 @@
+{
+  "42": {
+    "standard_moe": {
+      "val_loss": 0.5171792924404144,
+      "params": 596352
+    },
+    "dict_moe_small": {
+      "val_loss": 0.5126885592937469,
+      "params": 236032,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9990302499071703
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9991750592991968
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9991082153755615
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9989358887593969
+        }
+      }
+    },
+    "dict_moe_large": {
+      "val_loss": 0.5083061516284942,
+      "params": 432640,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9984395468290068
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9982249124807301
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9995335857986954
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9992561204553034
+        }
+      }
+    },
+    "dense_gpt": {
+      "val_loss": 0.5120796337723732,
+      "params": 202112
+    }
+  },
+  "123": {
+    "standard_moe": {
+      "val_loss": 0.5083673566579818,
+      "params": 596352
+    },
+    "dict_moe_small": {
+      "val_loss": 0.5043639704585076,
+      "params": 236032,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9987514087025714
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.999067054194455
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9989311879002734
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9996452598666558
+        }
+      }
+    },
+    "dict_moe_large": {
+      "val_loss": 0.5064049556851387,
+      "params": 432640,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9993432583317406
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.999634940907604
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9992932687078898
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9993726100374879
+        }
+      }
+    },
+    "dense_gpt": {
+      "val_loss": 0.5021469950675964,
+      "params": 202112
+    }
+  },
+  "7": {
+    "standard_moe": {
+      "val_loss": 0.5189784750342369,
+      "params": 596352
+    },
+    "dict_moe_small": {
+      "val_loss": 0.5142338797450066,
+      "params": 236032,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9993760496905051
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.999682408119242
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9989573292632045
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9988989698170117
+        }
+      }
+    },
+    "dict_moe_large": {
+      "val_loss": 0.5205786257982254,
+      "params": 432640,
+      "diagnostics": {
+        "layer_0": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9988573500155029
+        },
+        "layer_1": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9991937480805906
+        },
+        "layer_2": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9988000224652153
+        },
+        "layer_3": {
+          "utilization_rate": 1.0,
+          "normalized_entropy": 0.9989437999613366
+        }
+      }
+    },
+    "dense_gpt": {
+      "val_loss": 0.5212010100483895,
+      "params": 202112
+    }
+  }
+}

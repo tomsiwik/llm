@@ -86,21 +86,50 @@ Your job is to produce micro-experiments that are **rigorous within their delibe
 
 Before starting, ALWAYS read these files:
 
-1. `VISION.md` — the north star
-2. `FINDINGS.md` — what experiments have proven/disproven
-3. `ADVERSARIAL_REVIEW.md` — known weaknesses and gaps
-4. `IDEA*.md` — existing ideas to avoid duplication
-5. `micro/models/*/MATH.md` — existing math (match this style)
-6. `micro/models/*/PAPER.md` — existing papers (match this style)
+1. `HYPOTHESES.yml` — the hypothesis graph (pick your target node here)
+2. `references/REFERENCES.yml` — prior art manifest (check before ideating!)
+3. `VISION.md` — the north star
+4. `FINDINGS.md` — what experiments have proven/disproven
+5. `ADVERSARIAL_REVIEW.md` — known weaknesses and gaps
+6. `IDEA*.md` — existing ideas to avoid duplication
+7. `micro/models/*/MATH.md` — existing math (match this style)
+8. `micro/models/*/PAPER.md` — existing papers (match this style)
 
 Also scan `PLAN*.md` for context on what's been planned.
 
 ## Your Process
 
-### 1. Literature Review
-- Read all context files above
-- Use `/notebooklm` to research related work and find overlooked connections
-- Identify the most impactful open question from VISION.md "What Remains"
+### 1. Literature Review (BASELINE-FIRST — mandatory before any code)
+
+**Step 1: Check grounding repos FIRST** (git submodules — the ground truth):
+  - `references/LLMs-from-scratch/` — educational LLM implementations (GPT, Llama, Qwen3.5, LoRA, fine-tuning). This is the canonical reference for how standard mechanisms work. If it's implemented here, USE that implementation as your starting point.
+  - `references/reasoning-from-scratch/` — reasoning capability implementations
+  - `miniqwen.py` (repo root) — standalone Qwen3.5-0.8B architecture reference with SiLU MLP, GQA, hybrid attention. This is the macro baseline architecture.
+
+**Step 2: Check references for the specific hypothesis**:
+- Read `references/REFERENCES.yml` and find entries matching your HYPOTHESES.yml node
+- Scan the relevant `references/*/` folders for existing implementations
+- **Build on prior art, don't reinvent.** If a reference has working code for the mechanism you're testing, ADAPT it rather than writing from scratch.
+- For macro work: `references/qwen3-coder-next/` (512 experts, GatedDeltaNet, MTP) is the SOTA baseline. `references/deepseek-v3/` (256 experts, auxiliary-loss-free) is the production reference.
+
+**Step 3: NotebookLM SOTA research (MANDATORY for all new experiments)**:
+- Use `/notebooklm` to research the specific mechanism in your hypothesis
+- Search for EXISTING CODE IMPLEMENTATIONS and GitHub repos that already implement
+  the mechanism or closely related work. Prefer adapting existing code over writing
+  from scratch. The `notes` field in HYPOTHESES.yml often specifies what to search for.
+- For cross-domain experiments (tagged `cross-domain` in HYPOTHESES.yml), research
+  the source field (crypto, compression, protocols, data structures) for reference
+  implementations. Find the canonical library/repo for that mechanism.
+- When you find useful prior art, save it to `references/`:
+  create a subfolder, add paper/code/repo link, write README.md, update REFERENCES.yml
+- Generate a study guide or briefing focused on: (1) existing implementations,
+  (2) how the mechanism maps to expert routing/composition, (3) known failure modes
+- For LoRA experiments: search specifically for LoRA merging/composition papers and
+  code (TIES, DARE, TALL-mask, Model Soups, Git Re-Basin, AdaLoRA, DoRA)
+
+**Step 4: Read project context**:
+- All other context files listed above (VISION.md, FINDINGS.md, etc.)
+- Identify the most impactful open question from HYPOTHESES.yml
 
 ### 2. Ideation + Mathematical Formalization
 - Generate 2-3 candidate ideas ranked by impact/cost ratio
@@ -112,6 +141,15 @@ Also scan `PLAN*.md` for context on what's been planned.
 - Include a worked numerical example at micro scale (d=64, N=4)
 
 ### 3. Implementation
+
+**REUSE-FIRST RULE**: Before writing any code:
+1. Check if the mechanism already exists in a reference repo (`references/*/`)
+2. Check if a library implements it (e.g., `reedsolo` for Reed-Solomon, `sslib`
+   for Shamir, `TenSEAL` for homomorphic encryption, `scipy.linalg` for Procrustes)
+3. Check `references/LLMs-from-scratch/` for standard ML building blocks
+4. Only write custom code for the PROJECT-SPECIFIC integration logic
+5. When using external code, add the repo to `references/` with a README.md
+
 Build in `micro/models/[name]/`:
 - `__init__.py` — register with `@register("name", parent="parent_model")`
 - `[name].py` — extend closest parent, override only what's needed

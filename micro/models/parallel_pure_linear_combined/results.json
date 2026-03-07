@@ -1,0 +1,200 @@
+{
+  "n_seeds": 5,
+  "elapsed_seconds": 1097.770856142044,
+  "conditions": {
+    "seq_hybrid": {
+      "gap_mean": -0.4966521313421605,
+      "gap_median": -0.35048557422816845,
+      "gap_std": 1.2901022375368907,
+      "composed_mean": 0.504671576321125,
+      "joint_mean": 0.5071847203373909,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": -1.1467134582134313,
+          "joint_avg": 0.5057501569390297,
+          "composed_avg": 0.4999506518244743,
+          "single_avg": 0.4748819783329964
+        },
+        {
+          "seed": 1,
+          "gap_pct": 0.3951397616815446,
+          "joint_avg": 0.5124510690569878,
+          "composed_avg": 0.5144759669899941,
+          "single_avg": 0.4888296231627465
+        },
+        {
+          "seed": 2,
+          "gap_pct": -2.325070924043622,
+          "joint_avg": 0.5059409007430077,
+          "composed_avg": 0.4941774159669876,
+          "single_avg": 0.4701734855771065
+        },
+        {
+          "seed": 3,
+          "gap_pct": 0.9438695380928743,
+          "joint_avg": 0.5036114066839218,
+          "composed_avg": 0.5083648413419724,
+          "single_avg": 0.47944561392068863
+        },
+        {
+          "seed": 4,
+          "gap_pct": -0.35048557422816845,
+          "joint_avg": 0.5081700682640076,
+          "composed_avg": 0.5063890054821968,
+          "single_avg": 0.47977393865585327
+        }
+      ]
+    },
+    "seq_pure_linear": {
+      "gap_mean": 0.5771957855184602,
+      "gap_median": 0.5200609717025706,
+      "gap_std": 0.556867009107788,
+      "composed_mean": 0.5102372026443481,
+      "joint_mean": 0.5073198595643044,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": 0.06587389860474294,
+          "joint_avg": 0.5088376387953758,
+          "composed_avg": 0.5091728299856186,
+          "single_avg": 0.48375515192747115
+        },
+        {
+          "seed": 1,
+          "gap_pct": 0.7746529728450281,
+          "joint_avg": 0.5119447261095047,
+          "composed_avg": 0.5159105211496353,
+          "single_avg": 0.4881647452712059
+        },
+        {
+          "seed": 2,
+          "gap_pct": 1.4214365171275176,
+          "joint_avg": 0.5010223716497422,
+          "composed_avg": 0.50814408659935,
+          "single_avg": 0.48070552498102187
+        },
+        {
+          "seed": 3,
+          "gap_pct": 0.10395456731244151,
+          "joint_avg": 0.5079316765069961,
+          "composed_avg": 0.5084596946835518,
+          "single_avg": 0.48292627185583115
+        },
+        {
+          "seed": 4,
+          "gap_pct": 0.5200609717025706,
+          "joint_avg": 0.5068628847599029,
+          "composed_avg": 0.509498880803585,
+          "single_avg": 0.4812618851661682
+        }
+      ]
+    },
+    "par_hybrid": {
+      "gap_mean": -0.13273250891010943,
+      "gap_median": -0.31131582838218297,
+      "gap_std": 0.726745559762908,
+      "composed_mean": 0.5050068065524101,
+      "joint_mean": 0.5057057076692582,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": -0.3164237269801896,
+          "joint_avg": 0.5071449369192124,
+          "composed_avg": 0.5055402100086213,
+          "single_avg": 0.48068419545888896
+        },
+        {
+          "seed": 1,
+          "gap_pct": -1.0499052158172577,
+          "joint_avg": 0.5159578427672387,
+          "composed_avg": 0.5105407744646072,
+          "single_avg": 0.4872908964753151
+        },
+        {
+          "seed": 2,
+          "gap_pct": 0.06693227123155718,
+          "joint_avg": 0.4971916630864144,
+          "composed_avg": 0.49752444475889207,
+          "single_avg": 0.47039506733417513
+        },
+        {
+          "seed": 3,
+          "gap_pct": 0.947049955397526,
+          "joint_avg": 0.5032956525683403,
+          "composed_avg": 0.5080621138215065,
+          "single_avg": 0.48086468279361727
+        },
+        {
+          "seed": 4,
+          "gap_pct": -0.31131582838218297,
+          "joint_avg": 0.504938443005085,
+          "composed_avg": 0.5033664897084236,
+          "single_avg": 0.47624849081039433
+        }
+      ]
+    },
+    "par_pure_linear": {
+      "gap_mean": 0.9604742913196799,
+      "gap_median": 0.7992116608477002,
+      "gap_std": 0.6892436250255395,
+      "composed_mean": 0.512135654091835,
+      "joint_mean": 0.507252908051014,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": 0.5365162497611194,
+          "joint_avg": 0.5110532432794571,
+          "composed_avg": 0.5137951269745826,
+          "single_avg": 0.4869090750813484
+        },
+        {
+          "seed": 1,
+          "gap_pct": 2.1401431320214788,
+          "joint_avg": 0.5125142082571983,
+          "composed_avg": 0.523482745885849,
+          "single_avg": 0.4955515146255493
+        },
+        {
+          "seed": 2,
+          "gap_pct": 0.9144255991141721,
+          "joint_avg": 0.5004094839096069,
+          "composed_avg": 0.5049853563308715,
+          "single_avg": 0.47998096197843554
+        },
+        {
+          "seed": 3,
+          "gap_pct": 0.7992116608477002,
+          "joint_avg": 0.5052616938948631,
+          "composed_avg": 0.5092998042702674,
+          "single_avg": 0.4824619829654694
+        },
+        {
+          "seed": 4,
+          "gap_pct": 0.41207481485392866,
+          "joint_avg": 0.5070259109139443,
+          "composed_avg": 0.5091152369976044,
+          "single_avg": 0.48092304170131683
+        }
+      ]
+    }
+  },
+  "kill_criterion": {
+    "description": "combined parallel+pure-linear degrades >5% vs sequential+hybrid baseline",
+    "degradation_pct": 1.4789970588636003,
+    "threshold": 5.0,
+    "killed": false,
+    "baseline_comp_mean": 0.504671576321125,
+    "test_comp_mean": 0.512135654091835,
+    "gap_diff_pp": 1.4571264226618403
+  },
+  "factorial_analysis": {
+    "parallel_effect_with_hybrid": 0.06642542338699362,
+    "parallel_effect_with_linear": 0.37207232981993793,
+    "linear_effect_with_sequential": 1.102821435634344,
+    "linear_effect_with_parallel": 1.4116339516475502,
+    "predicted_additive": 1.1692468590213376,
+    "actual_combined": 1.4789970588636003,
+    "interaction_term": 0.3097501998422627
+  }
+}

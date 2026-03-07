@@ -1,0 +1,86 @@
+{
+  "n_seeds": 3,
+  "n_domains": 5,
+  "elapsed_seconds": 858.0714161396027,
+  "conditions": {
+    "seq_hybrid": {
+      "gap_mean": 2.567002896258374,
+      "gap_median": 2.726765374006069,
+      "gap_std": 0.33150927548560527,
+      "composed_mean": 0.4996211012204488,
+      "joint_mean": 0.4871225879589717,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": 2.788377964805515,
+          "joint_avg": 0.4859593719244003,
+          "composed_avg": 0.49950975596904756,
+          "single_avg": 0.4437032991647721
+        },
+        {
+          "seed": 1,
+          "gap_pct": 2.726765374006069,
+          "joint_avg": 0.48512508094310763,
+          "composed_avg": 0.4983533036708832,
+          "single_avg": 0.4445943814516068
+        },
+        {
+          "seed": 2,
+          "gap_pct": 2.1858653499635388,
+          "joint_avg": 0.49028331100940703,
+          "composed_avg": 0.5010002440214156,
+          "single_avg": 0.44525756478309636
+        }
+      ]
+    },
+    "par_pure_linear": {
+      "gap_mean": 3.316563362285611,
+      "gap_median": 3.059962628786925,
+      "gap_std": 1.4062137458259452,
+      "composed_mean": 0.5055419194698333,
+      "joint_mean": 0.4893468477328618,
+      "per_seed": [
+        {
+          "seed": 0,
+          "gap_pct": 2.0563198346528617,
+          "joint_avg": 0.4955224043130874,
+          "composed_avg": 0.5057119297981262,
+          "single_avg": 0.4470365971326828
+        },
+        {
+          "seed": 1,
+          "gap_pct": 3.059962628786925,
+          "joint_avg": 0.4855000388622284,
+          "composed_avg": 0.5003561586141586,
+          "single_avg": 0.4461929762363434
+        },
+        {
+          "seed": 2,
+          "gap_pct": 4.833407623417047,
+          "joint_avg": 0.4870181000232696,
+          "composed_avg": 0.5105576699972152,
+          "single_avg": 0.4535460448265075
+        }
+      ]
+    }
+  },
+  "kill_criterion": {
+    "description": "par_pure_linear N=5 composition gap >8%",
+    "test_gap_mean_pct": 3.316563362285611,
+    "threshold": 8.0,
+    "killed": false,
+    "test_comp_mean": 0.5055419194698333,
+    "test_joint_mean": 0.4893468477328618
+  },
+  "cross_architecture": {
+    "degradation_pct": 1.1850616867304917,
+    "gap_diff_pp": 0.749560466027237,
+    "baseline_comp_mean": 0.4996211012204488,
+    "test_comp_mean": 0.5055419194698333
+  },
+  "n2_comparison": {
+    "n2_degradation": 1.48,
+    "n5_degradation": 1.1850616867304917,
+    "delta_pp": -0.29493831326950826
+  }
+}

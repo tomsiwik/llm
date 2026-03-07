@@ -1,0 +1,98 @@
+{
+  "single_domain": {
+    "kd_tree_routing": [
+      {
+        "model": "kd_tree_routing",
+        "seed": 42,
+        "n_params": 203932,
+        "val_loss": 0.5160572439432144,
+        "elapsed": 26.39488983154297
+      },
+      {
+        "model": "kd_tree_routing",
+        "seed": 123,
+        "n_params": 203932,
+        "val_loss": 0.5180684745311737,
+        "elapsed": 27.38730001449585
+      },
+      {
+        "model": "kd_tree_routing",
+        "seed": 7,
+        "n_params": 203932,
+        "val_loss": 0.5153266310691833,
+        "elapsed": 27.029149055480957
+      }
+    ],
+    "hierarchical_tree": [
+      {
+        "model": "hierarchical_tree",
+        "seed": 42,
+        "n_params": 203932,
+        "val_loss": 0.5181555956602096,
+        "elapsed": 13.947785139083862
+      },
+      {
+        "model": "hierarchical_tree",
+        "seed": 123,
+        "n_params": 203932,
+        "val_loss": 0.5149704188108444,
+        "elapsed": 13.996161937713623
+      },
+      {
+        "model": "hierarchical_tree",
+        "seed": 7,
+        "n_params": 203932,
+        "val_loss": 0.5173574537038803,
+        "elapsed": 13.987950801849365
+      }
+    ]
+  },
+  "composition": {
+    "kd_tree_routing": [
+      {
+        "model": "kd_tree_routing",
+        "seed": 42,
+        "joint_loss": 0.5142928481101989,
+        "composed_loss": 0.562361991405487,
+        "gap_pct": 9.346648212574054
+      },
+      {
+        "model": "kd_tree_routing",
+        "seed": 123,
+        "joint_loss": 0.5170818656682968,
+        "composed_loss": 0.5385219573974609,
+        "gap_pct": 4.14636311050167
+      },
+      {
+        "model": "kd_tree_routing",
+        "seed": 7,
+        "joint_loss": 0.5223716765642166,
+        "composed_loss": 0.5502204418182373,
+        "gap_pct": 5.331216546270224
+      }
+    ],
+    "hierarchical_tree": [
+      {
+        "model": "hierarchical_tree",
+        "seed": 42,
+        "joint_loss": 0.5109038829803467,
+        "composed_loss": 0.5337919354438782,
+        "gap_pct": 4.479913585705098
+      },
+      {
+        "model": "hierarchical_tree",
+        "seed": 123,
+        "joint_loss": 0.5173143088817597,
+        "composed_loss": 0.5446211278438569,
+        "gap_pct": 5.278574068659406
+      },
+      {
+        "model": "hierarchical_tree",
+        "seed": 7,
+        "joint_loss": 0.5150023639202118,
+        "composed_loss": 0.5408831775188446,
+        "gap_pct": 5.025377631595196
+      }
+    ]
+  }
+}

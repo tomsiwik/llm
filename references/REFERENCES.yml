@@ -1,0 +1,230 @@
+# References Manifest — prior art grounding for the research loop.
+#
+# Each entry corresponds to a subfolder in references/ containing:
+#   paper.{md,pdf}   — the paper or a summary
+#   repo/            — cloned code or key files from the source
+#   code.{py,etc}    — standalone implementation snippets
+#   README.md        — source URL, key insight, relevance to our work
+#
+# Convention for adding new references:
+#   1. Create references/{short-name}/ (kebab-case, descriptive)
+#   2. Add paper/code/repo as available
+#   3. Write README.md with: source, key insight, relevance
+#   4. Add entry here linking to relevant HYPOTHESES.yml nodes
+#   5. The experiment-ideator MUST check this manifest before ideating
+#
+# Fields:
+#   dir:        subfolder name
+#   source:     URL (arxiv, github, blog)
+#   insight:    one-line summary of what we can use
+#   nodes:      HYPOTHESES.yml node IDs this is relevant to
+#   added:      date added
+
+entries:
+  # ── Modern MoE Routing ─────────────────────────────────────────────────────
+
+  - dir: "remoe-relu-routing"
+    source: "https://arxiv.org/abs/2408.14711"
+    insight: "ReLU replaces softmax+top-k routing — dynamic per-token expert count, outperforms standard MoE"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "union-of-experts"
+    source: "https://arxiv.org/abs/2410.02285"
+    insight: "Expert weights contain intrinsic routing signal (SVD analysis) — routing can bypass external router"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "moram-associative-memory"
+    source: "https://arxiv.org/abs/2501.13662"
+    insight: "LoRA adapters as key-value pairs in associative memory — self-routing eliminates router calibration"
+    nodes: [exp5_macro_match, exp11_training_time_compat]
+    added: "2026-03-04"
+
+  - dir: "soft-moe"
+    source: "https://arxiv.org/abs/2308.00951"
+    insight: "Soft token-to-expert assignment eliminates routing collapse and load balancing — no top-k needed"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  # ── Expert Merging ─────────────────────────────────────────────────────────
+
+  - dir: "ties-merging"
+    source: "https://arxiv.org/abs/2306.01708"
+    insight: "Trim-elect-merge resolves sign conflicts in LoRA delta merging — drop-in upgrade for weight averaging"
+    nodes: [exp5_macro_match, exp_ortho_diagnostic, exp_lora_procrustes_linear]
+    added: "2026-03-04"
+
+  - dir: "dare-merging"
+    source: "https://arxiv.org/abs/2311.03099"
+    insight: "Random drop + rescale of delta params before merging — exploits parameter redundancy similar to our dead capsule pruning"
+    nodes: [exp5_macro_match, exp_lora_procrustes_linear]
+    added: "2026-03-04"
+
+  # ── Neural Death & Pruning ─────────────────────────────────────────────────
+
+  - dir: "redo-dead-neurons"
+    source: "https://arxiv.org/abs/2405.14540"
+    insight: "Activation-based dead neuron profiling + reinitialization — hooks-based approach (not forward-pass duplication)"
+    nodes: [exp15_non_relu_pruning, exp17_training_duration_death]
+    added: "2026-03-04"
+
+  - dir: "gurbuzbalaban-neural-death"
+    source: "https://arxiv.org/abs/2402.00722"
+    insight: ">90% of revived neurons re-die; cosine decay promotes revival; non-monotonic death trajectory"
+    nodes: [exp17_training_duration_death, exp16_capsule_identity_tracking]
+    added: "2026-03-04"
+
+  # ── Production MoE Architecture ────────────────────────────────────────────
+
+  - dir: "deepseek-v3"
+    source: "https://arxiv.org/abs/2412.19437"
+    insight: "256 fine-grained experts, auxiliary-loss-free load balancing via per-expert bias — closest to capsule approach at scale"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "mixtral-8x7b"
+    source: "https://arxiv.org/abs/2401.04088"
+    insight: "Production top-2 MoE validates k=2 routing; expert offloading strategy maps to our inference protocol"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "switch-transformers"
+    source: "https://arxiv.org/abs/2101.03961"
+    insight: "k=1 routing works at scale with large experts — our micro k=1 kill is capacity-bound, not mechanism-bound"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  # ── Persistent Data Structures ────────────────────────────────────────────
+
+  - dir: "okasaki-persistent-ds"
+    source: "https://en.wikipedia.org/wiki/Persistent_data_structure"
+    insight: "Path-copying persistent binary trees enable O(log N) version management — direct application to expert tree versioning"
+    nodes: [exp_persistent_expert_tree]
+    added: "2026-03-07"
+
+  # ── Adaptive Compute ──────────────────────────────────────────────────────
+
+  - dir: "mixture-of-depths"
+    source: "https://arxiv.org/abs/2404.02258"
+    insight: "Adaptive compute at layer level (skip layers for easy tokens) — complementary to our within-layer entropy-adaptive k selection"
+    nodes: [exp_arithmetic_coding_router]
+    added: "2026-03-06"
+
+  # ── Continual Learning ─────────────────────────────────────────────────────
+
+  - dir: "infolora-continual"
+    source: "https://arxiv.org/abs/2404.00228"
+    insight: "Orthogonality constraints on LoRA for continual learning — enforces what we observe naturally (cos~0)"
+    nodes: [exp11_training_time_compat, exp_ortho_diagnostic, exp_lora_procrustes_linear]
+    added: "2026-03-04"
+
+  - dir: "moe-adapters4cl"
+    source: "https://arxiv.org/abs/2404.09855"
+    insight: "MoE adapters on frozen base for CL — most architecturally similar to our approach"
+    nodes: [exp5_macro_match, exp11_training_time_compat]
+    added: "2026-03-04"
+
+  # ── Educational Baselines (git submodules) ───────────────────────────────────
+  # These two repos are GROUNDING KNOWLEDGE for all agents/researchers.
+  # Agents MUST check these before reinventing any standard mechanism.
+
+  - dir: "LLMs-from-scratch"
+    source: "https://github.com/rasbt/LLMs-from-scratch"
+    insight: "Complete educational LLM implementations — GPT, Llama, Qwen3.5, fine-tuning, LoRA. The ground truth for how things work."
+    nodes: [exp5_macro_match, exp15_non_relu_pruning]
+    added: "2026-03-04"
+
+  - dir: "reasoning-from-scratch"
+    source: "https://github.com/rasbt/reasoning-from-scratch"
+    insight: "Educational reasoning implementations — chain-of-thought, tool use, structured reasoning from the ground up."
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "qwen3.5-from-scratch"
+    source: "https://github.com/rasbt/LLMs-from-scratch/tree/main/ch05/16_qwen3.5"
+    insight: "Clean Qwen3.5-0.8B reimplementation — hybrid attention, GQA with gated Q, SiLU MLP. Standalone copy at miniqwen.py"
+    nodes: [exp5_macro_match, exp15_non_relu_pruning]
+    added: "2026-03-04"
+
+  # ── Spring 2026 Novel Architectures ─────────────────────────────────────────
+
+  - dir: "qwen3-coder-next"
+    source: "https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct"
+    insight: "80B/3B active, 512 experts top-10, GatedDeltaNet hybrid, agentic code training — state of the art sparse MoE for code"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "arcee-trinity"
+    source: "https://arxiv.org/abs/2602.17004"
+    insight: "400B/13B MoE with SWA + depth-scaled RMSNorm — sliding window attention interaction with composition"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "tiny-aya-parallel"
+    source: "https://huggingface.co/CohereLabs/tiny-aya-base"
+    insight: "Parallel transformer blocks (attn + MLP compute from same norm) — changes capsule injection point"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  - dir: "spring-2026-architectures"
+    source: "https://magazine.sebastianraschka.com/p/a-dream-of-spring-for-open-weight"
+    insight: "10 open-weight LLMs Jan-Feb 2026 — trend toward MLA, linear attention hybrids, fine-grained MoE (512 experts)"
+    nodes: [exp5_macro_match]
+    added: "2026-03-04"
+
+  # ── Consistent Hashing ───────────────────────────────────────────────────────
+
+  - dir: "consistent-hashing"
+    source: "https://dl.acm.org/doi/10.1145/258533.258660"
+    insight: "Adding/removing one node from N displaces only 1/N of keys — applied to MoE expert routing for zero-recalibration add/remove"
+    nodes: [exp_consistent_hash_routing]
+    added: "2026-03-06"
+
+  # ── Cuckoo Hashing ─────────────────────────────────────────────────────────
+
+  - dir: "cuckoo-hashing"
+    source: "https://doi.org/10.1006/jagm.2003.1245"
+    insight: "Two hash functions with eviction chains provide O(1) worst-case lookup — adapted to MoE routing as dual-hash collision resolution for score ties"
+    nodes: [exp_cuckoo_collision_free_routing]
+    added: "2026-03-07"
+
+  # ── Dictionary/Shared Sub-Expert Structure ───────────────────────────────────
+
+  # - source: "StructMoE (Sarwar et al., ICML 2024)" — Low-Rank Experts (LoRE) per-expert, no folder
+  # - source: "L-MoE (2025, arXiv:2510.17898)" — lightweight MoE of LoRA experts, no folder
+  # - source: "HyperMoE (2024, arXiv:2402.12656)" — hypernetwork-generated experts, no folder
+  # - source: "Autonomy-of-Experts (ICLR 2025)" — low-rank factored self-routing, no folder
+
+  # ── Delta Compression for Model Weights ──────────────────────────────────────
+
+  - dir: "delta-compression-models"
+    source: "https://arxiv.org/abs/2402.10193 (BitDelta), https://arxiv.org/abs/2312.05215 (DeltaZip)"
+    insight: "BitDelta: 1-bit delta quantization, 10x memory savings. DeltaZip: multi-tenant delta serving, 10x compression. Neither does temporal version chains."
+    nodes: [exp_delta_coding_expert_versions]
+    added: "2026-03-07"
+
+  # ── Homomorphic Encryption ────────────────────────────────────────────────────
+
+  - dir: "python-paillier"
+    source: "https://github.com/data61/python-paillier"
+    insight: "Paillier partially-homomorphic encryption — additive homomorphism enables encrypted weight averaging. Noiseless decryption (unlike lattice FHE). Used in exp_homomorphic_composition."
+    nodes: [exp_homomorphic_composition]
+    added: "2026-03-07"
+
+  # ── Papers referenced but without dedicated folders ─────────────────────────
+  # (add folders when implementations become relevant)
+
+  # - source: "Vaswani et al. 2017 (Attention Is All You Need)" — foundational, no folder needed
+  # - source: "Radford et al. 2019 (GPT-2)" — foundational, no folder needed
+  # - source: "Shazeer et al. 2017 (Sparse MoE Layer)" — foundational, covered by switch-transformers
+  # - source: "EWC (Kirkpatrick 2017)" — baseline CL, well-known
+  # - source: "PackNet (Mallya & Lazebnik)" — parameter masking CL
+  # - source: "L2P, DualPrompt, CODA-Prompt, HiDe-Prompt" — prompt-based CL methods
+  # - source: "EASE (2024)" — adapter-based CL
+  # - source: "Progressive Neural Networks (Rusu 2016)" — column-per-task CL
+  # - source: "MiniMax-01/M1 (2025)" — Lightning Attention, CISPO
+  # - source: "Zhang et al. 2022 (Memorized Subnetworks)" — neuron tracking methodology
+  # - source: "NeurIPS 2019/2024 warmup papers" — covered by gurbuzbalaban
+  # - source: "Hoffmann 2022 (Chinchilla)" — scaling laws
+  # - source: "Frankle et al. (Linear Mode Connectivity)" — weight averaging viability

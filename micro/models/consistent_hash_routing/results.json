@@ -1,0 +1,59 @@
+[
+  {
+    "seed": 42,
+    "consistent_hash": {
+      "params": 202112,
+      "val_loss_before": 0.5168556153774262,
+      "val_loss_after": 0.5182822972536087,
+      "degradation_pct": 0.2760310295053567,
+      "displacement": 0.088623046875,
+      "tokens_per_sec": 20919.66028473029
+    },
+    "softmax": {
+      "params": 204160,
+      "val_loss_before": 0.5147942960262298,
+      "val_loss_after": 0.5148878008127212,
+      "degradation_pct": 0.01816352419076333,
+      "displacement": 0.0,
+      "tokens_per_sec": 61920.11866147608
+    }
+  },
+  {
+    "seed": 123,
+    "consistent_hash": {
+      "params": 202112,
+      "val_loss_before": 0.5172771990299225,
+      "val_loss_after": 0.5185491353273392,
+      "degradation_pct": 0.2458906558808218,
+      "displacement": 0.0888671875,
+      "tokens_per_sec": 20885.00184032549
+    },
+    "softmax": {
+      "params": 204160,
+      "val_loss_before": 0.5139163613319397,
+      "val_loss_after": 0.5139801323413848,
+      "degradation_pct": 0.01240883035516197,
+      "displacement": 0.0,
+      "tokens_per_sec": 63472.83269660509
+    }
+  },
+  {
+    "seed": 777,
+    "consistent_hash": {
+      "params": 202112,
+      "val_loss_before": 0.536075335741043,
+      "val_loss_after": 0.5364254713058472,
+      "degradation_pct": 0.0653146193193373,
+      "displacement": 0.095703125,
+      "tokens_per_sec": 21245.703480080643
+    },
+    "softmax": {
+      "params": 204160,
+      "val_loss_before": 0.5275767087936402,
+      "val_loss_after": 0.5276030957698822,
+      "degradation_pct": 0.005001543055673862,
+      "displacement": 0.0,
+      "tokens_per_sec": 64911.192137957
+    }
+  }
+]

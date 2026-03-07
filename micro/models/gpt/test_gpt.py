@@ -126,6 +126,44 @@ def test_learns_names():
     print("  PASSED\n")
 
 
+def test_generates_names():
+    """Train, then generate names and check plausibility."""
+    print("=" * 60)
+    print("test_generates_names")
+
+    docs = load_names()
+    tok = CharTokenizer(docs)
+    ds = CharDataset(docs[:500], tok, block_size=32)
+
+    model = get_model("gpt", vocab_size=tok.vocab_size, block_size=32,
+                       n_embd=64, n_head=4, n_layer=2)
+    train(model, ds, steps=200, batch_size=32, lr=3e-3, log_every=100)
+
+    # Generate 10 names
+    generated = []
+    bos = tok.bos
+    for i in range(10):
+        tokens = model.generate(mx.array([bos]), max_new=30, temperature=0.8)
+        mx.eval(mx.array(tokens))  # force evaluation
+        name = tok.decode(tokens).strip()
+        generated.append(name)
+        print(f"  [{i}] {repr(name)} (len={len(name)})")
+
+    # Check plausibility
+    valid_lens = sum(1 for n in generated if 2 <= len(n) <= 15)
+    all_alpha = all(c.isalpha() for n in generated for c in n)
+    terminated = sum(1 for n in generated if len(tok.encode(n)) < 28)
+
+    print(f"  valid lengths (2-15): {valid_lens}/10")
+    print(f"  all alpha chars: {all_alpha}")
+    print(f"  terminated early: {terminated}/10")
+
+    assert valid_lens >= 7, f"Only {valid_lens}/10 names have valid length"
+    assert all_alpha, "Generated non-alpha characters"
+    assert terminated >= 5, f"Only {terminated}/10 terminated (all hit max_new)"
+    print("  PASSED\n")
+
+
 if __name__ == "__main__":
     test_forward_shape()
     test_aux_loss_zero()
@@ -133,4 +171,5 @@ if __name__ == "__main__":
     test_causal_masking()
     test_param_count()
     test_learns_names()
+    test_generates_names()
     print("All GPT tests passed!")

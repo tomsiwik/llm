@@ -85,6 +85,24 @@ class GPT(nn.Module):
             x = layer(x)
         return self.lm_head(x)
 
+    def generate(self, prompt_tokens, max_new=20, temperature=0.8):
+        """Autoregressively generate tokens from a prompt."""
+        tokens = list(prompt_tokens.tolist()) if hasattr(prompt_tokens, 'tolist') else list(prompt_tokens)
+        block_size = self.wpe.weight.shape[0]
+        bos = self.wte.weight.shape[0] - 1
+        for _ in range(max_new):
+            x = mx.array([tokens[-block_size:]])
+            logits = self(x)[0, -1]
+            if temperature == 0:
+                next_tok = mx.argmax(logits).item()
+            else:
+                probs = mx.softmax(logits / temperature)
+                next_tok = mx.random.categorical(mx.log(probs)).item()
+            tokens.append(next_tok)
+            if next_tok == bos:
+                break
+        return tokens
+
     def aux_loss(self) -> mx.array:
         return mx.array(0.0)
 

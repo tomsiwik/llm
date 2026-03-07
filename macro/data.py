@@ -38,12 +38,11 @@ def load_code_eval(
         text_key = "content"
     elif lang == "javascript":
         ds = load_dataset(
-            "bigcode/the-stack-dedup",
-            data_dir="data/javascript",
+            "code_search_net", "javascript",
             split="train",
             streaming=True,
         )
-        text_key = "content"
+        text_key = "whole_func_string"
     else:
         raise ValueError(f"Unsupported language: {lang}. Use 'python' or 'javascript'.")
 
@@ -68,6 +67,20 @@ def load_code_eval(
     cache.write_text(json.dumps(snippets))
     print(f"Cached {len(snippets)} {lang} snippets to {cache}")
     return snippets
+
+
+def load_code_train(
+    lang: str = "python",
+    n_samples: int = 5000,
+    max_tokens: int = 512,
+    seed: int = 0,
+) -> list[str]:
+    """Load training code snippets (non-overlapping with eval set).
+
+    Uses seed=0 by default (skip=0) so training data starts from the
+    beginning of the stream, while eval uses seed=42 (skip=42000).
+    """
+    return load_code_eval(lang, n_samples=n_samples, max_tokens=max_tokens, seed=seed)
 
 
 def load_multilang_eval(

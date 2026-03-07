@@ -1,0 +1,68 @@
+{
+  "experiment": "homomorphic_composition",
+  "hypothesis": "exp_homomorphic_composition",
+  "status": "partially_proven",
+  "notes": "KC1 (quality) passes trivially. KC2 (performance) fails. Paillier HE preserves composition quality exactly but is too slow for practical use.",
+  "kc1_quality": {
+    "threshold_pct": 5.0,
+    "worst_gap_pct": 0.000012,
+    "verdict": "PASS"
+  },
+  "kc2_performance": {
+    "threshold_x": 100,
+    "measured_x": 7000,
+    "verdict": "KILL"
+  },
+  "quality_results": {
+    "single_seed_42": {
+      "plaintext_avg_loss": 0.522590,
+      "encrypted_16bit": {"avg_loss": 0.522590, "gap_pct": -0.000012, "max_weight_err": 8.18e-06},
+      "encrypted_24bit": {"avg_loss": 0.522590, "gap_pct": 0.000002, "max_weight_err": 3.73e-08},
+      "encrypted_32bit": {"avg_loss": 0.522590, "gap_pct": 0.000000, "max_weight_err": 1.49e-08}
+    },
+    "multiseed_24bit": [
+      {"seed": 42, "plain": 0.523171, "encrypted": 0.523171, "gap_pct": 0.000002},
+      {"seed": 123, "plain": 0.524230, "encrypted": 0.524230, "gap_pct": -0.000003},
+      {"seed": 7, "plain": 0.523216, "encrypted": 0.523216, "gap_pct": -0.000003}
+    ]
+  },
+  "performance_results": {
+    "key_bits": 2048,
+    "model_total_params": 32768,
+    "n_experts": 2,
+    "batch_packing": true,
+    "gmpy2_acceleration": true,
+    "measured_per_operation": {
+      "single_encrypt_ms": 7.7,
+      "batch_pack_encrypt_ms_per_pack": 98,
+      "homomorphic_add_ms_per_pack": 0.15,
+      "decrypt_ms_per_pack": 4.0
+    },
+    "full_model_extrapolated": {
+      "plaintext_avg_ms": 17,
+      "encrypt_per_expert_s": 52,
+      "homomorphic_add_n2_s": 0.06,
+      "decrypt_s": 16,
+      "total_encrypted_s": 121
+    },
+    "original_run_actual": {
+      "encrypt_16bit_s": 218,
+      "encrypt_24bit_s": 425,
+      "encrypt_32bit_s": 932,
+      "note": "These are 2x per-expert because N=2 experts both encrypt"
+    }
+  },
+  "config": {
+    "n_embd": 64,
+    "n_head": 4,
+    "n_layer": 4,
+    "block_size": 32,
+    "lora_rank": 8,
+    "lora_alpha": 1.0,
+    "pretrain_steps": 300,
+    "finetune_steps": 300,
+    "paillier_key_bits": 2048,
+    "seeds_tested": [42, 123, 7],
+    "n_domains": 2
+  }
+}

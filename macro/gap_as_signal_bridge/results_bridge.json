@@ -1,0 +1,36 @@
+{
+  "config": {
+    "d": 256,
+    "n_head": 8,
+    "n_layer": 6,
+    "block_size": 64,
+    "lora_rank": 16,
+    "lora_alpha": 1.0
+  },
+  "N2_k2": {
+    "r2_ce_quality_pooled": 0.5790771386859327,
+    "r2_ce_quality_ci_lo": 0.43794546676043977,
+    "r2_ce_quality_ci_hi": 0.6932560587123643,
+    "r2_ce_quality_mean_curve": 0.8974435023657842,
+    "r2_cos_quality": 0.371599460199643,
+    "r2_kl_quality": 0.4655641357198307,
+    "is_monotonic": false,
+    "best_r2": 0.5790771386859327,
+    "n_seeds": 20,
+    "kills": 2,
+    "passes": 2
+  },
+  "N4_k2": {
+    "r2_ce_quality_pooled": 0.8649632691034378,
+    "r2_ce_quality_ci_lo": 0.8105144246964596,
+    "r2_ce_quality_ci_hi": 0.9029883135529195,
+    "r2_ce_quality_mean_curve": 0.9450082891835111,
+    "r2_cos_quality": 0.6582237081024382,
+    "r2_kl_quality": 0.8625857590603346,
+    "is_monotonic": false,
+    "best_r2": 0.8649632691034378,
+    "n_seeds": 20,
+    "kills": 1,
+    "passes": 3
+  }
+}

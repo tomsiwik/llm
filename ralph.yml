@@ -1,9 +1,10 @@
 # Ralph Orchestrator — Infinite Research Loop
-# 2-hat pipeline: Researcher does the work, Reviewer gates quality.
-# Scratchpad resets each cycle to prevent context bloat.
+# 2-hat pipeline using Claude Code sub-agents for the heavy lifting.
+# Each hat dispatches to a focused sub-agent that runs autonomously.
+# The loop NEVER completes — findings always generate new questions.
 #
-# Start fresh:    ralph run
-# Continue:       ralph emit "experiment.done"  → enters at reviewer
+# Start:     ralph run -a
+# Continue:  ralph emit "experiment.done"  → enters at reviewer
 
 cli:
   backend: "claude"
@@ -13,6 +14,7 @@ event_loop:
   starting_event: "research.start"
   completion_promise: "LOOP_COMPLETE"
   max_iterations: 200
+  idle_timeout_secs: 7200
 
 features:
   parallel: true
@@ -24,10 +26,10 @@ memories:
   file: ".ralph/memories.md"
 
 hats:
-  # ── Researcher: find question → formalize math → build → run ────────────
+  # ── Researcher: delegate to experiment-ideator sub-agent ─────────────────
   researcher:
     name: "🔬 Researcher"
-    description: "Identifies the next experiment, formalizes the math, implements it, and runs it"
+    description: "Spawns experiment-ideator sub-agent to run a full research cycle"
     triggers:
       - "research.start"
       - "experiment.integrated"
@@ -35,65 +37,88 @@ hats:
       - "review.killed"
     publishes:
       - "experiment.done"
-      - "LOOP_COMPLETE"
     instructions: |
-      You are an autonomous researcher. Each activation you do a FULL cycle:
-      find the question, formalize the math, build it, run it.
+      You coordinate a research cycle by delegating to the experiment-ideator
+      sub-agent. Do NOT do the research yourself. Do NOT stop to ask for
+      confirmation. Complete all steps in one session.
 
-      ## 1. Survey & Pick Direction
+      ## Before delegating
 
-      Read: VISION.md, FINDINGS.md, micro/models/*/PAPER.md, .ralph/memories.md
+      Read .ralph/current_direction.md if it exists to check state.
 
-      If triggered by review.revise: read REVIEW-adversarial.md for fixes,
-      then go straight to Step 3 (rebuild with fixes). Skip Steps 1-2.
+      If triggered by review.revise:
+        Read micro/models/[name]/REVIEW-adversarial.md for the numbered fixes.
+        Include these fixes in your delegation prompt.
 
-      If triggered by review.killed: read REVIEW-adversarial.md to understand
-      WHY. Let failure inform a NEW direction.
+      If triggered by review.killed:
+        Read micro/models/[name]/REVIEW-adversarial.md to understand why.
+        Include the kill reason so the researcher avoids the same mistake.
 
-      Pick the highest-impact open question from VISION.md "What Remains":
-      - Specific, falsifiable research question
-      - Concrete success criteria (e.g. ">85% accuracy")
-      - Achievable at micro scale (d=64, ~200K params, <1hr)
-      - Not duplicating a killed or completed experiment
+      If triggered by research.start or experiment.integrated:
+        Read HYPOTHESES.yml. Pick the lowest-priority-number `open` node
+        whose `depends_on` are all satisfied (all deps must be `proven`).
+        Set it to `active` in HYPOTHESES.yml. If no open nodes remain,
+        first generate 2-3 new hypothesis nodes from existing findings
+        and add them to HYPOTHESES.yml before delegating.
 
-      Write direction to .ralph/current_direction.md.
+        PARALLEL: If multiple independent nodes (no shared deps, different
+        experiment_dirs) are eligible, you MAY launch multiple experiment-ideator
+        agents in parallel using separate Agent tool calls. Track each node_id
+        independently and emit experiment.done for each when complete.
 
-      ## 2. Formalize the Math
+      ## Baseline-First Rule (MANDATORY)
 
-      Write micro/models/[name]/MATH.md:
-      - All variables defined with shapes before first use
-      - Step-by-step derivations (no hand-waving)
-      - Worked numerical example at d=64
-      - Every assumption listed explicitly
-      - Falsification criteria — what kills the hypothesis
-      - Computational cost analysis
-      - Must fit micro constraints (<200K new params, <1hr)
+      Before delegating, identify which references are relevant to the hypothesis.
+      Check references/REFERENCES.yml for matching node IDs. Include relevant
+      reference paths in the delegation prompt so the researcher builds on
+      prior art instead of reinventing.
 
-      If math reveals the idea is broken: pick a different direction (Step 1).
+      For macro-scale work, the primary baselines are:
+        - references/qwen3-coder-next/ (SOTA sparse MoE architecture)
+        - references/qwen3.5-from-scratch/ + miniqwen.py (Qwen3.5 implementation)
+        - references/LLMs-from-scratch/ (educational ground truth)
+        - references/reasoning-from-scratch/ (reasoning patterns)
 
-      ## 3. Implement & Run
+      ## NotebookLM Research (MANDATORY for cross-domain nodes)
 
-      Build in micro/models/[name]/: [name].py, test_[name].py, __init__.py
-      - Register: @register("name", parent="parent")
-      - All tests must pass
-      - Experiment completes in <5 min ideally, max 1 hr
-      - Compare against parent baseline with actual numbers
+      If the HYPOTHESES.yml node has tag `cross-domain` or `novel`:
+        Include in the delegation prompt: "Use /notebooklm to research
+        SOTA approaches, CODE EXAMPLES, and existing repos for [mechanism].
+        Find implementations you can adapt rather than building from scratch.
+        Save any useful repos/papers to references/ with a README.md.
+        The notes field in HYPOTHESES.yml tells you what to search for."
 
-      Write micro/models/[name]/PAPER.md with honest results.
-      Negative results stated clearly — no spin.
+      ## Delegate
 
-      ## 4. Emit
+      Use the Agent tool with subagent_type="experiment-ideator" to run
+      the full research cycle. Give it a clear prompt:
 
-      If ALL items in VISION.md "What Remains" are addressed: emit LOOP_COMPLETE.
-      Otherwise: emit experiment.done.
+        "Work on hypothesis [node_id] from HYPOTHESES.yml: '[title]'.
+         Kill criteria: [kill_criteria]. Run the full cycle: survey,
+         formalize math, implement, run experiment, write PAPER.md.
+         Write your chosen direction to .ralph/current_direction.md.
+         BASELINE-FIRST: Check these references before implementing:
+         [list relevant references/*/]. Build on existing code, don't
+         reinvent. Also check references/LLMs-from-scratch/ and
+         references/reasoning-from-scratch/ for standard implementations.
+         REUSE-FIRST: Use /notebooklm to find existing implementations of
+         [mechanism from notes field]. Add repos to references/. Only write
+         custom code for the project-specific integration.
+         [If revise: Include the specific fixes from the review.]
+         [If killed: Explain why the previous direction failed.]"
 
-      IMPORTANT: Reset .ralph/agent/scratchpad.md to just a 1-line summary
-      of what you did this cycle. Do NOT accumulate history.
+      Wait for the sub-agent to complete. Do NOT interrupt it.
 
-  # ── Reviewer: adversarial review → integrate results ────────────────────
+      ## After sub-agent returns
+
+      Verify that micro/models/[name]/PAPER.md exists with results.
+      Reset .ralph/agent/scratchpad.md to a 1-line summary.
+      Emit experiment.done with a brief summary of results.
+
+  # ── Reviewer: delegate to adversarial-reviewer sub-agent ─────────────────
   reviewer:
     name: "🔴 Reviewer"
-    description: "Red-teams the experiment, then integrates results into the knowledge base"
+    description: "Spawns adversarial-reviewer sub-agent, then integrates results"
     triggers:
       - "experiment.done"
     publishes:
@@ -101,36 +126,47 @@ hats:
       - "review.revise"
       - "review.killed"
     instructions: |
-      You are a hostile peer reviewer AND knowledge integrator.
-      First tear the experiment apart. Then, if it passes, integrate it.
+      You coordinate peer review and integration. Do NOT do the review yourself.
+      Do NOT stop to ask for confirmation. Complete all steps in one session.
 
-      ## Part 1: Adversarial Review
+      ## Step 1: Delegate review
 
-      Read: micro/models/[name]/MATH.md, PAPER.md,
-            VISION.md, FINDINGS.md, .ralph/memories.md
+      Read .ralph/current_direction.md to find the experiment name.
 
-      Micro/macro contract — respect it:
-        CRITIQUE: math errors, hidden assumptions, flawed design,
-                  missing prior art, mechanisms broken in principle
-        DO NOT CRITIQUE: small scale, toy data, not beating SOTA
-                         (deliberate constraints, not bugs)
+      Use the Agent tool with subagent_type="adversarial-reviewer" to review
+      the experiment. Give it a clear prompt:
 
-      Write micro/models/[name]/REVIEW-adversarial.md:
-      - Verify derivations step-by-step
-      - Check prior art under different names
-      - Confirm experiment tests the stated hypothesis
-      - Clear verdict: PROCEED / REVISE / KILL
+        "Review the experiment at micro/models/[name]/. Read its MATH.md and
+         PAPER.md. Write REVIEW-adversarial.md with your verdict:
+         PROCEED, REVISE (with numbered fixes), or KILL (with explanation)."
 
-      If REVISE: emit review.revise with numbered fixes. Stop here.
-      If KILL: emit review.killed with explanation. Stop here.
+      Wait for the sub-agent to complete. Do NOT interrupt it.
 
-      ## Part 2: Integrate (only if PROCEED)
+      ## Step 2: Read verdict
 
-      - Update VISION.md "What's Been Proven" and "What Remains"
+      Read micro/models/[name]/REVIEW-adversarial.md.
+      Extract the verdict: PROCEED, REVISE, or KILL.
+
+      If REVISE: emit review.revise with the numbered fixes. Stop here.
+      If KILL:
+        - In HYPOTHESES.yml: set the node status to `disproven`, append evidence
+        - Cascade: set any nodes whose `depends_on` include this node to `blocked`
+        - Increment `meta.consecutive_kills`
+        - If `meta.consecutive_kills` >= 3: emit `research.exhaustion_warning`
+        - Emit review.killed with explanation. Stop here.
+
+      ## Step 3: Integrate (only if PROCEED)
+
+      Do this yourself (fast, no sub-agent needed):
+      - In HYPOTHESES.yml: set the node status to `proven`, append evidence
+        with date/claim/source, reset `meta.consecutive_kills` to 0,
+        update `meta.last_proven`
+      - Unblock dependents: nodes that depended on this one are now eligible
+      - Generate 1-3 NEW hypothesis nodes in HYPOTHESES.yml from findings
+      - Regenerate VISION.md "What Remains" from open nodes in HYPOTHESES.yml
+      - Update VISION.md "What's Been Proven"
       - Append results to FINDINGS.md with date
-      - Add memories to .ralph/memories.md (patterns, decisions, fixes)
-        Do NOT overwrite existing memories, only append.
+      - Add memories to .ralph/memories.md (only append, never overwrite)
 
       Reset .ralph/agent/scratchpad.md to a 1-line summary.
-
       Emit experiment.integrated.

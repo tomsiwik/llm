@@ -1,0 +1,54 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B",
+  "adapters": {
+    "python": {
+      "val_loss": 1.3455466747283935,
+      "path": "/workspace/llm/macro/compose_e2e/adapters/python.pt",
+      "n_tensors": 336
+    },
+    "javascript": {
+      "val_loss": 1.3510288000106812,
+      "path": "/workspace/llm/macro/compose_e2e/adapters/javascript.pt",
+      "n_tensors": 336
+    },
+    "medical": {
+      "val_loss": 4.11798198223114,
+      "path": "/workspace/llm/macro/compose_e2e/adapters/medical.pt",
+      "n_tensors": 336
+    },
+    "legal": {
+      "val_loss": 1.080796205997467,
+      "path": "/workspace/llm/macro/compose_e2e/adapters/legal.pt",
+      "n_tensors": 336
+    },
+    "math": {
+      "val_loss": 0.2334630787372589,
+      "path": "/workspace/llm/macro/compose_e2e/adapters/math.pt",
+      "n_tensors": 336
+    }
+  },
+  "latency": {
+    "merge_ms": {
+      "mean": 217.93015472590923,
+      "p50": 198.99647310376167,
+      "p99": 598.3257368206978
+    },
+    "forward_ms": {
+      "mean": 37.86880671977997,
+      "p50": 35.50245612859726,
+      "p99": 126.24213472008705
+    },
+    "generate_20tok_ms": {
+      "mean": 905.1064748317003,
+      "p50": 952.8268277645111,
+      "p99": 1106.1641536653042
+    },
+    "cache_stats": {
+      "hits": 117,
+      "misses": 3,
+      "loads": 3,
+      "evictions": 0
+    }
+  },
+  "elapsed_s": 245.31201553344727
+}

@@ -1,0 +1,27 @@
+2026-03-04T08:23:00.912567Z  INFO ralph: Loop lock held by PID 61071 (In IDEAS.md and VISION.md you can find the next po), spawning parallel loop in worktree
+2026-03-04T08:23:01.051894Z  INFO ralph: Created worktree at /Users/tom/Code/tomsiwik/llm/.worktrees/brave-daisy on branch ralph/brave-daisy
+2026-03-04T08:52:26.664816Z  INFO ralph_core::event_loop: Injecting scratchpad (212 chars) into prompt
+2026-03-04T09:20:06.359367Z  INFO ralph_core::event_loop: Injecting scratchpad (333 chars) into prompt
+2026-03-04T09:25:14.042746Z  INFO ralph_core::event_loop: Injecting scratchpad (233 chars) into prompt
+2026-03-04T09:49:36.531724Z  INFO ralph_core::event_loop: Injecting scratchpad (246 chars) into prompt
+2026-03-04T09:54:01.637645Z  INFO ralph_core::event_loop: Injecting scratchpad (497 chars) into prompt
+2026-03-04T09:58:10.958195Z  INFO ralph_core::event_loop: Injecting scratchpad (281 chars) into prompt
+2026-03-04T10:03:11.267210Z  INFO ralph_core::event_loop: Injecting scratchpad (263 chars) into prompt
+2026-03-04T10:15:22.745081Z  INFO ralph_core::event_loop: Injecting scratchpad (335 chars) into prompt
+2026-03-04T10:19:52.696624Z  INFO ralph_core::event_loop: Injecting scratchpad (260 chars) into prompt
+2026-03-04T10:31:43.905448Z  INFO ralph_core::event_loop: Injecting scratchpad (178 chars) into prompt
+2026-03-04T10:33:42.866468Z  INFO ralph_core::event_loop: Injecting scratchpad (298 chars) into prompt
+2026-03-04T10:47:05.984208Z  INFO ralph_core::event_loop: Injecting scratchpad (412 chars) into prompt
+2026-03-04T10:48:45.200897Z  INFO ralph_core::event_loop: Injecting scratchpad (230 chars) into prompt
+2026-03-04T10:58:47.271792Z  INFO ralph_core::event_loop: Injecting scratchpad (247 chars) into prompt
+2026-03-04T11:02:41.458627Z  INFO ralph_core::event_loop: Injecting scratchpad (319 chars) into prompt
+2026-03-04T11:15:03.933080Z  INFO ralph_core::event_loop: Injecting scratchpad (454 chars) into prompt
+2026-03-04T11:16:48.113068Z  INFO ralph_core::event_loop: Injecting scratchpad (248 chars) into prompt
+2026-03-04T11:38:16.307112Z  INFO ralph_core::event_loop: Injecting scratchpad (290 chars) into prompt
+2026-03-04T11:40:37.877541Z  INFO ralph_core::event_loop: Injecting scratchpad (284 chars) into prompt
+2026-03-04T11:59:00.096777Z  INFO ralph_core::event_loop: Injecting scratchpad (386 chars) into prompt
+2026-03-04T12:01:28.879521Z  INFO ralph_core::event_loop: Injecting scratchpad (286 chars) into prompt
+2026-03-04T12:20:18.761578Z  INFO ralph_core::event_loop: Injecting scratchpad (282 chars) into prompt
+2026-03-04T12:22:46.956803Z  INFO ralph_core::event_loop: Injecting scratchpad (231 chars) into prompt
+2026-03-04T13:17:45.601642Z  INFO ralph_core::event_loop: Wrapping up: max_runtime. 24 iterations in 4h 25m 0s. reason=max_runtime iterations=24 duration=4h 25m 0s
+2026-03-04T15:28:06.578958Z  INFO ralph_tui::app: Ctrl+C detected, signaling main loop

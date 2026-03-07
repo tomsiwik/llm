@@ -1,0 +1,1063 @@
+{
+  "phase1_scaling": [
+    {
+      "N": 8,
+      "caps_per_group": 32,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5141934067010879,
+          "params": 204160,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.202490234375,
+              "0.05": 0.59375,
+              "0.1": 0.7413330078125
+            },
+            "gap_stats": {
+              "mean": 0.12143780047808832,
+              "median": 0.033750906586647034,
+              "p10": 0.004727765917778015,
+              "p90": 0.45846447348594666
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 54794.062773781036
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5117998570203781,
+          "params": 204160,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.2494873046875,
+              "0.05": 0.6712158203125,
+              "0.1": 0.7545654296875
+            },
+            "gap_stats": {
+              "mean": 0.13497096821865853,
+              "median": 0.02520953118801117,
+              "p10": 0.003779098391532898,
+              "p90": 0.5481474995613098
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 54903.4819605982
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5227588653564453,
+          "params": 204160,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.1761962890625,
+              "0.05": 0.5647705078125,
+              "0.1": 0.7130859375
+            },
+            "gap_stats": {
+              "mean": 0.16510504632096853,
+              "median": 0.0402054488658905,
+              "p10": 0.005369305610656738,
+              "p90": 0.654144287109375
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 55259.91833666971
+        }
+      ]
+    },
+    {
+      "N": 16,
+      "caps_per_group": 16,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5090015739202499,
+          "params": 206208,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.3693359375,
+              "0.05": 0.7076904296875,
+              "0.1": 0.7578857421875
+            },
+            "gap_stats": {
+              "mean": 0.11110518075165601,
+              "median": 0.017164312303066254,
+              "p10": 0.0020687058568000793,
+              "p90": 0.430769681930542
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 40140.683334401576
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5104159146547318,
+          "params": 206208,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.2843017578125,
+              "0.05": 0.6853271484375,
+              "0.1": 0.7718017578125
+            },
+            "gap_stats": {
+              "mean": 0.10299355710358213,
+              "median": 0.022592030465602875,
+              "p10": 0.002690136432647705,
+              "p90": 0.3733004927635193
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 39889.21668776926
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5271789997816085,
+          "params": 206208,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.457470703125,
+              "0.05": 0.751513671875,
+              "0.1": 0.798193359375
+            },
+            "gap_stats": {
+              "mean": 0.09587086519131845,
+              "median": 0.012137196958065033,
+              "p10": 0.0013115182518959045,
+              "p90": 0.3804481029510498
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 40222.22104431766
+        }
+      ]
+    },
+    {
+      "N": 32,
+      "caps_per_group": 8,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5100298941135406,
+          "params": 210304,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.5723876953125,
+              "0.05": 0.7831298828125,
+              "0.1": 0.820849609375
+            },
+            "gap_stats": {
+              "mean": 0.07513624594712383,
+              "median": 0.007284842431545258,
+              "p10": 0.0010696649551391602,
+              "p90": 0.28790149092674255
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 27783.4553807182
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5075277984142303,
+          "params": 210304,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.6149169921875,
+              "0.05": 0.7786865234375,
+              "0.1": 0.818505859375
+            },
+            "gap_stats": {
+              "mean": 0.08385053881002022,
+              "median": 0.006339222192764282,
+              "p10": 0.0007365085184574127,
+              "p90": 0.3304632306098938
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 28127.952285199044
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5287360310554504,
+          "params": 210304,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.6317138671875,
+              "0.05": 0.777099609375,
+              "0.1": 0.8146484375
+            },
+            "gap_stats": {
+              "mean": 0.09736241864020485,
+              "median": 0.0052705928683280945,
+              "p10": 0.0005897842347621918,
+              "p90": 0.4162583351135254
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 28153.541499298215
+        }
+      ]
+    },
+    {
+      "N": 64,
+      "caps_per_group": 4,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5094845712184906,
+          "params": 218496,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.7231689453125,
+              "0.05": 0.8041015625,
+              "0.1": 0.8396240234375
+            },
+            "gap_stats": {
+              "mean": 0.05241020349917562,
+              "median": 0.0027503371238708496,
+              "p10": 0.00033538974821567535,
+              "p90": 0.22807562351226807
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 15935.43959968268
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5140320658683777,
+          "params": 218496,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.7201416015625,
+              "0.05": 0.8119873046875,
+              "0.1": 0.857958984375
+            },
+            "gap_stats": {
+              "mean": 0.041340883013936035,
+              "median": 0.0019631553441286087,
+              "p10": 0.00023306719958782196,
+              "p90": 0.16275493800640106
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 15955.108824626514
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5431221842765808,
+          "params": 218496,
+          "collision_data": {
+            "collision_rates": {
+              "0.01": 0.7562255859375,
+              "0.05": 0.8336669921875,
+              "0.1": 0.870556640625
+            },
+            "gap_stats": {
+              "mean": 0.04263507476148334,
+              "median": 0.002169150859117508,
+              "p10": 0.0002555549144744873,
+              "p90": 0.15239565074443817
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "tokens_per_sec": 15991.58550990026
+        }
+      ]
+    }
+  ],
+  "phase2_mitigation": [
+    {
+      "config": "baseline_T1.0",
+      "model_class": "CapsuleMoEGPT",
+      "extra_kwargs": {},
+      "training_temperature": 1.0,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5083198547363281,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.4423828125,
+              "0.05": 0.7435791015625,
+              "0.1": 0.7971435546875
+            },
+            "gap_stats": {
+              "mean": 0.08755198466396905,
+              "median": 0.012426033616065979,
+              "p10": 0.001484900712966919,
+              "p90": 0.30064576864242554
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.4423828125,
+              "0.05": 0.7435791015625,
+              "0.1": 0.7971435546875
+            },
+            "gap_stats": {
+              "mean": 0.08755198466396905,
+              "median": 0.012426033616065979,
+              "p10": 0.001484900712966919,
+              "p90": 0.30064576864242554
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27826.557347654205
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5239418476819993,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.6813720703125,
+              "0.05": 0.77890625,
+              "0.1": 0.820703125
+            },
+            "gap_stats": {
+              "mean": 0.06573485281123795,
+              "median": 0.004608027637004852,
+              "p10": 0.0005255900323390961,
+              "p90": 0.23283730447292328
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.6813720703125,
+              "0.05": 0.77890625,
+              "0.1": 0.820703125
+            },
+            "gap_stats": {
+              "mean": 0.06573485281123795,
+              "median": 0.004608027637004852,
+              "p10": 0.0005255900323390961,
+              "p90": 0.23283730447292328
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27800.973959357605
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5283862173557281,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.6436279296875,
+              "0.05": 0.78837890625,
+              "0.1": 0.8242919921875
+            },
+            "gap_stats": {
+              "mean": 0.07078695170630453,
+              "median": 0.005129985511302948,
+              "p10": 0.0006615743041038513,
+              "p90": 0.30274659395217896
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.6436279296875,
+              "0.05": 0.78837890625,
+              "0.1": 0.8242919921875
+            },
+            "gap_stats": {
+              "mean": 0.07078695170630453,
+              "median": 0.005129985511302948,
+              "p10": 0.0006615743041038513,
+              "p90": 0.30274659395217896
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27848.59043756285
+        },
+        {
+          "seed": 2024,
+          "val_loss": 0.5144475251436234,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.6043701171875,
+              "0.05": 0.804345703125,
+              "0.1": 0.841943359375
+            },
+            "gap_stats": {
+              "mean": 0.06452480390280471,
+              "median": 0.006403286010026932,
+              "p10": 0.0007705725729465485,
+              "p90": 0.24154667556285858
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.6043701171875,
+              "0.05": 0.804345703125,
+              "0.1": 0.841943359375
+            },
+            "gap_stats": {
+              "mean": 0.06452480390280471,
+              "median": 0.006403286010026932,
+              "p10": 0.0007705725729465485,
+              "p90": 0.24154667556285858
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27793.54135045206
+        },
+        {
+          "seed": 314,
+          "val_loss": 0.5182722717523575,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.5728759765625,
+              "0.05": 0.7533203125,
+              "0.1": 0.7946044921875
+            },
+            "gap_stats": {
+              "mean": 0.09383552707049603,
+              "median": 0.00730128213763237,
+              "p10": 0.0008142292499542236,
+              "p90": 0.35719794034957886
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.5728759765625,
+              "0.05": 0.7533203125,
+              "0.1": 0.7946044921875
+            },
+            "gap_stats": {
+              "mean": 0.09383552707049603,
+              "median": 0.00730128213763237,
+              "p10": 0.0008142292499542236,
+              "p90": 0.35719794034957886
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27766.954052627178
+        }
+      ]
+    },
+    {
+      "config": "temp_T0.5",
+      "model_class": "TempScaledMoEGPT",
+      "extra_kwargs": {
+        "temperature": 0.5
+      },
+      "training_temperature": 0.5,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5153832793235779,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.617236328125,
+              "0.05": 0.7720947265625,
+              "0.1": 0.821337890625
+            },
+            "gap_stats": {
+              "mean": 0.07488888369107372,
+              "median": 0.005837664008140564,
+              "p10": 0.0006915703415870667,
+              "p90": 0.2730080783367157
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.3998779296875,
+              "0.05": 0.6857421875,
+              "0.1": 0.735888671875
+            },
+            "gap_stats": {
+              "mean": 0.15850282430874357,
+              "median": 0.016254320740699768,
+              "p10": 0.0017871633172035217,
+              "p90": 0.7072715759277344
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 0.5
+          },
+          "training_temperature": 0.5,
+          "tokens_per_sec": 27971.91189662482
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5140822261571885,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.4584716796875,
+              "0.05": 0.7199462890625,
+              "0.1": 0.7617431640625
+            },
+            "gap_stats": {
+              "mean": 0.10503414921267903,
+              "median": 0.012075945734977722,
+              "p10": 0.0013012848794460297,
+              "p90": 0.4064699411392212
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.238232421875,
+              "0.05": 0.5610595703125,
+              "0.1": 0.6645751953125
+            },
+            "gap_stats": {
+              "mean": 0.2112964659278987,
+              "median": 0.03740989416837692,
+              "p10": 0.003665350377559662,
+              "p90": 0.8606404066085815
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 0.5
+          },
+          "training_temperature": 0.5,
+          "tokens_per_sec": 27969.30815556331
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.525826808810234,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.3703857421875,
+              "0.05": 0.746533203125,
+              "0.1": 0.82060546875
+            },
+            "gap_stats": {
+              "mean": 0.079049812100493,
+              "median": 0.016314655542373657,
+              "p10": 0.0020432323217391968,
+              "p90": 0.2830128073692322
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.1494384765625,
+              "0.05": 0.482421875,
+              "0.1": 0.645751953125
+            },
+            "gap_stats": {
+              "mean": 0.1823551230469093,
+              "median": 0.05371575057506561,
+              "p10": 0.006339311599731445,
+              "p90": 0.7353946566581726
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 0.5
+          },
+          "training_temperature": 0.5,
+          "tokens_per_sec": 27815.12730125464
+        },
+        {
+          "seed": 2024,
+          "val_loss": 0.5179809302091598,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.448974609375,
+              "0.05": 0.790576171875,
+              "0.1": 0.839697265625
+            },
+            "gap_stats": {
+              "mean": 0.07240159859666165,
+              "median": 0.011566288769245148,
+              "p10": 0.0014962032437324524,
+              "p90": 0.22059409320354462
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.203369140625,
+              "0.05": 0.584130859375,
+              "0.1": 0.7216552734375
+            },
+            "gap_stats": {
+              "mean": 0.15262863627085607,
+              "median": 0.035846322774887085,
+              "p10": 0.004300668835639954,
+              "p90": 0.5934566259384155
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 0.5
+          },
+          "training_temperature": 0.5,
+          "tokens_per_sec": 27739.912321833486
+        },
+        {
+          "seed": 314,
+          "val_loss": 0.5124702036380768,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.4626953125,
+              "0.05": 0.714892578125,
+              "0.1": 0.7925537109375
+            },
+            "gap_stats": {
+              "mean": 0.07795552255547591,
+              "median": 0.011985048651695251,
+              "p10": 0.0011912249028682709,
+              "p90": 0.2680402994155884
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.232763671875,
+              "0.05": 0.551904296875,
+              "0.1": 0.6489013671875
+            },
+            "gap_stats": {
+              "mean": 0.18472960185208648,
+              "median": 0.03714349865913391,
+              "p10": 0.0033044666051864624,
+              "p90": 0.7152215838432312
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 0.5
+          },
+          "training_temperature": 0.5,
+          "tokens_per_sec": 27875.714670293597
+        }
+      ]
+    },
+    {
+      "config": "temp_T2.0",
+      "model_class": "TempScaledMoEGPT",
+      "extra_kwargs": {
+        "temperature": 2.0
+      },
+      "training_temperature": 2.0,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5078239887952805,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.6211669921875,
+              "0.05": 0.7666748046875,
+              "0.1": 0.8045654296875
+            },
+            "gap_stats": {
+              "mean": 0.10519324116321513,
+              "median": 0.006109956651926041,
+              "p10": 0.0006456896662712097,
+              "p90": 0.48555484414100647
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.7490234375,
+              "0.05": 0.84111328125,
+              "0.1": 0.8874267578125
+            },
+            "gap_stats": {
+              "mean": 0.03163396980480684,
+              "median": 0.00249515101313591,
+              "p10": 0.00026840344071388245,
+              "p90": 0.11975961178541183
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 2.0
+          },
+          "training_temperature": 2.0,
+          "tokens_per_sec": 27889.829050604807
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5152665287256241,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.5837890625,
+              "0.05": 0.77421875,
+              "0.1": 0.8000244140625
+            },
+            "gap_stats": {
+              "mean": 0.08662536774345427,
+              "median": 0.0072848014533519745,
+              "p10": 0.0008826851844787598,
+              "p90": 0.3370087146759033
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.74921875,
+              "0.05": 0.8544677734375,
+              "0.1": 0.9231201171875
+            },
+            "gap_stats": {
+              "mean": 0.0247806951124403,
+              "median": 0.0027222037315368652,
+              "p10": 0.00036128610372543335,
+              "p90": 0.08236347138881683
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 2.0
+          },
+          "training_temperature": 2.0,
+          "tokens_per_sec": 28035.599673184013
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5271664768457412,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.661279296875,
+              "0.05": 0.774365234375,
+              "0.1": 0.7965087890625
+            },
+            "gap_stats": {
+              "mean": 0.10706216684711763,
+              "median": 0.004880551248788834,
+              "p10": 0.0007416494190692902,
+              "p90": 0.4752845764160156
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.7596435546875,
+              "0.05": 0.8348388671875,
+              "0.1": 0.88603515625
+            },
+            "gap_stats": {
+              "mean": 0.03372558990304242,
+              "median": 0.001974809914827347,
+              "p10": 0.00030866265296936035,
+              "p90": 0.11413286626338959
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 2.0
+          },
+          "training_temperature": 2.0,
+          "tokens_per_sec": 28038.55183348
+        },
+        {
+          "seed": 2024,
+          "val_loss": 0.5217071354389191,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.5104736328125,
+              "0.05": 0.742236328125,
+              "0.1": 0.7748291015625
+            },
+            "gap_stats": {
+              "mean": 0.1146072105731946,
+              "median": 0.009413063526153564,
+              "p10": 0.00099983811378479,
+              "p90": 0.5092077255249023
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.7010009765625,
+              "0.05": 0.814453125,
+              "0.1": 0.877392578125
+            },
+            "gap_stats": {
+              "mean": 0.03395922347426676,
+              "median": 0.0036072172224521637,
+              "p10": 0.00039265677332878113,
+              "p90": 0.129454106092453
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 2.0
+          },
+          "training_temperature": 2.0,
+          "tokens_per_sec": 28028.79432038721
+        },
+        {
+          "seed": 314,
+          "val_loss": 0.5110350966453552,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.558544921875,
+              "0.05": 0.7664794921875,
+              "0.1": 0.7965576171875
+            },
+            "gap_stats": {
+              "mean": 0.10175043418266796,
+              "median": 0.007749870419502258,
+              "p10": 0.0010625571012496948,
+              "p90": 0.4482277035713196
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.7305419921875,
+              "0.05": 0.83017578125,
+              "0.1": 0.89248046875
+            },
+            "gap_stats": {
+              "mean": 0.030325652316605556,
+              "median": 0.0030571632087230682,
+              "p10": 0.00042280182242393494,
+              "p90": 0.11137576401233673
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 2.0
+          },
+          "training_temperature": 2.0,
+          "tokens_per_sec": 27987.78052669038
+        }
+      ]
+    },
+    {
+      "config": "margin_m0.1",
+      "model_class": "MarginLossMoEGPT",
+      "extra_kwargs": {
+        "target_margin": 0.1,
+        "margin_weight": 0.1
+      },
+      "training_temperature": 1.0,
+      "seed_results": [
+        {
+          "seed": 42,
+          "val_loss": 0.5186462134122849,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.617626953125,
+              "0.05": 0.796826171875,
+              "0.1": 0.8458984375
+            },
+            "gap_stats": {
+              "mean": 0.05954447878175415,
+              "median": 0.005791477859020233,
+              "p10": 0.0006656236946582794,
+              "p90": 0.2249702662229538
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.617626953125,
+              "0.05": 0.796826171875,
+              "0.1": 0.8458984375
+            },
+            "gap_stats": {
+              "mean": 0.05954447878175415,
+              "median": 0.005791477859020233,
+              "p10": 0.0006656236946582794,
+              "p90": 0.2249702662229538
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27447.39515526461
+        },
+        {
+          "seed": 123,
+          "val_loss": 0.5176175951957702,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.6533203125,
+              "0.05": 0.791455078125,
+              "0.1": 0.8366943359375
+            },
+            "gap_stats": {
+              "mean": 0.057156697772006736,
+              "median": 0.005160022526979446,
+              "p10": 0.0006185732781887054,
+              "p90": 0.21103259921073914
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.6533203125,
+              "0.05": 0.791455078125,
+              "0.1": 0.8366943359375
+            },
+            "gap_stats": {
+              "mean": 0.057156697772006736,
+              "median": 0.005160022526979446,
+              "p10": 0.0006185732781887054,
+              "p90": 0.21103259921073914
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27783.66098960966
+        },
+        {
+          "seed": 777,
+          "val_loss": 0.5294911682605743,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.4674072265625,
+              "0.05": 0.750390625,
+              "0.1": 0.793798828125
+            },
+            "gap_stats": {
+              "mean": 0.08581896533632971,
+              "median": 0.011502154171466827,
+              "p10": 0.0012220703065395355,
+              "p90": 0.3282768726348877
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.4674072265625,
+              "0.05": 0.750390625,
+              "0.1": 0.793798828125
+            },
+            "gap_stats": {
+              "mean": 0.08581896533632971,
+              "median": 0.011502154171466827,
+              "p10": 0.0012220703065395355,
+              "p90": 0.3282768726348877
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27622.07730150251
+        },
+        {
+          "seed": 2024,
+          "val_loss": 0.5173648059368133,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.4409423828125,
+              "0.05": 0.7304931640625,
+              "0.1": 0.789990234375
+            },
+            "gap_stats": {
+              "mean": 0.09575407253951199,
+              "median": 0.012616090476512909,
+              "p10": 0.0013856105506420135,
+              "p90": 0.37765955924987793
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.4409423828125,
+              "0.05": 0.7304931640625,
+              "0.1": 0.789990234375
+            },
+            "gap_stats": {
+              "mean": 0.09575407253951199,
+              "median": 0.012616090476512909,
+              "p10": 0.0013856105506420135,
+              "p90": 0.37765955924987793
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 27390.88708260291
+        },
+        {
+          "seed": 314,
+          "val_loss": 0.5182348221540451,
+          "params": 210304,
+          "collision_at_T1": {
+            "collision_rates": {
+              "0.01": 0.5619873046875,
+              "0.05": 0.798779296875,
+              "0.1": 0.84833984375
+            },
+            "gap_stats": {
+              "mean": 0.05288561295883483,
+              "median": 0.007654424756765366,
+              "p10": 0.0008514933288097382,
+              "p90": 0.17774060368537903
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "collision_at_train_T": {
+            "collision_rates": {
+              "0.01": 0.5619873046875,
+              "0.05": 0.798779296875,
+              "0.1": 0.84833984375
+            },
+            "gap_stats": {
+              "mean": 0.05288561295883483,
+              "median": 0.007654424756765366,
+              "p10": 0.0008514933288097382,
+              "p90": 0.17774060368537903
+            },
+            "total_tokens": 40960,
+            "measurement_temperature": 1.0
+          },
+          "training_temperature": 1.0,
+          "tokens_per_sec": 26668.591638275422
+        }
+      ]
+    }
+  ],
+  "revision_notes": "v2: 5 seeds, dual-T measurement, p-values",
+  "total_runtime_s": 597.7895040512085
+}
