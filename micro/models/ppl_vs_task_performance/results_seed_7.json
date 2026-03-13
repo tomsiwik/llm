@@ -1,0 +1,60 @@
+{
+  "seed": 7,
+  "config": {
+    "d_model": 64,
+    "n_heads": 4,
+    "n_layers": 4,
+    "lora_rank": 8,
+    "n_train": 2000,
+    "base_epochs": 30,
+    "expert_epochs": 40
+  },
+  "base_ppls": {
+    "arithmetic": 2.678418579054616,
+    "reverse": 5.149677211186143,
+    "repeat": 1.565193039254223,
+    "sort": 4.359377954195166,
+    "parity": 1.724391288327949
+  },
+  "base_accs": {
+    "arithmetic": 0.71,
+    "reverse": 0.825,
+    "repeat": 1.0,
+    "sort": 0.635,
+    "parity": 0.905
+  },
+  "expert_ppls": {
+    "arithmetic": 2.554884903814351,
+    "reverse": 6.671847734708696,
+    "repeat": 1.4975033403239915,
+    "sort": 4.765318950633167,
+    "parity": 1.6545927181620008
+  },
+  "expert_accs": {
+    "arithmetic": 0.895,
+    "reverse": 0.9,
+    "repeat": 1.0,
+    "sort": 0.845,
+    "parity": 0.995
+  },
+  "ppl_improvements": {
+    "arithmetic": 0.0461218706464723,
+    "reverse": -0.295585618495872,
+    "repeat": 0.04324686938454831,
+    "sort": -0.09311901851670168,
+    "parity": 0.04047722268049048
+  },
+  "acc_improvements": {
+    "arithmetic": 0.18500000000000005,
+    "reverse": 0.07500000000000007,
+    "repeat": 0.0,
+    "sort": 0.20999999999999996,
+    "parity": 0.08999999999999997
+  },
+  "pearson_r": -0.010931755675642758,
+  "best_ppl_imp_domain": "arithmetic",
+  "best_acc_imp_domain": "sort",
+  "k1_pass": false,
+  "k2_pass": false,
+  "overall": "KILLED"
+}

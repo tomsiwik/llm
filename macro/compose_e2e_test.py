@@ -206,7 +206,7 @@ def test_compose_cli():
 def measure_latency():
     """Detailed latency measurements."""
     print("\n  Measuring latency...")
-    from tools.compose import ComposeEngine
+    from composer.compose import ComposeEngine
 
     engine = ComposeEngine(str(OUT_DIR))
     engine.load_base()

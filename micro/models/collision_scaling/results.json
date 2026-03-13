@@ -1,0 +1,1221 @@
+{
+  "config": {
+    "n_values": [
+      5,
+      10,
+      15,
+      20,
+      30,
+      50
+    ],
+    "seeds": [
+      42,
+      142,
+      242
+    ],
+    "train_steps": 300,
+    "lr": 0.01,
+    "n_sequences": 200,
+    "batch_size": 32,
+    "d_model": 64,
+    "d_ff": 256,
+    "n_layers": 4,
+    "lora_rank": 8,
+    "vocab_size": 32,
+    "context_len": 16,
+    "collision_threshold": 0.1
+  },
+  "per_seed": {
+    "42": [
+      {
+        "n_experts": 5,
+        "n_clusters": 1,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.0,
+          "within_collision_rate": 0.0,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.03063913690552832,
+          "within_mean_cos": 0.03063913690552832,
+          "cross_mean_cos": 0.0,
+          "total_max_cos": 0.04744639964491777,
+          "within_max_cos": 0.04744639964491777,
+          "cross_max_cos": 0.0,
+          "n_collisions": 0,
+          "n_pairs": 10,
+          "n_within_collisions": 0,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.03063913690552832,
+          "all_std": 0.009800983873096938,
+          "within_mean": 0.03063913690552832,
+          "cross_mean": 0.0
+        }
+      },
+      {
+        "n_experts": 10,
+        "n_clusters": 2,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.0,
+          "within_collision_rate": 0.0,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.025496638052739086,
+          "within_mean_cos": 0.04289822386739522,
+          "cross_mean_cos": 0.011575369401014177,
+          "total_max_cos": 0.09964704834907773,
+          "within_max_cos": 0.09964704834907773,
+          "cross_max_cos": 0.03969411158949297,
+          "n_collisions": 0,
+          "n_pairs": 45,
+          "n_within_collisions": 0,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.025496638052739086,
+          "all_std": 0.024953731053654137,
+          "within_mean": 0.04289822386739522,
+          "cross_mean": 0.011575369401014177
+        }
+      },
+      {
+        "n_experts": 15,
+        "n_clusters": 3,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.009523809523809525,
+          "within_collision_rate": 0.03333333333333333,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.01884070984756346,
+          "within_mean_cos": 0.042921197749235813,
+          "cross_mean_cos": 0.009208514686894516,
+          "total_max_cos": 0.103172920438071,
+          "within_max_cos": 0.103172920438071,
+          "cross_max_cos": 0.03902875787878532,
+          "n_collisions": 1,
+          "n_pairs": 105,
+          "n_within_collisions": 1,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.01884070984756346,
+          "all_std": 0.020440816700488515,
+          "within_mean": 0.042921197749235813,
+          "cross_mean": 0.009208514686894516
+        }
+      },
+      {
+        "n_experts": 20,
+        "n_clusters": 4,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.010526315789473684,
+          "within_collision_rate": 0.05,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.016359294872882266,
+          "within_mean_cos": 0.04736603130466537,
+          "cross_mean_cos": 0.00809083182440677,
+          "total_max_cos": 0.14738045289639154,
+          "within_max_cos": 0.14738045289639154,
+          "cross_max_cos": 0.033438757559414084,
+          "n_collisions": 2,
+          "n_pairs": 190,
+          "n_within_collisions": 2,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.016359294872882266,
+          "all_std": 0.021176046734909998,
+          "within_mean": 0.04736603130466537,
+          "cross_mean": 0.00809083182440677
+        }
+      },
+      {
+        "n_experts": 30,
+        "n_clusters": 6,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.013793103448275862,
+          "within_collision_rate": 0.1,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.013445083984833094,
+          "within_mean_cos": 0.06031359427682839,
+          "cross_mean_cos": 0.005946122338113845,
+          "total_max_cos": 0.12086506257742055,
+          "within_max_cos": 0.12086506257742055,
+          "cross_max_cos": 0.04517616859546297,
+          "n_collisions": 6,
+          "n_pairs": 435,
+          "n_within_collisions": 6,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.013445083984833094,
+          "all_std": 0.022049843202113867,
+          "within_mean": 0.06031359427682839,
+          "cross_mean": 0.005946122338113845
+        }
+      },
+      {
+        "n_experts": 50,
+        "n_clusters": 10,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ],
+          "engineering": [
+            "mechanical",
+            "electrical",
+            "civil",
+            "chemical",
+            "aerospace"
+          ],
+          "social": [
+            "sociology",
+            "anthropology",
+            "education",
+            "communication",
+            "journalism_studies"
+          ],
+          "health": [
+            "nutrition",
+            "fitness",
+            "mental_health",
+            "pharmacology",
+            "nursing"
+          ],
+          "systems": [
+            "networking",
+            "databases",
+            "os_design",
+            "distributed_sys",
+            "security"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.005714285714285714,
+          "within_collision_rate": 0.07,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.01192313169097446,
+          "within_mean_cos": 0.0536984258292987,
+          "cross_mean_cos": 0.008209772212012302,
+          "total_max_cos": 0.16531408447128265,
+          "within_max_cos": 0.16531408447128265,
+          "cross_max_cos": 0.06203140355970592,
+          "n_collisions": 7,
+          "n_pairs": 1225,
+          "n_within_collisions": 7,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.01192313169097446,
+          "all_std": 0.01707905696221768,
+          "within_mean": 0.0536984258292987,
+          "cross_mean": 0.008209772212012302
+        }
+      }
+    ],
+    "142": [
+      {
+        "n_experts": 5,
+        "n_clusters": 1,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.1,
+          "within_collision_rate": 0.1,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.05013679066031181,
+          "within_mean_cos": 0.05013679066031181,
+          "cross_mean_cos": 0.0,
+          "total_max_cos": 0.12103830981363482,
+          "within_max_cos": 0.12103830981363482,
+          "cross_max_cos": 0.0,
+          "n_collisions": 1,
+          "n_pairs": 10,
+          "n_within_collisions": 1,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.05013679066031181,
+          "all_std": 0.02901447807229659,
+          "within_mean": 0.05013679066031181,
+          "cross_mean": 0.0
+        }
+      },
+      {
+        "n_experts": 10,
+        "n_clusters": 2,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.06666666666666667,
+          "within_collision_rate": 0.15,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.03211478265745566,
+          "within_mean_cos": 0.05537092315443903,
+          "cross_mean_cos": 0.013509870259868977,
+          "total_max_cos": 0.13001140756758878,
+          "within_max_cos": 0.13001140756758878,
+          "cross_max_cos": 0.037125835396184304,
+          "n_collisions": 3,
+          "n_pairs": 45,
+          "n_within_collisions": 3,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.03211478265745566,
+          "all_std": 0.03160931905002186,
+          "within_mean": 0.05537092315443903,
+          "cross_mean": 0.013509870259868977
+        }
+      },
+      {
+        "n_experts": 15,
+        "n_clusters": 3,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.01904761904761905,
+          "within_collision_rate": 0.06666666666666667,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.02277596829940257,
+          "within_mean_cos": 0.06149065635373733,
+          "cross_mean_cos": 0.007290093077668667,
+          "total_max_cos": 0.14220172477120538,
+          "within_max_cos": 0.14220172477120538,
+          "cross_max_cos": 0.024970774495606272,
+          "n_collisions": 2,
+          "n_pairs": 105,
+          "n_within_collisions": 2,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.02277596829940257,
+          "all_std": 0.0287854954335638,
+          "within_mean": 0.06149065635373733,
+          "cross_mean": 0.007290093077668667
+        }
+      },
+      {
+        "n_experts": 20,
+        "n_clusters": 4,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.010526315789473684,
+          "within_collision_rate": 0.05,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.018520139418411467,
+          "within_mean_cos": 0.05077875850766291,
+          "cross_mean_cos": 0.009917840994611083,
+          "total_max_cos": 0.15108506748645772,
+          "within_max_cos": 0.15108506748645772,
+          "cross_max_cos": 0.04487122776617375,
+          "n_collisions": 2,
+          "n_pairs": 190,
+          "n_within_collisions": 2,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.018520139418411467,
+          "all_std": 0.022901680847706836,
+          "within_mean": 0.05077875850766291,
+          "cross_mean": 0.009917840994611083
+        }
+      },
+      {
+        "n_experts": 30,
+        "n_clusters": 6,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.016091954022988506,
+          "within_collision_rate": 0.11666666666666667,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.012871819625261387,
+          "within_mean_cos": 0.058684602876085706,
+          "cross_mean_cos": 0.005541774305129495,
+          "total_max_cos": 0.14753729816912137,
+          "within_max_cos": 0.14753729816912137,
+          "cross_max_cos": 0.03537961387802045,
+          "n_collisions": 7,
+          "n_pairs": 435,
+          "n_within_collisions": 7,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.012871819625261387,
+          "all_std": 0.023158029701890934,
+          "within_mean": 0.058684602876085706,
+          "cross_mean": 0.005541774305129495
+        }
+      },
+      {
+        "n_experts": 50,
+        "n_clusters": 10,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ],
+          "engineering": [
+            "mechanical",
+            "electrical",
+            "civil",
+            "chemical",
+            "aerospace"
+          ],
+          "social": [
+            "sociology",
+            "anthropology",
+            "education",
+            "communication",
+            "journalism_studies"
+          ],
+          "health": [
+            "nutrition",
+            "fitness",
+            "mental_health",
+            "pharmacology",
+            "nursing"
+          ],
+          "systems": [
+            "networking",
+            "databases",
+            "os_design",
+            "distributed_sys",
+            "security"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.007346938775510204,
+          "within_collision_rate": 0.08,
+          "cross_collision_rate": 0.0008888888888888889,
+          "total_mean_cos": 0.011341810029834698,
+          "within_mean_cos": 0.05628740550438096,
+          "cross_mean_cos": 0.007346645987652809,
+          "total_max_cos": 0.15429448605322957,
+          "within_max_cos": 0.15429448605322957,
+          "cross_max_cos": 0.10485160740134021,
+          "n_collisions": 9,
+          "n_pairs": 1225,
+          "n_within_collisions": 8,
+          "n_cross_collisions": 1
+        },
+        "cosine_stats": {
+          "all_mean": 0.011341810029834698,
+          "all_std": 0.017671812210532673,
+          "within_mean": 0.05628740550438096,
+          "cross_mean": 0.007346645987652809
+        }
+      }
+    ],
+    "242": [
+      {
+        "n_experts": 5,
+        "n_clusters": 1,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.0,
+          "within_collision_rate": 0.0,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.036557349823770215,
+          "within_mean_cos": 0.036557349823770215,
+          "cross_mean_cos": 0.0,
+          "total_max_cos": 0.06811653579733247,
+          "within_max_cos": 0.06811653579733247,
+          "cross_max_cos": 0.0,
+          "n_collisions": 0,
+          "n_pairs": 10,
+          "n_within_collisions": 0,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.036557349823770215,
+          "all_std": 0.01742023387020705,
+          "within_mean": 0.036557349823770215,
+          "cross_mean": 0.0
+        }
+      },
+      {
+        "n_experts": 10,
+        "n_clusters": 2,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.0,
+          "within_collision_rate": 0.0,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.02119988064219608,
+          "within_mean_cos": 0.03446205068201784,
+          "cross_mean_cos": 0.010590144610338663,
+          "total_max_cos": 0.07843939495294343,
+          "within_max_cos": 0.07843939495294343,
+          "cross_max_cos": 0.026522144368676535,
+          "n_collisions": 0,
+          "n_pairs": 45,
+          "n_within_collisions": 0,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.02119988064219608,
+          "all_std": 0.017516130064978007,
+          "within_mean": 0.03446205068201784,
+          "cross_mean": 0.010590144610338663
+        }
+      },
+      {
+        "n_experts": 15,
+        "n_clusters": 3,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.009523809523809525,
+          "within_collision_rate": 0.03333333333333333,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.018885487033633644,
+          "within_mean_cos": 0.04641932305035742,
+          "cross_mean_cos": 0.007871952626944135,
+          "total_max_cos": 0.10401549477561908,
+          "within_max_cos": 0.10401549477561908,
+          "cross_max_cos": 0.03434224532195442,
+          "n_collisions": 1,
+          "n_pairs": 105,
+          "n_within_collisions": 1,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.018885487033633644,
+          "all_std": 0.02202264897022035,
+          "within_mean": 0.04641932305035742,
+          "cross_mean": 0.007871952626944135
+        }
+      },
+      {
+        "n_experts": 20,
+        "n_clusters": 4,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.015789473684210527,
+          "within_collision_rate": 0.075,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.018101720359852518,
+          "within_mean_cos": 0.05344161716206293,
+          "cross_mean_cos": 0.008677747879263077,
+          "total_max_cos": 0.11076687782411429,
+          "within_max_cos": 0.11076687782411429,
+          "cross_max_cos": 0.05460004670004961,
+          "n_collisions": 3,
+          "n_pairs": 190,
+          "n_within_collisions": 3,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.018101720359852518,
+          "all_std": 0.02244280618135385,
+          "within_mean": 0.05344161716206293,
+          "cross_mean": 0.008677747879263077
+        }
+      },
+      {
+        "n_experts": 30,
+        "n_clusters": 6,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.011494252873563218,
+          "within_collision_rate": 0.08333333333333333,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.012623410629025129,
+          "within_mean_cos": 0.047649934173622635,
+          "cross_mean_cos": 0.0070191668618895305,
+          "total_max_cos": 0.1352887846863838,
+          "within_max_cos": 0.1352887846863838,
+          "cross_max_cos": 0.04297463817607741,
+          "n_collisions": 5,
+          "n_pairs": 435,
+          "n_within_collisions": 5,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.012623410629025129,
+          "all_std": 0.019030847241316633,
+          "within_mean": 0.047649934173622635,
+          "cross_mean": 0.0070191668618895305
+        }
+      },
+      {
+        "n_experts": 50,
+        "n_clusters": 10,
+        "clusters": {
+          "code": [
+            "python",
+            "javascript",
+            "rust",
+            "bash",
+            "sql"
+          ],
+          "reasoning": [
+            "math",
+            "logic",
+            "physics",
+            "statistics",
+            "economics"
+          ],
+          "knowledge": [
+            "medical",
+            "law",
+            "history",
+            "psychology",
+            "cooking"
+          ],
+          "creative": [
+            "poetry",
+            "fiction",
+            "screenwriting",
+            "journalism",
+            "comedy"
+          ],
+          "science": [
+            "chemistry",
+            "biology",
+            "astronomy",
+            "geology",
+            "ecology"
+          ],
+          "business": [
+            "marketing",
+            "finance",
+            "accounting",
+            "management",
+            "strategy"
+          ],
+          "engineering": [
+            "mechanical",
+            "electrical",
+            "civil",
+            "chemical",
+            "aerospace"
+          ],
+          "social": [
+            "sociology",
+            "anthropology",
+            "education",
+            "communication",
+            "journalism_studies"
+          ],
+          "health": [
+            "nutrition",
+            "fitness",
+            "mental_health",
+            "pharmacology",
+            "nursing"
+          ],
+          "systems": [
+            "networking",
+            "databases",
+            "os_design",
+            "distributed_sys",
+            "security"
+          ]
+        },
+        "rates": {
+          "total_collision_rate": 0.011428571428571429,
+          "within_collision_rate": 0.14,
+          "cross_collision_rate": 0.0,
+          "total_mean_cos": 0.01142264689520066,
+          "within_mean_cos": 0.05727497872120873,
+          "cross_mean_cos": 0.007346884066222167,
+          "total_max_cos": 0.19079013667683267,
+          "within_max_cos": 0.19079013667683267,
+          "cross_max_cos": 0.07329175420359399,
+          "n_collisions": 14,
+          "n_pairs": 1225,
+          "n_within_collisions": 14,
+          "n_cross_collisions": 0
+        },
+        "cosine_stats": {
+          "all_mean": 0.01142264689520066,
+          "all_std": 0.017924974291697274,
+          "within_mean": 0.05727497872120873,
+          "cross_mean": 0.007346884066222167
+        }
+      }
+    ]
+  },
+  "aggregate": {
+    "5": {
+      "collision_rate_mean": 0.03333333333333333,
+      "collision_rate_std": 0.047140452079103175,
+      "within_rate_mean": 0.03333333333333333,
+      "within_rate_std": 0.047140452079103175,
+      "cross_rate_mean": 0.0,
+      "cross_rate_std": 0.0,
+      "mean_cos_mean": 0.039111092463203455,
+      "within_cos_mean": 0.039111092463203455,
+      "cross_cos_mean": 0.0,
+      "n_clusters": 1
+    },
+    "10": {
+      "collision_rate_mean": 0.022222222222222223,
+      "collision_rate_std": 0.03142696805273544,
+      "within_rate_mean": 0.049999999999999996,
+      "within_rate_std": 0.07071067811865475,
+      "cross_rate_mean": 0.0,
+      "cross_rate_std": 0.0,
+      "mean_cos_mean": 0.026270433784130274,
+      "within_cos_mean": 0.0442437325679507,
+      "cross_cos_mean": 0.01189179475707394,
+      "n_clusters": 2
+    },
+    "15": {
+      "collision_rate_mean": 0.0126984126984127,
+      "collision_rate_std": 0.004489566864676493,
+      "within_rate_mean": 0.044444444444444446,
+      "within_rate_std": 0.015713484026367724,
+      "cross_rate_mean": 0.0,
+      "cross_rate_std": 0.0,
+      "mean_cos_mean": 0.020167388393533225,
+      "within_cos_mean": 0.050277059051110184,
+      "cross_cos_mean": 0.008123520130502439,
+      "n_clusters": 3
+    },
+    "20": {
+      "collision_rate_mean": 0.012280701754385967,
+      "collision_rate_std": 0.0024810764252159567,
+      "within_rate_mean": 0.05833333333333333,
+      "within_rate_std": 0.01178511301977579,
+      "cross_rate_mean": 0.0,
+      "cross_rate_std": 0.0,
+      "mean_cos_mean": 0.017660384883715418,
+      "within_cos_mean": 0.05052880232479707,
+      "cross_cos_mean": 0.008895473566093643,
+      "n_clusters": 4
+    },
+    "30": {
+      "collision_rate_mean": 0.013793103448275862,
+      "collision_rate_std": 0.0018770036343166115,
+      "within_rate_mean": 0.09999999999999999,
+      "within_rate_std": 0.013608276348795436,
+      "cross_rate_mean": 0.0,
+      "cross_rate_std": 0.0,
+      "mean_cos_mean": 0.012980104746373204,
+      "within_cos_mean": 0.055549377108845575,
+      "cross_cos_mean": 0.006169021168377624,
+      "n_clusters": 6
+    },
+    "50": {
+      "collision_rate_mean": 0.00816326530612245,
+      "collision_rate_std": 0.0024032002357354688,
+      "within_rate_mean": 0.09666666666666668,
+      "within_rate_std": 0.03091206165165235,
+      "cross_rate_mean": 0.0002962962962962963,
+      "cross_rate_std": 0.00041902624070313936,
+      "mean_cos_mean": 0.011562529538669939,
+      "within_cos_mean": 0.05575360335162946,
+      "cross_cos_mean": 0.007634434088629093,
+      "n_clusters": 10
+    }
+  },
+  "growth_fits": {
+    "total": {
+      "linear": {
+        "a": -0.000430277767489331,
+        "b": 0.026404524756060928,
+        "r2": 0.5833582410062077
+      },
+      "quadratic": {
+        "a": 2.030267790927491e-05,
+        "b": -0.001565958813038984,
+        "c": 0.03696826185572673,
+        "r2": 0.8160017321229502
+      },
+      "power_law": {
+        "a": 0.07756834376631914,
+        "beta": -0.574515437095524,
+        "r2": 0.9223256094204327
+      },
+      "best_model": "power_law",
+      "superlinear_test": {
+        "quadratic_a_positive": true,
+        "power_law_beta_gt_1": false,
+        "power_law_beta": -0.574515437095524,
+        "quadratic_improvement": 0.23264349111674254
+      }
+    },
+    "within_cluster": {
+      "linear": {
+        "a": 0.001529861111111111,
+        "b": 0.03064930555555557,
+        "r2": 0.7973334100019716
+      },
+      "quadratic": {
+        "a": -3.35950278050158e-05,
+        "b": 0.0034090829789554036,
+        "c": 0.013169392650746913,
+        "r2": 0.8662038241280559
+      },
+      "power_law": {
+        "a": 0.014382897895441405,
+        "beta": 0.4996858246137668,
+        "r2": 0.8311008127170267
+      },
+      "best_model": "quadratic",
+      "superlinear_test": {
+        "quadratic_a_positive": false,
+        "power_law_beta_gt_1": false,
+        "power_law_beta": 0.4996858246137668,
+        "quadratic_improvement": 0.0688704141260843
+      }
+    },
+    "cross_cluster": {
+      "linear": {
+        "a": 0.0,
+        "b": 0.0,
+        "r2": 0.0
+      },
+      "quadratic": {
+        "a": 0.0,
+        "b": 0.0,
+        "c": 0.0,
+        "r2": 0.0
+      },
+      "power_law": {
+        "a": 0.0,
+        "beta": 0.0,
+        "r2": 0.0
+      },
+      "best_model": "insufficient_data"
+    }
+  },
+  "kill_criteria": {
+    "k1_superlinear": false,
+    "k1_power_law_beta": -0.574515437095524,
+    "k2_high_collision_at_20": false,
+    "k2_rate_at_20": 0.012280701754385967,
+    "overall_kill": false
+  },
+  "elapsed_seconds": 226.9174838066101
+}

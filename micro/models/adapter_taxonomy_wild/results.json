@@ -1,0 +1,564 @@
+{
+  "taxonomy": {
+    "lora": {
+      "name": "LoRA (Low-Rank Adaptation)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "r * (d_in + d_out) per target module",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * r * (d_in + d_out)",
+      "capacity_class": "medium",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Standard LoRA learns rank-r deltas on top of frozen weights. Single LoRA cannot encode full-rank base knowledge. However, ReLoRA (Lialin et al. 2023) shows that iteratively merging low-rank updates achieves full-rank training from scratch -- effectively using LoRA as a training METHOD for base weights.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "dominant",
+      "peft_supported": true,
+      "key_papers": [
+        "Hu et al. 2021 (LoRA)",
+        "Dettmers et al. 2023 (QLoRA)",
+        "Kalajdzievski 2023 (rsLoRA)"
+      ]
+    },
+    "qlora": {
+      "name": "QLoRA (Quantized LoRA)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "Same as LoRA; base quantized to 4-bit NF4",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * r * (d_in + d_out)",
+      "capacity_class": "medium",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Identical to LoRA mathematically; base is 4-bit quantized to reduce memory. The quantization means the effective base has information loss, but LoRA deltas compensate.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "dominant",
+      "peft_supported": true,
+      "key_papers": [
+        "Dettmers et al. 2023 (QLoRA)"
+      ]
+    },
+    "dora": {
+      "name": "DoRA (Weight-Decomposed Low-Rank Adaptation)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "r * (d_in + d_out) + d_out (magnitude vector) per module",
+      "composes_additively": false,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * (r * (d_in + d_out) + d_out)",
+      "capacity_class": "medium-high",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "DoRA decomposes W = m * (W0 + BA)/||W0 + BA|| into magnitude m and direction. The magnitude scaling makes composition non-linear: sum of DoRA deltas != DoRA of summed deltas. This breaks our additive composition protocol.",
+      "inference_overhead": "minimal",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "common",
+      "peft_supported": true,
+      "key_papers": [
+        "Liu et al. 2024 (DoRA)"
+      ]
+    },
+    "rslora": {
+      "name": "rsLoRA (Rank-Stabilized LoRA)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "Same as LoRA; scaling = alpha/sqrt(r) instead of alpha/r",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * r * (d_in + d_out)",
+      "capacity_class": "medium-high",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Identical to LoRA with modified scaling. Enables stable training at high ranks, increasing effective capacity. Still a delta method.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "common",
+      "peft_supported": true,
+      "key_papers": [
+        "Kalajdzievski 2023 (rsLoRA)"
+      ]
+    },
+    "ia3": {
+      "name": "IA3 (Infused Adapter by Inhibiting and Amplifying)",
+      "category": "rescaling",
+      "composition_mode": "multiplicative",
+      "param_formula": "d per target activation (k, v, ff)",
+      "composes_additively": false,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "3 * d",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "IA3 learns element-wise scaling vectors for K, V, and FFN activations. It is fundamentally multiplicative: applying two IA3 adapters means element-wise product of scaling vectors, not sum. Capacity is limited to d-dimensional rescaling per layer -- cannot express new weight directions.",
+      "inference_overhead": "minimal",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "niche",
+      "peft_supported": true,
+      "key_papers": [
+        "Liu et al. 2022 (IA3 / T-Few)"
+      ]
+    },
+    "houlsby": {
+      "name": "Houlsby Adapters (Sequential Bottleneck)",
+      "category": "bottleneck",
+      "composition_mode": "sequential",
+      "param_formula": "2 * d * k per adapter (down + up projection)",
+      "composes_additively": false,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "2 * 2 * d * k",
+      "capacity_class": "medium",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Houlsby adapters insert bottleneck MLP blocks (down-nonlinearity-up) after attention and FFN sublayers. The nonlinearity (ReLU/GELU) makes composition non-linear: f(g(x)) != f(x) + g(x). Cannot be merged into base weights. Sequential composition is possible (adapter stacking) but interference patterns are complex.",
+      "inference_overhead": "moderate",
+      "can_merge_into_base": false,
+      "hf_hub_prevalence": "niche",
+      "peft_supported": false,
+      "key_papers": [
+        "Houlsby et al. 2019"
+      ]
+    },
+    "prefix_tuning": {
+      "name": "Prefix Tuning",
+      "category": "virtual-token",
+      "composition_mode": "concatenative",
+      "param_formula": "n_prefix * d per layer (K and V)",
+      "composes_additively": false,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "2 * n_prefix * d",
+      "capacity_class": "medium",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Prefix tuning prepends learned continuous vectors to K and V in every attention layer. Composition is via concatenation: two prefix adapters concatenate their virtual tokens, consuming context window. Cannot encode base knowledge -- it can only steer existing attention patterns.",
+      "inference_overhead": "moderate",
+      "can_merge_into_base": false,
+      "hf_hub_prevalence": "niche",
+      "peft_supported": true,
+      "key_papers": [
+        "Li & Liang 2021"
+      ]
+    },
+    "prompt_tuning": {
+      "name": "Prompt Tuning",
+      "category": "virtual-token",
+      "composition_mode": "concatenative",
+      "param_formula": "n_tokens * d_embed (input layer only)",
+      "composes_additively": false,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "0",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Prompt tuning learns soft tokens prepended to input only at the embedding layer. Even more limited than prefix tuning -- cannot even modify intermediate attention patterns. Composition is concatenation of soft tokens. Scales poorly to complex tasks.",
+      "inference_overhead": "minimal",
+      "can_merge_into_base": false,
+      "hf_hub_prevalence": "niche",
+      "peft_supported": true,
+      "key_papers": [
+        "Lester et al. 2021"
+      ]
+    },
+    "bitfit": {
+      "name": "BitFit (Bias-term Fine-tuning)",
+      "category": "bias",
+      "composition_mode": "additive",
+      "param_formula": "number of bias terms in model (<0.1% of params)",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "~5 * d",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "BitFit only updates bias vectors. Deltas are additive and compose trivially (sum the bias updates). But capacity is extremely limited -- bias terms represent <0.1% of the model and can only shift activation distributions, not learn new weight directions.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Ben Zaken et al. 2022"
+      ]
+    },
+    "full_rank": {
+      "name": "Full-Rank Adapters (Complete Layer Replacement)",
+      "category": "full-rank",
+      "composition_mode": "additive",
+      "param_formula": "d_out * d_in per replaced weight matrix",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "sum of all target matrix sizes",
+      "capacity_class": "full",
+      "requires_frozen_base": false,
+      "can_encode_base_knowledge": true,
+      "base_freedom_notes": "Full-rank adapters (complete weight replacement) can trivially encode any knowledge -- they ARE the weight matrices. The 'adapter' framing is: express pretrained weights as W = W_skeleton + delta_full. This is always possible but defeats the purpose of parameter efficiency. Key insight: SVD compression of this full-rank delta gives you... LoRA. The question is at what rank the quality holds.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Not a specific method -- general concept"
+      ]
+    },
+    "molora": {
+      "name": "MoLoRA (Mixture-of-LoRA Experts)",
+      "category": "moe-native",
+      "composition_mode": "additive",
+      "param_formula": "K * r * (d_in + d_out) + router params per module",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "K * n_targets * r * (d_in + d_out) + K * d",
+      "capacity_class": "high",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "MoLoRA is already our target architecture: multiple LoRA experts with a router. Each expert is a standard LoRA. The router selects top-k experts per token. This is EXACTLY what the Living Composable Model does. Our contribution: hash-ring routing (no calibration), independent training (no joint optimization).",
+      "inference_overhead": "minimal",
+      "can_merge_into_base": false,
+      "hf_hub_prevalence": "common",
+      "peft_supported": false,
+      "key_papers": [
+        "Dou et al. 2024 (MoLoRA)",
+        "Feng et al. 2024 (MixLoRA)"
+      ]
+    },
+    "lora_xs": {
+      "name": "LoRA-XS (Extremely Small LoRA)",
+      "category": "compressed",
+      "composition_mode": "additive",
+      "param_formula": "r * r per target module (uses SVD of base weights)",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * r^2",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "LoRA-XS uses SVD of the pretrained weight to fix U_r and V_r, learning only a small r*r core matrix R. The update is dW = U_r @ R @ V_r^T. Capacity is severely limited to the subspace already encoded by the pretrained weights. Cannot learn genuinely novel knowledge -- constrained to the existing singular value structure.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Balazy et al. 2024 (LoRA-XS)"
+      ]
+    },
+    "vera": {
+      "name": "VeRA (Vector-based Random Matrix Adaptation)",
+      "category": "compressed",
+      "composition_mode": "additive",
+      "param_formula": "2 * d per layer (scaling vectors only; A, B are frozen random)",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * 2 * max(d_in, d_out)",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "VeRA shares frozen random matrices across all layers. Only per-layer scaling vectors are learned. Extremely parameter-efficient but capacity-limited. The random projection basis is fixed, constraining the reachable update space.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": true,
+      "key_papers": [
+        "Kopiczko et al. 2024 (VeRA)"
+      ]
+    },
+    "tied_lora": {
+      "name": "Tied-LoRA",
+      "category": "compressed",
+      "composition_mode": "additive",
+      "param_formula": "Shared A/B across layers + per-layer scaling",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "r * (d_in + d_out) / L + scaling",
+      "capacity_class": "low",
+      "requires_frozen_base": true,
+      "can_encode_base_knowledge": false,
+      "base_freedom_notes": "Tied-LoRA shares weight matrices across layers with per-layer scaling. Similar idea to VeRA but sharing learned rather than random matrices. Capacity is intermediate between VeRA (random) and LoRA (independent per layer).",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Renduchintala et al. 2023 (Tied-LoRA)"
+      ]
+    },
+    "relora": {
+      "name": "ReLoRA (Iterative LoRA for Pretraining)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "Same as LoRA per iteration; merges periodically",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "n_targets * r * (d_in + d_out)",
+      "capacity_class": "full",
+      "requires_frozen_base": false,
+      "can_encode_base_knowledge": true,
+      "base_freedom_notes": "CRITICAL FINDING: ReLoRA demonstrates that LoRA updates can be iteratively merged to achieve full-rank training FROM SCRATCH. rank(sum of K rank-r matrices) <= K*r. With enough iterations, the accumulated update achieves full rank. Tested up to 1.3B params. This means LoRA is not just a fine-tuning method -- it is a TRAINING METHOD that can build base-level knowledge. Implication for our architecture: the 'base' could theoretically be built as a sequence of merged LoRA updates.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Lialin et al. 2023 (ReLoRA)"
+      ]
+    },
+    "lte": {
+      "name": "LTE (LoRA-the-Explorer)",
+      "category": "low-rank-additive",
+      "composition_mode": "additive",
+      "param_formula": "N_heads * r * (d_in + d_out) per module, accumulated",
+      "composes_additively": true,
+      "rank_per_layer": null,
+      "params_per_layer_formula": "N * n_targets * r * (d_in + d_out)",
+      "capacity_class": "full",
+      "requires_frozen_base": false,
+      "can_encode_base_knowledge": true,
+      "base_freedom_notes": "LTE uses parallel multi-head LoRA updates on different data shards, averaging and merging into base weights iteratively. Like ReLoRA, achieves full-rank network training. Adds parallelism for distributed training. Confirms that additive LoRA composition IS a viable pretraining paradigm.",
+      "inference_overhead": "zero",
+      "can_merge_into_base": true,
+      "hf_hub_prevalence": "rare",
+      "peft_supported": false,
+      "key_papers": [
+        "Hyeon-Woo et al. 2024 (LTE)"
+      ]
+    }
+  },
+  "scores": {
+    "lora": {
+      "adapter_name": "LoRA (Low-Rank Adaptation)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.5,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 1.0
+    },
+    "qlora": {
+      "adapter_name": "QLoRA (Quantized LoRA)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.5,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 1.0
+    },
+    "rslora": {
+      "adapter_name": "rsLoRA (Rank-Stabilized LoRA)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.65,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.7
+    },
+    "molora": {
+      "adapter_name": "MoLoRA (Mixture-of-LoRA Experts)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.8,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.9,
+      "ecosystem_maturity": 0.7
+    },
+    "full_rank": {
+      "adapter_name": "Full-Rank Adapters (Complete Layer Replacement)",
+      "additive_composition": 1.0,
+      "capacity_score": 1.0,
+      "base_freedom": 1.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "relora": {
+      "adapter_name": "ReLoRA (Iterative LoRA for Pretraining)",
+      "additive_composition": 1.0,
+      "capacity_score": 1.0,
+      "base_freedom": 1.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "lte": {
+      "adapter_name": "LTE (LoRA-the-Explorer)",
+      "additive_composition": 1.0,
+      "capacity_score": 1.0,
+      "base_freedom": 1.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "dora": {
+      "adapter_name": "DoRA (Weight-Decomposed Low-Rank Adaptation)",
+      "additive_composition": 0.7,
+      "capacity_score": 0.65,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.9,
+      "ecosystem_maturity": 0.7
+    },
+    "bitfit": {
+      "adapter_name": "BitFit (Bias-term Fine-tuning)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "lora_xs": {
+      "adapter_name": "LoRA-XS (Extremely Small LoRA)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "vera": {
+      "adapter_name": "VeRA (Vector-based Random Matrix Adaptation)",
+      "additive_composition": 1.0,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "tied_lora": {
+      "adapter_name": "Tied-LoRA",
+      "additive_composition": 1.0,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 1.0,
+      "ecosystem_maturity": 0.1
+    },
+    "ia3": {
+      "adapter_name": "IA3 (Infused Adapter by Inhibiting and Amplifying)",
+      "additive_composition": 0.3,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.9,
+      "ecosystem_maturity": 0.3
+    },
+    "prompt_tuning": {
+      "adapter_name": "Prompt Tuning",
+      "additive_composition": 0.2,
+      "capacity_score": 0.2,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.9,
+      "ecosystem_maturity": 0.3
+    },
+    "prefix_tuning": {
+      "adapter_name": "Prefix Tuning",
+      "additive_composition": 0.2,
+      "capacity_score": 0.5,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.6,
+      "ecosystem_maturity": 0.3
+    },
+    "houlsby": {
+      "adapter_name": "Houlsby Adapters (Sequential Bottleneck)",
+      "additive_composition": 0.1,
+      "capacity_score": 0.5,
+      "base_freedom": 0.0,
+      "inference_efficiency": 0.6,
+      "ecosystem_maturity": 0.3
+    }
+  },
+  "capacity": {
+    "lora": {
+      "params_per_layer": 1081344,
+      "total_params": 30277632,
+      "fraction_of_base": 0.004325376,
+      "rank_fraction": 0.004464285714285714,
+      "effective_dims_per_param": 1.0,
+      "notes": "rank-16 captures 0.0045 of full rank"
+    },
+    "ia3": {
+      "params_per_layer": 10752,
+      "total_params": 301056,
+      "fraction_of_base": 4.3008e-05,
+      "rank_fraction": 0,
+      "effective_dims_per_param": 0.5,
+      "notes": "Only rescales existing activations, cannot add new directions"
+    },
+    "prefix_tuning": {
+      "params_per_layer": 71680,
+      "total_params": 2007040,
+      "fraction_of_base": 0.00028672,
+      "rank_fraction": 0,
+      "effective_dims_per_param": 0.3,
+      "notes": "10 virtual tokens consume context window"
+    },
+    "bitfit": {
+      "params_per_layer": 17920,
+      "total_params": 501760,
+      "fraction_of_base": 7.168e-05,
+      "rank_fraction": 0,
+      "effective_dims_per_param": 0.2,
+      "notes": "Only shifts activation distributions via bias terms"
+    },
+    "houlsby": {
+      "params_per_layer": 917504,
+      "total_params": 25690112,
+      "fraction_of_base": 0.003670016,
+      "rank_fraction": 0.017857142857142856,
+      "effective_dims_per_param": 0.8,
+      "notes": "Bottleneck k=64, nonlinear -> higher expressiveness per param"
+    },
+    "vera": {
+      "params_per_layer": 7168,
+      "total_params": 200704,
+      "fraction_of_base": 2.8672e-05,
+      "rank_fraction": 0,
+      "effective_dims_per_param": 0.3,
+      "notes": "Frozen random projections limit learnable subspace"
+    },
+    "lora_xs": {
+      "params_per_layer": 768,
+      "total_params": 21504,
+      "fraction_of_base": 3.072e-06,
+      "rank_fraction": 0.004464285714285714,
+      "effective_dims_per_param": 0.4,
+      "notes": "r^2 params but frozen to pretrained SVD basis"
+    },
+    "full_rank": {
+      "params_per_layer": 203685888,
+      "total_params": 5703204864,
+      "fraction_of_base": 0.814743552,
+      "rank_fraction": 1.0,
+      "effective_dims_per_param": 1.0,
+      "notes": "Full expressiveness, no compression"
+    },
+    "relora": {
+      "params_per_layer": 1081344,
+      "total_params": 30277632,
+      "fraction_of_base": 0.004325376,
+      "rank_fraction": 1.0,
+      "effective_dims_per_param": 1.0,
+      "iterations_for_full_rank": 224,
+      "notes": "After 224 merge iterations, achieves full rank. Each iteration uses rank-16 LoRA."
+    }
+  },
+  "kill_criteria": {
+    "kill_1_base_knowledge": {
+      "criterion": "No adapter type exists that can encode base-model-level knowledge",
+      "killed": false,
+      "verdict": "SURVIVES",
+      "evidence": [
+        "full_rank",
+        "relora",
+        "lte"
+      ],
+      "explanation": "Found 3 adapter type(s) that CAN encode base knowledge: full_rank, relora, lte. ReLoRA and LTE demonstrate that iterative LoRA merging achieves full-rank training from scratch. Full-rank adapters trivially encode any knowledge."
+    },
+    "kill_2_frozen_base": {
+      "criterion": "All adapter types require a frozen base for stable training",
+      "killed": false,
+      "verdict": "SURVIVES",
+      "evidence": [
+        "full_rank",
+        "relora",
+        "lte"
+      ],
+      "explanation": "Found 3 adapter type(s) that do NOT require a frozen base: full_rank, relora, lte. ReLoRA trains from random init with periodic LoRA merge. LTE does the same in parallel. Full-rank adapters ARE the weights. However, standard LoRA, IA3, prefix tuning etc. all require frozen bases."
+    }
+  },
+  "summary": {
+    "total_types_surveyed": 16,
+    "additively_composable": 11,
+    "can_encode_base": 3,
+    "base_free_types": 3,
+    "kill_criterion_1_survives": true,
+    "kill_criterion_2_survives": true
+  }
+}

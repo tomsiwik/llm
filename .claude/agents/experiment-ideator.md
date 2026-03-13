@@ -140,6 +140,27 @@ Also scan `PLAN*.md` for context on what's been planned.
 - List every assumption explicitly
 - Include a worked numerical example at micro scale (d=64, N=4)
 
+### GPU/Remote Execution Rules (MANDATORY for macro-scale work)
+
+When running experiments on a remote GPU (RunPod, etc.):
+- **NEVER poll, sleep, or loop waiting** for a remote job. This wastes tokens.
+- If a training/benchmark job takes >5 minutes: start it as `nohup` background,
+  write the check command to `.ralph/current_direction.md`, and **return immediately**
+  with a summary of what was started and how to check progress.
+- The orchestrator will call you again on the next iteration — check progress ONCE then.
+- If the job isn't done yet, report progress and move to a different experiment.
+- Each active session should produce results, not wait for results.
+- **Interleave**: start long job → do short experiment → check long job → continue.
+
+**When blocked on a single GPU with dependent tasks:**
+If the next experiment depends on the running job AND there's no other GPU available:
+1. Do all PREP work that doesn't need GPU: write scripts, generate data locally,
+   set up eval datasets, write the benchmark harness, prepare MATH.md
+2. If no useful prep remains, **return early** with status:
+   "GPU blocked: [job] running, ETA [time]. Prep complete for [next steps].
+   Check command: [ssh command]. Resume when training completes."
+   Do NOT burn iterations polling. Exiting early is better than waiting.
+
 ### 3. Implementation
 
 **REUSE-FIRST RULE**: Before writing any code:

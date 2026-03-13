@@ -1,1 +1,1 @@
-exp_persistent_expert_tree REVISE complete: all 6 fixes applied. Tree API used, leaf-only fine-tuning, flat-dict baseline added, same-version cherry-pick control added. KC1 PASS (-0.85%), KC2 FAIL at micro (101.6%) but 32.8% savings vs flat-dict.
+exp_distillation_pilot_50 integrated (PROCEED). Status remains "supported" pending MMLU/HumanEval. Two new nodes spawned: exp_pilot50_held_out_eval (P7), exp_pilot50_composition_quality (P5). GPU latency bench may still be running on RunPod.

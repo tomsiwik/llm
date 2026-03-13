@@ -4,30 +4,42 @@
 
 meta:
   consecutive_kills: 0
-  last_killed: '2026-03-07'
-  last_killed_node: exp_swiglu_combined_dead_capsule
-  last_proven: '2026-03-07'
-  last_proven_node: exp_softmax_collision_quantification
-  roadmap_updated: '2026-03-07'
+  last_killed: '2026-03-11'
+  last_killed_node: exp_premerge_vs_dynamic_quality
+  last_proven: '2026-03-13'
+  last_proven_node: exp_distillation_pilot_50
+  roadmap_updated: '2026-03-10'
+  architecture_pivot: '2026-03-10'
+  pivot_note: >
+    Pivoted from hash-ring routing to composable expert architecture.
+    Key insight: orthogonal rank-8 FFN-only LoRAs compose via addition.
+    Base model is frozen skeleton (attention+embeddings), experts are the knowledge.
+    New priority: validate composition at scale before scaling to 50+ experts.
 
 nodes:
   # ── Phase 1: Distill ──────────────────────────────────────────────
 
   exp_distillation_pilot_50:
     title: 50-expert distillation pipeline end-to-end
-    status: open
+    status: supported
     scale: macro
-    priority: 1
+    priority: 6
     depends_on: []
     blocks:
     - exp_clone_compete_evolution
     - exp_scale_500_experts
-    experiment_dir: null
+    experiment_dir: micro/models/distillation_pilot_50
     kill_criteria:
     - composed 50-expert model does not beat base on >80% of expert domains (MMLU subsets or HumanEval)
     - distilled experts show <2% improvement over base on their own domain (distillation failed)
     - pipeline cost exceeds $0.50/expert (economics don't scale)
-    evidence: []
+    evidence:
+    - date: '2026-03-13'
+      claim: "Pipeline validated: 98% win rate (49/50), 42.2% PPL improvement on training data (contaminated eval -- see PAPER.md caveat), $0.44/expert. Only SQL regressed (-21.4%). Downstream task evaluation (MMLU/HumanEval) pending."
+      source: results/pilot50_benchmark.json
+    - date: '2026-03-13'
+      claim: "Adversarial review PROCEED (re-review). All 3 REVISE fixes verified: contamination caveat in PAPER.md, status supported in HYPOTHESES.yml, limitations rewritten. Non-blocking: SQL failure investigation, cost discrepancy, missing variance, PPL-to-task gap."
+      source: micro/models/distillation_pilot_50/REVIEW-adversarial.md
     tags:
     - distillation
     - pipeline
@@ -47,6 +59,66 @@ nodes:
 
       Domain selection for pilot: 10 programming languages, 10 science subfields,
       10 professional domains, 10 writing styles, 10 reasoning types.
+
+      Research first: Use /notebooklm to survey large-scale LoRA distillation
+      pipelines (e.g., Arcee-AI merge pipelines, OpenHermes data generation).
+      Check references/arcee-trinity/ for multi-expert training approaches.
+
+  exp_pilot50_held_out_eval:
+    title: Held-out evaluation of 50 pilot experts (MMLU/HumanEval)
+    status: open
+    scale: macro
+    priority: 7
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - composed 50-expert model does not beat base on >80% of expert domains on held-out benchmarks
+    - average improvement on MMLU subsets < 2% over base (distillation memorized, didn't generalize)
+    - HumanEval pass@1 for code experts < base pass@1 (code distillation failed)
+    evidence: []
+    tags:
+    - distillation
+    - evaluation
+    - contamination
+    - critical-path
+    created: '2026-03-13'
+    notes: >
+      Spawned from exp_distillation_pilot_50 adversarial review.
+      Current eval is contaminated (last 100 of 1000 training examples).
+      Need held-out benchmarks to upgrade from "supported" to "proven".
+      Subset of pilot 50: pick 5-10 experts with matching MMLU categories.
+      For code experts: HumanEval pass@1 (execution-based, no contamination risk).
+      Budget: ~$0.10 on RunPod (inference only).
+
+  exp_pilot50_composition_quality:
+    title: Pre-merge composition quality with N=5,10,25,50 pilot experts
+    status: open
+    scale: macro
+    priority: 5
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_scale_500_experts
+    experiment_dir: null
+    kill_criteria:
+    - pre-merged model at N=50 degrades >10% on any individual domain vs single-expert
+    - quality degrades superlinearly with N (composition doesn't scale)
+    - N=50 pre-merge worse than base on >20% of domains
+    evidence: []
+    tags:
+    - composition
+    - scaling
+    - pre-merge
+    - macro
+    created: '2026-03-13'
+    notes: >
+      Spawned from exp_distillation_pilot_50 PROCEED verdict.
+      Tests whether individual expert quality translates to composed model quality.
+      Use the 50 trained adapters. Pre-merge at N=5,10,25,50.
+      Evaluate on same domain eval sets (contaminated, but relative comparison is valid).
+      Key metric: per-domain PPL ratio (composed vs single-expert).
 
   exp_distillation_quality_vs_teacher:
     title: Expert quality as function of teacher model size
@@ -74,6 +146,129 @@ nodes:
 
       If 8B works for simple domains, cost drops 10x for those categories.
       Measure per-domain quality (perplexity + downstream eval) not just average.
+
+      Research first: Use /notebooklm to survey knowledge distillation literature
+      (Hinton et al., West-of-N distillation, Orca-style progressive distillation).
+      Key question: does teacher-student size ratio affect LoRA quality differently
+      than full fine-tune quality?
+
+  exp_reasoning_expert_distillation:
+    title: Distill reasoning capability as composable LoRA expert from DeepSeek-R1 traces
+    status: open
+    scale: macro
+    priority: 1
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_reasoning_domain_composition
+    - exp_reasoning_expert_universality
+    experiment_dir: null
+    kill_criteria:
+    - reasoning LoRA does not improve MATH-500 accuracy >10pp over base (distillation failed)
+    - reasoning LoRA composed with domain expert degrades domain quality >5% (interference)
+    - reasoning + domain composed model does not outperform either alone on cross-domain reasoning tasks
+    evidence: []
+    tags:
+    - distillation
+    - reasoning
+    - composition
+    - novel
+    - critical-path
+    created: '2026-03-12'
+    notes: >
+      POTENTIALLY REVOLUTIONARY. Instead of one monolithic reasoning model, distill
+      reasoning as a composable LoRA adapter that snaps onto any domain expert.
+
+      Insight: Current reasoning models (DeepSeek-R1, Qwen-QwQ) bake reasoning into
+      the full model. SOLE can decompose this: reasoning is an ORTHOGONAL capability
+      to domain knowledge. A math-reasoning expert + math-domain expert composed via
+      addition could outperform either alone.
+
+      Pipeline (following Rasbt ch08 / DeepSeek-R1 approach):
+      (1) Generate reasoning traces from DeepSeek-R1 671B via API (~$50 for 12K examples)
+           OR use existing dataset: rasbt/math_distill on HuggingFace
+      (2) Hard distillation: QLoRA rank-16 on Qwen2.5-7B with <think> token traces
+      (3) Test reasoning LoRA alone on MATH-500
+      (4) Compose reasoning LoRA + domain expert (e.g., math domain from pilot)
+      (5) Benchmark composed model vs reasoning-only vs domain-only vs base
+
+      Key questions:
+      - Is reasoning orthogonal to domain knowledge in LoRA weight space?
+      - Does composed (reasoning + domain) > max(reasoning-only, domain-only)?
+      - Can ONE reasoning adapter improve ALL domain experts universally?
+      - Does <think> token generation survive composition?
+
+      If proven: every domain expert in the SOLE library gains reasoning for free
+      by composing with a single reasoning adapter. This is a unique SOLE advantage
+      that no monolithic model can match — you'd need to retrain each specialist.
+
+      Cost: ~$2 (use existing rasbt/math_distill dataset, train 1 LoRA).
+      References: Rasbt "reasoning-from-scratch" ch08, DeepSeek-R1 paper (arXiv:2501.12948).
+
+  exp_reasoning_domain_composition:
+    title: Universal reasoning adapter composes with N domain experts without retraining
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_reasoning_expert_distillation
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - reasoning adapter improves <50% of domain experts (not universal)
+    - average domain quality degradation >3% when reasoning adapter is added
+    - reasoning traces become incoherent when composed with domain experts
+    evidence: []
+    tags:
+    - reasoning
+    - composition
+    - universality
+    - novel
+    created: '2026-03-12'
+    notes: >
+      If reasoning is truly orthogonal, ONE reasoning adapter should improve ALL
+      domain experts. Test with 10+ domain experts from pilot:
+      (1) Baseline: each domain expert alone on domain-specific + reasoning tasks
+      (2) Composed: each domain expert + reasoning adapter on same tasks
+      (3) Measure: accuracy delta, PPL delta, <think> trace quality
+
+      This would be the killer demo for SOLE: "add reasoning to any expert in 0 seconds."
+      No retraining, no data generation, just compose and serve.
+
+  exp_capability_expert_taxonomy:
+    title: Taxonomy of composable capabilities beyond domain knowledge
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_reasoning_expert_distillation
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - fewer than 3 capability types show orthogonal composition (limited to reasoning only)
+    - capability experts interfere with each other (cos > 0.01 between capability LoRAs)
+    evidence: []
+    tags:
+    - reasoning
+    - capabilities
+    - taxonomy
+    - novel
+    created: '2026-03-12'
+    notes: >
+      If reasoning works as a composable capability, what else can be decomposed?
+      Survey and test candidates:
+      - Reasoning (chain-of-thought, <think> traces)
+      - Instruction following (RLHF/DPO alignment as LoRA)
+      - Safety/guardrails (refuse harmful, as composable layer)
+      - Multilingual (language as capability, not domain)
+      - Code execution planning (agentic behavior)
+      - Conciseness/verbosity (style as capability)
+      - Citation/attribution (academic writing behavior)
+
+      If multiple capability types compose orthogonally with domain experts,
+      SOLE becomes a modular capability stack:
+        base + domain + reasoning + safety + language = full model
+      Each capability independently upgradeable. This is the "Unix philosophy for LLMs."
 
   # ── Phase 2: Compose at Scale ─────────────────────────────────────
 
@@ -106,6 +301,10 @@ nodes:
       Storage: 500 * 6MB = 3GB. Well within NVMe.
       Orthogonality: 500 / 609K = 0.08% of capacity. Should be trivially safe.
 
+      Research first: Use /notebooklm to survey large-scale LoRA merging
+      (TIES-Merging, DARE, Model Soups at scale). Check references/ties-merging/
+      and references/dare-merging/ for interference patterns at high N.
+
   exp_hash_ring_remove_expert:
     title: Expert removal via consistent hash ring (graceful degradation)
     status: open
@@ -131,6 +330,10 @@ nodes:
       (prune the loser). Add-expert validated at +0.20% / 9.1% displacement.
       Remove-expert is the dual operation: removing one expert should redistribute
       only its ~1/N tokens to the next clockwise neighbor.
+
+      Research first: Use /notebooklm to survey consistent hashing literature
+      (Karger et al., jump hash, maglev hashing) for removal guarantees.
+      Also check virtual node strategies for load balancing after removal.
 
   # ── Phase 3: Evolve ──────────────────────────────────────────────
 
@@ -172,6 +375,11 @@ nodes:
 
       This requires exp_hash_ring_remove_expert for pruning the loser.
 
+      Research first: Use /notebooklm to survey evolutionary model merging
+      (Sakana AI "Evolutionary Optimization of Model Merging Recipes"),
+      continual learning via adapter competition, and online learning for LLMs.
+      Key question: has anyone done clone-and-compete for LoRA experts specifically?
+
   exp_shadow_scoring:
     title: Shadow scoring for fair expert A/B comparison
     status: open
@@ -204,6 +412,10 @@ nodes:
 
       Validate that shadow perplexity predicts real quality by comparing
       shadow scores with held-out eval set scores.
+
+      Research first: Use /notebooklm to survey A/B testing for ML models,
+      shadow traffic patterns (Google's ML infrastructure papers), and
+      bandit-based model selection (Thompson sampling for expert routing).
 
   exp_evolution_convergence:
     title: Continuous evolution improves model quality monotonically
@@ -238,6 +450,10 @@ nodes:
       is not selecting the right winner. If quality plateaus, corrections
       have diminishing returns (expert capacity saturated).
 
+      Research first: Use /notebooklm to survey continual learning convergence
+      guarantees, online learning regret bounds, and RLHF iteration stability.
+      Check if DPO-style updates have monotonic convergence properties.
+
   exp_automated_correction_pipeline:
     title: Automated correction generation from teacher model
     status: open
@@ -271,6 +487,1081 @@ nodes:
       For code domains: use execution-based validation (run the code, check output).
       Free and perfect signal. No teacher needed.
 
+      Research first: Use /notebooklm to survey LLM-as-judge reliability
+      (MT-Bench, AlpacaEval), automated correction pipelines (Constitutional AI,
+      RLAIF), and self-play approaches (Self-Instruct, WizardLM Evol-Instruct).
+
+  # ── Composable Architecture Research ─────────────────────────────
+
+  exp_gram_schmidt_composition:
+    title: Gram-Schmidt orthogonalization preserves expert quality at merge
+    status: proven
+    scale: micro
+    priority: 1
+    proven_date: '2026-03-11'
+    depends_on: []
+    blocks:
+    - exp_collision_scaling
+    - exp_composable_merge_pipeline
+    experiment_dir: null
+    kill_criteria:
+    - orthogonalized expert loses >10% PPL improvement vs non-orthogonalized
+    - Gram-Schmidt projection removes >50% of expert signal (too aggressive)
+    evidence:
+    - date: '2026-03-10'
+      claim: 'math-medical cosine=0.70 confirms non-orthogonal pairs exist at N=5'
+      source: 'composer/orthogonality.py run on 5 trained adapters'
+    - date: '2026-03-11'
+      claim: 'GS preserves >99.67% signal retention across all experts (KC2 clean pass). GS Avg vs Simple Avg: -2.58% vs -2.56% improvement over base (indistinguishable). GS is unnecessary because deltas are already near-orthogonal.'
+      source: 'micro/models/gram_schmidt_composition/PAPER.md'
+    - date: '2026-03-11'
+      claim: 'Adversarial review: PROCEED. Math sound, negative result (GS unnecessary) is the key finding. Simple averaging confirmed as optimal merge strategy.'
+      source: 'micro/models/gram_schmidt_composition/REVIEW-adversarial.md'
+    tags:
+    - composition
+    - orthogonality
+    - novel
+    - critical-path
+    created: '2026-03-10'
+    notes: >
+      CRITICAL: math-medical pair has cosine 0.70. Before adding expert k,
+      project out its component along all existing experts:
+      A_k' B_k' = A_k B_k - sum_{i<k} proj(A_k B_k, A_i B_i)
+      This preserves only the NOVEL contribution.
+
+      Test: take our 5 trained experts (bash, math, medical, python, sql).
+      Orthogonalize math against medical. Measure if both still beat base PPL.
+
+      References: references/infolora-continual/ (orthogonality constraints).
+      Use /notebooklm to find Gram-Schmidt implementations for LoRA merging.
+
+  exp_collision_scaling:
+    title: Non-orthogonal collision rate as function of expert count N
+    status: active
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_gram_schmidt_composition
+    blocks:
+    - exp_composable_merge_pipeline
+    experiment_dir: micro/models/collision_scaling
+    kill_criteria:
+    - collision rate (cos>0.1) grows superlinearly with N (architecture-breaking)
+    - '>30% of pairs have cosine >0.1 at N=20 (clusters dominate)'
+    evidence:
+    - 'K1 DISPROVEN: collision rate DECREASES with N. Power law beta=-0.575, R^2=0.922'
+    - 'K2 DISPROVEN: at N=20, collision rate=1.23% (24x below 30% threshold)'
+    - 'Collisions exclusively within-cluster (99.97%). Cross-cluster rate ~0%'
+    - 'O(1/N) scaling: within-cluster pairs O(N), total pairs O(N^2)'
+    - 'CAVEAT: requires cluster diversity -- if K fixed, within-cluster is O(N^2)'
+    tags:
+    - composition
+    - scaling
+    - orthogonality
+    - cross-domain
+    - novel
+    created: '2026-03-10'
+    notes: >
+      Train 20 diverse LoRA experts (rank-8, FFN-only). Domains: 5 programming
+      languages, 5 sciences, 5 professional, 5 creative/reasoning.
+      Measure full 20x20 pairwise cosine matrix. Plot collision distribution.
+
+      Key question: does collision rate grow sublinearly (manageable) or
+      superlinearly (architecture-breaking)? Adversarial review predicts
+      20-40% of pairs above cos 0.1 at N=50.
+
+      Use Groq batch API for data generation ($0.02/expert at 8B).
+      Train on RunPod A5000 (~14 min/expert, rank-8 FFN-only).
+
+  exp_semantic_router:
+    title: Learned semantic router vs hash ring for expert selection
+    status: open
+    scale: micro
+    priority: 3
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - semantic router accuracy <70% on domain classification
+    - router latency >5ms per query (too slow for production)
+    - router adds >2% end-to-end latency vs hash ring
+    evidence: []
+    tags:
+    - routing
+    - composition
+    - novel
+    - cross-domain
+    created: '2026-03-10'
+    notes: >
+      Hash ring distributes uniformly regardless of content. A learned semantic
+      router maps query embedding → expert(s) in O(1).
+
+      Approach: geo-hash-like spatial partitioning of embedding space.
+      Tiny encoder (~50M params) embeds query, lookup table maps to expert set.
+      Like locality-sensitive hashing but for semantic expert routing.
+
+      Compare: (a) hash ring, (b) keyword classifier, (c) embedding similarity,
+      (d) LSH/geo-hash partitioning. Measure accuracy and latency.
+
+      Use /notebooklm to research semantic routing implementations.
+      Check references/soft-moe/ and references/switch-transformers/.
+
+  exp_procrustes_expert_transfer:
+    title: Procrustes alignment transfers experts across base model versions
+    status: open
+    scale: micro
+    priority: 4
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - transferred expert PPL >20% worse than natively-trained expert
+    - Procrustes alignment error >5% (weight spaces too different)
+    evidence: []
+    tags:
+    - composition
+    - lifecycle
+    - novel
+    - cross-domain
+    created: '2026-03-10'
+    notes: >
+      When base model upgrades (v1→v2), do experts need full retraining?
+
+      Procrustes alignment: find rotation R such that Base_v2 ≈ R·Base_v1·R^T,
+      then transform all experts: Expert_v2_k = R·Expert_v1_k·R^T.
+      Cost: O(d³) once, then O(d·r) per expert (seconds, no GPU training).
+
+      Test: train 5 experts on Qwen2.5-7B. Align to Qwen2.5-3B via Procrustes.
+      Do they still work? Compare vs natively-trained 3B experts.
+
+      Use /notebooklm to research linear mode connectivity, model stitching,
+      and Procrustes alignment papers (Ainsworth et al., Frankle et al.).
+
+  exp_minimum_viable_base:
+    title: Minimum base model size for effective expert composition
+    status: open
+    scale: micro
+    priority: 3
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - base <1.5B cannot support expert composition (PPL improvement <5%)
+    - expert quality scales linearly with base size (no sweet spot)
+    evidence:
+    - date: '2026-03-10'
+      claim: 'rank-8 FFN-only on 7B gives PPL 1.59 for bash (near rank-128 at 1.50)'
+      source: 'rank sweep experiment on RunPod'
+    - date: '2026-03-07'
+      claim: '0.5B base too weak for expert composition (killed prior experiment)'
+      source: 'micro experiment archive'
+    tags:
+    - composition
+    - scaling
+    - base-model
+    created: '2026-03-10'
+    notes: >
+      The base provides attention wiring + embeddings. Experts provide domain FFN.
+      How small can the base be before composition breaks?
+
+      Test rank-8 FFN-only experts on: Qwen2.5-0.5B, 1.5B, 3B, 7B.
+      Same training data, same domains. Measure PPL improvement per base size.
+
+      Sweet spot is likely 1.5-3B: big enough for attention quality,
+      small enough for fast inference. Prior work killed 0.5B.
+
+      Research first: Use /notebooklm to survey base model size vs adapter
+      effectiveness (LoRA papers across model sizes, Phi-style small models,
+      TinyLlama). Check references/tiny-aya-parallel/ for small-model
+      multi-lingual LoRA approaches.
+
+  exp_composable_merge_pipeline:
+    title: End-to-end merge pipeline with quality gates
+    status: open
+    scale: macro
+    priority: 5
+    depends_on:
+    - exp_gram_schmidt_composition
+    - exp_collision_scaling
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - merged model (N=20) loses >5% quality vs individually-served experts
+    - merge + benchmark cycle takes >1 hour (too slow for self-learning loop)
+    evidence: []
+    tags:
+    - composition
+    - pipeline
+    - critical-path
+    created: '2026-03-10'
+    notes: >
+      Build composer/merge.py: the production merge pipeline.
+      Steps: (1) Gram-Schmidt orthogonalize new expert against existing pool
+      (2) Merge via weight addition (3) Benchmark merged model
+      (4) Accept/reject based on quality gate
+
+      This is the core of the self-learning loop:
+      train expert → orthogonalize → merge → benchmark → deploy.
+
+      Depends on Gram-Schmidt and collision scaling experiments to validate
+      the composition approach works at scale.
+
+      Research first: Use /notebooklm to survey LoRA merging pipelines
+      (mergekit, LM-Cocktail, Model Breadcrumbs). Check references/ties-merging/
+      and references/dare-merging/ for quality gate implementations.
+
+  exp_ffn_only_vs_all_modules:
+    title: FFN-only LoRA composes better than all-modules LoRA
+    status: supported
+    scale: micro
+    priority: 2
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/ffn_only_vs_all_modules
+    kill_criteria:
+    - FFN-only expert quality >10% worse than all-modules at same rank
+    - FFN-only experts are NOT more orthogonal than all-modules experts
+    evidence:
+    - date: '2026-03-10'
+      claim: 'bash FFN-only rank-8 PPL=1.59 vs all-modules rank-16 PPL=1.25'
+      source: 'rank sweep (partial) and original training'
+    - date: '2026-03-11'
+      claim: 'FFN-only mean |cos|=0.0605 < all-modules mean |cos|=0.0711 on 5 real Qwen2.5-7B adapters'
+      source: 'micro/models/ffn_only_vs_all_modules'
+    - date: '2026-03-11'
+      claim: 'Attention is most correlated (mean |cos|=0.0853), confirming shared infrastructure hypothesis'
+      source: 'micro/models/ffn_only_vs_all_modules'
+    - date: '2026-03-11'
+      claim: 'FFN-only uses 25% fewer params (30.3M vs 40.4M at rank-16) with better orthogonality'
+      source: 'micro/models/ffn_only_vs_all_modules'
+    - date: '2026-03-11'
+      claim: 'Adversarial review PROCEED after revision: 5 fixes verified adequate, tail-behavior reframing accepted'
+      source: 'micro/models/ffn_only_vs_all_modules/REVIEW-adversarial.md'
+    tags:
+    - composition
+    - architecture
+    - critical-path
+    created: '2026-03-10'
+    notes: >
+      Hypothesis: FFN-only LoRA (gate_proj, up_proj, down_proj) composes
+      better because attention layers are shared infrastructure.
+
+      The rank sweep gave us bash FFN-only data (r=8 to r=128).
+      Need: (a) same sweep with all-modules for comparison
+      (b) orthogonality comparison: are FFN-only experts MORE orthogonal?
+      (c) test across domains not just bash
+
+      If FFN-only is both high-quality AND more orthogonal, it's strictly
+      better for the composable architecture.
+
+      Research first: Use /notebooklm to survey attention vs FFN specialization
+      literature (Geva et al. "Transformer FFN layers are key-value memories",
+      "What do attention heads do?"). Check if FFN-only adapters are used in
+      any existing MoE or continual learning systems.
+
+  # ── From exp_ffn_only_vs_all_modules findings ──────────────────
+
+  exp_ffn_only_matched_rank:
+    title: Independently trained FFN-only adapters match all-modules quality at same rank
+    status: killed
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_ffn_only_vs_all_modules
+    blocks: []
+    experiment_dir: micro/models/ffn_only_matched_rank
+    kill_criteria:
+    - FFN-only adapters >5% higher perplexity than all-modules at rank-16
+    - independently trained FFN-only orthogonality differs >50% from retroactive subset
+    evidence:
+    - 'Baseline retroactive orthogonality confirmed: FFN subset mean|cos|=0.0605, Attn=0.0853, Full=0.0711'
+    - 'Analysis infrastructure validated: 8/8 tests pass, CPU-only'
+    - 'Training script ready: train_ffn_only.py, ~$1 for 5 adapters on RunPod A5000'
+    - 'Adversarial review: PROCEED (2026-03-11). Design approved. 4 recommendations: (1) uncomment --also-train-all for fair baseline +$0.20, (2) run 3 seeds not 1 +$0.40, (3) report orthogonality with/without math-medical outlier, (4) save loss curves to verify convergence'
+    tags:
+    - composition
+    - architecture
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      The ffn_only_vs_all_modules experiment used retroactive subsets (extracting
+      FFN params from jointly-trained all-modules adapters). This confound was
+      acknowledged in review. Must validate with independently trained FFN-only
+      adapters at matched rank-16 across 5 domains.
+
+      If FFN-only quality matches, this confirms the architecture pivot to
+      FFN-only experts. If not, we need all-modules adapters (more expensive
+      but proven to work).
+
+      STATUS: Infrastructure complete. Awaiting RunPod GPU training.
+      Run: bash micro/models/ffn_only_matched_rank/run_on_runpod.sh
+
+  exp_attention_as_domain_similarity:
+    title: Attention LoRA cosine predicts domain overlap
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_ffn_only_vs_all_modules
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - attention cosine does not correlate with semantic domain similarity
+    - more domain pairs needed but signal vanishes with more data
+    evidence:
+    - date: '2026-03-11'
+      claim: 'math-medical attention cos=0.85 vs FFN cos=0.59 -- attention amplifies domain overlap'
+      source: 'micro/models/ffn_only_vs_all_modules'
+    tags:
+    - composition
+    - routing
+    - diagnostic
+    created: '2026-03-11'
+    notes: >
+      Key finding from ffn_only_vs_all_modules: attention parameters amplify
+      domain correlation more than FFN (0.85 vs 0.59 for math-medical).
+      If attention cosine reliably predicts domain overlap, it could be used
+      as a cheap domain similarity metric for routing or expert organization.
+
+      Test: train 10+ domain experts, compute attention-only cosine matrix,
+      compare with semantic similarity (embedding distance of domain descriptions).
+
+  # ── Reviewer Attack: "Orthogonality doesn't generalize" ─────────
+
+  exp_orthogonality_by_domain_type:
+    title: Orthogonality varies systematically by domain similarity
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on: []
+    blocks:
+    - exp_collision_scaling
+    experiment_dir: micro/models/orthogonality_by_domain_type
+    kill_criteria:
+    - within-cluster cosine is NOT higher than cross-cluster (no semantic structure)
+    - no predictable pattern in which domains collide
+    evidence:
+    - 'within-cluster mean |cos| = 0.060, cross-cluster = 0.008, ratio 7.84x (3 seeds)'
+    - 'permutation test p < 0.0001 across all 3 seeds'
+    - 'Cohen d = 2.24 (very large effect)'
+    - 'top 10 most similar pairs are ALL within-cluster (30/30 across seeds)'
+    - 'cross-cluster cosine near random baseline (0.008 vs 0.002 theoretical)'
+    tags:
+    - composition
+    - orthogonality
+    - novel
+    created: '2026-03-11'
+    proven_date: '2026-03-11'
+    notes: >
+      PROVEN. Within-cluster LoRA similarity is 7.84x higher than cross-cluster.
+      Collisions are predictable: domain similarity maps to parameter similarity.
+      The math-medical outlier from ffn_only_vs_all_modules is explained as
+      a within-cluster effect (reasoning-knowledge overlap), not an anomaly.
+
+      Practical implication: prefer routing experts from different semantic
+      clusters. Consider hierarchical composition (exp_hierarchical_composition)
+      to handle within-cluster overlap.
+
+      Caveats: Synthetic Markov chain data, MLP not transformer, minimal
+      training signal (loss barely decreases). Conservative test -- converged
+      training on real data should show stronger clustering.
+
+  exp_merge_order_dependence:
+    title: Gram-Schmidt merge order affects final model quality
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_gram_schmidt_composition
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - quality variance across 10 random orderings >5% (order matters too much)
+    - worst ordering >15% worse than best ordering
+    evidence: []
+    tags:
+    - composition
+    - orthogonality
+    - stability
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Gram-Schmidt is order-dependent. Expert added first
+      keeps full signal, last expert gets only the novel residual."
+
+      Test: take 10 experts, merge in 10 different random orders.
+      Measure per-domain PPL for each ordering. If variance is high,
+      need order-invariant orthogonalization (e.g., mutual projection
+      or simultaneous Gram-Schmidt via QR decomposition).
+
+      Research first: Use /notebooklm to survey order-invariant orthogonalization
+      methods (QR decomposition, SVD-based projection, mutual information
+      decorrelation). Check references/infolora-continual/ for their approach.
+
+  # ── Reviewer Attack: "PPL doesn't mean quality" ────────────────
+
+  exp_ppl_vs_task_performance:
+    title: Perplexity improvement correlates with downstream task performance
+    status: killed
+    scale: micro
+    priority: 2
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/ppl_vs_task_performance
+    kill_criteria:
+    - Pearson correlation between PPL improvement and task accuracy <0.5
+    - expert with best PPL does NOT have best task accuracy
+    evidence:
+    - 'Mean Pearson r = 0.084 +/- 0.097 across 3 seeds (all < 0.5): KILLED'
+    - 'Reverse/sort experts get WORSE PPL (-27%, -7%) but BETTER accuracy (+9.5pp, +14pp)'
+    - 'K1 pass rate: 0/3 seeds, K2 pass rate: 2/3 seeds'
+    - 'Root cause: full-sequence PPL averages over prompt + answer tokens, but accuracy only depends on answer tokens'
+    tags:
+    - evaluation
+    - benchmarks
+    - critical-path
+    - killed
+    created: '2026-03-11'
+    killed: '2026-03-11'
+    notes: >
+      Reviewer attack: "You only measure perplexity. Lower PPL doesn't mean
+      the expert actually writes better code or gives better medical advice."
+
+      For each of our 5 domains, run both:
+      (a) PPL on held-out eval set (what we already measure)
+      (b) Task-specific benchmark:
+          - python: HumanEval/MBPP pass@1
+          - bash: command accuracy on nl2bash-style eval
+          - math: GSM8K test set accuracy
+          - medical: MedMCQA accuracy
+          - sql: Spider dev set execution accuracy
+
+      Plot PPL vs task accuracy. If they don't correlate, PPL is a
+      misleading metric and we need task-specific evaluation throughout.
+
+      Research first: Use /notebooklm to survey PPL vs downstream performance
+      correlation studies (Schaeffer et al. "Are Emergent Abilities Mirage?",
+      "Scaling Data-Constrained Language Models"). Also survey eval frameworks:
+      lm-eval-harness, bigcode-evaluation-harness for standardized benchmarks.
+
+  exp_answer_conditioned_scoring:
+    title: Answer-only PPL correlates with task accuracy where full-sequence PPL fails
+    status: proven
+    scale: micro
+    priority: 3
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/answer_conditioned_scoring/
+    kill_criteria:
+    - answer-only PPL still shows Pearson r < 0.5 with task accuracy
+    - answer-only PPL ranking matches full-sequence PPL ranking (no improvement)
+    evidence:
+    - "K1 DISPROVEN: Answer-only PPL Pearson r = 0.811 +/- 0.162 (all 3 seeds > 0.5)"
+    - "K2 DISPROVEN: Rankings always differ; answer-only rank agreement 83-90% vs full-seq 20-60%"
+    - "Full-seq PPL anti-correlated with accuracy (r = -0.308)"
+    - "Prompt-only PPL anti-correlated (r = -0.740), confirming prompt dilution is the confounder"
+    - "Spearman rho = 0.90, p=0.037 (seeds 42, 123)"
+    - "Implication: shadow scoring should use answer-conditioned PPL"
+    tags:
+    - evaluation
+    - evolution
+    - shadow-scoring
+    - novel
+    created: '2026-03-11'
+    completed: '2026-03-11'
+    notes: >
+      Direct follow-up from exp_ppl_vs_task_performance kill. The root cause
+      was clear: full-sequence PPL averages prompt + answer tokens, diluting
+      the signal. Answer-conditioned PPL (score only tokens after the prompt)
+      correlates strongly with accuracy (r=0.811).
+
+      Shadow scoring in the Evolve phase can use answer-only PPL as a free
+      quality signal. No domain-specific evaluation infrastructure needed.
+
+  exp_execution_based_self_learning:
+    title: Code experts self-improve via execution feedback loop
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_ppl_vs_task_performance
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - self-learning loop does not improve pass@1 after 5 cycles
+    - generated training data quality degrades over cycles (model collapse)
+    evidence: []
+    tags:
+    - evolution
+    - self-learning
+    - code
+    - novel
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      For code domains, execution IS the oracle. No teacher needed.
+
+      Loop: (1) Expert generates K solutions per MBPP problem
+      (2) Execute each against test cases
+      (3) Passing solutions → new training data
+      (4) Retrain expert on combined original + passing data
+      (5) Measure pass@1 improvement
+      (6) Repeat
+
+      Also test DPO variant: use (pass, fail) pairs as (chosen, rejected).
+      DPO should be stronger because it teaches what NOT to do.
+
+      Watch for model collapse: if the expert only trains on its own outputs,
+      diversity may decrease. Track output diversity across cycles.
+
+      Research first: Use /notebooklm to survey self-play and self-improvement
+      for code LLMs (AlphaCode, CodeRL, RLTF, Self-Debugging). Check
+      StarCoder self-improvement and Reflexion for execution-feedback loops.
+
+  # ── Reviewer Attack: "Cross-domain queries break everything" ───
+
+  exp_cross_domain_composition:
+    title: Merged experts handle cross-domain queries (e.g. "Python to Bash")
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_gram_schmidt_composition
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - merged model scores >20% worse than base on cross-domain queries
+    - cross-domain queries route to wrong expert >50% of the time
+    evidence: []
+    tags:
+    - composition
+    - routing
+    - cross-domain
+    - novel
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "A user asks 'convert this Python to Bash'. Neither
+      expert alone has cross-domain knowledge. The composed model's behavior
+      depends on cross-expert interaction terms that were never trained."
+
+      Test queries that span 2+ domains:
+      - "Write a Python script that runs bash commands"
+      - "Calculate the statistical significance of this medical trial"
+      - "Write SQL to solve this math word problem"
+
+      Measure: does the merged model handle these better/worse than base?
+      Does routing activate multiple experts or just one?
+      Does Gram-Schmidt hurt cross-domain by removing shared components?
+
+      Research first: Use /notebooklm to survey multi-task LoRA composition
+      (LoRAHub, Mixture-of-LoRAs, AdapterFusion). How do existing systems
+      handle queries that need multiple experts simultaneously?
+
+  # ── Reviewer Attack: "No comparison to alternatives" ───────────
+
+  exp_composition_vs_monolithic:
+    title: Composed experts vs monolithic fine-tune on same data
+    status: open
+    scale: micro
+    priority: 3
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - monolithic fine-tune beats composition by >10% on average across domains
+    - composition has >2x training cost for same quality
+    evidence: []
+    tags:
+    - composition
+    - baselines
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Why not just fine-tune one model on all 5 domains?
+      What's the advantage of composition over standard multi-task training?"
+
+      Train: (a) 5 separate rank-8 experts, merge via addition
+      (b) 1 monolithic rank-40 LoRA on combined data from all 5 domains
+      (same total parameter budget: 5×rank-8 ≈ rank-40)
+
+      Measure per-domain quality, cross-domain quality, and forgetting.
+      Composition should win on: modularity (add/remove domains),
+      parallelizable training, no catastrophic forgetting.
+      Monolithic should win on: cross-domain interaction, simplicity.
+
+      Research first: Use /notebooklm to survey multi-task fine-tuning vs
+      modular approaches (T-Few, Flan-T5, adapter composition literature).
+      Check references/union-of-experts/ for union-based expert composition.
+
+  exp_composition_vs_moe:
+    title: Composed LoRA experts vs trained MoE architecture
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_composable_merge_pipeline
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - MoE beats composition by >15% on task quality at same parameter budget
+    - MoE routing overhead is <2x composition inference cost
+    evidence: []
+    tags:
+    - composition
+    - baselines
+    - moe
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Mixtral already solves this with jointly-trained
+      experts and a learned router. What's your advantage?"
+
+      Compare our composition approach vs:
+      (a) Standard MoE (jointly-trained experts + gating)
+      (b) Our approach (independent experts + addition/routing)
+
+      Our advantages: independent training (parallelizable, cheaper),
+      modular add/remove, no full retraining when adding domains.
+      MoE advantages: learned routing, optimized expert interaction.
+
+      Use references/mixtral-8x7b/ and references/switch-transformers/.
+
+      Research first: Use /notebooklm to survey MoE vs modular adapter
+      comparisons in literature. Check references/soft-moe/ for dense MoE
+      alternatives. Key question: can LoRA composition match MoE quality
+      at lower training cost?
+
+  # ── Reviewer Attack: "Catastrophic failure at scale" ───────────
+
+  exp_quality_degradation_detection:
+    title: Detect when adding expert N degrades expert M
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_gram_schmidt_composition
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - detection method has >20% false negative rate (misses real degradation)
+    - detection adds >10 min to merge pipeline
+    evidence: []
+    tags:
+    - composition
+    - safety
+    - monitoring
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "At N=500, there are 124,750 pairwise interactions.
+      How do you verify expert #347 hasn't subtly degraded expert #12?"
+
+      Options: (a) Full pairwise eval (O(N²), too expensive at scale)
+      (b) Sample-based: eval random subset of existing experts after each add
+      (c) Cosine-based gate: only eval experts with cosine >threshold to new one
+      (d) Canary queries: fixed set of regression tests per domain
+
+      Implement and compare detection rate vs cost. Option (c) is most
+      promising — only check potentially-affected experts.
+
+      Research first: Use /notebooklm to survey regression detection in
+      continual learning (backward transfer metrics, forgetting measures),
+      and ML model monitoring (data drift detection, performance monitoring).
+
+  exp_expert_removal_graceful:
+    title: Removing an expert from merged model doesn't break others
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_gram_schmidt_composition
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - removing expert causes >3% PPL regression on remaining experts
+    - Gram-Schmidt cascade recomputation takes >10 min at N=50
+    evidence: []
+    tags:
+    - composition
+    - safety
+    - lifecycle
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "If you Gram-Schmidt orthogonalize sequentially,
+      removing expert k requires recomputing the entire cascade."
+
+      Test: merge 10 experts with Gram-Schmidt. Remove expert #5.
+      (a) Naive: just subtract its contribution. Measure quality.
+      (b) Recompute: re-orthogonalize remaining 9. Measure quality + time.
+      (c) Compare to "never added" baseline (train 9 from scratch).
+
+      If naive removal works (thanks to near-orthogonality), the cascade
+      recomputation is unnecessary and removal is O(1).
+
+      Research first: Use /notebooklm to survey task arithmetic (Ilharco et al.
+      "Editing Models with Task Arithmetic") — they add/subtract task vectors.
+      Does subtraction cleanly remove capabilities? What are the failure modes?
+
+  # ── Reviewer Attack: "Training data quality matters" ───────────
+
+  exp_synthetic_vs_real_data:
+    title: Synthetic (Groq API) vs real (HuggingFace) training data quality
+    status: open
+    scale: micro
+    priority: 4
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - synthetic-only expert is >15% worse than real-data expert
+    - mixed (synthetic + real) is NOT better than either alone
+    evidence: []
+    tags:
+    - distillation
+    - data-quality
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Your experts are trained on LLM-generated synthetic
+      data. This introduces systematic biases and may contaminate benchmarks."
+
+      For python domain, train 3 experts:
+      (a) Synthetic only (Groq-generated)
+      (b) Real only (codeparrot-clean from HuggingFace)
+      (c) Mixed (50/50 synthetic + real)
+
+      Evaluate on HumanEval (execution-based, no contamination risk).
+      Also measure output diversity: do synthetic-trained experts
+      produce more homogeneous outputs?
+
+      Research first: Use /notebooklm to survey synthetic data quality
+      (Phi-1/Phi-2 "Textbooks Are All You Need", Orca, WizardLM Evol-Instruct).
+      Key question: does synthetic data produce LoRAs that are MORE or LESS
+      orthogonal than real data? Any known contamination/benchmark leakage risks?
+
+  exp_data_scaling_per_expert:
+    title: Expert quality as function of training examples
+    status: open
+    scale: micro
+    priority: 4
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - quality does not improve beyond 200 examples (data scaling flat)
+    - quality still improving significantly at 5000 examples (need more data than budgeted)
+    evidence: []
+    tags:
+    - distillation
+    - scaling
+    - economics
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "1000 examples per expert may be too few or too many.
+      Where does the data scaling curve saturate?"
+
+      Train python expert at: 50, 100, 200, 500, 1000, 2000, 5000 examples.
+      Same rank, same steps. Plot PPL vs data size.
+
+      This determines: (a) minimum viable dataset per expert
+      (b) when more data stops helping (capacity saturation)
+      (c) cost-optimal data budget per expert
+
+      Research first: Use /notebooklm to survey data scaling laws for
+      fine-tuning (Hoffmann et al. "Chinchilla", LIMA "Less Is More",
+      "Scaling Data-Constrained Language Models"). Does LoRA have different
+      data scaling behavior than full fine-tuning?
+
+  # ── Reviewer Attack: "Rank selection is ad-hoc" ────────────────
+
+  exp_adaptive_rank_selection:
+    title: Domain complexity predicts optimal rank automatically
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_ffn_only_vs_all_modules
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - no correlation between domain complexity metric and optimal rank
+    - predicted rank is >2x off from empirically optimal rank
+    evidence:
+    - date: '2026-03-10'
+      claim: 'bash (simple domain) saturates near rank-8'
+      source: 'rank sweep experiment'
+    tags:
+    - composition
+    - architecture
+    - automation
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "You tested rank sweep on one domain (bash). How do
+      you know rank-8 is right for medical reasoning or creative writing?"
+
+      Run rank sweep (8,16,32,64,128) across 5+ domains of varying complexity.
+      Define complexity metrics: (a) vocabulary richness of training data
+      (b) average sequence length (c) training loss at step 50 (faster=simpler)
+
+      Test if a simple heuristic (e.g., rank = 8 * ceil(complexity_score))
+      predicts the PPL knee point. If so, automate rank selection.
+
+      Research first: Use /notebooklm to survey adaptive rank selection
+      (AdaLoRA, DyLoRA, intrinsic dimensionality estimation). Check if
+      existing methods predict optimal rank from task complexity metrics.
+
+  # ── Reviewer Attack: "Hierarchical beats flat" ─────────────────
+
+  exp_hierarchical_composition:
+    title: Two-level expert hierarchy handles domain clusters better
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_orthogonality_by_domain_type
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - hierarchical is NOT better than flat for clustered domains
+    - hierarchy adds >30% complexity for <5% quality improvement
+    evidence: []
+    tags:
+    - composition
+    - architecture
+    - novel
+    - cross-domain
+    created: '2026-03-11'
+    notes: >
+      Reviewer suggests: "Don't pretend math and medical are independent.
+      Train a shared 'analytical reasoning' expert, layer domain-specific
+      experts on top."
+
+      Two-level hierarchy:
+      Level 1: "foundation LoRAs" (rank-32) for broad categories
+        - reasoning, code, language, factual_knowledge
+      Level 2: "specialist LoRAs" (rank-8) per domain, applied ON TOP
+
+      Test: does math expert + reasoning foundation beat flat math expert?
+      Does the hierarchy naturally resolve the math-medical collision?
+
+      References: references/moe-adapters4cl/ (hierarchical adapters).
+
+      Research first: Use /notebooklm to survey hierarchical adapter/expert
+      architectures (AdapterFusion, MAD-X, Hypernetwork-based adapters).
+      Check references/moe-adapters4cl/ codebase for implementation patterns.
+
+  # ── Reviewer Attack: "Dynamic composition is impractical" ──────
+
+  exp_runtime_expert_loading:
+    title: Hot-swap experts at runtime without model restart
+    status: open
+    scale: micro
+    priority: 6
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - expert swap takes >100ms (too slow for interactive use)
+    - hot-swap causes quality regression vs cold-start
+    evidence: []
+    tags:
+    - composition
+    - serving
+    - engineering
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Precomputing the sum means any expert change requires
+      recomputing ALL weight matrices. For 7B model, that's ~6.7GB of
+      computation. Not instant."
+
+      Test: (a) time to recompute merged weights after adding/removing expert
+      (b) can we use PEFT's runtime adapter swapping instead of precompute?
+      (c) hybrid: precompute for "always-on" experts, runtime-swap for
+          per-query specialists
+
+      vLLM already supports runtime LoRA swapping. Measure overhead.
+
+      Research first: Use /notebooklm to survey runtime adapter serving
+      (S-LoRA, Punica, vLLM multi-LoRA). Check batched LoRA serving
+      architectures and their overhead per adapter swap.
+
+  exp_quantized_composition:
+    title: Expert composition works after quantization (AWQ/GPTQ)
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_composable_merge_pipeline
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - quantized merged model >10% worse than fp16 merged model
+    - quantization destroys expert specialization (domains become indistinguishable)
+    evidence: []
+    tags:
+    - composition
+    - serving
+    - speed
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "You want fast inference via quantization, but
+      quantizing a merged model may destroy the subtle expert contributions."
+
+      Test: merge 5 experts → quantize to AWQ 4-bit → benchmark.
+      Compare: (a) quantize then merge, (b) merge then quantize.
+      Measure per-domain PPL preservation and inference speed gain.
+
+      If composition survives quantization, we get 2x inference speed free.
+
+      Research first: Use /notebooklm to survey quantization-aware LoRA
+      (QA-LoRA, LoftQ, QLoRA quantization effects on merged weights).
+      Key question: does quantizing AFTER merging preserve expert contributions
+      differently than quantizing BEFORE merging?
+
+  # ── Reviewer Attack: "No theoretical foundation" ───────────────
+
+  exp_subspace_capacity_empirical:
+    title: Empirical expert capacity matches theoretical N_max bound
+    status: open
+    scale: micro
+    priority: 6
+    depends_on:
+    - exp_collision_scaling
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - empirical capacity is <10% of theoretical N_max (theory is useless)
+    - quality degrades smoothly (no sharp capacity cliff)
+    evidence: []
+    tags:
+    - composition
+    - theory
+    - scaling
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Your N_max=262K bound is from random subspace packing.
+      Real experts aren't random — they cluster by semantic similarity."
+
+      Progressively merge experts (5, 10, 20, 50, 100) and measure:
+      (a) average pairwise cosine vs N
+      (b) merged model quality vs N
+      (c) per-domain quality vs N (does any domain catastrophically fail?)
+
+      Find the empirical capacity cliff: at what N does quality degrade
+      faster than 1/N? That's the real capacity, not the theoretical bound.
+
+      Research first: Use /notebooklm to survey subspace packing bounds
+      (Johnson-Lindenstrauss, random subspace angles), and empirical
+      MoE scaling studies. Check references/switch-transformers/ for
+      how expert count affects quality in practice.
+
+  # ── Reviewer Attack: "Self-learning doesn't converge" ──────────
+
+  exp_correction_signal_quality:
+    title: Human corrections vs teacher corrections vs execution feedback
+    status: open
+    scale: micro
+    priority: 4
+    depends_on: []
+    blocks:
+    - exp_execution_based_self_learning
+    experiment_dir: null
+    kill_criteria:
+    - teacher corrections are wrong >20% of the time
+    - execution feedback produces degenerate solutions (technically correct but useless)
+    evidence: []
+    tags:
+    - evolution
+    - self-learning
+    - data-quality
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "The self-learning loop depends on correction quality.
+      Bad corrections make the model worse, not better."
+
+      Compare 3 correction sources for the same expert (python):
+      (a) Human corrections (gold standard, expensive)
+      (b) 70B teacher corrections (automated, cheaper)
+      (c) Execution feedback (pass/fail, free, code-only)
+
+      Measure: correction accuracy, expert improvement per correction,
+      cost per useful correction. Build a decision tree:
+      code domains → execution feedback, others → teacher corrections.
+
+      Research first: Use /notebooklm to survey RLAIF (Reinforcement Learning
+      from AI Feedback), Constitutional AI, and reward model reliability.
+      Check if teacher confidence calibration is a solved problem.
+
+  exp_model_collapse_detection:
+    title: Self-learning loop does not cause model collapse
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_execution_based_self_learning
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - output diversity drops >30% after 5 self-learning cycles
+    - expert converges to repetitive/degenerate outputs
+    evidence: []
+    tags:
+    - evolution
+    - self-learning
+    - safety
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "Training on the model's own outputs causes model
+      collapse. Each cycle amplifies biases and reduces diversity."
+
+      Measure across self-learning cycles:
+      (a) unique n-gram ratio in generated outputs (diversity)
+      (b) pass@k for k>1 (does the model still generate diverse solutions?)
+      (c) embedding variance of outputs (are they clustering?)
+
+      Mitigation if detected: mix self-generated data with fresh real data
+      at each cycle (e.g., 50% self-generated, 50% new HuggingFace data).
+
+      Research first: Use /notebooklm to survey model collapse literature
+      (Shumailov et al. "The Curse of Recursion", "Self-Consuming Generative
+      Models Go MAD"). Key question: do LoRA-only updates collapse differently
+      than full fine-tuning? Is rank a natural regularizer against collapse?
+
+  # ── Reviewer Attack: "Economics are wrong" ─────────────────────
+
+  exp_end_to_end_cost_accounting:
+    title: True cost per expert includes all overhead
+    status: open
+    scale: micro
+    priority: 6
+    depends_on: []
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - true cost per expert >$1.00 (economics don't scale)
+    - overhead (data gen, eval, merge, benchmark) >3x training cost
+    evidence: []
+    tags:
+    - economics
+    - pipeline
+    created: '2026-03-11'
+    notes: >
+      Reviewer attack: "You claim $0.25/expert but that's just training.
+      What about data generation, evaluation, orthogonality checks,
+      merging, benchmarking, and GPU idle time?"
+
+      Time and cost every step of the pipeline for 5 experts:
+      (1) Data generation (Groq API call)
+      (2) Data download/preparation
+      (3) Training (GPU time)
+      (4) Orthogonality check
+      (5) Gram-Schmidt projection
+      (6) Merge into composed model
+      (7) Benchmark on eval set
+      (8) Quality gate decision
+
+      Report true $/expert including all overhead.
+
+      Research first: Use /notebooklm to survey ML training cost analyses
+      (Epoch AI compute surveys, MosaicML cost benchmarks). Check if any
+      existing LoRA pipelines have published end-to-end cost breakdowns.
+
   # ── Supporting Research ───────────────────────────────────────────
 
   exp_relu_router_vs_softmax:
@@ -295,6 +1586,10 @@ nodes:
       At N=500+, softmax collision becomes a real concern. ReMoE (ICLR 2025)
       shows ReLU routing avoids probability compression. Compare at N=32.
       Not on critical path but important for scaling beyond 500 experts.
+
+      Research first: Use /notebooklm to survey ReLU routing literature
+      (ReMoE, references/remoe-relu-routing/). Also check expert choice
+      routing (Zhou et al.) and top-k alternatives to softmax gating.
 
   exp_domain_taxonomy_generation:
     title: Automated domain taxonomy for expert coverage planning
@@ -324,3 +1619,973 @@ nodes:
       Validate: train experts on leaf domains, measure distinctness via
       orthogonality check and per-domain eval improvement over base.
       Merge domains that produce indistinguishable experts.
+
+      Research first: Use /notebooklm to survey domain taxonomy approaches
+      (WordNet hierarchies, Wikipedia category trees, LLM-based clustering).
+      Check if existing NLP task taxonomies (BigBench, FLAN task categories)
+      can bootstrap the domain tree.
+
+  # ── Inference Speed at Scale ─────────────────────────────────────
+
+  exp_inference_latency_vs_N:
+    title: End-to-end inference latency as function of composed expert count N
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on: []
+    blocks:
+    - exp_inference_routing_strategies
+    experiment_dir: micro/models/inference_latency_vs_N
+    kill_criteria:
+    - pre-merged model (additive composition) is >5% slower than base model at any N
+    - dynamic top-k routing latency grows faster than O(k) with N
+    - at N=50, any strategy exceeds 2x base model latency
+    evidence:
+    - date: '2026-03-07'
+      claim: 'Batched LoRA k=1 is -4% overhead (faster than monolithic)'
+      source: 'macro/batched_lora_latency/'
+    - date: '2026-03-11'
+      claim: 'Pre-merge overhead: max +2.6% across N=5..100 (K1 PASS)'
+      source: 'micro/models/inference_latency_vs_N/'
+    - date: '2026-03-11'
+      claim: 'Dynamic k=1 overhead constant across N: 254-265% (Python impl-bound, not N-bound). k4/k1 ratio stable at 1.40-1.41 (K2 PASS)'
+      source: 'micro/models/inference_latency_vs_N/'
+    - date: '2026-03-11'
+      claim: 'Hash ring routing: 0.5-0.6 us/query, O(log N), negligible at all N'
+      source: 'micro/models/inference_latency_vs_N/'
+    - date: '2026-03-11'
+      claim: 'Memory: 0.28 MB/expert (micro), pre-merge is O(1), dynamic is O(N)'
+      source: 'micro/models/inference_latency_vs_N/'
+    tags:
+    - inference
+    - scaling
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      THE KEY PRODUCTION QUESTION. Two composition strategies have different
+      inference profiles:
+
+      (A) Pre-merged: W = W_base + sum(D_i)/N. Inference is identical to base
+      model — zero overhead. But all experts are always active (no routing).
+
+      (B) Dynamic top-k: at query time, select k experts, apply only their
+      deltas. Inference = base forward + k LoRA forward passes.
+
+      (C) Hybrid: pre-merge "always-on" foundation experts, dynamic-select
+      specialists per query.
+
+      Measure at N = 5, 10, 20, 50, 100:
+      - Pre-merged throughput (tokens/sec) vs base
+      - Dynamic k=1,2,4 latency vs base
+      - Hybrid latency
+      - Memory footprint per strategy
+
+      Use existing adapters + synthetic ones to scale N.
+      vLLM and S-LoRA are the serving baselines.
+
+      Research first: Use /notebooklm to survey S-LoRA, Punica, dLoRA,
+      and vLLM multi-adapter serving. What are the SOTA latency numbers
+      for serving N concurrent LoRA adapters?
+
+  exp_inference_routing_strategies:
+    title: Optimal routing strategy for latency-quality tradeoff
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_inference_latency_vs_N
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - best routing strategy is >50ms per query at N=100
+    - routing overhead exceeds expert computation overhead
+    - no strategy achieves >90% of oracle routing quality
+    evidence: []
+    tags:
+    - inference
+    - routing
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      Given the latency profile from exp_inference_latency_vs_N, what's the
+      best way to select experts at query time?
+
+      Compare: (a) pre-merge all (zero routing cost, all experts active)
+      (b) hash ring (O(1) lookup, content-unaware)
+      (c) embedding similarity (O(N) or O(log N) with index)
+      (d) tiny classifier head (O(1) after training)
+      (e) hierarchical: coarse category → fine expert
+
+      For each: measure routing latency, expert selection accuracy,
+      end-to-end quality. Find the Pareto frontier.
+
+      Research first: Use /notebooklm to survey expert routing in
+      production MoE systems (GShard, Switch Transformer serving,
+      Mixtral inference optimization). How do they handle routing latency?
+
+  exp_premerge_vs_dynamic_quality:
+    title: Pre-merged model quality vs dynamic routing at same expert count
+    status: killed
+    scale: micro
+    priority: 3
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/premerge_vs_dynamic_quality
+    kill_criteria:
+    - pre-merged is >5% worse than dynamic top-k on domain-specific tasks
+    - dynamic routing provides zero quality advantage over pre-merge at N<20
+    evidence:
+    - K2 TRIGGERED: dynamic routing max +0.06% gap over pre-merge (3 seeds, N=5..20)
+    - K1 NOT triggered: pre-merge within 5% at all N
+    - CAVEAT: 0.0% expert specialization -- comparison is vacuous at micro scale
+    - Methodology validated, needs macro-scale retest with real specialization
+    tags:
+    - inference
+    - composition
+    - critical-path
+    created: '2026-03-11'
+    completed: '2026-03-11'
+    notes: >
+      KILLED at micro by K2: dynamic routing provides no advantage at N<20.
+      However, experts did not specialize (0.0% gap), so comparison is vacuous.
+      All strategies produce identical output when LoRA contributes nothing.
+      The directional finding is: gap is proportional to specialization gap.
+      At macro scale with 10% specialization, pre-merge would dilute to ~0.5%
+      per expert at N=20, vs full 10% for dynamic top-1. Gap would be ~5%.
+      Need macro-scale test to resolve definitively.
+
+      Research first: Use /notebooklm to survey LoRA merging vs serving
+      tradeoffs. Check S-LoRA paper for quality comparison.
+
+  # ── Base Model Necessity ─────────────────────────────────────────
+
+  exp_adapter_taxonomy_wild:
+    title: Survey adapter types in the wild for composable architecture fit
+    status: proven
+    scale: micro
+    priority: 1
+    depends_on: []
+    blocks:
+    - exp_base_free_composition
+    - exp_adapter_as_base
+    - exp_relora_composition_test
+    - exp_compressed_expert_sweep
+    experiment_dir: micro/models/adapter_taxonomy_wild
+    kill_criteria:
+    - no adapter type exists that can encode base-model-level knowledge
+    - all adapter types require a frozen base for stable training
+    evidence:
+    - "15 adapter types surveyed across 5 composability dimensions"
+    - "Kill criterion 1 SURVIVES: ReLoRA, LTE, full-rank can encode base knowledge"
+    - "Kill criterion 2 SURVIVES: ReLoRA/LTE train from scratch without frozen base"
+    - "LoRA confirmed as optimal for composable architecture (FIT=0.875)"
+    - "Three composition classes: A (additive/LoRA), B (caveats/DoRA,MoLoRA), C (incompatible/IA3,Houlsby,Prefix)"
+    - "No base-free composable model exists in published literature — our opportunity"
+    - "HuggingFace Hub: LoRA dominates >90% of adapters in production"
+    - date: '2026-03-11'
+      claim: "Adversarial review passed (revision). All 4 required fixes + 3 advisory items verified."
+      source: micro/models/adapter_taxonomy_wild/REVIEW-adversarial.md
+    tags:
+    - architecture
+    - survey
+    - novel
+    - cross-domain
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      FOUNDATIONAL QUESTION: We assume a frozen base + LoRA experts. But
+      what if the "base" itself could be an adapter? What adapter types
+      exist and which are best suited for a composable architecture?
+
+      Survey and classify:
+      (a) LoRA / QLoRA / DoRA / rsLoRA — low-rank additive
+      (b) IA3 / (IA)^3 — learned rescaling vectors
+      (c) Adapters (Houlsby) — bottleneck layers inserted between blocks
+      (d) Prefix tuning / prompt tuning — virtual token prepending
+      (e) BitFit — bias-only tuning
+      (f) Full-rank adapters — complete layer replacement
+      (g) Mixture-of-LoRAs (MoLoRA) — already MoE-native
+      (h) LoRA-XS, VeRA, Tied-LoRA — parameter-efficient variants
+      (i) HuggingFace PEFT ecosystem — what's actually used in production
+
+      For EACH type evaluate:
+      - Can it compose additively? (orthogonality property)
+      - What is its capacity (bits of knowledge per parameter)?
+      - Can it encode "base-level" knowledge or only deltas?
+      - What's the inference overhead?
+      - What exists on HuggingFace Hub right now?
+
+      Research first: Use /notebooklm to survey the full PEFT/adapter
+      landscape. Check HuggingFace Hub for adapter collections. Survey
+      AdapterHub, LoRAHub, and OpenDelta for composition patterns.
+      Key question: has anyone built a base-free modular model?
+
+  exp_base_free_composition:
+    title: Can a model be composed entirely from adapters without a pretrained base?
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_adapter_taxonomy_wild
+    blocks: []
+    experiment_dir: micro/models/base_free_composition
+    kill_criteria:
+    - adapter-only model quality <50% of base+adapter model
+    - adapter-only model fails to produce coherent text
+    - training adapter-as-base costs >10x training a LoRA expert
+    evidence:
+    - "K1 SURVIVES: worst loss ratio 1.095 (delta_r4), threshold >2.0x"
+    - "K2 SURVIVES: worst base loss ratio 1.229 (delta_r4), threshold >2.0x"
+    - "K3 SURVIVES: decomposition cost 0.001s vs 6.6s per expert (0.00x, threshold >10x)"
+    - "Rank-32 lossless: loss ratio 1.001, cos ratio 1.01x"
+    - "Rank-16 sweet spot: loss ratio 1.014, cos ratio 1.22x, same storage as 1 LoRA expert"
+    - "Expert quality degrades slower than base quality (rank-8: base -10%, experts -5%)"
+    - "Skeleton alone insufficient: base loss 6.9x, expert loss 1.27x, cos 6.3x"
+    - "Delta effective rank ~40 at d=64 (ratio 0.63)"
+    - date: '2026-03-11'
+      claim: "Base model is decomposable into adapter format. All 3 kill criteria disproven across 3 seeds. Rank-16 base adapter matches pretrained quality within 1.4%."
+      source: micro/models/base_free_composition/PAPER.md
+    - date: '2026-03-11'
+      claim: "Adversarial review PROCEED. Math sound, controls proper, 3 seeds consistent. Caveats: error propagation bound is empirical not theoretical; experts retrained per condition (not zero-shot transfer); macro rank extrapolation unverified."
+      source: micro/models/base_free_composition/REVIEW-adversarial.md
+    tags:
+    - architecture
+    - novel
+    - cross-domain
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      PROVEN. Tested delta decomposition approach: W_pretrained = W_skeleton + Delta,
+      where Delta is SVD-approximated at ranks {4, 8, 16, 32, full}. LoRA experts
+      compose on the reconstructed base with only 1.4% quality loss at rank-16.
+      Decomposition is instant (0.001s). Expert quality degrades slower than base quality.
+      Rank-16 base adapter is same size as one LoRA expert.
+      Macro risks: delta effective rank scaling with d, SVD quality at d=3584.
+
+  exp_adapter_as_base:
+    title: Distill pretrained base knowledge into adapter format
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_adapter_taxonomy_wild
+    blocks: []
+    experiment_dir: micro/models/base_free_composition
+    kill_criteria:
+    - base-as-adapter loses >20% quality vs native pretrained base
+    - base adapter is not composable with domain adapters
+    - base adapter parameter count exceeds 50% of original base model
+    evidence:
+    - "K1 SURVIVES: rank-16 base adapter loses only 1.9% base quality (threshold >20%)"
+    - "K2 SURVIVES: rank-16 experts compose with loss ratio 1.014, cos ratio 1.22x"
+    - "K3 SURVIVES: rank-16 base adapter ~42K params out of ~50K total (~84% at micro, but at d=3584 would be ~5%)"
+    - date: '2026-03-11'
+      claim: "Subsumed by exp_base_free_composition. SVD decomposition at rank-16 preserves base quality within 1.9% and expert composition within 1.4%."
+      source: micro/models/base_free_composition/PAPER.md
+    tags:
+    - architecture
+    - novel
+    - cross-domain
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      PRACTICAL VARIANT: Instead of eliminating the base, convert it.
+
+      Approach: take pretrained Qwen2.5-7B weights, subtract a minimal
+      "skeleton" (random init or minimal pretrained checkpoint), express
+      the difference as a set of adapters:
+        W_pretrained = W_skeleton + A_foundation @ B_foundation
+
+      If this works, the "base" becomes just another adapter that can be:
+      - Swapped (upgrade Qwen2.5→Qwen3 by swapping the foundation adapter)
+      - Composed (mix foundation adapters from different model families)
+      - Evolved (clone-and-compete on the base itself)
+
+      This would make the ENTIRE model — base included — part of the
+      living composable architecture. No sacred frozen weights.
+
+      Test: SVD decompose (W_pretrained - W_random) at various ranks.
+      At what rank does the "base adapter" preserve base model quality?
+      Is this rank small enough to be practical?
+
+      Research first: Use /notebooklm to survey:
+      - SVD compression of pretrained weights (ASVD, SliceGPT)
+      - Model distillation into adapter format
+      - "Lottery ticket" hypothesis — minimal subnetwork that preserves quality
+      Key question: what rank captures the base model's knowledge?
+
+  exp_relora_composition_test:
+    title: Test whether LoRA experts compose on a ReLoRA-built base model
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_adapter_taxonomy_wild
+    blocks:
+    - exp_base_free_composition
+    experiment_dir: micro/models/relora_composition_test
+    kill_criteria:
+    - LoRA experts on ReLoRA base show cos > 10x worse than pretrained base
+    - expert quality on ReLoRA base < 50% of same experts on pretrained base
+    - ReLoRA base model itself fails to produce coherent text
+    evidence:
+    - "Rev2 K1 SURVIVES: cos ratio = 1.77x, 95% CI [0.77, 2.64] (threshold >10x). p=0.056 not significant"
+    - "Rev2 K2 SURVIVES: loss ratio = 1.052 (5.2% gap, threshold >2.0x). Base gap 4.6%, composition penalty 0.6%"
+    - "Rev2 K3 SURVIVES: coherence ratio = 1.046 (threshold >2.0)"
+    - "Weight spectra nearly identical: effective rank 52.9 vs 53.2 (ratio 0.995)"
+    - "3 seeds tested (42, 123, 7): seed 42 ReLoRA better (0.77x), seed 7 moderate (1.90x), seed 123 notable (2.64x)"
+    - date: '2026-03-11'
+      claim: "ReLoRA-built base is a viable composition substrate. Orthogonality degradation statistically indistinguishable from noise (p=0.056). Loss gap 5.2% decomposes to 4.6% base quality + 0.6% composition penalty."
+      source: micro/models/relora_composition_test/PAPER.md
+    - date: '2026-03-11'
+      claim: "Adversarial review PROCEED. All rev2 fixes verified correct. Math verified. Methodology sound."
+      source: micro/models/relora_composition_test/REVIEW-adversarial.md
+    tags:
+    - architecture
+    - novel
+    - base-freedom
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      PROVEN. Adversarial review passed. Tested at micro scale
+      (d=64, r=8, L=4, K=5 merge cycles, N=4 domain experts, 3 seeds).
+      Result: LoRA experts compose on ReLoRA-built base with ~1.77x higher
+      cosine similarity but statistically indistinguishable from noise (p=0.056).
+      Loss gap 5.2% decomposes to 4.6% base quality + 0.6% composition penalty.
+      First empirical evidence that "base is just another adapter" is viable.
+      Macro risks: base quality gap at 7B, cos_ratio scaling, only 5 merge cycles tested.
+
+  exp_relora_composition_macro:
+    title: Validate ReLoRA composition scaling — does cos_ratio degrade or improve at d=896+?
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_relora_composition_test
+    blocks:
+    - exp_base_free_composition
+    experiment_dir: null
+    kill_criteria:
+    - cos_ratio at d=896 exceeds 5x (composition degradation grows with scale)
+    - loss_ratio at d=896 exceeds 1.20 (>20% quality loss vs conventional base)
+    - base quality gap exceeds 10% at 7B scale (ReLoRA pretraining too costly)
+    evidence: []
+    tags:
+    - architecture
+    - base-freedom
+    - scaling
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_relora_composition_test (proven). Micro result: cos_ratio 1.77x
+      (p=0.056) at d=64. Key question: does the ~2x factor persist, shrink, or grow
+      at d=896? Random cos drops to ~0.0002 at d=896, so even 2x remains negligible.
+      But if ReLoRA creates correlated weight structure, degradation could compound.
+      Also test with K=50+ merge cycles (micro used K=5 only).
+
+  exp_relora_merge_cycle_scaling:
+    title: Does composition quality degrade with more ReLoRA merge cycles (K=50-200)?
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_relora_composition_test
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - cos_ratio grows >5x at K=200 (systematic weight bias from repeated merges)
+    - loss_ratio grows >1.50 at K=200 (cumulative merge error compounds)
+    evidence: []
+    tags:
+    - architecture
+    - base-freedom
+    - scaling
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_relora_composition_test (proven) + adversarial review advisory.
+      Micro tested only K=5 merge cycles. Production ReLoRA uses hundreds.
+      More cycles = more optimizer resets = more potential for systematic weight bias.
+      Can run at micro scale (d=64) with K={5, 25, 50, 100, 200} to detect trend.
+
+  exp_compressed_expert_sweep:
+    title: Test LoRA-XS and VeRA as storage-efficient expert formats
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_adapter_taxonomy_wild
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - compressed experts encode <50% of domain knowledge vs standard LoRA (measured by domain eval)
+    - compressed experts lose orthogonality (cos > 0.01)
+    - inference overhead of compressed format exceeds 10%
+    evidence: []
+    tags:
+    - architecture
+    - storage
+    - scaling
+    created: '2026-03-11'
+    notes: >
+      STORAGE SCALING: At 5K experts, LoRA=300GB vs LoRA-XS=215MB (140x smaller).
+      If compressed experts encode sufficient narrow-domain knowledge, storage
+      costs become negligible. Test: train matched LoRA vs LoRA-XS vs VeRA
+      experts on same domains, compare quality and orthogonality.
+
+  exp_zero_shot_base_transfer:
+    title: Do experts trained on full base work on SVD-reconstructed base without retraining?
+    status: proven
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_base_free_composition
+    blocks: []
+    experiment_dir: micro/models/zero_shot_base_transfer
+    kill_criteria:
+    - expert loss on SVD base exceeds 2x loss on full base (zero-shot transfer fails)
+    - expert cos similarity on SVD base exceeds 5x that on full base
+    - more than 50% of experts fail zero-shot transfer
+    evidence:
+    - "3-seed avg: rank-32 ZS loss ratio 1.003 (threshold 2.0) SURVIVES"
+    - "3-seed avg: rank-16 ZS loss ratio 1.042 (threshold 2.0) SURVIVES"
+    - "3-seed avg: rank-8 ZS loss ratio 1.167 (threshold 2.0) SURVIVES"
+    - "3-seed avg: rank-4 ZS loss ratio 1.321 (threshold 2.0) SURVIVES"
+    - "0/48 expert-condition pairs exceeded 2x threshold (0% failure)"
+    - "cos identical by construction (same expert deltas across conditions)"
+    - "Transfer gap vs retrained: 0.2% (r32), 2.8% (r16), 11.7% (r8), 22.6% (r4)"
+    - "Key finding: ZS experts amplify base error (unlike retrained which compensate)"
+    - "Adversarial review: PROCEED. K2 (cosine) vacuous by design. Amplification 'bound' is empirical trend, not theoretical. Core conclusion sound."
+    tags:
+    - architecture
+    - base-freedom
+    - critical-path
+    - novel
+    created: '2026-03-11'
+    proven: '2026-03-11'
+    notes: >
+      PROVEN. Zero-shot transfer works: experts trained on full pretrained base
+      can be deployed on SVD-reconstructed bases without retraining. All kill
+      criteria disproven across 3 seeds (42, 123, 7). Key finding: zero-shot
+      experts amplify base error (expert/base ratio > 1.0), unlike retrained
+      experts which compensate (ratio < 1.0). At rank-16, the transfer gap
+      is only 2.8% -- acceptable for base swapping. At rank-32, zero-shot
+      is essentially free (0.2% gap). Skeleton-only is catastrophic (9x worse),
+      confirming base delta is essential.
+
+  exp_delta_rank_scaling:
+    title: Does delta effective rank ratio (r_needed/d) decrease at larger d?
+    status: revise
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_base_free_composition
+    blocks: []
+    experiment_dir: micro/models/delta_rank_scaling
+    kill_criteria:
+    - r_needed/d ratio stays above 0.5 at d=128 and d=256 (rank requirement is too high for macro)
+    - larger models show higher effective rank ratio than smaller ones
+    evidence:
+    - 'K1 KILLED: Shannon r_eff/d ratio 0.629 at d=128 and 0.538 at d=256 (both > 0.5)'
+    - 'K2 SURVIVES: ratio monotonically decreases (0.664 -> 0.629 -> 0.538, Cohens d=42)'
+    - 'Power law: rho(d) = 1.269 * d^(-0.152), R^2=0.929'
+    - 'Practical rank (r_95) scales more favorably: ratio 0.455 -> 0.415 -> 0.320'
+    - 'Attention weights scale best: ratio 0.592 -> 0.431 (27% reduction)'
+    - 'Extrapolation to d=4096: Shannon rank ~1472, practical rank ~500'
+    - '3 seeds, std < 0.003, unanimous trend'
+    - 'REVISE (adversarial review 2026-03-11): 5 fixes required'
+    - 'Fix 1: convergence control (train all sizes to same val loss, not same steps)'
+    - 'Fix 2: exclude embeddings from aggregate ratio (V=27 contaminates d-scaling signal)'
+    - 'Fix 3: report CI on power law exponent (3-point fit is underdetermined)'
+    - 'Fix 4: accept K1 kill cleanly, register new hypothesis with r_95 metric'
+    - 'Fix 5: add multi-checkpoint rho measurement to verify convergence'
+    tags:
+    - architecture
+    - base-freedom
+    - scaling
+    created: '2026-03-11'
+    completed: '2026-03-11'
+    notes: >
+      WEAK_KILL: K1 technically killed (Shannon r_eff ratio > 0.5 at both
+      d=128 and d=256), but K2 SURVIVES (monotonically decreasing trend).
+      The practical rank metric (r_95, 95% energy capture) falls below 0.5
+      at d=256 (0.320) and extrapolates to ~0.12 at d=4096 (rank ~500).
+      Base-as-adapter is feasible but requires higher rank than LoRA experts:
+      rank-500 at d=4096 = 5% of model, amortized over N experts.
+      Attention weights scale much better than FFN weights.
+      Literature (arXiv:2510.00537) confirms: hard rank utilization reliably
+      declines with width, power law exponent -0.4 to -0.6 for hard rank.
+      Our exponent -0.15 is consistent with entropy-based (soft) rank.
+      Next: validate at d=896 (Qwen 0.5B macro) to add a 4th data point.
+      ADVERSARIAL REVIEW (2026-03-11): REVISE. Core concern: under-training
+      confound (steps scale linearly but capacity quadratically). The entire
+      observed trend could be an artifact. Fix #1 (convergence control) is
+      cheapest and most impactful. Also: 3-point power law is underdetermined,
+      K1 kill should be accepted (not reinterpreted via r_95 post-hoc).
+
+  exp_fewshot_adaptation_recovery:
+    title: Can a few adaptation steps close the zero-shot transfer gap?
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_zero_shot_base_transfer
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - 50 adaptation steps don't reduce transfer gap by >50% (adaptation too slow)
+    - adapted expert quality worse than zero-shot on original base (adaptation hurts)
+    evidence: []
+    tags:
+    - architecture
+    - base-freedom
+    - efficiency
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_zero_shot_base_transfer adversarial review. If zero-shot
+      transfer gap at rank-16 is 2.8%, can 10-50 adaptation steps on the new
+      base close it to <0.5%? This would make base swapping nearly free:
+      deploy zero-shot immediately, then cheaply adapt in background.
+
+  exp_amplification_factor_scaling:
+    title: Does the zero-shot amplification factor c scale with model dimension d?
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_zero_shot_base_transfer
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - amplification factor c grows linearly or faster with d (amplification worsens at scale)
+    - no measurable amplification trend across d=64, d=128, d=256
+    evidence: []
+    tags:
+    - architecture
+    - base-freedom
+    - scaling
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_zero_shot_base_transfer adversarial review. The
+      amplification factor c (~0.1 at d=64) determines whether zero-shot
+      transfer gets safer or riskier at macro scale. If c decreases with d
+      (LoRA deltas proportionally smaller), zero-shot transfer improves.
+      If c grows, the error amplification asymmetry becomes a real problem.
+      Test at d=128 and d=256 to establish scaling direction.
+
+  # ── Naming & Framing ────────────────────────────────────────────
+
+  exp_composition_naming:
+    title: Define terminology and framing for the composable architecture
+    status: proven
+    scale: micro
+    priority: 1
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/composition_naming
+    kill_criteria:
+    - (no kill — this is a framing/naming task, not an experiment)
+    evidence:
+    - 'Recommended name: Structurally Orthogonal Latent Experts (SOLE)'
+    - 'Surveyed 13 papers across MoE, PEFT, model merging, continual learning, modular DL'
+    - 'Glossary: skeleton, expert, expert library, composition, selection set, clone-and-compete, shadow scoring, lineage'
+    - 'Key differentiation: no learned routing, instant expert management, evolutionary lifecycle, structural orthogonality'
+    tags:
+    - framing
+    - naming
+    created: '2026-03-11'
+    completed: '2026-03-11'
+    notes: >
+      We keep calling these "LoRA experts" but the architecture is broader
+      than LoRA. Need clear terminology:
+
+      Candidates:
+      - "Composable Expert Architecture" (CEA)
+      - "Orthogonal Expert Composition" (OEC)
+      - "Living Model" / "Evolvable Model"
+      - "Adapter Mesh" — like service mesh but for model components
+      - "Neural Lego" — snap-together model components
+      - "Expert Fabric" — woven from independent expert threads
+
+      The name should capture:
+      (1) Experts are independent and orthogonal
+      (2) Composition is additive (simple, no training)
+      (3) The model evolves (add/remove/upgrade experts)
+      (4) Potentially base-free (everything is a module)
+
+      This is a thinking/writing task, not a compute experiment.
+      Output: updated VISION.md with clear terminology section.
+
+  # ── Spawned from exp_inference_latency_vs_N + exp_composition_naming reviews ──
+
+  exp_gpu_latency_validation:
+    title: Validate N-independent latency on GPU with fused kernels
+    status: active
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_inference_latency_vs_N
+    blocks: []
+    experiment_dir: micro/models/inference_latency_gpu
+    kill_criteria:
+    - GPU pre-merge overhead exceeds 5% at any N in [5, 50, 100]
+    - GPU dynamic top-k overhead scales with N (not just k)
+    - fused kernel overhead exceeds 10% vs monolithic at k=2
+    evidence: []
+    tags:
+    - inference
+    - gpu
+    - validation
+    created: '2026-03-11'
+    notes: >
+      exp_inference_latency_vs_N proved N-independence on CPU with Python
+      weight-copy (260% overhead). Need to validate on GPU with vLLM's
+      fused MoE-LoRA kernel. Macro batched_lora_latency showed -4% at k=1
+      but didn't sweep N. This closes the loop: prove N-independence holds
+      on production hardware with production kernels.
+
+      2026-03-13: Script deployed to RunPod (scripts/gpu_latency_bench.py).
+      Uses 50 real trained adapters from distillation pilot on Qwen2.5-7B.
+      Tests pre-merge at N=5,10,20,50 and dynamic top-k at k=1,2.
+      Queued to run after pilot50_bench completes (chained via wrapper script).
+      Uses PEFT (not vLLM fused kernels) -- K3 deferred to future experiment.
+      MATH.md and PAPER.md written, awaiting results.
+
+  exp_oae_vs_lora_soups:
+    title: Position SOLE against LoRA Soups (Prabhakar et al., 2024)
+    status: proven
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_composition_naming
+    blocks: []
+    experiment_dir: micro/models/oae_vs_lora_soups
+    kill_criteria:
+    - SOLE provides no measurable advantage over LoRA Soups on any metric
+    - LoRA Soups already achieves orthogonal composition without FFN-only constraint
+    evidence:
+    - SOLE has 5 structural advantages (zero cost, instant management, N-independence, evolution, determinism)
+    - LoRA Soups restricted to binary (k=2) composition; SOLE tested at N=20
+    - LoRA Soups does not analyze orthogonality; SOLE provides structural guarantee
+    - LoRA Soups has no evolutionary lifecycle mechanism
+    - Micro empirical: all methods equivalent quality (experts did not specialize), CAT 52-75x overhead
+    - LoRA Soups is a composition technique; SOLE is an architecture (complementary, not competing)
+    tags:
+    - framing
+    - comparison
+    - literature
+    created: '2026-03-11'
+    notes: >
+      Literature comparison + micro empirical validation. Surveyed LoRA Soups
+      (Prabhakar et al., COLING 2025), Modular LLMs (Ostapenko et al., 2024),
+      and Task-Aware LoRA Composition (2025). SOLE occupies a different niche:
+      architectural framework with orthogonality guarantees + evolution, vs
+      composition technique for binary skill merging. CAT could be an optional
+      optimization step within SOLE for performance-critical binary compositions.
+      Reference added: references/lora-soups/.
+      ADVERSARIAL REVIEW (2026-03-11): PROCEED. Competent literature study.
+      Empirical component acknowledged as vacuous. 5 non-blocking fixes noted
+      for paper citations (MATH.md presentational issues, add LoRA-Flow reference).
+
+  exp_cat_weight_convergence:
+    title: Do CAT-optimized weights converge to ~1.0 with orthogonal specialized experts?
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_oae_vs_lora_soups
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - CAT weights diverge significantly from 1.0 (mean |w_i - 1| > 0.1) with specialized experts
+    - CAT provides >5% quality improvement over unit weights with orthogonal experts
+    evidence: []
+    tags:
+    - composition
+    - validation
+    - architecture
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_oae_vs_lora_soups adversarial review. Key falsifiable
+      prediction: SOLE theory says orthogonality makes optimal CAT weights ~1.0.
+      If CAT at macro scale with real expert specialization learns weights
+      significantly different from 1.0, SOLE's unit-weight assumption is wrong.
+      Requires real specialized experts (pilot 50 or later).
+
+  exp_lora_flow_comparison:
+    title: Compare SOLE against LoRA-Flow dynamic per-layer routing
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_oae_vs_lora_soups
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - LoRA-Flow achieves >10% quality gain over SOLE unit weights at comparable overhead
+    - LoRA-Flow's per-layer weight learning is feasible at N>10 experts
+    evidence: []
+    tags:
+    - routing
+    - comparison
+    - literature
+    created: '2026-03-11'
+    notes: >
+      Spawned from exp_oae_vs_lora_soups adversarial review. LoRA-Flow (Wang
+      et al., 2024) uses dynamic per-layer LoRA weights based on input, making
+      it a superset of both SOLE (fixed unit weights) and CAT (learned static
+      weights). Missing from the SOLE comparison table. Literature review first,
+      then micro empirical if warranted.
+
+  # ── Base-Free Training Path ─────────────────────────────────────
+
+  exp_relora_from_scratch_composition:
+    title: Train a base model from scratch via ReLoRA and compose experts on it
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_relora_composition_test
+    blocks:
+    - exp_full_base_free_pipeline
+    experiment_dir: null
+    kill_criteria:
+    - ReLoRA-from-scratch base quality >20% worse than conventional pretrained base at same FLOP budget
+    - experts on ReLoRA base show cos >5x worse than experts on pretrained base
+    - ReLoRA training diverges or requires careful hyperparameter tuning (not reproducible)
+    evidence:
+    - 'micro: ReLoRA base loss ratio 1.046, cos ratio 1.77x (p=0.056 n.s.)'
+    - 'Lialin et al. 2023: ReLoRA matches conventional pretraining at 350M-1.3B scale'
+    tags:
+    - architecture
+    - base-freedom
+    - novel
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      THE BASE-FREE PATH. If a model can be built entirely from iterative
+      low-rank updates (ReLoRA), then the base itself is just accumulated
+      LoRA merges. This means:
+      (1) No sacred pretrained weights — the base can be evolved
+      (2) Base improvements = merge more LoRA updates (same mechanism as experts)
+      (3) The entire model is a composition of rank-r updates
+
+      Test at macro scale (Qwen2.5-0.5B equivalent):
+      (a) Train ReLoRA base from scratch (K=50-200 merge cycles)
+      (b) Train 5 domain experts on the ReLoRA base
+      (c) Compare composition quality vs same experts on conventional base
+      (d) Measure orthogonality preservation
+
+      ReLoRA paper showed it works at 350M-1.3B scale for pretraining.
+      We need to verify it works for the composition use case specifically.
+
+      Research first: Use /notebooklm to survey ReLoRA implementations
+      (original codebase, any HuggingFace reproductions), LTE parallel
+      training approaches, and any base-free model construction literature.
+
+  exp_lte_parallel_base_construction:
+    title: LTE parallel LoRA training as alternative base construction
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_adapter_taxonomy_wild
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - LTE base quality >20% worse than conventional at same compute
+    - LTE requires >2x compute vs ReLoRA for same quality
+    - parallel branches interfere when merged (defeating the purpose)
+    evidence:
+    - 'Adapter taxonomy: LTE achieves full-rank from parallel LoRA branches'
+    tags:
+    - architecture
+    - base-freedom
+    - novel
+    created: '2026-03-11'
+    notes: >
+      LTE (LoRA-the-Explorer) trains multiple LoRA branches in parallel
+      and merges them. This is conceptually closer to SOLE than ReLoRA:
+      multiple independent experts merged into one model.
+
+      If LTE can construct a base model, the base IS a composition of
+      experts — exactly the SOLE thesis.
+
+      Test: (a) construct a base via LTE (K parallel rank-r branches)
+      (b) compare to ReLoRA (K sequential rank-r merges)
+      (c) which produces better composition substrate?
+
+      Research first: Use /notebooklm to find LTE implementations,
+      reproducing the parallel LoRA pretraining setup. Check if any
+      production models were built with LTE.
+
+  exp_full_base_free_pipeline:
+    title: End-to-end base-free SOLE — from random init to serving via LoRA only
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_relora_from_scratch_composition
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - base-free model >10% worse than conventional SOLE on average across 10+ domains
+    - base-free model >2x slower to construct than conventional pretraining + expert distillation
+    - system has any component that is NOT a composable adapter
+    evidence: []
+    tags:
+    - architecture
+    - base-freedom
+    - pipeline
+    - novel
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      THE ULTIMATE TEST. Build a complete SOLE model where EVERYTHING
+      is a composable adapter:
+
+      Step 1: Random skeleton (attention architecture + embeddings)
+      Step 2: ReLoRA or LTE → "base adapter" (general language knowledge)
+      Step 3: Distill 50+ domain experts via teacher
+      Step 4: Compose: skeleton + base_adapter + sum(expert_i)/N
+      Step 5: Route and serve
+
+      Every component is swappable:
+      - Upgrade base: swap base_adapter (no expert retraining needed)
+      - Add domain: add expert_i
+      - Remove domain: subtract expert_i
+      - Upgrade skeleton: Procrustes alignment of all adapters
+
+      This is the "no sacred weights" vision realized.
+
+  # ── Routing Deep-Dive ───────────────────────────────────────────
+
+  exp_content_aware_routing:
+    title: Content-aware routing outperforms hash ring on domain-specific queries
+    status: killed
+    scale: micro
+    priority: 2
+    depends_on: []
+    blocks: []
+    experiment_dir: micro/models/content_aware_routing
+    kill_criteria:
+    - content-aware routing accuracy <60% on domain classification
+    - content-aware routing latency >10ms per query (killing throughput)
+    - hash ring + pre-merge matches content-aware quality (routing unnecessary)
+    killed_by:
+    - 'K1: Best domain accuracy 26.5% (keyword matching) < 60% threshold'
+    - 'K3: Quality gap 0.00% — all NTP losses identical across all strategies including oracle'
+    evidence:
+    - 'Hash routing proven at N=20 with 5.3% displacement'
+    - 'Orthogonality by domain type: collisions predictable by domain similarity'
+    - 'Cluster-level routing ~96% accuracy (cosine, keyword) vs 33% random'
+    - 'MLP classifier fails catastrophically at micro scale (8.5% accuracy)'
+    - 'All routing latencies well under 10ms (max 98us for hash ring)'
+    - 'Expert specialization absent at d=64 — NTP loss identical across all strategies'
+    tags:
+    - routing
+    - composition
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      Hash ring is content-agnostic — a medical query might route to the
+      Python expert. For pre-merge (all experts always active), this doesn't
+      matter. For dynamic top-k (select best k experts per query), content
+      awareness could dramatically improve quality.
+
+      Compare:
+      (a) Hash ring (baseline, proven, zero overhead)
+      (b) Tiny classifier: embed query → 1-layer MLP → expert probabilities
+      (c) Cosine similarity: query embedding vs expert centroids
+      (d) Keyword matching: regex/pattern-based routing (cheapest)
+      (e) LLM self-routing: prepend "[DOMAIN: X]" and parse
+
+      Measure: routing accuracy, latency, quality improvement vs hash ring.
+
+      The key insight from orthogonality_by_domain_type: within-cluster
+      experts are 7.84x more similar. Content-aware routing should avoid
+      activating within-cluster experts simultaneously.
+
+      Research first: Use /notebooklm to survey expert routing in production
+      systems (Mixtral, DeepSeek routing, Union of Experts self-routing).
+
+  exp_routing_at_scale:
+    title: Routing accuracy and latency at N=100, 500, 1000 experts
+    status: open
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_content_aware_routing
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - best routing strategy >100ms at N=1000
+    - routing accuracy drops below 50% at N=500
+    - routing becomes the bottleneck (>50% of total inference latency)
+    evidence:
+    - 'Hash ring: 0.5us at N=100, O(log N)'
+    tags:
+    - routing
+    - scaling
+    - critical-path
+    created: '2026-03-11'
+    notes: >
+      Hash ring scales O(log N) but is content-agnostic.
+      Content-aware routing may be O(N) or O(log N) depending on implementation.
+      At N=1000, the routing decision itself could become the bottleneck.
+
+      Test all routing strategies from exp_content_aware_routing at
+      N=100, 500, 1000. Use synthetic expert embeddings to simulate.
+      Build an approximate nearest neighbor index (FAISS) for embedding
+      routing and measure if it achieves O(log N).
+
+      Research first: Use /notebooklm to survey FAISS, ScaNN, and
+      approximate nearest neighbor methods for routing at scale.
+
+  exp_structural_orthogonality_proof:
+    title: Formalize mathematical guarantee that LoRA expert orthogonality is structural at sufficient d
+    status: open
+    scale: micro
+    priority: 1
+    depends_on: []
+    blocks:
+    - exp_reasoning_domain_composition
+    experiment_dir: micro/models/structural_orthogonality_proof
+    kill_criteria:
+    - empirical cos(θ) exceeds random subspace bound √(r/d) at any tested d
+    - no clear d threshold below which orthogonality breaks down (i.e. gradual not phase-transition)
+    - gradient-aligned adapters are NOT more orthogonal than random subspaces (no separation effect)
+    evidence:
+    - 'Micro measurement: cos=0.0002 at d=896 (90x better than random bound)'
+    - 'Random subspace geometry: E[cos] ≈ r/d for rank-r subspaces in R^d'
+    - 'Grassmann packing bound: N_max ∝ d²/r²'
+    tags:
+    - theory
+    - orthogonality
+    - foundation
+    - sole-core
+    created: '2026-03-12'
+    notes: >
+      SOLE's unique claim is STRUCTURAL orthogonality — no enforcement needed.
+      This experiment formalizes that guarantee mathematically and empirically.
+
+      Three deliverables:
+      (1) Derive tight bound on E[cos(A_i, A_j)] for gradient-aligned LoRA
+          adapters as f(d, r, domain_divergence). Start from random subspace
+          geometry (Grassmannian), then show gradient alignment on different
+          domains pushes subspaces APART (not just random).
+      (2) Empirically validate at d=64, 128, 256, 512, 1024. Train adapter
+          pairs on distinct domains at each d. Plot measured cos vs predicted
+          bound. Show the separation effect (measured << random bound).
+      (3) Identify critical d_crit where structural orthogonality becomes
+          reliable (cos < τ=0.01). Predict: d_crit = r/τ = 1600 for r=16.
+          Verify empirically.
+
+      Math tools: Grassmannian manifold geometry, principal angle distributions,
+      concentration inequalities (Johnson-Lindenstrauss style).
+      Key reference: Absil et al. "Optimization Algorithms on Matrix Manifolds"
+      for Grassmannian distance/angle theory.
+
+      This is the theoretical foundation that elevates SOLE from empirical
+      observation to provable guarantee.

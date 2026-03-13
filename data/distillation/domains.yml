@@ -1,0 +1,208 @@
+# 50-Domain Taxonomy for Distillation Pilot
+# Organized: 10 programming, 10 science, 10 professional, 10 writing, 10 reasoning
+# Each domain: short name -> 1-2 sentence description for teacher prompt
+
+# ── Programming (10) ─────────────────────────────────────────────────
+python: >
+  Python programming: write functions, classes, algorithms, data structures,
+  decorators, generators, async/await patterns, and debugging techniques.
+
+javascript: >
+  JavaScript programming: DOM manipulation, async/await, closures, prototypal
+  inheritance, ES6+ features, Node.js patterns, and error handling.
+
+rust: >
+  Rust programming: ownership and borrowing, lifetime annotations, traits,
+  pattern matching, error handling with Result/Option, and concurrent programming.
+
+go: >
+  Go programming: goroutines and channels, interfaces, error handling idioms,
+  struct composition, standard library usage, and concurrent patterns.
+
+cpp: >
+  C++ programming: templates, RAII, smart pointers, move semantics, STL
+  containers and algorithms, virtual functions, and memory management.
+
+java: >
+  Java programming: object-oriented design, generics, streams API, concurrency
+  with threads and executors, Spring patterns, and exception handling.
+
+typescript: >
+  TypeScript programming: type system features, generics, union and intersection
+  types, utility types, type guards, decorators, and React/Angular patterns.
+
+sql: >
+  SQL database queries: SELECT, JOIN, GROUP BY, subqueries, window functions,
+  CTEs, indexing strategies, query optimization, and schema design.
+
+bash: >
+  Bash shell scripting: file manipulation, text processing with sed/awk/grep,
+  pipelines, process management, system administration, and automation scripts.
+
+swift: >
+  Swift programming: optionals, protocols, generics, closures, value vs reference
+  types, SwiftUI patterns, Combine framework, and error handling.
+
+# ── Science (10) ─────────────────────────────────────────────────────
+physics: >
+  Physics problems and explanations: classical mechanics, electromagnetism,
+  thermodynamics, quantum mechanics basics, and dimensional analysis.
+
+chemistry: >
+  Chemistry problems and explanations: chemical reactions, stoichiometry,
+  organic chemistry mechanisms, molecular structure, and thermochemistry.
+
+biology: >
+  Biology questions and explanations: cell biology, genetics, evolution,
+  ecology, molecular biology, and human physiology.
+
+math: >
+  Mathematical reasoning: algebra, calculus, linear algebra, probability,
+  number theory, proofs, optimization, and word problems.
+
+statistics: >
+  Statistics and data analysis: hypothesis testing, regression, Bayesian
+  inference, experimental design, probability distributions, and interpretation.
+
+astronomy: >
+  Astronomy and astrophysics: stellar evolution, cosmology, planetary science,
+  observational techniques, and celestial mechanics calculations.
+
+geology: >
+  Geology and earth sciences: plate tectonics, mineralogy, stratigraphy,
+  geological time, natural hazards, and rock cycle processes.
+
+neuroscience: >
+  Neuroscience: neural signaling, brain anatomy, cognitive processes,
+  neuroplasticity, neurotransmitters, and neurological disorders.
+
+ecology: >
+  Ecology and environmental science: population dynamics, ecosystem interactions,
+  biodiversity, conservation biology, and biogeochemical cycles.
+
+genetics: >
+  Genetics and genomics: Mendelian inheritance, molecular genetics, gene
+  expression, CRISPR, population genetics, and bioinformatics basics.
+
+# ── Professional (10) ────────────────────────────────────────────────
+legal: >
+  Legal analysis: contract law, constitutional principles, case analysis,
+  legal reasoning, statutory interpretation, and legal writing conventions.
+
+medical: >
+  Clinical medicine: symptoms, diagnoses, treatment plans, drug interactions,
+  patient management, differential diagnosis, and evidence-based medicine.
+
+finance: >
+  Finance and investing: financial analysis, valuation methods, portfolio theory,
+  derivatives, risk management, and corporate finance decisions.
+
+accounting: >
+  Accounting: financial statements, GAAP principles, journal entries, tax
+  implications, auditing procedures, and managerial accounting.
+
+marketing: >
+  Marketing strategy: market research, consumer behavior, digital marketing,
+  brand positioning, campaign analytics, and growth strategies.
+
+hr: >
+  Human resources: recruitment, performance management, employment law basics,
+  compensation design, organizational development, and conflict resolution.
+
+project-management: >
+  Project management: agile/scrum methodologies, risk assessment, resource
+  planning, stakeholder communication, timeline estimation, and retrospectives.
+
+cybersecurity: >
+  Cybersecurity: threat modeling, vulnerability assessment, network security,
+  cryptographic principles, incident response, and security architecture.
+
+data-engineering: >
+  Data engineering: ETL pipelines, data warehousing, stream processing,
+  data modeling, SQL/NoSQL databases, and distributed systems patterns.
+
+devops: >
+  DevOps and infrastructure: CI/CD pipelines, containerization with Docker,
+  Kubernetes orchestration, monitoring, IaC with Terraform, and cloud architecture.
+
+# ── Writing (10) ─────────────────────────────────────────────────────
+creative-fiction: >
+  Creative fiction writing: character development, plot structure, dialogue,
+  world-building, narrative voice, and literary techniques across genres.
+
+technical-writing: >
+  Technical writing: API documentation, user guides, system architecture docs,
+  clear explanations of complex topics, and structured information design.
+
+academic-writing: >
+  Academic writing: research paper structure, literature reviews, methodology
+  sections, scientific argumentation, citation conventions, and abstracts.
+
+journalism: >
+  Journalism: news reporting, investigative techniques, interview skills,
+  fact-checking, editorial writing, and AP style conventions.
+
+copywriting: >
+  Copywriting: persuasive writing, headline crafting, email campaigns,
+  landing page copy, brand voice development, and call-to-action optimization.
+
+poetry: >
+  Poetry: verse forms (sonnet, haiku, free verse), meter and rhythm,
+  figurative language, imagery, poetic devices, and revision techniques.
+
+screenplay: >
+  Screenplay writing: scene structure, dialogue formatting, visual storytelling,
+  character arcs, three-act structure, and industry-standard formatting.
+
+speechwriting: >
+  Speech writing: persuasive rhetoric, audience analysis, narrative structure,
+  emotional appeals, memorable phrases, and delivery preparation.
+
+grant-writing: >
+  Grant writing: proposal structure, needs assessment, budget justification,
+  outcome measurement, program logic models, and funder alignment.
+
+documentation: >
+  Software documentation: README files, changelog conventions, inline code
+  comments, architecture decision records, and developer onboarding guides.
+
+# ── Reasoning (10) ───────────────────────────────────────────────────
+logic-puzzles: >
+  Logic puzzles and deductive reasoning: syllogisms, truth tables, constraint
+  satisfaction, lateral thinking, and step-by-step logical deduction.
+
+debate: >
+  Debate and argumentation: claim-evidence-reasoning, counterarguments,
+  logical fallacy identification, persuasion techniques, and structured rebuttals.
+
+ethics: >
+  Ethics and moral reasoning: ethical frameworks (utilitarian, deontological,
+  virtue), applied ethics, moral dilemmas, and stakeholder analysis.
+
+game-theory: >
+  Game theory: Nash equilibrium, prisoner's dilemma, mechanism design,
+  strategic thinking, auction theory, and cooperative vs non-cooperative games.
+
+systems-thinking: >
+  Systems thinking: feedback loops, emergent behavior, causal loop diagrams,
+  leverage points, system archetypes, and complex adaptive systems.
+
+critical-analysis: >
+  Critical analysis: source evaluation, argument mapping, bias identification,
+  evidence quality assessment, and structured analytical techniques.
+
+causal-reasoning: >
+  Causal reasoning: cause-and-effect analysis, counterfactual thinking,
+  confounding variables, causal inference methods, and root cause analysis.
+
+analogical-reasoning: >
+  Analogical reasoning: identifying structural similarities, cross-domain
+  transfer, metaphor construction, and reasoning by analogy.
+
+spatial-reasoning: >
+  Spatial reasoning: geometric problems, spatial transformations, mental
+  rotation, map reading, topology basics, and 3D visualization.
+
+abstract-math: >
+  Abstract mathematical reasoning: set theory, group theory basics, formal
+  logic, combinatorics, graph theory, and mathematical proof techniques.

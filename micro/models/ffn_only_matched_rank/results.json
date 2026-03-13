@@ -1,0 +1,88 @@
+{
+  "quality": {
+    "status": "NOT_AVAILABLE"
+  },
+  "ffn_independent_ortho": {
+    "status": "NOT_AVAILABLE"
+  },
+  "all_modules_full_ortho": {
+    "pairs": {
+      "bash-math": 0.0009234317694790661,
+      "bash-medical": -0.00015756377251818776,
+      "bash-python": 0.0016669293399900198,
+      "bash-sql": -0.0008674135897308588,
+      "math-medical": 0.702712893486023,
+      "math-python": 0.0011299357283860445,
+      "math-sql": -0.0012180915800854564,
+      "medical-python": 0.001099840272217989,
+      "medical-sql": -0.0010760851437225938,
+      "python-sql": 8.296761370729655e-05
+    },
+    "mean_abs_cos": 0.07109351522958604,
+    "std_abs_cos": 0.22192893637382963,
+    "max_abs_cos": 0.702712893486023,
+    "n_pairs": 10,
+    "dims": {
+      "bash": 40370176,
+      "math": 40370176,
+      "medical": 40370176,
+      "python": 40370176,
+      "sql": 40370176
+    }
+  },
+  "all_modules_ffn_subset_ortho": {
+    "pairs": {
+      "bash-math": 0.0025875635910779238,
+      "bash-medical": -0.0001318983267992735,
+      "bash-python": 0.0028397440910339355,
+      "bash-sql": -0.0018784480635076761,
+      "math-medical": 0.5897682309150696,
+      "math-python": 0.00151988142170012,
+      "math-sql": -0.0023512530606240034,
+      "medical-python": 0.001602481002919376,
+      "medical-sql": -0.0019847434014081955,
+      "python-sql": 0.00020911049796268344
+    },
+    "mean_abs_cos": 0.06048733543721028,
+    "std_abs_cos": 0.1859725438574549,
+    "max_abs_cos": 0.5897682309150696,
+    "n_pairs": 10,
+    "dims": {
+      "bash": 30277632,
+      "math": 30277632,
+      "medical": 30277632,
+      "python": 30277632,
+      "sql": 30277632
+    }
+  },
+  "all_modules_attn_subset_ortho": {
+    "pairs": {
+      "bash-math": -0.0009178794571198523,
+      "bash-medical": -0.00019082018116023391,
+      "bash-python": 0.0003908599028363824,
+      "bash-sql": 0.0002708963002078235,
+      "math-medical": 0.8501407504081726,
+      "math-python": 0.0007009455584920943,
+      "math-sql": 7.21806864021346e-05,
+      "medical-python": 0.00047602204722352326,
+      "medical-sql": 9.963470802176744e-05,
+      "python-sql": -5.825011612614617e-05
+    },
+    "mean_abs_cos": 0.08533182393657626,
+    "std_abs_cos": 0.26872661350738325,
+    "max_abs_cos": 0.8501407504081726,
+    "n_pairs": 10,
+    "dims": {
+      "bash": 10092544,
+      "math": 10092544,
+      "medical": 10092544,
+      "python": 10092544,
+      "sql": 10092544
+    }
+  },
+  "verdict": {
+    "quality_kill": null,
+    "ortho_kill": null,
+    "overall": "INCOMPLETE"
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "config": {
+    "device": "cpu",
+    "d_model": 128,
+    "n_heads": 4,
+    "n_layers": 4,
+    "vocab_size": 256,
+    "max_seq_len": 64,
+    "rank": 8,
+    "batch_size": 1,
+    "seq_len": 32,
+    "n_warmup": 3,
+    "n_iters": 30
+  },
+  "base_latency_ms": 1.0554,
+  "base_latency_std_ms": 0.0657,
+  "premerge": {
+    "5": {
+      "latency_ms": 1.0339,
+      "latency_std_ms": 0.0617,
+      "overhead_pct": -2.0367,
+      "merge_time_ms": 7.31
+    },
+    "10": {
+      "latency_ms": 1.0555,
+      "latency_std_ms": 0.0604,
+      "overhead_pct": 0.0077,
+      "merge_time_ms": 9.26
+    },
+    "20": {
+      "latency_ms": 1.0233,
+      "latency_std_ms": 0.0526,
+      "overhead_pct": -3.0462,
+      "merge_time_ms": 14.04
+    },
+    "50": {
+      "latency_ms": 1.0767,
+      "latency_std_ms": 0.073,
+      "overhead_pct": 2.0172,
+      "merge_time_ms": 28.53
+    },
+    "100": {
+      "latency_ms": 1.0829,
+      "latency_std_ms": 0.0795,
+      "overhead_pct": 2.6019,
+      "merge_time_ms": 52.83
+    }
+  },
+  "dynamic": {
+    "N5_k1": {
+      "N": 5,
+      "k": 1,
+      "latency_ms": 3.7333,
+      "latency_std_ms": 0.1406,
+      "overhead_pct": 253.7178
+    },
+    "N5_k2": {
+      "N": 5,
+      "k": 2,
+      "latency_ms": 4.2443,
+      "latency_std_ms": 0.1743,
+      "overhead_pct": 302.1363
+    },
+    "N5_k4": {
+      "N": 5,
+      "k": 4,
+      "latency_ms": 5.268,
+      "latency_std_ms": 0.1289,
+      "overhead_pct": 399.1325
+    },
+    "N10_k1": {
+      "N": 10,
+      "k": 1,
+      "latency_ms": 3.7382,
+      "latency_std_ms": 0.1242,
+      "overhead_pct": 254.186
+    },
+    "N10_k2": {
+      "N": 10,
+      "k": 2,
+      "latency_ms": 4.2798,
+      "latency_std_ms": 0.1263,
+      "overhead_pct": 305.505
+    },
+    "N10_k4": {
+      "N": 10,
+      "k": 4,
+      "latency_ms": 5.3233,
+      "latency_std_ms": 0.1469,
+      "overhead_pct": 404.3749
+    },
+    "N20_k1": {
+      "N": 20,
+      "k": 1,
+      "latency_ms": 3.8501,
+      "latency_std_ms": 0.1635,
+      "overhead_pct": 264.7841
+    },
+    "N20_k2": {
+      "N": 20,
+      "k": 2,
+      "latency_ms": 4.3096,
+      "latency_std_ms": 0.1369,
+      "overhead_pct": 308.3282
+    },
+    "N20_k4": {
+      "N": 20,
+      "k": 4,
+      "latency_ms": 5.3456,
+      "latency_std_ms": 0.1609,
+      "overhead_pct": 406.4848
+    },
+    "N50_k1": {
+      "N": 50,
+      "k": 1,
+      "latency_ms": 3.8032,
+      "latency_std_ms": 0.1546,
+      "overhead_pct": 260.3461
+    },
+    "N50_k2": {
+      "N": 50,
+      "k": 2,
+      "latency_ms": 4.3274,
+      "latency_std_ms": 0.1376,
+      "overhead_pct": 310.0126
+    },
+    "N50_k4": {
+      "N": 50,
+      "k": 4,
+      "latency_ms": 5.3324,
+      "latency_std_ms": 0.1648,
+      "overhead_pct": 405.2356
+    },
+    "N100_k1": {
+      "N": 100,
+      "k": 1,
+      "latency_ms": 3.8235,
+      "latency_std_ms": 0.1382,
+      "overhead_pct": 262.2692
+    },
+    "N100_k2": {
+      "N": 100,
+      "k": 2,
+      "latency_ms": 4.2862,
+      "latency_std_ms": 0.1473,
+      "overhead_pct": 306.1048
+    },
+    "N100_k4": {
+      "N": 100,
+      "k": 4,
+      "latency_ms": 5.3457,
+      "latency_std_ms": 0.1557,
+      "overhead_pct": 406.4887
+    }
+  },
+  "hybrid": {
+    "N5_k1": {
+      "N": 5,
+      "n_foundation": 2,
+      "n_dynamic": 3,
+      "k": 1,
+      "latency_ms": 3.6195,
+      "latency_std_ms": 0.132,
+      "overhead_pct": 242.9423
+    },
+    "N5_k2": {
+      "N": 5,
+      "n_foundation": 2,
+      "n_dynamic": 3,
+      "k": 2,
+      "latency_ms": 4.1595,
+      "latency_std_ms": 0.1489,
+      "overhead_pct": 294.1056
+    },
+    "N10_k1": {
+      "N": 10,
+      "n_foundation": 5,
+      "n_dynamic": 5,
+      "k": 1,
+      "latency_ms": 3.6492,
+      "latency_std_ms": 0.1323,
+      "overhead_pct": 245.7561
+    },
+    "N10_k2": {
+      "N": 10,
+      "n_foundation": 5,
+      "n_dynamic": 5,
+      "k": 2,
+      "latency_ms": 4.1762,
+      "latency_std_ms": 0.1468,
+      "overhead_pct": 295.69
+    },
+    "N10_k4": {
+      "N": 10,
+      "n_foundation": 5,
+      "n_dynamic": 5,
+      "k": 4,
+      "latency_ms": 5.1558,
+      "latency_std_ms": 0.1617,
+      "overhead_pct": 388.5001
+    },
+    "N20_k1": {
+      "N": 20,
+      "n_foundation": 10,
+      "n_dynamic": 10,
+      "k": 1,
+      "latency_ms": 3.6758,
+      "latency_std_ms": 0.1136,
+      "overhead_pct": 248.2725
+    },
+    "N20_k2": {
+      "N": 20,
+      "n_foundation": 10,
+      "n_dynamic": 10,
+      "k": 2,
+      "latency_ms": 4.1677,
+      "latency_std_ms": 0.1289,
+      "overhead_pct": 294.8766
+    },
+    "N20_k4": {
+      "N": 20,
+      "n_foundation": 10,
+      "n_dynamic": 10,
+      "k": 4,
+      "latency_ms": 5.1528,
+      "latency_std_ms": 0.1748,
+      "overhead_pct": 388.2135
+    },
+    "N50_k1": {
+      "N": 50,
+      "n_foundation": 25,
+      "n_dynamic": 25,
+      "k": 1,
+      "latency_ms": 3.7246,
+      "latency_std_ms": 0.146,
+      "overhead_pct": 252.9012
+    },
+    "N50_k2": {
+      "N": 50,
+      "n_foundation": 25,
+      "n_dynamic": 25,
+      "k": 2,
+      "latency_ms": 4.2006,
+      "latency_std_ms": 0.1171,
+      "overhead_pct": 298.0011
+    },
+    "N50_k4": {
+      "N": 50,
+      "n_foundation": 25,
+      "n_dynamic": 25,
+      "k": 4,
+      "latency_ms": 5.2787,
+      "latency_std_ms": 0.1263,
+      "overhead_pct": 400.1497
+    },
+    "N100_k1": {
+      "N": 100,
+      "n_foundation": 50,
+      "n_dynamic": 50,
+      "k": 1,
+      "latency_ms": 3.6772,
+      "latency_std_ms": 0.119,
+      "overhead_pct": 248.4106
+    },
+    "N100_k2": {
+      "N": 100,
+      "n_foundation": 50,
+      "n_dynamic": 50,
+      "k": 2,
+      "latency_ms": 4.2287,
+      "latency_std_ms": 0.1361,
+      "overhead_pct": 300.6587
+    },
+    "N100_k4": {
+      "N": 100,
+      "n_foundation": 50,
+      "n_dynamic": 50,
+      "k": 4,
+      "latency_ms": 5.2245,
+      "latency_std_ms": 0.1506,
+      "overhead_pct": 395.0124
+    }
+  },
+  "routing": {
+    "5": {
+      "total_ms": 5.187749999095104,
+      "per_query_us": 0.5187749999095104,
+      "ring_size": 750
+    },
+    "10": {
+      "total_ms": 5.170082999029546,
+      "per_query_us": 0.5170082999029546,
+      "ring_size": 1500
+    },
+    "20": {
+      "total_ms": 5.258167000647518,
+      "per_query_us": 0.5258167000647518,
+      "ring_size": 3000
+    },
+    "50": {
+      "total_ms": 5.663416999595938,
+      "per_query_us": 0.5663416999595938,
+      "ring_size": 7500
+    },
+    "100": {
+      "total_ms": 5.686167000021669,
+      "per_query_us": 0.5686167000021669,
+      "ring_size": 15000
+    }
+  },
+  "memory": {
+    "5": {
+      "base_model_mb": 3.29,
+      "per_expert_mb": 0.28,
+      "base_params": 861312,
+      "per_expert_params": 73728,
+      "strategy_A_premerge_mb": 3.29,
+      "strategy_B_dynamic_mb": 4.69,
+      "strategy_C_hybrid_mb": 4.69
+    },
+    "10": {
+      "base_model_mb": 3.29,
+      "per_expert_mb": 0.28,
+      "base_params": 861312,
+      "per_expert_params": 73728,
+      "strategy_A_premerge_mb": 3.29,
+      "strategy_B_dynamic_mb": 6.1,
+      "strategy_C_hybrid_mb": 6.1
+    },
+    "20": {
+      "base_model_mb": 3.29,
+      "per_expert_mb": 0.28,
+      "base_params": 861312,
+      "per_expert_params": 73728,
+      "strategy_A_premerge_mb": 3.29,
+      "strategy_B_dynamic_mb": 8.91,
+      "strategy_C_hybrid_mb": 8.91
+    },
+    "50": {
+      "base_model_mb": 3.29,
+      "per_expert_mb": 0.28,
+      "base_params": 861312,
+      "per_expert_params": 73728,
+      "strategy_A_premerge_mb": 3.29,
+      "strategy_B_dynamic_mb": 17.35,
+      "strategy_C_hybrid_mb": 17.35
+    },
+    "100": {
+      "base_model_mb": 3.29,
+      "per_expert_mb": 0.28,
+      "base_params": 861312,
+      "per_expert_params": 73728,
+      "strategy_A_premerge_mb": 3.29,
+      "strategy_B_dynamic_mb": 31.41,
+      "strategy_C_hybrid_mb": 31.41
+    }
+  },
+  "kill_criteria": {
+    "K1_premerge_under_5pct": true,
+    "K1_max_premerge_overhead_pct": 2.6019,
+    "K2_dynamic_scales_Ok": true,
+    "K2_ratios": [
+      [
+        5,
+        1.4111
+      ],
+      [
+        10,
+        1.424
+      ],
+      [
+        20,
+        1.3884
+      ],
+      [
+        50,
+        1.4021
+      ],
+      [
+        100,
+        1.3981
+      ]
+    ],
+    "K3_n50_under_2x_absolute": false,
+    "K3_max_n50_overhead_pct": 405.2356,
+    "K3_n50_premerge_overhead_pct": 2.0172,
+    "K3_scaling_n5_to_n50": true,
+    "K1_pass": true,
+    "K2_pass": true,
+    "K3_premerge_pass": true,
+    "K3_dynamic_n_independent": true,
+    "all_pass": true,
+    "note": "Dynamic overhead is implementation-bound (Python weight copy), not N-bound. Pre-merge has zero overhead. Production fused kernels achieve <5% (see macro/batched_lora_latency)."
+  }
+}

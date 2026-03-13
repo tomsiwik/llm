@@ -42,6 +42,26 @@ hats:
       sub-agent. Do NOT do the research yourself. Do NOT stop to ask for
       confirmation. Complete all steps in one session.
 
+      ## GPU/Remote Job Rules (MANDATORY)
+
+      NEVER poll, sleep, or wait for a remote job to complete. This burns tokens
+      and wastes iterations. If a job (training, benchmark, etc.) takes >5 minutes:
+      1. Start it as a background/nohup process on the remote machine
+      2. Write a sentinel check command in .ralph/current_direction.md (e.g.,
+         "Check: ssh runpod 'ls /workspace/llm/adapters/*/adapter_config.json | wc -l'")
+      3. IMMEDIATELY move to the next experiment — do NOT wait
+      4. On the next iteration (triggered by experiment.integrated), check the
+         sentinel ONCE. If done → benchmark/analyze. If not → do another experiment.
+
+      Each experiment should take <2hrs of active agent time. If an experiment is
+      blocked waiting on a remote job, it is NOT active — move on.
+
+      If blocked on a single GPU with no independent work possible:
+      - Do all prep work (scripts, data gen, eval setup, MATH.md)
+      - If no prep remains, tell the sub-agent to return early with status
+      - Emit experiment.done with "GPU_BLOCKED: [job] running, ETA [time]"
+      - The loop will terminate cleanly instead of burning tokens polling
+
       ## Before delegating
 
       Read .ralph/current_direction.md if it exists to check state.

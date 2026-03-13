@@ -1,0 +1,70 @@
+{
+  "seeds": {
+    "42": {
+      "relora_cos": 0.02404252594957749,
+      "conv_cos": 0.031135893737276394,
+      "cos_ratio": 0.7721803700794756,
+      "relora_loss": 0.4726140148937702,
+      "conv_loss": 0.4539926804602146,
+      "loss_ratio": 1.0410168164268179,
+      "relora_base_loss": 0.5344960510730743,
+      "conv_base_loss": 0.5128263771533966,
+      "relora_effective_rank": 52.674314998605865,
+      "conv_effective_rank": 53.142892127618644,
+      "verdict": "SURVIVES"
+    },
+    "123": {
+      "relora_cos": 0.06576974872344483,
+      "conv_cos": 0.024915369227528572,
+      "cos_ratio": 2.6397260309567168,
+      "relora_loss": 0.4633867532014847,
+      "conv_loss": 0.4452843934297562,
+      "loss_ratio": 1.0406534790772635,
+      "relora_base_loss": 0.5400068879127502,
+      "conv_base_loss": 0.5162166833877564,
+      "relora_effective_rank": 53.601812381096835,
+      "conv_effective_rank": 53.02367659894039,
+      "verdict": "INCONCLUSIVE"
+    },
+    "7": {
+      "relora_cos": 0.047012481528023876,
+      "conv_cos": 0.024792313886185486,
+      "cos_ratio": 1.8962522716495385,
+      "relora_loss": 0.47540017366409304,
+      "conv_loss": 0.4426455982029438,
+      "loss_ratio": 1.0739972917253138,
+      "relora_base_loss": 0.5432902336120605,
+      "conv_base_loss": 0.5179417192935943,
+      "relora_effective_rank": 53.80067446754356,
+      "conv_effective_rank": 53.69542472870309,
+      "verdict": "SURVIVES"
+    }
+  },
+  "aggregate": {
+    "mean_cos_ratio": 1.769386224228577,
+    "cos_ratio_95ci": [
+      0.7721803700794756,
+      2.6397260309567168
+    ],
+    "mean_loss_ratio": 1.0518891957431318,
+    "loss_ratio_95ci": [
+      1.0406534790772635,
+      1.0739972917253138
+    ],
+    "mean_relora_cos": 0.0456082520670154,
+    "mean_conv_cos": 0.02694785895033015,
+    "permutation_test_p": 0.0563,
+    "overall_verdict": "INCONCLUSIVE"
+  },
+  "config": {
+    "n_embd": 64,
+    "n_head": 4,
+    "n_layer": 4,
+    "lora_rank": 8,
+    "lora_alpha": 1.0,
+    "total_pretrain_steps": 1000,
+    "merge_every": 200,
+    "expert_train_steps": 300,
+    "n_experts": 4
+  }
+}

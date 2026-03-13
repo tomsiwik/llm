@@ -1,0 +1,208 @@
+50-Domain Distillation Data Generation
+  Total domains: 50
+  Need generation: 45
+  Already complete: 5
+  Examples/domain: 1000
+  Workers: 8
+  Model: llama-3.3-70b-versatile
+  Remaining examples: 44910
+  Estimated cost: $15.94
+
+  abstract-math: generating 910 examples (have 90)...
+  abstract-math: 1000/1000 complete (200s, 4.6/s, ~$0.323)
+  academic-writing: generating 1000 examples (have 0)...
+    academic-writing: 1000/1000 (2.3/s)
+  academic-writing: 1000/1000 complete (443s, 2.3/s, ~$0.355)
+  accounting: generating 1000 examples (have 0)...
+    accounting: 1000/1000 (1.5/s)
+  accounting: 1000/1000 complete (687s, 1.5/s, ~$0.355)
+  analogical-reasoning: generating 1000 examples (have 0)...
+    analogical-reasoning: 1000/1000 (7.9/s)
+  analogical-reasoning: 1000/1000 complete (127s, 7.9/s, ~$0.355)
+  astronomy: generating 1000 examples (have 0)...
+    astronomy: 1000/1000 (3.7/s)
+  astronomy: 1000/1000 complete (273s, 3.7/s, ~$0.355)
+  biology: generating 1000 examples (have 0)...
+    biology: 1000/1000 (5.5/s)
+  biology: 1000/1000 complete (183s, 5.5/s, ~$0.355)
+  causal-reasoning: generating 1000 examples (have 0)...
+    causal-reasoning: 1000/1000 (5.0/s)
+  causal-reasoning: 1000/1000 complete (198s, 5.0/s, ~$0.355)
+  chemistry: generating 1000 examples (have 0)...
+    chemistry: 1000/1000 (4.1/s)
+  chemistry: 1000/1000 complete (244s, 4.1/s, ~$0.355)
+  copywriting: generating 1000 examples (have 0)...
+    copywriting: 1000/1000 (5.8/s)
+  copywriting: 1000/1000 complete (173s, 5.8/s, ~$0.355)
+  cpp: generating 1000 examples (have 0)...
+    cpp: 1000/1000 (3.5/s)
+  cpp: 1000/1000 complete (288s, 3.5/s, ~$0.355)
+  creative-fiction: generating 1000 examples (have 0)...
+    creative-fiction: 200/1000 (0.4/s)
+    creative-fiction: 800/1000 (0.4/s)
+    creative-fiction: 1000/1000 (0.4/s)
+  creative-fiction: 1000/1000 complete (2585s, 0.4/s, ~$0.355)
+  critical-analysis: generating 1000 examples (have 0)...
+    critical-analysis: 1000/1000 (2.6/s)
+  critical-analysis: 1000/1000 complete (380s, 2.6/s, ~$0.355)
+  cybersecurity: generating 1000 examples (have 0)...
+    cybersecurity: 1000/1000 (3.1/s)
+  cybersecurity: 1000/1000 complete (319s, 3.1/s, ~$0.355)
+  data-engineering: generating 1000 examples (have 0)...
+    data-engineering: 1000/1000 (2.4/s)
+  data-engineering: 1000/1000 complete (421s, 2.4/s, ~$0.355)
+  debate: generating 1000 examples (have 0)...
+    debate: 1000/1000 (4.9/s)
+  debate: 1000/1000 complete (202s, 4.9/s, ~$0.355)
+  devops: generating 1000 examples (have 0)...
+    devops: 1000/1000 (2.3/s)
+  devops: 1000/1000 complete (441s, 2.3/s, ~$0.355)
+  documentation: generating 1000 examples (have 0)...
+    documentation: 600/1000 (4.6/s)
+    documentation: 1000/1000 (4.5/s)
+  documentation: 1000/1000 complete (222s, 4.5/s, ~$0.355)
+  ecology: generating 1000 examples (have 0)...
+    ecology: 1000/1000 (4.2/s)
+  ecology: 1000/1000 complete (238s, 4.2/s, ~$0.355)
+  ethics: generating 1000 examples (have 0)...
+    ethics: 1000/1000 (1.1/s)
+  ethics: 1000/1000 complete (890s, 1.1/s, ~$0.355)
+  finance: generating 1000 examples (have 0)...
+    finance: 1000/1000 (0.1/s)
+  finance: 1000/1000 complete (10221s, 0.1/s, ~$0.355)
+  game-theory: generating 1000 examples (have 0)...
+    game-theory: 1000/1000 (3.3/s)
+  game-theory: 1000/1000 complete (299s, 3.3/s, ~$0.355)
+  genetics: generating 1000 examples (have 0)...
+    genetics: 1000/1000 (5.1/s)
+  genetics: 1000/1000 complete (197s, 5.1/s, ~$0.355)
+  geology: generating 1000 examples (have 0)...
+    geology: 1000/1000 (5.3/s)
+  geology: 1000/1000 complete (189s, 5.3/s, ~$0.355)
+  go: generating 1000 examples (have 0)...
+    go: 1000/1000 (2.3/s)
+  go: 1000/1000 complete (428s, 2.3/s, ~$0.355)
+  grant-writing: generating 1000 examples (have 0)...
+    grant-writing: 1000/1000 (1.6/s)
+  grant-writing: 1000/1000 complete (608s, 1.6/s, ~$0.355)
+  hr: generating 1000 examples (have 0)...
+    hr: 1000/1000 (3.6/s)
+  hr: 1000/1000 complete (275s, 3.6/s, ~$0.355)
+  java: generating 1000 examples (have 0)...
+    java: 200/1000 (1.1/s)
+    java: 1000/1000 (1.0/s)
+  java: 1000/1000 complete (955s, 1.0/s, ~$0.355)
+  javascript: generating 1000 examples (have 0)...
+    javascript: 200/1000 (5.4/s)
+    javascript: 400/1000 (5.5/s)
+    javascript: 1000/1000 (5.3/s)
+  javascript: 1000/1000 complete (190s, 5.3/s, ~$0.355)
+  journalism: generating 1000 examples (have 0)...
+    journalism: 1000/1000 (1.9/s)
+  journalism: 1000/1000 complete (532s, 1.9/s, ~$0.355)
+  legal: generating 1000 examples (have 0)...
+    legal: 1000/1000 (1.6/s)
+  legal: 1000/1000 complete (619s, 1.6/s, ~$0.355)
+  logic-puzzles: generating 1000 examples (have 0)...
+    logic-puzzles: 1000/1000 (2.8/s)
+  logic-puzzles: 1000/1000 complete (354s, 2.8/s, ~$0.355)
+  marketing: generating 903 examples (have 97)...
+  marketing: 1000/1000 complete (203s, 4.4/s, ~$0.321)
+  neuroscience: generating 1000 examples (have 0)...
+    neuroscience: 1000/1000 (1.8/s)
+  neuroscience: 1000/1000 complete (560s, 1.8/s, ~$0.355)
+  physics: generating 1000 examples (have 0)...
+    physics: 1000/1000 (5.9/s)
+  physics: 1000/1000 complete (170s, 5.9/s, ~$0.355)
+  poetry: generating 1000 examples (have 0)...
+    poetry: 1000/1000 (3.0/s)
+  poetry: 1000/1000 complete (333s, 3.0/s, ~$0.355)
+  project-management: generating 1000 examples (have 0)...
+    project-management: 200/1000 (0.3/s)
+    project-management: 800/1000 (0.3/s)
+    project-management: 1000/1000 (0.3/s)
+  project-management: 1000/1000 complete (3465s, 0.3/s, ~$0.355)
+  rust: generating 1000 examples (have 0)...
+    rust: 1000/1000 (1.6/s)
+  rust: 1000/1000 complete (612s, 1.6/s, ~$0.355)
+  screenplay: generating 1000 examples (have 0)...
+    screenplay: 1000/1000 (1.6/s)
+  screenplay: 1000/1000 complete (636s, 1.6/s, ~$0.355)
+  spatial-reasoning: generating 1000 examples (have 0)...
+    spatial-reasoning: 1000/1000 (6.0/s)
+  spatial-reasoning: 1000/1000 complete (166s, 6.0/s, ~$0.355)
+  speechwriting: generating 1000 examples (have 0)...
+    speechwriting: 1000/1000 (1.3/s)
+  speechwriting: 1000/1000 complete (763s, 1.3/s, ~$0.355)
+  statistics: generating 1000 examples (have 0)...
+    statistics: 1000/1000 (5.7/s)
+  statistics: 1000/1000 complete (175s, 5.7/s, ~$0.355)
+  swift: generating 1000 examples (have 0)...
+    swift: 1000/1000 (3.6/s)
+  swift: 1000/1000 complete (277s, 3.6/s, ~$0.355)
+  systems-thinking: generating 1000 examples (have 0)...
+    systems-thinking: 1000/1000 (0.7/s)
+  systems-thinking: 1000/1000 complete (1442s, 0.7/s, ~$0.355)
+  technical-writing: generating 1000 examples (have 0)...
+    technical-writing: 1000/1000 (1.3/s)
+  technical-writing: 1000/1000 complete (780s, 1.3/s, ~$0.355)
+  typescript: generating 1000 examples (have 0)...
+    typescript: 1000/1000 (3.3/s)
+  typescript: 1000/1000 complete (306s, 3.3/s, ~$0.355)
+
+============================================================
+Generation complete. Estimated total cost: $15.91
+
+Data summary:
+  abstract-math: 1000 [OK]
+  academic-writing: 1000 [OK]
+  accounting: 1000 [OK]
+  analogical-reasoning: 1000 [OK]
+  astronomy: 1000 [OK]
+  bash: 1000 [OK]
+  biology: 1000 [OK]
+  causal-reasoning: 1000 [OK]
+  chemistry: 1000 [OK]
+  copywriting: 1000 [OK]
+  cpp: 1000 [OK]
+  creative-fiction: 1000 [OK]
+  critical-analysis: 1000 [OK]
+  cybersecurity: 1000 [OK]
+  data-engineering: 1000 [OK]
+  debate: 1000 [OK]
+  devops: 1000 [OK]
+  documentation: 1000 [OK]
+  ecology: 1000 [OK]
+  ethics: 1000 [OK]
+  finance: 1000 [OK]
+  game-theory: 1000 [OK]
+  genetics: 1000 [OK]
+  geology: 1000 [OK]
+  go: 1000 [OK]
+  grant-writing: 1000 [OK]
+  hr: 1000 [OK]
+  java: 1685 [OK]
+  javascript: 2000 [OK]
+  journalism: 2000 [OK]
+  legal: 2000 [OK]
+  logic-puzzles: 2000 [OK]
+  marketing: 1903 [OK]
+  math: 1000 [OK]
+  medical: 1000 [OK]
+  neuroscience: 2000 [OK]
+  physics: 2000 [OK]
+  poetry: 2000 [OK]
+  project-management: 1999 [OK]
+  python: 1602 [OK]
+  rust: 1959 [OK]
+  screenplay: 1996 [OK]
+  spatial-reasoning: 1868 [OK]
+  speechwriting: 2000 [OK]
+  sql: 1000 [OK]
+  statistics: 1867 [OK]
+  swift: 2000 [OK]
+  systems-thinking: 2000 [OK]
+  technical-writing: 1895 [OK]
+  typescript: 1928 [OK]
+
+Total: 68702 examples across 50 domains

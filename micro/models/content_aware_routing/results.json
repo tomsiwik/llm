@@ -1,0 +1,278 @@
+{
+  "config": {
+    "n_seeds": 3,
+    "train_steps": 300,
+    "router_train_steps": 500,
+    "train_lr": 0.01,
+    "n_sequences": 300,
+    "n_test_sequences": 100,
+    "batch_size": 32,
+    "d_model": 64,
+    "d_ff": 256,
+    "n_layers": 4,
+    "lora_rank": 8,
+    "vocab_size": 32,
+    "context_len": 16
+  },
+  "clusters": {
+    "code": [
+      "python",
+      "javascript",
+      "rust",
+      "bash",
+      "sql"
+    ],
+    "reasoning": [
+      "math",
+      "logic",
+      "physics",
+      "statistics",
+      "economics"
+    ],
+    "knowledge": [
+      "medical",
+      "law",
+      "history",
+      "psychology",
+      "cooking"
+    ]
+  },
+  "seed_results": [
+    {
+      "seed": 42,
+      "results": {
+        "hash_ring": {
+          "accuracy": 0.07,
+          "latency_us": 98.53061040242513,
+          "mean_ntp_loss": 3.46568808202669
+        },
+        "mlp_classifier": {
+          "accuracy": 0.06666666666666667,
+          "latency_us": 1.9046465555826824,
+          "mean_ntp_loss": 3.465688093875906,
+          "train_acc": 0.06644444444444444
+        },
+        "cosine_similarity": {
+          "accuracy": 0.26866666666666666,
+          "latency_us": 1.4746983846028645,
+          "mean_ntp_loss": 3.4656879600393187
+        },
+        "keyword_matching": {
+          "accuracy": 0.2793333333333333,
+          "latency_us": 6.112575531005859,
+          "mean_ntp_loss": 3.4656879584972677
+        },
+        "oracle": {
+          "accuracy": 1.0,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4656879686771913
+        },
+        "base_model": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4656881196882154
+        },
+        "pre_merge_all": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4656881167540536
+        }
+      },
+      "domain_train_losses": {
+        "python": 3.4657843480367903,
+        "javascript": 3.4656280086134537,
+        "rust": 3.465564043795836,
+        "bash": 3.465645912511442,
+        "sql": 3.4656567089982557,
+        "math": 3.4657814746374624,
+        "logic": 3.4659564502777327,
+        "physics": 3.4656284402983872,
+        "statistics": 3.465768498922781,
+        "economics": 3.465790851589249,
+        "medical": 3.465723999289061,
+        "law": 3.465537115975799,
+        "history": 3.4654261440522176,
+        "psychology": 3.465503221863618,
+        "cooking": 3.465233812678421
+      }
+    },
+    {
+      "seed": 142,
+      "results": {
+        "hash_ring": {
+          "accuracy": 0.06133333333333333,
+          "latency_us": 98.16869099934895,
+          "mean_ntp_loss": 3.465790783418631
+        },
+        "mlp_classifier": {
+          "accuracy": 0.06666666666666667,
+          "latency_us": 1.1286735534667969,
+          "mean_ntp_loss": 3.4657908262328636,
+          "train_acc": 0.06666666666666667
+        },
+        "cosine_similarity": {
+          "accuracy": 0.23933333333333334,
+          "latency_us": 1.4125506083170574,
+          "mean_ntp_loss": 3.4657906281243593
+        },
+        "keyword_matching": {
+          "accuracy": 0.252,
+          "latency_us": 5.974769592285156,
+          "mean_ntp_loss": 3.4657906266717764
+        },
+        "oracle": {
+          "accuracy": 1.0,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657906418373017
+        },
+        "base_model": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657908320366055
+        },
+        "pre_merge_all": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657908292882835
+        }
+      },
+      "domain_train_losses": {
+        "python": 3.466007563573081,
+        "javascript": 3.4658811789118706,
+        "rust": 3.46578562785948,
+        "bash": 3.4660527881735455,
+        "sql": 3.465719492321073,
+        "math": 3.465792000690752,
+        "logic": 3.4658359411939177,
+        "physics": 3.465708009049846,
+        "statistics": 3.4655917189657766,
+        "economics": 3.4660186660590275,
+        "medical": 3.4656077337788824,
+        "law": 3.4652957895858,
+        "history": 3.465526220669853,
+        "psychology": 3.4654928890728653,
+        "cooking": 3.4654355157877936
+      }
+    },
+    {
+      "seed": 242,
+      "results": {
+        "hash_ring": {
+          "accuracy": 0.066,
+          "latency_us": 98.26135635375977,
+          "mean_ntp_loss": 3.4657454411082798
+        },
+        "mlp_classifier": {
+          "accuracy": 0.12266666666666666,
+          "latency_us": 1.1404355367024739,
+          "mean_ntp_loss": 3.4657450536068373,
+          "train_acc": 0.12622222222222224
+        },
+        "cosine_similarity": {
+          "accuracy": 0.25666666666666665,
+          "latency_us": 1.476605733235677,
+          "mean_ntp_loss": 3.4657446621272174
+        },
+        "keyword_matching": {
+          "accuracy": 0.264,
+          "latency_us": 5.462646484375,
+          "mean_ntp_loss": 3.4657446695157694
+        },
+        "oracle": {
+          "accuracy": 1.0,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657448313438133
+        },
+        "base_model": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657456923003793
+        },
+        "pre_merge_all": {
+          "accuracy": null,
+          "latency_us": 0.0,
+          "mean_ntp_loss": 3.4657456731332346
+        }
+      },
+      "domain_train_losses": {
+        "python": 3.465901635439164,
+        "javascript": 3.465462063263558,
+        "rust": 3.465360535971453,
+        "bash": 3.4654016673211068,
+        "sql": 3.4656540401764944,
+        "math": 3.465821674086857,
+        "logic": 3.4656091311694497,
+        "physics": 3.465832727588867,
+        "statistics": 3.4658195430140895,
+        "economics": 3.465515620541969,
+        "medical": 3.4663516359967774,
+        "law": 3.465976300833426,
+        "history": 3.4658617226241875,
+        "psychology": 3.46585282197404,
+        "cooking": 3.4661779419250465
+      }
+    }
+  ],
+  "aggregate": {
+    "hash_ring": {
+      "mean_accuracy": 0.06577777777777778,
+      "std_accuracy": 0.0035416394334464993,
+      "mean_ntp_loss": 3.4657414355178666,
+      "std_ntp_loss": 4.2023228041740826e-05,
+      "mean_latency_us": 98.3202192518446
+    },
+    "mlp_classifier": {
+      "mean_accuracy": 0.08533333333333333,
+      "std_accuracy": 0.02639865316429777,
+      "mean_ntp_loss": 3.4657413245718693,
+      "std_ntp_loss": 4.20231171925821e-05,
+      "mean_latency_us": 1.3912518819173176
+    },
+    "cosine_similarity": {
+      "mean_accuracy": 0.2548888888888889,
+      "std_accuracy": 0.012041081941461388,
+      "mean_ntp_loss": 3.4657410834302986,
+      "std_ntp_loss": 4.1990389576725835e-05,
+      "mean_latency_us": 1.4546182420518663
+    },
+    "keyword_matching": {
+      "mean_accuracy": 0.26511111111111113,
+      "std_accuracy": 0.011186411509913967,
+      "mean_ntp_loss": 3.465741084894938,
+      "std_ntp_loss": 4.199067868082674e-05,
+      "mean_latency_us": 5.849997202555339
+    },
+    "oracle": {
+      "mean_accuracy": 1.0,
+      "std_accuracy": 0.0,
+      "mean_ntp_loss": 3.4657411472861015,
+      "std_ntp_loss": 4.199701308963774e-05,
+      "mean_latency_us": 0.0
+    },
+    "base_model": {
+      "mean_accuracy": null,
+      "std_accuracy": null,
+      "mean_ntp_loss": 3.4657415480084004,
+      "std_ntp_loss": 4.2034414431979116e-05,
+      "mean_latency_us": 0.0
+    },
+    "pre_merge_all": {
+      "mean_accuracy": null,
+      "std_accuracy": null,
+      "mean_ntp_loss": 3.4657415397251903,
+      "std_ntp_loss": 4.2033954279249157e-05,
+      "mean_latency_us": 0.0
+    }
+  },
+  "kill_criteria": {
+    "k1_accuracy_pass": false,
+    "k2_latency_pass": true,
+    "k3_quality_gap_pass": false,
+    "overall_kill": true,
+    "best_content_aware": "keyword_matching",
+    "best_ca_accuracy": 0.26511111111111113,
+    "best_ca_latency_us": 5.849997202555339,
+    "quality_gap_pct": 1.0116824075434618e-05
+  },
+  "elapsed_seconds": 31.40629482269287
+}

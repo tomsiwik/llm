@@ -2,3 +2,24 @@
 __pycache__/
 *.pyc
 .worktrees/
+
+# Large model files (keep local)
+adapters/*/adapter_model.safetensors
+adapters/*/tokenizer.json
+adapters/*/tokenizer_config.json
+*.safetensors
+*.gguf
+*.bin
+
+# Training data (keep local)
+data/distillation/*/train.jsonl
+data/distillation/*/train_split.jsonl
+data/distillation/*/val.jsonl
+
+# Results data (keep local)
+results/*.jsonl
+results/*.csv
+
+# Lock files
+.ralph/loop.lock
+uv.lock

@@ -1,0 +1,47 @@
+{
+  "base_model": "/workspace/models/Qwen2.5-7B",
+  "domains": {
+    "bash": {
+      "base_ppl": 2.103370164186237,
+      "expert_ppl": 1.247203567498751,
+      "improvement_pct": 40.704513702119776,
+      "expert_wins": true,
+      "n_eval": 50
+    },
+    "math": {
+      "base_ppl": 2.2680820270566406,
+      "expert_ppl": 1.4422267770866537,
+      "improvement_pct": 36.412053890384406,
+      "expert_wins": true,
+      "n_eval": 50
+    },
+    "medical": {
+      "base_ppl": 10.333131759510342,
+      "expert_ppl": 3.279660302974218,
+      "improvement_pct": 68.2607327642396,
+      "expert_wins": true,
+      "n_eval": 50
+    },
+    "python": {
+      "base_ppl": 2.6634859536425908,
+      "expert_ppl": 1.3778011288937326,
+      "improvement_pct": 48.270756712290975,
+      "expert_wins": true,
+      "n_eval": 50
+    },
+    "sql": {
+      "base_ppl": 8.370732179833146,
+      "expert_ppl": 11.094874296553604,
+      "improvement_pct": -32.54365398624853,
+      "expert_wins": false,
+      "n_eval": 50
+    }
+  },
+  "timestamp": "2026-03-08 14:59:38",
+  "aggregate": {
+    "domains_tested": 5,
+    "expert_wins": 4,
+    "win_rate_pct": 80.0,
+    "kill_criterion_met": false
+  }
+}

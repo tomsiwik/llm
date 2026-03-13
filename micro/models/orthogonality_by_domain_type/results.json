@@ -1,0 +1,3876 @@
+{
+  "config": {
+    "n_seeds": 3,
+    "train_steps": 300,
+    "train_lr": 0.01,
+    "n_sequences": 300,
+    "batch_size": 32,
+    "d_model": 64,
+    "d_ff": 256,
+    "n_layers": 4,
+    "lora_rank": 8,
+    "vocab_size": 32,
+    "context_len": 16
+  },
+  "clusters": {
+    "code": [
+      "python",
+      "javascript",
+      "rust",
+      "bash",
+      "sql"
+    ],
+    "reasoning": [
+      "math",
+      "logic",
+      "physics",
+      "statistics",
+      "economics"
+    ],
+    "knowledge": [
+      "medical",
+      "law",
+      "history",
+      "psychology",
+      "cooking"
+    ]
+  },
+  "seed_results": [
+    {
+      "seed": 42,
+      "within_mean": 0.05206194695645798,
+      "cross_mean": 0.006796513803365006,
+      "ratio": 7.660095817164634,
+      "p_value": 0.0,
+      "significant": true,
+      "analysis": {
+        "within_cluster": {
+          "mean": 0.05206194695645798,
+          "std": 0.02539031205476915,
+          "median": 0.05062141342709263,
+          "max": 0.12055324267114308,
+          "min": 0.005889482267543686,
+          "n_pairs": 30
+        },
+        "cross_cluster": {
+          "mean": 0.006796513803365006,
+          "std": 0.0059274760892232175,
+          "median": 0.005293389287641151,
+          "max": 0.025111536409618416,
+          "min": 5.295873753640504e-05,
+          "n_pairs": 75
+        },
+        "ratio": 7.660095817164634,
+        "pair_details": [
+          {
+            "domain1": "python",
+            "domain2": "javascript",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.052657674593180485,
+            "abs_cosine": 0.052657674593180485,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.045750600836369455,
+            "abs_cosine": 0.045750600836369455,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.023301072806622313,
+            "abs_cosine": 0.023301072806622313,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.1060590148584452,
+            "abs_cosine": 0.1060590148584452,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0024367377290545576,
+            "abs_cosine": 0.0024367377290545576,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.00523938201526471,
+            "abs_cosine": 0.00523938201526471,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.003526892230914082,
+            "abs_cosine": 0.003526892230914082,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.012940334290832049,
+            "abs_cosine": 0.012940334290832049,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.003598004332711463,
+            "abs_cosine": 0.003598004332711463,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0013847183036049078,
+            "abs_cosine": 0.0013847183036049078,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.007254455424752033,
+            "abs_cosine": 0.007254455424752033,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.02440928659938957,
+            "abs_cosine": 0.02440928659938957,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00336492611020856,
+            "abs_cosine": 0.00336492611020856,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00867924769637214,
+            "abs_cosine": 0.00867924769637214,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.09332557353193446,
+            "abs_cosine": 0.09332557353193446,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.052010478004167415,
+            "abs_cosine": 0.052010478004167415,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.056738766264861115,
+            "abs_cosine": 0.056738766264861115,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.006379868782850096,
+            "abs_cosine": 0.006379868782850096,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.008945245034112693,
+            "abs_cosine": 0.008945245034112693,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.002403434188127999,
+            "abs_cosine": 0.002403434188127999,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.006167990375000527,
+            "abs_cosine": 0.006167990375000527,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.013396865781454406,
+            "abs_cosine": 0.013396865781454406,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.005293389287641151,
+            "abs_cosine": 0.005293389287641151,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.004011245364489391,
+            "abs_cosine": 0.004011245364489391,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.004868540411821211,
+            "abs_cosine": 0.004868540411821211,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00014419797558629758,
+            "abs_cosine": 0.00014419797558629758,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.004098351543580039,
+            "abs_cosine": 0.004098351543580039,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.05325564348761164,
+            "abs_cosine": 0.05325564348761164,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.02992133933565983,
+            "abs_cosine": 0.02992133933565983,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.00040364025087535893,
+            "abs_cosine": 0.00040364025087535893,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0002219404966732151,
+            "abs_cosine": 0.0002219404966732151,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.001018984957005329,
+            "abs_cosine": 0.001018984957005329,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0110964316493461,
+            "abs_cosine": 0.0110964316493461,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0008791674110049454,
+            "abs_cosine": 0.0008791674110049454,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.011363720791422198,
+            "abs_cosine": 0.011363720791422198,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.010908277202012762,
+            "abs_cosine": 0.010908277202012762,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.015320022633526373,
+            "abs_cosine": 0.015320022633526373,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.00016126910027569754,
+            "abs_cosine": 0.00016126910027569754,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00531250052232122,
+            "abs_cosine": 0.00531250052232122,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": -0.005889482267543686,
+            "abs_cosine": 0.005889482267543686,
+            "same_cluster": true
+          },
+          {
+            "domain1": "bash",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.010374978480872247,
+            "abs_cosine": 0.010374978480872247,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 5.93346380564036e-05,
+            "abs_cosine": 5.93346380564036e-05,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.001429805757043478,
+            "abs_cosine": 0.001429805757043478,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.004693795401843008,
+            "abs_cosine": 0.004693795401843008,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.00856546706404888,
+            "abs_cosine": 0.00856546706404888,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0031521546856867295,
+            "abs_cosine": 0.0031521546856867295,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0015831890246917506,
+            "abs_cosine": 0.0015831890246917506,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.006594892424747731,
+            "abs_cosine": 0.006594892424747731,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.009896761271775405,
+            "abs_cosine": 0.009896761271775405,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0034941260600040843,
+            "abs_cosine": 0.0034941260600040843,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.004718038411128627,
+            "abs_cosine": 0.004718038411128627,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 5.295873753640504e-05,
+            "abs_cosine": 5.295873753640504e-05,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0016749666339394927,
+            "abs_cosine": 0.0016749666339394927,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.003529711309874732,
+            "abs_cosine": 0.003529711309874732,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0036795556967741355,
+            "abs_cosine": 0.0036795556967741355,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.006352924778530035,
+            "abs_cosine": 0.006352924778530035,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.004068181129188063,
+            "abs_cosine": 0.004068181129188063,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.02246212918531701,
+            "abs_cosine": 0.02246212918531701,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0032021464458860272,
+            "abs_cosine": 0.0032021464458860272,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.01491651105490886,
+            "abs_cosine": 0.01491651105490886,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "logic",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.03472012336256781,
+            "abs_cosine": 0.03472012336256781,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.06693763708013738,
+            "abs_cosine": 0.06693763708013738,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.028739951471781242,
+            "abs_cosine": 0.028739951471781242,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.03234619861853599,
+            "abs_cosine": 0.03234619861853599,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.013851533811819266,
+            "abs_cosine": 0.013851533811819266,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.01785222310033484,
+            "abs_cosine": 0.01785222310033484,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.00844480492827073,
+            "abs_cosine": 0.00844480492827073,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.00663956496931617,
+            "abs_cosine": 0.00663956496931617,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.005637109759446124,
+            "abs_cosine": 0.005637109759446124,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.08148988821437332,
+            "abs_cosine": 0.08148988821437332,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.06237804125112252,
+            "abs_cosine": 0.06237804125112252,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.12055324267114308,
+            "abs_cosine": 0.12055324267114308,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0028631312789780343,
+            "abs_cosine": 0.0028631312789780343,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.001762754418024347,
+            "abs_cosine": 0.001762754418024347,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.021028587968914936,
+            "abs_cosine": 0.021028587968914936,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.006455153597589143,
+            "abs_cosine": 0.006455153597589143,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0013821931213602757,
+            "abs_cosine": 0.0013821931213602757,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.024922974306155046,
+            "abs_cosine": 0.024922974306155046,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.05634338037081786,
+            "abs_cosine": 0.05634338037081786,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0036387417225761678,
+            "abs_cosine": 0.0036387417225761678,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.015143077026052386,
+            "abs_cosine": 0.015143077026052386,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.006542953480318679,
+            "abs_cosine": 0.006542953480318679,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0026443885867815852,
+            "abs_cosine": 0.0026443885867815852,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.025111536409618416,
+            "abs_cosine": 0.025111536409618416,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04152190163802102,
+            "abs_cosine": 0.04152190163802102,
+            "same_cluster": true
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.006645989967045465,
+            "abs_cosine": 0.006645989967045465,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.012361135199390711,
+            "abs_cosine": 0.012361135199390711,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0008375230028096269,
+            "abs_cosine": 0.0008375230028096269,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.012383358843029992,
+            "abs_cosine": 0.012383358843029992,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.017185466974807165,
+            "abs_cosine": 0.017185466974807165,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.005928207937277222,
+            "abs_cosine": 0.005928207937277222,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.007927524330330907,
+            "abs_cosine": 0.007927524330330907,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.00542988627824293,
+            "abs_cosine": 0.00542988627824293,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.001757807225668042,
+            "abs_cosine": 0.001757807225668042,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0005531846302880983,
+            "abs_cosine": 0.0005531846302880983,
+            "same_cluster": false
+          },
+          {
+            "domain1": "medical",
+            "domain2": "law",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.05607518489899016,
+            "abs_cosine": 0.05607518489899016,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.040465982496500394,
+            "abs_cosine": 0.040465982496500394,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.035181398523001124,
+            "abs_cosine": 0.035181398523001124,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.07135774189490107,
+            "abs_cosine": 0.07135774189490107,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.08571022207861353,
+            "abs_cosine": 0.08571022207861353,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.058916615493591305,
+            "abs_cosine": 0.058916615493591305,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.04923234885001784,
+            "abs_cosine": 0.04923234885001784,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03454564089787113,
+            "abs_cosine": 0.03454564089787113,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.02801886543837903,
+            "abs_cosine": 0.02801886543837903,
+            "same_cluster": true
+          },
+          {
+            "domain1": "psychology",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03349142315082294,
+            "abs_cosine": 0.03349142315082294,
+            "same_cluster": true
+          }
+        ]
+      },
+      "perm_test": {
+        "observed_diff": 0.04526543315309298,
+        "p_value": 0.0,
+        "n_permutations": 10000,
+        "significant_at_005": true,
+        "significant_at_001": true
+      },
+      "domain_losses": {
+        "python": 3.4658448614784456,
+        "javascript": 3.465716505756755,
+        "rust": 3.4660444639450043,
+        "bash": 3.4657335608401736,
+        "sql": 3.4656782390795513,
+        "math": 3.4660763592088486,
+        "logic": 3.465874115646982,
+        "physics": 3.4659516845756646,
+        "statistics": 3.4659058977981907,
+        "economics": 3.46605459535015,
+        "medical": 3.465457072228923,
+        "law": 3.4657799586216873,
+        "history": 3.465533048487413,
+        "psychology": 3.4656467645367517,
+        "cooking": 3.4657393675517874
+      },
+      "cosine_matrix": [
+        [
+          1.0,
+          0.052657674593180485,
+          0.045750600836369455,
+          0.023301072806622313,
+          0.1060590148584452,
+          -0.0024367377290545576,
+          -0.00523938201526471,
+          0.003526892230914082,
+          -0.012940334290832049,
+          -0.003598004332711463,
+          0.0013847183036049078,
+          -0.007254455424752033,
+          -0.02440928659938957,
+          -0.00336492611020856,
+          -0.00867924769637214
+        ],
+        [
+          0.052657674593180485,
+          1.0,
+          0.09332557353193446,
+          0.052010478004167415,
+          0.056738766264861115,
+          -0.006379868782850096,
+          0.008945245034112693,
+          -0.002403434188127999,
+          -0.006167990375000527,
+          0.013396865781454406,
+          -0.005293389287641151,
+          0.004011245364489391,
+          0.004868540411821211,
+          -0.00014419797558629758,
+          -0.004098351543580039
+        ],
+        [
+          0.045750600836369455,
+          0.09332557353193446,
+          1.0,
+          0.05325564348761164,
+          0.02992133933565983,
+          -0.00040364025087535893,
+          -0.0002219404966732151,
+          0.001018984957005329,
+          -0.0110964316493461,
+          -0.0008791674110049454,
+          -0.011363720791422198,
+          -0.010908277202012762,
+          -0.015320022633526373,
+          0.00016126910027569754,
+          -0.00531250052232122
+        ],
+        [
+          0.023301072806622313,
+          0.052010478004167415,
+          0.05325564348761164,
+          1.0,
+          -0.005889482267543686,
+          -0.010374978480872247,
+          5.93346380564036e-05,
+          -0.001429805757043478,
+          -0.004693795401843008,
+          0.00856546706404888,
+          0.0031521546856867295,
+          -0.0015831890246917506,
+          0.006594892424747731,
+          -0.009896761271775405,
+          -0.0034941260600040843
+        ],
+        [
+          0.1060590148584452,
+          0.056738766264861115,
+          0.02992133933565983,
+          -0.005889482267543686,
+          1.0,
+          0.004718038411128627,
+          5.295873753640504e-05,
+          -0.0016749666339394927,
+          -0.003529711309874732,
+          -0.0036795556967741355,
+          0.006352924778530035,
+          -0.004068181129188063,
+          -0.02246212918531701,
+          0.0032021464458860272,
+          -0.01491651105490886
+        ],
+        [
+          -0.0024367377290545576,
+          -0.006379868782850096,
+          -0.00040364025087535893,
+          -0.010374978480872247,
+          0.004718038411128627,
+          1.0,
+          0.03472012336256781,
+          0.06693763708013738,
+          0.028739951471781242,
+          0.03234619861853599,
+          -0.013851533811819266,
+          -0.01785222310033484,
+          -0.00844480492827073,
+          -0.00663956496931617,
+          -0.005637109759446124
+        ],
+        [
+          -0.00523938201526471,
+          0.008945245034112693,
+          -0.0002219404966732151,
+          5.93346380564036e-05,
+          5.295873753640504e-05,
+          0.03472012336256781,
+          1.0,
+          0.08148988821437332,
+          0.06237804125112252,
+          0.12055324267114308,
+          0.0028631312789780343,
+          0.001762754418024347,
+          -0.021028587968914936,
+          0.006455153597589143,
+          0.0013821931213602757
+        ],
+        [
+          0.003526892230914082,
+          -0.002403434188127999,
+          0.001018984957005329,
+          -0.001429805757043478,
+          -0.0016749666339394927,
+          0.06693763708013738,
+          0.08148988821437332,
+          1.0,
+          0.024922974306155046,
+          0.05634338037081786,
+          0.0036387417225761678,
+          -0.015143077026052386,
+          0.006542953480318679,
+          -0.0026443885867815852,
+          -0.025111536409618416
+        ],
+        [
+          -0.012940334290832049,
+          -0.006167990375000527,
+          -0.0110964316493461,
+          -0.004693795401843008,
+          -0.003529711309874732,
+          0.028739951471781242,
+          0.06237804125112252,
+          0.024922974306155046,
+          1.0,
+          0.04152190163802102,
+          -0.006645989967045465,
+          -0.012361135199390711,
+          -0.0008375230028096269,
+          -0.012383358843029992,
+          -0.017185466974807165
+        ],
+        [
+          -0.003598004332711463,
+          0.013396865781454406,
+          -0.0008791674110049454,
+          0.00856546706404888,
+          -0.0036795556967741355,
+          0.03234619861853599,
+          0.12055324267114308,
+          0.05634338037081786,
+          0.04152190163802102,
+          1.0,
+          0.005928207937277222,
+          -0.007927524330330907,
+          0.00542988627824293,
+          0.001757807225668042,
+          -0.0005531846302880983
+        ],
+        [
+          0.0013847183036049078,
+          -0.005293389287641151,
+          -0.011363720791422198,
+          0.0031521546856867295,
+          0.006352924778530035,
+          -0.013851533811819266,
+          0.0028631312789780343,
+          0.0036387417225761678,
+          -0.006645989967045465,
+          0.005928207937277222,
+          1.0,
+          0.05607518489899016,
+          0.040465982496500394,
+          0.035181398523001124,
+          0.07135774189490107
+        ],
+        [
+          -0.007254455424752033,
+          0.004011245364489391,
+          -0.010908277202012762,
+          -0.0015831890246917506,
+          -0.004068181129188063,
+          -0.01785222310033484,
+          0.001762754418024347,
+          -0.015143077026052386,
+          -0.012361135199390711,
+          -0.007927524330330907,
+          0.05607518489899016,
+          1.0,
+          0.08571022207861353,
+          0.058916615493591305,
+          0.04923234885001784
+        ],
+        [
+          -0.02440928659938957,
+          0.004868540411821211,
+          -0.015320022633526373,
+          0.006594892424747731,
+          -0.02246212918531701,
+          -0.00844480492827073,
+          -0.021028587968914936,
+          0.006542953480318679,
+          -0.0008375230028096269,
+          0.00542988627824293,
+          0.040465982496500394,
+          0.08571022207861353,
+          1.0,
+          0.03454564089787113,
+          0.02801886543837903
+        ],
+        [
+          -0.00336492611020856,
+          -0.00014419797558629758,
+          0.00016126910027569754,
+          -0.009896761271775405,
+          0.0032021464458860272,
+          -0.00663956496931617,
+          0.006455153597589143,
+          -0.0026443885867815852,
+          -0.012383358843029992,
+          0.001757807225668042,
+          0.035181398523001124,
+          0.058916615493591305,
+          0.03454564089787113,
+          1.0,
+          0.03349142315082294
+        ],
+        [
+          -0.00867924769637214,
+          -0.004098351543580039,
+          -0.00531250052232122,
+          -0.0034941260600040843,
+          -0.01491651105490886,
+          -0.005637109759446124,
+          0.0013821931213602757,
+          -0.025111536409618416,
+          -0.017185466974807165,
+          -0.0005531846302880983,
+          0.07135774189490107,
+          0.04923234885001784,
+          0.02801886543837903,
+          0.03349142315082294,
+          1.0
+        ]
+      ],
+      "domain_order": [
+        "python",
+        "javascript",
+        "rust",
+        "bash",
+        "sql",
+        "math",
+        "logic",
+        "physics",
+        "statistics",
+        "economics",
+        "medical",
+        "law",
+        "history",
+        "psychology",
+        "cooking"
+      ]
+    },
+    {
+      "seed": 142,
+      "within_mean": 0.04864697499906222,
+      "cross_mean": 0.00920486780683369,
+      "ratio": 5.28491837361822,
+      "p_value": 0.0,
+      "significant": true,
+      "analysis": {
+        "within_cluster": {
+          "mean": 0.04864697499906222,
+          "std": 0.024865077255707687,
+          "median": 0.04304380214231397,
+          "max": 0.10479445275833017,
+          "min": 0.012527493499998503,
+          "n_pairs": 30
+        },
+        "cross_cluster": {
+          "mean": 0.00920486780683369,
+          "std": 0.007526202892349961,
+          "median": 0.007635630498967621,
+          "max": 0.03252976929230891,
+          "min": 0.00020544605748194753,
+          "n_pairs": 75
+        },
+        "ratio": 5.28491837361822,
+        "pair_details": [
+          {
+            "domain1": "python",
+            "domain2": "javascript",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.05637203461337199,
+            "abs_cosine": 0.05637203461337199,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.09917202946901434,
+            "abs_cosine": 0.09917202946901434,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.07512107478885835,
+            "abs_cosine": 0.07512107478885835,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.09423824174649142,
+            "abs_cosine": 0.09423824174649142,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.003775623329998605,
+            "abs_cosine": 0.003775623329998605,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.01643645583065951,
+            "abs_cosine": 0.01643645583065951,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.03252976929230891,
+            "abs_cosine": 0.03252976929230891,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.009704216418938094,
+            "abs_cosine": 0.009704216418938094,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.00046169021716802375,
+            "abs_cosine": 0.00046169021716802375,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00042270847992063697,
+            "abs_cosine": 0.00042270847992063697,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0032624458296622023,
+            "abs_cosine": 0.0032624458296622023,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0032089671203740155,
+            "abs_cosine": 0.0032089671203740155,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0015891206807192202,
+            "abs_cosine": 0.0015891206807192202,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0029069808564125294,
+            "abs_cosine": 0.0029069808564125294,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.047326677577314964,
+            "abs_cosine": 0.047326677577314964,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.059051852439237586,
+            "abs_cosine": 0.059051852439237586,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.0682855885070368,
+            "abs_cosine": 0.0682855885070368,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.01011585921617816,
+            "abs_cosine": 0.01011585921617816,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.024245191730223506,
+            "abs_cosine": 0.024245191730223506,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.016785493723537753,
+            "abs_cosine": 0.016785493723537753,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.013181765050432752,
+            "abs_cosine": 0.013181765050432752,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.014103231489270228,
+            "abs_cosine": 0.014103231489270228,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.005610619575175346,
+            "abs_cosine": 0.005610619575175346,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.008126010889322133,
+            "abs_cosine": 0.008126010889322133,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.01525382982770514,
+            "abs_cosine": 0.01525382982770514,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.005202570230766533,
+            "abs_cosine": 0.005202570230766533,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0006268751168949204,
+            "abs_cosine": 0.0006268751168949204,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.016489399511887354,
+            "abs_cosine": 0.016489399511887354,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.10479445275833017,
+            "abs_cosine": 0.10479445275833017,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0042785319072322575,
+            "abs_cosine": 0.0042785319072322575,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.013824042077580137,
+            "abs_cosine": 0.013824042077580137,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.019835666500372405,
+            "abs_cosine": 0.019835666500372405,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.006470216553471559,
+            "abs_cosine": 0.006470216553471559,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0021045646002101114,
+            "abs_cosine": 0.0021045646002101114,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0010180111201901327,
+            "abs_cosine": 0.0010180111201901327,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.001998152485355898,
+            "abs_cosine": 0.001998152485355898,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.002914628183348003,
+            "abs_cosine": 0.002914628183348003,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0007641982067914931,
+            "abs_cosine": 0.0007641982067914931,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.002253109992473911,
+            "abs_cosine": 0.002253109992473911,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.07910367650938042,
+            "abs_cosine": 0.07910367650938042,
+            "same_cluster": true
+          },
+          {
+            "domain1": "bash",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.012050264667205482,
+            "abs_cosine": 0.012050264667205482,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.019078428067849956,
+            "abs_cosine": 0.019078428067849956,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.018855969938117785,
+            "abs_cosine": 0.018855969938117785,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.01909044719766772,
+            "abs_cosine": 0.01909044719766772,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.0015802377924520623,
+            "abs_cosine": 0.0015802377924520623,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00043226162785587875,
+            "abs_cosine": 0.00043226162785587875,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.014162053611320566,
+            "abs_cosine": 0.014162053611320566,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0019932784148404934,
+            "abs_cosine": 0.0019932784148404934,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00799831055015962,
+            "abs_cosine": 0.00799831055015962,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0009673555068072423,
+            "abs_cosine": 0.0009673555068072423,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.006685261289608762,
+            "abs_cosine": 0.006685261289608762,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.009129474829230185,
+            "abs_cosine": 0.009129474829230185,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0005554209431873877,
+            "abs_cosine": 0.0005554209431873877,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.016278884119556077,
+            "abs_cosine": 0.016278884119556077,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.007111630938327974,
+            "abs_cosine": 0.007111630938327974,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.004396242474455758,
+            "abs_cosine": 0.004396242474455758,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.008031031288997365,
+            "abs_cosine": 0.008031031288997365,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0029009107743201033,
+            "abs_cosine": 0.0029009107743201033,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.00020544605748194753,
+            "abs_cosine": 0.00020544605748194753,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0071595751491668,
+            "abs_cosine": 0.0071595751491668,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "logic",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.016179886605904227,
+            "abs_cosine": 0.016179886605904227,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.049476243608126004,
+            "abs_cosine": 0.049476243608126004,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.016225068934420776,
+            "abs_cosine": 0.016225068934420776,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04154868041356585,
+            "abs_cosine": 0.04154868041356585,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.008598972575565765,
+            "abs_cosine": 0.008598972575565765,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0009713140603806455,
+            "abs_cosine": 0.0009713140603806455,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.000501697151037452,
+            "abs_cosine": 0.000501697151037452,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0026753401000858355,
+            "abs_cosine": 0.0026753401000858355,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.009489711940393455,
+            "abs_cosine": 0.009489711940393455,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.012527493499998503,
+            "abs_cosine": 0.012527493499998503,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04019653821081858,
+            "abs_cosine": 0.04019653821081858,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.03824630580841877,
+            "abs_cosine": 0.03824630580841877,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.013387860176900078,
+            "abs_cosine": 0.013387860176900078,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.02765179065842392,
+            "abs_cosine": 0.02765179065842392,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.006596554554926295,
+            "abs_cosine": 0.006596554554926295,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.015157216041889434,
+            "abs_cosine": 0.015157216041889434,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.014459344107263794,
+            "abs_cosine": 0.014459344107263794,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.06922571635438597,
+            "abs_cosine": 0.06922571635438597,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.03551661583884678,
+            "abs_cosine": 0.03551661583884678,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.026401763261126622,
+            "abs_cosine": 0.026401763261126622,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.007133365180709054,
+            "abs_cosine": 0.007133365180709054,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.009490410302726656,
+            "abs_cosine": 0.009490410302726656,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.005386105464304343,
+            "abs_cosine": 0.005386105464304343,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.011142971668131186,
+            "abs_cosine": 0.011142971668131186,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04759542559060623,
+            "abs_cosine": 0.04759542559060623,
+            "same_cluster": true
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.01767632933692477,
+            "abs_cosine": 0.01767632933692477,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.010795869758301052,
+            "abs_cosine": 0.010795869758301052,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.008702052948835831,
+            "abs_cosine": 0.008702052948835831,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.007635630498967621,
+            "abs_cosine": 0.007635630498967621,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.019271270824311206,
+            "abs_cosine": 0.019271270824311206,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.006966862482243006,
+            "abs_cosine": 0.006966862482243006,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.025611606592317024,
+            "abs_cosine": 0.025611606592317024,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0036626853622298747,
+            "abs_cosine": 0.0036626853622298747,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.013534172288372394,
+            "abs_cosine": 0.013534172288372394,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.01579115640485607,
+            "abs_cosine": 0.01579115640485607,
+            "same_cluster": false
+          },
+          {
+            "domain1": "medical",
+            "domain2": "law",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.0445389238710621,
+            "abs_cosine": 0.0445389238710621,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.045128517601372715,
+            "abs_cosine": 0.045128517601372715,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.025273185811911895,
+            "abs_cosine": 0.025273185811911895,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03335148527125371,
+            "abs_cosine": 0.03335148527125371,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.07906821148950852,
+            "abs_cosine": 0.07906821148950852,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.01716463182060401,
+            "abs_cosine": 0.01716463182060401,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03408447534205079,
+            "abs_cosine": 0.03408447534205079,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03341454274929427,
+            "abs_cosine": 0.03341454274929427,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.03974272137180235,
+            "abs_cosine": 0.03974272137180235,
+            "same_cluster": true
+          },
+          {
+            "domain1": "psychology",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.04094955185699133,
+            "abs_cosine": 0.04094955185699133,
+            "same_cluster": true
+          }
+        ]
+      },
+      "perm_test": {
+        "observed_diff": 0.03944210719222853,
+        "p_value": 0.0,
+        "n_permutations": 10000,
+        "significant_at_005": true,
+        "significant_at_001": true
+      },
+      "domain_losses": {
+        "python": 3.466176990756712,
+        "javascript": 3.465881297489968,
+        "rust": 3.4663788629676615,
+        "bash": 3.4658958407502816,
+        "sql": 3.4659584916725525,
+        "math": 3.465849653809996,
+        "logic": 3.465478284820859,
+        "physics": 3.465676870968662,
+        "statistics": 3.4658228476504354,
+        "economics": 3.465988634656374,
+        "medical": 3.465803102389793,
+        "law": 3.465648807528823,
+        "history": 3.4658178574511846,
+        "psychology": 3.465332917253706,
+        "cooking": 3.46517206447962
+      },
+      "cosine_matrix": [
+        [
+          1.0,
+          0.05637203461337199,
+          0.09917202946901434,
+          0.07512107478885835,
+          0.09423824174649142,
+          0.003775623329998605,
+          0.01643645583065951,
+          -0.03252976929230891,
+          -0.009704216418938094,
+          0.00046169021716802375,
+          -0.00042270847992063697,
+          0.0032624458296622023,
+          0.0032089671203740155,
+          -0.0015891206807192202,
+          -0.0029069808564125294
+        ],
+        [
+          0.05637203461337199,
+          1.0,
+          0.047326677577314964,
+          0.059051852439237586,
+          0.0682855885070368,
+          0.01011585921617816,
+          -0.024245191730223506,
+          -0.016785493723537753,
+          -0.013181765050432752,
+          -0.014103231489270228,
+          -0.005610619575175346,
+          -0.008126010889322133,
+          -0.01525382982770514,
+          -0.005202570230766533,
+          -0.0006268751168949204
+        ],
+        [
+          0.09917202946901434,
+          0.047326677577314964,
+          1.0,
+          0.016489399511887354,
+          0.10479445275833017,
+          -0.0042785319072322575,
+          -0.013824042077580137,
+          -0.019835666500372405,
+          0.006470216553471559,
+          -0.0021045646002101114,
+          -0.0010180111201901327,
+          0.001998152485355898,
+          -0.002914628183348003,
+          -0.0007641982067914931,
+          -0.002253109992473911
+        ],
+        [
+          0.07512107478885835,
+          0.059051852439237586,
+          0.016489399511887354,
+          1.0,
+          0.07910367650938042,
+          -0.012050264667205482,
+          -0.019078428067849956,
+          -0.018855969938117785,
+          -0.01909044719766772,
+          0.0015802377924520623,
+          -0.00043226162785587875,
+          0.014162053611320566,
+          -0.0019932784148404934,
+          -0.00799831055015962,
+          -0.0009673555068072423
+        ],
+        [
+          0.09423824174649142,
+          0.0682855885070368,
+          0.10479445275833017,
+          0.07910367650938042,
+          1.0,
+          -0.006685261289608762,
+          -0.009129474829230185,
+          -0.0005554209431873877,
+          -0.016278884119556077,
+          0.007111630938327974,
+          -0.004396242474455758,
+          0.008031031288997365,
+          -0.0029009107743201033,
+          -0.00020544605748194753,
+          -0.0071595751491668
+        ],
+        [
+          0.003775623329998605,
+          0.01011585921617816,
+          -0.0042785319072322575,
+          -0.012050264667205482,
+          -0.006685261289608762,
+          1.0,
+          0.016179886605904227,
+          0.049476243608126004,
+          0.016225068934420776,
+          0.04154868041356585,
+          -0.008598972575565765,
+          0.0009713140603806455,
+          0.000501697151037452,
+          -0.0026753401000858355,
+          -0.009489711940393455
+        ],
+        [
+          0.01643645583065951,
+          -0.024245191730223506,
+          -0.013824042077580137,
+          -0.019078428067849956,
+          -0.009129474829230185,
+          0.016179886605904227,
+          1.0,
+          0.012527493499998503,
+          0.04019653821081858,
+          0.03824630580841877,
+          -0.013387860176900078,
+          -0.02765179065842392,
+          -0.006596554554926295,
+          -0.015157216041889434,
+          -0.014459344107263794
+        ],
+        [
+          -0.03252976929230891,
+          -0.016785493723537753,
+          -0.019835666500372405,
+          -0.018855969938117785,
+          -0.0005554209431873877,
+          0.049476243608126004,
+          0.012527493499998503,
+          1.0,
+          0.06922571635438597,
+          0.03551661583884678,
+          -0.026401763261126622,
+          -0.007133365180709054,
+          -0.009490410302726656,
+          -0.005386105464304343,
+          -0.011142971668131186
+        ],
+        [
+          -0.009704216418938094,
+          -0.013181765050432752,
+          0.006470216553471559,
+          -0.01909044719766772,
+          -0.016278884119556077,
+          0.016225068934420776,
+          0.04019653821081858,
+          0.06922571635438597,
+          1.0,
+          0.04759542559060623,
+          -0.01767632933692477,
+          -0.010795869758301052,
+          -0.008702052948835831,
+          -0.007635630498967621,
+          -0.019271270824311206
+        ],
+        [
+          0.00046169021716802375,
+          -0.014103231489270228,
+          -0.0021045646002101114,
+          0.0015802377924520623,
+          0.007111630938327974,
+          0.04154868041356585,
+          0.03824630580841877,
+          0.03551661583884678,
+          0.04759542559060623,
+          1.0,
+          -0.006966862482243006,
+          -0.025611606592317024,
+          0.0036626853622298747,
+          -0.013534172288372394,
+          -0.01579115640485607
+        ],
+        [
+          -0.00042270847992063697,
+          -0.005610619575175346,
+          -0.0010180111201901327,
+          -0.00043226162785587875,
+          -0.004396242474455758,
+          -0.008598972575565765,
+          -0.013387860176900078,
+          -0.026401763261126622,
+          -0.01767632933692477,
+          -0.006966862482243006,
+          1.0,
+          0.0445389238710621,
+          0.045128517601372715,
+          0.025273185811911895,
+          0.03335148527125371
+        ],
+        [
+          0.0032624458296622023,
+          -0.008126010889322133,
+          0.001998152485355898,
+          0.014162053611320566,
+          0.008031031288997365,
+          0.0009713140603806455,
+          -0.02765179065842392,
+          -0.007133365180709054,
+          -0.010795869758301052,
+          -0.025611606592317024,
+          0.0445389238710621,
+          1.0,
+          0.07906821148950852,
+          0.01716463182060401,
+          0.03408447534205079
+        ],
+        [
+          0.0032089671203740155,
+          -0.01525382982770514,
+          -0.002914628183348003,
+          -0.0019932784148404934,
+          -0.0029009107743201033,
+          0.000501697151037452,
+          -0.006596554554926295,
+          -0.009490410302726656,
+          -0.008702052948835831,
+          0.0036626853622298747,
+          0.045128517601372715,
+          0.07906821148950852,
+          1.0,
+          0.03341454274929427,
+          0.03974272137180235
+        ],
+        [
+          -0.0015891206807192202,
+          -0.005202570230766533,
+          -0.0007641982067914931,
+          -0.00799831055015962,
+          -0.00020544605748194753,
+          -0.0026753401000858355,
+          -0.015157216041889434,
+          -0.005386105464304343,
+          -0.007635630498967621,
+          -0.013534172288372394,
+          0.025273185811911895,
+          0.01716463182060401,
+          0.03341454274929427,
+          1.0,
+          0.04094955185699133
+        ],
+        [
+          -0.0029069808564125294,
+          -0.0006268751168949204,
+          -0.002253109992473911,
+          -0.0009673555068072423,
+          -0.0071595751491668,
+          -0.009489711940393455,
+          -0.014459344107263794,
+          -0.011142971668131186,
+          -0.019271270824311206,
+          -0.01579115640485607,
+          0.03335148527125371,
+          0.03408447534205079,
+          0.03974272137180235,
+          0.04094955185699133,
+          1.0
+        ]
+      ],
+      "domain_order": [
+        "python",
+        "javascript",
+        "rust",
+        "bash",
+        "sql",
+        "math",
+        "logic",
+        "physics",
+        "statistics",
+        "economics",
+        "medical",
+        "law",
+        "history",
+        "psychology",
+        "cooking"
+      ]
+    },
+    {
+      "seed": 242,
+      "within_mean": 0.08011447580506564,
+      "cross_mean": 0.007580692365464811,
+      "ratio": 10.568226745361855,
+      "p_value": 0.0,
+      "significant": true,
+      "analysis": {
+        "within_cluster": {
+          "mean": 0.08011447580506564,
+          "std": 0.03576618492024991,
+          "median": 0.07912125562620073,
+          "max": 0.16542556687132856,
+          "min": 0.026324549475030014,
+          "n_pairs": 30
+        },
+        "cross_cluster": {
+          "mean": 0.007580692365464811,
+          "std": 0.007505610432220035,
+          "median": 0.005584349958606003,
+          "max": 0.03708547123869554,
+          "min": 0.00019485733804272976,
+          "n_pairs": 75
+        },
+        "ratio": 10.568226745361855,
+        "pair_details": [
+          {
+            "domain1": "python",
+            "domain2": "javascript",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.03394605985973335,
+            "abs_cosine": 0.03394605985973335,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.11593059495862792,
+            "abs_cosine": 0.11593059495862792,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.09048453020182914,
+            "abs_cosine": 0.09048453020182914,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.059465367391784214,
+            "abs_cosine": 0.059465367391784214,
+            "same_cluster": true
+          },
+          {
+            "domain1": "python",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.002800740324398899,
+            "abs_cosine": 0.002800740324398899,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.00194091309215157,
+            "abs_cosine": 0.00194091309215157,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.0036947242205261086,
+            "abs_cosine": 0.0036947242205261086,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.014904406056686434,
+            "abs_cosine": 0.014904406056686434,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.01514124692555217,
+            "abs_cosine": 0.01514124692555217,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.011270794244384149,
+            "abs_cosine": 0.011270794244384149,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.006744681497879958,
+            "abs_cosine": 0.006744681497879958,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.004603301033076186,
+            "abs_cosine": 0.004603301033076186,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.008885479783255417,
+            "abs_cosine": 0.008885479783255417,
+            "same_cluster": false
+          },
+          {
+            "domain1": "python",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.008860332397549886,
+            "abs_cosine": 0.008860332397549886,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "rust",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.12278816830127849,
+            "abs_cosine": 0.12278816830127849,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.039153528946455206,
+            "abs_cosine": 0.039153528946455206,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.07436691442724906,
+            "abs_cosine": 0.07436691442724906,
+            "same_cluster": true
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.02043603527997552,
+            "abs_cosine": 0.02043603527997552,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.00568647059724103,
+            "abs_cosine": 0.00568647059724103,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.019787842084542092,
+            "abs_cosine": 0.019787842084542092,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.002671006482654631,
+            "abs_cosine": 0.002671006482654631,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.018337457008146554,
+            "abs_cosine": 0.018337457008146554,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.009825300736600137,
+            "abs_cosine": 0.009825300736600137,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0018211427834167611,
+            "abs_cosine": 0.0018211427834167611,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.007797159667940086,
+            "abs_cosine": 0.007797159667940086,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.004936697581635902,
+            "abs_cosine": 0.004936697581635902,
+            "same_cluster": false
+          },
+          {
+            "domain1": "javascript",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0018836999941679563,
+            "abs_cosine": 0.0018836999941679563,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "bash",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.09325790633741508,
+            "abs_cosine": 0.09325790633741508,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.026324549475030014,
+            "abs_cosine": 0.026324549475030014,
+            "same_cluster": true
+          },
+          {
+            "domain1": "rust",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.017705034034896195,
+            "abs_cosine": 0.017705034034896195,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.007445996116921504,
+            "abs_cosine": 0.007445996116921504,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.010271261850961715,
+            "abs_cosine": 0.010271261850961715,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.03365305522704901,
+            "abs_cosine": 0.03365305522704901,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.015596697647071651,
+            "abs_cosine": 0.015596697647071651,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.013019222212489788,
+            "abs_cosine": 0.013019222212489788,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.00028712422046879934,
+            "abs_cosine": 0.00028712422046879934,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0016922285138889074,
+            "abs_cosine": 0.0016922285138889074,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0003957758692033719,
+            "abs_cosine": 0.0003957758692033719,
+            "same_cluster": false
+          },
+          {
+            "domain1": "rust",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.007092330260206342,
+            "abs_cosine": 0.007092330260206342,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "sql",
+            "cluster1": "code",
+            "cluster2": "code",
+            "cosine": 0.03951006503266446,
+            "abs_cosine": 0.03951006503266446,
+            "same_cluster": true
+          },
+          {
+            "domain1": "bash",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.010021005915275091,
+            "abs_cosine": 0.010021005915275091,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.0017957194126683243,
+            "abs_cosine": 0.0017957194126683243,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.0016718900378045324,
+            "abs_cosine": 0.0016718900378045324,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.03093990065152426,
+            "abs_cosine": 0.03093990065152426,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.03708547123869554,
+            "abs_cosine": 0.03708547123869554,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.009607886659209723,
+            "abs_cosine": 0.009607886659209723,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.0060352030529051935,
+            "abs_cosine": 0.0060352030529051935,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0011516681440400123,
+            "abs_cosine": 0.0011516681440400123,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.010776241235270241,
+            "abs_cosine": 0.010776241235270241,
+            "same_cluster": false
+          },
+          {
+            "domain1": "bash",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.011807448488684468,
+            "abs_cosine": 0.011807448488684468,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "math",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.021407468951440047,
+            "abs_cosine": 0.021407468951440047,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "logic",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.006770096388254075,
+            "abs_cosine": 0.006770096388254075,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "physics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": 0.006285675502251967,
+            "abs_cosine": 0.006285675502251967,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "statistics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.002025767972370179,
+            "abs_cosine": 0.002025767972370179,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "economics",
+            "cluster1": "code",
+            "cluster2": "reasoning",
+            "cosine": -0.005403360538499492,
+            "abs_cosine": 0.005403360538499492,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "medical",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.008007547226603443,
+            "abs_cosine": 0.008007547226603443,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "law",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.004256198628070221,
+            "abs_cosine": 0.004256198628070221,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "history",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": -0.0012676102236124115,
+            "abs_cosine": 0.0012676102236124115,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "psychology",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.005584349958606003,
+            "abs_cosine": 0.005584349958606003,
+            "same_cluster": false
+          },
+          {
+            "domain1": "sql",
+            "domain2": "cooking",
+            "cluster1": "code",
+            "cluster2": "knowledge",
+            "cosine": 0.013924158281266596,
+            "abs_cosine": 0.013924158281266596,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "logic",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.10009815549675376,
+            "abs_cosine": 0.10009815549675376,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.07034438834226941,
+            "abs_cosine": 0.07034438834226941,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.08973133918196345,
+            "abs_cosine": 0.08973133918196345,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.06887948633440844,
+            "abs_cosine": 0.06887948633440844,
+            "same_cluster": true
+          },
+          {
+            "domain1": "math",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.005820083519675114,
+            "abs_cosine": 0.005820083519675114,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0016875766258772308,
+            "abs_cosine": 0.0016875766258772308,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.010082899841546937,
+            "abs_cosine": 0.010082899841546937,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.003154170325401095,
+            "abs_cosine": 0.003154170325401095,
+            "same_cluster": false
+          },
+          {
+            "domain1": "math",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0035865995542258703,
+            "abs_cosine": 0.0035865995542258703,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "physics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.02882080768999029,
+            "abs_cosine": 0.02882080768999029,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.12593320392357976,
+            "abs_cosine": 0.12593320392357976,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04438799634986508,
+            "abs_cosine": 0.04438799634986508,
+            "same_cluster": true
+          },
+          {
+            "domain1": "logic",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.007213031185431362,
+            "abs_cosine": 0.007213031185431362,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0009559491904293437,
+            "abs_cosine": 0.0009559491904293437,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.009548484011329059,
+            "abs_cosine": 0.009548484011329059,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.009689362262555878,
+            "abs_cosine": 0.009689362262555878,
+            "same_cluster": false
+          },
+          {
+            "domain1": "logic",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0038962331824992594,
+            "abs_cosine": 0.0038962331824992594,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "statistics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.06829331763592066,
+            "abs_cosine": 0.06829331763592066,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.04554461566527852,
+            "abs_cosine": 0.04554461566527852,
+            "same_cluster": true
+          },
+          {
+            "domain1": "physics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0027476238804559094,
+            "abs_cosine": 0.0027476238804559094,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.007104789791343438,
+            "abs_cosine": 0.007104789791343438,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0007035567687398177,
+            "abs_cosine": 0.0007035567687398177,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.002607502451663102,
+            "abs_cosine": 0.002607502451663102,
+            "same_cluster": false
+          },
+          {
+            "domain1": "physics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.003969576314053752,
+            "abs_cosine": 0.003969576314053752,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "economics",
+            "cluster1": "reasoning",
+            "cluster2": "reasoning",
+            "cosine": 0.07962470245755185,
+            "abs_cosine": 0.07962470245755185,
+            "same_cluster": true
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.002576445131987247,
+            "abs_cosine": 0.002576445131987247,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0019948332233218585,
+            "abs_cosine": 0.0019948332233218585,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.00019485733804272976,
+            "abs_cosine": 0.00019485733804272976,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0007590755939803285,
+            "abs_cosine": 0.0007590755939803285,
+            "same_cluster": false
+          },
+          {
+            "domain1": "statistics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.003203602784570653,
+            "abs_cosine": 0.003203602784570653,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "medical",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0036371352017614813,
+            "abs_cosine": 0.0036371352017614813,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "law",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": -0.0018471729417756917,
+            "abs_cosine": 0.0018471729417756917,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "history",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0033945329584879388,
+            "abs_cosine": 0.0033945329584879388,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "psychology",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0017429466801721406,
+            "abs_cosine": 0.0017429466801721406,
+            "same_cluster": false
+          },
+          {
+            "domain1": "economics",
+            "domain2": "cooking",
+            "cluster1": "reasoning",
+            "cluster2": "knowledge",
+            "cosine": 0.0014210603985431037,
+            "abs_cosine": 0.0014210603985431037,
+            "same_cluster": false
+          },
+          {
+            "domain1": "medical",
+            "domain2": "law",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.1312137511856782,
+            "abs_cosine": 0.1312137511856782,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.07861780879484961,
+            "abs_cosine": 0.07861780879484961,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.16542556687132856,
+            "abs_cosine": 0.16542556687132856,
+            "same_cluster": true
+          },
+          {
+            "domain1": "medical",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.05718430994537784,
+            "abs_cosine": 0.05718430994537784,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "history",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.07998692801955165,
+            "abs_cosine": 0.07998692801955165,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.1614876368481451,
+            "abs_cosine": 0.1614876368481451,
+            "same_cluster": true
+          },
+          {
+            "domain1": "law",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.08287356438836534,
+            "abs_cosine": 0.08287356438836534,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "psychology",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.09749385017585549,
+            "abs_cosine": 0.09749385017585549,
+            "same_cluster": true
+          },
+          {
+            "domain1": "history",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.08004144517079798,
+            "abs_cosine": 0.08004144517079798,
+            "same_cluster": true
+          },
+          {
+            "domain1": "psychology",
+            "domain2": "cooking",
+            "cluster1": "knowledge",
+            "cluster2": "knowledge",
+            "cosine": 0.05222371474237176,
+            "abs_cosine": 0.05222371474237176,
+            "same_cluster": true
+          }
+        ]
+      },
+      "perm_test": {
+        "observed_diff": 0.07253378343960083,
+        "p_value": 0.0,
+        "n_permutations": 10000,
+        "significant_at_005": true,
+        "significant_at_001": true
+      },
+      "domain_losses": {
+        "python": 3.465607121497081,
+        "javascript": 3.4652975160993913,
+        "rust": 3.4653053311984934,
+        "bash": 3.465461353764214,
+        "sql": 3.4657088026977405,
+        "math": 3.466000244354043,
+        "logic": 3.4660370348850016,
+        "physics": 3.465654919570019,
+        "statistics": 3.4658293980992503,
+        "economics": 3.465525586379952,
+        "medical": 3.4664060132035317,
+        "law": 3.4659722564618107,
+        "history": 3.4664530653200116,
+        "psychology": 3.4663027655927237,
+        "cooking": 3.4656371142604683
+      },
+      "cosine_matrix": [
+        [
+          1.0,
+          0.03394605985973335,
+          0.11593059495862792,
+          0.09048453020182914,
+          0.059465367391784214,
+          -0.002800740324398899,
+          0.00194091309215157,
+          0.0036947242205261086,
+          0.014904406056686434,
+          -0.01514124692555217,
+          -0.011270794244384149,
+          -0.006744681497879958,
+          0.004603301033076186,
+          -0.008885479783255417,
+          0.008860332397549886
+        ],
+        [
+          0.03394605985973335,
+          1.0,
+          0.12278816830127849,
+          0.039153528946455206,
+          0.07436691442724906,
+          -0.02043603527997552,
+          -0.00568647059724103,
+          -0.019787842084542092,
+          -0.002671006482654631,
+          -0.018337457008146554,
+          -0.009825300736600137,
+          -0.0018211427834167611,
+          -0.007797159667940086,
+          -0.004936697581635902,
+          0.0018836999941679563
+        ],
+        [
+          0.11593059495862792,
+          0.12278816830127849,
+          1.0,
+          0.09325790633741508,
+          0.026324549475030014,
+          -0.017705034034896195,
+          0.007445996116921504,
+          -0.010271261850961715,
+          -0.03365305522704901,
+          -0.015596697647071651,
+          -0.013019222212489788,
+          0.00028712422046879934,
+          -0.0016922285138889074,
+          0.0003957758692033719,
+          0.007092330260206342
+        ],
+        [
+          0.09048453020182914,
+          0.039153528946455206,
+          0.09325790633741508,
+          1.0,
+          0.03951006503266446,
+          -0.010021005915275091,
+          -0.0017957194126683243,
+          0.0016718900378045324,
+          -0.03093990065152426,
+          -0.03708547123869554,
+          0.009607886659209723,
+          0.0060352030529051935,
+          -0.0011516681440400123,
+          0.010776241235270241,
+          0.011807448488684468
+        ],
+        [
+          0.059465367391784214,
+          0.07436691442724906,
+          0.026324549475030014,
+          0.03951006503266446,
+          1.0,
+          0.021407468951440047,
+          0.006770096388254075,
+          0.006285675502251967,
+          -0.002025767972370179,
+          -0.005403360538499492,
+          0.008007547226603443,
+          0.004256198628070221,
+          -0.0012676102236124115,
+          0.005584349958606003,
+          0.013924158281266596
+        ],
+        [
+          -0.002800740324398899,
+          -0.02043603527997552,
+          -0.017705034034896195,
+          -0.010021005915275091,
+          0.021407468951440047,
+          1.0,
+          0.10009815549675376,
+          0.07034438834226941,
+          0.08973133918196345,
+          0.06887948633440844,
+          0.005820083519675114,
+          0.0016875766258772308,
+          0.010082899841546937,
+          0.003154170325401095,
+          0.0035865995542258703
+        ],
+        [
+          0.00194091309215157,
+          -0.00568647059724103,
+          0.007445996116921504,
+          -0.0017957194126683243,
+          0.006770096388254075,
+          0.10009815549675376,
+          1.0,
+          0.02882080768999029,
+          0.12593320392357976,
+          0.04438799634986508,
+          0.007213031185431362,
+          -0.0009559491904293437,
+          0.009548484011329059,
+          0.009689362262555878,
+          0.0038962331824992594
+        ],
+        [
+          0.0036947242205261086,
+          -0.019787842084542092,
+          -0.010271261850961715,
+          0.0016718900378045324,
+          0.006285675502251967,
+          0.07034438834226941,
+          0.02882080768999029,
+          1.0,
+          0.06829331763592066,
+          0.04554461566527852,
+          0.0027476238804559094,
+          -0.007104789791343438,
+          -0.0007035567687398177,
+          0.002607502451663102,
+          -0.003969576314053752
+        ],
+        [
+          0.014904406056686434,
+          -0.002671006482654631,
+          -0.03365305522704901,
+          -0.03093990065152426,
+          -0.002025767972370179,
+          0.08973133918196345,
+          0.12593320392357976,
+          0.06829331763592066,
+          1.0,
+          0.07962470245755185,
+          0.002576445131987247,
+          -0.0019948332233218585,
+          -0.00019485733804272976,
+          0.0007590755939803285,
+          0.003203602784570653
+        ],
+        [
+          -0.01514124692555217,
+          -0.018337457008146554,
+          -0.015596697647071651,
+          -0.03708547123869554,
+          -0.005403360538499492,
+          0.06887948633440844,
+          0.04438799634986508,
+          0.04554461566527852,
+          0.07962470245755185,
+          1.0,
+          0.0036371352017614813,
+          -0.0018471729417756917,
+          0.0033945329584879388,
+          0.0017429466801721406,
+          0.0014210603985431037
+        ],
+        [
+          -0.011270794244384149,
+          -0.009825300736600137,
+          -0.013019222212489788,
+          0.009607886659209723,
+          0.008007547226603443,
+          0.005820083519675114,
+          0.007213031185431362,
+          0.0027476238804559094,
+          0.002576445131987247,
+          0.0036371352017614813,
+          1.0,
+          0.1312137511856782,
+          0.07861780879484961,
+          0.16542556687132856,
+          0.05718430994537784
+        ],
+        [
+          -0.006744681497879958,
+          -0.0018211427834167611,
+          0.00028712422046879934,
+          0.0060352030529051935,
+          0.004256198628070221,
+          0.0016875766258772308,
+          -0.0009559491904293437,
+          -0.007104789791343438,
+          -0.0019948332233218585,
+          -0.0018471729417756917,
+          0.1312137511856782,
+          1.0,
+          0.07998692801955165,
+          0.1614876368481451,
+          0.08287356438836534
+        ],
+        [
+          0.004603301033076186,
+          -0.007797159667940086,
+          -0.0016922285138889074,
+          -0.0011516681440400123,
+          -0.0012676102236124115,
+          0.010082899841546937,
+          0.009548484011329059,
+          -0.0007035567687398177,
+          -0.00019485733804272976,
+          0.0033945329584879388,
+          0.07861780879484961,
+          0.07998692801955165,
+          1.0,
+          0.09749385017585549,
+          0.08004144517079798
+        ],
+        [
+          -0.008885479783255417,
+          -0.004936697581635902,
+          0.0003957758692033719,
+          0.010776241235270241,
+          0.005584349958606003,
+          0.003154170325401095,
+          0.009689362262555878,
+          0.002607502451663102,
+          0.0007590755939803285,
+          0.0017429466801721406,
+          0.16542556687132856,
+          0.1614876368481451,
+          0.09749385017585549,
+          1.0,
+          0.05222371474237176
+        ],
+        [
+          0.008860332397549886,
+          0.0018836999941679563,
+          0.007092330260206342,
+          0.011807448488684468,
+          0.013924158281266596,
+          0.0035865995542258703,
+          0.0038962331824992594,
+          -0.003969576314053752,
+          0.003203602784570653,
+          0.0014210603985431037,
+          0.05718430994537784,
+          0.08287356438836534,
+          0.08004144517079798,
+          0.05222371474237176,
+          1.0
+        ]
+      ],
+      "domain_order": [
+        "python",
+        "javascript",
+        "rust",
+        "bash",
+        "sql",
+        "math",
+        "logic",
+        "physics",
+        "statistics",
+        "economics",
+        "medical",
+        "law",
+        "history",
+        "psychology",
+        "cooking"
+      ]
+    }
+  ],
+  "aggregate": {
+    "within_mean": 0.06027446592019528,
+    "within_std": 0.014098108680274933,
+    "cross_mean": 0.007860691325221169,
+    "cross_std": 0.0010029429410836862,
+    "mean_ratio": 7.837746978714903,
+    "p_values": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_significant": 3,
+    "cohens_d": 2.2384743266470073
+  },
+  "kill_criteria": {
+    "k1_within_gt_cross": true,
+    "k2_pattern_significant": true,
+    "overall_kill": false
+  },
+  "elapsed_seconds": 29.26534342765808
+}

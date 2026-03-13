@@ -228,3 +228,78 @@ entries:
   # - source: "NeurIPS 2019/2024 warmup papers" — covered by gurbuzbalaban
   # - source: "Hoffmann 2022 (Chinchilla)" — scaling laws
   # - source: "Frankle et al. (Linear Mode Connectivity)" — weight averaging viability
+
+  # ── ReLoRA ──────────────────────────────────────────────────────────────────
+
+  # - dir: "relora" (no dedicated folder -- code at github.com/Guitaricet/relora)
+  #   source: "https://arxiv.org/abs/2307.05695"
+  #   insight: "Iterative LoRA merge-and-restart achieves full-rank pretraining from scratch. Tested: ReLoRA base supports LoRA expert composition with ~2x cos degradation."
+  #   nodes: [exp_relora_composition_test, exp_base_free_composition]
+  #   added: "2026-03-11"
+
+  # ── Adapter Taxonomy (no folders, referenced in survey) ─────────────────────
+  # - source: "Lialin et al. 2023 (ReLoRA)" — iterative LoRA achieves full-rank pretraining from scratch
+  # - source: "Hyeon-Woo et al. 2024 (LTE)" — parallel multi-head LoRA pretraining
+  # - source: "Houlsby et al. 2019" — sequential bottleneck adapters (incompatible with additive composition)
+  # - source: "Liu et al. 2022 (IA3/T-Few)" — multiplicative rescaling adapters
+  # - source: "Li & Liang 2021 (Prefix Tuning)" — concatenative virtual token adapters
+  # - source: "Liu et al. 2024 (DoRA)" — weight-decomposed LoRA (nonlinear magnitude breaks addition)
+  # - source: "Balazy et al. 2024 (LoRA-XS)" — r^2 params per module via SVD basis
+  # - source: "Kopiczko et al. 2024 (VeRA)" — shared random matrices + learned scaling
+  # - source: "Li et al. 2022 (Branch-Train-Merge)" — modular training of specialized branches
+  # - source: "Huang et al. 2023 (LoRAHub)" — cross-task LoRA composition via gradient-free optimization
+
+  # ── LoRA Composition at Runtime ────────────────────────────────────────────
+
+  - dir: "lora-soups"
+    source: "https://arxiv.org/abs/2410.13025"
+    insight: "CAT: per-layer learned scalar weights for combining 2 independently trained LoRAs. Beats data mixing by 12%. Binary composition only, requires optimization."
+    nodes: [exp_oae_vs_lora_soups, exp_composition_naming]
+    added: "2026-03-11"
+
+  # - source: "Ostapenko et al. 2024 (Towards Modular LLMs)" arXiv:2405.11157 — MBC clustering + Arrow zero-shot routing over LoRA library
+  # - source: "Task-Aware LoRA Composition 2025" arXiv:2602.21222 — vector DB retrieval + nucleus sampling for dynamic LoRA merging
+
+  # ── Orthogonal Composition & LoRA MoE (SOLE prior art) ─────────────────────
+
+  - dir: "mdm-oc"
+    source: "https://arxiv.org/abs/2507.20997"
+    insight: "Gram-Schmidt orthogonalization of weight deltas with learned α coefficients — reversible composition. Closest prior work to SOLE; enforces orthogonality via projection rather than observing it structurally."
+    nodes: [exp_ortho_diagnostic, exp_gram_schmidt_composition, exp_lora_procrustes_linear]
+    added: "2026-03-12"
+
+  - dir: "osrm"
+    source: "https://arxiv.org/abs/2505.22934"
+    insight: "Constrained LoRA initialization using minimal-variance eigenvectors — ~14% post-training drift. Enforces orthogonality at init time; SOLE observes it as emergent property."
+    nodes: [exp_ortho_diagnostic, exp11_training_time_compat]
+    added: "2026-03-12"
+
+  - dir: "smile"
+    source: "https://arxiv.org/abs/2408.10174"
+    insight: "SVD of weight deltas into orthonormal low-rank experts with sparse routing, zero-shot construction. Closest to SOLE philosophy (structural orthonormality) but requires routing."
+    nodes: [exp_ortho_diagnostic, exp5_macro_match, exp_composition_naming]
+    added: "2026-03-12"
+
+  - dir: "inflora"
+    source: "https://arxiv.org/abs/2404.00228"
+    insight: "Orthogonal projection for continual learning — prevents catastrophic forgetting by enforcing orthogonality for sequential task addition."
+    nodes: [exp_ortho_diagnostic, exp11_training_time_compat]
+    added: "2026-03-12"
+
+  - dir: "molae"
+    source: "https://arxiv.org/abs/2503.23100"
+    insight: "SVD factorization of MoE into shared projection + expert-specific transforms in latent space — 40-50% param reduction. Defines 'latent experts' concept that SOLE builds on."
+    nodes: [exp5_macro_match, exp_composition_naming]
+    added: "2026-03-12"
+
+  - dir: "x-lora"
+    source: "https://arxiv.org/abs/2402.07148"
+    insight: "Dynamic layer-wise token-level LoRA mixing via gating on hidden states. LoRA MoE with learned routing; SOLE eliminates routing via structural orthogonality."
+    nodes: [exp5_macro_match, exp_oae_vs_lora_soups]
+    added: "2026-03-12"
+
+  - dir: "elrea"
+    source: "https://arxiv.org/abs/2502.00089"
+    insight: "Gradient-direction clustering for expert specialization with dynamic contribution adjustment. Cluster-based expert training; SOLE uses independent distillation instead."
+    nodes: [exp5_macro_match, exp_composition_naming]
+    added: "2026-03-12"

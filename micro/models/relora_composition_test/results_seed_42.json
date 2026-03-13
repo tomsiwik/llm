@@ -1,0 +1,43 @@
+{
+  "relora_final_loss": 1.2118628382682801,
+  "conventional_final_loss": 1.1549683809280396,
+  "relora_merges": 4,
+  "relora_train_time": 0.3218669891357422,
+  "conventional_train_time": 0.2738969326019287,
+  "relora_mean_cos": 0.08732137084007263,
+  "conventional_mean_cos": 0.053252220153808594,
+  "relora_max_cos": 0.08732137084007263,
+  "conventional_max_cos": 0.053252220153808594,
+  "relora_cosines": [
+    [
+      0,
+      1,
+      0.08732137084007263
+    ]
+  ],
+  "conventional_cosines": [
+    [
+      0,
+      1,
+      0.053252220153808594
+    ]
+  ],
+  "relora_expert_losses": [
+    1.0727429270744324,
+    1.1161991119384767
+  ],
+  "conventional_expert_losses": [
+    1.052537202835083,
+    1.0982216536998748
+  ],
+  "relora_mean_expert_loss": 1.0944710195064546,
+  "conventional_mean_expert_loss": 1.075379428267479,
+  "relora_effective_rank": 28.228089939574502,
+  "conventional_effective_rank": 29.16981410019671,
+  "cos_ratio": 1.6397695830562973,
+  "loss_ratio": 1.0177533535951435,
+  "kill_cos_violated": false,
+  "kill_quality_violated": false,
+  "kill_coherence_violated": false,
+  "verdict": "SURVIVES"
+}
