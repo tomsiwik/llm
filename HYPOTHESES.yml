@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 0
+  consecutive_kills: 1
   last_killed: '2026-03-14'
-  last_killed_node: exp_inference_routing_strategies
+  last_killed_node: exp_lte_rank_accumulation_quality
   last_proven: '2026-03-14'
   last_proven_node: exp_lte_parallel_base_construction
   roadmap_updated: '2026-03-13'
@@ -494,18 +494,21 @@ nodes:
 
   exp_automated_correction_pipeline:
     title: Automated correction generation from teacher model
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
     - exp_distillation_pilot_50
     blocks:
     - exp_clone_compete_evolution
-    experiment_dir: null
+    experiment_dir: macro/automated_correction_pipeline
     kill_criteria:
     - teacher-generated corrections are wrong >20% of the time (teacher unreliable)
     - automated corrections improve expert quality <50% as much as human corrections
-    evidence: []
+    evidence:
+    - date: '2026-03-14'
+      claim: 'Experiment script written and submitted to GPU queue. 5 domains, 70B teacher via Groq API, dual kill criteria (teacher reliability + correction effectiveness).'
+      source: macro/automated_correction_pipeline/run_correction_pipeline.py
     tags:
     - distillation
     - correction
@@ -2641,29 +2644,39 @@ nodes:
 
   exp_lte_rank_accumulation_quality:
     title: Parallel rank accumulation quality advantage at macro d
-    status: active
+    status: killed
     scale: micro
     priority: 4
     depends_on:
     - exp_lte_parallel_base_construction
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/lte_rank_accumulation_quality
     kill_criteria:
     - K parallel rank-r branches merged show no quality advantage over K sequential rank-r merges at d>=256
     - quality difference <1% at d=256 (same as d=64 result)
     evidence:
     - 'micro d=64: par vs seq equivalence (1.007x base), but d=64 is too small for rank capacity to matter (K*r=32 vs r=8 in d=64 space)'
+    - date: '2026-03-14'
+      claim: >
+        KILLED at d=256. Parallel shows NO quality advantage over sequential despite 4x rank capacity ratio.
+        Base loss: par/seq = 1.023 (parallel 2.3% worse). Expert cos: par/seq = 2.06 CI [0.71, 3.17] (high
+        variance, trending sequential better). Expert loss: par/seq = 1.007 (identical). Effective rank:
+        identical. Key insight: rank capacity advantage is offset by 1/K magnitude dilution and data shard
+        homogeneity. Surprising bonus finding: LoRA-merge vs conventional advantage grows dramatically with d
+        (2% at d=64 -> 33% at d=256). Conclusion: parallel vs sequential is purely an engineering choice
+        (multi-GPU vs single-device). Sequential (ReLoRA) is the recommended default for SOLE.
+      source: micro/models/lte_rank_accumulation_quality/results_aggregate.json
     tags:
     - architecture
     - base-freedom
     - scaling
     created: '2026-03-14'
     notes: >
-      At d=64, parallel rank accumulation (K*r=32 in d=64) cannot show
-      meaningful advantage because the space is too small. At d=4096,
-      parallel K=4 at r=16 gives effective rank 64 per interval vs 16
-      for sequential — a real capacity advantage. Test at d=256 (mid-scale)
-      to see if parallel shows quality divergence from sequential.
+      KILLED: Parallel rank accumulation does not produce better substrates
+      at d=256 despite 4x theoretical rank capacity advantage. The averaging
+      step (1/K dilution) and data homogeneity cancel the rank advantage.
+      Sequential (ReLoRA) is marginally better or equivalent on all metrics.
+      Bonus finding: LoRA-merge advantage over conventional grows with d.
 
   # ── Routing Deep-Dive ───────────────────────────────────────────
 
@@ -2929,7 +2942,7 @@ nodes:
 
   exp_minimax_grassmannian_packing:
     title: Minimax packing on Grassmannian provides worst-case interference guarantees
-    status: open
+    status: killed
     scale: micro
     priority: 4
     depends_on:
@@ -2942,18 +2955,30 @@ nodes:
     evidence:
     - 'AP optimizes mean coherence but d=256 tail anomaly shows outlier pairs (adversarial review)'
     - 'SOLE composition safety requires worst-case bounds, not just mean-case'
+    - 'KILLED: AP converges to equidistributed configuration (max/mean=1.00x) that is already minimax-optimal'
+    - 'KILLED: Stochastic refinement finds 0/500 improvements (0% acceptance rate at all d)'
+    - 'FINDING: d=256 tail anomaly is training-dynamic (B-matrix alignment), not skeleton geometry'
+    - 'FINDING: Skeleton has max/mean=1.00x; post-training delta vectors develop 9.4x tail via domain-dependent B overlap'
     tags:
     - grassmannian
     - initialization
     - orthogonality
     - sole-core
     created: '2026-03-13'
+    killed: '2026-03-14'
     notes: >
-      AP packing optimizes mean coherence (sum of squared off-diagonal blocks).
-      The d=256 tail anomaly shows AP can produce outlier high-interference pairs.
-      Minimax packing optimizes the worst-case pair instead. Key for SOLE's
-      composition safety guarantees. Compare: same AP algorithm but with
-      max-norm clipping instead of sum-of-squares objective.
+      KILLED (K1). AP already converges to an equidistributed configuration where
+      all pairwise coherences are identical (max = mean, ratio 1.00x). This is
+      simultaneously the mean-case and minimax optimum. The d=256 tail anomaly
+      (max/mean = 9.4x) occurs in POST-TRAINING delta vectors, not in the skeleton.
+      The tail is caused by B-matrix alignment (similar domains learn similar B),
+      not by skeleton geometry. No skeleton optimization can fix this. To control
+      worst-case composition interference, must address B-matrix overlap during
+      training (regularization, norm constraints), not initialization geometry.
+      Two approaches tested: (1) modified AP structural projection with adaptive
+      threshold -- disrupts AP convergence, worse at 2/3 dimensions; (2) post-AP
+      stochastic refinement on Grassmannian -- 0% acceptance, AP fixed point is
+      locally minimax-optimal. K2 passed (1.01-1.06x compute).
 
   exp_taap_convergence:
     title: TAAP (Truncated AP) closes gap to Welch bound for large N
