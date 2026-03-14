@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 1
+  consecutive_kills: 2
   last_killed: '2026-03-14'
-  last_killed_node: exp_lte_rank_accumulation_quality
+  last_killed_node: exp_minimax_grassmannian_packing
   last_proven: '2026-03-14'
   last_proven_node: exp_lte_parallel_base_construction
   roadmap_updated: '2026-03-13'
@@ -655,12 +655,12 @@ nodes:
 
   exp_procrustes_expert_transfer:
     title: Procrustes alignment transfers experts across base model versions
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on: []
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/procrustes_expert_transfer
     kill_criteria:
     - transferred expert PPL >20% worse than natively-trained expert
     - Procrustes alignment error >5% (weight spaces too different)
@@ -2575,19 +2575,20 @@ nodes:
 
   exp_full_base_free_pipeline:
     title: End-to-end base-free SOLE — from random init to serving via LoRA only
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
     - exp_relora_from_scratch_composition
     - exp_distillation_pilot_50
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/full_base_free_pipeline
     kill_criteria:
     - base-free model >10% worse than conventional SOLE on average across 10+ domains
     - base-free model >2x slower to construct than conventional pretraining + expert distillation
     - system has any component that is NOT a composable adapter
-    evidence: []
+    evidence:
+    - 'macro experiment submitted to GPU queue (run_full_base_free_1773517079). GPT-2 124M, 12 domains, ReLoRA base + expert LoRA composition. Reuses cached bases from exp_relora_from_scratch. Date: 2026-03-14.'
     tags:
     - architecture
     - base-freedom

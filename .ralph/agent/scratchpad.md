@@ -1,21 +1,12 @@
-2026-03-14: Reviewed and integrated exp_inference_routing_strategies (KILL confirmed) and exp_lte_parallel_base_construction (PROCEED). Consecutive kills reset to 0. Two new hypotheses generated: LTE no-reset at macro, LTE rank accumulation quality at scale.
+2026-03-14: exp_minimax_grassmannian_packing reviewed (adversarial: PROCEED as kill), integrated as killed. consecutive_kills=2. B-matrix training dynamics identified as next target for composition safety.
 
-## 2026-03-14 Macro Loop Iteration
+2026-03-14: Picked exp_procrustes_expert_transfer (priority 4, micro, no deps). Tags: novel, cross-domain. Delegating to experiment-ideator. Previous two experiments killed (minimax_grassmannian, lte_rank_accumulation) — this one tests expert portability across base models via Procrustes alignment.
 
-### State Assessment
-- GPU queue: 1 active (pilot50_held_out_eval), 12 pending
-- Completed: cat_weight_convergence (PROVEN), attention_layer_orthogonality (PROVEN) — already integrated
-- fix_and_retrain: 4/5 adapters INCOMPLETE, diagnose_adapters2 pending in queue
-- composition_quality failed (domains_with_data empty — likely due to incomplete adapters)
+2026-03-14: Macro loop — exp_full_base_free_pipeline scripted and submitted.
+Wrote run_full_base_free.py for exp_full_base_free_pipeline (P4, critical-path).
+Design: GPT-2 124M, 12 domains, builds both conventional + ReLoRA bases (reuses cached from relora_from_scratch), trains 12 domain experts per base, composes via weighted LoRA sum, evaluates with hash-routing. Three kill criteria: quality ratio >1.10, speed ratio >2x, non-composable component.
+Submitted as run_full_base_free_1773517079, position 16 in queue.
+HYPOTHESES.yml updated: status=active, experiment_dir=macro/full_base_free_pipeline.
 
-### Eligible Open Macro Nodes (deps satisfied)
-- p3: pilot50_composition_quality (queued), distillation_quality_vs_teacher (queued), converged_adapter_orthogonality (queued)
-- p4: **lte_no_reset_macro**, scale_500_experts, automated_correction_pipeline, full_base_free_pipeline
-- p5: composable_merge_pipeline
-
-### Task: Write & submit exp_lte_no_reset_macro
-- Highest priority unqueued eligible macro node (p4, blocks full_base_free_pipeline)
-- Dependency proven: lte_parallel_base_construction showed par/seq equivalence
-- Micro found: no-reset diverges at d=64 due to 8x scaling bug (alpha/r double-counting in forward pass)
-- Hypothesis: at macro d=768+, alpha/r is proportionally smaller → may stabilize
-- Script: GPT-2 125M on RunPod, compare reset vs no-reset LTE, measure divergence
+Queue state: 16 pending, 1 active (run_all_eval). Worker running, GPU at 39%.
+Remaining unscripted macro nodes: exp_scale_500_experts (P4, needs 500 adapters — impractical until pilot pipeline proven), exp_composable_merge_pipeline (P5, blocked by collision_scaling deps).
