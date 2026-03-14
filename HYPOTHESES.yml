@@ -740,18 +740,19 @@ nodes:
 
   exp_composable_merge_pipeline:
     title: End-to-end merge pipeline with quality gates
-    status: open
+    status: active
     scale: macro
     priority: 5
     depends_on:
     - exp_gram_schmidt_composition
     - exp_collision_scaling
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/composable_merge_pipeline
     kill_criteria:
     - merged model (N=20) loses >5% quality vs individually-served experts
     - merge + benchmark cycle takes >1 hour (too slow for self-learning loop)
-    evidence: []
+    evidence:
+    - 'macro experiment submitted to GPU queue (run_composable_merge_1773518793). Unit-weight linear merge of up to 20 pilot50 adapters. Per-domain PPL comparison merged vs individual. Date: 2026-03-14.'
     tags:
     - composition
     - pipeline
