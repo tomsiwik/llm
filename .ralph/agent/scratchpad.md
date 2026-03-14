@@ -1,21 +1,17 @@
-## 2026-03-15 — Scale 500 Experiment
+## 2026-03-15 Iteration: Generate new macro hypotheses
 
-### Analysis
-- Reviewed HYPOTHESES.yml: only open macro node with satisfied deps is `exp_scale_500_experts` (P4, depends on `exp_distillation_pilot_50` which is supported)
-- Other open macro nodes blocked: `exp_cross_domain_semantic_transfer` (needs active `exp_pilot50_composition_quality`), `exp_expert_pruning_from_composition` (same), `exp_evolution_convergence` (needs active `exp_clone_compete_evolution`)
-- GPU queue has 1 active task (held-out eval) + 22 pending. Worker is running.
+### Situation
+- No open macro nodes with satisfied deps remain
+- 25 tasks pending in GPU queue, 1 active (held-out eval running ~18h)
+- 3 open macro nodes blocked: exp_evolution_convergence, exp_cross_domain_semantic_transfer, exp_expert_pruning_from_composition
+- Recent failures: composition_quality (IndexError), several scripts missing from remote (rsync stale)
+- Per objective: "If none remain, generate 2-3 new macro hypotheses"
 
-### Approach
-- 3-phase pipeline: (1) data prep from SlimOrca dataset, (2) train 450 new adapters at 100 steps each, (3) evaluate composition at N=50,100,250,500
-- Data: partitioned Open-Orca/SlimOrca into 450 domain buckets of 300 examples each (domains named domain_050 through domain_499)
-- Training: 100 steps per adapter (vs 300 for pilot50) — sufficient for scale test, ~5 min/adapter
-- Eval: hash ring displacement (mathematical), composition PPL degradation, inference latency
-- Estimated cost: ~$13 for training + ~$1 for eval
+### New Hypotheses Plan
+All have deps satisfied by exp_distillation_pilot_50 (supported) only.
 
-### Submitted
-- `prepare_scale_data_1773530168` — data prep from SlimOrca
-- `train_scale_adapters_1773530181` — train 450 adapters
-- `eval_scale_500_1773530195` — composition eval at N=50,100,250,500
+1. **exp_sole_vs_full_finetune_union** - THE fundamental value prop test. Compare composed 50-expert SOLE model vs a single LoRA trained on the union of all 50 training datasets. If SOLE wins, modularity has genuine quality advantages. If it loses, the value is purely in updatability/cost, not quality. Uses existing pilot50 adapters + cached base.
 
-### Status
-Set `exp_scale_500_experts` to `active` in HYPOTHESES.yml.
+2. **exp_expert_continual_addition** - Train 10 NEW experts on domains not in pilot50 (e.g., Haskell, geology, philosophy). Add them to existing 50-expert composed model. Measure: (a) existing expert quality preservation, (b) new expert quality, (c) composition cost. Tests the "add without retraining" promise.
+
+3. **exp_sole_inference_throughput** - End-to-end throughput measurement of composed SOLE model on RunPod A5000. Pre-merged mode (fastest), batch sizes 1/4/16/32. Compare tok/s and latency vs base Qwen2.5-7B. If pre-merge matches base (micro finding: -4% overhead), SOLE is deployment-ready.
