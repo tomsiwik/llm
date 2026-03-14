@@ -1,12 +1,23 @@
-2026-03-14: exp_minimax_grassmannian_packing reviewed (adversarial: PROCEED as kill), integrated as killed. consecutive_kills=2. B-matrix training dynamics identified as next target for composition safety.
+2026-03-14: 3 consecutive kills → picking high-confidence exp_amplification_factor_scaling (priority 4, micro, depends on proven zero_shot_base_transfer). Straightforward scaling measurement at d=64/128/256. Delegating to experiment-ideator.
 
-2026-03-14: Picked exp_procrustes_expert_transfer (priority 4, micro, no deps). Tags: novel, cross-domain. Delegating to experiment-ideator. Previous two experiments killed (minimax_grassmannian, lte_rank_accumulation) — this one tests expert portability across base models via Procrustes alignment.
+2026-03-14: Macro loop — scripted 2 eligible P3 macro experiments.
+Queue had dead entries for scripts that never existed (measure_orthogonality, run_composition_quality pointed to non-existent paths). Created both scripts and submitted fresh queue entries.
 
-2026-03-14: Macro loop — exp_full_base_free_pipeline scripted and submitted.
-Wrote run_full_base_free.py for exp_full_base_free_pipeline (P4, critical-path).
-Design: GPT-2 124M, 12 domains, builds both conventional + ReLoRA bases (reuses cached from relora_from_scratch), trains 12 domain experts per base, composes via weighted LoRA sum, evaluates with hash-routing. Three kill criteria: quality ratio >1.10, speed ratio >2x, non-composable component.
-Submitted as run_full_base_free_1773517079, position 16 in queue.
-HYPOTHESES.yml updated: status=active, experiment_dir=macro/full_base_free_pipeline.
+1. exp_pilot50_composition_quality (P3): run_composition_quality.py
+   - Pre-merges adapters at N=5,10,25,50 via PEFT add_weighted_adapter
+   - Measures per-domain PPL vs single-expert baselines
+   - Kill: >10% degradation at N=50, superlinear scaling, >20% worse than base
+   - Submitted as run_composition_quality_1773517791
 
-Queue state: 16 pending, 1 active (run_all_eval). Worker running, GPU at 39%.
-Remaining unscripted macro nodes: exp_scale_500_experts (P4, needs 500 adapters — impractical until pilot pipeline proven), exp_composable_merge_pipeline (P5, blocked by collision_scaling deps).
+2. exp_converged_adapter_orthogonality (P3): measure_orthogonality.py
+   - Validates micro orthogonality proof with converged production adapters
+   - Checks convergence (non-trivial loss), pairwise cosines, gradient-alignment bias
+   - Kill: cos >2x micro prediction, gradient bias >0.05
+   - Submitted as measure_orthogonality_1773517906
+
+Queue state: 1 active (run_all_eval), 18 pending (16 original + 2 new). Worker running, GPU at 38%.
+All eligible P3 macro nodes now scripted and queued. Remaining open macro nodes:
+- exp_distillation_quality_vs_teacher (P3) — scripts exist in queue but dirs don't exist locally
+- exp_scale_500_experts (P4) — impractical, needs 500 adapters
+- exp_composable_merge_pipeline (P5) — blocked by collision_scaling deps
+Next: check queue progress, integrate results when active tasks complete.

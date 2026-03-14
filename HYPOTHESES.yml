@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 2
+  consecutive_kills: 3
   last_killed: '2026-03-14'
-  last_killed_node: exp_minimax_grassmannian_packing
+  last_killed_node: exp_procrustes_expert_transfer
   last_proven: '2026-03-14'
   last_proven_node: exp_lte_parallel_base_construction
   roadmap_updated: '2026-03-13'
@@ -99,19 +99,20 @@ nodes:
 
   exp_pilot50_composition_quality:
     title: Pre-merge composition quality with N=5,10,25,50 pilot experts
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
     - exp_distillation_pilot_50
     blocks:
     - exp_scale_500_experts
-    experiment_dir: null
+    experiment_dir: macro/pilot50_composition_quality
     kill_criteria:
     - pre-merged model at N=50 degrades >10% on any individual domain vs single-expert
     - quality degrades superlinearly with N (composition doesn't scale)
     - N=50 pre-merge worse than base on >20% of domains
-    evidence: []
+    evidence:
+    - '2026-03-14: script written and submitted to GPU queue'
     tags:
     - composition
     - scaling
@@ -655,7 +656,7 @@ nodes:
 
   exp_procrustes_expert_transfer:
     title: Procrustes alignment transfers experts across base model versions
-    status: active
+    status: killed
     scale: micro
     priority: 4
     depends_on: []
@@ -664,7 +665,13 @@ nodes:
     kill_criteria:
     - transferred expert PPL >20% worse than natively-trained expert
     - Procrustes alignment error >5% (weight spaces too different)
-    evidence: []
+    evidence:
+    - "K1 SURVIVES: activation Procrustes ratio 1.133 (3 seeds, d=64, threshold 1.20)"
+    - "K2 KILLED: alignment error 26% activation, 81% per-weight (threshold 5%)"
+    - "Activation Procrustes improves over naive by 1.7% (consistent across 3 seeds)"
+    - "Per-weight Procrustes barely helps (0.2% improvement)"
+    - "Naive transfer already works at 15.3% gap (comparable to rank-8 SVD perturbation)"
+    - "K2 threshold miscalibrated for independently-trained models at d=64"
     tags:
     - composition
     - lifecycle
@@ -2282,13 +2289,13 @@ nodes:
 
   exp_amplification_factor_scaling:
     title: Does the zero-shot amplification factor c scale with model dimension d?
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on:
     - exp_zero_shot_base_transfer
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/amplification_factor_scaling
     kill_criteria:
     - amplification factor c grows linearly or faster with d (amplification worsens at scale)
     - no measurable amplification trend across d=64, d=128, d=256
@@ -2856,14 +2863,14 @@ nodes:
 
   exp_converged_adapter_orthogonality:
     title: Structural orthogonality holds for fully converged (non-trivial loss) adapters
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
     - exp_structural_orthogonality_proof
     - exp_distillation_pilot_50
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/converged_adapter_orthogonality
     kill_criteria:
     - converged adapters show cos >2x higher than predicted by power law from micro proof
     - gradient-alignment bias exceeds 0.05 at production d for dissimilar domains
