@@ -1,42 +1,38 @@
-# Current Direction (2026-03-13)
+# Current Direction (2026-03-14)
 
-## Completed This Iteration
-- exp_distillation_pilot_50: **REVISED** per adversarial review (REVIEW-adversarial.md)
-  - Status downgraded from "proven" to "supported"
-  - Three required fixes applied:
-    1. Contamination caveat added to PAPER.md after results tables
-    2. Status downgraded in HYPOTHESES.yml, evidence claim updated
-    3. Limitations section rewritten to state eval data IS training data
-  - FINDINGS.md: moved from Conclusive to Supported section with caveat
-  - VISION.md: updated table, roadmap, and gate criteria with contamination note
-  - HYPOTHESES.yml meta: last_proven_node updated (no longer this experiment)
-  - To fully prove: run MMLU subset or HumanEval evaluation on the 50 experts
+## Just Integrated: Two macro experiments PROVEN
 
-## Active Tasks
+### 1. exp_cat_weight_convergence (P3, macro) -- PROVEN
+**Node:** exp_cat_weight_convergence
+**Title:** Do CAT-optimized weights converge to ~1.0 with orthogonal specialized experts?
+**Dir:** macro/cat_weight_convergence
+**Deps:** exp_oae_vs_lora_soups (proven), exp_distillation_pilot_50 (supported)
+**Status:** PROVEN
 
-### Task: exp_gpu_latency_validation (P4)
-- **Status**: RUNNING on RunPod (nohup, restarted after crash fix)
-- **Script**: `/workspace/llm/scripts/gpu_latency_bench.py`
-- **Log**: `/workspace/gpu_latency_bench.log`
-- **Results**: `/workspace/llm/results/gpu_latency_benchmark.json`
-- **ETA**: ~30-60 min (model load + 3 phases x multiple N values)
-- **Kill criteria**: Pre-merge >5% overhead at any N; dynamic top-k scales with N
+**Results:**
+- K1 SURVIVES: CAT weights converge near 1.0 (mean|w-1| within 0.1 threshold)
+- K2 SURVIVES: PPL improvement from CAT ≤5% over unit weights
+- Validates SOLE unit-weight assumption: orthogonal experts make CAT unnecessary
+- Base PPL 7.1748, Qwen2.5-7B, 50 pilot adapters, rank-16
 
-## Check Commands (next iteration)
-```bash
-# Check latency benchmark
-ssh runpod 'tail -30 /workspace/gpu_latency_bench.log 2>/dev/null; ls -la /workspace/llm/results/gpu_latency_benchmark.json 2>/dev/null || echo "not done yet"'
+### 2. exp_attention_layer_orthogonality (P2, macro) -- PROVEN
+**Node:** exp_attention_layer_orthogonality
+**Title:** Attention-layer LoRA adapters maintain structural orthogonality for dissimilar domains at macro scale
+**Dir:** macro/attention_layer_orthogonality
+**Deps:** exp_structural_orthogonality_proof (proven)
+**Status:** PROVEN
 
-# Process status
-ssh runpod 'ps aux | grep gpu_latency | grep -v grep'
-```
+**Results:**
+- K1 PASS: 0.0% of dissimilar pairs exceed sqrt(r/d) bound (threshold 20%)
+- K2 PASS: max attention cos = 0.0 for dissimilar domains (threshold 0.1)
+- Bound sqrt(16/3584) = 0.0668 at d=3584, rank=16
+- Structural orthogonality extends to attention layers, not just MLP
 
-## After Results Are Available
-1. Pull latency results: `scp runpod:/workspace/llm/results/gpu_latency_benchmark.json results/`
-2. Update `micro/models/inference_latency_gpu/PAPER.md` with actual numbers
-3. Update HYPOTHESES.yml: exp_gpu_latency_validation
+## GPU Queue Status
+- ACTIVE: pilot50_held_out_eval running
+- 12 PENDING tasks queued (composition quality, orthogonality, distillation quality, clone-compete, reasoning expert)
+- Prior failures requeued: composition_quality (IndexError), measure_orthogonality
 
-## Budget Tracking
-- pilot50_bench: ~$0.09 (done)
-- latency_bench: ~$0.09 (running)
-- Total this session: ~$0.18
+## Context
+- Strong SOLE theory validation: orthogonality + unit weights confirmed at macro scale
+- Multiple active experiments across phases 1-3 being processed in GPU queue

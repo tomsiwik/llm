@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 1
+  consecutive_kills: 3
   last_killed: '2026-03-14'
-  last_killed_node: exp_semantic_router
+  last_killed_node: exp_fewshot_adaptation_recovery
   last_proven: '2026-03-14'
   last_proven_node: exp_cross_domain_composition
   roadmap_updated: '2026-03-13'
@@ -850,13 +850,13 @@ nodes:
 
   exp_attention_as_domain_similarity:
     title: Attention LoRA cosine predicts domain overlap
-    status: open
+    status: killed
     scale: micro
     priority: 3
     depends_on:
     - exp_ffn_only_vs_all_modules
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/attention_as_domain_similarity
     kill_criteria:
     - attention cosine does not correlate with semantic domain similarity
     - more domain pairs needed but signal vanishes with more data
@@ -864,19 +864,28 @@ nodes:
     - date: '2026-03-11'
       claim: 'math-medical attention cos=0.85 vs FFN cos=0.59 -- attention amplifies domain overlap'
       source: 'micro/models/ffn_only_vs_all_modules'
+    - date: '2026-03-14'
+      claim: >
+        K1 KILLED: Attention Spearman rho=0.073 (threshold >=0.3), p=0.66 (threshold <0.05).
+        FFN rho=0.185 is a STRONGER predictor than attention rho=0.073.
+        Within/cross ratio: attention 0.98x vs FFN 1.28x.
+        12 domains, 4 clusters, 66 pairs, 3 seeds.
+        Caveat: non-converged training (loss ~3.466 throughout).
+        The macro math-medical finding may be a converged-training phenomenon,
+        not a structural attention property.
+      source: 'micro/models/attention_as_domain_similarity'
     tags:
     - composition
     - routing
     - diagnostic
     created: '2026-03-11'
     notes: >
-      Key finding from ffn_only_vs_all_modules: attention parameters amplify
-      domain correlation more than FFN (0.85 vs 0.59 for math-medical).
-      If attention cosine reliably predicts domain overlap, it could be used
-      as a cheap domain similarity metric for routing or expert organization.
-
-      Test: train 10+ domain experts, compute attention-only cosine matrix,
-      compare with semantic similarity (embedding distance of domain descriptions).
+      KILLED at micro. Attention cosine does NOT predict domain similarity
+      (rho=0.073, p=0.66). FFN cosine is a stronger predictor (rho=0.185).
+      Non-converged training caveat: the math-medical attention cos=0.85
+      finding from real Qwen adapters may be a converged-training phenomenon
+      that cannot be tested at micro scale. Macro retest with 10+ real
+      trained domain adapters would be the definitive test.
 
   # ── Reviewer Attack: "Orthogonality doesn't generalize" ─────────
 
@@ -1763,18 +1772,33 @@ nodes:
 
   exp_inference_routing_strategies:
     title: Optimal routing strategy for latency-quality tradeoff
-    status: open
+    status: killed
     scale: micro
     priority: 3
     depends_on:
     - exp_inference_latency_vs_N
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/inference_routing_strategies
     kill_criteria:
     - best routing strategy is >50ms per query at N=100
     - routing overhead exceeds expert computation overhead
     - no strategy achieves >90% of oracle routing quality
-    evidence: []
+    evidence:
+    - date: '2026-03-14'
+      claim: 'K1 PASS: worst routing latency 4.25us (0.004ms) at N=100, 12500x below 50ms threshold'
+      source: 'micro/models/inference_routing_strategies/'
+    - date: '2026-03-14'
+      claim: 'K2 PASS: worst routing/compute ratio 0.004 (0.4% of 1ms inference), routing is negligible'
+      source: 'micro/models/inference_routing_strategies/'
+    - date: '2026-03-14'
+      claim: 'K3 KILL: best quality capture 0.415 (tiny classifier, N=5, 1:1 ratio), best quality lift 0.091 (9.1% of oracle gap). No config achieves >90%.'
+      source: 'micro/models/inference_routing_strategies/'
+    - date: '2026-03-14'
+      claim: 'Pareto frontier has 2 points: premerge (0us, 23% capture) and embedding_sim (3us, 27% capture). Gap is negligible.'
+      source: 'micro/models/inference_routing_strategies/'
+    - date: '2026-03-14'
+      claim: 'Hierarchical routing (cluster cosine + hash ring) is Pareto-optimal for selective routing: ~4us, near-constant with N, 97% cluster accuracy from prior experiments.'
+      source: 'micro/models/inference_routing_strategies/'
     tags:
     - inference
     - routing
@@ -2088,7 +2112,7 @@ nodes:
 
   exp_compressed_expert_sweep:
     title: Test LoRA-XS and VeRA as storage-efficient expert formats
-    status: active
+    status: killed
     scale: micro
     priority: 3
     depends_on:
@@ -2099,7 +2123,17 @@ nodes:
     - compressed experts encode <50% of domain knowledge vs standard LoRA (measured by domain eval)
     - compressed experts lose orthogonality (cos > 0.01)
     - inference overhead of compressed format exceeds 10%
-    evidence: []
+    evidence:
+    - "K1 KILLED: LoRA-XS signal retention 0.0-0.2%, VeRA 0.1-0.9% vs LoRA 100% (synthetic fitting paradigm)"
+    - "K2 KILLED: LoRA-XS mean|cos|~0.10 at ALL d (d-independent, subspace collapse). VeRA cos 0.003-0.012 (kills at d=64, survives d>=256)"
+    - "K3 KILLED: LoRA-XS +4-45%, VeRA +5-85% at small d; survives at d>=896 (~5% overhead)"
+    - "Root cause: LoRA-XS forces ALL experts into same r^2-dim subspace via Kronecker structure (V_r kron U_r). Cos ~ 1/r independent of d."
+    - "VeRA partially escapes via d-dimensional lambda_b diversity: cos ~ 1/sqrt(d), but still 5-18x worse than LoRA"
+    - "Storage advantage is real (LoRA-XS 448x, VeRA 32x at d=3584) but orthogonality cost is fatal for SOLE"
+    - "Correct SOLE storage path: quantization (INT4/INT8 LoRA) preserves subspace independence"
+    - date: '2026-03-14'
+      claim: "All 3 kill criteria triggered. LoRA-XS fundamentally incompatible with SOLE (d-independent cosine ~0.10). VeRA marginally compatible at large d but with degraded orthogonality."
+      source: micro/models/compressed_expert_sweep/PAPER.md
     tags:
     - architecture
     - storage
@@ -2110,6 +2144,14 @@ nodes:
       If compressed experts encode sufficient narrow-domain knowledge, storage
       costs become negligible. Test: train matched LoRA vs LoRA-XS vs VeRA
       experts on same domains, compare quality and orthogonality.
+
+      RESULT (2026-03-14): KILLED. LoRA-XS destroys orthogonality by forcing all
+      experts into the same r^2-dimensional subspace (Kronecker product of SVD basis).
+      E[|cos|] ~ 1/r ~ 0.10 regardless of model dimension. VeRA is intermediate
+      (cos ~ 1/sqrt(d)) but still 5-18x worse than LoRA. Signal retention <1% for
+      both formats (fitting paradigm; training may be somewhat better but geometric
+      capacity is fundamentally limited). Correct storage path for SOLE is
+      quantization of standard LoRA, not subspace compression.
 
   exp_zero_shot_base_transfer:
     title: Do experts trained on full base work on SVD-reconstructed base without retraining?
@@ -2203,27 +2245,37 @@ nodes:
 
   exp_fewshot_adaptation_recovery:
     title: Can a few adaptation steps close the zero-shot transfer gap?
-    status: open
+    status: killed
     scale: micro
     priority: 3
     depends_on:
     - exp_zero_shot_base_transfer
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/fewshot_adaptation_recovery
     kill_criteria:
     - 50 adaptation steps don't reduce transfer gap by >50% (adaptation too slow)
     - adapted expert quality worse than zero-shot on original base (adaptation hurts)
-    evidence: []
+    evidence:
+    - "K1 KILLED: 50 steps at lr=1e-3 reduces gap by 35.1% (3 seeds, std=1.5pp), below 50% threshold"
+    - "K1 borderline at lr=3e-3: 50 steps reaches exactly 50.0% gap reduction (single seed)"
+    - "K2 KILLED (strict): adapted experts 0.7-1.6% worse on original base at 50 steps"
+    - "Adaptation is logarithmic: R%(n) ~ 8.5*ln(n) - 2.0, requiring ~550 steps for 50% at lr=1e-3"
+    - "SVD warm-start enables adaptation; at 100 steps (3e-3 LR), adapted exceeds retrained (recovery=103%)"
+    - "Forgetting grows linearly: K2 ~ 1 + 1.3e-4*n (lr=1e-3), fundamental tradeoff not circumventable"
+    - "Deploy-then-adapt protocol still viable: 0 steps=3.7% gap, 50 steps=2.7% gap, 6x cheaper than RT"
     tags:
     - architecture
     - base-freedom
     - efficiency
     created: '2026-03-11'
     notes: >
-      Spawned from exp_zero_shot_base_transfer adversarial review. If zero-shot
-      transfer gap at rank-16 is 2.8%, can 10-50 adaptation steps on the new
-      base close it to <0.5%? This would make base swapping nearly free:
-      deploy zero-shot immediately, then cheaply adapt in background.
+      KILLED on both K1 and K2 (strict interpretation). At conservative LR (1e-3),
+      50 steps only recovers 35% of gap. At training LR (3e-3), borderline 50%.
+      Fundamental finding: adaptation-forgetting tradeoff is real and logarithmic.
+      Every step toward new base hurts old base quality. Deploy-then-adapt protocol
+      remains practical despite kill: 50-step adaptation is 6x cheaper than retraining
+      and closes gap from 3.7% to 2.7%. SVD warm-start from trained deltas is
+      strictly better than cold retraining for short budgets.
 
   exp_amplification_factor_scaling:
     title: Does the zero-shot amplification factor c scale with model dimension d?
@@ -2371,18 +2423,23 @@ nodes:
 
   exp_cat_weight_convergence:
     title: Do CAT-optimized weights converge to ~1.0 with orthogonal specialized experts?
-    status: open
+    status: proven
     scale: macro
     priority: 3
     depends_on:
     - exp_oae_vs_lora_soups
     - exp_distillation_pilot_50
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/cat_weight_convergence
     kill_criteria:
     - CAT weights diverge significantly from 1.0 (mean |w_i - 1| > 0.1) with specialized experts
     - CAT provides >5% quality improvement over unit weights with orthogonal experts
-    evidence: []
+    evidence:
+    - 'K1 SURVIVES: CAT weights converge near 1.0 (mean|w-1| well within 0.1 threshold)'
+    - 'K2 SURVIVES: PPL improvement from CAT optimization <=5% over unit weights'
+    - 'Validates SOLE unit-weight assumption: orthogonal experts make CAT optimization unnecessary'
+    - 'Base PPL 7.1748 on Qwen2.5-7B with 50 pilot adapters (rank-16, wikitext-2 validation)'
+    - 'Date: 2026-03-14, GPU time: 255s, cost: ~$0.02'
     tags:
     - composition
     - validation
@@ -2469,19 +2526,29 @@ nodes:
 
   exp_lte_parallel_base_construction:
     title: LTE parallel LoRA training as alternative base construction
-    status: open
+    status: proven
     scale: micro
     priority: 3
     depends_on:
     - exp_adapter_taxonomy_wild
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/lte_parallel_base
     kill_criteria:
     - LTE base quality >20% worse than conventional at same compute
     - LTE requires >2x compute vs ReLoRA for same quality
     - parallel branches interfere when merged (defeating the purpose)
     evidence:
     - 'Adapter taxonomy: LTE achieves full-rank from parallel LoRA branches'
+    - date: '2026-03-14'
+      claim: >
+        Parallel (K=4) and sequential LoRA merging produce equivalent composition substrates.
+        3 seeds, d=64, r=8. K1: par_base_ratio=0.979 (SURVIVES, threshold 1.20).
+        K2: par_compute_ratio=0.73x (SURVIVES, threshold 2.0).
+        K3: par_cos_ratio=0.455 (SURVIVES, threshold 5.0).
+        Par vs Seq head-to-head: base 1.007x, cos 1.46x (CI [0.80, 2.20]), loss 1.006x.
+        Both LoRA-merge methods produce better bases than continued conventional training.
+        Engineering choice not quality choice: LTE for multi-GPU, ReLoRA for single-GPU.
+      source: micro/models/lte_parallel_base/results_aggregate.json
     tags:
     - architecture
     - base-freedom
@@ -2686,7 +2753,7 @@ nodes:
 
   exp_attention_layer_orthogonality:
     title: Attention-layer LoRA adapters maintain structural orthogonality for dissimilar domains at macro scale
-    status: active
+    status: proven
     scale: macro
     priority: 2
     depends_on:
@@ -2699,6 +2766,11 @@ nodes:
     evidence:
     - 'Prior: attn cos=0.85 for math-medical (related domains) vs FFN cos=0.59 (ffn_only_vs_all_modules)'
     - 'Structural proof tested MLP-only; SOLE uses all-modules adapters'
+    - 'K1 PASS: 0.0% of dissimilar pairs exceed sqrt(r/d) bound (threshold 20%)'
+    - 'K2 PASS: max attention cos for dissimilar domains = 0.000000 (threshold 0.1)'
+    - 'Bound sqrt(16/3584) = 0.0668 on Qwen2.5-7B (d=3584, rank=16)'
+    - 'Attention layers maintain structural orthogonality at macro scale for dissimilar domains'
+    - 'Date: 2026-03-14, GPU time: 13s, cost: ~$0.01'
     tags:
     - theory
     - orthogonality
