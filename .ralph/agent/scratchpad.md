@@ -1,7 +1,21 @@
-2026-03-14: Parallel micro experiments complete. exp_inference_routing_strategies KILLED (K3: 41.5% quality capture < 90%), exp_lte_parallel_base_construction PROVEN (parallel=sequential substrates). 4th consecutive kill (routing) but 1 proven (LTE). Next: review both.
+2026-03-14: Reviewed and integrated exp_inference_routing_strategies (KILL confirmed) and exp_lte_parallel_base_construction (PROCEED). Consecutive kills reset to 0. Two new hypotheses generated: LTE no-reset at macro, LTE rank accumulation quality at scale.
 
-2026-03-14 (macro iteration): Integrated two completed GPU results:
-- exp_cat_weight_convergence: PROVEN. CAT weights converge to ~1.0 with orthogonal experts. K1 SURVIVES (mean|w-1| within 0.1), K2 SURVIVES (PPL imp ≤5%). Validates SOLE unit-weight assumption.
-- exp_attention_layer_orthogonality: PROVEN. K1 PASS (0.0% dissimilar pairs above bound), K2 PASS (max cos=0.0). Attention layers maintain structural orthogonality at macro d=3584.
-GPU queue: 1 active (pilot50_held_out_eval), 12 pending. Two prior failures: run_composition_quality (IndexError: empty domains_with_data) and measure_orthogonality (instant fail) — both requeued.
-Both proven results strengthen SOLE core theory: orthogonality holds across all module types, and CAT optimization is unnecessary.
+## 2026-03-14 Macro Loop Iteration
+
+### State Assessment
+- GPU queue: 1 active (pilot50_held_out_eval), 12 pending
+- Completed: cat_weight_convergence (PROVEN), attention_layer_orthogonality (PROVEN) — already integrated
+- fix_and_retrain: 4/5 adapters INCOMPLETE, diagnose_adapters2 pending in queue
+- composition_quality failed (domains_with_data empty — likely due to incomplete adapters)
+
+### Eligible Open Macro Nodes (deps satisfied)
+- p3: pilot50_composition_quality (queued), distillation_quality_vs_teacher (queued), converged_adapter_orthogonality (queued)
+- p4: **lte_no_reset_macro**, scale_500_experts, automated_correction_pipeline, full_base_free_pipeline
+- p5: composable_merge_pipeline
+
+### Task: Write & submit exp_lte_no_reset_macro
+- Highest priority unqueued eligible macro node (p4, blocks full_base_free_pipeline)
+- Dependency proven: lte_parallel_base_construction showed par/seq equivalence
+- Micro found: no-reset diverges at d=64 due to 8x scaling bug (alpha/r double-counting in forward pass)
+- Hypothesis: at macro d=768+, alpha/r is proportionally smaller → may stabilize
+- Script: GPT-2 125M on RunPod, compare reset vs no-reset LTE, measure divergence

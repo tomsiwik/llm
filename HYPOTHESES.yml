@@ -3,11 +3,11 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 3
+  consecutive_kills: 0
   last_killed: '2026-03-14'
-  last_killed_node: exp_fewshot_adaptation_recovery
+  last_killed_node: exp_inference_routing_strategies
   last_proven: '2026-03-14'
-  last_proven_node: exp_cross_domain_composition
+  last_proven_node: exp_lte_parallel_base_construction
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -2609,6 +2609,61 @@ nodes:
       - Upgrade skeleton: Procrustes alignment of all adapters
 
       This is the "no sacred weights" vision realized.
+
+  exp_lte_no_reset_macro:
+    title: LTE no-reset variant at macro scale (alpha/r scaling stabilization)
+    status: active
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_lte_parallel_base_construction
+    blocks:
+    - exp_full_base_free_pipeline
+    experiment_dir: macro/lte_no_reset
+    kill_criteria:
+    - no-reset LTE diverges at macro scale (d>=768, r>=16)
+    - no-reset LTE quality >20% worse than reset variant at same compute
+    - alpha/r scaling issue persists at macro scale
+    evidence:
+    - 'micro: no-reset diverged at d=64 due to forward-pass double-counting of LoRA contributions (8x scaling bug). Hypothesized to stabilize at macro where alpha/r is smaller relative to weight norms.'
+    - 'macro experiment submitted to GPU queue (run_lte_no_reset_1773513906). GPT-2 125M, d=768, rank=16, alpha=16. 2-way comparison: LTE reset vs no-reset, then 4 domain experts for composition quality.'
+    tags:
+    - architecture
+    - base-freedom
+    - novel
+    created: '2026-03-14'
+    notes: >
+      The micro LTE experiment found that no-reset variant diverges at d=64
+      due to forward-pass double-counting. At macro scale (d>=768), the LoRA
+      contribution (alpha/r * B@A) is proportionally much smaller relative to
+      base weights, which may naturally suppress the instability. If no-reset
+      works, it eliminates the reset overhead and simplifies the pipeline.
+
+  exp_lte_rank_accumulation_quality:
+    title: Parallel rank accumulation quality advantage at macro d
+    status: active
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_lte_parallel_base_construction
+    blocks: []
+    experiment_dir: null
+    kill_criteria:
+    - K parallel rank-r branches merged show no quality advantage over K sequential rank-r merges at d>=256
+    - quality difference <1% at d=256 (same as d=64 result)
+    evidence:
+    - 'micro d=64: par vs seq equivalence (1.007x base), but d=64 is too small for rank capacity to matter (K*r=32 vs r=8 in d=64 space)'
+    tags:
+    - architecture
+    - base-freedom
+    - scaling
+    created: '2026-03-14'
+    notes: >
+      At d=64, parallel rank accumulation (K*r=32 in d=64) cannot show
+      meaningful advantage because the space is too small. At d=4096,
+      parallel K=4 at r=16 gives effective rank 64 per interval vs 16
+      for sequential — a real capacity advantage. Test at d=256 (mid-scale)
+      to see if parallel shows quality divergence from sequential.
 
   # ── Routing Deep-Dive ───────────────────────────────────────────
 
