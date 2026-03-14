@@ -3188,3 +3188,121 @@ nodes:
       of two domains). Real cross-domain queries like "convert this Python to Rust" or
       "explain this algorithm in medical terms" require deeper integration. Needs pilot 50
       real LoRA experts to test meaningfully.
+
+  # ── Phase 2b: Composition Quality & Evolve ─────────────────────────
+
+  exp_answer_conditioned_shadow_scoring:
+    title: Answer-conditioned PPL predicts task accuracy at macro scale (SOLE Evolve enabler)
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_answer_conditioned_scoring
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/answer_conditioned_shadow
+    kill_criteria:
+    - Answer-only PPL correlation with MMLU accuracy < 0.5 (Pearson r) across pilot50 adapters
+    - Answer-only PPL fails to distinguish expert-improved vs expert-degraded domains (AUC < 0.7)
+    - Shadow scoring ranking disagrees with teacher-judged ranking on >40% of comparisons
+    evidence:
+    - 'Micro proven: answer-only PPL r=0.811 +/- 0.16 (3 seeds, d=32, V=42)'
+    - 'Full-sequence PPL anti-correlated (r=-0.31) — prompt token dilution is real'
+    - 'Directly enables teacher-free evolve phase: shadow scoring replaces expensive API calls'
+    tags:
+    - evolve
+    - scoring
+    - macro-validation
+    - critical-path
+    created: '2026-03-14'
+    notes: >
+      THE EVOLVE ENABLER. SOLE's evolve phase needs a cheap quality signal to
+      decide which experts to keep/replace without calling a teacher model on
+      every evaluation. Answer-conditioned PPL (proven at micro, r=0.811) is
+      the candidate metric. At macro scale with Qwen2.5-7B pilot50 adapters:
+      (1) Compute answer-only PPL for each adapter on MMLU subset
+      (2) Compute actual MMLU accuracy for same adapter+categories
+      (3) Correlate: does PPL_answer rank adapters the same as accuracy?
+      (4) Test shadow scoring: can we detect adapter degradation without labels?
+      If this holds, SOLE can evolve autonomously (no teacher API needed).
+      Compute: ~30 min (reuse MMLU data from held-out eval).
+
+  exp_b_matrix_interference_regularization:
+    title: B-matrix repulsion regularizer reduces real composition interference
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_grassmannian_expert_init
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/b_matrix_regularization
+    kill_criteria:
+    - B-repulsion training increases per-adapter PPL >5% vs standard training (quality cost too high)
+    - Composition interference (pairwise cos) does not decrease >30% vs standard training
+    - Training time increases >3x due to regularizer overhead
+    evidence:
+    - 'Minimax Grassmannian proved A-matrix packing is already optimal (AP equidistributed)'
+    - 'Interference formula: ||delta_W_i^T delta_W_j||_F = (alpha/r)^2 * ||B_i^T (A_i^T A_j) B_j||_F'
+    - 'B-matrix alignment is the sole uncontrolled variable in LoRA interference'
+    - 'Frozen-A training locks A to skeleton (drift 0.02%); only B is learned'
+    tags:
+    - interference
+    - training
+    - novel
+    - composition
+    created: '2026-03-14'
+    notes: >
+      ROOT CAUSE FIX FOR INTERFERENCE. The minimax Grassmannian experiment
+      proved that A-matrix geometry is already optimal (AP equidistributed),
+      and the d=256 tail anomaly is entirely B-matrix training dynamics.
+      The interference between experts i,j is:
+        ||delta_W_i^T delta_W_j||_F = (alpha/r)^2 * ||B_i^T (A_i^T A_j) B_j||_F
+      With frozen A (locked to AP skeleton), A_i^T A_j is fixed and near-zero.
+      The remaining interference comes from B_i^T B_j alignment during training.
+      Regularizer: add lambda * sum_{j!=i} ||B_i^T B_j||_F to training loss.
+      Implementation: periodically sample other experts' B matrices from disk,
+      compute repulsion gradient. Offline batched: train normally, then fine-tune
+      with repulsion for 10% of steps. Expected to directly reduce the
+      interference that matters most at scale (N=500+).
+
+  exp_expert_pruning_from_composition:
+    title: Pruning low-quality experts from composition improves aggregate quality
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_cat_weight_convergence
+    - exp_pilot50_composition_quality
+    blocks: []
+    experiment_dir: macro/expert_pruning_composition
+    kill_criteria:
+    - Removing bottom-20% experts (by individual PPL) does not improve composed model PPL by >1%
+    - Expert quality ranking is unstable across evaluation datasets (Kendall tau < 0.6)
+    - Optimal subset selection requires >O(N log N) evaluations (not scalable to N=500)
+    evidence:
+    - 'CAT weights converge to ~1.0 — CAT optimization cannot identify weak experts'
+    - 'Unit-weight composition is optimal for orthogonal experts, but some experts may not be orthogonal'
+    - 'Collision landscape is block-diagonal: within-cluster interference 7.84x higher'
+    - 'At N=50, collision rate 1.23% — but at N=500, within-cluster collisions may grow'
+    tags:
+    - composition
+    - quality
+    - scaling
+    - evolve
+    created: '2026-03-14'
+    notes: >
+      QUALITY CEILING INVESTIGATION. CAT weights converge to 1.0, confirming
+      unit-weight composition is optimal in theory. But this assumes all experts
+      are equally orthogonal and equally useful. In practice, some pilot50
+      experts may: (a) have high within-cluster interference, (b) be trained on
+      low-quality data, (c) be redundant with other experts. This experiment:
+      (1) Rank all 50 experts by individual quality (domain PPL, MMLU accuracy)
+      (2) Measure composed model quality as f(N) by adding experts in rank order
+      (3) Test if removing bottom-K experts improves the composed model
+      (4) Identify the quality-quantity tradeoff curve
+      If pruning helps, SOLE's evolve phase should include quality-based culling.
+      If it doesn't help (unit weight truly optimal), confirms SOLE's "more is
+      always better" property — a strong scaling result.
+      Depends on composition quality results to identify which experts are weak.
+      real LoRA experts to test meaningfully.

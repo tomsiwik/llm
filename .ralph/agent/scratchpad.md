@@ -50,3 +50,15 @@ Remaining OPEN macro with unsatisfied deps:
 - exp_evolution_convergence (P5) — blocked by exp_clone_compete_evolution
 
 No results to integrate yet. Queue must progress. Next: integrate results when tasks complete.
+
+## 2026-03-14 Macro Loop — New Hypotheses Generated
+No practical eligible macro nodes remain (exp_scale_500_experts needs 500 adapters).
+Killed orphaned eval_humaneval process (pid 50996) from first killed run_all_eval attempt — was wasting GPU for 5+ hours.
+run_all_eval_1773497259 (2nd attempt) is legitimately running — child process eval_mmlu.py at 99% CPU, 3GB RSS.
+
+Generated 3 new macro hypotheses:
+1. **exp_answer_conditioned_shadow_scoring** (P3) — validate answer-only PPL as quality metric at macro with pilot50 + MMLU. Evolve enabler. Depends on: exp_answer_conditioned_scoring (proven), exp_distillation_pilot_50 (supported). ELIGIBLE.
+2. **exp_b_matrix_interference_regularization** (P4) — train with B-matrix repulsion regularizer to reduce interference. Root cause fix from minimax Grassmannian findings. Depends on: exp_grassmannian_expert_init (proven), exp_distillation_pilot_50 (supported). ELIGIBLE.
+3. **exp_expert_pruning_from_composition** (P4) — test if removing weak experts improves composed model. Quality ceiling investigation. Depends on: exp_cat_weight_convergence (proven), exp_pilot50_composition_quality (active). BLOCKED.
+
+Next: script exp_answer_conditioned_shadow_scoring (P3, eligible, directly enables evolve phase).
