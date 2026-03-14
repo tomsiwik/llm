@@ -1604,7 +1604,7 @@ nodes:
 
   exp_sole_vs_full_finetune:
     title: SOLE (50 composed experts) vs single LoRA on union of all 50 datasets
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
@@ -1615,7 +1615,10 @@ nodes:
     - union LoRA beats SOLE on >70% of domains (modularity hurts quality)
     - union LoRA aggregate PPL >10% better than SOLE (specialization is wasteful)
     - union LoRA training cost >5x SOLE training cost (monolithic is impractical)
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: 'Script submitted to GPU queue (run_sole_vs_finetune_1773531197)'
+      source: tools/gpu_queue.py status
     tags:
     - composition
     - baselines
@@ -1631,7 +1634,7 @@ nodes:
 
   exp_expert_continual_addition:
     title: Adding 10 new experts to composed-50 model preserves existing quality
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
@@ -1642,7 +1645,10 @@ nodes:
     - adding 10 new experts degrades existing domain PPL by >3% (interference)
     - new experts achieve <50% of pilot expert PPL improvement (poor composition)
     - training 10 new experts costs >$5 total (economics don't scale)
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: 'Script submitted to GPU queue (run_continual_addition_1773531208)'
+      source: tools/gpu_queue.py status
     tags:
     - composition
     - continual-learning
@@ -1657,7 +1663,7 @@ nodes:
 
   exp_sole_inference_throughput:
     title: Composed SOLE model inference throughput matches base Qwen2.5-7B
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
@@ -1671,6 +1677,9 @@ nodes:
     evidence:
     - 'micro: batched LoRA k=1 overhead -4% (faster than monolithic) at d=64'
     - 'micro: pre-merge latency N-independent (max +2.6% across N=5..100)'
+    - date: '2026-03-15'
+      claim: 'Script submitted to GPU queue (run_inference_throughput_1773531219)'
+      source: tools/gpu_queue.py status
     tags:
     - serving
     - throughput
