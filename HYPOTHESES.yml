@@ -287,13 +287,13 @@ nodes:
 
   exp_scale_500_experts:
     title: Scale composition to 500 experts on 7B base
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
     - exp_distillation_pilot_50
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/scale_500_experts
     kill_criteria:
     - hash ring displacement at N=500 exceeds 1% per add (should be ~0.2%)
     - composed model quality degrades >5% vs N=50 model on shared domains
@@ -1335,7 +1335,7 @@ nodes:
 
   exp_data_scaling_per_expert:
     title: Expert quality as function of training examples
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on: []
@@ -2103,7 +2103,7 @@ nodes:
 
   exp_relora_merge_cycle_scaling:
     title: Does composition quality degrade with more ReLoRA merge cycles (K=50-200)?
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on:
