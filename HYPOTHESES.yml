@@ -216,18 +216,19 @@ nodes:
 
   exp_reasoning_domain_composition:
     title: Universal reasoning adapter composes with N domain experts without retraining
-    status: open
+    status: active
     scale: macro
     priority: 2
     depends_on:
     - exp_reasoning_expert_distillation
     blocks: []
-    experiment_dir: null
+    experiment_dir: macro/reasoning_domain_composition
     kill_criteria:
     - reasoning adapter improves <50% of domain experts (not universal)
     - average domain quality degradation >3% when reasoning adapter is added
     - reasoning traces become incoherent when composed with domain experts
-    evidence: []
+    evidence:
+    - 'Submitted run_reasoning_composition_1773518403: tests all pilot50 experts with/without reasoning adapter'
     tags:
     - reasoning
     - composition
