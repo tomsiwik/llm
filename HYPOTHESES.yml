@@ -128,17 +128,20 @@ nodes:
 
   exp_distillation_quality_vs_teacher:
     title: Expert quality as function of teacher model size
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
     - exp_distillation_pilot_50
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/distillation_quality_vs_teacher
     kill_criteria:
     - 70B teacher produces <5% better experts than 8B teacher (teacher size doesn't matter)
     - mixed teacher strategy (8B for simple, 70B for complex) does not beat uniform 70B
-    evidence: []
+    evidence:
+    - date: '2026-03-14'
+      claim: 'Training scripts (train_70b_missing, train_8b_adapters) and eval script (eval_teacher_comparison) queued in GPU worker. Positions 1-2 and 5 in pending queue.'
+      source: tools/gpu_queue.py status
     tags:
     - distillation
     - teacher-size

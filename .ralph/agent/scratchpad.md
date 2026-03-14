@@ -21,3 +21,32 @@ All eligible P3 macro nodes now scripted and queued. Remaining open macro nodes:
 - exp_scale_500_experts (P4) — impractical, needs 500 adapters
 - exp_composable_merge_pipeline (P5) — blocked by collision_scaling deps
 Next: check queue progress, integrate results when active tasks complete.
+
+## 2026-03-14 Macro Loop — Status Check & Housekeeping
+Queue check at 20:09 UTC:
+- ACTIVE: run_all_eval_1773497259 — running ~1hr (started 19:06 UTC), GPU 34%
+- PENDING: 20 tasks in optimal order (training → eval → retrain → adapter-dependent)
+- 3 old FAILED tasks still in pending (diagnose, orthogonality, composition_quality from pre-rsync-fix) — re-submissions later in queue will supersede
+- Worker: RUNNING
+
+Updated exp_distillation_quality_vs_teacher: open → active. Scripts were already queued (train_70b_missing, train_8b_adapters, eval_teacher_comparison) but status was never updated.
+
+All eligible macro nodes now active or queued:
+- P1: exp_reasoning_expert_distillation (active, training scripts queued)
+- P2: exp_pilot50_held_out_eval (active, run_all_eval running now)
+- P2: exp_reasoning_domain_composition (active, queued after adapters)
+- P2: exp_clone_compete_evolution (active, queued after adapters)
+- P3: exp_pilot50_composition_quality (active, re-submitted)
+- P3: exp_converged_adapter_orthogonality (active, re-submitted)
+- P3: exp_distillation_quality_vs_teacher (NOW active, scripts queued)
+- P4: exp_automated_correction_pipeline (active, queued)
+- P4: exp_lte_no_reset_macro (active, queued)
+- P4: exp_full_base_free_pipeline (active, queued)
+- P5: exp_composable_merge_pipeline (active, queued)
+
+Remaining OPEN macro with unsatisfied deps:
+- exp_cross_domain_semantic_transfer (P3) — blocked by exp_pilot50_composition_quality
+- exp_scale_500_experts (P4) — deps satisfied but needs 500 adapters (impractical)
+- exp_evolution_convergence (P5) — blocked by exp_clone_compete_evolution
+
+No results to integrate yet. Queue must progress. Next: integrate results when tasks complete.
