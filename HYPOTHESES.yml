@@ -3193,7 +3193,7 @@ nodes:
 
   exp_answer_conditioned_shadow_scoring:
     title: Answer-conditioned PPL predicts task accuracy at macro scale (SOLE Evolve enabler)
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
@@ -3209,6 +3209,9 @@ nodes:
     - 'Micro proven: answer-only PPL r=0.811 +/- 0.16 (3 seeds, d=32, V=42)'
     - 'Full-sequence PPL anti-correlated (r=-0.31) — prompt token dilution is real'
     - 'Directly enables teacher-free evolve phase: shadow scoring replaces expensive API calls'
+    - date: '2026-03-14'
+      claim: 'Experiment script written and submitted to GPU queue. Tests answer-only PPL vs MMLU accuracy across pilot50 adapters with MMLU mapping (~22 adapters). Three kill criteria: correlation, AUC, shadow ranking agreement.'
+      source: macro/answer_conditioned_shadow/run_answer_conditioned_shadow.py
     tags:
     - evolve
     - scoring
@@ -3229,7 +3232,7 @@ nodes:
 
   exp_b_matrix_interference_regularization:
     title: B-matrix repulsion regularizer reduces real composition interference
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
@@ -3246,6 +3249,9 @@ nodes:
     - 'Interference formula: ||delta_W_i^T delta_W_j||_F = (alpha/r)^2 * ||B_i^T (A_i^T A_j) B_j||_F'
     - 'B-matrix alignment is the sole uncontrolled variable in LoRA interference'
     - 'Frozen-A training locks A to skeleton (drift 0.02%); only B is learned'
+    - date: '2026-03-14'
+      claim: 'Experiment script written and submitted to GPU queue. Offline batched approach: fine-tune existing pilot50 adapters for 30 steps with B-repulsion loss (lambda=0.01). 10 domains, measures pairwise ||B_i^T B_j||_F before/after.'
+      source: macro/b_matrix_regularization/run_b_repulsion.py
     tags:
     - interference
     - training

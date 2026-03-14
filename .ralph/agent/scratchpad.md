@@ -62,3 +62,29 @@ Generated 3 new macro hypotheses:
 3. **exp_expert_pruning_from_composition** (P4) — test if removing weak experts improves composed model. Quality ceiling investigation. Depends on: exp_cat_weight_convergence (proven), exp_pilot50_composition_quality (active). BLOCKED.
 
 Next: script exp_answer_conditioned_shadow_scoring (P3, eligible, directly enables evolve phase).
+
+## 2026-03-14 Macro Loop — Two New Experiments Scripted & Submitted
+
+Scripted and queued both newly-generated eligible macro nodes:
+
+1. **exp_answer_conditioned_shadow_scoring** (P3):
+   - run_answer_conditioned_shadow.py — validates answer-only PPL as accuracy predictor at macro scale
+   - Uses Qwen2.5-7B + pilot50 adapters on MMLU (~22 adapters with MMLU mapping)
+   - K1: Pearson r >= 0.5, K2: AUC >= 0.7, K3: shadow ranking agreement >= 60%
+   - Submitted as run_answer_conditioned_shadow_1773520502
+
+2. **exp_b_matrix_interference_regularization** (P4):
+   - run_b_repulsion.py — fine-tunes existing pilot50 adapters with B-matrix repulsion loss
+   - Offline batched: 30 steps (10% of 300) with lambda=0.01 repulsion on 10 domains
+   - K1: PPL degradation <= 5%, K2: interference reduction >= 30%, K3: time overhead <= 3x
+   - Submitted as run_b_repulsion_1773520515
+
+Queue state: 22 pending, 1 active (run_all_eval_1773497259, ~1h20m). Worker RUNNING, GPU 8%.
+
+All scriptable macro nodes now queued. Open macro nodes remaining:
+- exp_cross_domain_semantic_transfer (P3) — blocked by exp_pilot50_composition_quality
+- exp_scale_500_experts (P4) — impractical (needs 500 adapters)
+- exp_evolution_convergence (P5) — blocked by exp_clone_compete_evolution
+- exp_expert_pruning_from_composition (P4) — blocked by exp_pilot50_composition_quality
+
+Next: wait for queue to progress, integrate completed experiment results.
