@@ -79,7 +79,7 @@ def main():
             ],
             cwd=str(REPO_ROOT),
             env={**os.environ, "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"},
-            timeout=1800,  # 30 min timeout per domain
+            timeout=10800,  # 3 hr timeout per domain (300 steps @ ~29s/step ≈ 2.4hr)
         )
 
         elapsed = time.time() - start
