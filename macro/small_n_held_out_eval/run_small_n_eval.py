@@ -278,6 +278,10 @@ def main():
     }}
 
     # Phase 2: Composition eval at each N
+    # Free base model before composition loop — each iteration reloads fresh
+    del base_model
+    torch.cuda.empty_cache()
+
     for n in N_VALUES:
         if n > len(ranked_adapters):
             print(f"\nSkipping N={n}: only {len(ranked_adapters)} adapters available")
@@ -286,12 +290,15 @@ def main():
         print(f"\n=== Phase 2: N={n} composition ===")
         t1 = time.time()
 
+        # Reload fresh base model (PeftModel modifies base in-place)
+        fresh_model, _ = load_base_model()
+
         # Select top-N adapters by quality
         selected = ranked_adapters[:n]
         print(f"Selected adapters: {selected[:5]}{'...' if n > 5 else ''}")
 
         # Compose
-        composed_model = compose_adapters(base_model, selected)
+        composed_model = compose_adapters(fresh_model, selected)
         comp_results = evaluate_mmlu_logprob(
             composed_model, tokenizer, subjects, args.max_per_subject
         )
@@ -308,7 +315,7 @@ def main():
         }
 
         # Cleanup
-        del composed_model
+        del composed_model, fresh_model
         torch.cuda.empty_cache()
 
     # Phase 3: Analysis

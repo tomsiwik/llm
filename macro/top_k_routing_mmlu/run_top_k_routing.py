@@ -176,14 +176,26 @@ def get_choice_token_ids(tokenizer):
 
 def evaluate_with_routing(base_model, tokenizer, domain_embeddings, k, subjects,
                           max_per_subject=50):
-    """Evaluate MMLU with per-question top-K routing."""
+    """Evaluate MMLU with per-question top-K routing.
+
+    Pre-loads all adapters once, then uses add_weighted_adapter/delete_adapter
+    per example to avoid PeftModel re-creation (which corrupts base model).
+    """
     choice_tokens = get_choice_token_ids(tokenizer)
     results = {}
     total_correct = 0
     total_count = 0
-    adapter_usage = {}  # Track which adapters get selected
+    adapter_usage = {}
 
     available = list(domain_embeddings.keys())
+
+    # Pre-load all adapters into a single PeftModel (once)
+    adapter_paths = {name: str(ADAPTER_DIR / name) for name in available}
+    first = available[0]
+    model = PeftModel.from_pretrained(base_model, adapter_paths[first], adapter_name=first)
+    for name in available[1:]:
+        model.load_adapter(adapter_paths[name], adapter_name=name)
+    model.eval()
 
     for subject in subjects:
         try:
@@ -199,19 +211,17 @@ def evaluate_with_routing(base_model, tokenizer, domain_embeddings, k, subjects,
 
         for ex in ds:
             prompt = format_mmlu_prompt(ex)
-            # Get question embedding for routing
-            q_emb = get_text_embedding(base_model, tokenizer, ex["question"])
+            # Get question embedding for routing (use base through PEFT — disable adapters)
+            model.disable_adapter_layers()
+            q_emb = get_text_embedding(model, tokenizer, ex["question"])
+            model.enable_adapter_layers()
 
             # Select top-K adapters
             top_k_names, sims = select_top_k(q_emb, domain_embeddings, k)
             for name in top_k_names:
                 adapter_usage[name] = adapter_usage.get(name, 0) + 1
 
-            # Compose top-K adapters
-            adapter_paths = [str(ADAPTER_DIR / name) for name in top_k_names]
-            model = PeftModel.from_pretrained(base_model, adapter_paths[0], adapter_name=top_k_names[0])
-            for name, path in zip(top_k_names[1:], adapter_paths[1:]):
-                model.load_adapter(path, adapter_name=name)
+            # Compose top-K via weighted adapter (reuses pre-loaded adapters)
             model.add_weighted_adapter(
                 adapters=list(top_k_names),
                 weights=[1.0] * len(top_k_names),
@@ -219,7 +229,6 @@ def evaluate_with_routing(base_model, tokenizer, domain_embeddings, k, subjects,
                 combination_type="linear",
             )
             model.set_adapter("routed")
-            model.eval()
 
             # Score
             inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).to(model.device)
@@ -237,16 +246,18 @@ def evaluate_with_routing(base_model, tokenizer, domain_embeddings, k, subjects,
             correct += int(pred == gold)
             count += 1
 
-            # Cleanup
-            del model
-            gc.collect()
-            torch.cuda.empty_cache()
+            # Clean up per-example composition (keep individual adapters loaded)
+            model.delete_adapter("routed")
 
         acc = correct / max(1, count)
         results[subject] = {"correct": correct, "total": count, "accuracy": round(acc, 4)}
         total_correct += correct
         total_count += count
         print(f"  {subject}: {acc:.1%} ({correct}/{count})")
+
+    del model
+    gc.collect()
+    torch.cuda.empty_cache()
 
     overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
     return {
@@ -335,7 +346,7 @@ def evaluate_base(base_model, tokenizer, subjects, max_per_subject=50):
         count = 0
         for ex in ds:
             prompt = format_mmlu_prompt(ex)
-            inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).to(model.device)
+            inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).to(base_model.device)
             with torch.no_grad():
                 outputs = base_model(**inputs)
                 logits = outputs.logits[0, -1]
@@ -398,10 +409,13 @@ def main():
         "config": {"subjects": subjects, "k_values": K_VALUES, "n_total": len(available), "seed": SEED},
     }
 
-    # Phase 2: Full N=50 merge
+    # Phase 2: Full N=50 merge (reload fresh base — PeftModel modifies in-place)
     print(f"\n=== Full merge (N={len(available)}) ===")
     t1 = time.time()
-    full_results = evaluate_full_merge(base_model, tokenizer, available, subjects, args.max_per_subject)
+    fresh_model, _ = load_base_model()
+    full_results = evaluate_full_merge(fresh_model, tokenizer, available, subjects, args.max_per_subject)
+    del fresh_model
+    torch.cuda.empty_cache()
     full_acc = full_results["overall"]["accuracy"]
     full_delta = (full_acc - base_acc) * 100
     print(f"Full merge: {full_acc:.4f} ({full_delta:+.2f}pp, {time.time() - t1:.0f}s)")
@@ -410,13 +424,17 @@ def main():
         "delta_vs_base_pp": round(full_delta, 4),
     }
 
-    # Phase 3: Top-K routing
+    # Phase 3: Top-K routing (reload fresh base for each K)
     for k in K_VALUES:
         print(f"\n=== Top-{k} routing ===")
         t2 = time.time()
+        fresh_model_k, _ = load_base_model()
         routed_results = evaluate_with_routing(
-            base_model, tokenizer, domain_embeddings, k, subjects, args.max_per_subject
+            fresh_model_k, tokenizer, domain_embeddings, k, subjects, args.max_per_subject
         )
+        del fresh_model_k
+        gc.collect()
+        torch.cuda.empty_cache()
         routed_acc = routed_results["overall"]["accuracy"]
         routed_delta = (routed_acc - base_acc) * 100
         print(f"Top-{k}: {routed_acc:.4f} ({routed_delta:+.2f}pp, {time.time() - t2:.0f}s)")

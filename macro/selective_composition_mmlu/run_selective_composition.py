@@ -338,17 +338,20 @@ def main():
                 print(f"  {subject}: {acc:.1%} (base, no relevant adapter)")
                 continue
 
-            # Compose relevant adapters
+            # Compose relevant adapters (reload fresh base — PeftModel modifies in-place)
+            fresh_model, _ = load_base_model()
             try:
-                composed = compose_adapters(base_model, relevant)
+                composed = compose_adapters(fresh_model, relevant)
             except Exception as e:
                 print(f"  {subject}: FAILED to compose {relevant}: {e}")
+                del fresh_model
+                torch.cuda.empty_cache()
                 continue
 
             try:
                 ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
             except Exception:
-                del composed
+                del composed, fresh_model
                 torch.cuda.empty_cache()
                 continue
             if len(ds) > args.max_per_subject:
@@ -383,7 +386,7 @@ def main():
             total_count += len(ds)
             print(f"  {subject}: {acc:.1%} ({delta:+.2f}pp) adapters={relevant}")
 
-            del composed
+            del composed, fresh_model
             torch.cuda.empty_cache()
 
         overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
@@ -409,16 +412,19 @@ def main():
             # Pick k random adapters
             random_adapters = list(rng.choice(available_adapters, size=min(k, len(available_adapters)), replace=False))
 
+            fresh_model, _ = load_base_model()
             try:
-                composed = compose_adapters(base_model, random_adapters)
+                composed = compose_adapters(fresh_model, random_adapters)
             except Exception as e:
                 print(f"  {subject}: FAILED: {e}")
+                del fresh_model
+                torch.cuda.empty_cache()
                 continue
 
             try:
                 ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
             except Exception:
-                del composed
+                del composed, fresh_model
                 torch.cuda.empty_cache()
                 continue
             if len(ds) > args.max_per_subject:
@@ -451,7 +457,7 @@ def main():
             total_correct += correct
             total_count += len(ds)
 
-            del composed
+            del composed, fresh_model
             torch.cuda.empty_cache()
 
         overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0

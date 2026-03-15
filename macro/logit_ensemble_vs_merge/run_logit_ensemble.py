@@ -273,20 +273,25 @@ def main():
         },
     }
 
+    # Free base model — each composition/ensemble reloads fresh
+    del base_model
+    torch.cuda.empty_cache()
+
     for n in N_VALUES:
         if n > len(ranked_adapters):
             continue
         selected = ranked_adapters[:n]
 
-        # Weight-space merge
+        # Weight-space merge (reload fresh base each time — PeftModel modifies in-place)
         print(f"\n=== N={n} Weight Merge ===")
         t1 = time.time()
-        merged_model = compose_adapters(base_model, selected)
+        fresh_model, _ = load_base_model()
+        merged_model = compose_adapters(fresh_model, selected)
         merge_results = evaluate_logprob(merged_model, tokenizer, subjects, args.max_per_subject)
         merge_acc = merge_results["overall"]["accuracy"]
         merge_delta = (merge_acc - base_acc) * 100
         print(f"Weight merge N={n}: {merge_acc:.4f} ({merge_delta:+.2f}pp, {time.time() - t1:.0f}s)")
-        del merged_model
+        del merged_model, fresh_model
         gc.collect()
         torch.cuda.empty_cache()
 
@@ -297,12 +302,16 @@ def main():
             "elapsed_s": round(time.time() - t1, 1),
         }
 
-        # Logit-space ensemble
+        # Logit-space ensemble (reload fresh base — each adapter wrapping modifies it)
         print(f"\n=== N={n} Logit Ensemble ===")
         t2 = time.time()
+        fresh_model2, _ = load_base_model()
         ensemble_results = evaluate_ensemble_logprob(
-            base_model, tokenizer, selected, subjects, args.max_per_subject
+            fresh_model2, tokenizer, selected, subjects, args.max_per_subject
         )
+        del fresh_model2
+        gc.collect()
+        torch.cuda.empty_cache()
         ens_acc = ensemble_results["overall"]["accuracy"]
         ens_delta = (ens_acc - base_acc) * 100
         print(f"Logit ensemble N={n}: {ens_acc:.4f} ({ens_delta:+.2f}pp, {time.time() - t2:.0f}s)")

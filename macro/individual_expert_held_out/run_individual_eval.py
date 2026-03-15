@@ -210,18 +210,26 @@ def main():
     from peft import PeftModel
 
     deltas = []
+    # Free base model — each adapter eval reloads fresh (PeftModel modifies in-place)
+    del base_model
+    torch.cuda.empty_cache()
+
     for i, adapter_name in enumerate(adapters):
         print(f"\n=== Phase 2: Expert {i+1}/{len(adapters)}: {adapter_name} ===")
         t1 = time.time()
 
+        # Reload fresh base each time (PeftModel.from_pretrained modifies model in-place)
+        fresh_model, _ = load_base_model()
         adapter_path = str(ADAPTER_DIR / adapter_name)
         try:
-            peft_model = PeftModel.from_pretrained(base_model, adapter_path, adapter_name=adapter_name)
+            peft_model = PeftModel.from_pretrained(fresh_model, adapter_path, adapter_name=adapter_name)
             peft_model.set_adapter(adapter_name)
             peft_model.eval()
         except Exception as e:
             print(f"  Failed to load {adapter_name}: {e}")
             all_results["individual_experts"][adapter_name] = {"error": str(e)}
+            del fresh_model
+            torch.cuda.empty_cache()
             continue
 
         expert_results = evaluate_mmlu_logprob(peft_model, tokenizer, subjects, args.max_per_subject)
@@ -238,7 +246,7 @@ def main():
         deltas.append(delta_pp)
 
         # Cleanup adapter
-        del peft_model
+        del peft_model, fresh_model
         torch.cuda.empty_cache()
 
     # Phase 3: Analysis
