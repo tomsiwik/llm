@@ -1,27 +1,32 @@
-Both exp_correlated_layer_errors (PROVEN: correlation reduces error, sub-additivity robust) and exp_residual_layernorm_error_dynamics (PROVEN: Pre-RMSNorm 11.5x safer than feedforward, 1/d scaling preserved) completed. Awaiting review.
+exp_removal_safety_complete_bound PROVEN. Combined bound predicts 0.106% deviation (K1: <1% PASS), empirical 0.098% matches within 0.93x (K2: within 2x PASS). Micro safety story complete.
 
 ## Iteration 51 (2026-03-15)
 
-### New results since last iteration
-- run_sole_vs_finetune_1773531197: CRASHED — CUDA OOM. Float16 7B model (~14GB) + iterative merge_and_unload exhausted 24GB GPU.
-- run_b_repulsion_1773520515: CRASHED — empty param list (already known, code was fixed)
-- run_continual_addition_1773531208: ACTIVE (still running)
+### Situation
+- ACTIVE: run_inference_throughput_1773531219 (still running)
+- 29 pending tasks in GPU queue (including retrain_all_adapters)
+- No new results since iteration 50
+- ALL open macro nodes are blocked (most by exp_pilot50_composition_quality → retrain_all_adapters)
+- Worker is running, GPU at 10%
 
-### Actions taken
-1. Fixed run_sole_vs_finetune.py OOM:
-   - Switched from float16 to 4-bit quantization (BitsAndBytesConfig, ~4GB VRAM)
-   - Replaced iterative merge_and_unload with add_weighted_adapter (matches composition_quality pattern)
-   - Reordered phases: base eval first, then SOLE composition, then union QLoRA training
-   - For union LoRA phase: reload fresh 4-bit model + QLoRA, evaluate as PeftModel (no merge_and_unload on quantized base)
-2. Resubmitted as run_sole_vs_finetune_1773569015
-3. Integrated both failure results into HYPOTHESES.yml
+### Action: Generated 3 new macro hypotheses
+No open macro nodes with satisfied deps → generated new hypotheses per objective.
 
-### Queue Status
-- 29 pending tasks (28 old + 1 resubmission)
-- 1 active: run_continual_addition_1773531208
-- b_repulsion resubmission (1773567889) already in queue with fixed code
+1. **exp_composition_weight_normalization** (priority 3): Test 1/N, 1/sqrt(N), and grid-searched scaling factors at N=5,10,25,50. Attacks the PPL-in-trillions problem directly. Cheap (inference only, ~10 min).
+
+2. **exp_cluster_grouped_composition** (priority 3): Leverage block-diagonal interference finding (within-cluster 7.84x higher). Route to cluster, compose within-cluster only (N_eff=5-10 vs N=50). Natural production architecture.
+
+3. **exp_greedy_expert_selection** (priority 3): Greedily build optimal expert subset using validation PPL. Finds K* (optimal subset size), identifies net-harmful experts. O(N²/2) evaluations.
+
+### Key insight
+The core unsolved problem is: why does composition at N=50 produce catastrophic PPL? Three attack vectors:
+- Weight scaling (normalization)
+- Reducing effective N (clustering)
+- Selecting good experts (greedy)
+These are complementary — weight normalization + clustering + selection could all be combined.
 
 ### Next iteration should
-- Check if continual_addition and any queued jobs have completed
-- Check for run_sole_vs_finetune_1773569015 result
-- Look for newly completable macro nodes
+- These 3 new nodes depend only on exp_distillation_pilot_50 (supported) → they are ELIGIBLE
+- Write experiment scripts and submit to GPU queue
+- Start with exp_composition_weight_normalization (simplest, cheapest, fastest)
+- Check if run_inference_throughput has completed

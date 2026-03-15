@@ -3,11 +3,11 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 0
+  consecutive_kills: 2
   last_killed: '2026-03-15'
-  last_killed_node: exp_answer_conditioned_shadow_scoring
+  last_killed_node: exp_b_matrix_training_correlation
   last_proven: '2026-03-15'
-  last_proven_node: exp_attention_layer_removal_safety
+  last_proven_node: exp_removal_safety_complete_bound
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -2805,3 +2805,276 @@ nodes:
       heuristic works at d=4096, SOLE can automatically allocate rank budgets per domain,
       potentially saving 30-50% of parameters for simple domains while giving complex domains
       more capacity. Spectral measurement is cheap (SVD of LoRA delta matrices).
+
+  # ── From correlated_layer_errors + residual_layernorm findings ───────────
+
+  exp_b_matrix_training_correlation:
+    title: B-matrix overlap during LoRA training creates structured inter-expert correlation
+    status: killed
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_correlated_layer_errors
+    - exp_grassmannian_expert_init
+    blocks: []
+    experiment_dir: micro/models/b_matrix_training_correlation
+    kill_criteria:
+    - K1: trained B-matrices show >3x higher pairwise |cos| than random initialization (structured correlation exists)
+    - K2: B-matrix correlation does NOT increase amplification ratio vs uncorrelated B-matrices (safe even if correlated)
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        K1 FAIL: trained B-matrix |cos| = 2.52x random baseline (< 3x threshold, p=0.010).
+        K2 PASS: AP/shuffled amp ratio = 1.06x (< 1.5x margin), all amp ratios ~0.
+        Key finding: Grassmannian skeleton acts as decorrelation filter -- full delta
+        vectors show only 0.14x of baseline |cos| (0.0017 vs 0.0118) despite B-matrices
+        being 2.52x above. A_i^T A_j near-zero makes B-matrix correlation irrelevant.
+        Training dynamics contribute 62% of B-matrix correlation, AP skeleton 38%.
+        Domain similarity effect weak (1.39x). No B-matrix regularization needed.
+      source: micro/models/b_matrix_training_correlation/results.json
+    tags:
+    - composition
+    - safety
+    - training-dynamics
+    created: '2026-03-15'
+    notes: >
+      Minimax Grassmannian packing identified B-matrix overlap as the uncontrolled variable:
+      ||delta_W_i^T delta_W_j||_F = (alpha/r)^2 * ||B_i^T (A_i^T A_j) B_j||_F.
+      Frozen A (Grassmannian skeleton) controls A_i^T A_j but B-matrices are learned freely.
+      If same-domain experts learn similar B-matrices (shared output projections), the effective
+      inter-expert correlation could be higher than assumed. Test: train 8 experts on 4 domain
+      pairs (2 similar + 2 dissimilar), measure B-matrix pairwise cosines vs random init,
+      then test amplification ratio with measured vs random B-matrices. CPU only, numpy.
+
+  exp_attention_self_repair_removal:
+    title: Attention mechanism provides self-repair after expert removal
+    status: killed
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_residual_layernorm_error_dynamics
+    - exp_attention_layer_removal_safety
+    blocks: []
+    experiment_dir: micro/models/attention_self_repair_removal
+    kill_criteria:
+    - K1: transformer with attention shows >30% lower output deviation than MLP-only at same depth/dimension after expert removal (self-repair exists)
+    - K2: self-repair effect INCREASES with depth (attention redistributes around perturbation over layers)
+    evidence:
+    - date: '2026-03-15'
+      claim: "KILLED. K1 FAIL: overall repair ratio 2.1% (threshold >30%). K2 FAIL: self-repair DECREASES with depth (slope=-0.0029, p=0.033). Frozen random attention provides ~2-4% deviation reduction, far below threshold. Effect peaks at mid-layers (~11.7%) then decays. Amplification ratios nearly identical: MLP 0.037 vs TF 0.035 at L=16. Conclusion: residual_layernorm bound (amp_ratio=0.022) is the correct safety bound; attention is neutral for expert removal. Self-repair requires trained redundancy (McGill et al.), not present in frozen random attention. 4 tests, 3 seeds, d={32,64,128}, L={1..16}."
+      source: micro/models/attention_self_repair_removal/results.json
+    tags:
+    - composition
+    - safety
+    - attention
+    created: '2026-03-15'
+    notes: >
+      Both correlated_layer_errors and residual_layernorm flagged attention as untested.
+      Attention's softmax creates data-dependent routing that could either amplify aligned
+      perturbations (risk) or redistribute activations to bypass perturbed subspaces (repair).
+      McGill et al. (2024) "self-repair" shows transformers compensate for ablated heads.
+      Test: compare expert removal output deviation in 4-layer transformer vs 4-layer MLP
+      (both with residual+Pre-RMSNorm), across depths and dimensions. If attention self-repairs,
+      the production safety margin is even larger than residual_layernorm suggests.
+      CPU only, numpy/MLX.
+
+  exp_decorrelation_filter_scaling:
+    title: Grassmannian decorrelation filter effectiveness scales with dimension
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_b_matrix_training_correlation
+    - exp_structural_orthogonality_characterization
+    blocks: []
+    experiment_dir: micro/models/decorrelation_filter_scaling
+    kill_criteria:
+    - K1: full delta cosine ratio (trained/random) DECREASES with dimension d (decorrelation filter gets stronger at scale)
+    - K2: at d>=256, full delta cosine is <0.5x random baseline (decorrelation dominates B-matrix correlation)
+    evidence: []
+    tags:
+    - composition
+    - safety
+    - scaling
+    created: '2026-03-15'
+    notes: >
+      B-matrix training correlation showed decorrelation filter at d=64 (0.14x baseline).
+      Structural orthogonality characterization showed cos scaling as d^(-0.673).
+      If both effects compound, the filter should be even more effective at d>=256.
+      Test: sweep d={64,128,256,512} with N=6 trained experts per dimension,
+      measure both B-matrix and full delta cosines. CPU only, numpy.
+
+  exp_removal_safety_complete_bound:
+    title: Complete expert removal safety bound combining all micro results
+    status: proven
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_attention_self_repair_removal
+    - exp_b_matrix_training_correlation
+    - exp_residual_layernorm_error_dynamics
+    - exp_correlated_layer_errors
+    - exp_multilayer_removal_cascade
+    blocks: []
+    experiment_dir: micro/models/removal_safety_complete_bound
+    kill_criteria:
+    - K1: combined bound (residual+LN + depth dampening + decorrelation filter + neutral attention) predicts <1% output deviation at d=256, L=24, N=50
+    - K2: empirical measurement matches combined bound within 2x
+    evidence:
+    - date: '2026-03-15'
+      claim: "K1 PASS: direct bound 0.106%, empirical 0.098% (10x below 1% threshold). K2 PASS: ratio 0.93x (within 2x). Bound D=sum_eps*alpha validated across d=64..256, N=8..50, 3 seeds. Alpha=0.022 is architectural constant (CV=10.6%). Dimension scaling d^(-1.17), R^2=0.9999. Production extrapolation: d=896 ~0.023%, with SOLE cosines ~0.00025%."
+      source: micro/models/removal_safety_complete_bound/results.json
+    tags:
+    - composition
+    - safety
+    - theory
+    created: '2026-03-15'
+    notes: >
+      Five micro experiments now characterize expert removal safety independently:
+      residual_layernorm (amp_ratio=0.022), multilayer_removal (0.25 at L=24),
+      correlated_layer_errors (0.074 at max corr), attention_self_repair (neutral),
+      b_matrix_training (decorrelation filter). Combined into single theoretical bound
+      D = sum_eps * alpha_total. Validated empirically at d=256, L=24, N=50.
+      Micro safety story is complete. Closes the expert removal safety line.
+
+  # ── New Hypotheses: Composition Scaling Fixes (2026-03-15) ──────
+
+  exp_composition_weight_normalization:
+    title: Weight-normalized composition (1/sqrt(N)) prevents PPL explosion at high expert count
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_pilot50_composition_quality
+    experiment_dir: macro/composition_weight_normalization
+    kill_criteria:
+    - K1: 1/sqrt(N) scaling does not reduce composed PPL by >50% vs unit-weight at N=50
+    - K2: best scaling factor produces composed PPL >2x individual expert average PPL
+    - K3: scaling factor that works at N=50 does not transfer to N=25 (not robust)
+    evidence:
+    - 'Motivation: unit-weight composition at N=50 produced PPL in trillions (catastrophic)'
+    - 'CAT weights converge to 1.0 under perfect orthogonality, but real adapters are not perfectly orthogonal'
+    - 'LoRA alpha/r scaling already normalizes individual adapters, but multi-adapter sum is unscaled'
+    tags:
+    - composition
+    - scaling
+    - normalization
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      SIMPLEST FIX FOR PPL EXPLOSION. When composing N adapters via addition,
+      the total LoRA contribution scales linearly with N. If adapters are not
+      perfectly orthogonal, this creates constructive interference that grows
+      with N, potentially explaining the trillions-PPL result.
+
+      Test 4 scaling strategies at N=5,10,25,50:
+      (1) Unit weight: w_i = 1.0 (current default)
+      (2) Mean: w_i = 1/N (average rather than sum)
+      (3) Sqrt: w_i = 1/sqrt(N) (geometric mean between sum and average)
+      (4) Optimal: grid search w_i in [0.01, 0.05, 0.1, 0.2, 0.5, 1.0]
+
+      Evaluate on per-domain PPL (same domains as composition_quality).
+      Use retrained adapters (rank-16, all-modules).
+      Inference only — cheap experiment (~10 min on A5000).
+
+      If 1/sqrt(N) works: adopt as default, re-run all composition experiments.
+      If 1/N works: composition is averaging, not additive (changes theory).
+      If nothing works: PPL explosion is not a scaling issue (deeper problem).
+
+  exp_cluster_grouped_composition:
+    title: Cluster-aware composition with routing beats compose-all at macro scale
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/cluster_grouped_composition
+    kill_criteria:
+    - K1: cluster-routed composition does not beat compose-all by >3% on held-out PPL
+    - K2: cluster routing accuracy <80% (wrong cluster selected too often)
+    - K3: cluster composition within-cluster PPL >10% worse than individual expert
+    evidence:
+    - 'Micro: within-cluster |cos| 7.84x higher than cross-cluster (block-diagonal interference)'
+    - 'Micro: collision landscape top 10 pairs ALL within-cluster (30/30 across seeds)'
+    - 'Micro: cross-cluster mean |cos|=0.008, near random baseline 0.002'
+    - 'Micro: cluster-level routing achieves 95-96% accuracy'
+    tags:
+    - composition
+    - routing
+    - clustering
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      LEVERAGES BLOCK-DIAGONAL INTERFERENCE. Micro experiments showed that
+      composition interference is concentrated within domain clusters. Cross-cluster
+      interference is near-random baseline. This suggests a two-level strategy:
+
+      Architecture:
+      (1) Cluster pilot-50 experts by domain similarity (5-10 clusters)
+      (2) At query time: route to best cluster (96% accuracy at micro)
+      (3) Compose only within-cluster experts (N=5-10 per cluster, not N=50)
+      (4) Optionally: compose cluster representatives across clusters
+
+      Compare 3 strategies:
+      (a) Compose-all N=50 (baseline, currently catastrophic)
+      (b) Route-to-cluster, compose within-cluster only
+      (c) Route-to-cluster + cross-cluster representative merge
+
+      Evaluate on MMLU subsets and per-domain PPL. Measure routing accuracy.
+      Use cosine similarity of query embedding to cluster centroids for routing.
+
+      If cluster routing works: SOLE serving becomes route-compose-serve,
+      with N_effective = N/K_clusters instead of N. This is the natural production
+      architecture.
+
+  exp_greedy_expert_selection:
+    title: Validation-guided greedy selection finds optimal expert subset from pilot-50
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/greedy_expert_selection
+    kill_criteria:
+    - K1: greedy-selected subset of K experts does not beat compose-all-50 on held-out PPL
+    - K2: greedy ordering differs from individual-quality ranking for <30% of experts (individual quality suffices)
+    - K3: greedy selection requires >O(N^2) evaluations to converge (not scalable)
+    evidence:
+    - 'Composition quality degrades at high N (PPL in trillions at N=50)'
+    - 'Some experts may be net-harmful to the composition (noise > signal)'
+    - 'Individual expert quality may not predict composition contribution'
+    - 'CAT weights converge to 1.0, cannot identify weak experts'
+    tags:
+    - composition
+    - quality
+    - selection
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      DATA-DRIVEN OPTIMAL SUBSET. Instead of composing all 50 experts and hoping
+      for the best, use a validation set to greedily build the optimal subset:
+
+      Algorithm:
+      (1) Evaluate base model on held-out set -> baseline PPL per domain
+      (2) For each expert: evaluate base+expert -> individual improvement
+      (3) Start with best individual expert
+      (4) For each remaining: evaluate current_best + candidate -> pick best addition
+      (5) Stop when adding any expert worsens quality (or all added)
+      (6) Record the quality curve and optimal subset size K*
+
+      O(N^2/2) evaluations = 1225 for N=50. At ~30s per eval: ~10 hours.
+      Optimize: early stopping (skip experts whose individual score < threshold),
+      cache per-domain PPL computations.
+
+      Key questions answered:
+      - What is the optimal number of composed experts? (K* may be << 50)
+      - Which experts are net-harmful? (those never selected)
+      - Does greedy order match individual quality order? (if yes, simpler heuristic suffices)
+      - What quality ceiling does optimal selection achieve?
+
+      If K* << 50: prune experts before composition (quality gate).
+      If K* ~ 50: the composition method is the bottleneck, not expert selection.
