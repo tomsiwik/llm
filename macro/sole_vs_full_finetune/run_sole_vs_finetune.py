@@ -235,6 +235,12 @@ def run_experiment():
         adapter_name="composed", combination_type="linear",
     )
     peft_model.set_adapter("composed")
+
+    # Delete original adapters to free GPU memory (composed adapter is independent)
+    for adapter_name in loaded_adapters:
+        peft_model.delete_adapter(adapter_name)
+    torch.cuda.empty_cache()
+
     merge_time = time.time() - merge_start
     log(f"Composed {n} adapters in {merge_time:.1f}s")
 

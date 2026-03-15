@@ -173,14 +173,14 @@ def train_expert(model, tokenizer, domain, steps, lr):
     final_loss = losses[-1] if losses else None
     log(f"  Trained {domain}: {step} steps, final_loss={final_loss:.4f}")
 
-    # Return the merged model (base + new expert)
-    merged = peft_model.merge_and_unload()
-    return merged, final_loss
+    # Clean up (don't merge_and_unload — incompatible with 4-bit quantization)
+    del peft_model
+    return None, final_loss
 
 
 def run_experiment():
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
     from peft import PeftModel
 
     log("=" * 70)
@@ -275,14 +275,20 @@ def run_experiment():
     gc.collect()
     torch.cuda.empty_cache()
 
+    # 4-bit quantization config for training (fp16 7B model OOMs on 24GB during training)
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True, bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_use_double_quant=True,
+    )
+
     new_expert_losses = {}
     train_times = {}
     for domain in new_domains:
         log(f"\nTraining new expert: {domain}")
-        # Load fresh base for each expert (clean slate)
+        # Load fresh base for each expert (clean slate, 4-bit to fit in 24GB GPU)
         base_model = AutoModelForCausalLM.from_pretrained(
-            BASE_MODEL, cache_dir=HF_CACHE,
-            torch_dtype=torch.float16, device_map="auto",
+            BASE_MODEL, cache_dir=HF_CACHE, quantization_config=bnb_config,
+            torch_dtype=torch.bfloat16, device_map="auto",
             trust_remote_code=True,
         )
         t0 = time.time()

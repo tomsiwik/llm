@@ -307,6 +307,17 @@ def main():
         del model
         torch.cuda.empty_cache()
 
+    # Reload base model to clear PEFT wrapping from Phase 1
+    # (delete_adapter doesn't fully unwrap PEFT modules, leaving base_model
+    # in a state where subsequent PeftModel.from_pretrained can't find LoRA params)
+    del base_model
+    torch.cuda.empty_cache()
+    gc.collect()
+    base_model = AutoModelForCausalLM.from_pretrained(
+        BASE_MODEL, quantization_config=bnb_config, device_map="auto",
+        torch_dtype=torch.bfloat16, cache_dir=HF_CACHE, trust_remote_code=True,
+    )
+
     # Compute baseline pairwise interference
     print(f"\n[3] Computing baseline pairwise interference")
     baseline_interference = {}
