@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 0
+  consecutive_kills: 1
   last_killed: '2026-03-15'
-  last_killed_node: exp_b_matrix_training_correlation
+  last_killed_node: exp_sole_inference_throughput
   last_proven: '2026-03-15'
   last_proven_node: exp_rmsnorm_gamma_nonuniformity
   roadmap_updated: '2026-03-13'
@@ -1849,7 +1849,7 @@ nodes:
 
   exp_sole_inference_throughput:
     title: Composed SOLE model inference throughput matches base Qwen2.5-7B
-    status: active
+    status: killed
     scale: macro
     priority: 4
     depends_on:
@@ -1866,6 +1866,16 @@ nodes:
     - date: '2026-03-15'
       claim: 'Script submitted to GPU queue (run_inference_throughput_1773531219)'
       source: tools/gpu_queue.py status
+    - date: '2026-03-15'
+      claim: >
+        KILLED by K3: per-request throughput degrades 12.9% at batch_size=32
+        (threshold: >10%). K1 SURVIVED: SOLE throughput 97% of base at bs=1
+        (5.3 vs 5.4 tok/s). K2 SURVIVED: first-token latency ratio 1.03x
+        (206.5ms vs 201.4ms). Batch scaling table: bs=1 0.97x, bs=4 0.98x,
+        bs=16 1.03x, bs=32 0.97x. The degradation at bs=32 is marginal
+        (12.9% vs 10% threshold) but triggers kill. Pre-merge composition
+        is nearly free at low batch sizes but shows slight scaling issues.
+      source: gpu_queue results run_inference_throughput_1773531219
     tags:
     - serving
     - throughput
@@ -1877,6 +1887,8 @@ nodes:
       N-independent and even slightly faster than base. This tests at macro
       scale with real Qwen2.5-7B and 50 real adapters. Measures throughput
       (tok/s), first-token latency (p50/p99), and batch scaling on A5000 GPU.
+      KILLED narrowly on batch scaling — single-request and first-token latency
+      are excellent. May be recoverable with pre-merged weight caching.
 
   # ── New Micro Hypotheses from lora_flow + layerwise reviews (2026-03-15) ──
 

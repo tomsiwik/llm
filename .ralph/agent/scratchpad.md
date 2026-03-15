@@ -1,32 +1,62 @@
-exp_removal_safety_complete_bound PROVEN. Combined bound predicts 0.106% deviation (K1: <1% PASS), empirical 0.098% matches within 0.93x (K2: within 2x PASS). Micro safety story complete.
+exp_rmsnorm_gamma_nonuniformity integrated as PROVEN. Micro safety story complete (all macro transfer risks resolved). 2 new hypotheses generated: silu_vs_gelu_gamma_correction (p5), gamma_perturbation_correlation (p4).
 
 ## Iteration 51 (2026-03-15)
 
 ### Situation
-- ACTIVE: run_inference_throughput_1773531219 (still running)
-- 29 pending tasks in GPU queue (including retrain_all_adapters)
-- No new results since iteration 50
-- ALL open macro nodes are blocked (most by exp_pilot50_composition_quality → retrain_all_adapters)
-- Worker is running, GPU at 10%
+- No open macro nodes with all deps satisfied (4 open macro nodes blocked by active deps)
+- 35 pending + 1 active (run_inference_throughput) in GPU queue
+- No new results to integrate (only the old continual_addition OOM failure, already handled)
+- Pipeline is saturated — 31 active macro nodes all have scripts submitted
 
-### Action: Generated 3 new macro hypotheses
-No open macro nodes with satisfied deps → generated new hypotheses per objective.
-
-1. **exp_composition_weight_normalization** (priority 3): Test 1/N, 1/sqrt(N), and grid-searched scaling factors at N=5,10,25,50. Attacks the PPL-in-trillions problem directly. Cheap (inference only, ~10 min).
-
-2. **exp_cluster_grouped_composition** (priority 3): Leverage block-diagonal interference finding (within-cluster 7.84x higher). Route to cluster, compose within-cluster only (N_eff=5-10 vs N=50). Natural production architecture.
-
-3. **exp_greedy_expert_selection** (priority 3): Greedily build optimal expert subset using validation PPL. Finds K* (optimal subset size), identifies net-harmful experts. O(N²/2) evaluations.
+### Actions taken
+1. Generated 3 NEW macro hypotheses targeting the critical gap: Evolve phase has no quality signal
+   - exp_task_accuracy_evolve_signal (p2): 10-question held-out benchmark as adapter ranking signal
+   - exp_relative_ppl_within_domain (p3): within-domain PPL ranking (salvaging PPL for clone-and-compete)
+   - exp_composition_health_kl_divergence (p3): label-free KL divergence composition health monitor
+2. Wrote experiment scripts for all 3
+3. Submitted to GPU queue: run_task_accuracy_signal_1773574632, run_relative_ppl_1773574642, run_kl_health_1773574653
+4. Committed as c4c9951
 
 ### Key insight
-The core unsolved problem is: why does composition at N=50 produce catastrophic PPL? Three attack vectors:
-- Weight scaling (normalization)
-- Reducing effective N (clustering)
-- Selecting good experts (greedy)
-These are complementary — weight normalization + clustering + selection could all be combined.
+The Evolve phase is completely blocked without a macro-scale quality signal. Answer-only PPL was killed (r=-0.63 cross-domain). Two approaches to fix:
+- **Task accuracy**: more expensive but reliable (10 held-out questions per domain)
+- **Within-domain PPL**: PPL may still work for within-domain comparisons (clone-and-compete only needs within-domain ranking)
+- **KL divergence**: label-free health monitoring, doesn't solve ranking but detects catastrophic composition
+
+### Queue status
+- ACTIVE: run_inference_throughput_1773531219
+- 38 pending tasks (35 + 3 new submissions)
+- Key blocker: retrain_all_adapters_1773536208 (must complete before composition experiments are meaningful)
 
 ### Next iteration should
-- These 3 new nodes depend only on exp_distillation_pilot_50 (supported) → they are ELIGIBLE
-- Write experiment scripts and submit to GPU queue
-- Start with exp_composition_weight_normalization (simplest, cheapest, fastest)
 - Check if run_inference_throughput has completed
+- Check if any other queued tasks have results
+- If no new results, consider whether pipeline is stalled and whether to investigate retrain_all_adapters progress
+
+## Iteration 52 (2026-03-15)
+
+### New results since last iteration
+- run_inference_throughput_1773531219: KILLED by K3 (12.9% degradation at bs=32, threshold 10%)
+  - K1 SURVIVED: throughput ratio 0.97 at bs=1 (5.3 vs 5.4 tok/s)
+  - K2 SURVIVED: first-token latency ratio 1.03x (206.5ms vs 201.4ms)
+  - K3 KILLED: 12.9% degradation at max batch (threshold 10%)
+  - Narrowly killed — composition overhead is minimal for single requests
+- train_scale_adapters_1773530181: OK but vacuous (no training data exists for scale_500 domains)
+- prepare_scale_data_1773530168: FAILED (instant fail, 0s runtime — data gen failed)
+- eval_teacher_comparison_1773501574: FAILED (0s runtime, instant fail)
+- ACTIVE: eval_math500_1773512952 (reasoning expert eval)
+
+### Actions taken
+1. Integrated exp_sole_inference_throughput as KILLED in HYPOTHESES.yml
+2. Updated meta: consecutive_kills=1, last_killed_node=exp_sole_inference_throughput
+3. No downstream nodes blocked by this kill (blocks: [])
+
+### Queue status
+- ACTIVE: eval_math500_1773512952
+- 34 pending tasks
+- Key blocker: retrain_all_adapters_1773536208 still pending
+
+### Next iteration should
+- Check for new results (eval_math500 may complete)
+- Investigate why prepare_scale_data and eval_teacher_comparison instantly failed
+- Check if any open macro nodes now have satisfied deps
