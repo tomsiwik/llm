@@ -50,30 +50,38 @@ def discover_adapters():
     return adapters
 
 
-def load_domain_samples(domain, n_samples):
+def load_domain_samples(domain, n_samples, tokenizer=None):
     """Load evaluation samples for a domain from distillation data.
 
-    Uses last N samples from train.jsonl as held-out eval set.
+    Checks eval.jsonl first, then falls back to train.jsonl (last N as held-out).
     """
-    data_path = DATA_DIR / domain / "train.jsonl"
-    if not data_path.exists():
-        return []
-    with open(data_path) as f:
-        lines = f.readlines()
-    # Use last n_samples as eval (not seen during training with packing)
-    eval_lines = lines[-n_samples:] if len(lines) > n_samples else lines
-    samples = []
-    for line in eval_lines:
-        obj = json.loads(line)
-        if "messages" in obj:
-            text = " ".join(m.get("content", "") for m in obj["messages"])
-        elif "text" in obj:
-            text = obj["text"]
-        else:
+    texts = []
+    for fname in ["eval.jsonl", "train.jsonl"]:
+        data_path = DATA_DIR / domain / fname
+        if not data_path.exists():
             continue
-        if text.strip():
-            samples.append(text.strip())
-    return samples
+        with open(data_path) as f:
+            lines = f.readlines()
+        # Use last portion of train.jsonl to avoid contamination
+        if fname == "train.jsonl":
+            lines = lines[-min(n_samples * 4, len(lines)):]
+        for line in lines:
+            obj = json.loads(line)
+            if "messages" in obj:
+                if tokenizer is not None:
+                    text = tokenizer.apply_chat_template(
+                        obj["messages"], tokenize=False, add_generation_prompt=False)
+                else:
+                    text = " ".join(m.get("content", "") for m in obj["messages"])
+            elif "text" in obj:
+                text = obj["text"]
+            else:
+                continue
+            if text.strip():
+                texts.append(text.strip())
+            if len(texts) >= n_samples:
+                return texts
+    return texts
 
 
 def compute_ppl(model, tokenizer, texts, max_len=MAX_EVAL_TOKENS):
@@ -133,7 +141,7 @@ def main():
     log("Phase 1: Individual expert benchmarks")
     individual_ppls = {}
     for domain in adapters:
-        samples = load_domain_samples(domain, EVAL_SAMPLES)
+        samples = load_domain_samples(domain, EVAL_SAMPLES, tokenizer)
         if not samples:
             log(f"  SKIP {domain}: no eval data")
             continue
@@ -181,7 +189,7 @@ def main():
     log("Phase 3: Merged model benchmarks")
     merged_ppls = {}
     for domain in individual_ppls:
-        samples = load_domain_samples(domain, EVAL_SAMPLES)
+        samples = load_domain_samples(domain, EVAL_SAMPLES, tokenizer)
         ppl = compute_ppl(compose_model, tokenizer, samples)
         merged_ppls[domain] = {"ppl": ppl, "n_samples": len(samples)}
         log(f"  {domain}: PPL={ppl:.2f}")
