@@ -398,6 +398,7 @@ def prepare_data(tokenizer_name="gpt2"):
 
 
 def prepare_domain_data(tokenizer_name="gpt2"):
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     domain_paths = {d: OUTPUT_DIR / f"domain_{d}_tokens.npy" for d in DOMAINS}
 
     # Try to reuse from relora_from_scratch
