@@ -97,7 +97,7 @@ def generate_corrections(base_model, tokenizer, adapter_dir, domain, n=50):
 
     # Score each example — high loss = expert struggles = correction candidate
     scored = []
-    with torch.no_grad():
+    with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
         for line in eval_lines[:min(n * 4, len(eval_lines))]:
             record = json.loads(line)
             if "messages" in record:
@@ -248,7 +248,7 @@ def run_tournament(base_model, tokenizer, domain, corrections_file):
         m = PeftModel.from_pretrained(base_model, str(adapter_path))
         m.eval()
         losses = []
-        with torch.no_grad():
+        with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
             for text in texts:
                 inputs = tokenizer(text, return_tensors="pt", truncation=True,
                                    max_length=512).to(base_model.device)

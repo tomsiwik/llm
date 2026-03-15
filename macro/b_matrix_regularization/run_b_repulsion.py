@@ -126,7 +126,7 @@ def evaluate_ppl(model, tokenizer, data_path, max_examples=100):
     total_tokens = 0
 
     model.eval()
-    with torch.no_grad():
+    with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
         for idx in sorted(indices):
             example = dataset[int(idx)]
             text = tokenizer.apply_chat_template(
@@ -157,8 +157,8 @@ def finetune_with_repulsion(base_model, adapter_path, data_path, reference_b_set
 
     Returns (model, metrics dict).
     """
-    # Load adapter
-    model = PeftModel.from_pretrained(base_model, str(adapter_path))
+    # Load adapter (is_trainable=True so LoRA params get requires_grad)
+    model = PeftModel.from_pretrained(base_model, str(adapter_path), is_trainable=True)
     model.train()
 
     # Load training data
