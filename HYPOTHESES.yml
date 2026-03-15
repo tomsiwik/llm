@@ -2069,3 +2069,67 @@ nodes:
       If equal-weight wins, pre-merge is confirmed as optimal (simpler is better).
 
       Depends on pilot50_composition_quality to establish the equal-weight baseline.
+
+  exp_individual_expert_held_out:
+    title: Individual experts tested alone on held-out MMLU (distillation vs composition diagnosis)
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_pilot50_held_out_eval
+    experiment_dir: macro/individual_expert_held_out
+    kill_criteria:
+    - Individual experts average >-1pp on MMLU → problem is composition, not distillation
+    - Individual experts average <-3pp on MMLU → distillation memorized, adapters harm generalization
+    evidence: []
+    tags:
+    - distillation
+    - evaluation
+    - diagnosis
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      CRITICAL DIAGNOSIS. The N=50 composition showed -3.67pp on held-out MMLU.
+      This could be: (a) distillation quality — each adapter individually hurts base
+      on non-training-domain tasks, or (b) composition interference — individuals are
+      fine but composing 50 creates destructive interference.
+
+      Tests top-20 adapters INDIVIDUALLY on 20 MMLU subjects. No composition.
+      If individuals also regress, fix distillation. If individuals are neutral,
+      fix composition (selective top-k, not compose-all).
+
+      Inference only, no training. ~2hrs for 20 adapters * 20 subjects.
+
+  exp_selective_composition_mmlu:
+    title: Topic-selective expert composition beats compose-all on MMLU
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/selective_composition_mmlu
+    kill_criteria:
+    - Selective top-k composition does not beat base on MMLU (even targeted selection fails)
+    - Selective top-k shows no improvement over random-k baseline (domain matching useless)
+    evidence:
+    - 'Micro cross-domain: single-expert -7.0% vs multi-expert -1.0% (dilution when irrelevant expert added)'
+    - 'N=50 compose-all: -3.67pp on MMLU held-out (dilution hypothesis)'
+    tags:
+    - composition
+    - evaluation
+    - routing
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      DILUTION FIX. Instead of composing all 50 adapters for every query, select
+      only the k most relevant adapters based on MMLU subject-to-domain mapping.
+
+      Tests k=1,3,5 selective composition vs base and random-k baseline.
+      If selective k=3 beats base, SOLE needs a routing/selection layer.
+      If even k=1 (single best domain) doesn't help, the problem is distillation
+      quality, not composition dilution.
+
+      Inference only, no training. Uses domain-to-MMLU-subject mapping.
