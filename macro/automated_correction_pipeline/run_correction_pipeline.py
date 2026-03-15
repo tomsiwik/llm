@@ -320,7 +320,7 @@ def finetune_clone(base_model, tokenizer, domain, corrections, suffix):
             optim="adamw_8bit",
             seed=42,
             dataset_text_field="text",
-            max_seq_length=512,
+            max_length=512,
         ),
     )
 

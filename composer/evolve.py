@@ -79,7 +79,7 @@ def finetune_clone(base_model_name: str, clone_dir: Path, corrections_file: Path
             optim="adamw_8bit",
             seed=42,
             dataset_text_field="text",
-            max_seq_length=2048,
+            max_length=2048,
         ),
     )
 

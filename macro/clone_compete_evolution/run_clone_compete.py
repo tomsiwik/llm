@@ -196,7 +196,7 @@ def run_tournament(base_model, tokenizer, domain, corrections_file):
             optim="adamw_8bit",
             seed=42,
             dataset_text_field="text",
-            max_seq_length=512,
+            max_length=512,
         ),
     )
 

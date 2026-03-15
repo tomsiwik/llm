@@ -402,7 +402,7 @@ def train_one_expert(base_model: str, data_path: Path, output_dir: Path,
             optim="adamw_8bit",
             seed=42,
             dataset_text_field="text",
-            max_seq_length=1024,
+            max_length=1024,
             packing=True,
         ),
     )

@@ -147,7 +147,7 @@ def train_single_adapter(
             optim="adamw_8bit",
             seed=seed,
             dataset_text_field="text",
-            max_seq_length=1024,
+            max_length=1024,
             packing=True,
         ),
     )
@@ -173,7 +173,7 @@ def train_single_adapter(
             per_device_train_batch_size=1,
             per_device_eval_batch_size=1,
             dataset_text_field="text",
-            max_seq_length=1024,
+            max_length=1024,
             packing=True,
             report_to="none",
         ),
