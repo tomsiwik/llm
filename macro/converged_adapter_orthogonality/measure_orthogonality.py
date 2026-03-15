@@ -208,37 +208,45 @@ def measure_gradient_alignment_bias(base_model, tokenizer, adapter_pairs, n_samp
         if len(a_texts) < 3 or len(b_texts) < 3:
             continue
 
-        # Compute gradients on domain A data using base model (no adapter)
+        # Compute gradients on domain data using base model (no adapter).
+        # With 4-bit quantization, weights are Params4bit and don't support
+        # requires_grad. Instead, hook the target layer's output to capture
+        # gradients w.r.t. hidden states (same subspace, avoids quantization).
+        target_layer = base_model.model.layers[14].self_attn.q_proj
+
+        def _collect_grads(texts, n):
+            grads = []
+            for text in texts[:n]:
+                captured = {}
+
+                def hook_fn(module, input, output):
+                    captured["out"] = output
+
+                handle = target_layer.register_forward_hook(hook_fn)
+                inputs = tokenizer(text, return_tensors="pt", truncation=True,
+                                   max_length=256).to(base_model.device)
+                if inputs["input_ids"].shape[1] < 2:
+                    handle.remove()
+                    continue
+                outputs = base_model(**inputs, labels=inputs["input_ids"])
+                handle.remove()
+
+                if "out" in captured and captured["out"].requires_grad:
+                    g = torch.autograd.grad(outputs.loss, captured["out"],
+                                            retain_graph=False)[0]
+                    grads.append(g.detach().float().cpu().numpy().flatten())
+            return grads
+
         base_model.train()
-        grad_a = []
-        for text in a_texts[:n_samples]:
-            base_model.zero_grad()
-            inputs = tokenizer(text, return_tensors="pt", truncation=True,
-                               max_length=256).to(base_model.device)
-            if inputs["input_ids"].shape[1] < 2:
-                continue
-            outputs = base_model(**inputs, labels=inputs["input_ids"])
-            outputs.loss.backward()
-            # Collect gradients from a representative layer
-            for name, param in base_model.named_parameters():
-                if "layers.14.self_attn.q_proj.weight" in name and param.grad is not None:
-                    grad_a.append(param.grad.detach().float().cpu().numpy().flatten())
-                    break
+        # Enable grad on embeddings so hidden states get grad_fn
+        embed_param = next(base_model.model.embed_tokens.parameters())
+        orig_requires_grad = embed_param.requires_grad
+        embed_param.requires_grad_(True)
 
-        grad_b = []
-        for text in b_texts[:n_samples]:
-            base_model.zero_grad()
-            inputs = tokenizer(text, return_tensors="pt", truncation=True,
-                               max_length=256).to(base_model.device)
-            if inputs["input_ids"].shape[1] < 2:
-                continue
-            outputs = base_model(**inputs, labels=inputs["input_ids"])
-            outputs.loss.backward()
-            for name, param in base_model.named_parameters():
-                if "layers.14.self_attn.q_proj.weight" in name and param.grad is not None:
-                    grad_b.append(param.grad.detach().float().cpu().numpy().flatten())
-                    break
+        grad_a = _collect_grads(a_texts, n_samples)
+        grad_b = _collect_grads(b_texts, n_samples)
 
+        embed_param.requires_grad_(orig_requires_grad)
         base_model.eval()
 
         if grad_a and grad_b:
