@@ -1921,7 +1921,7 @@ nodes:
 
   exp_expert_redundancy_clustering:
     title: Pilot50 adapter similarity reveals redundant experts prunable without quality loss
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
@@ -1958,7 +1958,7 @@ nodes:
 
   exp_small_n_held_out_eval:
     title: Small-N (2-5) expert composition passes held-out eval where N=50 failed
-    status: open
+    status: active
     scale: macro
     priority: 2
     depends_on:
@@ -1994,7 +1994,7 @@ nodes:
 
   exp_expert_interpolation_linearity:
     title: Linear interpolation between two domain experts produces smooth quality gradient
-    status: open
+    status: active
     scale: macro
     priority: 4
     depends_on:
@@ -2072,7 +2072,7 @@ nodes:
 
   exp_individual_expert_held_out:
     title: Individual experts tested alone on held-out MMLU (distillation vs composition diagnosis)
-    status: open
+    status: active
     scale: macro
     priority: 2
     depends_on:
@@ -2104,7 +2104,7 @@ nodes:
 
   exp_selective_composition_mmlu:
     title: Topic-selective expert composition beats compose-all on MMLU
-    status: open
+    status: active
     scale: macro
     priority: 2
     depends_on:
