@@ -51,20 +51,28 @@ def discover_adapters():
 
 
 def load_domain_samples(domain, n_samples):
-    """Load evaluation samples for a domain from distillation data."""
-    domain_dir = DATA_DIR / domain
-    if not domain_dir.exists():
+    """Load evaluation samples for a domain from distillation data.
+
+    Uses last N samples from train.jsonl as held-out eval set.
+    """
+    data_path = DATA_DIR / domain / "train.jsonl"
+    if not data_path.exists():
         return []
+    with open(data_path) as f:
+        lines = f.readlines()
+    # Use last n_samples as eval (not seen during training with packing)
+    eval_lines = lines[-n_samples:] if len(lines) > n_samples else lines
     samples = []
-    for f in sorted(domain_dir.glob("*.jsonl")):
-        with open(f) as fh:
-            for line in fh:
-                obj = json.loads(line)
-                prompt = obj.get("prompt") or obj.get("instruction") or obj.get("input", "")
-                if prompt.strip():
-                    samples.append(prompt.strip())
-                if len(samples) >= n_samples:
-                    return samples
+    for line in eval_lines:
+        obj = json.loads(line)
+        if "messages" in obj:
+            text = " ".join(m.get("content", "") for m in obj["messages"])
+        elif "text" in obj:
+            text = obj["text"]
+        else:
+            continue
+        if text.strip():
+            samples.append(text.strip())
     return samples
 
 
