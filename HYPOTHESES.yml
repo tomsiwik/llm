@@ -3035,7 +3035,7 @@ nodes:
 
   exp_cluster_grouped_composition:
     title: Cluster-aware composition with routing beats compose-all at macro scale
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
@@ -3082,7 +3082,7 @@ nodes:
 
   exp_greedy_expert_selection:
     title: Validation-guided greedy selection finds optimal expert subset from pilot-50
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
