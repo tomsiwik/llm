@@ -43,13 +43,18 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 BASE_MODEL = "Qwen/Qwen2.5-7B"
 HF_CACHE = "/workspace/hf_cache"
 
-# Load API key
-from dotenv import load_dotenv
-load_dotenv(REPO_ROOT / ".env")
-
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 TEACHER_MODEL = "llama-3.3-70b-versatile"
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+
+
+def _load_api_key():
+    """Load GROQ_API_KEY from .env (deferred to avoid top-level dotenv dependency)."""
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(REPO_ROOT / ".env")
+    except ImportError:
+        pass
+    return os.environ.get("GROQ_API_KEY", "")
 
 # 5 diverse domains — includes code (execution-testable) and non-code
 TEST_DOMAINS = ["python", "bash", "math", "medical", "sql"]
@@ -154,7 +159,7 @@ def judge_with_teacher(query, expert_answer, ground_truth):
     """
     from openai import OpenAI
 
-    client = OpenAI(api_key=GROQ_API_KEY, base_url=GROQ_BASE_URL)
+    client = OpenAI(api_key=os.environ.get("GROQ_API_KEY", ""), base_url=GROQ_BASE_URL)
 
     judge_prompt = f"""You are judging whether an AI assistant's answer is correct.
 
@@ -367,6 +372,7 @@ def main():
     log(f"Domains: {TEST_DOMAINS}")
     log(f"Queries per domain: {N_QUERIES}")
 
+    GROQ_API_KEY = _load_api_key()
     if not GROQ_API_KEY:
         log("ERROR: GROQ_API_KEY not found in environment")
         sys.exit(1)
