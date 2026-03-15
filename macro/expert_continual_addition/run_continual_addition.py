@@ -20,7 +20,9 @@ import json
 import math
 import os
 import random
+import shutil
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -103,6 +105,55 @@ def load_texts(domain, tokenizer, n=50, split="eval"):
             texts.append(text)
     random.shuffle(texts)
     return texts[:n]
+
+
+def compose_adapters_on_cpu(adapter_names, adapter_dir, weights=None):
+    """Compose multiple LoRA adapters on CPU by averaging safetensors weights.
+
+    Returns path to a temporary directory containing the composed adapter.
+    Caller is responsible for cleanup (shutil.rmtree).
+    """
+    from safetensors.torch import load_file, save_file
+    import torch as _torch
+
+    if weights is None:
+        weights = [1.0 / len(adapter_names)] * len(adapter_names)
+
+    composed = {}
+    adapter_config = None
+
+    for i, name in enumerate(adapter_names):
+        if isinstance(name, Path):
+            adapter_path = name
+        else:
+            adapter_path = adapter_dir / name
+        st_path = adapter_path / "adapter_model.safetensors"
+        if not st_path.exists():
+            continue
+        tensors = load_file(str(st_path), device="cpu")
+        w = weights[i]
+        for key, val in tensors.items():
+            if key in composed:
+                composed[key] = composed[key] + val.float() * w
+            else:
+                composed[key] = val.float() * w
+
+        if adapter_config is None:
+            cfg_path = adapter_path / "adapter_config.json"
+            if cfg_path.exists():
+                with open(cfg_path) as f:
+                    adapter_config = json.load(f)
+
+    for key in composed:
+        composed[key] = composed[key].to(_torch.bfloat16)
+
+    tmp_dir = tempfile.mkdtemp(prefix="composed_adapter_")
+    save_file(composed, os.path.join(tmp_dir, "adapter_model.safetensors"))
+    if adapter_config:
+        with open(os.path.join(tmp_dir, "adapter_config.json"), "w") as f:
+            json.dump(adapter_config, f, indent=2)
+
+    return tmp_dir
 
 
 def compute_ppl(model, tokenizer, texts, max_len=512):
@@ -248,34 +299,12 @@ def run_experiment():
         trust_remote_code=True,
     )
 
-    # Load all adapters and compose via add_weighted_adapter (4-bit can't merge_and_unload)
-    loaded_adapters = []
-    first = True
-    for adapter_name in adapters:
-        adapter_path = ADAPTER_DIR / adapter_name
-        try:
-            if first:
-                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
-                first = False
-            else:
-                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
-            loaded_adapters.append(adapter_name)
-            if len(loaded_adapters) % 10 == 0:
-                log(f"  Loaded {len(loaded_adapters)}/{len(adapters)} adapters")
-        except Exception as e:
-            log(f"  WARN: failed to load {adapter_name}: {e}")
-
-    n_merged = len(loaded_adapters)
-    n = len(loaded_adapters)
-    weights = [1.0 / n] * n
-    peft_model.add_weighted_adapter(
-        adapters=loaded_adapters, weights=weights,
-        adapter_name="sole50", combination_type="linear",
-    )
-    peft_model.set_adapter("sole50")
-    for a in loaded_adapters:
-        peft_model.delete_adapter(a)
-    torch.cuda.empty_cache()
+    # Compose adapters on CPU to avoid GPU OOM with 50 simultaneous adapters
+    log(f"Composing {len(adapters)} pilot adapters on CPU...")
+    composed_dir = compose_adapters_on_cpu(adapters, ADAPTER_DIR)
+    n_merged = len(adapters)
+    peft_model = PeftModel.from_pretrained(model, composed_dir, adapter_name="sole50")
+    shutil.rmtree(composed_dir)
     log(f"Composed {n_merged} pilot adapters")
 
     sole50_ppl = {}
@@ -336,50 +365,26 @@ def run_experiment():
         trust_remote_code=True,
     )
 
-    # Load all pilot + new adapters, compose via add_weighted_adapter
-    all_adapter_names = []
-    first = True
-    # Pilot adapters
-    for adapter_name in adapters:
-        adapter_path = ADAPTER_DIR / adapter_name
-        try:
-            if first:
-                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
-                first = False
-            else:
-                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
-            all_adapter_names.append(adapter_name)
-        except Exception:
-            pass
+    # Compose all pilot + new adapters on CPU to avoid GPU OOM
+    # Collect all adapter paths (pilot from ADAPTER_DIR, new from NEW_ADAPTER_DIR)
+    all_adapter_paths = []
+    for name in adapters:
+        p = ADAPTER_DIR / name
+        if (p / "adapter_model.safetensors").exists():
+            all_adapter_paths.append(p)
 
-    # New adapters
     n_new_merged = 0
     for domain in new_domains:
-        adapter_path = NEW_ADAPTER_DIR / domain
-        if not (adapter_path / "adapter_model.safetensors").exists():
-            continue
-        adapter_name = f"new_{domain}"
-        try:
-            if first:
-                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
-                first = False
-            else:
-                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
-            all_adapter_names.append(adapter_name)
+        p = NEW_ADAPTER_DIR / domain
+        if (p / "adapter_model.safetensors").exists():
+            all_adapter_paths.append(p)
             n_new_merged += 1
-        except Exception as e:
-            log(f"  WARN: failed to load new {domain}: {e}")
 
-    n_total = len(all_adapter_names)
-    weights = [1.0 / n_total] * n_total
-    peft_model.add_weighted_adapter(
-        adapters=all_adapter_names, weights=weights,
-        adapter_name="sole60", combination_type="linear",
-    )
-    peft_model.set_adapter("sole60")
-    for a in all_adapter_names:
-        peft_model.delete_adapter(a)
-    torch.cuda.empty_cache()
+    n_total = len(all_adapter_paths)
+    log(f"Composing {n_total} adapters on CPU ({n_new_merged} new + {n_merged} pilot)...")
+    composed_dir = compose_adapters_on_cpu(all_adapter_paths, Path("."), weights=[1.0 / n_total] * n_total)
+    peft_model = PeftModel.from_pretrained(model, composed_dir, adapter_name="sole60")
+    shutil.rmtree(composed_dir)
     log(f"Composed {n_new_merged} new + {n_merged} pilot adapters = {n_total} total")
 
     sole60_ppl = {}

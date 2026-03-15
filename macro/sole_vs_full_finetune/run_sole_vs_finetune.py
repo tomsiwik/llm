@@ -24,7 +24,9 @@ import json
 import math
 import os
 import random
+import shutil
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -127,6 +129,55 @@ def load_union_training_data(tokenizer, domains, max_per_domain=100):
     return all_texts
 
 
+def compose_adapters_on_cpu(adapter_names, adapter_dir, weights=None):
+    """Compose multiple LoRA adapters on CPU by averaging safetensors weights.
+
+    Returns path to a temporary directory containing the composed adapter.
+    Caller is responsible for cleanup (shutil.rmtree).
+    """
+    from safetensors.torch import load_file, save_file
+    import torch as _torch
+
+    if weights is None:
+        weights = [1.0 / len(adapter_names)] * len(adapter_names)
+
+    composed = {}
+    adapter_config = None
+
+    for i, name in enumerate(adapter_names):
+        adapter_path = adapter_dir / name
+        st_path = adapter_path / "adapter_model.safetensors"
+        if not st_path.exists():
+            continue
+        tensors = load_file(str(st_path), device="cpu")
+        w = weights[i]
+        for key, val in tensors.items():
+            if key in composed:
+                composed[key] = composed[key] + val.float() * w
+            else:
+                composed[key] = val.float() * w
+
+        # Grab adapter_config from first adapter
+        if adapter_config is None:
+            cfg_path = adapter_path / "adapter_config.json"
+            if cfg_path.exists():
+                with open(cfg_path) as f:
+                    adapter_config = json.load(f)
+
+    # Cast back to bf16
+    for key in composed:
+        composed[key] = composed[key].to(_torch.bfloat16)
+
+    # Save to temp dir
+    tmp_dir = tempfile.mkdtemp(prefix="composed_adapter_")
+    save_file(composed, os.path.join(tmp_dir, "adapter_model.safetensors"))
+    if adapter_config:
+        with open(os.path.join(tmp_dir, "adapter_config.json"), "w") as f:
+            json.dump(adapter_config, f, indent=2)
+
+    return tmp_dir
+
+
 def compute_ppl(model, tokenizer, texts, max_len=512):
     """Compute perplexity on a list of texts."""
     import torch
@@ -206,40 +257,13 @@ def run_experiment():
     log("PHASE 2: SOLE composed model evaluation")
     log("=" * 70)
 
-    log(f"Loading {len(adapters)} adapters for composition...")
+    log(f"Composing {len(adapters)} adapters on CPU (avoids GPU OOM)...")
     merge_start = time.time()
-    loaded_adapters = []
 
-    # Load first adapter to create PeftModel
-    first_adapter = adapters[0]
-    peft_model = PeftModel.from_pretrained(
-        model, str(ADAPTER_DIR / first_adapter), adapter_name=first_adapter)
-    loaded_adapters.append(first_adapter)
-
-    # Load remaining adapters
-    for adapter_name in adapters[1:]:
-        adapter_path = ADAPTER_DIR / adapter_name
-        try:
-            peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
-            loaded_adapters.append(adapter_name)
-            if len(loaded_adapters) % 10 == 0:
-                log(f"  Loaded {len(loaded_adapters)}/{len(adapters)} adapters")
-        except Exception as e:
-            log(f"  WARN: failed to load {adapter_name}: {e}")
-
-    # Compose via weighted addition (SOLE: equal weights, scaled by 1/N)
-    n = len(loaded_adapters)
-    weights = [1.0 / n] * n
-    peft_model.add_weighted_adapter(
-        adapters=loaded_adapters, weights=weights,
-        adapter_name="composed", combination_type="linear",
-    )
-    peft_model.set_adapter("composed")
-
-    # Delete original adapters to free GPU memory (composed adapter is independent)
-    for adapter_name in loaded_adapters:
-        peft_model.delete_adapter(adapter_name)
-    torch.cuda.empty_cache()
+    composed_dir = compose_adapters_on_cpu(adapters, ADAPTER_DIR)
+    n = len(adapters)
+    peft_model = PeftModel.from_pretrained(model, composed_dir, adapter_name="composed")
+    shutil.rmtree(composed_dir)
 
     merge_time = time.time() - merge_start
     log(f"Composed {n} adapters in {merge_time:.1f}s")
