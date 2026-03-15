@@ -48,12 +48,16 @@ GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 
 def _load_api_key():
-    """Load GROQ_API_KEY from .env (deferred to avoid top-level dotenv dependency)."""
-    try:
-        from dotenv import load_dotenv
-        load_dotenv(REPO_ROOT / ".env")
-    except ImportError:
-        pass
+    """Load GROQ_API_KEY from .env (manual parse to avoid dotenv dependency)."""
+    if not os.environ.get("GROQ_API_KEY"):
+        env_file = REPO_ROOT / ".env"
+        if env_file.exists():
+            for line in env_file.read_text().splitlines():
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, _, val = line.partition("=")
+                    val = val.strip().strip("'\"")
+                    os.environ.setdefault(key.strip(), val)
     return os.environ.get("GROQ_API_KEY", "")
 
 # 5 diverse domains — includes code (execution-testable) and non-code
