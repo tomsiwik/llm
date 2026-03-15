@@ -150,7 +150,7 @@ def compute_ppl(model, tokenizer, texts, max_len=512):
 
 def run_experiment():
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
     from peft import PeftModel, LoraConfig, get_peft_model
 
     log("=" * 70)
@@ -169,65 +169,24 @@ def run_experiment():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # ============================================================
-    # PHASE 1: Evaluate SOLE (composed 50-expert model)
-    # ============================================================
-    log("\n" + "=" * 70)
-    log("PHASE 1: SOLE composed model evaluation")
-    log("=" * 70)
-
-    log("Loading base model...")
-    model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, cache_dir=HF_CACHE,
-        torch_dtype=torch.float16, device_map="auto",
-        trust_remote_code=True,
+    # 4-bit quantization config (fits 7B model in ~4GB VRAM)
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True, bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_use_double_quant=True,
     )
 
-    # Pre-merge all adapters via weighted addition
-    log(f"Pre-merging {len(adapters)} adapters...")
-    merge_start = time.time()
-    n_merged = 0
-    for adapter_name in adapters:
-        adapter_path = ADAPTER_DIR / adapter_name
-        try:
-            peft_model = PeftModel.from_pretrained(model, str(adapter_path))
-            peft_model.merge_and_unload()
-            model = peft_model.base_model
-            n_merged += 1
-            if n_merged % 10 == 0:
-                log(f"  Merged {n_merged}/{len(adapters)} adapters")
-        except Exception as e:
-            log(f"  WARN: failed to merge {adapter_name}: {e}")
-    merge_time = time.time() - merge_start
-    log(f"Merged {n_merged} adapters in {merge_time:.1f}s")
-
-    # Evaluate SOLE on each domain
-    sole_results = {}
-    for domain in EVAL_DOMAINS:
-        texts = load_eval_texts(domain, tokenizer, EVAL_SAMPLES)
-        if len(texts) < 3:
-            log(f"  SKIP {domain}: not enough eval data ({len(texts)} texts)")
-            continue
-        ppl = compute_ppl(model, tokenizer, texts, MAX_SEQ_LEN)
-        sole_results[domain] = ppl
-        log(f"  SOLE PPL on {domain}: {ppl:.2f}")
-
-    # Free SOLE model
-    del model
-    gc.collect()
-    torch.cuda.empty_cache()
-
     # ============================================================
-    # PHASE 2: Evaluate BASE model (no adapters)
+    # PHASE 1: Evaluate BASE model (no adapters) — do this first
+    # since we reuse the base model for SOLE composition
     # ============================================================
     log("\n" + "=" * 70)
-    log("PHASE 2: Base model evaluation")
+    log("PHASE 1: Base model evaluation")
     log("=" * 70)
 
+    log("Loading base model (4-bit)...")
     model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, cache_dir=HF_CACHE,
-        torch_dtype=torch.float16, device_map="auto",
-        trust_remote_code=True,
+        BASE_MODEL, quantization_config=bnb_config, device_map="auto",
+        torch_dtype=torch.bfloat16, cache_dir=HF_CACHE, trust_remote_code=True,
     )
 
     base_results = {}
@@ -240,7 +199,66 @@ def run_experiment():
         log(f"  Base PPL on {domain}: {ppl:.2f}")
 
     # ============================================================
-    # PHASE 3: Train union LoRA on concatenated data
+    # PHASE 2: Evaluate SOLE (composed 50-expert model)
+    # Uses add_weighted_adapter to compose without dequantizing base
+    # ============================================================
+    log("\n" + "=" * 70)
+    log("PHASE 2: SOLE composed model evaluation")
+    log("=" * 70)
+
+    log(f"Loading {len(adapters)} adapters for composition...")
+    merge_start = time.time()
+    loaded_adapters = []
+
+    # Load first adapter to create PeftModel
+    first_adapter = adapters[0]
+    peft_model = PeftModel.from_pretrained(
+        model, str(ADAPTER_DIR / first_adapter), adapter_name=first_adapter)
+    loaded_adapters.append(first_adapter)
+
+    # Load remaining adapters
+    for adapter_name in adapters[1:]:
+        adapter_path = ADAPTER_DIR / adapter_name
+        try:
+            peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
+            loaded_adapters.append(adapter_name)
+            if len(loaded_adapters) % 10 == 0:
+                log(f"  Loaded {len(loaded_adapters)}/{len(adapters)} adapters")
+        except Exception as e:
+            log(f"  WARN: failed to load {adapter_name}: {e}")
+
+    # Compose via weighted addition (SOLE: equal weights, scaled by 1/N)
+    n = len(loaded_adapters)
+    weights = [1.0 / n] * n
+    peft_model.add_weighted_adapter(
+        adapters=loaded_adapters, weights=weights,
+        adapter_name="composed", combination_type="linear",
+    )
+    peft_model.set_adapter("composed")
+    merge_time = time.time() - merge_start
+    log(f"Composed {n} adapters in {merge_time:.1f}s")
+
+    # Evaluate SOLE on each domain
+    sole_results = {}
+    peft_model.eval()
+    for domain in EVAL_DOMAINS:
+        texts = load_eval_texts(domain, tokenizer, EVAL_SAMPLES)
+        if len(texts) < 3:
+            log(f"  SKIP {domain}: not enough eval data ({len(texts)} texts)")
+            continue
+        ppl = compute_ppl(peft_model, tokenizer, texts, MAX_SEQ_LEN)
+        sole_results[domain] = ppl
+        log(f"  SOLE PPL on {domain}: {ppl:.2f}")
+
+    n_merged = n  # for results output
+
+    # Free SOLE model
+    del peft_model
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    # ============================================================
+    # PHASE 3: Train union LoRA on concatenated data (QLoRA)
     # ============================================================
     log("\n" + "=" * 70)
     log("PHASE 3: Train union LoRA on all 50 domains")
@@ -251,6 +269,16 @@ def run_experiment():
     max_per_domain = 20 if IS_SMOKE else 100  # ~5000 total examples
     union_data = load_union_training_data(tokenizer, all_domains, max_per_domain)
     log(f"Union dataset: {len(union_data)} examples from {len(all_domains)} domains")
+
+    # Reload base model for training (need fresh model without composed adapters)
+    del model
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    model = AutoModelForCausalLM.from_pretrained(
+        BASE_MODEL, quantization_config=bnb_config, device_map="auto",
+        torch_dtype=torch.bfloat16, cache_dir=HF_CACHE, trust_remote_code=True,
+    )
 
     # Apply LoRA config (same as pilot50)
     lora_config = LoraConfig(
@@ -267,8 +295,8 @@ def run_experiment():
     log(f"Trainable params: {trainable_params:,}")
 
     # Simple training loop
-    from torch.utils.data import DataLoader
-    optimizer = torch.optim.AdamW(model.parameters(), lr=UNION_LR)
+    optimizer = torch.optim.AdamW(
+        [p for p in model.parameters() if p.requires_grad], lr=UNION_LR)
     model.train()
 
     train_start = time.time()
@@ -296,10 +324,7 @@ def run_experiment():
     train_time = time.time() - train_start
     log(f"Union training: {step} steps in {train_time:.1f}s")
 
-    # Merge union LoRA into base
-    model = model.merge_and_unload()
-
-    # Evaluate union model on each domain
+    # Evaluate union model on each domain (keep as PeftModel — can't merge into 4-bit base)
     union_results = {}
     model.eval()
     for domain in EVAL_DOMAINS:
@@ -408,7 +433,7 @@ def run_experiment():
             "union_steps": step,
             "union_train_time_s": train_time,
             "union_final_loss": losses[-1] if losses else None,
-            "merge_time_s": merge_time,
+            "compose_time_s": merge_time,
             "sole_estimated_train_time_min": sole_train_cost,
             "union_train_time_min": union_train_cost,
         },

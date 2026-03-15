@@ -1751,6 +1751,13 @@ nodes:
     - date: '2026-03-14'
       claim: 'Experiment script written and submitted to GPU queue. Offline batched approach: fine-tune existing pilot50 adapters for 30 steps with B-repulsion loss (lambda=0.01). 10 domains, measures pairwise ||B_i^T B_j||_F before/after.'
       source: macro/b_matrix_regularization/run_b_repulsion.py
+    - date: '2026-03-15'
+      claim: >
+        CRASHED: ValueError empty parameter list. After Phase 1 PeftModel
+        wrapping/unwrapping, LoRA params not found in Phase 2. Fix already in
+        code (explicit requires_grad + RuntimeError check at L171-181).
+        Resubmission run_b_repulsion_1773567889 in queue will use fixed code.
+      source: gpu_queue results run_b_repulsion_1773520515
     tags:
     - interference
     - training
@@ -1790,6 +1797,14 @@ nodes:
     - date: '2026-03-15'
       claim: 'Script submitted to GPU queue (run_sole_vs_finetune_1773531197)'
       source: tools/gpu_queue.py status
+    - date: '2026-03-15'
+      claim: >
+        CRASHED: CUDA OOM on 24GB GPU. Float16 model (~14GB) + iterative
+        merge_and_unload of 50 adapters exhausted VRAM. Fixed: switched to
+        4-bit quantization (BitsAndBytesConfig) and add_weighted_adapter
+        composition (matching composition_quality pattern). Resubmitted as
+        run_sole_vs_finetune_1773569015.
+      source: gpu_queue results run_sole_vs_finetune_1773531197
     tags:
     - composition
     - baselines
@@ -2659,7 +2674,7 @@ nodes:
 
   exp_correlated_layer_errors:
     title: Correlated per-layer errors break sub-additivity guarantee
-    status: active
+    status: proven
     scale: micro
     priority: 5
     depends_on:
@@ -2669,7 +2684,16 @@ nodes:
     kill_criteria:
     - K1: correlated errors amplify >2x vs independent errors at same cosine (sub-additivity breaks)
     - K2: amplification ratio still <1.0 even with maximally correlated errors (sub-additivity robust)
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        K1 NOT triggered: correlated errors produce 0.41x output deviation vs independent
+        (not >2x). K2 TRIGGERED: amp_ratio=0.074 at rho=1.0, firmly sub-additive.
+        Surprising: correlation REDUCES error. Mechanism: rank-1 perturbations are maximally
+        compressible + consistent activation masking. Sub-additivity robust to any
+        inter-layer correlation level. No cosine bound needed for production.
+        5 tests, 3 seeds each, d=32-256, L=1-24, rho=0-1. Runtime: 39s.
+      source: micro/models/correlated_layer_errors/results.json
     tags:
     - composition
     - safety
@@ -2682,10 +2706,11 @@ nodes:
       aligned per-layer deltas (worst case) vs random (baseline). If K1 triggers, the
       production safety guarantee needs a cosine bound on per-layer correlation.
       CPU only, extend multilayer cascade framework.
+      RESULT: Hypothesis DISPROVED (correlation helps, not hurts). Sub-additivity proven robust.
 
   exp_residual_layernorm_error_dynamics:
     title: Residual connections and LayerNorm change multi-layer error propagation
-    status: active
+    status: proven
     scale: micro
     priority: 5
     depends_on:
@@ -2695,7 +2720,18 @@ nodes:
     kill_criteria:
     - K1: residual connections change amplification ratio by >50% vs feedforward-only (dynamics fundamentally different)
     - K2: LayerNorm renormalization makes error propagation dimension-independent (breaks 1/d scaling)
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        K1 TRIGGERED (favorably): residual connections change amp_ratio by 53-91%.
+        Pre-RMSNorm (Qwen/Llama production): amp_ratio=0.022, 11.5x better than
+        feedforward (0.254). All residual architectures are safer than feedforward.
+        LayerNorm-only (no residual) is dangerous (amp_ratio=3.41, error amplifies)
+        but no production system uses this. K2 KILLED: all architectures preserve
+        ~1/d dimension scaling (exponents -0.92 to -1.16, R^2>0.98). Production
+        safety extrapolation: Pre-RMSNorm at d=896 SOLE cosines ~0.0004% output
+        deviation. 7 architectures tested, 3 seeds, 7 depths, 4 dimensions. 55s runtime.
+      source: micro/models/residual_layernorm_error_dynamics/results.json
     tags:
     - composition
     - safety
