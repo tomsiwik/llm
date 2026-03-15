@@ -7,7 +7,7 @@ meta:
   last_killed: '2026-03-15'
   last_killed_node: exp_layerwise_order_sensitivity
   last_proven: '2026-03-15'
-  last_proven_node: exp_lora_flow_comparison
+  last_proven_node: exp_composition_weight_sensitivity
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -1498,7 +1498,7 @@ nodes:
 
   exp_cross_domain_dilution_vs_k:
     title: Multi-expert composition quality improves with selective top-k vs averaging all involved experts
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on:
@@ -1731,6 +1731,7 @@ nodes:
   exp_composition_weight_sensitivity:
     title: Pre-merged SOLE quality degrades gracefully as expert count N grows (dilution test)
     status: supported
+    status_qualifier: K2 only
     scale: micro
     priority: 4
     depends_on:
@@ -1745,13 +1746,26 @@ nodes:
     - 'Lora-flow found all methods identical at micro — dilution effect may dominate at scale'
     - date: '2026-03-15'
       claim: >
-        K2 PASS (decisive): zero quality degradation from N=2 to N=100
-        (AVG gap stays at ~2-6e-6% of base). K1 INCONCLUSIVE: false positive
-        from zero expert specialization at micro scale. SNR increases with N
-        (O(N) scaling: noise floor drops as 1/N^2 while signal as 1/N).
-        SUM composition grows linearly but stable. Orthogonality confirmed at
-        N=100 (mean|cos|=0.0021). 3 seeds, d=64, r=8, L=4, 100 domains.
+        K2 PASS (trivially true -- expert deltas contribute 0.00% improvement,
+        so composition cannot degrade quality). Zero quality degradation from
+        N=2 to N=100 (AVG gap stays at ~2-6e-6% of base). K1 INCONCLUSIVE:
+        false positive from zero expert specialization at micro scale. SNR
+        increases with N but SNR~O(N) is a PREDICTION, not a finding -- power
+        law exponent +0.57 contradicts predicted -1.0. Orthogonality measured
+        among 20 of 100 experts (mean|cos|=0.0022). Noise floor: 20 samples
+        with symmetric LOO reweighting (v2 revision). 3 seeds, d=64, r=8, L=4,
+        100 domains.
       source: micro/models/composition_weight_sensitivity/results.json
+    - date: '2026-03-15'
+      claim: >
+        Adversarial review v2: PROCEED. 6 REVISE fixes well-applied. Reviewer
+        identified noise norm double-division bug (noise scaled to avg_norm/N then
+        divided by N again in compose_avg, producing O(1/N^2) noise vs O(1/N) signal).
+        This inflates SNR values but does NOT affect K2 (stability) finding. Two
+        non-blocking fixes: (1) resolve MATH.md vs PAPER.md noise scaling contradiction,
+        (2) clarify which SNR prediction is canonical. Status "supported (K2 only)"
+        confirmed as appropriately conservative.
+      source: micro/models/composition_weight_sensitivity/REVIEW-adversarial.md
     tags:
     - composition
     - scaling
@@ -2133,3 +2147,59 @@ nodes:
       quality, not composition dilution.
 
       Inference only, no training. Uses domain-to-MMLU-subject mapping.
+
+  exp_logit_ensemble_vs_merge:
+    title: Logit-space ensembling vs weight-space merging diagnoses regression source
+    status: active
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks:
+    - exp_pilot50_held_out_eval
+    experiment_dir: macro/logit_ensemble_vs_merge
+    kill_criteria:
+    - Logit ensemble shows same regression as weight merge (problem is distillation, not interference)
+    - Logit ensemble overhead >10x weight merge (impractical as diagnostic baseline)
+    evidence: []
+    tags:
+    - composition
+    - evaluation
+    - diagnosis
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      KEY DIAGNOSTIC. Weight merge computes sum(LoRA_i)/N and runs inference once.
+      Logit ensemble runs inference N times (once per adapter) and averages logits.
+      If logit ensemble beats weight merge, the regression is from WEIGHT INTERFERENCE
+      (LoRA weights destructively interfere when summed). If both regress equally,
+      the problem is DISTILLATION QUALITY (individual adapters hurt the base).
+      This directly determines whether to fix training or fix composition.
+      Tests N=5,10,25,50 on 15 MMLU subjects, 50 examples each.
+
+  exp_top_k_embedding_routing:
+    title: Embedding-based top-K routing beats full merge on held-out MMLU
+    status: active
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/top_k_routing_mmlu
+    kill_criteria:
+    - Best top-K does not beat full merge by >2pp (routing doesn't help)
+    - Embedding-based selection matches random-K baseline (routing signal is noise)
+    evidence:
+    - 'Selective composition (subject-mapping) already submitted — this tests embedding routing'
+    tags:
+    - composition
+    - routing
+    - evaluation
+    created: '2026-03-15'
+    notes: >
+      Complementary to exp_selective_composition_mmlu which uses explicit subject-domain
+      mapping. This uses embedding-based routing: compute base-model hidden-state
+      embedding for each question, compare to domain description embeddings via cosine,
+      select top-K adapters. More realistic than manual mapping — no human annotation needed.
+      Tests K=1,3,5,10 from N=50 total. If top-K >> full merge, SOLE should
+      route rather than pre-merge. If top-K ≈ full merge, expert selection doesn't help.
