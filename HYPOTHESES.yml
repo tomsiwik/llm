@@ -1730,7 +1730,7 @@ nodes:
 
   exp_composition_weight_sensitivity:
     title: Pre-merged SOLE quality degrades gracefully as expert count N grows (dilution test)
-    status: active
+    status: supported
     scale: micro
     priority: 4
     depends_on:
@@ -1743,6 +1743,15 @@ nodes:
     evidence:
     - 'LoRA-Flow review: pre-merge dilutes each expert to 1/N strength. At N=500, each expert is 0.2%'
     - 'Lora-flow found all methods identical at micro — dilution effect may dominate at scale'
+    - date: '2026-03-15'
+      claim: >
+        K2 PASS (decisive): zero quality degradation from N=2 to N=100
+        (AVG gap stays at ~2-6e-6% of base). K1 INCONCLUSIVE: false positive
+        from zero expert specialization at micro scale. SNR increases with N
+        (O(N) scaling: noise floor drops as 1/N^2 while signal as 1/N).
+        SUM composition grows linearly but stable. Orthogonality confirmed at
+        N=100 (mean|cos|=0.0021). 3 seeds, d=64, r=8, L=4, 100 domains.
+      source: micro/models/composition_weight_sensitivity/results.json
     tags:
     - composition
     - scaling
@@ -1907,6 +1916,115 @@ nodes:
 
       Test on 5 pilot50 experts. 3 refinement iterations each.
       Compare PPL-guided improvement vs random data augmentation (control).
+
+  # ── New Macro Hypotheses (2026-03-15, generated: no eligible open macro nodes) ──
+
+  exp_expert_redundancy_clustering:
+    title: Pilot50 adapter similarity reveals redundant experts prunable without quality loss
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/expert_redundancy_clustering
+    kill_criteria:
+    - All 50 experts are pairwise dissimilar (max cos < 0.10) — no redundancy exists
+    - Removing redundant experts (cos > 0.10 cluster members) degrades composed model quality >3%
+    evidence:
+    - 'Micro orthogonality_by_domain_type: within-cluster |cos| 7.84x higher than cross-cluster'
+    - 'Macro ortho_scaling: cos=0.0002 at d=896, but within-cluster pairs untested'
+    tags:
+    - composition
+    - pruning
+    - efficiency
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      EXPERT EFFICIENCY. The 50 pilot adapters span diverse domains, but some may
+      overlap (e.g., Python and JavaScript, or Physics and Chemistry). At d=896,
+      structural orthogonality guarantees low CROSS-cluster cosine, but WITHIN-cluster
+      pairs may have meaningful overlap.
+
+      Steps: (1) Compute 50x50 pairwise cosine matrix of all adapter deltas
+      (2) Hierarchical clustering to find groups
+      (3) For each cluster with cos>0.10, select representative and prune others
+      (4) Compare composed model quality (MMLU subsets) with full 50 vs pruned set
+      (5) Measure if pruned composition is BETTER (less dilution) or WORSE (lost coverage)
+
+      This directly addresses reviewer attack "too many experts = dilution".
+      If pruning helps, SOLE gets an automatic optimization pass.
+      Uses existing adapters at /workspace/llm/adapters/.
+
+  exp_small_n_held_out_eval:
+    title: Small-N (2-5) expert composition passes held-out eval where N=50 failed
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/small_n_held_out_eval
+    kill_criteria:
+    - Even N=2 composition shows >2pp MMLU regression vs base (composition itself is harmful)
+    - Quality does not monotonically decrease with N (dilution hypothesis wrong)
+    evidence:
+    - 'MMLU held-out eval at N=50: -3.67pp vs base (kill criteria met)'
+    - 'Micro cross-domain: K1_multi -1.0% at N=5 (passed)'
+    - 'Data scaling: saturation at N=200, extreme diminishing returns past N=500'
+    tags:
+    - composition
+    - evaluation
+    - quality
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      DILUTION DIAGNOSIS. The N=50 held-out MMLU eval showed -3.67pp regression.
+      Two explanations: (1) composition itself hurts (fundamental), or (2) N=50
+      causes dilution where each expert's 1/N contribution is below noise floor.
+
+      Test: compose N=2, 3, 5, 10, 25, 50 experts and run MMLU held-out eval at each N.
+      Select top-N experts by individual domain quality (not random).
+      If N=2..5 shows positive delta and degradation scales with N, dilution is the cause
+      and SOLE needs selective composition (top-k per query) rather than compose-all.
+      If even N=2 hurts, composition fundamentally doesn't generalize.
+
+      Uses existing adapters at /workspace/llm/adapters/. Quick experiment — just
+      compose and eval, no training needed. Can run on retrained adapters too once ready.
+
+  exp_expert_interpolation_linearity:
+    title: Linear interpolation between two domain experts produces smooth quality gradient
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/expert_interpolation_linearity
+    kill_criteria:
+    - Quality is NOT monotonic in interpolation weight (non-convex landscape)
+    - Interpolated model at alpha=0.5 is worse than BOTH individual experts on both domains
+    evidence:
+    - 'CAT weights converge to ~1.0 under orthogonality (linear regime)'
+    - 'Structural orthogonality: LoRA composition is additive by construction'
+    tags:
+    - composition
+    - theory
+    - validation
+    created: '2026-03-15'
+    notes: >
+      LINEARITY VALIDATION. SOLE assumes LoRA composition is linear: W + alpha*delta_A + (1-alpha)*delta_B
+      produces a smooth quality gradient between expert A and B. This is true mathematically
+      for the weight space, but downstream quality may NOT be linear.
+
+      Test: pick 5 expert pairs spanning similar (within-cluster) and dissimilar (cross-cluster)
+      domains. For each pair, sweep alpha in [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0].
+      Measure MMLU accuracy on both domains at each alpha.
+      Plot quality curves. If smooth and monotonic, LoRA composition is functionally linear.
+      If quality dips at intermediate alpha, there's a composition barrier.
+
+      This is a quick experiment (7 alphas * 5 pairs * 2 domains = 70 evals).
+      Uses existing adapters. No training needed.
 
   exp_dynamic_weight_composition_macro:
     title: Per-query expert weighting beats equal-weight pre-merge at macro scale
