@@ -7,7 +7,7 @@ meta:
   last_killed: '2026-03-15'
   last_killed_node: exp_layerwise_order_sensitivity
   last_proven: '2026-03-15'
-  last_proven_node: exp_composition_weight_sensitivity
+  last_proven_node: exp_cross_domain_dilution_vs_k
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -742,7 +742,7 @@ nodes:
 
   exp_adaptive_rank_selection:
     title: Domain complexity predicts optimal rank automatically
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on:
@@ -1498,11 +1498,11 @@ nodes:
 
   exp_cross_domain_dilution_vs_k:
     title: Multi-expert composition quality improves with selective top-k vs averaging all involved experts
-    status: active
+    status: proven
     scale: micro
     priority: 4
     depends_on:
-    - exp_cross_domain_composition
+    - exp_relora_from_scratch_composition  # was exp_cross_domain_composition (node never existed; cross-domain work built on relora composition)
     blocks: []
     experiment_dir: micro/models/cross_domain_dilution_vs_k
     kill_criteria:
@@ -1511,17 +1511,25 @@ nodes:
     evidence:
     - 'Cross-domain composition shows dilution when second expert adds noise (PAPER.md: single-expert -7.0% vs multi-expert -1.0%)'
     - 'Hypothesis: weighting involved experts by subspace alignment to query reduces noise injection'
+    - 'K1 PASS: ppl_probe_weighted +9.34pp improvement over equal_weight (threshold 2pp). loss_weighted oracle +9.46pp.'
+    - 'K2 PASS: arith_reverse drops from +24.3% to -8.5% with loss/probe weighting (threshold 20%)'
+    - 'PPL probe (n=10) correlates r=0.990 with full oracle weights -- near-perfect cheap proxy'
+    - 'Weight-space signals useless: activation r=0.023, logit_diff r=-0.245 vs oracle'
+    - 'Top-1 oracle NOT always best: catastrophic on arith_parity (+37.4%). Smooth weighting > hard selection.'
+    - '5 seeds, 10 cross-domain types, 7 strategies compared'
+    - 'Adversarial review: PROCEED (2026-03-15). 2 non-blocking: probe-test overlap (<0.5pp impact), no tau sweep.'
     tags:
     - composition
     - routing
     - cross-domain
     created: '2026-03-14'
+    completed: '2026-03-15'
     notes: >
-      Cross-domain composition found single-expert often beats 2-expert equal-weight.
-      This suggests the second expert sometimes adds noise. A relevance-weighted
-      composition (e.g., weight by cosine of expert subspace to query embedding)
-      could preserve the benefit of multi-expert while avoiding dilution. Micro-testable
-      with the existing cross-domain setup.
+      PPL on a 10-example probe buffer is a production-viable near-oracle proxy for
+      expert relevance weighting. Weight-space signals (activation magnitude, logit
+      difference) are useless at micro scale. Smooth softmax weighting outperforms
+      hard top-1 selection because some cross-domain queries genuinely need both
+      experts. Cost: K+1 forward passes on 10 examples (~0.002s at K=2).
 
   exp_cross_domain_semantic_transfer:
     title: Cross-domain composition handles semantic transfer (not just sequential chaining)
@@ -1529,7 +1537,7 @@ nodes:
     scale: macro
     priority: 3
     depends_on:
-    - exp_cross_domain_composition
+    - exp_cross_domain_dilution_vs_k  # was exp_cross_domain_composition (node never existed)
     - exp_pilot50_composition_quality
     blocks: []
     experiment_dir: macro/cross_domain_semantic_transfer
@@ -1813,7 +1821,7 @@ nodes:
     scale: macro
     priority: 4
     depends_on:
-    - exp_cat_weight_convergence
+    - exp_composition_weight_sensitivity  # was exp_cat_weight_convergence (node never existed; CAT convergence finding came from weight_sensitivity)
     - exp_pilot50_composition_quality
     blocks: []
     experiment_dir: macro/expert_pruning_composition
@@ -2203,3 +2211,54 @@ nodes:
       select top-K adapters. More realistic than manual mapping — no human annotation needed.
       Tests K=1,3,5,10 from N=50 total. If top-K >> full merge, SOLE should
       route rather than pre-merge. If top-K ≈ full merge, expert selection doesn't help.
+
+  exp_ppl_probe_temperature_sensitivity:
+    title: PPL-probe weighting quality is robust across softmax temperatures
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_cross_domain_dilution_vs_k
+    blocks: []
+    experiment_dir: micro/models/ppl_probe_temperature_sensitivity
+    kill_criteria:
+    - tau sweep {0.1, 0.5, 1.0, 2.0, 5.0} shows >5pp variance in mean gap improvement
+    - optimal tau differs from 1.0 by >2x (tau* < 0.5 or tau* > 2.0)
+    evidence:
+    - 'Parent used tau=1.0 without justification; adversarial review flagged as non-blocking gap'
+    - 'At K=2 with loss-based scores, softmax dynamic range depends on absolute loss difference'
+    tags:
+    - composition
+    - routing
+    - cross-domain
+    created: '2026-03-15'
+    notes: >
+      Quick validation: reuse parent experiment infrastructure, sweep tau in {0.1, 0.5, 1.0, 2.0, 5.0}.
+      If quality is robust across tau, the PPL-probe approach is even more production-friendly
+      (no hyperparameter tuning needed). If tau matters, document the optimal range for macro.
+
+  exp_ppl_probe_k3_scaling:
+    title: PPL-probe weighting scales to K=3+ expert composition
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_cross_domain_dilution_vs_k
+    blocks: []
+    experiment_dir: micro/models/ppl_probe_k3_scaling
+    kill_criteria:
+    - probe-oracle correlation drops below r=0.8 at K=3
+    - K=3 probe-weighted composition is worse than K=2 probe-weighted
+    evidence:
+    - 'Parent tested K=2 only; adversarial review flagged K>2 scaling as untested'
+    - 'At K>2, weight space is (K-1)-dimensional; 10 probe examples may not suffice'
+    tags:
+    - composition
+    - routing
+    - scaling
+    created: '2026-03-15'
+    notes: >
+      Extend parent to K=3 (and optionally K=5). Tests whether 10-example probe provides
+      enough signal for higher-dimensional weight optimization. At K=3, the dilution problem
+      is worse (2 noise experts), so the benefit of selective weighting should increase,
+      but the probe must discriminate among 3 experts, not just 2.
