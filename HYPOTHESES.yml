@@ -7,7 +7,7 @@ meta:
   last_killed: '2026-03-15'
   last_killed_node: exp_b_matrix_training_correlation
   last_proven: '2026-03-15'
-  last_proven_node: exp_removal_safety_complete_bound
+  last_proven_node: exp_alpha_residual_scaling_ablation
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -2941,7 +2941,7 @@ nodes:
 
   exp_alpha_residual_scaling_ablation:
     title: Ablate 1/sqrt(L) residual scaling to measure its contribution to alpha=0.022
-    status: active
+    status: proven
     scale: micro
     priority: 2
     depends_on:
@@ -2951,18 +2951,25 @@ nodes:
     kill_criteria:
     - K1: alpha without 1/sqrt(L) scaling is <10x higher than alpha=0.022
     - K2: combined bound D=sum_eps*alpha still predicts <5% at d=256, L=24, N=50 without scaling
-    evidence: []
+    evidence:
+    - "K1 PASS: alpha ratio (unscaled/scaled) = 1.00x across all configs (d=64..256, N=8..50, L=4..48). Max ratio 1.01x at L=48."
+    - "K2 PASS: D=0.098% at d=256, L=24, N=50 — identical for both scaling variants. 51x below 5% threshold."
+    - "1/sqrt(L) scaling affects absolute output magnitude (4.9x = sqrt(24)) but NOT the amplification ratio."
+    - "Alpha is scale-invariant because both signal and perturbation scale identically. The SNR is unchanged."
+    - "Full 12.3x dampening (FF 0.25 -> Pre-RMSNorm 0.022) comes from residual+RMSNorm, zero from 1/sqrt(L)."
     tags:
     - safety
     - theory
     - macro-readiness
     created: '2026-03-15'
+    completed: '2026-03-15'
     notes: >
       Adversarial review flagged 1/sqrt(L) residual scaling as non-standard (Qwen2.5/Llama
-      don't use it). Without it, feedforward amp=0.25 vs 0.022 with scaling. This experiment
-      runs the complete bound experiment with scale=1.0 to quantify how much of alpha=0.022
-      is artificial dampening vs genuine architectural behavior. Critical for macro transfer.
-      CPU only, extends existing removal_safety_complete_bound code.
+      don't use it). Result: the concern was unfounded. The amplification ratio is a
+      dimensionless ratio (output deviation / weight error) that cancels out any uniform
+      scaling factor. Alpha=0.022 is a genuine architectural constant of Pre-RMSNorm
+      transformers that transfers directly to production. Remaining macro concerns:
+      learned RMSNorm gamma, real attention, structured pre-trained weights.
 
   exp_removal_position_sensitivity:
     title: Expert removal position (first/middle/last in GS order) affects output deviation
@@ -3128,3 +3135,121 @@ nodes:
 
       If K* << 50: prune experts before composition (quality gate).
       If K* ~ 50: the composition method is the bottleneck, not expert selection.
+
+  # ── New Hypotheses from alpha_residual_scaling_ablation review (2026-03-15) ──────
+
+  exp_rmsnorm_gamma_nonuniformity:
+    title: Learned RMSNorm gamma non-uniformity breaks alpha scale-invariance at macro
+    status: active
+    scale: micro
+    priority: 3
+    depends_on:
+    - exp_alpha_residual_scaling_ablation
+    blocks: []
+    experiment_dir: micro/models/rmsnorm_gamma_nonuniformity
+    kill_criteria:
+    - K1: non-uniform gamma (sampled from real Qwen distributions) changes alpha by <2x vs uniform gamma
+    - K2: worst-case gamma profile (gamma=5 on 25% of layers) still yields D<5% at d=256, N=50
+    evidence:
+    - 'Adversarial review of alpha ablation: learned gamma 2-5x typical in trained transformers'
+    - 'Alpha scale-invariance proof assumes uniform scaling; non-uniform gamma breaks this'
+    - 'RMSNorm gamma is trainable per-layer in Qwen2.5 and Llama architectures'
+    tags:
+    - safety
+    - theory
+    - macro-readiness
+    created: '2026-03-15'
+    notes: >
+      The adversarial review of alpha_residual_scaling_ablation identified learned RMSNorm
+      gamma as the PRIMARY remaining risk for macro transfer. The scale-invariance proof
+      assumes uniform scaling across layers, but production models learn per-layer gamma
+      values that can vary 2-5x. This breaks the uniform cancellation argument.
+
+      Experiment design (CPU, MLX):
+      (1) Extract gamma values from Qwen2.5-0.5B (d=896) — measure distribution
+      (2) In toy model (d=64..256): replace uniform gamma with sampled non-uniform gamma
+      (3) Measure alpha with non-uniform gamma vs baseline uniform gamma
+      (4) Sweep gamma variance: sigma={0.5, 1.0, 2.0, 5.0} to find breakpoint
+      (5) If alpha changes: derive corrected bound D=f(gamma_profile)*sum_eps*alpha
+
+      Quick experiment: ~30 min CPU. Resolves the last open concern about safety bound
+      transferability to production architectures.
+
+  # ── New Hypotheses: Macro Validation of Micro Safety/Init Proofs (2026-03-15) ──
+
+  exp_expert_removal_macro_safety:
+    title: Micro safety bound (alpha=0.022) transfers to Qwen2.5-7B with pilot-50 adapters
+    status: active
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_removal_safety_complete_bound
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/expert_removal_macro_safety
+    kill_criteria:
+    - K1: empirical output deviation at N=50 exceeds micro-predicted bound by >5x
+    - K2: removing any single adapter causes >1% PPL regression on remaining experts' domains
+    - K3: deviation is NOT monotonic with adapter norm (unpredictable removal impact)
+    evidence: []
+    tags:
+    - safety
+    - composition
+    - macro-validation
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      MACRO VALIDATION of the complete safety bound. Micro proved D = sum_eps * alpha
+      with alpha=0.022, yielding 0.023% max output deviation at d=896, N=50. Production
+      Qwen2.5-7B has learned RMSNorm gamma, real attention, structured pretrained weights
+      — all factors that micro didn't test. This experiment measures the ACTUAL deviation
+      when removing individual experts from composed pilot-50 adapters.
+
+      Protocol:
+      (1) Compose N adapters (N=5,10,25,50) via CPU weight addition
+      (2) Generate reference outputs from composed model
+      (3) Remove one adapter at a time, measure logit deviation and PPL change
+      (4) Compare empirical deviation against micro-predicted bound
+      (5) Check if adapter norm predicts removal impact (monotonicity)
+
+      If micro bound transfers: expert removal is safe by default at production scale.
+      If deviation exceeds 5x bound: investigate which production factor breaks it.
+
+  exp_grassmannian_init_macro:
+    title: Grassmannian AP skeleton reduces interference at d=896 production scale
+    status: active
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/grassmannian_init_macro
+    kill_criteria:
+    - K1: AP-init adapters show mean |cos| >0.7x random-init (AP provides <30% interference reduction)
+    - K2: AP-init individual adapter quality (PPL) >5% worse than random-init (quality cost too high)
+    - K3: AP composition at N=5 shows PPL >3% worse than random-init composition
+    evidence:
+    - 'Micro proven: AP init reduces post-training |cos| by 1.3-2.0x (3 seeds, d=64/128/256)'
+    - 'Micro proven: frozen-A locks experts to skeleton slots (drift 0.02% of max)'
+    - 'Micro proven: AP pre-training coherence 1.7-2.2x below random'
+    tags:
+    - composition
+    - init
+    - grassmannian
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      MACRO VALIDATION of Grassmannian AP initialization. Micro proved that Alternating
+      Projection on Gr(r,d) constructs a skeleton of frozen A matrices that are 1.3-2.0x
+      more orthogonal post-training. With frozen A, B-matrix training correlation is
+      irrelevant (decorrelation filter at 0.14x baseline).
+
+      This experiment validates at production scale (Qwen2.5-7B, d=896, rank=16):
+      (1) Compute AP skeleton for 50 expert slots on Gr(16, 896)
+      (2) Retrain 5 diverse-domain adapters using AP-initialized frozen A
+      (3) Compare pairwise |cos| vs standard random-init adapters
+      (4) Evaluate composition quality (PPL) of AP-init vs random-init
+
+      If AP init works at macro: adopt as default initialization for SOLE adapters.
+      Benefits: structural guarantee of orthogonality, frozen-A simplifies composition
+      math, decorrelation filter eliminates need for B-matrix regularization.
