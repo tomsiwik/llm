@@ -84,7 +84,15 @@ nodes:
     - individual adapters do not beat base on >80% of evaluated domains on held-out benchmarks
     - average improvement on MMLU subsets < 2% over base (distillation memorized, didn't generalize)
     - HumanEval pass@1 for code experts < base pass@1 (code distillation failed)
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        MMLU held-out eval: kill criteria MET. Average delta -3.67pp vs base
+        (adapters hurt performance). win_rate_below_80=True, avg_improvement_below_2=True.
+        Adapters evaluated were pre-retrain (old config). Retrain with rank-16
+        all-modules currently in progress — results may differ. HumanEval eval
+        failed (timeout after 10161s), requeued as run_humaneval_only_1773533006.
+      source: gpu_queue results run_all_eval_1773497259 (MMLU OK, HumanEval FAILED)
     tags:
     - distillation
     - evaluation
@@ -98,6 +106,11 @@ nodes:
       Subset of pilot 50: pick 5-10 experts with matching MMLU categories.
       For code experts: HumanEval pass@1 (execution-based, no contamination risk).
       Budget: ~$0.10 on RunPod (inference only).
+
+      2026-03-15: MMLU kill criteria met on OLD adapters (pre-retrain).
+      NOT declaring killed yet because: (1) retrain_all_adapters is retraining
+      with rank-16 all-modules config, (2) HumanEval still pending,
+      (3) need to re-run MMLU after retrain completes to confirm.
 
   exp_pilot50_composition_quality:
     title: Pre-merge composition quality with N=5,10,25,50 pilot experts
