@@ -166,7 +166,19 @@ def finetune_with_repulsion(base_model, adapter_path, data_path, reference_b_set
     rng = np.random.RandomState(42)
 
     # Optimizer — only LoRA params
-    lora_params = [p for n, p in model.named_parameters() if "lora" in n and p.requires_grad]
+    # Explicitly enable gradients (is_trainable may not work if base_model
+    # was previously wrapped by PeftModel in Phase 1)
+    for n, p in model.named_parameters():
+        if "lora" in n.lower():
+            p.requires_grad_(True)
+        else:
+            p.requires_grad_(False)
+    lora_params = [p for n, p in model.named_parameters() if "lora" in n.lower() and p.requires_grad]
+    if not lora_params:
+        raise RuntimeError(
+            f"No LoRA params found for {domain}. "
+            f"Named params: {[n for n, _ in model.named_parameters()][:10]}"
+        )
     optimizer = torch.optim.AdamW(lora_params, lr=lr, weight_decay=0.01)
 
     ce_losses = []
@@ -290,6 +302,8 @@ def main():
         baseline_ppls[domain] = ppl
         print(f"    Baseline PPL: {ppl:.2f}")
 
+        # Properly remove adapter so base_model is clean for next iteration
+        model.delete_adapter("default")
         del model
         torch.cuda.empty_cache()
 
@@ -338,6 +352,7 @@ def main():
         print(f"    Post-repulsion PPL: {ppl:.2f} (baseline: {baseline_ppls[domain]:.2f}, "
               f"delta: {(ppl/baseline_ppls[domain] - 1)*100:+.2f}%)")
 
+        model.delete_adapter("default")
         del model
         torch.cuda.empty_cache()
         gc.collect()
