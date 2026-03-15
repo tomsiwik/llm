@@ -557,7 +557,7 @@ def build_conventional_base(train_tokens, val_tokens):
     val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False, num_workers=1, pin_memory=True)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR_BASE, weight_decay=WEIGHT_DECAY, betas=(0.9, 0.95))
-    scaler = torch.amp.GradScaler("cuda")
+    # scaler removed — bf16 does not need GradScaler
 
     model.train()
     train_iter = iter(train_loader)
@@ -584,8 +584,7 @@ def build_conventional_base(train_tokens, val_tokens):
             accum_loss += loss.item() / GRAD_ACCUM
 
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        scaler.step(optimizer)
-        scaler.update()
+        optimizer.step()
         losses.append(accum_loss)
 
         if step % 1000 == 0 or step == TOTAL_STEPS - 1:
@@ -607,7 +606,7 @@ def build_conventional_base(train_tokens, val_tokens):
     with open(meta_path, "w") as f:
         json.dump(meta, f, indent=2)
 
-    del model, optimizer, scaler
+    del model, optimizer
     gc.collect()
     torch.cuda.empty_cache()
     return meta
@@ -649,7 +648,7 @@ def build_relora_base(train_tokens, val_tokens):
 
     # Phase A: Full-rank warmup
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR_BASE, weight_decay=WEIGHT_DECAY, betas=(0.9, 0.95))
-    scaler = torch.amp.GradScaler("cuda")
+    # bf16 does not need GradScaler — removed to fix AssertionError
     model.train()
     train_iter = iter(train_loader)
     t0 = time.time()
@@ -673,13 +672,12 @@ def build_relora_base(train_tokens, val_tokens):
             (loss / GRAD_ACCUM).backward()
             accum_loss += loss.item() / GRAD_ACCUM
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        scaler.step(optimizer)
-        scaler.update()
+        optimizer.step()
         if step % 500 == 0:
             val_loss = evaluate(model, val_loader)
             log(f"  warmup {step}: train={accum_loss:.4f}, val={val_loss:.4f}")
 
-    del optimizer, scaler
+    del optimizer
     gc.collect()
     torch.cuda.empty_cache()
 
@@ -691,7 +689,7 @@ def build_relora_base(train_tokens, val_tokens):
         apply_lora(model, RELORA_RANK, RELORA_ALPHA, freeze_base=True)
         lora_params = [p for p in model.parameters() if p.requires_grad]
         optimizer = torch.optim.AdamW(lora_params, lr=RELORA_LR, weight_decay=0.0, betas=(0.9, 0.95))
-        scaler = torch.amp.GradScaler("cuda")
+        # scaler removed — bf16 does not need GradScaler
 
         for step_in_cycle in range(RELORA_STEPS_PER_CYCLE):
             lr = get_relora_lr(step_in_cycle, RELORA_STEPS_PER_CYCLE, RELORA_REWARMUP, RELORA_LR)
@@ -711,8 +709,7 @@ def build_relora_base(train_tokens, val_tokens):
                 (loss / GRAD_ACCUM).backward()
                 accum_loss += loss.item() / GRAD_ACCUM
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            scaler.step(optimizer)
-            scaler.update()
+            optimizer.step()
 
         cycle_val = evaluate(model, val_loader)
         cycle_losses.append({"cycle": cycle + 1, "val": cycle_val})
@@ -721,7 +718,7 @@ def build_relora_base(train_tokens, val_tokens):
         for m in get_lora_modules(model):
             m.merge_and_reset()
         strip_lora(model)
-        del optimizer, scaler
+        del optimizer
         gc.collect()
         torch.cuda.empty_cache()
 
@@ -773,7 +770,7 @@ def train_expert(base_ckpt: Path, domain: str, domain_tokens: np.ndarray,
 
     lora_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.AdamW(lora_params, lr=EXPERT_LR, weight_decay=0.0)
-    scaler = torch.amp.GradScaler("cuda")
+    # scaler removed — bf16 does not need GradScaler
 
     model.train()
     train_iter = iter(train_loader)
@@ -800,8 +797,7 @@ def train_expert(base_ckpt: Path, domain: str, domain_tokens: np.ndarray,
             accum_loss += loss.item() / EXPERT_GRAD_ACCUM
 
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        scaler.step(optimizer)
-        scaler.update()
+        optimizer.step()
         losses.append(accum_loss)
 
     val_loss = evaluate(model, val_loader, max_batches=50)
@@ -826,7 +822,7 @@ def train_expert(base_ckpt: Path, domain: str, domain_tokens: np.ndarray,
     with open(meta_path, "w") as f:
         json.dump(meta, f, indent=2)
 
-    del model, optimizer, scaler
+    del model, optimizer
     gc.collect()
     torch.cuda.empty_cache()
 
