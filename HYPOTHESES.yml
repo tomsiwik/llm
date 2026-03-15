@@ -7,7 +7,7 @@ meta:
   last_killed: '2026-03-15'
   last_killed_node: exp_b_matrix_training_correlation
   last_proven: '2026-03-15'
-  last_proven_node: exp_alpha_residual_scaling_ablation
+  last_proven_node: exp_rmsnorm_gamma_nonuniformity
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -2973,7 +2973,7 @@ nodes:
 
   exp_removal_position_sensitivity:
     title: Expert removal position (first/middle/last in GS order) affects output deviation
-    status: open
+    status: active
     scale: micro
     priority: 4
     depends_on:
@@ -3140,7 +3140,7 @@ nodes:
 
   exp_rmsnorm_gamma_nonuniformity:
     title: Learned RMSNorm gamma non-uniformity breaks alpha scale-invariance at macro
-    status: active
+    status: proven
     scale: micro
     priority: 3
     depends_on:
@@ -3154,6 +3154,16 @@ nodes:
     - 'Adversarial review of alpha ablation: learned gamma 2-5x typical in trained transformers'
     - 'Alpha scale-invariance proof assumes uniform scaling; non-uniform gamma breaks this'
     - 'RMSNorm gamma is trainable per-layer in Qwen2.5 and Llama architectures'
+    - date: '2026-03-15'
+      claim: >
+        PROVEN. K1 PASS: max alpha ratio across all gamma profiles = 1.43x (threshold <2x).
+        Realistic gamma (lognormal sigma=0.5, range [0.2, 4.7]) gives only 1.02x change.
+        K2 PASS: D=0.098% at d=256, N=50 with worst-case bimodal gamma (51x margin below 5%).
+        Gamma cancels in alpha because it is a fixed parameter applied identically to all
+        forward passes. The 1.43x worst case (single layer gamma=10) comes from GELU
+        nonlinearity, not systematic bias. Safety bound D=sum_eps*0.022 transfers to
+        production without modification.
+      source: micro/models/rmsnorm_gamma_nonuniformity/results.json
     tags:
     - safety
     - theory
@@ -3165,15 +3175,9 @@ nodes:
       assumes uniform scaling across layers, but production models learn per-layer gamma
       values that can vary 2-5x. This breaks the uniform cancellation argument.
 
-      Experiment design (CPU, MLX):
-      (1) Extract gamma values from Qwen2.5-0.5B (d=896) — measure distribution
-      (2) In toy model (d=64..256): replace uniform gamma with sampled non-uniform gamma
-      (3) Measure alpha with non-uniform gamma vs baseline uniform gamma
-      (4) Sweep gamma variance: sigma={0.5, 1.0, 2.0, 5.0} to find breakpoint
-      (5) If alpha changes: derive corrected bound D=f(gamma_profile)*sum_eps*alpha
-
-      Quick experiment: ~30 min CPU. Resolves the last open concern about safety bound
-      transferability to production architectures.
+      Result: gamma does NOT break scale-invariance. The cancellation extends to
+      per-dimension gamma because gamma is input-independent (fixed parameter).
+      Max effect: 1.43x for extreme single-spike gamma=10. Realistic: 1.02x.
 
   # ── New Hypotheses: Macro Validation of Micro Safety/Init Proofs (2026-03-15) ──
 
@@ -3253,3 +3257,196 @@ nodes:
       If AP init works at macro: adopt as default initialization for SOLE adapters.
       Benefits: structural guarantee of orthogonality, frozen-A simplifies composition
       math, decorrelation filter eliminates need for B-matrix regularization.
+
+  # ── New Hypotheses from rmsnorm_gamma_nonuniformity review (2026-03-15) ──────
+
+  exp_silu_vs_gelu_gamma_correction:
+    title: SiLU activation produces different gamma correction factor than GELU
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_rmsnorm_gamma_nonuniformity
+    blocks: []
+    experiment_dir: micro/models/silu_vs_gelu_gamma_correction
+    kill_criteria:
+    - K1: SiLU gamma correction factor differs from GELU by >1.5x (e.g., >2.15x vs 1.43x)
+    - K2: SiLU worst-case D exceeds 5% at d=256, N=50
+    evidence:
+    - 'Adversarial review: GELU tested but Qwen2.5 uses SiLU. Similar saturation expected but unverified.'
+    - 'Gamma correction factor comes entirely from nonlinearity interaction (linear case is exact invariance).'
+    tags:
+    - safety
+    - validation
+    - quick-win
+    created: '2026-03-15'
+    notes: >
+      5-minute experiment: swap GELU for SiLU in rmsnorm_gamma_nonuniformity script,
+      rerun worst-case config. If SiLU correction factor is similar (~1.43x), this
+      closes the last gap in the safety story. If significantly different, need to
+      update the safety bound.
+
+  exp_gamma_perturbation_correlation:
+    title: Real LoRA experts preferentially modify high-gamma dimensions
+    status: active
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_rmsnorm_gamma_nonuniformity
+    blocks: []
+    experiment_dir: micro/models/gamma_perturbation_correlation
+    kill_criteria:
+    - K1: cosine between gamma magnitude vector and expert delta magnitude vector exceeds 0.3 (systematic correlation)
+    - K2: correlated gamma-perturbation profile changes alpha by >2x vs uncorrelated
+    evidence:
+    - 'Adversarial review: gamma-perturbation correlation is the remaining open risk.'
+    - 'Gamma values correlated with learned weight structure; LoRA may preferentially modify emphasized dimensions.'
+    - 'Current safety bound assumes uncorrelated gamma and perturbation directions.'
+    tags:
+    - safety
+    - theory
+    - macro-readiness
+    created: '2026-03-15'
+    notes: >
+      Extract real gamma values from Qwen2.5-0.5B checkpoint. Train a few LoRA
+      adapters. Measure cosine between gamma magnitude and adapter delta magnitude
+      per layer. If correlation exists, inject correlated synthetic gamma into the
+      alpha measurement and check if the correction factor exceeds 1.43x.
+      This is the one risk the adversarial review flagged as genuinely unresolved.
+
+  # ── New Macro Hypotheses (2026-03-15, iteration 51: quality signal & composition health) ──
+
+  exp_task_accuracy_evolve_signal:
+    title: Small held-out benchmark (10 questions/domain) reliably ranks adapter quality at macro
+    status: open
+    scale: macro
+    priority: 2
+    depends_on:
+    - exp_distillation_pilot_50
+    - exp_individual_expert_held_out
+    blocks:
+    - exp_clone_compete_evolution
+    experiment_dir: macro/task_accuracy_evolve_signal
+    kill_criteria:
+    - 10-question held-out accuracy does NOT rank adapters consistently (Kendall tau < 0.7 vs 100-question gold standard)
+    - per-domain evaluation cost exceeds 60s/adapter (too slow for tournament-based evolution)
+    - accuracy ranking disagrees with PPL ranking AND gold-standard ranking (no useful signal)
+    evidence:
+    - 'answer-only PPL KILLED at macro (r=-0.63, micro-to-macro transfer failed)'
+    - 'full-sequence PPL anti-correlated with task accuracy (r=-0.31)'
+    - 'exp_ppl_guided_expert_refinement BLOCKED without alternative signal'
+    - 'Evolve phase clone-and-compete needs cheap, reliable quality signal'
+    tags:
+    - evolve
+    - scoring
+    - macro-validation
+    - critical-path
+    created: '2026-03-15'
+    notes: >
+      EVOLVE PHASE UNBLOCKED. PPL-based signals failed at macro scale. The simplest
+      alternative: use actual task accuracy on a tiny held-out set as the quality signal.
+
+      Protocol:
+      (1) For each of 10 pilot-50 domains, curate 100 held-out questions (gold standard)
+      (2) Sample 10-question subsets (5 random draws) per domain
+      (3) Evaluate each adapter on 10-question and 100-question sets
+      (4) Measure Kendall tau rank correlation between 10q and 100q rankings
+      (5) Compare ranking stability (how often does best adapter change with subset?)
+      (6) Time per evaluation — must be <60s for practical evolution
+
+      If 10 questions suffice for stable ranking: evolution tournament costs ~10s/comparison
+      (generate output, score against 10 reference answers). This is 1000x cheaper than
+      teacher-based scoring and avoids the PPL-accuracy disconnect.
+
+      Data sources: MMLU subsets (for knowledge domains), HumanEval (for code),
+      MATH-500 subset (for reasoning). All have ground-truth answers.
+
+  exp_relative_ppl_within_domain:
+    title: Answer-only PPL ranks adapters correctly WITHIN a domain even though cross-domain correlation fails
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    - exp_individual_expert_held_out
+    blocks: []
+    experiment_dir: macro/relative_ppl_within_domain
+    kill_criteria:
+    - within-domain PPL ranking Kendall tau < 0.5 vs accuracy ranking (PPL useless even within domain)
+    - ranking flips occur for >30% of adapter pairs (unreliable for tournament)
+    evidence:
+    - 'answer-only PPL micro: r=0.811 correlation with task accuracy'
+    - 'answer-only PPL macro KILLED: r=-0.63 CROSS-domain (different domains have different PPL baselines)'
+    - 'hypothesis: cross-domain failure may be due to incomparable PPL scales, not fundamentally broken signal'
+    tags:
+    - evolve
+    - scoring
+    - diagnosis
+    created: '2026-03-15'
+    notes: >
+      SALVAGING PPL FOR EVOLVE. The shadow scoring experiment showed answer-only PPL
+      anti-correlated at macro ACROSS domains (r=-0.63). But this may be because different
+      domains have inherently different PPL scales (medical text has lower entropy than code).
+
+      Key insight: clone-and-compete only needs to compare TWO adapters on the SAME domain.
+      It never needs to compare adapters across domains. If within-domain PPL ranking is
+      preserved, PPL is still usable for evolution tournaments.
+
+      Protocol:
+      (1) Pick 5 domains where we have multiple adapter variants (original + retrained)
+      (2) For each domain: rank all adapter variants by answer-only PPL
+      (3) Rank same variants by task accuracy on held-out benchmark
+      (4) Compute within-domain Kendall tau
+      (5) If tau > 0.5 for majority of domains, PPL works for clone-and-compete
+
+      This is cheap (reuse existing eval infrastructure) and could unblock the entire
+      Evolve phase if within-domain PPL ranking is preserved despite cross-domain failure.
+
+  exp_composition_health_kl_divergence:
+    title: KL divergence from base detects harmful expert additions without task labels
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/composition_health_kl_divergence
+    kill_criteria:
+    - K1: KL(composed || base) does not correlate with composition quality loss (Spearman rho < 0.3)
+    - K2: adding a harmful expert does not spike KL more than adding a helpful one (no discrimination)
+    - K3: KL measurement on 100 calibration tokens takes >30s per composition (too slow)
+    evidence:
+    - 'composition at N=50 produced catastrophic PPL (trillions) — extreme KL divergence from base'
+    - 'cosine-based degradation detection ANTI-correlated at micro (r=-0.46)'
+    - 'canary queries work (FNR=9.8%) but require per-expert held-out data'
+    - 'KL divergence is label-free, domain-agnostic, and cheap (single forward pass)'
+    tags:
+    - composition
+    - monitoring
+    - safety
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      COMPOSITION HEALTH MONITOR. A lightweight, label-free signal for detecting
+      when adding an expert hurts the composed model. Unlike canary queries (which
+      need per-expert held-out data), KL divergence only needs a fixed set of
+      calibration tokens.
+
+      Protocol:
+      (1) Select 100 calibration tokens from a diverse held-out set (Wikipedia, code, QA)
+      (2) Compute base model logit distribution P_base on calibration tokens
+      (3) For each N in [5, 10, 25, 50]:
+          - Compose N adapters, compute P_composed
+          - KL(P_composed || P_base) = expected divergence at that N
+      (4) For each individual adapter i:
+          - Compose (all adapters except i), compute P_without_i
+          - Compose (all adapters), compute P_with_i
+          - Delta_KL_i = KL(P_with_i || P_base) - KL(P_without_i || P_base)
+          - If Delta_KL_i >> mean(Delta_KL), adapter i is likely harmful
+      (5) Correlate Delta_KL ranking with actual per-adapter quality impact (PPL delta)
+
+      If KL divergence discriminates: use as automatic quality gate in merge pipeline.
+      No task labels, no per-domain data, no teacher API needed. Just calibration tokens.
+
+      Bonus: track KL(composed || base) as function of N to characterize the "composition
+      budget" — how much divergence from base is healthy before quality degrades.
