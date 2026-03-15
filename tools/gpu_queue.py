@@ -293,6 +293,7 @@ def cmd_submit(args):
         "--exclude", ".git", "--exclude", "*.pyc",
         "--exclude", ".ralph/events-*", "--exclude", ".worktrees",
         "--exclude", "references",
+        "--exclude", "results",
         "--exclude", "adapters/*/adapter_model.safetensors",
         "-e", "ssh",
         f"{REPO_ROOT}/", f"{SSH_ALIAS}:{REMOTE_DIR}/",

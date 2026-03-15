@@ -3,9 +3,9 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 0
+  consecutive_kills: 1
   last_killed: '2026-03-15'
-  last_killed_node: exp_layerwise_order_sensitivity
+  last_killed_node: exp_answer_conditioned_shadow_scoring
   last_proven: '2026-03-15'
   last_proven_node: exp_coverage_vs_noise_disentangle
   roadmap_updated: '2026-03-13'
@@ -650,17 +650,27 @@ nodes:
 
   exp_quality_degradation_detection:
     title: Detect when adding expert N degrades expert M
-    status: active
+    status: proven
     scale: micro
     priority: 4
     depends_on:
     - exp_gram_schmidt_composition
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/quality_degradation_detection
     kill_criteria:
     - detection method has >20% false negative rate (misses real degradation)
     - detection adds >10 min to merge pipeline
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        Canary queries (20 examples/expert) achieve FNR=9.8%, FPR=3.1%,
+        projected 6.8s at N=500. Both kill criteria pass. Key surprise:
+        cosine similarity is ANTI-correlated with degradation (Pearson
+        r=-0.46, Spearman rho=-0.44 at d=64). Low-cosine experts degrade
+        MORE, not less. Cosine-based gating at tau>0.1 has FNR=35.5%.
+        At production scale (d=896, cos~0.0002), degradation is near-zero
+        due to structural orthogonality. Detection is insurance, not routine.
+      source: micro/models/quality_degradation_detection/results.json
     tags:
     - composition
     - safety
@@ -684,17 +694,21 @@ nodes:
 
   exp_expert_removal_graceful:
     title: Removing an expert from merged model doesn't break others
-    status: active
+    status: proven
     scale: micro
     priority: 4
     depends_on:
     - exp_gram_schmidt_composition
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/expert_removal_graceful
     kill_criteria:
     - removing expert causes >3% PPL regression on remaining experts
     - Gram-Schmidt cascade recomputation takes >10 min at N=50
-    evidence: []
+    evidence:
+    - 'K1 CONDITIONAL PASS: Near-orthogonal regime (cos~0.001, SOLE production): naive subtraction recon error 0.18% max, per-expert regression 0.0022% max. Clustered cos=0.3: recon error 10.1% but per-expert regression 3.6% at N=10 only. At N>=20, regression < 2.8%. Date: 2026-03-15.'
+    - 'K2 PASS: GS recompute 1.06s at N=50, 14.8s at N=200. Kill threshold (10 min) not reached until ~N=1600. Date: 2026-03-15.'
+    - 'KEY FINDING: Two regimes. cos<0.01 -> naive O(1) subtraction sufficient (<0.2% error, 2000x speedup). cos>0.1 -> GS recompute required but cheap (<2s at N=50). SOLE operates in the naive-sufficient regime. Date: 2026-03-15.'
+    - 'Position sensitivity: removing first expert in GS order = worst case (24.3% error). Last expert = zero error. Production clone-compete removes recent clones (late position, low error). Date: 2026-03-15.'
     tags:
     - composition
     - safety
@@ -1662,7 +1676,7 @@ nodes:
 
   exp_answer_conditioned_shadow_scoring:
     title: Answer-conditioned PPL predicts task accuracy at macro scale (SOLE Evolve enabler)
-    status: active
+    status: killed
     scale: macro
     priority: 3
     depends_on:
@@ -1681,6 +1695,15 @@ nodes:
     - date: '2026-03-14'
       claim: 'Experiment script written and submitted to GPU queue. Tests answer-only PPL vs MMLU accuracy across pilot50 adapters with MMLU mapping (~22 adapters). Three kill criteria: correlation, AUC, shadow ranking agreement.'
       source: macro/answer_conditioned_shadow/run_answer_conditioned_shadow.py
+    - date: '2026-03-15'
+      claim: >
+        KILLED — all 3 kill criteria triggered. K1: Pearson r=-0.6334 (need >=0.5),
+        anti-correlated at macro scale. K2: AUC=0.0 (need >=0.7), cannot distinguish
+        improved vs degraded domains. K3: shadow disagree=100% (need <=40%), ranking
+        completely unreliable. Micro-to-macro transfer failed catastrophically —
+        answer-only PPL does not scale from micro (r=0.811) to macro Qwen2.5-7B.
+        Only 3 domains had MMLU mappings (medical +1%, math 0%, python -5%).
+      source: gpu_queue results run_answer_conditioned_shadow_1773520502
     tags:
     - evolve
     - scoring
@@ -1999,7 +2022,7 @@ nodes:
 
   exp_ppl_guided_expert_refinement:
     title: Answer-only PPL enables teacher-free iterative expert improvement
-    status: open
+    status: blocked
     scale: macro
     priority: 4
     depends_on:
@@ -2015,6 +2038,12 @@ nodes:
     - 'Micro: answer-only PPL r=0.811 with task accuracy (3 seeds)'
     - 'Full-sequence PPL anti-correlated (r=-0.31) -- prompt dilution confirmed'
     - 'If macro answer-conditioned shadow scoring confirms, this is directly actionable'
+    - date: '2026-03-15'
+      claim: >
+        BLOCKED: dependency exp_answer_conditioned_shadow_scoring was KILLED.
+        Answer-only PPL does not transfer from micro to macro scale (r=-0.63 vs r=0.81).
+        This hypothesis cannot proceed without an alternative quality signal.
+        Consider: task-specific accuracy eval, or investigate why micro-to-macro transfer failed.
     tags:
     - evolve
     - scoring
