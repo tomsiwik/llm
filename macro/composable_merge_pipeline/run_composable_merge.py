@@ -161,7 +161,7 @@ def main():
 
     compose_model.add_weighted_adapter(
         adapters=adapters,
-        weights=[1.0] * len(adapters),
+        weights=[1.0 / len(adapters)] * len(adapters),
         adapter_name="composed",
         combination_type="linear",
     )

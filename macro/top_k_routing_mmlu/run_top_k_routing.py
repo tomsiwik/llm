@@ -224,7 +224,7 @@ def evaluate_with_routing(base_model, tokenizer, domain_embeddings, k, subjects,
             # Compose top-K via weighted adapter (reuses pre-loaded adapters)
             model.add_weighted_adapter(
                 adapters=list(top_k_names),
-                weights=[1.0] * len(top_k_names),
+                weights=[1.0 / len(top_k_names)] * len(top_k_names),
                 adapter_name="routed",
                 combination_type="linear",
             )
@@ -276,7 +276,7 @@ def evaluate_full_merge(base_model, tokenizer, adapter_names, subjects, max_per_
         model.load_adapter(path, adapter_name=name)
     model.add_weighted_adapter(
         adapters=list(adapter_names),
-        weights=[1.0] * len(adapter_names),
+        weights=[1.0 / len(adapter_names)] * len(adapter_names),
         adapter_name="composed",
         combination_type="linear",
     )

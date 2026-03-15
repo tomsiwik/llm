@@ -231,7 +231,7 @@ def compose_adapters(base_model, adapter_names):
     # Merge with equal weights
     model.add_weighted_adapter(
         adapters=list(adapter_names),
-        weights=[1.0] * len(adapter_names),
+        weights=[1.0 / len(adapter_names)] * len(adapter_names),
         adapter_name="composed",
         combination_type="linear",
     )

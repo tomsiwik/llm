@@ -197,7 +197,7 @@ def main():
                     composed.load_adapter(str(ADAPTER_DIR / a), adapter_name=a)
                 composed.add_weighted_adapter(
                     adapters=list(adapter_list),
-                    weights=[1.0] * len(adapter_list),
+                    weights=[1.0 / len(adapter_list)] * len(adapter_list),
                     adapter_name="composed",
                     combination_type="linear",
                 )

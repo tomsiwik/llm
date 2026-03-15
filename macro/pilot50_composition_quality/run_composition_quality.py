@@ -166,8 +166,8 @@ def compose_and_evaluate(base_model, tokenizer, adapter_names, eval_domains):
     for name in adapter_names[1:]:
         model.load_adapter(str(ADAPTER_DIR / name), adapter_name=name)
 
-    # Merge with equal weights (SOLE addition)
-    weights = [1.0] * n
+    # Merge with equal weights (SOLE addition, averaged by 1/N)
+    weights = [1.0 / n] * n
     model.add_weighted_adapter(
         adapters=adapter_names,
         weights=weights,
