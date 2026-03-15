@@ -3,7 +3,7 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 2
+  consecutive_kills: 0
   last_killed: '2026-03-15'
   last_killed_node: exp_b_matrix_training_correlation
   last_proven: '2026-03-15'
@@ -2937,11 +2937,61 @@ nodes:
       D = sum_eps * alpha_total. Validated empirically at d=256, L=24, N=50.
       Micro safety story is complete. Closes the expert removal safety line.
 
+  # ── New Hypotheses: From removal_safety_complete_bound review (2026-03-15) ──
+
+  exp_alpha_residual_scaling_ablation:
+    title: Ablate 1/sqrt(L) residual scaling to measure its contribution to alpha=0.022
+    status: active
+    scale: micro
+    priority: 2
+    depends_on:
+    - exp_removal_safety_complete_bound
+    blocks: []
+    experiment_dir: micro/models/alpha_residual_scaling_ablation
+    kill_criteria:
+    - K1: alpha without 1/sqrt(L) scaling is <10x higher than alpha=0.022
+    - K2: combined bound D=sum_eps*alpha still predicts <5% at d=256, L=24, N=50 without scaling
+    evidence: []
+    tags:
+    - safety
+    - theory
+    - macro-readiness
+    created: '2026-03-15'
+    notes: >
+      Adversarial review flagged 1/sqrt(L) residual scaling as non-standard (Qwen2.5/Llama
+      don't use it). Without it, feedforward amp=0.25 vs 0.022 with scaling. This experiment
+      runs the complete bound experiment with scale=1.0 to quantify how much of alpha=0.022
+      is artificial dampening vs genuine architectural behavior. Critical for macro transfer.
+      CPU only, extends existing removal_safety_complete_bound code.
+
+  exp_removal_position_sensitivity:
+    title: Expert removal position (first/middle/last in GS order) affects output deviation
+    status: open
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_removal_safety_complete_bound
+    blocks: []
+    experiment_dir: micro/models/removal_position_sensitivity
+    kill_criteria:
+    - K1: position-dependent deviation varies by <2x across all positions at N=50
+    - K2: worst-case position still within 2x of the mean bound
+    evidence: []
+    tags:
+    - safety
+    - composition
+    created: '2026-03-15'
+    notes: >
+      Parent experiment only removed middle expert (index N//2). If GS ordering affects
+      orthogonalization quality, removing expert 0 vs expert 49 could give different results.
+      Quick ablation: sweep removal position across {0, N//4, N//2, 3N//4, N-1} at d=256,
+      L=24, N=50. CPU only.
+
   # ── New Hypotheses: Composition Scaling Fixes (2026-03-15) ──────
 
   exp_composition_weight_normalization:
     title: Weight-normalized composition (1/sqrt(N)) prevents PPL explosion at high expert count
-    status: open
+    status: active
     scale: macro
     priority: 3
     depends_on:
