@@ -3,11 +3,11 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 4
+  consecutive_kills: 0
   last_killed: '2026-03-15'
   last_killed_node: exp_layerwise_order_sensitivity
-  last_proven: '2026-03-14'
-  last_proven_node: exp_lte_parallel_base_construction
+  last_proven: '2026-03-15'
+  last_proven_node: exp_lora_flow_comparison
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -1163,28 +1163,43 @@ nodes:
 
   exp_lora_flow_comparison:
     title: Compare SOLE against LoRA-Flow dynamic per-layer routing
-    status: active
+    status: supported
     scale: micro
     priority: 4
     depends_on:
     - exp_oae_vs_lora_soups
     blocks: []
-    experiment_dir: null
+    experiment_dir: micro/models/lora_flow_comparison
     kill_criteria:
     - LoRA-Flow achieves >10% quality gain over SOLE unit weights at comparable overhead
     - LoRA-Flow's per-layer weight learning is feasible at N>10 experts
-    evidence: []
+    evidence:
+    - 'K1 SURVIVES: LoRA-Flow gain 0.0% over SOLE (threshold >10%), all k={2,6,12}, 3 seeds'
+    - 'K2 PARTIAL: feasible at k=12 (3120 params, 6.2s) but scales O(k*d*L) -- 65.6M params at k=500 d=4096'
+    - 'All 4 methods (SOLE, CAT, LoRA-Flow, X-LoRA) produce identical loss to 4 decimal places'
+    - 'Overhead: SOLE 1x < LoRA-Flow 6-8x < CAT 17-24x'
+    - 'LoRA-Flow solves different problem (k<=10 overlapping skills) vs SOLE (N>>10 orthogonal experts)'
+    - date: '2026-03-15'
+      claim: >
+        Adversarial review PROCEED. Downgraded proven→supported: quality results vacuous (zero expert
+        specialization at micro), scaling/positioning analysis valid. Non-blocking: Section 3.4 "Theorem"
+        is incomplete (needs Hessian assumption), X-LoRA h=16/h=64 mismatch undisclosed, conflated
+        training+inference overhead. LoRA-Flow may help at macro with real expert specialization.
+      source: micro/models/lora_flow_comparison/REVIEW-adversarial.md
     tags:
     - routing
     - comparison
     - literature
     created: '2026-03-11'
+    completed: '2026-03-15'
     notes: >
-      Spawned from exp_oae_vs_lora_soups adversarial review. LoRA-Flow (Wang
-      et al., 2024) uses dynamic per-layer LoRA weights based on input, making
-      it a superset of both SOLE (fixed unit weights) and CAT (learned static
-      weights). Missing from the SOLE comparison table. Literature review first,
-      then micro empirical if warranted.
+      Spawned from exp_oae_vs_lora_soups adversarial review. Compared SOLE,
+      CAT, LoRA-Flow (Wang et al., 2024), and X-LoRA (Buehler, 2024) at micro
+      scale. Quality comparison vacuous (experts do not specialize at d=64).
+      Key findings: (1) under orthogonality, all methods converge to SOLE;
+      (2) LoRA-Flow params scale as O(k*d*L), infeasible at k>=100;
+      (3) SOLE and LoRA-Flow solve fundamentally different problems.
+      LoRA-Flow does NOT threaten SOLE positioning.
 
   # ── Base-Free Training Path ─────────────────────────────────────
 
@@ -1416,6 +1431,12 @@ nodes:
         K1 PASSES: attn variation 49% >> 1% threshold. Flattened vs layer-wise GS diverge
         meaningfully (cos=0.975, L2=22.4%) but show similar order sensitivity. 3 seeds.
       source: micro/models/layerwise_order_sensitivity/results.json
+    - date: '2026-03-15'
+      claim: >
+        Adversarial review PROCEED (kill confirmed). Math correct, experimental design sound.
+        Per-sublayer decomposition is novel. Multi-seed ratio 1.04 +/- 0.01 confirms identical
+        scaling. No revisions needed.
+      source: micro/models/layerwise_order_sensitivity/REVIEW-adversarial.md
     tags:
     - composition
     - orthogonality
@@ -1692,6 +1713,64 @@ nodes:
       scale with real Qwen2.5-7B and 50 real adapters. Measures throughput
       (tok/s), first-token latency (p50/p99), and batch scaling on A5000 GPU.
 
+  # ── New Micro Hypotheses from lora_flow + layerwise reviews (2026-03-15) ──
+
+  exp_composition_weight_sensitivity:
+    title: Pre-merged SOLE quality degrades gracefully as expert count N grows (dilution test)
+    status: active
+    scale: micro
+    priority: 4
+    depends_on:
+    - exp_lora_flow_comparison
+    blocks: []
+    experiment_dir: micro/models/composition_weight_sensitivity
+    kill_criteria:
+    - Per-expert signal (delta loss from adding 1 expert) drops below noise floor at N<50
+    - Pre-merge quality degrades >20% at N=100 vs N=10 (dilution is catastrophic)
+    evidence:
+    - 'LoRA-Flow review: pre-merge dilutes each expert to 1/N strength. At N=500, each expert is 0.2%'
+    - 'Lora-flow found all methods identical at micro — dilution effect may dominate at scale'
+    tags:
+    - composition
+    - scaling
+    - pre-merge
+    created: '2026-03-15'
+    notes: >
+      Spawned from lora_flow_comparison adversarial review macro risk #3.
+      Tests whether naive pre-merge (W + sum(B_i @ A_i)) maintains per-expert
+      quality contribution as N grows. Sweep N=2,5,10,20,50,100. Measure
+      per-expert marginal contribution and aggregate quality. If dilution is
+      severe, selective top-k or weighted pre-merge becomes necessary.
+
+  exp_order_sensitivity_cosine_threshold:
+    title: GS order sensitivity becomes practically significant above cos=0.06
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_layerwise_order_sensitivity
+    - exp_merge_order_dependence
+    blocks: []
+    experiment_dir: micro/models/order_sensitivity_cosine_threshold
+    kill_criteria:
+    - Order sensitivity CV exceeds 5% at cos<0.06 (threshold is too low)
+    - Order sensitivity remains <5% CV at cos=0.20 (threshold is too high, never relevant)
+    evidence:
+    - 'Layerwise: variation ~ 62*cos holds for both attn and FFN identically'
+    - 'Merge order: CV=0.029% at production cosines, threshold at cos>0.06 (300x above production)'
+    - 'Adversarial review confirmed: order sensitivity is purely cosine-determined'
+    tags:
+    - composition
+    - orthogonality
+    - safety
+    created: '2026-03-15'
+    notes: >
+      Spawned from layerwise_order_sensitivity kill. Both experiments confirm
+      variation ~ 62*cos. The practical threshold where order sensitivity
+      becomes relevant is cos~0.06 (CV~5%). This experiment validates that
+      threshold precisely and tests whether it holds at higher N (N=20,50).
+      If threshold is accurate, SOLE is safe as long as pairwise cos<0.06.
+
   exp_expert_pruning_from_composition:
     title: Pruning low-quality experts from composition improves aggregate quality
     status: open
@@ -1731,4 +1810,131 @@ nodes:
       If it doesn't help (unit weight truly optimal), confirms SOLE's "more is
       always better" property — a strong scaling result.
       Depends on composition quality results to identify which experts are weak.
-      real LoRA experts to test meaningfully.
+
+  # ── New Hypotheses from Recent Findings (2026-03-15) ────────────
+
+  exp_ffn_only_macro_composition:
+    title: FFN-only LoRA experts compose with better orthogonality at macro scale (Qwen2.5-7B)
+    status: active
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/ffn_only_macro_composition
+    kill_criteria:
+    - FFN-only experts show >5% worse per-domain PPL than all-modules experts on same domains
+    - FFN-only pairwise cosine is NOT lower than all-modules pairwise cosine (orthogonality claim fails at scale)
+    - FFN-only composition quality at N=10 is >3% worse than all-modules composition
+    evidence:
+    - 'Micro: FFN-only mean|cos|=0.0605 vs all-modules 0.0711 (5 Qwen2.5-7B adapters)'
+    - 'FFN-only is 25% fewer params (30.3M vs 40.4M at rank-16)'
+    - 'Attention amplifies domain overlap: math-medical attn cos=0.85 vs FFN cos=0.59'
+    tags:
+    - composition
+    - architecture
+    - ffn-only
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      MICRO FINDING MACRO VALIDATION. The micro experiment proved FFN-only LoRAs
+      are more orthogonal with 25% fewer parameters. Attention layers amplify
+      domain overlap (cos=0.85 for related domains). But pilot50 used all-modules.
+
+      This experiment trains 10 matched FFN-only experts on the same domains as
+      10 pilot50 all-modules experts, then compares:
+      (1) Individual expert quality: per-domain PPL (FFN-only vs all-modules)
+      (2) Pairwise orthogonality: mean|cos| for FFN-only vs all-modules
+      (3) Composition quality: pre-merge N=5,10 composed model quality
+      (4) Training cost: time and VRAM for FFN-only vs all-modules
+
+      If FFN-only matches quality with better orthogonality, ALL future experts
+      should be trained FFN-only. This is a fundamental architecture decision.
+
+      Select 10 domains spanning clusters: 3 code, 3 science, 2 professional, 2 writing.
+      Reuse training data from pilot50. Same QLoRA config except target_modules.
+
+  exp_ppl_guided_expert_refinement:
+    title: Answer-only PPL enables teacher-free iterative expert improvement
+    status: open
+    scale: macro
+    priority: 4
+    depends_on:
+    - exp_answer_conditioned_shadow_scoring
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/ppl_guided_refinement
+    kill_criteria:
+    - PPL-guided refinement does not improve expert quality after 3 iterations (no signal)
+    - PPL-guided improvement is <50% as effective as teacher-judged improvement (PPL too noisy)
+    - Refinement loop increases training cost >3x per expert for <10% quality gain
+    evidence:
+    - 'Micro: answer-only PPL r=0.811 with task accuracy (3 seeds)'
+    - 'Full-sequence PPL anti-correlated (r=-0.31) -- prompt dilution confirmed'
+    - 'If macro answer-conditioned shadow scoring confirms, this is directly actionable'
+    tags:
+    - evolve
+    - scoring
+    - automation
+    - novel
+    created: '2026-03-15'
+    notes: >
+      TEACHER-FREE EVOLUTION. If answer-only PPL predicts accuracy (proven micro,
+      testing macro), we can use it as a cheap automated quality signal:
+
+      Loop: (1) Evaluate expert on held-out domain questions using answer-only PPL
+      (2) Identify worst-performing question types (highest PPL_answer)
+      (3) Generate more training data for weak areas (from existing teacher data)
+      (4) Retrain expert with augmented data
+      (5) Re-evaluate with answer-only PPL
+      (6) Accept if PPL_answer improves, reject otherwise
+
+      This is cheaper than teacher-based correction ($0 for PPL eval vs $0.001/query
+      for teacher judge). If it works, SOLE can self-improve with zero API cost.
+
+      Test on 5 pilot50 experts. 3 refinement iterations each.
+      Compare PPL-guided improvement vs random data augmentation (control).
+
+  exp_dynamic_weight_composition_macro:
+    title: Per-query expert weighting beats equal-weight pre-merge at macro scale
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    - exp_pilot50_composition_quality
+    blocks: []
+    experiment_dir: macro/dynamic_weight_composition
+    kill_criteria:
+    - Dynamic weighting improves composed model quality <2% over equal-weight pre-merge
+    - Dynamic weighting overhead exceeds 50ms per query (too slow for interactive)
+    - Equal-weight pre-merge is Pareto-optimal (no quality-latency tradeoff favors dynamic)
+    evidence:
+    - 'Micro cross-domain: single-expert -7.0% vs multi-expert -1.0% (dilution when second expert adds noise)'
+    - 'CAT weights converge to ~1.0 under orthogonality (equal weight is optimal for orthogonal)'
+    - 'At macro with real specialization, experts are NOT perfectly orthogonal within clusters'
+    tags:
+    - composition
+    - routing
+    - quality
+    - macro-validation
+    created: '2026-03-15'
+    notes: >
+      DILUTION FIX AT SCALE. Micro cross-domain found equal-weight averaging
+      sometimes hurts because the second expert adds noise. At macro with real
+      expert specialization, this effect may be stronger or weaker.
+
+      Compare 3 strategies on pilot50 experts:
+      (1) Equal-weight pre-merge (current SOLE default): sum(W_i)/N
+      (2) Top-k selection: only merge top-k most relevant experts per query
+          (relevance = cosine of query embedding to expert training centroid)
+      (3) Weighted merge: weight each expert by relevance score
+
+      Evaluate on cross-domain queries (e.g., "write Python to solve a physics
+      problem") and single-domain queries. Measure quality (PPL, accuracy) and
+      latency overhead.
+
+      If dynamic weighting helps, it becomes the new SOLE serving strategy.
+      If equal-weight wins, pre-merge is confirmed as optimal (simpler is better).
+
+      Depends on pilot50_composition_quality to establish the equal-weight baseline.
