@@ -100,22 +100,17 @@ def main():
         with open(train_file, "w") as f:
             for j in range(start_idx, min(end_idx, len(ds))):
                 row = ds[j]
-                # Convert SlimOrca format to chat messages format
+                # SlimOrca uses 'conversations' list with {from, value} dicts
+                convos = row["conversations"]
+                role_map = {"system": "system", "human": "user", "gpt": "assistant"}
                 messages = []
-                if row.get("system_prompt", "").strip():
-                    messages.append({
-                        "role": "system",
-                        "content": row["system_prompt"].strip()
-                    })
-                messages.append({
-                    "role": "user",
-                    "content": row["question"].strip()
-                })
-                messages.append({
-                    "role": "assistant",
-                    "content": row["response"].strip()
-                })
-                f.write(json.dumps({"messages": messages}) + "\n")
+                for turn in convos:
+                    role = role_map.get(turn["from"], turn["from"])
+                    content = turn["value"].strip()
+                    if content:
+                        messages.append({"role": role, "content": content})
+                if messages:
+                    f.write(json.dumps({"messages": messages}) + "\n")
 
         if (i + 1) % 50 == 0 or i == N_NEW_DOMAINS - 1:
             log(f"  Prepared {i + 1}/{N_NEW_DOMAINS} domains")
