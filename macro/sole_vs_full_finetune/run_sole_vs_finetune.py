@@ -297,6 +297,7 @@ def run_experiment():
         task_type="CAUSAL_LM",
     )
     model = get_peft_model(model, lora_config)
+    model.gradient_checkpointing_enable()
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     log(f"Trainable params: {trainable_params:,}")
 

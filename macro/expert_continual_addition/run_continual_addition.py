@@ -202,6 +202,12 @@ def run_experiment():
                    if d not in pilot_set and (DATA_DIR / d / "train.jsonl").exists()][:N_NEW]
     log(f"New domains to train: {new_domains}")
 
+    # 4-bit quantization config (fits 7B model in ~4GB VRAM, leaves room for adapters)
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True, bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_use_double_quant=True,
+    )
+
     # ============================================================
     # PHASE 1: Evaluate base model
     # ============================================================
@@ -210,8 +216,8 @@ def run_experiment():
     log("=" * 70)
 
     model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, cache_dir=HF_CACHE,
-        torch_dtype=torch.float16, device_map="auto",
+        BASE_MODEL, cache_dir=HF_CACHE, quantization_config=bnb_config,
+        torch_dtype=torch.bfloat16, device_map="auto",
         trust_remote_code=True,
     )
 
@@ -237,29 +243,48 @@ def run_experiment():
     log("=" * 70)
 
     model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, cache_dir=HF_CACHE,
-        torch_dtype=torch.float16, device_map="auto",
+        BASE_MODEL, cache_dir=HF_CACHE, quantization_config=bnb_config,
+        torch_dtype=torch.bfloat16, device_map="auto",
         trust_remote_code=True,
     )
 
-    n_merged = 0
+    # Load all adapters and compose via add_weighted_adapter (4-bit can't merge_and_unload)
+    loaded_adapters = []
+    first = True
     for adapter_name in adapters:
         adapter_path = ADAPTER_DIR / adapter_name
         try:
-            peft_model = PeftModel.from_pretrained(model, str(adapter_path))
-            peft_model.merge_and_unload()
-            model = peft_model.base_model
-            n_merged += 1
+            if first:
+                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
+                first = False
+            else:
+                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
+            loaded_adapters.append(adapter_name)
+            if len(loaded_adapters) % 10 == 0:
+                log(f"  Loaded {len(loaded_adapters)}/{len(adapters)} adapters")
         except Exception as e:
-            log(f"  WARN: failed to merge {adapter_name}: {e}")
-    log(f"Merged {n_merged} pilot adapters")
+            log(f"  WARN: failed to load {adapter_name}: {e}")
+
+    n_merged = len(loaded_adapters)
+    n = len(loaded_adapters)
+    weights = [1.0 / n] * n
+    peft_model.add_weighted_adapter(
+        adapters=loaded_adapters, weights=weights,
+        adapter_name="sole50", combination_type="linear",
+    )
+    peft_model.set_adapter("sole50")
+    for a in loaded_adapters:
+        peft_model.delete_adapter(a)
+    torch.cuda.empty_cache()
+    log(f"Composed {n_merged} pilot adapters")
 
     sole50_ppl = {}
+    peft_model.eval()
     for domain in all_eval_domains:
         texts = load_texts(domain, tokenizer, EVAL_SAMPLES, split="eval")
         if len(texts) < 3:
             continue
-        ppl = compute_ppl(model, tokenizer, texts, MAX_SEQ_LEN)
+        ppl = compute_ppl(peft_model, tokenizer, texts, MAX_SEQ_LEN)
         sole50_ppl[domain] = ppl
         log(f"  SOLE-50 PPL {domain}: {ppl:.2f}")
 
@@ -271,15 +296,9 @@ def run_experiment():
     log("=" * 70)
 
     # We need fresh base for training each new expert
-    del model
+    del peft_model, model
     gc.collect()
     torch.cuda.empty_cache()
-
-    # 4-bit quantization config for training (fp16 7B model OOMs on 24GB during training)
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True, bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_use_double_quant=True,
-    )
 
     new_expert_losses = {}
     train_times = {}
@@ -312,46 +331,68 @@ def run_experiment():
     log("=" * 70)
 
     model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, cache_dir=HF_CACHE,
-        torch_dtype=torch.float16, device_map="auto",
+        BASE_MODEL, cache_dir=HF_CACHE, quantization_config=bnb_config,
+        torch_dtype=torch.bfloat16, device_map="auto",
         trust_remote_code=True,
     )
 
-    # Merge pilot adapters
+    # Load all pilot + new adapters, compose via add_weighted_adapter
+    all_adapter_names = []
+    first = True
+    # Pilot adapters
     for adapter_name in adapters:
         adapter_path = ADAPTER_DIR / adapter_name
         try:
-            peft_model = PeftModel.from_pretrained(model, str(adapter_path))
-            peft_model.merge_and_unload()
-            model = peft_model.base_model
+            if first:
+                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
+                first = False
+            else:
+                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
+            all_adapter_names.append(adapter_name)
         except Exception:
             pass
 
-    # Merge new adapters
+    # New adapters
     n_new_merged = 0
     for domain in new_domains:
         adapter_path = NEW_ADAPTER_DIR / domain
         if not (adapter_path / "adapter_model.safetensors").exists():
             continue
+        adapter_name = f"new_{domain}"
         try:
-            peft_model = PeftModel.from_pretrained(model, str(adapter_path))
-            peft_model.merge_and_unload()
-            model = peft_model.base_model
+            if first:
+                peft_model = PeftModel.from_pretrained(model, str(adapter_path), adapter_name=adapter_name)
+                first = False
+            else:
+                peft_model.load_adapter(str(adapter_path), adapter_name=adapter_name)
+            all_adapter_names.append(adapter_name)
             n_new_merged += 1
         except Exception as e:
-            log(f"  WARN: failed to merge new {domain}: {e}")
-    log(f"Merged {n_new_merged} new adapters on top of {n_merged} pilot adapters")
+            log(f"  WARN: failed to load new {domain}: {e}")
+
+    n_total = len(all_adapter_names)
+    weights = [1.0 / n_total] * n_total
+    peft_model.add_weighted_adapter(
+        adapters=all_adapter_names, weights=weights,
+        adapter_name="sole60", combination_type="linear",
+    )
+    peft_model.set_adapter("sole60")
+    for a in all_adapter_names:
+        peft_model.delete_adapter(a)
+    torch.cuda.empty_cache()
+    log(f"Composed {n_new_merged} new + {n_merged} pilot adapters = {n_total} total")
 
     sole60_ppl = {}
+    peft_model.eval()
     for domain in all_eval_domains:
         texts = load_texts(domain, tokenizer, EVAL_SAMPLES, split="eval")
         if len(texts) < 3:
             continue
-        ppl = compute_ppl(model, tokenizer, texts, MAX_SEQ_LEN)
+        ppl = compute_ppl(peft_model, tokenizer, texts, MAX_SEQ_LEN)
         sole60_ppl[domain] = ppl
         log(f"  SOLE-60 PPL {domain}: {ppl:.2f}")
 
-    del model
+    del peft_model, model
     gc.collect()
     torch.cuda.empty_cache()
 
