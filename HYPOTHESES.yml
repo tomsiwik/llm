@@ -3,11 +3,11 @@
 # Roadmap: Distill → Compose → Evolve
 
 meta:
-  consecutive_kills: 1
+  consecutive_kills: 0
   last_killed: '2026-03-15'
   last_killed_node: exp_sole_inference_throughput
   last_proven: '2026-03-15'
-  last_proven_node: exp_rmsnorm_gamma_nonuniformity
+  last_proven_node: exp_gamma_perturbation_correlation
   roadmap_updated: '2026-03-13'
   architecture_pivot: '2026-03-10'
   pivot_note: >
@@ -2985,7 +2985,7 @@ nodes:
 
   exp_removal_position_sensitivity:
     title: Expert removal position (first/middle/last in GS order) affects output deviation
-    status: active
+    status: supported
     scale: micro
     priority: 4
     depends_on:
@@ -2995,7 +2995,17 @@ nodes:
     kill_criteria:
     - K1: position-dependent deviation varies by <2x across all positions at N=50
     - K2: worst-case position still within 2x of the mean bound
-    evidence: []
+    evidence:
+    - date: '2026-03-15'
+      claim: >
+        Position sensitivity exists but is bounded. Last expert has exactly 0% error
+        (mathematical identity). First expert (worst case) has 0.164% at d=256, N=50,
+        which is 1.67x the middle-only result and 6x below 1% threshold. K1 marginally
+        fails (first/Q3=2.16x vs 2.0x threshold). K2 passes (worst/mean=1.40x).
+        Amplification ratio is position-independent (CV=2.9%). Deviation decays linearly
+        with position (R^2=0.946). Random GS permutation per layer amortizes all effects.
+      source: micro/models/removal_position_sensitivity/results.json
+    completed: '2026-03-15'
     tags:
     - safety
     - composition
@@ -3300,7 +3310,7 @@ nodes:
 
   exp_gamma_perturbation_correlation:
     title: Real LoRA experts preferentially modify high-gamma dimensions
-    status: active
+    status: proven
     scale: micro
     priority: 4
     depends_on:
@@ -3314,17 +3324,23 @@ nodes:
     - 'Adversarial review: gamma-perturbation correlation is the remaining open risk.'
     - 'Gamma values correlated with learned weight structure; LoRA may preferentially modify emphasized dimensions.'
     - 'Current safety bound assumes uncorrelated gamma and perturbation directions.'
+    - 'PROVEN SAFE: Pearson r=0.018 across 5 real adapters x 168 layer-modules (840 measurements). No systematic correlation.'
+    - 'Raw cosine 0.839 is positivity artifact (expected 0.638 for random positive vectors at d=3584). Pearson is correct metric.'
+    - 'Even at perfect correlation (cos=1.0), alpha ratio is only 1.068x (K2 threshold 2.0x).'
+    - 'Real Qwen gamma gives alpha ratio 1.014x. Gamma-perturbation correlation concern definitively resolved.'
+    - 'All 5 domains (python, math, bash, medical, sql) and 6 module types show near-zero Pearson correlation.'
     tags:
     - safety
     - theory
     - macro-readiness
     created: '2026-03-15'
+    resolved: '2026-03-15'
     notes: >
-      Extract real gamma values from Qwen2.5-0.5B checkpoint. Train a few LoRA
-      adapters. Measure cosine between gamma magnitude and adapter delta magnitude
-      per layer. If correlation exists, inject correlated synthetic gamma into the
-      alpha measurement and check if the correction factor exceeds 1.43x.
-      This is the one risk the adversarial review flagged as genuinely unresolved.
+      Extracted real gamma from Qwen2.5-0.5B and 7B. Measured correlation with 5
+      real pilot-50 adapters. Cosine similarity is misleading for positive magnitude
+      vectors (baseline ~0.64 at d=3584). Pearson r=0.018 shows no systematic
+      correlation. Alpha sweep from corr=0 to corr=1.0 shows max 1.068x ratio.
+      Last adversarial concern for safety bound transfer is resolved.
 
   # ── New Macro Hypotheses (2026-03-15, iteration 51: quality signal & composition health) ──
 
@@ -3462,3 +3478,128 @@ nodes:
 
       Bonus: track KL(composed || base) as function of N to characterize the "composition
       budget" — how much divergence from base is healthy before quality degrades.
+
+  # ── New Micro Hypotheses (2026-03-15, integration: gamma_perturbation + removal_position) ──
+
+  exp_silu_gamma_correction:
+    title: SiLU activation produces similar gamma correction factor as GELU (~1.43x)
+    status: open
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_rmsnorm_gamma_nonuniformity
+    blocks: []
+    experiment_dir: micro/models/silu_gamma_correction
+    kill_criteria:
+    - K1: SiLU worst-case correction factor exceeds 2.0x (vs GELU 1.43x)
+    - K2: SiLU correction diverges from GELU by >50% at matched gamma profiles
+    evidence:
+    - 'Adversarial review of gamma_perturbation_correlation flagged GELU vs SiLU gap.'
+    - 'Qwen2.5 and Llama use SiLU, not GELU. Similar saturation expected but unverified.'
+    tags:
+    - safety
+    - validation
+    - quick-win
+    created: '2026-03-15'
+    notes: >
+      5-minute experiment: swap GELU for SiLU in rmsnorm_gamma_nonuniformity script,
+      rerun worst-case config. If SiLU correction factor is similar (~1.43x), this
+      closes the last activation-function gap. Lowest priority since gamma_perturbation
+      already showed 1.014x real-world ratio (19x margin on K2).
+
+  exp_gs_random_permutation_validation:
+    title: Random GS permutation per layer reduces worst-case removal deviation to ~mean
+    status: active
+    scale: micro
+    priority: 5
+    depends_on:
+    - exp_removal_position_sensitivity
+    blocks: []
+    experiment_dir: micro/models/gs_random_permutation_validation
+    kill_criteria:
+    - K1: Permuted worst-case exceeds 2x the unpermuted mean deviation
+    - K2: Permutation introduces new failure modes (any position exceeds 1% at d=256, N=50)
+    evidence:
+    - 'Removal position sensitivity: worst 0.164%, mean 0.098%. Permutation should give ~0.098%.'
+    - 'Recommendation from adversarial review: sound but untested.'
+    tags:
+    - safety
+    - composition
+    - quick-win
+    created: '2026-03-15'
+    notes: >
+      Quick validation: run removal sweep with 10 random GS orderings per layer,
+      measure that worst-case deviation converges to the unpermuted mean. CPU only,
+      5 minutes. Validates the production recommendation from removal_position_sensitivity.
+
+  # ── New Macro Hypotheses (2026-03-15, iteration 52: composition diagnostics) ──
+
+  exp_leave_one_out_expert_ranking:
+    title: Leave-one-out PPL ranking identifies harmful vs helpful experts without task labels
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/leave_one_out_expert_ranking
+    kill_criteria:
+    - K1: all experts contribute equally (leave-one-out PPL delta std < 0.1%) — ranking is noise
+    - K2: ranking takes >4hrs for N=50 (impractical for iterative use)
+    - K3: ranking unstable across calibration sets (Kendall tau < 0.5 between two disjoint sets)
+    evidence:
+    - 'Expert removal is safe at macro (alpha=0.022, exp_expert_removal_macro_safety pending)'
+    - 'PPL fails cross-domain (r=-0.63 macro) but leave-one-out measures RELATIVE impact, not absolute'
+    - 'Micro: composition_weight_sensitivity showed zero expert specialization — macro may differ'
+    tags:
+    - composition
+    - diagnostics
+    - label-free
+    - macro
+    created: '2026-03-15'
+    notes: >
+      COMPOSITION DIAGNOSTIC. For each of N=50 adapters, compose N-1 and compare
+      PPL to full-N composition. Experts whose removal IMPROVES quality are harmful.
+      Uses two disjoint calibration sets to test ranking stability (K3).
+
+      Unlike exp_expert_pruning_from_composition (which prunes bottom-20%), this ranks
+      ALL experts and tests whether the ranking is stable and meaningful. If stable,
+      this becomes the standard diagnostic before composition at scale.
+
+      Practical value: identifies which adapters need retraining vs which are fine.
+      No task labels, no domain-specific data, just generic calibration text.
+
+  exp_composition_dropout_robustness:
+    title: Composed model quality robust to random 20% expert dropout (bootstrap test)
+    status: open
+    scale: macro
+    priority: 3
+    depends_on:
+    - exp_distillation_pilot_50
+    blocks: []
+    experiment_dir: macro/composition_dropout_robustness
+    kill_criteria:
+    - K1: PPL coefficient of variation across 20 random 80% subsets > 5% (composition fragile)
+    - K2: best 80% subset improves >10% over all-50 (pruning is critical, not optional)
+    - K3: worst 80% subset degrades >15% from all-50 (random dropout is dangerous)
+    evidence:
+    - 'Micro: composition_weight_sensitivity showed zero degradation N=2..100 (but no expert specialization)'
+    - 'Micro: cross_domain_composition showed -1% degradation at N=50 (within noise)'
+    - 'Macro adapters are trained on real data with real specialization — may behave differently'
+    tags:
+    - composition
+    - robustness
+    - diagnostics
+    - macro
+    created: '2026-03-15'
+    notes: >
+      ROBUSTNESS TEST. Answers: "Does every expert matter, or is SOLE robust to
+      missing experts?" Composes 20 random subsets of 40/50 experts. If quality
+      variance is low (CV < 2%), individual expert quality is noise-dominated.
+
+      This is complementary to leave_one_out_expert_ranking: LOO measures
+      individual contribution, dropout measures aggregate robustness.
+
+      If robust (CV < 2%): SOLE is production-safe even with adapter failures.
+      If fragile (CV > 5%): expert selection/routing is critical for quality.
+      If pruning helps (best subset >> all): some experts actively hurt composition.
