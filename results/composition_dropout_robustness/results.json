@@ -1,0 +1,124 @@
+{
+  "config": {
+    "n_experts": 5,
+    "n_keep": 4,
+    "dropout_frac": 0.8,
+    "n_bootstrap": 20,
+    "calib_samples": 30,
+    "max_seq_len": 512,
+    "base_model": "Qwen/Qwen2.5-7B",
+    "seed": 42,
+    "smoke_test": false
+  },
+  "reference_ppl": 31600521088146.906,
+  "base_ppl": 2.6545287906019355,
+  "bootstrap_summary": {
+    "mean_ppl": 2484891907963.3374,
+    "std_ppl": 2788191240005.7847,
+    "cv_pct": 112.20573543140704,
+    "median_ppl": 2196542854714.6975,
+    "iqr_ppl": 1647407096259.6028,
+    "best_delta_pct": -99.99999994404051,
+    "worst_delta_pct": -73.6721974202786
+  },
+  "kill_criteria": {
+    "K1_cv_pct": 112.20573543140704,
+    "K1_threshold": 5.0,
+    "K1_pass": false,
+    "K2_best_delta_pct": -99.99999994404051,
+    "K2_threshold": 10.0,
+    "K2_pass": false,
+    "K3_worst_delta_pct": -73.6721974202786,
+    "K3_threshold": 15.0,
+    "K3_pass": true,
+    "overall": "KILLED"
+  },
+  "bootstrap_details": [
+    {
+      "bootstrap_id": 0,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "medical",
+        "python",
+        "sql"
+      ],
+      "ppl": 17683.491048380318,
+      "delta_from_ref_pct": -99.99999994404051,
+      "delta_from_base_pct": 666063.0912042377
+    },
+    {
+      "bootstrap_id": 1,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "math",
+        "medical",
+        "python"
+      ],
+      "ppl": 2196542854714.6975,
+      "delta_from_ref_pct": -93.04902963913906,
+      "delta_from_base_pct": 82746996848881.78
+    },
+    {
+      "bootstrap_id": 2,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "math",
+        "medical",
+        "python"
+      ],
+      "ppl": 2196542854714.6975,
+      "delta_from_ref_pct": -93.04902963913906,
+      "delta_from_base_pct": 82746996848881.78
+    },
+    {
+      "bootstrap_id": 3,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "math",
+        "medical",
+        "python"
+      ],
+      "ppl": 2196542854714.6975,
+      "delta_from_ref_pct": -93.04902963913906,
+      "delta_from_base_pct": 82746996848881.78
+    },
+    {
+      "bootstrap_id": 4,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "math",
+        "medical",
+        "sql"
+      ],
+      "ppl": 8319722806250.545,
+      "delta_from_ref_pct": -73.6721974202786,
+      "delta_from_base_pct": 313416182778011.1
+    },
+    {
+      "bootstrap_id": 5,
+      "n_experts": 4,
+      "subset": [
+        "bash",
+        "math",
+        "python",
+        "sql"
+      ],
+      "ppl": 59701.893772421885,
+      "delta_from_ref_pct": -99.99999981107307,
+      "delta_from_base_pct": 2248958.0619727997
+    }
+  ],
+  "elapsed_s": 979.9816040992737,
+  "per_phase_timing": {
+    "phase0_setup_s": 2.5899500846862793,
+    "phase1_reference_s": 212.83127570152283,
+    "phase2_base_s": 95.99218130111694,
+    "phase3_bootstrap_s": 667.570410490036,
+    "phase4_analysis_s": 0.018268823623657227
+  }
+}

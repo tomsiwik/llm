@@ -1,0 +1,3139 @@
+{
+  "experiment": "cross_domain_dilution_vs_k",
+  "config": {
+    "d_model": 32,
+    "n_heads": 2,
+    "n_layers": 2,
+    "vocab_size": 42,
+    "n_domains": 5,
+    "domains": [
+      "arithmetic",
+      "reverse",
+      "repeat",
+      "sort",
+      "parity"
+    ],
+    "n_cross_domains": 10,
+    "rank_per_expert": 4,
+    "epochs_per_expert": 15,
+    "n_train": 200,
+    "n_cross_test": 50,
+    "n_seeds": 5,
+    "strategies": [
+      "equal_weight",
+      "activation_weighted",
+      "logit_diff_weighted",
+      "ppl_probe_weighted",
+      "loss_weighted",
+      "top1_oracle",
+      "top1_logit_diff"
+    ]
+  },
+  "strategy_aggregate": {
+    "equal_weight": {
+      "mean_gap": -0.6002532181607811,
+      "std_gap": 18.79875501950956,
+      "max_gap": 34.074500214154845,
+      "p75_gap": 16.410092815518126,
+      "improvement_vs_ew": 0.0
+    },
+    "activation_weighted": {
+      "mean_gap": -0.7104652032036836,
+      "std_gap": 18.657037984207964,
+      "max_gap": 32.591032445574314,
+      "p75_gap": 14.55211305999385,
+      "improvement_vs_ew": 0.11021198504290242
+    },
+    "logit_diff_weighted": {
+      "mean_gap": 1.5915940245950717,
+      "std_gap": 21.83532390723934,
+      "max_gap": 62.536202943061845,
+      "p75_gap": 15.624533433218305,
+      "improvement_vs_ew": -2.191847242755853
+    },
+    "ppl_probe_weighted": {
+      "mean_gap": -9.940405358808475,
+      "std_gap": 13.724038472913865,
+      "max_gap": 23.38980983447863,
+      "p75_gap": 1.932520323537445,
+      "improvement_vs_ew": 9.340152140647694
+    },
+    "loss_weighted": {
+      "mean_gap": -10.064098754160732,
+      "std_gap": 13.69061381553848,
+      "max_gap": 23.750218504128597,
+      "p75_gap": 1.9304084214729693,
+      "improvement_vs_ew": 9.463845535999951
+    },
+    "top1_oracle": {
+      "mean_gap": -5.846628204023041,
+      "std_gap": 16.6509366374918,
+      "max_gap": 37.380384977930284,
+      "p75_gap": 3.421440063219519,
+      "improvement_vs_ew": 5.24637498586226
+    },
+    "top1_logit_diff": {
+      "mean_gap": 22.79928222216828,
+      "std_gap": 40.01241759576167,
+      "max_gap": 140.9359505606013,
+      "p75_gap": 50.377035897292224,
+      "improvement_vs_ew": -23.39953544032906
+    }
+  },
+  "arith_reverse_stats": {
+    "equal_weight": {
+      "mean": 24.320329523940522,
+      "std": 10.480541743869724,
+      "max": 34.074500214154845,
+      "per_seed": [
+        30.809633119285078,
+        34.074500214154845,
+        24.52625994694697,
+        4.335099880322868,
+        27.856154458992844
+      ]
+    },
+    "activation_weighted": {
+      "mean": 23.885413636479562,
+      "std": 9.653778446206301,
+      "max": 32.591032445574314,
+      "per_seed": [
+        31.171679564573573,
+        32.591032445574314,
+        25.74464472722659,
+        5.624122944147979,
+        24.29558850087534
+      ]
+    },
+    "logit_diff_weighted": {
+      "mean": 34.47531708787861,
+      "std": 17.13041981592347,
+      "max": 62.536202943061845,
+      "per_seed": [
+        30.05528373083938,
+        62.536202943061845,
+        26.09408288300019,
+        11.456659000066866,
+        42.23435688242474
+      ]
+    },
+    "ppl_probe_weighted": {
+      "mean": -8.532131691187699,
+      "std": 7.663767997801183,
+      "max": 6.264932224487761,
+      "per_seed": [
+        -10.44139194501569,
+        6.264932224487761,
+        -12.034116306649846,
+        -15.941438511030597,
+        -10.50864391773012
+      ]
+    },
+    "loss_weighted": {
+      "mean": -8.50672326621173,
+      "std": 7.646035003703316,
+      "max": 6.250173365187783,
+      "per_seed": [
+        -10.442844650502856,
+        6.250173365187783,
+        -12.00173274754161,
+        -15.916845431643841,
+        -10.422366866558122
+      ]
+    },
+    "top1_oracle": {
+      "mean": -7.908665419427601,
+      "std": 7.551629737985882,
+      "max": 6.7827678916983105,
+      "per_seed": [
+        -11.07318840819986,
+        6.7827678916983105,
+        -11.099747073817483,
+        -14.7558630624894,
+        -9.397296444329577
+      ]
+    },
+    "top1_logit_diff": {
+      "mean": 86.6408634437181,
+      "std": 51.81762251989253,
+      "max": 140.9359505606013,
+      "per_seed": [
+        -11.07318840819986,
+        140.9359505606013,
+        105.38032951577547,
+        87.28379295255027,
+        110.67743259786332
+      ]
+    }
+  },
+  "per_type_comparison": {
+    "arith_reverse": {
+      "ew_mean": 24.320329523940522,
+      "best_mean": -8.50672326621173,
+      "delta": 32.82705279015225,
+      "ew_max": 34.074500214154845,
+      "best_max": 6.250173365187783
+    },
+    "arith_sort": {
+      "ew_mean": 15.236818492957298,
+      "best_mean": -9.497206676667474,
+      "delta": 24.734025169624772,
+      "ew_max": 24.0782034214683,
+      "best_max": 1.9408437561108411
+    },
+    "arith_repeat": {
+      "ew_mean": -20.095033580933183,
+      "best_mean": -27.068682855231806,
+      "delta": 6.973649274298623,
+      "ew_max": -12.193835593251924,
+      "best_max": -20.125687796993237
+    },
+    "arith_parity": {
+      "ew_mean": 0.04150531266464448,
+      "best_mean": 0.9435245867042497,
+      "delta": -0.9020192740396051,
+      "ew_max": 10.09395121102401,
+      "best_max": 8.138305851412317
+    },
+    "reverse_repeat": {
+      "ew_mean": -22.347698391458955,
+      "best_mean": -28.53011275662149,
+      "delta": 6.182414365162536,
+      "ew_max": -16.188646900689086,
+      "best_max": -23.65063869517862
+    },
+    "reverse_sort": {
+      "ew_mean": -6.4665596322979635,
+      "best_mean": -6.997520187258042,
+      "delta": 0.5309605549600782,
+      "ew_max": 11.546035329102885,
+      "best_max": 11.635305202560602
+    },
+    "reverse_parity": {
+      "ew_mean": -17.633083948181884,
+      "best_mean": -17.577264014061647,
+      "delta": -0.05581993412023678,
+      "ew_max": -9.225219245083595,
+      "best_max": -9.732671420503694
+    },
+    "repeat_sort": {
+      "ew_mean": 19.977130006687855,
+      "best_mean": 4.086864445324464,
+      "delta": 15.89026556136339,
+      "ew_max": 28.936362354759986,
+      "best_max": 15.554280683886898
+    },
+    "repeat_parity": {
+      "ew_mean": 16.042939161570093,
+      "best_mean": 8.81200861773569,
+      "delta": 7.230930543834402,
+      "ew_max": 25.193705014179834,
+      "best_max": 23.750218504128597
+    },
+    "sort_parity": {
+      "ew_mean": -15.078879126556245,
+      "best_mean": -16.305875435319518,
+      "delta": 1.2269963087632725,
+      "ew_max": -11.43867140981957,
+      "best_max": -12.802381561333288
+    }
+  },
+  "best_strategy": "loss_weighted",
+  "best_weighted_strategy": "loss_weighted",
+  "weight_correlation": {
+    "activation": 0.023028825970627234,
+    "logit_diff": -0.24510524868084962,
+    "ppl_probe": 0.9903819799543497
+  },
+  "kill_criteria": {
+    "k1_improvement_pp": 9.463845535999951,
+    "k1_threshold": 2.0,
+    "k1_kill": false,
+    "k2_arith_reverse_best": -8.50672326621173,
+    "k2_threshold": 20.0,
+    "k2_kill": false,
+    "overall_kill": false
+  },
+  "per_seed_data": [
+    {
+      "seed": 42,
+      "cross_results": {
+        "arith_reverse": {
+          "base_loss": 2.8833301030591807,
+          "involved": [
+            "arithmetic",
+            "reverse"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.5640535283170944,
+            "reverse": 5.991099650118564
+          },
+          "activation_scores": {
+            "arithmetic": 0.07690522543640328,
+            "reverse": 0.08511320310573177
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.0256433189403493,
+            "reverse": 2.008463727677725
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.5262484998889065,
+            "reverse": -5.951138112181662
+          },
+          "act_weights": {
+            "arithmetic": 0.4979480170779828,
+            "reverse": 0.502051982871812
+          },
+          "logit_weights": {
+            "arithmetic": 0.5042947921609189,
+            "reverse": 0.49570520778865157
+          },
+          "probe_weights": {
+            "arithmetic": 0.9684734068953965,
+            "reverse": 0.03152659300775617
+          },
+          "loss_weights": {
+            "arithmetic": 0.9685391844036135,
+            "reverse": 0.031460815499532425
+          },
+          "strategy_losses": {
+            "equal_weight": 3.7716735294296186,
+            "activation_weighted": 3.7821125235736774,
+            "logit_diff_weighted": 3.749923146430321,
+            "ppl_probe_weighted": 2.582270305930147,
+            "loss_weighted": 2.5822284196355265,
+            "top1_oracle": 2.5640535283170944,
+            "top1_logit_diff": 2.5640535283170944
+          },
+          "strategy_gaps": {
+            "equal_weight": 30.809633119285078,
+            "activation_weighted": 31.171679564573573,
+            "logit_diff_weighted": 30.05528373083938,
+            "ppl_probe_weighted": -10.44139194501569,
+            "loss_weighted": -10.442844650502856,
+            "top1_oracle": -11.07318840819986,
+            "top1_logit_diff": -11.07318840819986
+          }
+        },
+        "arith_sort": {
+          "base_loss": 2.817120522222589,
+          "involved": [
+            "arithmetic",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.456177734310171,
+            "sort": 5.519865460112462
+          },
+          "activation_scores": {
+            "arithmetic": 0.07837265257989537,
+            "sort": 0.07966985470783122
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.0360488568397312,
+            "sort": 1.931924659194451
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.5476970223967252,
+            "sort": -5.535463437130127
+          },
+          "act_weights": {
+            "arithmetic": 0.49967569948849194,
+            "sort": 0.5003243004614756
+          },
+          "logit_weights": {
+            "arithmetic": 0.5260075561297753,
+            "sort": 0.4739924438176239
+          },
+          "probe_weights": {
+            "arithmetic": 0.9520183842176461,
+            "sort": 0.047981615687152056
+          },
+          "loss_weights": {
+            "arithmetic": 0.9553697996982948,
+            "sort": 0.04463020020616822
+          },
+          "strategy_losses": {
+            "equal_weight": 3.495432532191274,
+            "activation_weighted": 3.496985757716088,
+            "logit_diff_weighted": 3.3748993671902534,
+            "ppl_probe_weighted": 2.4948189409924875,
+            "loss_weighted": 2.4919231000210385,
+            "top1_oracle": 2.456177734310171,
+            "top1_logit_diff": 2.456177734310171
+          },
+          "strategy_gaps": {
+            "equal_weight": 24.0782034214683,
+            "activation_weighted": 24.133338638884872,
+            "logit_diff_weighted": 19.799608876073243,
+            "ppl_probe_weighted": -11.440816205329371,
+            "loss_weighted": -11.543610563916639,
+            "top1_oracle": -12.81247234774496,
+            "top1_logit_diff": -12.81247234774496
+          }
+        },
+        "arith_repeat": {
+          "base_loss": 3.5652984642852195,
+          "involved": [
+            "arithmetic",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.7327128940162804,
+            "repeat": 4.268161609288276
+          },
+          "activation_scores": {
+            "arithmetic": 0.07769027453232492,
+            "repeat": 0.10883778137843286
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.023211418410453,
+            "repeat": 1.5973302188170055
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.745106724346864,
+            "repeat": -4.365715266587332
+          },
+          "act_weights": {
+            "arithmetic": 0.4922137527500952,
+            "repeat": 0.5077862471991262
+          },
+          "logit_weights": {
+            "arithmetic": 0.604889709203198,
+            "repeat": 0.3951102907363131
+          },
+          "probe_weights": {
+            "arithmetic": 0.8348790380538567,
+            "repeat": 0.1651209618626555
+          },
+          "loss_weights": {
+            "arithmetic": 0.8228021279724453,
+            "repeat": 0.1771978719452745
+          },
+          "strategy_losses": {
+            "equal_weight": 3.130551831141544,
+            "activation_weighted": 3.1511437581613073,
+            "logit_diff_weighted": 2.8783530592501143,
+            "ppl_probe_weighted": 2.6613245191729664,
+            "loss_weighted": 2.660032388504634,
+            "top1_oracle": 2.7327128940162804,
+            "top1_logit_diff": 2.7327128940162804
+          },
+          "strategy_gaps": {
+            "equal_weight": -12.193835593251924,
+            "activation_weighted": -11.616270286278626,
+            "logit_diff_weighted": -19.267542729352556,
+            "ppl_probe_weighted": -25.354790185664978,
+            "loss_weighted": -25.391032051003215,
+            "top1_oracle": -23.352478862828054,
+            "top1_logit_diff": -23.352478862828054
+          }
+        },
+        "arith_parity": {
+          "base_loss": 3.4224168840918447,
+          "involved": [
+            "arithmetic",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.3862009566586955,
+            "parity": 4.426609330300708
+          },
+          "activation_scores": {
+            "arithmetic": 0.060422855858218584,
+            "parity": 0.0657184177811804
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.002089857857296,
+            "parity": 2.250356703097438
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.3962727219750253,
+            "parity": -4.4475559008465275
+          },
+          "act_weights": {
+            "arithmetic": 0.49867611258807015,
+            "parity": 0.5013238873617974
+          },
+          "logit_weights": {
+            "arithmetic": 0.4382501334146027,
+            "parity": 0.5617498665292223
+          },
+          "probe_weights": {
+            "arithmetic": 0.7410212285521026,
+            "parity": 0.2589787713737952
+          },
+          "loss_weights": {
+            "arithmetic": 0.7389287943132521,
+            "parity": 0.2610712056128551
+          },
+          "strategy_losses": {
+            "equal_weight": 3.0549491361253387,
+            "activation_weighted": 3.056639530554411,
+            "logit_diff_weighted": 3.1456470611831375,
+            "ppl_probe_weighted": 3.0268838567274137,
+            "loss_weighted": 3.025569620559527,
+            "top1_oracle": 3.3862009566586955,
+            "top1_logit_diff": 4.426609330300708
+          },
+          "strategy_gaps": {
+            "equal_weight": -10.737083190378645,
+            "activation_weighted": -10.687691357462853,
+            "logit_diff_weighted": -8.086969889471822,
+            "ppl_probe_weighted": -11.557125878000328,
+            "loss_weighted": -11.595526698601573,
+            "top1_oracle": -1.0581974277151613,
+            "top1_logit_diff": 29.34161676435658
+          }
+        },
+        "reverse_repeat": {
+          "base_loss": 4.653833976801705,
+          "involved": [
+            "reverse",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.826397558083291,
+            "repeat": 2.8655213646786555
+          },
+          "activation_scores": {
+            "reverse": 0.09081378861373415,
+            "repeat": 0.10626469707285979
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9255860601293764,
+            "repeat": 1.9077222561132858
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.8350841135328264,
+            "repeat": -2.9389004499672224
+          },
+          "act_weights": {
+            "reverse": 0.49613734970430684,
+            "repeat": 0.503862650245307
+          },
+          "logit_weights": {
+            "reverse": 0.5044658322195171,
+            "repeat": 0.4955341677300363
+          },
+          "probe_weights": {
+            "reverse": 0.28983538659041447,
+            "repeat": 0.7101646133385691
+          },
+          "loss_weights": {
+            "reverse": 0.2767028006389518,
+            "repeat": 0.7232971992887185
+          },
+          "strategy_losses": {
+            "equal_weight": 3.456192796476169,
+            "activation_weighted": 3.4530304553856475,
+            "logit_diff_weighted": 3.459850680079625,
+            "ppl_probe_weighted": 3.1853821971439404,
+            "loss_weighted": 3.158974949680058,
+            "top1_oracle": 2.8655213646786555,
+            "top1_logit_diff": 3.826397558083291
+          },
+          "strategy_gaps": {
+            "equal_weight": -25.734505921257668,
+            "activation_weighted": -25.802457229926716,
+            "logit_diff_weighted": -25.655906563788328,
+            "ppl_probe_weighted": -31.553591876668996,
+            "loss_weighted": -32.12102181928226,
+            "top1_oracle": -38.42665254148252,
+            "top1_logit_diff": -17.779672047670687
+          }
+        },
+        "reverse_sort": {
+          "base_loss": 2.81386437865531,
+          "involved": [
+            "reverse",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.892433477183271,
+            "sort": 2.5350549606765957
+          },
+          "activation_scores": {
+            "reverse": 0.05677077227219152,
+            "sort": 0.055535483707018184
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9968416358704242,
+            "sort": 1.8488451793032303
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.992666407856584,
+            "sort": -2.4726368863688397
+          },
+          "act_weights": {
+            "reverse": 0.5003088220769921,
+            "sort": 0.49969117787297695
+          },
+          "logit_weights": {
+            "reverse": 0.5369317292194346,
+            "sort": 0.4630682707268723
+          },
+          "probe_weights": {
+            "reverse": 0.37284533057813696,
+            "sort": 0.6271546693591475
+          },
+          "loss_weights": {
+            "reverse": 0.41159430094300364,
+            "sort": 0.5884056989981558
+          },
+          "strategy_losses": {
+            "equal_weight": 2.7541955118241765,
+            "activation_weighted": 2.7543826174664807,
+            "logit_diff_weighted": 2.776853601495587,
+            "ppl_probe_weighted": 2.685708984333696,
+            "loss_weighted": 2.7030855266447475,
+            "top1_oracle": 2.5350549606765957,
+            "top1_logit_diff": 2.892433477183271
+          },
+          "strategy_gaps": {
+            "equal_weight": -2.1205310136392552,
+            "activation_weighted": -2.1138815942953992,
+            "logit_diff_weighted": -1.3153006747755733,
+            "ppl_probe_weighted": -4.554426833565339,
+            "loss_weighted": -3.936893791004291,
+            "top1_oracle": -9.908417054270103,
+            "top1_logit_diff": 2.7922134102819784
+          }
+        },
+        "reverse_parity": {
+          "base_loss": 3.466369963435944,
+          "involved": [
+            "reverse",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.2298262440957113,
+            "parity": 3.3939622267689002
+          },
+          "activation_scores": {
+            "reverse": 0.03526003655881471,
+            "parity": 0.04641249978081939
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9624588650625607,
+            "parity": 1.9586013946360394
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.2836073898908915,
+            "parity": -3.4169277277092025
+          },
+          "act_weights": {
+            "reverse": 0.49721191306736473,
+            "parity": 0.5027880868823564
+          },
+          "logit_weights": {
+            "reverse": 0.5009643663857134,
+            "parity": 0.4990356335641901
+          },
+          "probe_weights": {
+            "reverse": 0.533280803739323,
+            "parity": 0.46671919620734903
+          },
+          "loss_weights": {
+            "reverse": 0.5409421197074344,
+            "parity": 0.45905788023847144
+          },
+          "strategy_losses": {
+            "equal_weight": 2.8089269458491253,
+            "activation_weighted": 2.808692161172469,
+            "logit_diff_weighted": 2.809027925376995,
+            "ppl_probe_weighted": 2.816747028968316,
+            "loss_weighted": 2.8197279295065476,
+            "top1_oracle": 3.2298262440957113,
+            "top1_logit_diff": 3.2298262440957113
+          },
+          "strategy_gaps": {
+            "equal_weight": -18.96632571022934,
+            "activation_weighted": -18.973098924835195,
+            "logit_diff_weighted": -18.9634125899065,
+            "ppl_probe_weighted": -18.740727081067458,
+            "loss_weighted": -18.654732205457677,
+            "top1_oracle": -6.823960564952664,
+            "top1_logit_diff": -6.823960564952664
+          }
+        },
+        "repeat_sort": {
+          "base_loss": 2.4628492573796374,
+          "involved": [
+            "repeat",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.457295285910364,
+            "sort": 3.736205640470672
+          },
+          "activation_scores": {
+            "repeat": 0.0894777186149486,
+            "sort": 0.05536136985638464
+          },
+          "logit_diff_scores": {
+            "repeat": 1.6746930943884801,
+            "sort": 2.021891764421854
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.432484974606095,
+            "sort": -3.7326488890530216
+          },
+          "act_weights": {
+            "repeat": 0.5085282599917272,
+            "sort": 0.49147173995741994
+          },
+          "logit_weights": {
+            "repeat": 0.4140619007055098,
+            "sort": 0.5859380992358963
+          },
+          "probe_weights": {
+            "repeat": 0.7858625682213045,
+            "sort": 0.2141374317001091
+          },
+          "loss_weights": {
+            "repeat": 0.7822642375160338,
+            "sort": 0.2177357624057398
+          },
+          "strategy_losses": {
+            "equal_weight": 3.124956106723504,
+            "activation_weighted": 3.098896049375076,
+            "logit_diff_weighted": 3.3454295108465133,
+            "ppl_probe_weighted": 2.5186254879656484,
+            "loss_weighted": 2.522386095881365,
+            "top1_oracle": 2.457295285910364,
+            "top1_logit_diff": 3.736205640470672
+          },
+          "strategy_gaps": {
+            "equal_weight": 26.883774853858444,
+            "activation_weighted": 25.825648487807335,
+            "logit_diff_weighted": 35.83573987820522,
+            "ppl_probe_weighted": 2.2647033885197847,
+            "loss_weighted": 2.4173967742172007,
+            "top1_oracle": -0.22551000442400476,
+            "top1_logit_diff": 51.702570885147445
+          }
+        },
+        "repeat_parity": {
+          "base_loss": 2.748193428243,
+          "involved": [
+            "repeat",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.9073303108015907,
+            "parity": 4.421916353903025
+          },
+          "activation_scores": {
+            "repeat": 0.07662038330574987,
+            "parity": 0.04494818423374918
+          },
+          "logit_diff_scores": {
+            "repeat": 1.6795025814991715,
+            "parity": 2.1530972941523263
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.8508129240645474,
+            "parity": -4.5023424976356825
+          },
+          "act_weights": {
+            "repeat": 0.5079173879070124,
+            "parity": 0.492082612042196
+          },
+          "logit_weights": {
+            "repeat": 0.38376577697479347,
+            "parity": 0.616234222963583
+          },
+          "probe_weights": {
+            "repeat": 0.8390976694464122,
+            "parity": 0.16090233046967814
+          },
+          "loss_weights": {
+            "repeat": 0.8197398639020997,
+            "parity": 0.1802601360159262
+          },
+          "strategy_losses": {
+            "equal_weight": 3.0288838489204015,
+            "activation_weighted": 3.010949739222377,
+            "logit_diff_weighted": 3.3114134511222133,
+            "ppl_probe_weighted": 2.807899178344892,
+            "loss_weighted": 2.80038443607797,
+            "top1_oracle": 2.9073303108015907,
+            "top1_logit_diff": 4.421916353903025
+          },
+          "strategy_gaps": {
+            "equal_weight": 10.213634083859056,
+            "activation_weighted": 9.561055938750465,
+            "logit_diff_weighted": 20.494191460143927,
+            "ppl_probe_weighted": 2.1725454070408685,
+            "loss_weighted": 1.8991024175593543,
+            "top1_oracle": 5.790599778136129,
+            "top1_logit_diff": 60.90266094297754
+          }
+        },
+        "sort_parity": {
+          "base_loss": 3.396359998543276,
+          "involved": [
+            "sort",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "sort": 3.025953155537469,
+            "parity": 3.655377893862503
+          },
+          "activation_scores": {
+            "sort": 0.043176724297216806,
+            "parity": 0.04243678189226514
+          },
+          "logit_diff_scores": {
+            "sort": 1.8603536304684871,
+            "parity": 2.0338546608452437
+          },
+          "ppl_probe_scores": {
+            "sort": -3.0176305670855075,
+            "parity": -3.4700422536899924
+          },
+          "act_weights": {
+            "sort": 0.5001849855677792,
+            "parity": 0.49981501438220227
+          },
+          "logit_weights": {
+            "sort": 0.4567332248618408,
+            "parity": 0.5432667750838325
+          },
+          "probe_weights": {
+            "sort": 0.6112124807749016,
+            "parity": 0.38878751916397714
+          },
+          "loss_weights": {
+            "sort": 0.6523590118722529,
+            "parity": 0.34764098806251126
+          },
+          "strategy_losses": {
+            "equal_weight": 2.7775585589465175,
+            "activation_weighted": 2.7774079062748247,
+            "logit_diff_weighted": 2.818885694716612,
+            "ppl_probe_weighted": 2.728716195421242,
+            "loss_weighted": 2.733659410613926,
+            "top1_oracle": 3.025953155537469,
+            "top1_logit_diff": 3.655377893862503
+          },
+          "strategy_gaps": {
+            "equal_weight": -18.219547982609825,
+            "activation_weighted": -18.22398369236254,
+            "logit_diff_weighted": -17.00274128992059,
+            "ppl_probe_weighted": -19.657627678113958,
+            "loss_weighted": -19.512083177683973,
+            "top1_oracle": -10.905994746277697,
+            "top1_logit_diff": 7.626338062817885
+          }
+        }
+      },
+      "elapsed": 15.55424690246582
+    },
+    {
+      "seed": 142,
+      "cross_results": {
+        "arith_reverse": {
+          "base_loss": 2.552011907969634,
+          "involved": [
+            "arithmetic",
+            "reverse"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.7251089522557157,
+            "reverse": 6.148714148886375
+          },
+          "activation_scores": {
+            "arithmetic": 0.11237253300826366,
+            "reverse": 0.08763386819645841
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.812477267242609,
+            "reverse": 2.2329256819990735
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.668887521856429,
+            "reverse": -6.122218464977416
+          },
+          "act_weights": {
+            "arithmetic": 0.5061843507778632,
+            "reverse": 0.4938156491715184
+          },
+          "logit_weights": {
+            "arithmetic": 0.3964094533792856,
+            "reverse": 0.6035905465603553
+          },
+          "probe_weights": {
+            "arithmetic": 0.9693303212803984,
+            "reverse": 0.03066967862266854
+          },
+          "loss_weights": {
+            "arithmetic": 0.9684341666537448,
+            "reverse": 0.03156583324941181
+          },
+          "strategy_losses": {
+            "equal_weight": 3.421597211016004,
+            "activation_weighted": 3.3837389369109374,
+            "logit_diff_weighted": 4.147943253868629,
+            "ppl_probe_weighted": 2.7118937243647885,
+            "loss_weighted": 2.7115170765179726,
+            "top1_oracle": 2.7251089522557157,
+            "top1_logit_diff": 6.148714148886375
+          },
+          "strategy_gaps": {
+            "equal_weight": 34.074500214154845,
+            "activation_weighted": 32.591032445574314,
+            "logit_diff_weighted": 62.536202943061845,
+            "ppl_probe_weighted": 6.264932224487761,
+            "loss_weighted": 6.250173365187783,
+            "top1_oracle": 6.7827678916983105,
+            "top1_logit_diff": 140.9359505606013
+          }
+        },
+        "arith_sort": {
+          "base_loss": 2.4968368039063265,
+          "involved": [
+            "arithmetic",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.6160568946318015,
+            "sort": 5.0783454096715035
+          },
+          "activation_scores": {
+            "arithmetic": 0.12064203620351138,
+            "sort": 0.09989173939283479
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.853524923716462,
+            "sort": 1.6733539873030228
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.5463941350737906,
+            "sort": -5.158497057938094
+          },
+          "act_weights": {
+            "arithmetic": 0.5051873880485939,
+            "sort": 0.4948126119008874
+          },
+          "logit_weights": {
+            "arithmetic": 0.5449212818363633,
+            "sort": 0.4550787181091445
+          },
+          "probe_weights": {
+            "arithmetic": 0.9316364529217854,
+            "sort": 0.06836354698505089
+          },
+          "loss_weights": {
+            "arithmetic": 0.9214554545415878,
+            "sort": 0.07854454536626664
+          },
+          "strategy_losses": {
+            "equal_weight": 2.9539495928128625,
+            "activation_weighted": 2.9328190356308848,
+            "logit_diff_weighted": 2.7873768975409177,
+            "ppl_probe_weighted": 2.5532940325503692,
+            "loss_weighted": 2.54529650511522,
+            "top1_oracle": 2.6160568946318015,
+            "top1_logit_diff": 2.6160568946318015
+          },
+          "strategy_gaps": {
+            "equal_weight": 18.30767586377205,
+            "activation_weighted": 17.461382780102394,
+            "logit_diff_weighted": 11.636326938950848,
+            "ppl_probe_weighted": 2.2611501302654173,
+            "loss_weighted": 1.9408437561108411,
+            "top1_oracle": 4.774845137613879,
+            "top1_logit_diff": 4.774845137613879
+          }
+        },
+        "arith_repeat": {
+          "base_loss": 4.02937476968398,
+          "involved": [
+            "arithmetic",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.1642072326541753,
+            "repeat": 4.283980295565979
+          },
+          "activation_scores": {
+            "arithmetic": 0.0948767648572816,
+            "repeat": 0.055425509215942526
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.8109069601347418,
+            "repeat": 1.5923467394354374
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.1262210309241003,
+            "repeat": -4.300935487281305
+          },
+          "act_weights": {
+            "arithmetic": 0.5098615348751477,
+            "repeat": 0.49013846507386605
+          },
+          "logit_weights": {
+            "arithmetic": 0.5544235827011901,
+            "repeat": 0.4455764172433676
+          },
+          "probe_weights": {
+            "arithmetic": 0.7639961183740577,
+            "repeat": 0.23600388154954277
+          },
+          "loss_weights": {
+            "arithmetic": 0.7539466194661898,
+            "repeat": 0.24605338045841563
+          },
+          "strategy_losses": {
+            "equal_weight": 2.9373501402114863,
+            "activation_weighted": 2.9223850674131318,
+            "logit_diff_weighted": 2.861524482101852,
+            "ppl_probe_weighted": 2.8223254660448687,
+            "loss_weighted": 2.8134089630804233,
+            "top1_oracle": 3.1642072326541753,
+            "top1_logit_diff": 3.1642072326541753
+          },
+          "strategy_gaps": {
+            "equal_weight": -27.101589995763547,
+            "activation_weighted": -27.47298937293114,
+            "logit_diff_weighted": -28.983411927049957,
+            "ppl_probe_weighted": -29.956243155157775,
+            "loss_weighted": -30.177530661882905,
+            "top1_oracle": -21.4715082731721,
+            "top1_logit_diff": -21.4715082731721
+          }
+        },
+        "arith_parity": {
+          "base_loss": 2.83256044625754,
+          "involved": [
+            "arithmetic",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.5085197743763086,
+            "parity": 4.239707312188094
+          },
+          "activation_scores": {
+            "arithmetic": 0.05629467891703291,
+            "parity": 0.058583916716670965
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.8114904638359275,
+            "parity": 2.22046276171048
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.4016780765709056,
+            "parity": -4.51236165134326
+          },
+          "act_weights": {
+            "arithmetic": 0.4994276907750279,
+            "parity": 0.5005723091749148
+          },
+          "logit_weights": {
+            "arithmetic": 0.3991585703998954,
+            "parity": 0.6008414295400205
+          },
+          "probe_weights": {
+            "arithmetic": 0.7522565288853869,
+            "parity": 0.24774347103938746
+          },
+          "loss_weights": {
+            "arithmetic": 0.6750658154191713,
+            "parity": 0.3249341845133221
+          },
+          "strategy_losses": {
+            "equal_weight": 2.811360376622535,
+            "activation_weighted": 2.8119117956965165,
+            "logit_diff_weighted": 2.9821359190332974,
+            "ppl_probe_weighted": 3.051933572448895,
+            "loss_weighted": 2.9017039988996003,
+            "top1_oracle": 3.5085197743763086,
+            "top1_logit_diff": 4.239707312188094
+          },
+          "strategy_gaps": {
+            "equal_weight": -0.7484419145587993,
+            "activation_weighted": -0.7289747545654429,
+            "logit_diff_weighted": 5.280574787852475,
+            "ppl_probe_weighted": 7.74469355035995,
+            "loss_weighted": 2.4410265536756506,
+            "top1_oracle": 23.863897732945652,
+            "top1_logit_diff": 49.67755825969103
+          }
+        },
+        "reverse_repeat": {
+          "base_loss": 4.210614471306644,
+          "involved": [
+            "reverse",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.4721360711892277,
+            "repeat": 2.785590116919926
+          },
+          "activation_scores": {
+            "reverse": 0.08094973234055707,
+            "repeat": 0.07731642932966594
+          },
+          "logit_diff_scores": {
+            "reverse": 2.0796350590529022,
+            "repeat": 1.6984930849333193
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.5283018705208757,
+            "repeat": -2.7945271393355338
+          },
+          "act_weights": {
+            "reverse": 0.5009083247284074,
+            "repeat": 0.4990916752215017
+          },
+          "logit_weights": {
+            "reverse": 0.5941485036176362,
+            "repeat": 0.4058514963229491
+          },
+          "probe_weights": {
+            "reverse": 0.32436693581515424,
+            "repeat": 0.6756330641172825
+          },
+          "loss_weights": {
+            "reverse": 0.33480188285859586,
+            "repeat": 0.6651981170748842
+          },
+          "strategy_losses": {
+            "equal_weight": 3.0511499920130283,
+            "activation_weighted": 3.052023665100777,
+            "logit_diff_weighted": 3.132295728203622,
+            "ppl_probe_weighted": 2.908799300249445,
+            "loss_weighted": 2.915258553120498,
+            "top1_oracle": 2.785590116919926,
+            "top1_logit_diff": 3.4721360711892277
+          },
+          "strategy_gaps": {
+            "equal_weight": -27.536704849014804,
+            "activation_weighted": -27.515955547607557,
+            "logit_diff_weighted": -25.609533963540404,
+            "ppl_probe_weighted": -30.91746299568523,
+            "loss_weighted": -30.76405895180827,
+            "top1_oracle": -33.8436198350048,
+            "top1_logit_diff": -17.53849480045725
+          }
+        },
+        "reverse_sort": {
+          "base_loss": 2.94521323515918,
+          "involved": [
+            "reverse",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.381866761979461,
+            "sort": 2.530335582939877
+          },
+          "activation_scores": {
+            "reverse": 0.128016972252113,
+            "sort": 0.10102259471862121
+          },
+          "logit_diff_scores": {
+            "reverse": 2.0994300650006408,
+            "sort": 1.613633370574678
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.4482956997205463,
+            "sort": -2.5867467559914354
+          },
+          "act_weights": {
+            "reverse": 0.5067481845811741,
+            "sort": 0.4932518153681511
+          },
+          "logit_weights": {
+            "reverse": 0.6191157422420066,
+            "sort": 0.3808842576960819
+          },
+          "probe_weights": {
+            "reverse": 0.5345575796915168,
+            "sort": 0.46544242025502747
+          },
+          "loss_weights": {
+            "reverse": 0.5370491739840381,
+            "sort": 0.462950825962257
+          },
+          "strategy_losses": {
+            "equal_weight": 2.2730567352784887,
+            "activation_weighted": 2.2714634290985063,
+            "logit_diff_weighted": 2.2598934449384895,
+            "ppl_probe_weighted": 2.2658050405110184,
+            "loss_weighted": 2.265347273128515,
+            "top1_oracle": 2.381866761979461,
+            "top1_logit_diff": 2.381866761979461
+          },
+          "strategy_gaps": {
+            "equal_weight": -22.821997805003182,
+            "activation_weighted": -22.876095965399923,
+            "logit_diff_weighted": -23.268936253563012,
+            "ppl_probe_weighted": -23.06821749059,
+            "loss_weighted": -23.08376024915969,
+            "top1_oracle": -19.127527557415444,
+            "top1_logit_diff": -19.127527557415444
+          }
+        },
+        "reverse_parity": {
+          "base_loss": 3.2433561204152093,
+          "involved": [
+            "reverse",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.7846420763804303,
+            "parity": 3.5274675447250092
+          },
+          "activation_scores": {
+            "reverse": 0.11211161661580155,
+            "parity": 0.06692871700078476
+          },
+          "logit_diff_scores": {
+            "reverse": 2.1718297993974636,
+            "parity": 2.123128561461791
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.6787865891089466,
+            "parity": -3.6816065635414343
+          },
+          "act_weights": {
+            "reverse": 0.5112938035898964,
+            "parity": 0.48870619635897417
+          },
+          "logit_weights": {
+            "reverse": 0.5121729035676654,
+            "parity": 0.48782709638111726
+          },
+          "probe_weights": {
+            "reverse": 0.7316126578076118,
+            "parity": 0.268387342119227
+          },
+          "loss_weights": {
+            "reverse": 0.6776133990839108,
+            "parity": 0.3223866008483279
+          },
+          "strategy_losses": {
+            "equal_weight": 2.471335280232347,
+            "activation_weighted": 2.4615932793831816,
+            "logit_diff_weighted": 2.4608896477753928,
+            "ppl_probe_weighted": 2.495127042771513,
+            "loss_weighted": 2.4539822640447233,
+            "top1_oracle": 2.7846420763804303,
+            "top1_logit_diff": 2.7846420763804303
+          },
+          "strategy_gaps": {
+            "equal_weight": -23.803147465780892,
+            "activation_weighted": -24.103515371353907,
+            "logit_diff_weighted": -24.125209924207965,
+            "ppl_probe_weighted": -23.06959365127962,
+            "loss_weighted": -24.338180177063983,
+            "top1_oracle": -14.143190787697257,
+            "top1_logit_diff": -14.143190787697257
+          }
+        },
+        "repeat_sort": {
+          "base_loss": 2.620974656881129,
+          "involved": [
+            "repeat",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.519271609553978,
+            "sort": 3.4126584333219525
+          },
+          "activation_scores": {
+            "repeat": 0.08032561227403454,
+            "sort": 0.07835298856438228
+          },
+          "logit_diff_scores": {
+            "repeat": 1.6313329175199687,
+            "sort": 1.6389898832959797
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.5088730019663235,
+            "sort": -3.5009657117850845
+          },
+          "act_weights": {
+            "repeat": 0.5004931557424479,
+            "sort": 0.49950684420750274
+          },
+          "logit_weights": {
+            "repeat": 0.4980857678834678,
+            "sort": 0.5019142320663408
+          },
+          "probe_weights": {
+            "repeat": 0.7295010734473935,
+            "sort": 0.27049892647965634
+          },
+          "loss_weights": {
+            "repeat": 0.7095885992632389,
+            "sort": 0.2904114006658022
+          },
+          "strategy_losses": {
+            "equal_weight": 2.83979821772404,
+            "activation_weighted": 2.838850764929833,
+            "logit_diff_weighted": 2.843493269283918,
+            "ppl_probe_weighted": 2.5772552632529733,
+            "loss_weighted": 2.588771411618648,
+            "top1_oracle": 2.519271609553978,
+            "top1_logit_diff": 3.4126584333219525
+          },
+          "strategy_gaps": {
+            "equal_weight": 8.348938448084951,
+            "activation_weighted": 8.312789575308956,
+            "logit_diff_weighted": 8.489918504880873,
+            "ppl_probe_weighted": -1.6680586175594803,
+            "loss_weighted": -1.2286744237657659,
+            "top1_oracle": -3.8803521834955066,
+            "top1_logit_diff": 30.205701316581994
+          }
+        },
+        "repeat_parity": {
+          "base_loss": 2.654649494718471,
+          "involved": [
+            "repeat",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.6997403391958783,
+            "parity": 4.245076670275159
+          },
+          "activation_scores": {
+            "repeat": 0.06976224823868901,
+            "parity": 0.03666824345462701
+          },
+          "logit_diff_scores": {
+            "repeat": 1.5978739875182515,
+            "parity": 2.1024249329311133
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.7309494221182904,
+            "parity": -4.021455190264541
+          },
+          "act_weights": {
+            "repeat": 0.5082727461489281,
+            "parity": 0.49172725380024457
+          },
+          "logit_weights": {
+            "repeat": 0.3764717772528199,
+            "parity": 0.6235282226848272
+          },
+          "probe_weights": {
+            "repeat": 0.7842327833192315,
+            "parity": 0.21576721660234532
+          },
+          "loss_weights": {
+            "repeat": 0.8242391320988198,
+            "parity": 0.17576086781875627
+          },
+          "strategy_losses": {
+            "equal_weight": 2.7917544820558735,
+            "activation_weighted": 2.7756332839867808,
+            "logit_diff_weighted": 3.0960952098534924,
+            "ppl_probe_weighted": 2.601550382560495,
+            "loss_weighted": 2.61425885974001,
+            "top1_oracle": 2.6997403391958783,
+            "top1_logit_diff": 4.245076670275159
+          },
+          "strategy_gaps": {
+            "equal_weight": 5.164711484893886,
+            "activation_weighted": 4.557429879500538,
+            "logit_diff_weighted": 16.629152587311236,
+            "ppl_probe_weighted": -2.0002306241791623,
+            "loss_weighted": -1.521505383622962,
+            "top1_oracle": 1.6985611308429676,
+            "top1_logit_diff": 59.911004398919886
+          }
+        },
+        "sort_parity": {
+          "base_loss": 3.391169246136041,
+          "involved": [
+            "sort",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "sort": 2.903196787638545,
+            "parity": 3.6196252342272293
+          },
+          "activation_scores": {
+            "sort": 0.09107938174545377,
+            "parity": 0.07040522059092323
+          },
+          "logit_diff_scores": {
+            "sort": 1.5728596599182672,
+            "parity": 2.132677247482104
+          },
+          "ppl_probe_scores": {
+            "sort": -2.8678502010716524,
+            "parity": -3.505691580299047
+          },
+          "act_weights": {
+            "sort": 0.5051683561757859,
+            "parity": 0.4948316437736972
+          },
+          "logit_weights": {
+            "sort": 0.3635896674636993,
+            "parity": 0.6364103324726597
+          },
+          "probe_weights": {
+            "sort": 0.6542653385186615,
+            "parity": 0.3457346614159119
+          },
+          "loss_weights": {
+            "sort": 0.6718200523041473,
+            "parity": 0.3281799476286707
+          },
+          "strategy_losses": {
+            "equal_weight": 2.7531946907277876,
+            "activation_weighted": 2.7467087384557405,
+            "logit_diff_weighted": 2.9568348840119434,
+            "ppl_probe_weighted": 2.6504318008517735,
+            "loss_weighted": 2.6534179638330833,
+            "top1_oracle": 2.903196787638545,
+            "top1_logit_diff": 3.6196252342272293
+          },
+          "strategy_gaps": {
+            "equal_weight": -18.81281968262637,
+            "activation_weighted": -19.00407974077408,
+            "logit_diff_weighted": -12.80780552663321,
+            "ppl_probe_weighted": -21.84312818147537,
+            "loss_weighted": -21.755071149679857,
+            "top1_oracle": -14.389504712968856,
+            "top1_logit_diff": 6.73679110387944
+          }
+        }
+      },
+      "elapsed": 15.428947925567627
+    },
+    {
+      "seed": 242,
+      "cross_results": {
+        "arith_reverse": {
+          "base_loss": 2.757475889342132,
+          "involved": [
+            "arithmetic",
+            "reverse"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.451403040003656,
+            "reverse": 5.6633130678489305
+          },
+          "activation_scores": {
+            "arithmetic": 0.09840996282833461,
+            "reverse": 0.12450777423844911
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.8811983689210052,
+            "reverse": 1.914743926453727
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.4711302968417943,
+            "reverse": -5.640141263305896
+          },
+          "act_weights": {
+            "arithmetic": 0.49347591741202007,
+            "reverse": 0.5065240825373275
+          },
+          "logit_weights": {
+            "arithmetic": 0.49161439694009906,
+            "reverse": 0.5083856030090623
+          },
+          "probe_weights": {
+            "arithmetic": 0.9596513058421542,
+            "reverse": 0.04034869406188078
+          },
+          "loss_weights": {
+            "arithmetic": 0.9612800207719839,
+            "reverse": 0.038719979131888
+          },
+          "strategy_losses": {
+            "equal_weight": 3.433781593936571,
+            "activation_weighted": 3.4673782604921954,
+            "logit_diff_weighted": 3.4770139333858143,
+            "ppl_probe_weighted": 2.4256380336908725,
+            "loss_weighted": 2.426531002525393,
+            "top1_oracle": 2.451403040003656,
+            "top1_logit_diff": 5.6633130678489305
+          },
+          "strategy_gaps": {
+            "equal_weight": 24.52625994694697,
+            "activation_weighted": 25.74464472722659,
+            "logit_diff_weighted": 26.09408288300019,
+            "ppl_probe_weighted": -12.034116306649846,
+            "loss_weighted": -12.00173274754161,
+            "top1_oracle": -11.099747073817483,
+            "top1_logit_diff": 105.38032951577547
+          }
+        },
+        "arith_sort": {
+          "base_loss": 2.6916423973496055,
+          "involved": [
+            "arithmetic",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.3652344387108393,
+            "sort": 5.180203777039018
+          },
+          "activation_scores": {
+            "arithmetic": 0.10651957534882917,
+            "sort": 0.09627192910401938
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9021807357085532,
+            "sort": 1.5833669203857894
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.363921241437111,
+            "sort": -5.188493717857094
+          },
+          "act_weights": {
+            "arithmetic": 0.5025618891164118,
+            "sort": 0.49743811083333195
+          },
+          "logit_weights": {
+            "arithmetic": 0.5790351426502812,
+            "sort": 0.42096485729181515
+          },
+          "probe_weights": {
+            "arithmetic": 0.9439893204784857,
+            "sort": 0.05601067942711533
+          },
+          "loss_weights": {
+            "arithmetic": 0.9434793988885898,
+            "sort": 0.05652060101706231
+          },
+          "strategy_losses": {
+            "equal_weight": 3.085056068673459,
+            "activation_weighted": 3.07487652974193,
+            "logit_diff_weighted": 2.803028611633369,
+            "ppl_probe_weighted": 2.3609470236415517,
+            "loss_weighted": 2.360934334587295,
+            "top1_oracle": 2.3652344387108393,
+            "top1_logit_diff": 2.3652344387108393
+          },
+          "strategy_gaps": {
+            "equal_weight": 14.6161195748454,
+            "activation_weighted": 14.237928960016596,
+            "logit_diff_weighted": 4.138224839727703,
+            "ppl_probe_weighted": -12.286007013178327,
+            "loss_weighted": -12.286478437401291,
+            "top1_oracle": -12.126720806603885,
+            "top1_logit_diff": -12.126720806603885
+          }
+        },
+        "arith_repeat": {
+          "base_loss": 4.0411643320438815,
+          "involved": [
+            "arithmetic",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.866901746193377,
+            "repeat": 4.828141577346708
+          },
+          "activation_scores": {
+            "arithmetic": 0.09287530911752365,
+            "repeat": 0.07481432505264948
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9505347401125035,
+            "repeat": 1.9618148065586103
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.944652936604966,
+            "repeat": -4.649491843905054
+          },
+          "act_weights": {
+            "arithmetic": 0.5045151232556526,
+            "repeat": 0.49548487669389585
+          },
+          "logit_weights": {
+            "arithmetic": 0.497180013264646,
+            "repeat": 0.5028199866850719
+          },
+          "probe_weights": {
+            "arithmetic": 0.8461656677896443,
+            "repeat": 0.15383433212573905
+          },
+          "loss_weights": {
+            "arithmetic": 0.8766670678978309,
+            "repeat": 0.12333293201450234
+          },
+          "strategy_losses": {
+            "equal_weight": 3.1455829613605486,
+            "activation_weighted": 3.1314774195970196,
+            "logit_diff_weighted": 3.1544382059866676,
+            "ppl_probe_weighted": 2.7411741955529028,
+            "loss_weighted": 2.7654367814653744,
+            "top1_oracle": 2.866901746193377,
+            "top1_logit_diff": 4.828141577346708
+          },
+          "strategy_gaps": {
+            "equal_weight": -22.161468752506256,
+            "activation_weighted": -22.510515230316646,
+            "logit_diff_weighted": -21.942342681440486,
+            "ppl_probe_weighted": -32.16870262322365,
+            "loss_weighted": -31.568316597837736,
+            "top1_oracle": -29.057531180787276,
+            "top1_logit_diff": 19.474022351988847
+          }
+        },
+        "arith_parity": {
+          "base_loss": 2.6101117768517272,
+          "involved": [
+            "arithmetic",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.5857816073931996,
+            "parity": 3.9640217799864037
+          },
+          "activation_scores": {
+            "arithmetic": 0.09604674877397504,
+            "parity": 0.05591712755719619
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.037554301129818,
+            "parity": 2.063050945258733
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.6065383194796214,
+            "parity": -3.8769258061899032
+          },
+          "act_weights": {
+            "arithmetic": 0.5100310591574541,
+            "parity": 0.4899689407915428
+          },
+          "logit_weights": {
+            "arithmetic": 0.49362618422927473,
+            "parity": 0.5063738157200879
+          },
+          "probe_weights": {
+            "arithmetic": 0.5671880298815313,
+            "parity": 0.43281197006174993
+          },
+          "loss_weights": {
+            "arithmetic": 0.5934485839057749,
+            "parity": 0.4065514160348801
+          },
+          "strategy_losses": {
+            "equal_weight": 2.682566870401295,
+            "activation_weighted": 2.6758439727709002,
+            "logit_diff_weighted": 2.687758194522811,
+            "ppl_probe_weighted": 2.6710486656385557,
+            "loss_weighted": 2.686646854776183,
+            "top1_oracle": 3.5857816073931996,
+            "top1_logit_diff": 3.9640217799864037
+          },
+          "strategy_gaps": {
+            "equal_weight": 2.7759383407312126,
+            "activation_weighted": 2.518367086886144,
+            "logit_diff_weighted": 2.9748311302108066,
+            "ppl_probe_weighted": 2.334646712346147,
+            "loss_weighted": 2.932252886762225,
+            "top1_oracle": 37.380384977930284,
+            "top1_logit_diff": 51.871725002051065
+          }
+        },
+        "reverse_repeat": {
+          "base_loss": 4.0997481546343035,
+          "involved": [
+            "reverse",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.885425806883264,
+            "repeat": 3.0755727779806343
+          },
+          "activation_scores": {
+            "reverse": 0.1315853542085908,
+            "repeat": 0.11704270484302803
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9482729806841426,
+            "repeat": 2.0379123653467595
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.987572902319143,
+            "repeat": -3.0814769581993726
+          },
+          "act_weights": {
+            "reverse": 0.5036355982422707,
+            "repeat": 0.49636440170736573
+          },
+          "logit_weights": {
+            "reverse": 0.4776051474308103,
+            "repeat": 0.5223948525169503
+          },
+          "probe_weights": {
+            "reverse": 0.28779939168095636,
+            "repeat": 0.7122006082478236
+          },
+          "loss_weights": {
+            "reverse": 0.30792181521110096,
+            "repeat": 0.6920781847196913
+          },
+          "strategy_losses": {
+            "equal_weight": 3.2807085587724902,
+            "activation_weighted": 3.2848916958839003,
+            "logit_diff_weighted": 3.257022265823215,
+            "ppl_probe_weighted": 3.1192141960279383,
+            "loss_weighted": 3.1301315311694915,
+            "top1_oracle": 3.0755727779806343,
+            "top1_logit_diff": 3.0755727779806343
+          },
+          "strategy_gaps": {
+            "equal_weight": -19.977802659316556,
+            "activation_weighted": -19.875768657382036,
+            "logit_diff_weighted": -20.55555261018855,
+            "ppl_probe_weighted": -23.91693151926862,
+            "loss_weighted": -23.65063869517862,
+            "top1_oracle": -24.981421736746302,
+            "top1_logit_diff": -24.981421736746302
+          }
+        },
+        "reverse_sort": {
+          "base_loss": 2.4370994291578705,
+          "involved": [
+            "reverse",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.8933754939038465,
+            "sort": 2.7242128029237502
+          },
+          "activation_scores": {
+            "reverse": 0.13993913636897484,
+            "sort": 0.13431872956840163
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9563938103109313,
+            "sort": 1.5150116447289734
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.913504097324845,
+            "sort": -2.5186600127234153
+          },
+          "act_weights": {
+            "reverse": 0.5014050979762044,
+            "sort": 0.49859490197365514
+          },
+          "logit_weights": {
+            "reverse": 0.6085883237746562,
+            "sort": 0.3914116761644849
+          },
+          "probe_weights": {
+            "reverse": 0.40255173183042686,
+            "sort": 0.5974482681098284
+          },
+          "loss_weights": {
+            "reverse": 0.4578098886871902,
+            "sort": 0.5421901112585907
+          },
+          "strategy_losses": {
+            "equal_weight": 2.718487790253803,
+            "activation_weighted": 2.718447748405658,
+            "logit_diff_weighted": 2.7178686408432804,
+            "ppl_probe_weighted": 2.722251576609368,
+            "loss_weighted": 2.720663385830251,
+            "top1_oracle": 2.7242128029237502,
+            "top1_logit_diff": 2.8933754939038465
+          },
+          "strategy_gaps": {
+            "equal_weight": 11.546035329102885,
+            "activation_weighted": 11.544392316607551,
+            "logit_diff_weighted": 11.52063015264127,
+            "ppl_probe_weighted": 11.700472456720014,
+            "loss_weighted": 11.635305202560602,
+            "top1_oracle": 11.780946248265733,
+            "top1_logit_diff": 18.722094769175683
+          }
+        },
+        "reverse_parity": {
+          "base_loss": 3.0955921966293003,
+          "involved": [
+            "reverse",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.2192837968346786,
+            "parity": 3.300702701778763
+          },
+          "activation_scores": {
+            "reverse": 0.12867951620238874,
+            "parity": 0.0855209206433736
+          },
+          "logit_diff_scores": {
+            "reverse": 1.920782572953775,
+            "parity": 1.9925199488925596
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.248408841819271,
+            "parity": -3.223220361844455
+          },
+          "act_weights": {
+            "reverse": 0.5107879743843488,
+            "parity": 0.48921202556457244
+          },
+          "logit_weights": {
+            "reverse": 0.4820733432540994,
+            "parity": 0.517926656694108
+          },
+          "probe_weights": {
+            "reverse": 0.4937032128991568,
+            "parity": 0.5062967870502135
+          },
+          "loss_weights": {
+            "reverse": 0.5203434893032597,
+            "parity": 0.47965651064470594
+          },
+          "strategy_losses": {
+            "equal_weight": 2.6292001734105344,
+            "activation_weighted": 2.6342190184458154,
+            "logit_diff_weighted": 2.6232438625952157,
+            "ppl_probe_weighted": 2.6267621776487577,
+            "loss_weighted": 2.639533436660897,
+            "top1_oracle": 3.2192837968346786,
+            "top1_logit_diff": 3.300702701778763
+          },
+          "strategy_gaps": {
+            "equal_weight": -15.066326363227253,
+            "activation_weighted": -14.904197609939082,
+            "logit_diff_weighted": -15.25873900794849,
+            "ppl_probe_weighted": -15.145083370188031,
+            "loss_weighted": -14.732520661636,
+            "top1_oracle": 3.9957330406783695,
+            "top1_logit_diff": 6.625889074562258
+          }
+        },
+        "repeat_sort": {
+          "base_loss": 2.205115321233115,
+          "involved": [
+            "repeat",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.5378836844934862,
+            "sort": 3.7853550060346732
+          },
+          "activation_scores": {
+            "repeat": 0.08930184397038196,
+            "sort": 0.1329877865969793
+          },
+          "logit_diff_scores": {
+            "repeat": 1.9882921209510624,
+            "sort": 1.6250581895278933
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.537191867302706,
+            "sort": -3.7800346592136833
+          },
+          "act_weights": {
+            "repeat": 0.48908025092325624,
+            "sort": 0.5109197490256518
+          },
+          "logit_weights": {
+            "repeat": 0.5898230515908105,
+            "sort": 0.41017694835020724
+          },
+          "probe_weights": {
+            "repeat": 0.7760584556235117,
+            "sort": 0.22394154429888238
+          },
+          "loss_weights": {
+            "repeat": 0.77686182785188,
+            "sort": 0.2231381720704339
+          },
+          "strategy_losses": {
+            "equal_weight": 2.8431954809254587,
+            "activation_weighted": 2.862578362771151,
+            "logit_diff_weighted": 2.701679583461694,
+            "ppl_probe_weighted": 2.5484054477776037,
+            "loss_weighted": 2.548105147701108,
+            "top1_oracle": 2.5378836844934862,
+            "top1_logit_diff": 2.5378836844934862
+          },
+          "strategy_gaps": {
+            "equal_weight": 28.936362354759986,
+            "activation_weighted": 29.81535864393606,
+            "logit_diff_weighted": 22.518743461947246,
+            "ppl_probe_weighted": 15.567899022737672,
+            "loss_weighted": 15.554280683886898,
+            "top1_oracle": 15.090746504554014,
+            "top1_logit_diff": 15.090746504554014
+          }
+        },
+        "repeat_parity": {
+          "base_loss": 2.220829572111713,
+          "involved": [
+            "repeat",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.892232056170593,
+            "parity": 4.088289573616797
+          },
+          "activation_scores": {
+            "repeat": 0.06062807263702676,
+            "parity": 0.0946880019215722
+          },
+          "logit_diff_scores": {
+            "repeat": 2.033212389828865,
+            "parity": 2.131902789478448
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.880593993074215,
+            "parity": -4.010229121673626
+          },
+          "act_weights": {
+            "repeat": 0.4914858407292484,
+            "parity": 0.5085141592199002
+          },
+          "logit_weights": {
+            "repeat": 0.47534740608284104,
+            "parity": 0.5246525938646937
+          },
+          "probe_weights": {
+            "repeat": 0.7557715570276646,
+            "parity": 0.24422844289675813
+          },
+          "loss_weights": {
+            "repeat": 0.7678226953522295,
+            "parity": 0.2321773045709884
+          },
+          "strategy_losses": {
+            "equal_weight": 2.78033882337721,
+            "activation_weighted": 2.7932785736483647,
+            "logit_diff_weighted": 2.8203663599142312,
+            "ppl_probe_weighted": 2.740277385776508,
+            "loss_weighted": 2.748281448092549,
+            "top1_oracle": 2.892232056170593,
+            "top1_logit_diff": 4.088289573616797
+          },
+          "strategy_gaps": {
+            "equal_weight": 25.193705014179834,
+            "activation_weighted": 25.776358921244423,
+            "logit_diff_weighted": 26.996073689366394,
+            "ppl_probe_weighted": 23.38980983447863,
+            "loss_weighted": 23.750218504128597,
+            "top1_oracle": 30.232057988153766,
+            "top1_logit_diff": 84.08839764004848
+          }
+        },
+        "sort_parity": {
+          "base_loss": 3.0652821937500354,
+          "involved": [
+            "sort",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "sort": 3.055346074899479,
+            "parity": 3.177951332532977
+          },
+          "activation_scores": {
+            "sort": 0.11295433503881508,
+            "parity": 0.0892992883628473
+          },
+          "logit_diff_scores": {
+            "sort": 1.584207152606807,
+            "parity": 1.9741666781267129
+          },
+          "ppl_probe_scores": {
+            "sort": -3.0769190455791735,
+            "parity": -3.154100042423431
+          },
+          "act_weights": {
+            "sort": 0.5059134858995122,
+            "parity": 0.4940865140498964
+          },
+          "logit_weights": {
+            "sort": 0.40372704412420357,
+            "parity": 0.5962729558161691
+          },
+          "probe_weights": {
+            "sort": 0.5192856765537942,
+            "parity": 0.48071432339427717
+          },
+          "loss_weights": {
+            "sort": 0.5306129760041062,
+            "parity": 0.4693870239428325
+          },
+          "strategy_losses": {
+            "equal_weight": 2.6408270928874393,
+            "activation_weighted": 2.641921541203369,
+            "logit_diff_weighted": 2.6569789288009407,
+            "ppl_probe_weighted": 2.645403969261533,
+            "loss_weighted": 2.6495462284437683,
+            "top1_oracle": 3.055346074899479,
+            "top1_logit_diff": 3.177951332532977
+          },
+          "strategy_gaps": {
+            "equal_weight": -13.84717862936208,
+            "activation_weighted": -13.811473978150476,
+            "logit_diff_weighted": -13.320250441594112,
+            "ppl_probe_weighted": -13.697865251839259,
+            "loss_weighted": -13.562730575146817,
+            "top1_oracle": -0.32415021595125904,
+            "top1_logit_diff": 3.675653061002622
+          }
+        }
+      },
+      "elapsed": 15.551957130432129
+    },
+    {
+      "seed": 342,
+      "cross_results": {
+        "arith_reverse": {
+          "base_loss": 3.0514628126884142,
+          "involved": [
+            "arithmetic",
+            "reverse"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.6011931386453244,
+            "reverse": 5.714895296139437
+          },
+          "activation_scores": {
+            "arithmetic": 0.049181404329179335,
+            "reverse": 0.08516387266121184
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9722676654627775,
+            "reverse": 2.164841630689947
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.602166351433475,
+            "reverse": -5.689823972699437
+          },
+          "act_weights": {
+            "arithmetic": 0.491005353346978,
+            "reverse": 0.5089946466021226
+          },
+          "logit_weights": {
+            "arithmetic": 0.452004741348829,
+            "reverse": 0.5479952585963715
+          },
+          "probe_weights": {
+            "arithmetic": 0.9563807532510344,
+            "reverse": 0.0436192466533276
+          },
+          "loss_weights": {
+            "arithmetic": 0.9574544204190861,
+            "reverse": 0.04254557948516851
+          },
+          "strategy_losses": {
+            "equal_weight": 3.1837467734293665,
+            "activation_weighted": 3.2230808328689666,
+            "logit_diff_weighted": 3.401058501651975,
+            "ppl_probe_weighted": 2.565015744716726,
+            "loss_weighted": 2.5657661933887077,
+            "top1_oracle": 2.6011931386453244,
+            "top1_logit_diff": 5.714895296139437
+          },
+          "strategy_gaps": {
+            "equal_weight": 4.335099880322868,
+            "activation_weighted": 5.624122944147979,
+            "logit_diff_weighted": 11.456659000066866,
+            "ppl_probe_weighted": -15.941438511030597,
+            "loss_weighted": -15.916845431643841,
+            "top1_oracle": -14.7558630624894,
+            "top1_logit_diff": 87.28379295255027
+          }
+        },
+        "arith_sort": {
+          "base_loss": 2.997841546622943,
+          "involved": [
+            "arithmetic",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.5443575224951145,
+            "sort": 5.2810999800748055
+          },
+          "activation_scores": {
+            "arithmetic": 0.04928089261054405,
+            "sort": 0.08060821618942929
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9548669110442347,
+            "sort": 1.9975872997056299
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.539746149779035,
+            "sort": -5.276205229485923
+          },
+          "act_weights": {
+            "arithmetic": 0.49216880953145253,
+            "sort": 0.5078311904177644
+          },
+          "logit_weights": {
+            "arithmetic": 0.48932152680618685,
+            "sort": 0.5106784731427454
+          },
+          "probe_weights": {
+            "arithmetic": 0.9391440385079709,
+            "sort": 0.06085596139811475
+          },
+          "loss_weights": {
+            "arithmetic": 0.9391602322503131,
+            "sort": 0.06083976765577096
+          },
+          "strategy_losses": {
+            "equal_weight": 3.063014912905714,
+            "activation_weighted": 3.095888627306958,
+            "logit_diff_weighted": 3.1080537053611574,
+            "ppl_probe_weighted": 2.50357964678479,
+            "loss_weighted": 2.5035879551384186,
+            "top1_oracle": 2.5443575224951145,
+            "top1_logit_diff": 5.2810999800748055
+          },
+          "strategy_gaps": {
+            "equal_weight": 2.174009708958383,
+            "activation_weighted": 3.2705891608735778,
+            "logit_diff_weighted": 3.6763837255630776,
+            "ppl_probe_weighted": -16.487258987885376,
+            "loss_weighted": -16.486981843363246,
+            "top1_oracle": -15.127017791806797,
+            "top1_logit_diff": 76.16341284027985
+          }
+        },
+        "arith_repeat": {
+          "base_loss": 3.376760357629366,
+          "involved": [
+            "arithmetic",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.806882825687876,
+            "repeat": 4.3785308296417025
+          },
+          "activation_scores": {
+            "arithmetic": 0.049651900676197784,
+            "repeat": 0.0914010025649998
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9678854867387292,
+            "repeat": 1.6569776250751103
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.813374621574533,
+            "repeat": -4.333684800330081
+          },
+          "act_weights": {
+            "arithmetic": 0.48956424024201706,
+            "repeat": 0.5104357597069393
+          },
+          "logit_weights": {
+            "arithmetic": 0.5771068443506193,
+            "repeat": 0.42289315559167007
+          },
+          "probe_weights": {
+            "arithmetic": 0.8205841513824068,
+            "repeat": 0.1794158485355347
+          },
+          "loss_weights": {
+            "arithmetic": 0.8280184172961873,
+            "repeat": 0.17198158262101074
+          },
+          "strategy_losses": {
+            "equal_weight": 2.8746821403108407,
+            "activation_weighted": 2.8973433259010557,
+            "logit_diff_weighted": 2.7513159954680533,
+            "ppl_probe_weighted": 2.6943048532572367,
+            "loss_weighted": 2.6971641104002475,
+            "top1_oracle": 2.806882825687876,
+            "top1_logit_diff": 2.806882825687876
+          },
+          "strategy_gaps": {
+            "equal_weight": -14.868636330207524,
+            "activation_weighted": -14.197543827625427,
+            "logit_diff_weighted": -18.522023949617857,
+            "ppl_probe_weighted": -20.21036236196646,
+            "loss_weighted": -20.125687796993237,
+            "top1_oracle": -16.876457657231235,
+            "top1_logit_diff": -16.876457657231235
+          }
+        },
+        "arith_parity": {
+          "base_loss": 3.0822095626772255,
+          "involved": [
+            "arithmetic",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.6736791056294464,
+            "parity": 4.612775995922064
+          },
+          "activation_scores": {
+            "arithmetic": 0.06388286825085636,
+            "parity": 0.05876051165054648
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9672178809834338,
+            "parity": 2.3582012269043444
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.6840416862898464,
+            "parity": -4.49114159695034
+          },
+          "act_weights": {
+            "arithmetic": 0.5012805863248911,
+            "parity": 0.49871941362498085
+          },
+          "logit_weights": {
+            "arithmetic": 0.40348060259727986,
+            "parity": 0.5965193973430682
+          },
+          "probe_weights": {
+            "arithmetic": 0.6914911687322154,
+            "parity": 0.3085088311986355
+          },
+          "loss_weights": {
+            "arithmetic": 0.7189171973210363,
+            "parity": 0.281082802607072
+          },
+          "strategy_losses": {
+            "equal_weight": 3.045936952894948,
+            "activation_weighted": 3.0436163293105363,
+            "logit_diff_weighted": 3.2868775998985065,
+            "ppl_probe_weighted": 3.119579660660278,
+            "loss_weighted": 3.1685596466776635,
+            "top1_oracle": 3.6736791056294464,
+            "top1_logit_diff": 4.612775995922064
+          },
+          "strategy_gaps": {
+            "equal_weight": -1.1768378834945545,
+            "activation_weighted": -1.25212879208534,
+            "logit_diff_weighted": 6.640302453785951,
+            "ppl_probe_weighted": 1.2124450730271752,
+            "loss_weighted": 2.8015643402726287,
+            "top1_oracle": 19.189790016693966,
+            "top1_logit_diff": 49.65809112328428
+          }
+        },
+        "reverse_repeat": {
+          "base_loss": 3.98355648899355,
+          "involved": [
+            "reverse",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.7771235719336573,
+            "repeat": 2.8023533943670618
+          },
+          "activation_scores": {
+            "reverse": 0.07870637142688797,
+            "repeat": 0.05016596063389732
+          },
+          "logit_diff_scores": {
+            "reverse": 2.046655010959836,
+            "repeat": 1.897672132381562
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.6932109766243104,
+            "repeat": -2.794952086986247
+          },
+          "act_weights": {
+            "reverse": 0.5071346183841502,
+            "repeat": 0.49286538156513643
+          },
+          "logit_weights": {
+            "reverse": 0.5371769803348357,
+            "repeat": 0.46282301961144645
+          },
+          "probe_weights": {
+            "reverse": 0.28940842744134515,
+            "repeat": 0.7105915724875957
+          },
+          "loss_weights": {
+            "reverse": 0.27393072634486704,
+            "repeat": 0.726069273582526
+          },
+          "strategy_losses": {
+            "equal_weight": 3.338672594900897,
+            "activation_weighted": 3.344246380718523,
+            "logit_diff_weighted": 3.3669793022793564,
+            "ppl_probe_weighted": 3.008528644736467,
+            "loss_weighted": 2.9828351693923576,
+            "top1_oracle": 2.8023533943670618,
+            "top1_logit_diff": 3.7771235719336573
+          },
+          "strategy_gaps": {
+            "equal_weight": -16.188646900689086,
+            "activation_weighted": -16.04872706189613,
+            "logit_diff_weighted": -15.478058072422934,
+            "ppl_probe_weighted": -24.476315246214195,
+            "loss_weighted": -25.121303598082672,
+            "top1_oracle": -29.651973001766585,
+            "top1_logit_diff": -5.18212601303034
+          }
+        },
+        "reverse_sort": {
+          "base_loss": 2.9970646733918973,
+          "involved": [
+            "reverse",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.7930646581570735,
+            "sort": 2.542428654217432
+          },
+          "activation_scores": {
+            "reverse": 0.06881862237191884,
+            "sort": 0.09681172556812696
+          },
+          "logit_diff_scores": {
+            "reverse": 2.105607679710794,
+            "sort": 2.019838932865052
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.7566846292916103,
+            "sort": -2.489063362510305
+          },
+          "act_weights": {
+            "reverse": 0.4930021811356181,
+            "sort": 0.5069978188136822
+          },
+          "logit_weights": {
+            "reverse": 0.521429051789473,
+            "sort": 0.47857094815838425
+          },
+          "probe_weights": {
+            "reverse": 0.43349116348688765,
+            "sort": 0.5665088364564614
+          },
+          "loss_weights": {
+            "reverse": 0.4376669630387056,
+            "sort": 0.5623330369050611
+          },
+          "strategy_losses": {
+            "equal_weight": 2.6900096173024184,
+            "activation_weighted": 2.687705306366918,
+            "logit_diff_weighted": 2.6970349003637217,
+            "ppl_probe_weighted": 2.6678203291324816,
+            "loss_weighted": 2.669201134387892,
+            "top1_oracle": 2.542428654217432,
+            "top1_logit_diff": 2.7930646581570735
+          },
+          "strategy_gaps": {
+            "equal_weight": -10.245192865390273,
+            "activation_weighted": -10.322078458015561,
+            "logit_diff_weighted": -10.010787411157864,
+            "ppl_probe_weighted": -10.985560211044655,
+            "loss_weighted": -10.939488290486205,
+            "top1_oracle": -15.169376330472566,
+            "top1_logit_diff": -6.806660431653244
+          }
+        },
+        "reverse_parity": {
+          "base_loss": 3.14364248191117,
+          "involved": [
+            "reverse",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.183502508165221,
+            "parity": 3.5915227635537903
+          },
+          "activation_scores": {
+            "reverse": 0.07670801839885169,
+            "parity": 0.0910714167811342
+          },
+          "logit_diff_scores": {
+            "reverse": 2.0890615804338926,
+            "parity": 2.259326651443735
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.0887105355763245,
+            "parity": -3.777786364092875
+          },
+          "act_weights": {
+            "reverse": 0.49640921211300476,
+            "parity": 0.5035907878366361
+          },
+          "logit_weights": {
+            "reverse": 0.4575362686759109,
+            "parity": 0.5424637312698428
+          },
+          "probe_weights": {
+            "reverse": 0.6657613086358898,
+            "parity": 0.33423869129753403
+          },
+          "loss_weights": {
+            "reverse": 0.6006130783271181,
+            "parity": 0.3993869216128206
+          },
+          "strategy_losses": {
+            "equal_weight": 2.853634570673277,
+            "activation_weighted": 2.855018744185354,
+            "logit_diff_weighted": 2.8737772381724214,
+            "ppl_probe_weighted": 2.854642633750418,
+            "loss_weighted": 2.8376820885113885,
+            "top1_oracle": 3.183502508165221,
+            "top1_logit_diff": 3.5915227635537903
+          },
+          "strategy_gaps": {
+            "equal_weight": -9.225219245083595,
+            "activation_weighted": -9.18118836307199,
+            "logit_diff_weighted": -8.584476297530012,
+            "ppl_probe_weighted": -9.193152523662777,
+            "loss_weighted": -9.732671420503694,
+            "top1_oracle": 1.2679567248314487,
+            "top1_logit_diff": 14.24717614104555
+          }
+        },
+        "repeat_sort": {
+          "base_loss": 2.6274907362939315,
+          "involved": [
+            "repeat",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.5066448183619254,
+            "sort": 3.570622278279359
+          },
+          "activation_scores": {
+            "repeat": 0.0611540517693841,
+            "sort": 0.09133122193114979
+          },
+          "logit_diff_scores": {
+            "repeat": 1.7475474507605309,
+            "sort": 2.133376162401505
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.435730933000951,
+            "sort": -3.5537123804953197
+          },
+          "act_weights": {
+            "repeat": 0.49245627990722374,
+            "sort": 0.5075437200420219
+          },
+          "logit_weights": {
+            "repeat": 0.4047218554273196,
+            "sort": 0.5952781445131525
+          },
+          "probe_weights": {
+            "repeat": 0.7536141036962055,
+            "sort": 0.24638589622843307
+          },
+          "loss_weights": {
+            "repeat": 0.7434499089964391,
+            "sort": 0.2565500909292159
+          },
+          "strategy_losses": {
+            "equal_weight": 2.810758731733884,
+            "activation_weighted": 2.822091803862519,
+            "logit_diff_weighted": 2.958835079214412,
+            "ppl_probe_weighted": 2.5435020570817364,
+            "loss_weighted": 2.549650124243952,
+            "top1_oracle": 2.5066448183619254,
+            "top1_logit_diff": 3.570622278279359
+          },
+          "strategy_gaps": {
+            "equal_weight": 6.975019660714449,
+            "activation_weighted": 7.4063464765273315,
+            "logit_diff_weighted": 12.610675970939514,
+            "ppl_probe_weighted": -3.1965356928588413,
+            "loss_weighted": -2.9625456324071857,
+            "top1_oracle": -4.599289971330552,
+            "top1_logit_diff": 35.89476183332664
+          }
+        },
+        "repeat_parity": {
+          "base_loss": 2.389637194251436,
+          "involved": [
+            "repeat",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.903316166903024,
+            "parity": 4.179075471619452
+          },
+          "activation_scores": {
+            "repeat": 0.061725779189504885,
+            "parity": 0.08128208752920144
+          },
+          "logit_diff_scores": {
+            "repeat": 1.6188448478483664,
+            "parity": 2.3231350628839817
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.760273479614954,
+            "parity": -4.325340609002829
+          },
+          "act_weights": {
+            "repeat": 0.49511107870275256,
+            "parity": 0.5048889212467587
+          },
+          "logit_weights": {
+            "repeat": 0.33086171921562557,
+            "parity": 0.6691382807174606
+          },
+          "probe_weights": {
+            "repeat": 0.8270792510351573,
+            "parity": 0.17292074888213474
+          },
+          "loss_weights": {
+            "repeat": 0.7817270516198195,
+            "parity": 0.2182729483020078
+          },
+          "strategy_losses": {
+            "equal_weight": 2.7964072540772515,
+            "activation_weighted": 2.804178406762347,
+            "logit_diff_weighted": 3.197145160532838,
+            "ppl_probe_weighted": 2.7460105955513483,
+            "loss_weighted": 2.716149197528855,
+            "top1_oracle": 2.903316166903024,
+            "top1_logit_diff": 4.179075471619452
+          },
+          "strategy_gaps": {
+            "equal_weight": 17.022251779657214,
+            "activation_weighted": 17.347453977873332,
+            "logit_diff_weighted": 33.79207388569115,
+            "ppl_probe_weighted": 14.913284834920221,
+            "loss_weighted": 13.663664260954922,
+            "top1_oracle": 21.49610718678575,
+            "top1_logit_diff": 74.88326184714268
+          }
+        },
+        "sort_parity": {
+          "base_loss": 3.165985175287377,
+          "involved": [
+            "sort",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "sort": 2.999028327050919,
+            "parity": 3.6089828451145634
+          },
+          "activation_scores": {
+            "sort": 0.09848919472412127,
+            "parity": 0.10108454965985365
+          },
+          "logit_diff_scores": {
+            "sort": 1.9910459990991503,
+            "parity": 2.221768343438357
+          },
+          "ppl_probe_scores": {
+            "sort": -2.861942391242219,
+            "parity": -3.7492686010209293
+          },
+          "act_weights": {
+            "sort": 0.4993511616052743,
+            "parity": 0.5006488383446608
+          },
+          "logit_weights": {
+            "sort": 0.4425739340205146,
+            "parity": 0.5574260659237428
+          },
+          "probe_weights": {
+            "sort": 0.708338088049526,
+            "parity": 0.2916619118796402
+          },
+          "loss_weights": {
+            "sort": 0.6479304269243037,
+            "parity": 0.35206957301090325
+          },
+          "strategy_losses": {
+            "equal_weight": 2.803838534202654,
+            "activation_weighted": 2.8042567962825524,
+            "logit_diff_weighted": 2.8487095426337783,
+            "ppl_probe_weighted": 2.768840058419013,
+            "loss_weighted": 2.7606636729718406,
+            "top1_oracle": 2.999028327050919,
+            "top1_logit_diff": 3.6089828451145634
+          },
+          "strategy_gaps": {
+            "equal_weight": -11.43867140981957,
+            "activation_weighted": -11.425460290476266,
+            "logit_diff_weighted": -10.021387185579593,
+            "ppl_probe_weighted": -12.544124336662914,
+            "loss_weighted": -12.802381561333288,
+            "top1_oracle": -5.273456412230471,
+            "top1_logit_diff": 13.992411375930565
+          }
+        }
+      },
+      "elapsed": 15.597979068756104
+    },
+    {
+      "seed": 442,
+      "cross_results": {
+        "arith_reverse": {
+          "base_loss": 2.8506624888601113,
+          "involved": [
+            "arithmetic",
+            "reverse"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.582777284154623,
+            "reverse": 6.005702543560834
+          },
+          "activation_scores": {
+            "arithmetic": 0.17728823837269042,
+            "reverse": 0.11253167087900923
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.9377774248493986,
+            "reverse": 2.1854841567463175
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.580378359004101,
+            "reverse": -5.912918957223707
+          },
+          "act_weights": {
+            "arithmetic": 0.5161834869049035,
+            "reverse": 0.4838165130434782
+          },
+          "logit_weights": {
+            "arithmetic": 0.4383880307782931,
+            "reverse": 0.5616119691655458
+          },
+          "probe_weights": {
+            "arithmetic": 0.9655284291494304,
+            "reverse": 0.0344715707540168
+          },
+          "loss_weights": {
+            "arithmetic": 0.9684133747378484,
+            "reverse": 0.0315866251653103
+          },
+          "strategy_losses": {
+            "equal_weight": 3.6447474348615536,
+            "activation_weighted": 3.5432477167023753,
+            "logit_diff_weighted": 4.054621457918702,
+            "ppl_probe_weighted": 2.551096518609499,
+            "loss_weighted": 2.553555986143754,
+            "top1_oracle": 2.582777284154623,
+            "top1_logit_diff": 6.005702543560834
+          },
+          "strategy_gaps": {
+            "equal_weight": 27.856154458992844,
+            "activation_weighted": 24.29558850087534,
+            "logit_diff_weighted": 42.23435688242474,
+            "ppl_probe_weighted": -10.50864391773012,
+            "loss_weighted": -10.422366866558122,
+            "top1_oracle": -9.397296444329577,
+            "top1_logit_diff": 110.67743259786332
+          }
+        },
+        "arith_sort": {
+          "base_loss": 2.7856980049574656,
+          "involved": [
+            "arithmetic",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.58756539288788,
+            "sort": 5.285208091374426
+          },
+          "activation_scores": {
+            "arithmetic": 0.1820388590460356,
+            "sort": 0.12267349078175077
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.949607008160423,
+            "sort": 1.674273036657434
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.6044241606821057,
+            "sort": -5.282535363645748
+          },
+          "act_weights": {
+            "arithmetic": 0.514836984862261,
+            "sort": 0.48516301508625514
+          },
+          "logit_weights": {
+            "arithmetic": 0.5684019155993714,
+            "sort": 0.43159808434378844
+          },
+          "probe_weights": {
+            "arithmetic": 0.9357226137426341,
+            "sort": 0.06427738616379369
+          },
+          "loss_weights": {
+            "arithmetic": 0.9368874015017937,
+            "sort": 0.06311259840451752
+          },
+          "strategy_losses": {
+            "equal_weight": 3.2594918587226527,
+            "activation_weighted": 3.1939933348838556,
+            "logit_diff_weighted": 2.9775978077651475,
+            "ppl_probe_weighted": 2.5309980638295793,
+            "loss_weighted": 2.5319263127486504,
+            "top1_oracle": 2.58756539288788,
+            "top1_logit_diff": 2.58756539288788
+          },
+          "strategy_gaps": {
+            "equal_weight": 17.008083895742367,
+            "activation_weighted": 14.656841093319601,
+            "logit_diff_weighted": 6.888751130459026,
+            "ppl_probe_weighted": -9.143128245582217,
+            "loss_weighted": -9.109806294767042,
+            "top1_oracle": -7.112494309038022,
+            "top1_logit_diff": -7.112494309038022
+          }
+        },
+        "arith_repeat": {
+          "base_loss": 3.8732928225772882,
+          "involved": [
+            "arithmetic",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 2.918832439352679,
+            "repeat": 4.217996964107631
+          },
+          "activation_scores": {
+            "arithmetic": 0.14545497489854453,
+            "repeat": 0.10743208730435652
+          },
+          "logit_diff_scores": {
+            "arithmetic": 1.991312440843105,
+            "repeat": 1.4958826474825222
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -2.8519485973172256,
+            "repeat": -4.154150568204619
+          },
+          "act_weights": {
+            "arithmetic": 0.5095045768046179,
+            "repeat": 0.4904954231444317
+          },
+          "logit_weights": {
+            "arithmetic": 0.6213847160840331,
+            "repeat": 0.3786152838538284
+          },
+          "probe_weights": {
+            "arithmetic": 0.7862053378242017,
+            "repeat": 0.21379466209717787
+          },
+          "loss_weights": {
+            "arithmetic": 0.7856943402867751,
+            "repeat": 0.2143056596346554
+          },
+          "strategy_losses": {
+            "equal_weight": 2.9379066569554997,
+            "activation_weighted": 2.9180782946750154,
+            "logit_diff_weighted": 2.781583022320628,
+            "ppl_probe_weighted": 2.785858105047191,
+            "loss_weighted": 2.7856393846831287,
+            "top1_oracle": 2.918832439352679,
+            "top1_logit_diff": 2.918832439352679
+          },
+          "strategy_gaps": {
+            "equal_weight": -24.149637232936673,
+            "activation_weighted": -24.661562439440694,
+            "logit_diff_weighted": -28.185573625962956,
+            "ppl_probe_weighted": -28.07520028414785,
+            "loss_weighted": -28.08084716844195,
+            "top1_oracle": -24.64209206340127,
+            "top1_logit_diff": -24.64209206340127
+          }
+        },
+        "arith_parity": {
+          "base_loss": 2.85017100380714,
+          "involved": [
+            "arithmetic",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "arithmetic": 3.5661696924765947,
+            "parity": 4.240940000065819
+          },
+          "activation_scores": {
+            "arithmetic": 0.13497796936021383,
+            "parity": 0.13154705424404312
+          },
+          "logit_diff_scores": {
+            "arithmetic": 2.000206476796145,
+            "parity": 2.1894645573708775
+          },
+          "ppl_probe_scores": {
+            "arithmetic": -3.5667929626268964,
+            "parity": -4.41356397234297
+          },
+          "act_weights": {
+            "arithmetic": 0.5008577279125846,
+            "parity": 0.49914227203732964
+          },
+          "logit_weights": {
+            "arithmetic": 0.45282620420337916,
+            "parity": 0.5471737957419034
+          },
+          "probe_weights": {
+            "arithmetic": 0.6998893496534008,
+            "parity": 0.3001106502766102
+          },
+          "loss_weights": {
+            "arithmetic": 0.6625704865193955,
+            "parity": 0.33742951341434746
+          },
+          "strategy_losses": {
+            "equal_weight": 3.137865874362186,
+            "activation_weighted": 3.1368801255291756,
+            "logit_diff_weighted": 3.2000567850936914,
+            "ppl_probe_weighted": 3.103357827975497,
+            "loss_weighted": 3.0821266373852336,
+            "top1_oracle": 3.5661696924765947,
+            "top1_logit_diff": 4.240940000065819
+          },
+          "strategy_gaps": {
+            "equal_weight": 10.09395121102401,
+            "activation_weighted": 10.059365607855161,
+            "logit_diff_weighted": 12.275957506380795,
+            "ppl_probe_weighted": 8.88321521165434,
+            "loss_weighted": 8.138305851412317,
+            "top1_oracle": 25.121253697166008,
+            "top1_logit_diff": 48.79598432518426
+          }
+        },
+        "reverse_repeat": {
+          "base_loss": 4.0154792360668266,
+          "involved": [
+            "reverse",
+            "repeat"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.8724758550206144,
+            "repeat": 2.6897093613424667
+          },
+          "activation_scores": {
+            "reverse": 0.06894478657300986,
+            "repeat": 0.07177339978614142
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9006131191371713,
+            "repeat": 1.439385768019693
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.833753375138593,
+            "repeat": -2.716378834180761
+          },
+          "act_weights": {
+            "reverse": 0.4992928471432143,
+            "repeat": 0.500707152806715
+          },
+          "logit_weights": {
+            "reverse": 0.6133052974847962,
+            "repeat": 0.38669470245387316
+          },
+          "probe_weights": {
+            "reverse": 0.24649860390968656,
+            "repeat": 0.7535013960149634
+          },
+          "loss_weights": {
+            "reverse": 0.23455513794155136,
+            "repeat": 0.7654448619819041
+          },
+          "strategy_losses": {
+            "equal_weight": 3.1199939726137487,
+            "activation_weighted": 3.1190234011317908,
+            "logit_diff_weighted": 3.2822729127317425,
+            "ppl_probe_weighted": 2.7838172590021717,
+            "loss_weighted": 2.7709400439832765,
+            "top1_oracle": 2.6897093613424667,
+            "top1_logit_diff": 3.8724758550206144
+          },
+          "strategy_gaps": {
+            "equal_weight": -22.300831627016663,
+            "activation_weighted": -22.325002377875993,
+            "logit_diff_weighted": -18.259497316023023,
+            "ppl_probe_weighted": -30.672851349894447,
+            "loss_weighted": -30.993540718755646,
+            "top1_oracle": -33.01647939843303,
+            "top1_logit_diff": -3.5613029638346316
+          }
+        },
+        "reverse_sort": {
+          "base_loss": 2.956042878127205,
+          "involved": [
+            "reverse",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "reverse": 2.7750958520775244,
+            "sort": 2.6780708157569904
+          },
+          "activation_scores": {
+            "reverse": 0.05875988706338696,
+            "sort": 0.06615863837406712
+          },
+          "logit_diff_scores": {
+            "reverse": 1.9751458590002506,
+            "sort": 1.5174223205902662
+          },
+          "ppl_probe_scores": {
+            "reverse": -2.7735816760021215,
+            "sort": -2.558919928873693
+          },
+          "act_weights": {
+            "reverse": 0.4981503205851779,
+            "sort": 0.5018496793646372
+          },
+          "logit_weights": {
+            "reverse": 0.6124739973963551,
+            "sort": 0.3875260025423975
+          },
+          "probe_weights": {
+            "reverse": 0.44653969180136077,
+            "sort": 0.5534603081432932
+          },
+          "loss_weights": {
+            "reverse": 0.47576275174613597,
+            "sort": 0.5242372482014402
+          },
+          "strategy_losses": {
+            "equal_weight": 2.6991298865393154,
+            "activation_weighted": 2.699240688596849,
+            "logit_diff_weighted": 2.678844130256816,
+            "ppl_probe_weighted": 2.6997883338029793,
+            "loss_weighted": 2.699967865525909,
+            "top1_oracle": 2.6780708157569904,
+            "top1_logit_diff": 2.7750958520775244
+          },
+          "strategy_gaps": {
+            "equal_weight": -8.691111806559995,
+            "activation_weighted": -8.687363482800775,
+            "logit_diff_weighted": -9.377358830667832,
+            "ppl_probe_weighted": -8.668837188402863,
+            "loss_weighted": -8.662763808200626,
+            "top1_oracle": -9.403519293547022,
+            "top1_logit_diff": -6.121258503676341
+          }
+        },
+        "reverse_parity": {
+          "base_loss": 3.4766256332883816,
+          "involved": [
+            "reverse",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "reverse": 3.2257619942744324,
+            "parity": 3.5082615283391423
+          },
+          "activation_scores": {
+            "reverse": 0.05618570107221699,
+            "parity": 0.08782198942789504
+          },
+          "logit_diff_scores": {
+            "reverse": 2.0539178550974424,
+            "parity": 2.068317974951192
+          },
+          "ppl_probe_scores": {
+            "reverse": -3.219497771957365,
+            "parity": -3.8310631956548904
+          },
+          "act_weights": {
+            "reverse": 0.49209158747276316,
+            "parity": 0.507908412476446
+          },
+          "logit_weights": {
+            "reverse": 0.4964000322198272,
+            "parity": 0.5035999677298129
+          },
+          "probe_weights": {
+            "reverse": 0.6482978135938888,
+            "parity": 0.35170218634128136
+          },
+          "loss_weights": {
+            "reverse": 0.570158911158969,
+            "parity": 0.4298410887840152
+          },
+          "strategy_losses": {
+            "equal_weight": 2.742904619879673,
+            "activation_weighted": 2.7426959080230584,
+            "logit_diff_weighted": 2.742733689676227,
+            "ppl_probe_weighted": 2.8285644893295223,
+            "loss_weighted": 2.766413053119045,
+            "top1_oracle": 3.2257619942744324,
+            "top1_logit_diff": 3.5082615283391423
+          },
+          "strategy_gaps": {
+            "equal_weight": -21.104400956588336,
+            "activation_weighted": -21.110404244794474,
+            "logit_diff_weighted": -21.109317511359414,
+            "ppl_probe_weighted": -18.640521365134383,
+            "loss_weighted": -20.42821560564687,
+            "top1_oracle": -7.215721952112189,
+            "top1_logit_diff": 0.9099597824928233
+          }
+        },
+        "repeat_sort": {
+          "base_loss": 2.5077926433246467,
+          "involved": [
+            "repeat",
+            "sort"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.472953996707119,
+            "sort": 3.776991393061112
+          },
+          "activation_scores": {
+            "repeat": 0.07400911942967373,
+            "sort": 0.05734357727697712
+          },
+          "logit_diff_scores": {
+            "repeat": 1.480506873557893,
+            "sort": 1.6343098361029362
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.461850960760368,
+            "sort": -3.8708735325438237
+          },
+          "act_weights": {
+            "repeat": 0.5041662890843381,
+            "sort": 0.4958337108652452
+          },
+          "logit_weights": {
+            "repeat": 0.4616248776143207,
+            "sort": 0.5383751223318419
+          },
+          "probe_weights": {
+            "repeat": 0.8036117317062724,
+            "sort": 0.19638826821336636
+          },
+          "loss_weights": {
+            "repeat": 0.7865136860107175,
+            "sort": 0.21348631391063114
+          },
+          "strategy_losses": {
+            "equal_weight": 3.228571238070161,
+            "activation_weighted": 3.2191470444326655,
+            "logit_diff_weighted": 3.313572227579311,
+            "ppl_probe_weighted": 2.6506731266504047,
+            "loss_weighted": 2.6746577758950183,
+            "top1_oracle": 2.472953996707119,
+            "top1_logit_diff": 3.776991393061112
+          },
+          "strategy_gaps": {
+            "equal_weight": 28.74155471602146,
+            "activation_weighted": 28.365758349340943,
+            "logit_diff_weighted": 32.13102911038216,
+            "ppl_probe_weighted": 5.697460023502484,
+            "loss_weighted": 6.653864824691172,
+            "top1_oracle": -1.3892156000322722,
+            "top1_logit_diff": 50.61019510982595
+          }
+        },
+        "repeat_parity": {
+          "base_loss": 2.5884732794316028,
+          "involved": [
+            "repeat",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "repeat": 2.693611030129121,
+            "parity": 4.4479396110530685
+          },
+          "activation_scores": {
+            "repeat": 0.07768940200406743,
+            "parity": 0.07655851322079099
+          },
+          "logit_diff_scores": {
+            "repeat": 1.4676741848977932,
+            "parity": 2.151083215320437
+          },
+          "ppl_probe_scores": {
+            "repeat": -2.669556964459449,
+            "parity": -4.4134307161868085
+          },
+          "act_weights": {
+            "repeat": 0.5002827221406595,
+            "parity": 0.49971727780931224
+          },
+          "logit_weights": {
+            "repeat": 0.33550086750792846,
+            "parity": 0.6644991324256215
+          },
+          "probe_weights": {
+            "repeat": 0.851178435719999,
+            "parity": 0.14882156419488327
+          },
+          "loss_weights": {
+            "repeat": 0.8524979311220828,
+            "parity": 0.14750206879266725
+          },
+          "strategy_losses": {
+            "equal_weight": 3.173996119464468,
+            "activation_weighted": 3.1733926142691242,
+            "logit_diff_weighted": 3.5909128004745794,
+            "ppl_probe_weighted": 2.7516330868282983,
+            "loss_weighted": 2.750733365188673,
+            "top1_oracle": 2.693611030129121,
+            "top1_logit_diff": 4.4479396110530685
+          },
+          "strategy_gaps": {
+            "equal_weight": 22.620393445260476,
+            "activation_weighted": 22.59707834287409,
+            "logit_diff_weighted": 38.72705694930334,
+            "ppl_probe_weighted": 6.30332206606836,
+            "loss_weighted": 6.268563289658548,
+            "top1_oracle": 4.061766892977368,
+            "top1_logit_diff": 71.8364120810929
+          }
+        },
+        "sort_parity": {
+          "base_loss": 3.3807898976046675,
+          "involved": [
+            "sort",
+            "parity"
+          ],
+          "per_expert_losses": {
+            "sort": 2.9684543750575147,
+            "parity": 3.617720335066766
+          },
+          "activation_scores": {
+            "sort": 0.05086041827625181,
+            "parity": 0.08846513609514542
+          },
+          "logit_diff_scores": {
+            "sort": 1.4838825868162577,
+            "parity": 2.0640609116706874
+          },
+          "ppl_probe_scores": {
+            "sort": -2.929522675123093,
+            "parity": -3.6608624927932616
+          },
+          "act_weights": {
+            "sort": 0.4905999282258955,
+            "parity": 0.5094000717231644
+          },
+          "logit_weights": {
+            "sort": 0.3588915621278016,
+            "parity": 0.6411084378080876
+          },
+          "probe_weights": {
+            "sort": 0.6750992174140823,
+            "parity": 0.32490078251840776
+          },
+          "loss_weights": {
+            "sort": 0.656845029336923,
+            "parity": 0.34315497059739253
+          },
+          "strategy_losses": {
+            "equal_weight": 2.938711795209747,
+            "activation_weighted": 2.9424568314020045,
+            "logit_diff_weighted": 3.0379441639478255,
+            "ppl_probe_weighted": 2.9103604491298602,
+            "loss_weighted": 2.9109577825689557,
+            "top1_oracle": 2.9684543750575147,
+            "top1_logit_diff": 3.617720335066766
+          },
+          "strategy_gaps": {
+            "equal_weight": -13.07617792836338,
+            "activation_weighted": -12.965403928627081,
+            "logit_diff_weighted": -10.140994975752635,
+            "ppl_probe_weighted": -13.914779170634429,
+            "loss_weighted": -13.897110712753664,
+            "top1_oracle": -12.196425540649471,
+            "top1_logit_diff": 7.008138471721264
+          }
+        }
+      },
+      "elapsed": 15.536947965621948
+    }
+  ]
+}

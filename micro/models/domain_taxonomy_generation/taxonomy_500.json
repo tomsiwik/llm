@@ -1,0 +1,1356 @@
+{
+  "version": "1.0",
+  "n_domains": 270,
+  "domains": [
+    {
+      "name": "c_programming",
+      "path": "programming/systems_languages/c_programming",
+      "description": "C programming language: pointers, memory allocation, structs, preprocessor macros, system calls, low-level programming"
+    },
+    {
+      "name": "cpp_modern",
+      "path": "programming/systems_languages/cpp_modern",
+      "description": "Modern C++ programming: templates, RAII, smart pointers, move semantics, STL containers, virtual functions, constexpr"
+    },
+    {
+      "name": "rust_systems",
+      "path": "programming/systems_languages/rust_systems",
+      "description": "Rust systems programming: ownership borrowing lifetimes, traits, pattern matching, Result Option error handling, async concurrency"
+    },
+    {
+      "name": "go_concurrency",
+      "path": "programming/systems_languages/go_concurrency",
+      "description": "Go programming: goroutines channels, interfaces, struct composition, error handling, concurrent patterns, standard library"
+    },
+    {
+      "name": "assembly_x86",
+      "path": "programming/systems_languages/assembly_x86",
+      "description": "x86 assembly language: registers, instructions, stack operations, calling conventions, SIMD, memory addressing modes"
+    },
+    {
+      "name": "zig_programming",
+      "path": "programming/systems_languages/zig_programming",
+      "description": "Zig programming: comptime, explicit allocators, error unions, no hidden control flow, C interop, safety guarantees"
+    },
+    {
+      "name": "d_programming",
+      "path": "programming/systems_languages/d_programming",
+      "description": "D programming language: templates, mixins, ranges, garbage collection, contracts, metaprogramming"
+    },
+    {
+      "name": "python_general",
+      "path": "programming/application_languages/python_general",
+      "description": "Python programming: functions classes decorators generators async/await, data structures, algorithms, standard library, debugging"
+    },
+    {
+      "name": "java_enterprise",
+      "path": "programming/application_languages/java_enterprise",
+      "description": "Java enterprise programming: object-oriented design, generics, streams, Spring framework, concurrency, JVM tuning"
+    },
+    {
+      "name": "csharp_dotnet",
+      "path": "programming/application_languages/csharp_dotnet",
+      "description": "C# .NET programming: LINQ, async await, generics, Entity Framework, ASP.NET, dependency injection"
+    },
+    {
+      "name": "kotlin_jvm",
+      "path": "programming/application_languages/kotlin_jvm",
+      "description": "Kotlin programming: coroutines, null safety, extension functions, data classes, sealed classes, Android development"
+    },
+    {
+      "name": "scala_functional",
+      "path": "programming/application_languages/scala_functional",
+      "description": "Scala functional programming: pattern matching, implicits, monads, Akka actors, type classes, category theory applications"
+    },
+    {
+      "name": "ruby_rails",
+      "path": "programming/application_languages/ruby_rails",
+      "description": "Ruby on Rails: convention over configuration, ActiveRecord, MVC, metaprogramming, gems, REST APIs"
+    },
+    {
+      "name": "php_web",
+      "path": "programming/application_languages/php_web",
+      "description": "PHP web development: Laravel, Symfony, object-oriented PHP, database access, session management, API development"
+    },
+    {
+      "name": "javascript_core",
+      "path": "programming/web_frontend/javascript_core",
+      "description": "JavaScript core: closures, prototypal inheritance, promises, async/await, event loop, DOM manipulation, ES6+ features"
+    },
+    {
+      "name": "typescript_advanced",
+      "path": "programming/web_frontend/typescript_advanced",
+      "description": "TypeScript advanced types: generics, union intersection types, utility types, type guards, decorators, conditional types"
+    },
+    {
+      "name": "react_components",
+      "path": "programming/web_frontend/react_components",
+      "description": "React development: components, hooks, state management, JSX, virtual DOM, context API, performance optimization"
+    },
+    {
+      "name": "vue_framework",
+      "path": "programming/web_frontend/vue_framework",
+      "description": "Vue.js framework: reactivity system, composition API, single-file components, Vuex/Pinia, Vue Router"
+    },
+    {
+      "name": "angular_enterprise",
+      "path": "programming/web_frontend/angular_enterprise",
+      "description": "Angular enterprise: TypeScript, RxJS observables, dependency injection, modules, components, NgRx state management"
+    },
+    {
+      "name": "svelte_reactive",
+      "path": "programming/web_frontend/svelte_reactive",
+      "description": "Svelte reactive programming: compiler-based reactivity, stores, transitions, SvelteKit, no virtual DOM"
+    },
+    {
+      "name": "css_layouts",
+      "path": "programming/web_frontend/css_layouts",
+      "description": "CSS styling and layouts: flexbox, grid, responsive design, animations, custom properties, CSS-in-JS, preprocessors"
+    },
+    {
+      "name": "html_semantic",
+      "path": "programming/web_frontend/html_semantic",
+      "description": "HTML semantic markup: accessibility, ARIA roles, SEO, structured data, web forms, canvas, SVG"
+    },
+    {
+      "name": "webassembly",
+      "path": "programming/web_frontend/webassembly",
+      "description": "WebAssembly: binary format, linear memory, Emscripten, Rust/C++ to Wasm compilation, WASI, browser APIs"
+    },
+    {
+      "name": "bash_shell",
+      "path": "programming/scripting_automation/bash_shell",
+      "description": "Bash shell scripting: file manipulation, sed awk grep, pipelines, process management, system administration"
+    },
+    {
+      "name": "powershell_admin",
+      "path": "programming/scripting_automation/powershell_admin",
+      "description": "PowerShell administration: cmdlets, pipeline, WMI/CIM, Active Directory, remoting, DSC, module development"
+    },
+    {
+      "name": "lua_scripting",
+      "path": "programming/scripting_automation/lua_scripting",
+      "description": "Lua scripting: tables, metatables, coroutines, game scripting, embedding in C, lightweight scripting"
+    },
+    {
+      "name": "perl_text",
+      "path": "programming/scripting_automation/perl_text",
+      "description": "Perl text processing: regular expressions, file I/O, CPAN modules, one-liners, bioinformatics scripting"
+    },
+    {
+      "name": "makefile_build",
+      "path": "programming/scripting_automation/makefile_build",
+      "description": "Makefile and build systems: targets, dependencies, variables, pattern rules, CMake, Bazel, build automation"
+    },
+    {
+      "name": "awk_text_processing",
+      "path": "programming/scripting_automation/awk_text_processing",
+      "description": "AWK text processing: field splitting, pattern matching, associative arrays, report generation, data transformation"
+    },
+    {
+      "name": "sql_analytics",
+      "path": "programming/data_query/sql_analytics",
+      "description": "SQL analytics: window functions, CTEs, aggregations, GROUP BY, HAVING, analytical queries, data warehousing"
+    },
+    {
+      "name": "sql_optimization",
+      "path": "programming/data_query/sql_optimization",
+      "description": "SQL performance optimization: query plans, indexes, partitioning, materialized views, join strategies, statistics"
+    },
+    {
+      "name": "nosql_mongodb",
+      "path": "programming/data_query/nosql_mongodb",
+      "description": "MongoDB NoSQL: document model, aggregation pipeline, indexing, sharding, replication, schema design patterns"
+    },
+    {
+      "name": "graphql_api",
+      "path": "programming/data_query/graphql_api",
+      "description": "GraphQL API design: schemas, resolvers, mutations, subscriptions, fragments, Apollo, federation"
+    },
+    {
+      "name": "elasticsearch_queries",
+      "path": "programming/data_query/elasticsearch_queries",
+      "description": "Elasticsearch: full-text search, query DSL, aggregations, mapping, analyzers, relevance scoring"
+    },
+    {
+      "name": "redis_patterns",
+      "path": "programming/data_query/redis_patterns",
+      "description": "Redis patterns: caching strategies, pub/sub, streams, data structures, Lua scripting, cluster mode"
+    },
+    {
+      "name": "swift_ios",
+      "path": "programming/mobile_embedded/swift_ios",
+      "description": "Swift iOS development: optionals, protocols, SwiftUI, Combine framework, Core Data, UIKit patterns"
+    },
+    {
+      "name": "objective_c_legacy",
+      "path": "programming/mobile_embedded/objective_c_legacy",
+      "description": "Objective-C: message passing, categories, blocks, ARC, Foundation framework, Cocoa patterns"
+    },
+    {
+      "name": "dart_flutter",
+      "path": "programming/mobile_embedded/dart_flutter",
+      "description": "Dart and Flutter: widget tree, state management, platform channels, Material Design, hot reload"
+    },
+    {
+      "name": "embedded_c",
+      "path": "programming/mobile_embedded/embedded_c",
+      "description": "Embedded C programming: microcontrollers, registers, interrupts, RTOS, bare metal, memory-mapped I/O"
+    },
+    {
+      "name": "arduino_iot",
+      "path": "programming/mobile_embedded/arduino_iot",
+      "description": "Arduino and IoT: sensor interfacing, serial communication, WiFi/BLE, ESP32, MQTT, edge computing"
+    },
+    {
+      "name": "react_native",
+      "path": "programming/mobile_embedded/react_native",
+      "description": "React Native mobile: cross-platform components, native modules, navigation, Expo, platform-specific code"
+    },
+    {
+      "name": "haskell_pure",
+      "path": "programming/functional_programming/haskell_pure",
+      "description": "Haskell pure functional: monads, type classes, lazy evaluation, algebraic data types, lenses, concurrency"
+    },
+    {
+      "name": "elixir_concurrent",
+      "path": "programming/functional_programming/elixir_concurrent",
+      "description": "Elixir concurrent programming: OTP, GenServer, supervision trees, Phoenix framework, LiveView, distributed Erlang"
+    },
+    {
+      "name": "clojure_lisp",
+      "path": "programming/functional_programming/clojure_lisp",
+      "description": "Clojure Lisp: persistent data structures, macros, REPL-driven development, concurrency primitives, spec"
+    },
+    {
+      "name": "ocaml_typed",
+      "path": "programming/functional_programming/ocaml_typed",
+      "description": "OCaml: algebraic types, pattern matching, modules/functors, GADTs, effect handlers, multicore"
+    },
+    {
+      "name": "erlang_distributed",
+      "path": "programming/functional_programming/erlang_distributed",
+      "description": "Erlang distributed systems: OTP behaviors, message passing, fault tolerance, hot code loading, BEAM VM"
+    },
+    {
+      "name": "fsharp_dotnet",
+      "path": "programming/functional_programming/fsharp_dotnet",
+      "description": "F# .NET: type providers, computation expressions, discriminated unions, active patterns, async workflows"
+    },
+    {
+      "name": "docker_containers",
+      "path": "programming/devops_infra/docker_containers",
+      "description": "Docker containerization: Dockerfiles, multi-stage builds, volumes, networking, compose, image optimization"
+    },
+    {
+      "name": "kubernetes_orchestration",
+      "path": "programming/devops_infra/kubernetes_orchestration",
+      "description": "Kubernetes: pods, deployments, services, ingress, operators, Helm charts, autoscaling, RBAC"
+    },
+    {
+      "name": "terraform_iac",
+      "path": "programming/devops_infra/terraform_iac",
+      "description": "Terraform infrastructure as code: providers, modules, state management, plan/apply, HCL syntax, drift detection"
+    },
+    {
+      "name": "ansible_config",
+      "path": "programming/devops_infra/ansible_config",
+      "description": "Ansible configuration management: playbooks, roles, inventory, modules, vault, idempotent operations"
+    },
+    {
+      "name": "cicd_pipelines",
+      "path": "programming/devops_infra/cicd_pipelines",
+      "description": "CI/CD pipelines: GitHub Actions, GitLab CI, Jenkins, build automation, testing stages, deployment strategies"
+    },
+    {
+      "name": "monitoring_observability",
+      "path": "programming/devops_infra/monitoring_observability",
+      "description": "Monitoring and observability: Prometheus, Grafana, distributed tracing, logging, alerting, SLOs"
+    },
+    {
+      "name": "cloud_aws",
+      "path": "programming/devops_infra/cloud_aws",
+      "description": "AWS cloud services: EC2, S3, Lambda, IAM, VPC, RDS, DynamoDB, CloudFormation, well-architected framework"
+    },
+    {
+      "name": "cloud_gcp",
+      "path": "programming/devops_infra/cloud_gcp",
+      "description": "Google Cloud Platform: Compute Engine, BigQuery, Cloud Functions, IAM, GKE, Pub/Sub, Firestore"
+    },
+    {
+      "name": "cloud_azure",
+      "path": "programming/devops_infra/cloud_azure",
+      "description": "Microsoft Azure: VMs, App Service, Azure Functions, Active Directory, Cosmos DB, DevOps, ARM templates"
+    },
+    {
+      "name": "classical_mechanics",
+      "path": "science/physics/classical_mechanics",
+      "description": "Classical mechanics: Newton's laws, conservation of energy and momentum, rotational dynamics, oscillations, Lagrangian and Hamiltonian mechanics"
+    },
+    {
+      "name": "electromagnetism",
+      "path": "science/physics/electromagnetism",
+      "description": "Electromagnetism: Maxwell's equations, electric and magnetic fields, electromagnetic waves, circuits, Gauss's law, Faraday's law"
+    },
+    {
+      "name": "thermodynamics",
+      "path": "science/physics/thermodynamics",
+      "description": "Thermodynamics: laws of thermodynamics, entropy, heat engines, free energy, phase transitions, statistical mechanics"
+    },
+    {
+      "name": "quantum_mechanics",
+      "path": "science/physics/quantum_mechanics",
+      "description": "Quantum mechanics: Schrodinger equation, wave functions, operators, uncertainty principle, quantum entanglement, spin"
+    },
+    {
+      "name": "particle_physics",
+      "path": "science/physics/particle_physics",
+      "description": "Particle physics: Standard Model, quarks, leptons, gauge bosons, Higgs mechanism, Feynman diagrams, symmetry breaking"
+    },
+    {
+      "name": "condensed_matter",
+      "path": "science/physics/condensed_matter",
+      "description": "Condensed matter physics: crystal structure, band theory, superconductivity, semiconductors, magnetism, topological materials"
+    },
+    {
+      "name": "astrophysics_cosmology",
+      "path": "science/physics/astrophysics_cosmology",
+      "description": "Astrophysics and cosmology: stellar evolution, galaxy formation, dark matter, dark energy, Big Bang, cosmic microwave background"
+    },
+    {
+      "name": "optics_photonics",
+      "path": "science/physics/optics_photonics",
+      "description": "Optics and photonics: wave optics, interference, diffraction, lasers, fiber optics, nonlinear optics, quantum optics"
+    },
+    {
+      "name": "fluid_dynamics",
+      "path": "science/physics/fluid_dynamics",
+      "description": "Fluid dynamics: Navier-Stokes equations, turbulence, boundary layers, compressible flow, computational fluid dynamics"
+    },
+    {
+      "name": "relativity_gravitation",
+      "path": "science/physics/relativity_gravitation",
+      "description": "General and special relativity: spacetime, Lorentz transformations, gravitational waves, black holes, Einstein field equations"
+    },
+    {
+      "name": "organic_chemistry",
+      "path": "science/chemistry/organic_chemistry",
+      "description": "Organic chemistry: reaction mechanisms, functional groups, stereochemistry, synthesis, spectroscopy, retrosynthetic analysis"
+    },
+    {
+      "name": "inorganic_chemistry",
+      "path": "science/chemistry/inorganic_chemistry",
+      "description": "Inorganic chemistry: coordination compounds, crystal field theory, organometallics, bioinorganic, solid state chemistry"
+    },
+    {
+      "name": "physical_chemistry",
+      "path": "science/chemistry/physical_chemistry",
+      "description": "Physical chemistry: quantum chemistry, thermodynamic potentials, kinetics, spectroscopy, surface chemistry, electrochemistry"
+    },
+    {
+      "name": "analytical_chemistry",
+      "path": "science/chemistry/analytical_chemistry",
+      "description": "Analytical chemistry: chromatography, mass spectrometry, NMR, titrations, spectrophotometry, method validation"
+    },
+    {
+      "name": "biochemistry",
+      "path": "science/chemistry/biochemistry",
+      "description": "Biochemistry: enzyme kinetics, protein structure, metabolic pathways, DNA replication, signal transduction, membrane transport"
+    },
+    {
+      "name": "polymer_chemistry",
+      "path": "science/chemistry/polymer_chemistry",
+      "description": "Polymer chemistry: polymerization mechanisms, molecular weight distributions, polymer physics, rheology, copolymers"
+    },
+    {
+      "name": "computational_chemistry",
+      "path": "science/chemistry/computational_chemistry",
+      "description": "Computational chemistry: DFT, molecular dynamics, Monte Carlo, ab initio methods, force fields, docking"
+    },
+    {
+      "name": "environmental_chemistry",
+      "path": "science/chemistry/environmental_chemistry",
+      "description": "Environmental chemistry: atmospheric chemistry, water treatment, pollutant fate, green chemistry, remediation"
+    },
+    {
+      "name": "cell_biology",
+      "path": "science/biology/cell_biology",
+      "description": "Cell biology: organelles, cell cycle, apoptosis, signal transduction, membrane transport, cytoskeleton, cell division"
+    },
+    {
+      "name": "molecular_biology",
+      "path": "science/biology/molecular_biology",
+      "description": "Molecular biology: gene expression, transcription, translation, DNA repair, epigenetics, CRISPR, cloning"
+    },
+    {
+      "name": "genetics_genomics",
+      "path": "science/biology/genetics_genomics",
+      "description": "Genetics and genomics: Mendelian inheritance, population genetics, GWAS, sequencing, bioinformatics, gene regulation"
+    },
+    {
+      "name": "evolutionary_biology",
+      "path": "science/biology/evolutionary_biology",
+      "description": "Evolutionary biology: natural selection, speciation, phylogenetics, molecular evolution, adaptation, coevolution"
+    },
+    {
+      "name": "ecology_conservation",
+      "path": "science/biology/ecology_conservation",
+      "description": "Ecology and conservation: population dynamics, community ecology, biodiversity, habitat loss, restoration ecology"
+    },
+    {
+      "name": "microbiology",
+      "path": "science/biology/microbiology",
+      "description": "Microbiology: bacteria, viruses, fungi, antimicrobial resistance, microbial ecology, fermentation, pathogenesis"
+    },
+    {
+      "name": "neuroscience",
+      "path": "science/biology/neuroscience",
+      "description": "Neuroscience: neural signaling, brain anatomy, cognitive processes, neuroplasticity, neurotransmitters, neurological disorders"
+    },
+    {
+      "name": "immunology",
+      "path": "science/biology/immunology",
+      "description": "Immunology: innate and adaptive immunity, T cells, B cells, antibodies, autoimmunity, vaccines, immunotherapy"
+    },
+    {
+      "name": "plant_biology",
+      "path": "science/biology/plant_biology",
+      "description": "Plant biology: photosynthesis, plant hormones, root systems, transpiration, seed development, plant genetics"
+    },
+    {
+      "name": "marine_biology",
+      "path": "science/biology/marine_biology",
+      "description": "Marine biology: ocean ecosystems, coral reefs, deep sea organisms, fisheries, marine conservation, plankton ecology"
+    },
+    {
+      "name": "geology_mineralogy",
+      "path": "science/earth_space/geology_mineralogy",
+      "description": "Geology and mineralogy: plate tectonics, rock cycle, mineral identification, stratigraphy, geological mapping"
+    },
+    {
+      "name": "meteorology_climate",
+      "path": "science/earth_space/meteorology_climate",
+      "description": "Meteorology and climate science: weather systems, atmospheric circulation, climate models, greenhouse effect, extreme weather"
+    },
+    {
+      "name": "oceanography",
+      "path": "science/earth_space/oceanography",
+      "description": "Oceanography: ocean currents, thermohaline circulation, marine chemistry, ocean acoustics, coastal processes"
+    },
+    {
+      "name": "astronomy_observation",
+      "path": "science/earth_space/astronomy_observation",
+      "description": "Observational astronomy: telescopes, photometry, spectroscopy, stellar classification, variable stars, exoplanet detection"
+    },
+    {
+      "name": "planetary_science",
+      "path": "science/earth_space/planetary_science",
+      "description": "Planetary science: solar system formation, planetary atmospheres, surface geology, moons, asteroids, space missions"
+    },
+    {
+      "name": "seismology",
+      "path": "science/earth_space/seismology",
+      "description": "Seismology: earthquake mechanics, seismic waves, fault systems, earthquake prediction, ground motion, structural response"
+    },
+    {
+      "name": "volcanology",
+      "path": "science/earth_space/volcanology",
+      "description": "Volcanology: magma generation, eruption mechanisms, volcanic hazards, lava flow modeling, monitoring techniques"
+    },
+    {
+      "name": "paleontology",
+      "path": "science/earth_space/paleontology",
+      "description": "Paleontology: fossil record, mass extinctions, evolutionary transitions, paleoclimate, stratigraphic correlation"
+    },
+    {
+      "name": "calculus_analysis",
+      "path": "science/mathematics/calculus_analysis",
+      "description": "Calculus and real analysis: limits, derivatives, integrals, series, multivariable calculus, measure theory, functional analysis"
+    },
+    {
+      "name": "linear_algebra",
+      "path": "science/mathematics/linear_algebra",
+      "description": "Linear algebra: vector spaces, eigenvalues, matrix decompositions, inner products, linear transformations, tensor products"
+    },
+    {
+      "name": "abstract_algebra",
+      "path": "science/mathematics/abstract_algebra",
+      "description": "Abstract algebra: groups, rings, fields, Galois theory, modules, homomorphisms, representation theory"
+    },
+    {
+      "name": "number_theory",
+      "path": "science/mathematics/number_theory",
+      "description": "Number theory: primes, modular arithmetic, Diophantine equations, algebraic number theory, analytic number theory, cryptographic applications"
+    },
+    {
+      "name": "topology",
+      "path": "science/mathematics/topology",
+      "description": "Topology: topological spaces, continuity, compactness, connectedness, fundamental group, homology, manifolds"
+    },
+    {
+      "name": "combinatorics_graph_theory",
+      "path": "science/mathematics/combinatorics_graph_theory",
+      "description": "Combinatorics and graph theory: counting, generating functions, graph coloring, matching, network flow, Ramsey theory"
+    },
+    {
+      "name": "differential_equations",
+      "path": "science/mathematics/differential_equations",
+      "description": "Differential equations: ODEs, PDEs, boundary value problems, dynamical systems, stability analysis, chaos theory"
+    },
+    {
+      "name": "probability_theory",
+      "path": "science/mathematics/probability_theory",
+      "description": "Probability theory: measure-theoretic probability, stochastic processes, martingales, Markov chains, central limit theorem"
+    },
+    {
+      "name": "numerical_methods",
+      "path": "science/mathematics/numerical_methods",
+      "description": "Numerical methods: floating point, interpolation, quadrature, root finding, linear solvers, finite elements, FFT"
+    },
+    {
+      "name": "mathematical_logic",
+      "path": "science/mathematics/mathematical_logic",
+      "description": "Mathematical logic: propositional and predicate logic, completeness, incompleteness theorems, model theory, computability"
+    },
+    {
+      "name": "descriptive_statistics",
+      "path": "science/statistics_data/descriptive_statistics",
+      "description": "Descriptive statistics: measures of central tendency, dispersion, visualization, distributions, exploratory data analysis"
+    },
+    {
+      "name": "hypothesis_testing",
+      "path": "science/statistics_data/hypothesis_testing",
+      "description": "Hypothesis testing: t-tests, chi-square, ANOVA, p-values, power analysis, multiple comparisons, nonparametric tests"
+    },
+    {
+      "name": "regression_analysis",
+      "path": "science/statistics_data/regression_analysis",
+      "description": "Regression analysis: linear regression, logistic regression, regularization, model selection, diagnostics, mixed effects"
+    },
+    {
+      "name": "bayesian_inference",
+      "path": "science/statistics_data/bayesian_inference",
+      "description": "Bayesian inference: prior distributions, posterior computation, MCMC, hierarchical models, Bayesian model selection"
+    },
+    {
+      "name": "experimental_design",
+      "path": "science/statistics_data/experimental_design",
+      "description": "Experimental design: randomization, blocking, factorial designs, response surface, sample size, A/B testing"
+    },
+    {
+      "name": "time_series",
+      "path": "science/statistics_data/time_series",
+      "description": "Time series analysis: ARIMA, seasonal decomposition, spectral analysis, state space models, forecasting, change point detection"
+    },
+    {
+      "name": "multivariate_analysis",
+      "path": "science/statistics_data/multivariate_analysis",
+      "description": "Multivariate analysis: PCA, factor analysis, discriminant analysis, cluster analysis, canonical correlation, MANOVA"
+    },
+    {
+      "name": "causal_inference_stats",
+      "path": "science/statistics_data/causal_inference_stats",
+      "description": "Causal inference: potential outcomes, propensity scores, instrumental variables, difference-in-differences, regression discontinuity"
+    },
+    {
+      "name": "machine_learning_theory",
+      "path": "science/statistics_data/machine_learning_theory",
+      "description": "Machine learning theory: PAC learning, VC dimension, bias-variance tradeoff, regularization theory, kernel methods, ensemble theory"
+    },
+    {
+      "name": "deep_learning_theory",
+      "path": "science/statistics_data/deep_learning_theory",
+      "description": "Deep learning theory: neural network optimization, generalization bounds, neural tangent kernels, implicit regularization, loss landscapes"
+    },
+    {
+      "name": "clinical_medicine",
+      "path": "professional/healthcare/clinical_medicine",
+      "description": "Clinical medicine: patient assessment, differential diagnosis, treatment planning, drug interactions, evidence-based medicine"
+    },
+    {
+      "name": "surgery_procedures",
+      "path": "professional/healthcare/surgery_procedures",
+      "description": "Surgical procedures: preoperative assessment, surgical techniques, wound management, laparoscopic surgery, postoperative care"
+    },
+    {
+      "name": "pharmacology",
+      "path": "professional/healthcare/pharmacology",
+      "description": "Pharmacology: drug mechanisms, pharmacokinetics, drug interactions, adverse effects, dosing, therapeutic monitoring"
+    },
+    {
+      "name": "radiology_imaging",
+      "path": "professional/healthcare/radiology_imaging",
+      "description": "Radiology and medical imaging: X-ray, CT, MRI, ultrasound, nuclear medicine, image interpretation, radiation safety"
+    },
+    {
+      "name": "psychiatry_mental_health",
+      "path": "professional/healthcare/psychiatry_mental_health",
+      "description": "Psychiatry and mental health: mood disorders, anxiety, psychosis, therapy approaches, psychopharmacology, DSM criteria"
+    },
+    {
+      "name": "nursing_care",
+      "path": "professional/healthcare/nursing_care",
+      "description": "Nursing care: patient assessment, care planning, medication administration, wound care, patient education, triage"
+    },
+    {
+      "name": "public_health_epidemiology",
+      "path": "professional/healthcare/public_health_epidemiology",
+      "description": "Public health and epidemiology: disease surveillance, outbreak investigation, health policy, biostatistics, screening"
+    },
+    {
+      "name": "emergency_medicine",
+      "path": "professional/healthcare/emergency_medicine",
+      "description": "Emergency medicine: triage, trauma assessment, resuscitation, acute care protocols, toxicology, disaster medicine"
+    },
+    {
+      "name": "pediatrics",
+      "path": "professional/healthcare/pediatrics",
+      "description": "Pediatrics: child development, vaccination schedules, common childhood diseases, growth assessment, adolescent medicine"
+    },
+    {
+      "name": "geriatrics",
+      "path": "professional/healthcare/geriatrics",
+      "description": "Geriatrics: aging physiology, polypharmacy, dementia care, fall prevention, end-of-life care, functional assessment"
+    },
+    {
+      "name": "contract_law",
+      "path": "professional/legal/contract_law",
+      "description": "Contract law: formation, breach, remedies, consideration, conditions, assignment, third-party rights, UCC"
+    },
+    {
+      "name": "constitutional_law",
+      "path": "professional/legal/constitutional_law",
+      "description": "Constitutional law: judicial review, separation of powers, due process, equal protection, First Amendment, federalism"
+    },
+    {
+      "name": "criminal_law",
+      "path": "professional/legal/criminal_law",
+      "description": "Criminal law: elements of crimes, defenses, sentencing, procedure, evidence, constitutional protections, plea bargaining"
+    },
+    {
+      "name": "intellectual_property",
+      "path": "professional/legal/intellectual_property",
+      "description": "Intellectual property: patents, trademarks, copyrights, trade secrets, licensing, infringement, fair use"
+    },
+    {
+      "name": "corporate_law",
+      "path": "professional/legal/corporate_law",
+      "description": "Corporate law: entity formation, fiduciary duties, mergers and acquisitions, securities regulation, corporate governance"
+    },
+    {
+      "name": "international_law",
+      "path": "professional/legal/international_law",
+      "description": "International law: treaties, customary law, international courts, humanitarian law, trade law, sovereignty"
+    },
+    {
+      "name": "family_law",
+      "path": "professional/legal/family_law",
+      "description": "Family law: marriage, divorce, child custody, adoption, domestic violence, property division, prenuptial agreements"
+    },
+    {
+      "name": "environmental_law",
+      "path": "professional/legal/environmental_law",
+      "description": "Environmental law: NEPA, Clean Air/Water Act, environmental impact assessment, pollution control, conservation law"
+    },
+    {
+      "name": "legal_writing_analysis",
+      "path": "professional/legal/legal_writing_analysis",
+      "description": "Legal writing and analysis: case briefs, memoranda, appellate briefs, statutory interpretation, legal research methods"
+    },
+    {
+      "name": "financial_analysis",
+      "path": "professional/business_finance/financial_analysis",
+      "description": "Financial analysis: ratio analysis, cash flow analysis, financial modeling, valuation, equity research, financial statements"
+    },
+    {
+      "name": "investment_portfolio",
+      "path": "professional/business_finance/investment_portfolio",
+      "description": "Investment and portfolio management: asset allocation, modern portfolio theory, risk-adjusted returns, factor investing, derivatives"
+    },
+    {
+      "name": "accounting_gaap",
+      "path": "professional/business_finance/accounting_gaap",
+      "description": "Accounting GAAP: revenue recognition, lease accounting, financial statement preparation, consolidation, fair value measurement"
+    },
+    {
+      "name": "tax_planning",
+      "path": "professional/business_finance/tax_planning",
+      "description": "Tax planning: individual and corporate taxation, deductions, credits, international tax, estate tax, tax compliance"
+    },
+    {
+      "name": "corporate_finance",
+      "path": "professional/business_finance/corporate_finance",
+      "description": "Corporate finance: capital budgeting, cost of capital, capital structure, dividend policy, working capital management"
+    },
+    {
+      "name": "banking_regulation",
+      "path": "professional/business_finance/banking_regulation",
+      "description": "Banking and regulation: Basel accords, monetary policy, credit risk, liquidity management, payment systems, fintech regulation"
+    },
+    {
+      "name": "insurance_actuarial",
+      "path": "professional/business_finance/insurance_actuarial",
+      "description": "Insurance and actuarial science: risk assessment, premium pricing, reserving, life tables, loss distributions, Solvency II"
+    },
+    {
+      "name": "real_estate_finance",
+      "path": "professional/business_finance/real_estate_finance",
+      "description": "Real estate finance: property valuation, mortgage analysis, REITs, commercial real estate, development finance"
+    },
+    {
+      "name": "cryptocurrency_blockchain",
+      "path": "professional/business_finance/cryptocurrency_blockchain",
+      "description": "Cryptocurrency and blockchain: consensus mechanisms, smart contracts, DeFi, tokenomics, layer-2 scaling, wallet security"
+    },
+    {
+      "name": "venture_capital",
+      "path": "professional/business_finance/venture_capital",
+      "description": "Venture capital: startup valuation, term sheets, due diligence, cap tables, exit strategies, portfolio construction"
+    },
+    {
+      "name": "project_management_agile",
+      "path": "professional/management/project_management_agile",
+      "description": "Project management and agile: Scrum, Kanban, sprint planning, risk management, stakeholder communication, retrospectives"
+    },
+    {
+      "name": "product_management",
+      "path": "professional/management/product_management",
+      "description": "Product management: user research, roadmapping, prioritization frameworks, metrics, A/B testing, go-to-market"
+    },
+    {
+      "name": "operations_management",
+      "path": "professional/management/operations_management",
+      "description": "Operations management: process optimization, quality management, lean manufacturing, Six Sigma, capacity planning"
+    },
+    {
+      "name": "supply_chain_logistics",
+      "path": "professional/management/supply_chain_logistics",
+      "description": "Supply chain and logistics: inventory management, procurement, demand forecasting, warehousing, transportation optimization"
+    },
+    {
+      "name": "human_resources",
+      "path": "professional/management/human_resources",
+      "description": "Human resources: recruitment, compensation design, performance management, employment law, organizational development"
+    },
+    {
+      "name": "organizational_behavior",
+      "path": "professional/management/organizational_behavior",
+      "description": "Organizational behavior: motivation, team dynamics, leadership theory, organizational culture, conflict resolution"
+    },
+    {
+      "name": "change_management",
+      "path": "professional/management/change_management",
+      "description": "Change management: stakeholder analysis, communication plans, resistance management, adoption metrics, organizational transformation"
+    },
+    {
+      "name": "executive_leadership",
+      "path": "professional/management/executive_leadership",
+      "description": "Executive leadership: strategic planning, board governance, C-suite communication, crisis leadership, vision setting"
+    },
+    {
+      "name": "civil_engineering",
+      "path": "professional/engineering/civil_engineering",
+      "description": "Civil engineering: structural analysis, geotechnical design, transportation engineering, hydraulics, construction management"
+    },
+    {
+      "name": "mechanical_engineering",
+      "path": "professional/engineering/mechanical_engineering",
+      "description": "Mechanical engineering: machine design, heat transfer, manufacturing processes, vibrations, control systems, robotics"
+    },
+    {
+      "name": "electrical_engineering",
+      "path": "professional/engineering/electrical_engineering",
+      "description": "Electrical engineering: circuit analysis, power systems, signal processing, control theory, RF design, embedded systems"
+    },
+    {
+      "name": "chemical_engineering",
+      "path": "professional/engineering/chemical_engineering",
+      "description": "Chemical engineering: reactor design, mass transfer, separation processes, process control, thermodynamics, plant design"
+    },
+    {
+      "name": "aerospace_engineering",
+      "path": "professional/engineering/aerospace_engineering",
+      "description": "Aerospace engineering: aerodynamics, orbital mechanics, propulsion, flight controls, spacecraft design, composite structures"
+    },
+    {
+      "name": "biomedical_engineering",
+      "path": "professional/engineering/biomedical_engineering",
+      "description": "Biomedical engineering: medical devices, biomechanics, tissue engineering, bioinformatics, neural engineering, imaging systems"
+    },
+    {
+      "name": "materials_science",
+      "path": "professional/engineering/materials_science",
+      "description": "Materials science: crystallography, phase diagrams, mechanical properties, nanomaterials, ceramics, composites, corrosion"
+    },
+    {
+      "name": "industrial_engineering",
+      "path": "professional/engineering/industrial_engineering",
+      "description": "Industrial engineering: operations research, ergonomics, facility layout, production scheduling, quality engineering"
+    },
+    {
+      "name": "environmental_engineering",
+      "path": "professional/engineering/environmental_engineering",
+      "description": "Environmental engineering: water treatment, air pollution control, waste management, remediation, sustainability design"
+    },
+    {
+      "name": "digital_marketing",
+      "path": "professional/marketing_communications/digital_marketing",
+      "description": "Digital marketing: SEO, PPC advertising, email campaigns, marketing automation, conversion optimization, analytics"
+    },
+    {
+      "name": "brand_strategy",
+      "path": "professional/marketing_communications/brand_strategy",
+      "description": "Brand strategy: positioning, brand architecture, brand equity, naming, visual identity, brand guidelines, rebranding"
+    },
+    {
+      "name": "content_marketing",
+      "path": "professional/marketing_communications/content_marketing",
+      "description": "Content marketing: content strategy, storytelling, editorial calendar, distribution channels, audience engagement, ROI measurement"
+    },
+    {
+      "name": "seo_sem",
+      "path": "professional/marketing_communications/seo_sem",
+      "description": "SEO and SEM: keyword research, on-page optimization, link building, Google Ads, quality score, SERP features"
+    },
+    {
+      "name": "social_media_marketing",
+      "path": "professional/marketing_communications/social_media_marketing",
+      "description": "Social media marketing: platform strategy, community management, influencer marketing, paid social, analytics, viral content"
+    },
+    {
+      "name": "public_relations",
+      "path": "professional/marketing_communications/public_relations",
+      "description": "Public relations: media relations, crisis communication, press releases, reputation management, event planning, thought leadership"
+    },
+    {
+      "name": "market_research",
+      "path": "professional/marketing_communications/market_research",
+      "description": "Market research: surveys, focus groups, competitive analysis, consumer insights, market sizing, trend analysis"
+    },
+    {
+      "name": "advertising_creative",
+      "path": "professional/marketing_communications/advertising_creative",
+      "description": "Advertising creative: campaign concepts, art direction, copywriting, media planning, creative briefs, brand storytelling"
+    },
+    {
+      "name": "network_security",
+      "path": "professional/cybersecurity/network_security",
+      "description": "Network security: firewalls, IDS/IPS, VPN, network segmentation, traffic analysis, zero trust architecture"
+    },
+    {
+      "name": "application_security",
+      "path": "professional/cybersecurity/application_security",
+      "description": "Application security: OWASP top 10, secure coding, vulnerability scanning, code review, authentication, API security"
+    },
+    {
+      "name": "cryptography_applied",
+      "path": "professional/cybersecurity/cryptography_applied",
+      "description": "Applied cryptography: symmetric/asymmetric encryption, digital signatures, PKI, TLS/SSL, hash functions, key management"
+    },
+    {
+      "name": "incident_response_forensics",
+      "path": "professional/cybersecurity/incident_response_forensics",
+      "description": "Incident response and forensics: evidence collection, malware analysis, log analysis, chain of custody, timeline reconstruction"
+    },
+    {
+      "name": "penetration_testing",
+      "path": "professional/cybersecurity/penetration_testing",
+      "description": "Penetration testing: reconnaissance, vulnerability exploitation, privilege escalation, social engineering, report writing"
+    },
+    {
+      "name": "security_architecture",
+      "path": "professional/cybersecurity/security_architecture",
+      "description": "Security architecture: defense in depth, security frameworks, SIEM, threat modeling, security controls, compliance"
+    },
+    {
+      "name": "compliance_governance",
+      "path": "professional/cybersecurity/compliance_governance",
+      "description": "Compliance and governance: GDPR, HIPAA, SOC 2, ISO 27001, risk management frameworks, audit procedures"
+    },
+    {
+      "name": "fiction_short_story",
+      "path": "writing_communication/creative_writing/fiction_short_story",
+      "description": "Short fiction writing: character development, plot structure, dialogue, narrative voice, literary techniques, flash fiction"
+    },
+    {
+      "name": "fiction_novel",
+      "path": "writing_communication/creative_writing/fiction_novel",
+      "description": "Novel writing: multi-chapter structure, character arcs, world-building, pacing, point of view, revision process"
+    },
+    {
+      "name": "poetry_verse",
+      "path": "writing_communication/creative_writing/poetry_verse",
+      "description": "Poetry: verse forms, meter and rhythm, figurative language, imagery, poetic devices, sound patterns, free verse"
+    },
+    {
+      "name": "screenplay_film",
+      "path": "writing_communication/creative_writing/screenplay_film",
+      "description": "Screenplay writing: scene structure, dialogue formatting, visual storytelling, three-act structure, industry formatting"
+    },
+    {
+      "name": "playwriting_theater",
+      "path": "writing_communication/creative_writing/playwriting_theater",
+      "description": "Playwriting: dramatic structure, stage directions, character monologue, ensemble scenes, theatrical conventions"
+    },
+    {
+      "name": "creative_nonfiction",
+      "path": "writing_communication/creative_writing/creative_nonfiction",
+      "description": "Creative nonfiction: personal essay, memoir, literary journalism, travel writing, nature writing, narrative nonfiction"
+    },
+    {
+      "name": "comedy_humor_writing",
+      "path": "writing_communication/creative_writing/comedy_humor_writing",
+      "description": "Comedy and humor writing: joke structure, comedic timing, satire, parody, sitcom writing, stand-up material"
+    },
+    {
+      "name": "childrens_literature",
+      "path": "writing_communication/creative_writing/childrens_literature",
+      "description": "Children's literature: picture books, middle grade, young adult, age-appropriate content, illustration collaboration"
+    },
+    {
+      "name": "technical_documentation",
+      "path": "writing_communication/professional_writing/technical_documentation",
+      "description": "Technical documentation: user guides, system architecture docs, API references, troubleshooting guides, information architecture"
+    },
+    {
+      "name": "api_documentation",
+      "path": "writing_communication/professional_writing/api_documentation",
+      "description": "API documentation: endpoint descriptions, request/response examples, authentication guides, SDK documentation, OpenAPI/Swagger"
+    },
+    {
+      "name": "academic_papers",
+      "path": "writing_communication/professional_writing/academic_papers",
+      "description": "Academic paper writing: research structure, literature reviews, methodology sections, scientific argumentation, citation conventions"
+    },
+    {
+      "name": "grant_proposals",
+      "path": "writing_communication/professional_writing/grant_proposals",
+      "description": "Grant writing: proposal structure, needs assessment, budget justification, outcome measurement, logic models, funder alignment"
+    },
+    {
+      "name": "business_reports",
+      "path": "writing_communication/professional_writing/business_reports",
+      "description": "Business report writing: executive summaries, data presentation, recommendations, quarterly reports, market analysis reports"
+    },
+    {
+      "name": "white_papers",
+      "path": "writing_communication/professional_writing/white_papers",
+      "description": "White paper writing: technical authority, problem-solution format, industry analysis, thought leadership, reference architecture"
+    },
+    {
+      "name": "user_guides",
+      "path": "writing_communication/professional_writing/user_guides",
+      "description": "User guide writing: task-oriented documentation, step-by-step instructions, screenshots, FAQ, onboarding documentation"
+    },
+    {
+      "name": "release_notes",
+      "path": "writing_communication/professional_writing/release_notes",
+      "description": "Release notes: changelog formatting, version semantics, feature descriptions, breaking changes, migration guides"
+    },
+    {
+      "name": "news_reporting",
+      "path": "writing_communication/journalism_media/news_reporting",
+      "description": "News reporting: inverted pyramid, fact verification, source attribution, deadline writing, AP style, breaking news"
+    },
+    {
+      "name": "investigative_journalism",
+      "path": "writing_communication/journalism_media/investigative_journalism",
+      "description": "Investigative journalism: deep research, document analysis, source protection, data analysis, narrative investigation"
+    },
+    {
+      "name": "feature_writing",
+      "path": "writing_communication/journalism_media/feature_writing",
+      "description": "Feature writing: long-form narrative, profile writing, trend pieces, human interest, scene-setting, structural variety"
+    },
+    {
+      "name": "editorial_opinion",
+      "path": "writing_communication/journalism_media/editorial_opinion",
+      "description": "Editorial and opinion writing: argument construction, evidence marshaling, persuasive structure, counterargument engagement"
+    },
+    {
+      "name": "data_journalism",
+      "path": "writing_communication/journalism_media/data_journalism",
+      "description": "Data journalism: data analysis, visualization, public records, statistical literacy, interactive storytelling, scraping"
+    },
+    {
+      "name": "broadcast_writing",
+      "path": "writing_communication/journalism_media/broadcast_writing",
+      "description": "Broadcast writing: script formatting, conversational tone, sound bites, teleprompter writing, packages, voiceover"
+    },
+    {
+      "name": "podcast_scripting",
+      "path": "writing_communication/journalism_media/podcast_scripting",
+      "description": "Podcast scripting: interview preparation, segment planning, conversational flow, sound design, show notes, narrative podcasts"
+    },
+    {
+      "name": "copywriting_ads",
+      "path": "writing_communication/persuasive_writing/copywriting_ads",
+      "description": "Advertising copywriting: headlines, taglines, email campaigns, landing pages, calls to action, brand voice"
+    },
+    {
+      "name": "speechwriting_rhetoric",
+      "path": "writing_communication/persuasive_writing/speechwriting_rhetoric",
+      "description": "Speechwriting and rhetoric: persuasion, audience analysis, narrative structure, emotional appeals, memorable phrases"
+    },
+    {
+      "name": "proposal_writing",
+      "path": "writing_communication/persuasive_writing/proposal_writing",
+      "description": "Proposal writing: RFP responses, solution architecture, pricing strategy, executive summary, compliance matrix"
+    },
+    {
+      "name": "fundraising_appeals",
+      "path": "writing_communication/persuasive_writing/fundraising_appeals",
+      "description": "Fundraising appeals: donor communication, storytelling for impact, annual campaigns, major gift solicitation, gratitude"
+    },
+    {
+      "name": "political_messaging",
+      "path": "writing_communication/persuasive_writing/political_messaging",
+      "description": "Political messaging: campaign communications, policy briefs, talking points, debate preparation, voter outreach"
+    },
+    {
+      "name": "sales_copy",
+      "path": "writing_communication/persuasive_writing/sales_copy",
+      "description": "Sales copy: product descriptions, case studies, testimonials, value propositions, objection handling, conversion optimization"
+    },
+    {
+      "name": "english_spanish",
+      "path": "writing_communication/translation_localization/english_spanish",
+      "description": "English-Spanish translation: grammar differences, idiomatic expressions, regional variations, cultural adaptation"
+    },
+    {
+      "name": "english_french",
+      "path": "writing_communication/translation_localization/english_french",
+      "description": "English-French translation: syntax differences, gender agreement, formal/informal registers, Quebec vs France French"
+    },
+    {
+      "name": "english_german",
+      "path": "writing_communication/translation_localization/english_german",
+      "description": "English-German translation: compound words, case system, word order, technical terminology, formal registers"
+    },
+    {
+      "name": "english_chinese",
+      "path": "writing_communication/translation_localization/english_chinese",
+      "description": "English-Chinese translation: character-based writing, tonal context, classical vs modern Chinese, cultural concepts"
+    },
+    {
+      "name": "english_japanese",
+      "path": "writing_communication/translation_localization/english_japanese",
+      "description": "English-Japanese translation: honorific systems, kanji/hiragana/katakana, sentence structure, keigo formality levels"
+    },
+    {
+      "name": "english_arabic",
+      "path": "writing_communication/translation_localization/english_arabic",
+      "description": "English-Arabic translation: right-to-left script, root-pattern morphology, dialectal variation, formal Modern Standard Arabic"
+    },
+    {
+      "name": "technical_translation",
+      "path": "writing_communication/translation_localization/technical_translation",
+      "description": "Technical translation: terminology management, consistency, CAT tools, domain expertise, quality assurance"
+    },
+    {
+      "name": "literary_translation",
+      "path": "writing_communication/translation_localization/literary_translation",
+      "description": "Literary translation: style preservation, cultural adaptation, rhythm and tone, footnoting, translator's voice"
+    },
+    {
+      "name": "propositional_logic",
+      "path": "reasoning_analysis/formal_reasoning/propositional_logic",
+      "description": "Propositional logic: truth tables, logical connectives, validity, tautologies, natural deduction, resolution"
+    },
+    {
+      "name": "predicate_logic",
+      "path": "reasoning_analysis/formal_reasoning/predicate_logic",
+      "description": "Predicate logic: quantifiers, variables, interpretations, first-order theories, Skolemization, unification"
+    },
+    {
+      "name": "modal_logic",
+      "path": "reasoning_analysis/formal_reasoning/modal_logic",
+      "description": "Modal logic: necessity, possibility, Kripke semantics, epistemic logic, deontic logic, temporal logic"
+    },
+    {
+      "name": "set_theory_foundations",
+      "path": "reasoning_analysis/formal_reasoning/set_theory_foundations",
+      "description": "Set theory: axioms of ZFC, cardinality, ordinals, transfinite induction, forcing, continuum hypothesis"
+    },
+    {
+      "name": "proof_techniques",
+      "path": "reasoning_analysis/formal_reasoning/proof_techniques",
+      "description": "Mathematical proof techniques: direct proof, contradiction, induction, constructive proof, proof by cases, Zorn's lemma"
+    },
+    {
+      "name": "formal_verification",
+      "path": "reasoning_analysis/formal_reasoning/formal_verification",
+      "description": "Formal verification: model checking, theorem proving, Coq, Isabelle, TLA+, correctness proofs, invariants"
+    },
+    {
+      "name": "causal_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/causal_reasoning",
+      "description": "Causal reasoning: cause-and-effect analysis, counterfactual thinking, confounding variables, root cause analysis, causal graphs"
+    },
+    {
+      "name": "analogical_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/analogical_reasoning",
+      "description": "Analogical reasoning: structural similarity, cross-domain transfer, metaphor construction, relational mapping"
+    },
+    {
+      "name": "spatial_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/spatial_reasoning",
+      "description": "Spatial reasoning: geometric problems, mental rotation, spatial transformations, topology, 3D visualization, maps"
+    },
+    {
+      "name": "temporal_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/temporal_reasoning",
+      "description": "Temporal reasoning: timeline analysis, scheduling, temporal logic, event ordering, duration estimation, planning"
+    },
+    {
+      "name": "probabilistic_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/probabilistic_reasoning",
+      "description": "Probabilistic reasoning: Bayesian updating, expected value, risk assessment, uncertainty quantification, decision trees"
+    },
+    {
+      "name": "abductive_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/abductive_reasoning",
+      "description": "Abductive reasoning: inference to best explanation, hypothesis generation, diagnostic reasoning, scientific discovery"
+    },
+    {
+      "name": "counterfactual_reasoning",
+      "path": "reasoning_analysis/applied_reasoning/counterfactual_reasoning",
+      "description": "Counterfactual reasoning: alternative scenarios, what-if analysis, causal models, policy evaluation, historical counterfactuals"
+    },
+    {
+      "name": "argument_analysis",
+      "path": "reasoning_analysis/critical_thinking/argument_analysis",
+      "description": "Argument analysis: premise identification, validity assessment, argument mapping, Toulmin model, informal logic"
+    },
+    {
+      "name": "fallacy_identification",
+      "path": "reasoning_analysis/critical_thinking/fallacy_identification",
+      "description": "Fallacy identification: formal and informal fallacies, ad hominem, straw man, appeal to authority, red herring"
+    },
+    {
+      "name": "source_evaluation",
+      "path": "reasoning_analysis/critical_thinking/source_evaluation",
+      "description": "Source evaluation: credibility assessment, bias detection, primary vs secondary sources, fact-checking methodology"
+    },
+    {
+      "name": "debate_argumentation",
+      "path": "reasoning_analysis/critical_thinking/debate_argumentation",
+      "description": "Debate and argumentation: claim-evidence-reasoning, counterarguments, rebuttals, persuasion techniques, structured debate"
+    },
+    {
+      "name": "ethical_reasoning_applied",
+      "path": "reasoning_analysis/critical_thinking/ethical_reasoning_applied",
+      "description": "Applied ethical reasoning: utilitarian, deontological, virtue ethics, moral dilemmas, stakeholder analysis, bioethics"
+    },
+    {
+      "name": "decision_analysis",
+      "path": "reasoning_analysis/critical_thinking/decision_analysis",
+      "description": "Decision analysis: decision trees, multi-criteria analysis, cost-benefit analysis, scenario planning, sensitivity analysis"
+    },
+    {
+      "name": "risk_assessment",
+      "path": "reasoning_analysis/critical_thinking/risk_assessment",
+      "description": "Risk assessment: probability estimation, impact analysis, risk matrices, mitigation strategies, Monte Carlo simulation"
+    },
+    {
+      "name": "algorithmic_thinking",
+      "path": "reasoning_analysis/problem_solving/algorithmic_thinking",
+      "description": "Algorithmic thinking: problem decomposition, algorithm design, complexity analysis, data structure selection, recursion"
+    },
+    {
+      "name": "constraint_satisfaction",
+      "path": "reasoning_analysis/problem_solving/constraint_satisfaction",
+      "description": "Constraint satisfaction: variable assignment, backtracking, arc consistency, SAT solvers, scheduling, resource allocation"
+    },
+    {
+      "name": "optimization_problems",
+      "path": "reasoning_analysis/problem_solving/optimization_problems",
+      "description": "Optimization: linear programming, convex optimization, gradient descent, integer programming, metaheuristics, dynamic programming"
+    },
+    {
+      "name": "puzzle_solving",
+      "path": "reasoning_analysis/problem_solving/puzzle_solving",
+      "description": "Puzzle solving: logic puzzles, Sudoku strategies, lateral thinking, pattern recognition, mathematical puzzles, riddles"
+    },
+    {
+      "name": "systems_thinking_analysis",
+      "path": "reasoning_analysis/problem_solving/systems_thinking_analysis",
+      "description": "Systems thinking: feedback loops, emergent behavior, causal loop diagrams, leverage points, system archetypes"
+    },
+    {
+      "name": "design_thinking",
+      "path": "reasoning_analysis/problem_solving/design_thinking",
+      "description": "Design thinking: empathy mapping, ideation, prototyping, user testing, iteration, human-centered design"
+    },
+    {
+      "name": "game_theory_strategy",
+      "path": "reasoning_analysis/problem_solving/game_theory_strategy",
+      "description": "Game theory: Nash equilibrium, prisoner's dilemma, mechanism design, auction theory, cooperative games, evolutionary games"
+    },
+    {
+      "name": "learning_strategies",
+      "path": "reasoning_analysis/metacognition/learning_strategies",
+      "description": "Learning strategies: spaced repetition, active recall, elaboration, interleaving, metacognitive monitoring"
+    },
+    {
+      "name": "memory_techniques",
+      "path": "reasoning_analysis/metacognition/memory_techniques",
+      "description": "Memory techniques: mnemonics, method of loci, chunking, association, visualization, spaced retrieval practice"
+    },
+    {
+      "name": "cognitive_biases",
+      "path": "reasoning_analysis/metacognition/cognitive_biases",
+      "description": "Cognitive biases: anchoring, confirmation bias, availability heuristic, framing effects, sunk cost, Dunning-Kruger"
+    },
+    {
+      "name": "self_regulation",
+      "path": "reasoning_analysis/metacognition/self_regulation",
+      "description": "Self-regulation: goal setting, habit formation, willpower, emotional regulation, procrastination, executive function"
+    },
+    {
+      "name": "expertise_development",
+      "path": "reasoning_analysis/metacognition/expertise_development",
+      "description": "Expertise development: deliberate practice, skill acquisition, transfer of training, automaticity, domain-specific knowledge"
+    },
+    {
+      "name": "k12_teaching",
+      "path": "domain_specific/education/k12_teaching",
+      "description": "K-12 teaching: lesson planning, classroom management, differentiated instruction, assessment design, curriculum standards"
+    },
+    {
+      "name": "higher_education",
+      "path": "domain_specific/education/higher_education",
+      "description": "Higher education: course design, syllabus development, lecture techniques, research mentoring, academic advising"
+    },
+    {
+      "name": "special_education",
+      "path": "domain_specific/education/special_education",
+      "description": "Special education: IEP development, accommodations, learning disabilities, autism spectrum, assistive technology"
+    },
+    {
+      "name": "curriculum_design",
+      "path": "domain_specific/education/curriculum_design",
+      "description": "Curriculum design: learning objectives, backward design, scaffolding, alignment, assessment rubrics, scope and sequence"
+    },
+    {
+      "name": "educational_assessment",
+      "path": "domain_specific/education/educational_assessment",
+      "description": "Educational assessment: formative and summative, test construction, item analysis, grading rubrics, standardized testing"
+    },
+    {
+      "name": "elearning_design",
+      "path": "domain_specific/education/elearning_design",
+      "description": "E-learning design: instructional design, LMS platforms, multimedia learning, gamification, accessibility, SCORM"
+    },
+    {
+      "name": "music_theory",
+      "path": "domain_specific/arts_culture/music_theory",
+      "description": "Music theory: harmony, counterpoint, form, orchestration, ear training, music analysis, composition techniques"
+    },
+    {
+      "name": "visual_arts_critique",
+      "path": "domain_specific/arts_culture/visual_arts_critique",
+      "description": "Visual arts and critique: art analysis, composition, color theory, art movements, studio techniques, portfolio review"
+    },
+    {
+      "name": "film_analysis",
+      "path": "domain_specific/arts_culture/film_analysis",
+      "description": "Film analysis: cinematography, editing, sound design, narrative structure, genre conventions, auteur theory"
+    },
+    {
+      "name": "architecture_design",
+      "path": "domain_specific/arts_culture/architecture_design",
+      "description": "Architecture design: building design, structural systems, sustainability, urban planning, architectural history, BIM"
+    },
+    {
+      "name": "art_history",
+      "path": "domain_specific/arts_culture/art_history",
+      "description": "Art history: movements and periods, iconography, patronage, art criticism, museum studies, cultural context"
+    },
+    {
+      "name": "cultural_studies",
+      "path": "domain_specific/arts_culture/cultural_studies",
+      "description": "Cultural studies: identity, representation, media analysis, postcolonialism, globalization, popular culture, semiotics"
+    },
+    {
+      "name": "psychology_clinical",
+      "path": "domain_specific/social_sciences/psychology_clinical",
+      "description": "Clinical psychology: therapy approaches, CBT, psychodynamic, assessment, diagnosis, treatment planning, ethics"
+    },
+    {
+      "name": "sociology_research",
+      "path": "domain_specific/social_sciences/sociology_research",
+      "description": "Sociology: social structures, inequality, research methods, institutions, socialization, collective behavior"
+    },
+    {
+      "name": "economics_macro",
+      "path": "domain_specific/social_sciences/economics_macro",
+      "description": "Macroeconomics: GDP, inflation, monetary policy, fiscal policy, international trade, growth models, business cycles"
+    },
+    {
+      "name": "economics_micro",
+      "path": "domain_specific/social_sciences/economics_micro",
+      "description": "Microeconomics: supply and demand, market structures, game theory, welfare economics, externalities, behavioral economics"
+    },
+    {
+      "name": "political_science",
+      "path": "domain_specific/social_sciences/political_science",
+      "description": "Political science: comparative politics, international relations, political theory, public policy, electoral systems"
+    },
+    {
+      "name": "anthropology",
+      "path": "domain_specific/social_sciences/anthropology",
+      "description": "Anthropology: cultural anthropology, ethnography, kinship, material culture, linguistic anthropology, archaeological methods"
+    },
+    {
+      "name": "geography_human",
+      "path": "domain_specific/social_sciences/geography_human",
+      "description": "Human geography: urbanization, migration, cultural landscapes, geopolitics, economic geography, spatial analysis"
+    },
+    {
+      "name": "linguistics",
+      "path": "domain_specific/social_sciences/linguistics",
+      "description": "Linguistics: phonology, morphology, syntax, semantics, pragmatics, sociolinguistics, language acquisition, computational linguistics"
+    },
+    {
+      "name": "cooking_culinary",
+      "path": "domain_specific/practical_skills/cooking_culinary",
+      "description": "Cooking and culinary arts: techniques, flavor profiles, recipe development, food science, baking, international cuisines"
+    },
+    {
+      "name": "fitness_nutrition",
+      "path": "domain_specific/practical_skills/fitness_nutrition",
+      "description": "Fitness and nutrition: exercise physiology, training programs, macronutrients, meal planning, supplements, recovery"
+    },
+    {
+      "name": "personal_finance",
+      "path": "domain_specific/practical_skills/personal_finance",
+      "description": "Personal finance: budgeting, investing basics, retirement planning, debt management, insurance, tax optimization"
+    },
+    {
+      "name": "home_improvement",
+      "path": "domain_specific/practical_skills/home_improvement",
+      "description": "Home improvement: renovation planning, electrical basics, plumbing, carpentry, painting, building codes, DIY projects"
+    },
+    {
+      "name": "gardening_agriculture",
+      "path": "domain_specific/practical_skills/gardening_agriculture",
+      "description": "Gardening and agriculture: soil science, crop rotation, pest management, permaculture, hydroponics, seasonal planning"
+    },
+    {
+      "name": "automotive_repair",
+      "path": "domain_specific/practical_skills/automotive_repair",
+      "description": "Automotive repair: engine diagnostics, brake systems, electrical systems, maintenance schedules, emissions, troubleshooting"
+    },
+    {
+      "name": "photography_technique",
+      "path": "domain_specific/practical_skills/photography_technique",
+      "description": "Photography: exposure triangle, composition rules, lighting, post-processing, lens selection, genre-specific techniques"
+    },
+    {
+      "name": "travel_planning",
+      "path": "domain_specific/practical_skills/travel_planning",
+      "description": "Travel planning: itinerary design, budget optimization, cultural etiquette, visa requirements, accommodation, transportation"
+    }
+  ]
+}

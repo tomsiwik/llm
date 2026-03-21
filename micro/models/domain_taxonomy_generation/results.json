@@ -1,0 +1,181 @@
+{
+  "taxonomy_size": 270,
+  "n_supercategories": 6,
+  "n_categories": 35,
+  "embedding_method": "sentence-transformers (all-MiniLM-L6-v2)",
+  "overlap_analysis": {
+    "mean_pairwise_cos": 0.13312594592571259,
+    "median_pairwise_cos": 0.12166471779346466,
+    "std_pairwise_cos": 0.09835122525691986,
+    "max_pairwise_cos": 0.7256550788879395,
+    "overlap_threshold": 0.7,
+    "pairs_above_threshold": 4,
+    "total_pairs": 36315,
+    "overlap_fraction": 0.00011014732204323282,
+    "within_category_mean": 0.33776170015335083,
+    "cross_category_mean": 0.12767045199871063,
+    "within_cross_ratio": 2.6455745697021484
+  },
+  "distinctness_analysis": {
+    "threshold": 0.85,
+    "n_indistinguishable": 0,
+    "indistinguishable_fraction": 0.0,
+    "indistinguishable_domains": []
+  },
+  "kill_criteria": {
+    "K1_overlap_fraction": 0.00011014732204323282,
+    "K1_threshold": 0.3,
+    "K1_pass": true,
+    "K2_indistinguishable_fraction": 0.0,
+    "K2_threshold": 0.2,
+    "K2_pass": true
+  },
+  "supercategory_counts": {
+    "programming": 56,
+    "science": 56,
+    "professional": 61,
+    "writing_communication": 37,
+    "reasoning_analysis": 32,
+    "domain_specific": 28
+  },
+  "category_counts": {
+    "programming/systems_languages": 7,
+    "programming/application_languages": 7,
+    "programming/web_frontend": 9,
+    "programming/scripting_automation": 6,
+    "programming/data_query": 6,
+    "programming/mobile_embedded": 6,
+    "programming/functional_programming": 6,
+    "programming/devops_infra": 9,
+    "science/physics": 10,
+    "science/chemistry": 8,
+    "science/biology": 10,
+    "science/earth_space": 8,
+    "science/mathematics": 10,
+    "science/statistics_data": 10,
+    "professional/healthcare": 10,
+    "professional/legal": 9,
+    "professional/business_finance": 10,
+    "professional/management": 8,
+    "professional/engineering": 9,
+    "professional/marketing_communications": 8,
+    "professional/cybersecurity": 7,
+    "writing_communication/creative_writing": 8,
+    "writing_communication/professional_writing": 8,
+    "writing_communication/journalism_media": 7,
+    "writing_communication/persuasive_writing": 6,
+    "writing_communication/translation_localization": 8,
+    "reasoning_analysis/formal_reasoning": 6,
+    "reasoning_analysis/applied_reasoning": 7,
+    "reasoning_analysis/critical_thinking": 7,
+    "reasoning_analysis/problem_solving": 7,
+    "reasoning_analysis/metacognition": 5,
+    "domain_specific/education": 6,
+    "domain_specific/arts_culture": 6,
+    "domain_specific/social_sciences": 8,
+    "domain_specific/practical_skills": 8
+  },
+  "top_20_pairs": [
+    {
+      "cos": 0.7256550788879395,
+      "domain1": "advertising_creative",
+      "domain2": "copywriting_ads"
+    },
+    {
+      "cos": 0.7166228890419006,
+      "domain1": "editorial_opinion",
+      "domain2": "debate_argumentation"
+    },
+    {
+      "cos": 0.7133213877677917,
+      "domain1": "scala_functional",
+      "domain2": "haskell_pure"
+    },
+    {
+      "cos": 0.7040279507637024,
+      "domain1": "technical_documentation",
+      "domain2": "user_guides"
+    },
+    {
+      "cos": 0.6935878396034241,
+      "domain1": "c_programming",
+      "domain2": "embedded_c"
+    },
+    {
+      "cos": 0.6790414452552795,
+      "domain1": "screenplay_film",
+      "domain2": "playwriting_theater"
+    },
+    {
+      "cos": 0.674220860004425,
+      "domain1": "mathematical_logic",
+      "domain2": "predicate_logic"
+    },
+    {
+      "cos": 0.6650589108467102,
+      "domain1": "causal_reasoning",
+      "domain2": "counterfactual_reasoning"
+    },
+    {
+      "cos": 0.659389853477478,
+      "domain1": "learning_strategies",
+      "domain2": "memory_techniques"
+    },
+    {
+      "cos": 0.6591020822525024,
+      "domain1": "fiction_short_story",
+      "domain2": "fiction_novel"
+    },
+    {
+      "cos": 0.6557512879371643,
+      "domain1": "corporate_finance",
+      "domain2": "personal_finance"
+    },
+    {
+      "cos": 0.6455406546592712,
+      "domain1": "c_programming",
+      "domain2": "cpp_modern"
+    },
+    {
+      "cos": 0.6309025287628174,
+      "domain1": "environmental_chemistry",
+      "domain2": "environmental_engineering"
+    },
+    {
+      "cos": 0.6261045932769775,
+      "domain1": "mathematical_logic",
+      "domain2": "propositional_logic"
+    },
+    {
+      "cos": 0.6242992877960205,
+      "domain1": "operations_management",
+      "domain2": "industrial_engineering"
+    },
+    {
+      "cos": 0.6203153133392334,
+      "domain1": "financial_analysis",
+      "domain2": "real_estate_finance"
+    },
+    {
+      "cos": 0.6186286807060242,
+      "domain1": "visual_arts_critique",
+      "domain2": "art_history"
+    },
+    {
+      "cos": 0.6166600584983826,
+      "domain1": "argument_analysis",
+      "domain2": "debate_argumentation"
+    },
+    {
+      "cos": 0.613889753818512,
+      "domain1": "broadcast_writing",
+      "domain2": "podcast_scripting"
+    },
+    {
+      "cos": 0.6133579015731812,
+      "domain1": "c_programming",
+      "domain2": "d_programming"
+    }
+  ],
+  "runtime_seconds": 5.086437225341797
+}

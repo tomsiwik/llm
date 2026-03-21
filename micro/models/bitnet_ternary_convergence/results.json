@@ -1,0 +1,304 @@
+{
+  "experiment": "bitnet_ternary_convergence",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "fp16_steps": 200,
+  "ternary_steps": 400,
+  "timestamp": "2026-03-20 23:54:07",
+  "base_ppls": {
+    "medical": 18.9752,
+    "code": 3.7802,
+    "math": 4.5409,
+    "legal": 26.9342,
+    "creative": 3.514
+  },
+  "fp16_train_results": "loaded_from_prior_run",
+  "fp16_individual_ppls": {
+    "medical": 9.4203,
+    "code": 2.7937,
+    "math": 3.1578,
+    "legal": 18.1084,
+    "creative": 3.2078
+  },
+  "fp16_composed_ppls": {
+    "medical": 13.0387,
+    "code": 3.1547,
+    "math": 4.2369,
+    "legal": 23.1032,
+    "creative": 3.3227
+  },
+  "fp16_cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.000846
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 0.00029
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.00039
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.000432
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.001998
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.000589
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.001064
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.001813
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000798
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.001617
+    }
+  ],
+  "fp16_mean_cos": 0.000984,
+  "ternary_train_results": {
+    "medical": {
+      "condition": "ternary_400",
+      "domain": "medical",
+      "n_steps": 400,
+      "train_time_s": 255.8,
+      "first_50_avg_loss": 2.9278,
+      "last_50_avg_loss": 1.7141,
+      "converged": true,
+      "val_ppls": [
+        {
+          "step": 100,
+          "val_ppl": 10.9757
+        },
+        {
+          "step": 200,
+          "val_ppl": 10.1638
+        },
+        {
+          "step": 300,
+          "val_ppl": 9.4751
+        },
+        {
+          "step": 400,
+          "val_ppl": 9.0408
+        }
+      ],
+      "best_val_ppl": 9.0408,
+      "final_val_ppl": 9.0408,
+      "overfit_ratio": 1.0
+    },
+    "code": {
+      "condition": "ternary_400",
+      "domain": "code",
+      "n_steps": 400,
+      "train_time_s": 196.8,
+      "first_50_avg_loss": 1.0658,
+      "last_50_avg_loss": 1.1182,
+      "converged": false,
+      "val_ppls": [
+        {
+          "step": 100,
+          "val_ppl": 3.0234
+        },
+        {
+          "step": 200,
+          "val_ppl": 3.0269
+        },
+        {
+          "step": 300,
+          "val_ppl": 2.9823
+        },
+        {
+          "step": 400,
+          "val_ppl": 2.9678
+        }
+      ],
+      "best_val_ppl": 2.9678,
+      "final_val_ppl": 2.9678,
+      "overfit_ratio": 1.0
+    },
+    "math": {
+      "condition": "ternary_400",
+      "domain": "math",
+      "n_steps": 400,
+      "train_time_s": 188.4,
+      "first_50_avg_loss": 1.3449,
+      "last_50_avg_loss": 1.2659,
+      "converged": true,
+      "val_ppls": [
+        {
+          "step": 100,
+          "val_ppl": 3.2448
+        },
+        {
+          "step": 200,
+          "val_ppl": 3.1472
+        },
+        {
+          "step": 300,
+          "val_ppl": 3.1058
+        },
+        {
+          "step": 400,
+          "val_ppl": 3.08
+        }
+      ],
+      "best_val_ppl": 3.08,
+      "final_val_ppl": 3.08,
+      "overfit_ratio": 1.0
+    },
+    "legal": {
+      "condition": "ternary_400",
+      "domain": "legal",
+      "n_steps": 400,
+      "train_time_s": 209.4,
+      "first_50_avg_loss": 3.1498,
+      "last_50_avg_loss": 2.8845,
+      "converged": true,
+      "val_ppls": [
+        {
+          "step": 100,
+          "val_ppl": 20.0229
+        },
+        {
+          "step": 200,
+          "val_ppl": 19.3426
+        },
+        {
+          "step": 300,
+          "val_ppl": 19.2573
+        },
+        {
+          "step": 400,
+          "val_ppl": 18.9093
+        }
+      ],
+      "best_val_ppl": 18.9093,
+      "final_val_ppl": 18.9093,
+      "overfit_ratio": 1.0
+    },
+    "creative": {
+      "condition": "ternary_400",
+      "domain": "creative",
+      "n_steps": 400,
+      "train_time_s": 194.3,
+      "first_50_avg_loss": 1.2449,
+      "last_50_avg_loss": 1.6355,
+      "converged": false,
+      "val_ppls": [
+        {
+          "step": 100,
+          "val_ppl": 3.1276
+        },
+        {
+          "step": 200,
+          "val_ppl": 3.1818
+        },
+        {
+          "step": 300,
+          "val_ppl": 3.226
+        },
+        {
+          "step": 400,
+          "val_ppl": 3.1195
+        }
+      ],
+      "best_val_ppl": 3.1195,
+      "final_val_ppl": 3.1195,
+      "overfit_ratio": 1.0
+    }
+  },
+  "ternary_individual_ppls": {
+    "medical": 7.9932,
+    "code": 2.7628,
+    "math": 3.1213,
+    "legal": 17.9551,
+    "creative": 3.1625
+  },
+  "ternary_composed_ppls": {
+    "medical": 13.2698,
+    "code": 3.2214,
+    "math": 4.3051,
+    "legal": 23.4401,
+    "creative": 3.3731
+  },
+  "ternary_cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.003405
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 0.000298
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.000195
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.004099
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.002384
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.002168
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.002403
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.002392
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000883
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.000352
+    }
+  ],
+  "ternary_mean_cos": 0.001858,
+  "k1_ternary_converged": 3,
+  "k1_pass": true,
+  "k2_fp16_avg_composed": 9.3712,
+  "k2_ternary_avg_composed": 9.5219,
+  "k2_ratio": 1.0161,
+  "k2_pass": false,
+  "k3_best_individual": 2.7628,
+  "k3_composition_ratio": 3.4465,
+  "k3_pass": true,
+  "fp16_composition_ratio": 3.3544,
+  "ternary_domain_wins": 0,
+  "verdict": "KILLED",
+  "kill_reasons": [
+    "K2: ternary composed 1.02x worse than FP16"
+  ]
+}

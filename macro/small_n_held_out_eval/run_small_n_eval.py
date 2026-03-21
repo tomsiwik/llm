@@ -125,7 +125,8 @@ def get_adapter_quality_ranking():
             ppl_improvement = info.get("ppl_improvement_pct", 0)
             ranked.append((name, ppl_improvement))
         ranked.sort(key=lambda x: x[1], reverse=True)
-        return [name for name, _ in ranked]
+        if ranked:
+            return [name for name, _ in ranked]
 
     # Fallback: alphabetical
     adapters = sorted(

@@ -1,10 +1,16 @@
 # Ralph Orchestrator — Infinite Research Loop
-# 2-hat pipeline using Claude Code sub-agents for the heavy lifting.
-# Each hat dispatches to a focused sub-agent that runs autonomously.
-# The loop NEVER completes — findings always generate new questions.
+# 4-hat pipeline using Claude Code sub-agents for the heavy lifting.
+# Separation of concerns: research design vs GPU engineering vs review.
+#
+# Flow:
+#   research.start → Researcher (ideation + math)
+#                  → Programmer (GPU-optimized scripts)
+#                  → submit to gpu_queue
+#   gpu.results.ready → Harvester (collect results, write PAPER.md)
+#                     → experiment.done → Reviewer → integrate
 #
 # Start:     ralph run -a
-# Continue:  ralph emit "experiment.done"  → enters at reviewer
+# Continue:  ralph emit "experiment.done"
 
 cli:
   backend: "claude"
@@ -13,8 +19,8 @@ event_loop:
   prompt_file: "PROMPT.md"
   starting_event: "research.start"
   completion_promise: "LOOP_COMPLETE"
-  max_iterations: 200
-  idle_timeout_secs: 7200
+  max_iterations: 1000
+  idle_timeout_secs: 28800
 
 features:
   parallel: true
@@ -26,41 +32,22 @@ memories:
   file: ".ralph/memories.md"
 
 hats:
-  # ── Researcher: delegate to experiment-ideator sub-agent ─────────────────
+  # ── Researcher: design experiments (NO script writing for GPU) ──────────
   researcher:
     name: "🔬 Researcher"
-    description: "Spawns experiment-ideator sub-agent to run a full research cycle"
+    description: "Designs experiments via experiment-ideator. For micro: runs them. For macro: produces SPEC.md for the programmer."
     triggers:
       - "research.start"
       - "experiment.integrated"
       - "review.revise"
       - "review.killed"
     publishes:
+      - "experiment.designed"
       - "experiment.done"
     instructions: |
       You coordinate a research cycle by delegating to the experiment-ideator
       sub-agent. Do NOT do the research yourself. Do NOT stop to ask for
       confirmation. Complete all steps in one session.
-
-      ## GPU/Remote Job Rules (MANDATORY)
-
-      NEVER poll, sleep, or wait for a remote job to complete. This burns tokens
-      and wastes iterations. If a job (training, benchmark, etc.) takes >5 minutes:
-      1. Start it as a background/nohup process on the remote machine
-      2. Write a sentinel check command in .ralph/current_direction.md (e.g.,
-         "Check: ssh runpod 'ls /workspace/llm/adapters/*/adapter_config.json | wc -l'")
-      3. IMMEDIATELY move to the next experiment — do NOT wait
-      4. On the next iteration (triggered by experiment.integrated), check the
-         sentinel ONCE. If done → benchmark/analyze. If not → do another experiment.
-
-      Each experiment should take <2hrs of active agent time. If an experiment is
-      blocked waiting on a remote job, it is NOT active — move on.
-
-      If blocked on a single GPU with no independent work possible:
-      - Do all prep work (scripts, data gen, eval setup, MATH.md)
-      - If no prep remains, tell the sub-agent to return early with status
-      - Emit experiment.done with "GPU_BLOCKED: [job] running, ETA [time]"
-      - The loop will terminate cleanly instead of burning tokens polling
 
       ## Before delegating
 
@@ -75,16 +62,45 @@ hats:
         Include the kill reason so the researcher avoids the same mistake.
 
       If triggered by research.start or experiment.integrated:
-        Read HYPOTHESES.yml. Pick the lowest-priority-number `open` node
-        whose `depends_on` are all satisfied (all deps must be `proven`).
-        Set it to `active` in HYPOTHESES.yml. If no open nodes remain,
-        first generate 2-3 new hypothesis nodes from existing findings
-        and add them to HYPOTHESES.yml before delegating.
+        Read the prompt context (PROMPT.md or inline -p prompt). Check for a
+        SCALE CONSTRAINT (e.g., "CPU only", "micro only", "GPU only", "macro only").
+        If a scale constraint exists, ONLY consider nodes matching that scale
+        in HYPOTHESES.yml. Example: "CPU only" → only pick `scale: micro` nodes.
+        "GPU" → only pick `scale: macro` nodes.
 
-        PARALLEL: If multiple independent nodes (no shared deps, different
-        experiment_dirs) are eligible, you MAY launch multiple experiment-ideator
-        agents in parallel using separate Agent tool calls. Track each node_id
-        independently and emit experiment.done for each when complete.
+        ## Node Selection (CRITICAL — follow this order exactly)
+
+        Read HYPOTHESES.yml. Select work using this PRIORITY ORDER:
+
+        1. FIRST: Pick any `active` node that has unfinished work (script not
+           written, results not collected, PAPER.md incomplete). FINISH existing
+           work before starting new work.
+
+        2. SECOND: Pick the `open` or `active` node that UNBLOCKS THE MOST
+           downstream nodes. Count how many other nodes have this node in their
+           `depends_on`. The node that unblocks the most wins. This ensures
+           critical-path work is done first.
+
+        3. TIE-BREAK: Among nodes that unblock the same number of downstream
+           nodes, pick the lowest priority number (P1 > P2 > P3).
+
+        4. NEVER pick a P5+ node when P1-P4 nodes with unsatisfied deps exist
+           that could be unblocked by completing a different P1-P4 node first.
+
+        The node must have all `depends_on` satisfied (deps must be `proven`,
+        `supported`, or `killed`) AND `scale` must match the constraint.
+        Set the chosen node to `active` in HYPOTHESES.yml.
+
+        ## Hypothesis Generation (SOFT-FREEZE)
+
+        Do NOT generate new hypotheses unless ALL of these are true:
+        - You just completed (proven/killed) an experiment
+        - There are fewer than 5 `open` nodes remaining at matching scale
+        - Generate exactly 1 new hypothesis (not 2-3)
+        - New hypothesis MUST be P5 or higher (deprioritized)
+        - New hypothesis MUST relate to a finding from the just-completed work
+
+        The goal is to DRAIN the backlog, not grow it.
 
       ## Baseline-First Rule (MANDATORY)
 
@@ -93,49 +109,148 @@ hats:
       reference paths in the delegation prompt so the researcher builds on
       prior art instead of reinventing.
 
-      For macro-scale work, the primary baselines are:
-        - references/qwen3-coder-next/ (SOTA sparse MoE architecture)
-        - references/qwen3.5-from-scratch/ + miniqwen.py (Qwen3.5 implementation)
-        - references/LLMs-from-scratch/ (educational ground truth)
-        - references/reasoning-from-scratch/ (reasoning patterns)
-
-      ## NotebookLM Research (MANDATORY for cross-domain nodes)
-
-      If the HYPOTHESES.yml node has tag `cross-domain` or `novel`:
-        Include in the delegation prompt: "Use /notebooklm to research
-        SOTA approaches, CODE EXAMPLES, and existing repos for [mechanism].
-        Find implementations you can adapt rather than building from scratch.
-        Save any useful repos/papers to references/ with a README.md.
-        The notes field in HYPOTHESES.yml tells you what to search for."
-
       ## Delegate
 
       Use the Agent tool with subagent_type="experiment-ideator" to run
-      the full research cycle. Give it a clear prompt:
+      the research design cycle. Give it a clear prompt:
 
         "Work on hypothesis [node_id] from HYPOTHESES.yml: '[title]'.
-         Kill criteria: [kill_criteria]. Run the full cycle: survey,
-         formalize math, implement, run experiment, write PAPER.md.
+         Kill criteria: [kill_criteria].
+         SCALE: [micro or macro].
+         If micro: run the full cycle — survey, math, implement, run, write PAPER.md.
+         If macro: survey, math, write MATH.md + SPEC.md (experiment spec).
+           Do NOT write the GPU script. The experiment-programmer handles that.
          Write your chosen direction to .ralph/current_direction.md.
          BASELINE-FIRST: Check these references before implementing:
-         [list relevant references/*/]. Build on existing code, don't
-         reinvent. Also check references/LLMs-from-scratch/ and
-         references/reasoning-from-scratch/ for standard implementations.
-         REUSE-FIRST: Use /notebooklm to find existing implementations of
-         [mechanism from notes field]. Add repos to references/. Only write
-         custom code for the project-specific integration.
-         [If revise: Include the specific fixes from the review.]
-         [If killed: Explain why the previous direction failed.]"
+         [list relevant references/*/]."
 
-      Wait for the sub-agent to complete. Do NOT interrupt it.
+      Wait for the sub-agent to complete.
 
       ## After sub-agent returns
 
-      Verify that micro/models/[name]/PAPER.md exists with results.
-      Reset .ralph/agent/scratchpad.md to a 1-line summary.
-      Emit experiment.done with a brief summary of results.
+      For MICRO experiments:
+        Verify micro/models/[name]/PAPER.md exists with results.
+        Emit experiment.done with a brief summary.
 
-  # ── Reviewer: delegate to adversarial-reviewer sub-agent ─────────────────
+      For MACRO experiments:
+        Verify macro/[name]/SPEC.md + MATH.md exist.
+        Emit experiment.designed with the experiment name and spec path.
+        The programmer hat takes it from here.
+
+  # ── Programmer: GPU-optimize and submit ─────────────────────────────────
+  programmer:
+    name: "⚙️ Programmer"
+    description: "Takes a SPEC.md and produces GPU-optimized scripts, then submits to gpu_queue"
+    triggers:
+      - "experiment.designed"
+    publishes:
+      - "script.submitted"
+    instructions: |
+      You take a research design (SPEC.md + MATH.md) and produce efficient
+      GPU scripts. Do NOT question the research — that's the researcher's job.
+      Focus on making the script FAST and GPU-efficient.
+
+      ## Step 1: Read the spec
+
+      The experiment name is in the event payload from experiment.designed.
+      Read macro/[name]/SPEC.md and MATH.md to understand what to implement.
+
+      ## Step 2: Produce script
+
+      Use the Agent tool with subagent_type="experiment-programmer" to write
+      the script. Give it the full spec:
+
+        "Write an efficient GPU script for the experiment at macro/[name]/.
+         Read SPEC.md for what to implement and MATH.md for the math.
+         Read GPU_CODING_GUIDELINES.md for MANDATORY coding rules.
+         Write the script to macro/[name]/run_[name].py.
+         Follow ALL rules in GPU_CODING_GUIDELINES.md — especially:
+         - Function scoping for each GPU phase (never two models in one scope)
+         - Cleanup pattern: del + gc.collect + empty_cache + function return
+         - SMOKE_TEST=1 support and MAX_RUNTIME timeout
+         - Monkey-patch set_submodule for RunPod compatibility
+         For SOLE composition: weights = [1.0/n] * n (average, NOT sum).
+         Target GPU utilization >50%. Batch all inference."
+
+      ## Step 3: Validate locally
+
+      After the programmer produces the script, run a quick smoke test:
+        SMOKE_TEST=1 python3 macro/[name]/run_[name].py
+      If it crashes, fix the error and retry (max 2 attempts).
+
+      ## Step 4: Submit to GPU queue
+
+      uv run python3 tools/gpu_queue.py submit macro/[name]/run_[name].py
+
+      ## Step 5: Also check for completed results
+
+      While you're here, check if any previous GPU tasks have completed:
+        uv run python3 tools/gpu_queue.py status
+
+      If there are completed tasks (OK or FAILED), note them in the event payload.
+
+      Emit script.submitted with the task_id and experiment name.
+
+  # ── Harvester: collect GPU results, write PAPER.md ──────────────────────
+  harvester:
+    name: "📊 Harvester"
+    description: "Monitors GPU queue, collects results, writes PAPER.md from actual data"
+    triggers:
+      - "script.submitted"
+      - "harvest.check"
+    publishes:
+      - "experiment.done"
+      - "harvest.check"
+    instructions: |
+      You monitor the GPU queue and harvest completed results.
+
+      ## Step 1: Check GPU queue status
+
+      Run: uv run python3 tools/gpu_queue.py status
+
+      Look at RECENT COMPLETED tasks. For each completed task (OK or FAILED):
+
+      ## Step 2: For OK tasks — harvest results
+
+      1. Run: uv run python3 tools/gpu_queue.py results <task_id>
+      2. Read the results JSON and task log
+      3. Find the experiment's PAPER.md template (or SPEC.md)
+      4. Write/update PAPER.md with ACTUAL results:
+         - Fill in the "TO BE FILLED" placeholders with real numbers
+         - Assess kill criteria based on actual data
+         - Write honest limitations
+      5. Update .ralph/current_direction.md with results summary
+
+      ## Step 3: For FAILED tasks — triage
+
+      1. Read the error from: uv run python3 tools/gpu_queue.py results <task_id>
+      2. Common fixes:
+         - dtype mismatch: add .to(torch.bfloat16) or .float()
+         - missing module: add import or pip install to script
+         - GradScaler: remove mixed precision or fix scaler usage
+         - OOM: reduce batch size
+         - weight bug: check composition weights are 1/N not 1.0
+      3. Fix the script locally
+      4. Resubmit: uv run python3 tools/gpu_queue.py submit <fixed_script.py>
+      5. Do NOT emit experiment.done for failed tasks
+
+      ## Step 4: Check if queue has pending work
+
+      If there are still PENDING or ACTIVE tasks:
+        Emit harvest.check (triggers self again later to re-check).
+        Include a note about which tasks are still running.
+
+      If ALL tasks for an experiment are done:
+        Emit experiment.done with the experiment name and results summary.
+
+      ## GPU Utilization Monitoring
+
+      When checking status, note the GPU utilization percentage.
+      If a task is ACTIVE but GPU util is <10% for >2 minutes, it may be stuck
+      on CPU-bound work (e.g., sequential token generation). Note this in your
+      event payload so future scripts can be optimized.
+
+  # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
     name: "🔴 Reviewer"
     description: "Spawns adversarial-reviewer sub-agent, then integrates results"
@@ -151,12 +266,15 @@ hats:
 
       ## Step 1: Delegate review
 
-      Read .ralph/current_direction.md to find the experiment name.
+      The experiment name is in the event payload from experiment.done.
+      Also read .ralph/current_direction.md as a fallback.
+      Find the experiment_dir — it's either micro/models/[name]/ or macro/[name]/.
+      Verify that PAPER.md exists in the experiment dir before reviewing.
 
       Use the Agent tool with subagent_type="adversarial-reviewer" to review
       the experiment. Give it a clear prompt:
 
-        "Review the experiment at micro/models/[name]/. Read its MATH.md and
+        "Review the experiment at [experiment_dir]/. Read its MATH.md and
          PAPER.md. Write REVIEW-adversarial.md with your verdict:
          PROCEED, REVISE (with numbered fixes), or KILL (with explanation)."
 
@@ -164,29 +282,23 @@ hats:
 
       ## Step 2: Read verdict
 
-      Read micro/models/[name]/REVIEW-adversarial.md.
+      Read [experiment_dir]/REVIEW-adversarial.md.
       Extract the verdict: PROCEED, REVISE, or KILL.
 
       If REVISE: emit review.revise with the numbered fixes. Stop here.
       If KILL:
-        - In HYPOTHESES.yml: set the node status to `disproven`, append evidence
-        - Cascade: set any nodes whose `depends_on` include this node to `blocked`
+        - In HYPOTHESES.yml: set the node status to `killed`, append evidence
         - Increment `meta.consecutive_kills`
-        - If `meta.consecutive_kills` >= 3: emit `research.exhaustion_warning`
         - Emit review.killed with explanation. Stop here.
 
       ## Step 3: Integrate (only if PROCEED)
 
       Do this yourself (fast, no sub-agent needed):
-      - In HYPOTHESES.yml: set the node status to `proven`, append evidence
-        with date/claim/source, reset `meta.consecutive_kills` to 0,
-        update `meta.last_proven`
-      - Unblock dependents: nodes that depended on this one are now eligible
-      - Generate 1-3 NEW hypothesis nodes in HYPOTHESES.yml from findings
-      - Regenerate VISION.md "What Remains" from open nodes in HYPOTHESES.yml
-      - Update VISION.md "What's Been Proven"
-      - Append results to FINDINGS.md with date
-      - Add memories to .ralph/memories.md (only append, never overwrite)
+      - In HYPOTHESES.yml: set the node status to `proven` or `supported`,
+        append evidence with date/claim/source,
+        reset `meta.consecutive_kills` to 0, update `meta.last_proven`
+      - Append results to FINDINGS.md with date and caveats
+      - Update VISION.md readiness table if applicable
 
       Reset .ralph/agent/scratchpad.md to a 1-line summary.
       Emit experiment.integrated.

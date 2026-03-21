@@ -1,0 +1,220 @@
+{
+  "revision": "v2 -- adversarial review fixes",
+  "timestamp": "2026-03-18T01:00:00",
+  "good_taxonomy": {
+    "label": "Good Taxonomy (270 distinct)",
+    "n_domains": 270,
+    "n_pairs": 36315,
+    "method": "sentence-transformers (all-MiniLM-L6-v2)",
+    "mean_cos": 0.13312594592571259,
+    "median_cos": 0.12166471779346466,
+    "std_cos": 0.09835122525691986,
+    "max_cos": 0.7256550788879395,
+    "overlap_at_thresholds": {
+      "0.3": {
+        "n_pairs": 2087,
+        "fraction": 0.05746936527605673
+      },
+      "0.4": {
+        "n_pairs": 587,
+        "fraction": 0.016164119509844418
+      },
+      "0.5": {
+        "n_pairs": 165,
+        "fraction": 0.004543577034283354
+      },
+      "0.6": {
+        "n_pairs": 28,
+        "fraction": 0.0007710312543026298
+      },
+      "0.7": {
+        "n_pairs": 4,
+        "fraction": 0.00011014732204323282
+      },
+      "0.8": {
+        "n_pairs": 0,
+        "fraction": 0.0
+      },
+      "0.9": {
+        "n_pairs": 0,
+        "fraction": 0.0
+      }
+    },
+    "nn_mean": 0.5204093873500824,
+    "nn_median": 0.5182433128356934,
+    "nn_max": 0.7256550788879395,
+    "nn_above_07_count": 8,
+    "nn_above_07_frac": 0.02962962962962963,
+    "k1_tightened": {
+      "metric": "fraction of pairs with cos>0.5",
+      "value": 0.004543577034283354,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "k2_tightened": {
+      "metric": "fraction of domains with NN cos>0.7",
+      "value": 0.02962962962962963,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "negative_control": {
+    "label": "Negative Control (30 x 9 paraphrases)",
+    "n_domains": 270,
+    "n_pairs": 36315,
+    "method": "sentence-transformers (all-MiniLM-L6-v2)",
+    "mean_cos": 0.14761123061180115,
+    "median_cos": 0.127177894115448,
+    "std_cos": 0.1291705071926117,
+    "max_cos": 0.8949339985847473,
+    "overlap_at_thresholds": {
+      "0.3": {
+        "n_pairs": 2858,
+        "fraction": 0.07870026159988985
+      },
+      "0.4": {
+        "n_pairs": 1383,
+        "fraction": 0.03808343659644775
+      },
+      "0.5": {
+        "n_pairs": 1015,
+        "fraction": 0.02794988296847033
+      },
+      "0.6": {
+        "n_pairs": 791,
+        "fraction": 0.02178163293404929
+      },
+      "0.7": {
+        "n_pairs": 333,
+        "fraction": 0.009169764560099132
+      },
+      "0.8": {
+        "n_pairs": 58,
+        "fraction": 0.001597136169626876
+      },
+      "0.9": {
+        "n_pairs": 0,
+        "fraction": 0.0
+      }
+    },
+    "nn_mean": 0.7398027725793698,
+    "nn_median": 0.7476228773593903,
+    "nn_max": 0.8949339985847473,
+    "nn_above_07_count": 195,
+    "nn_above_07_frac": 0.7222222222222222,
+    "k1_tightened": {
+      "metric": "fraction of pairs with cos>0.5",
+      "value": 0.02794988296847033,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "k2_tightened": {
+      "metric": "fraction of domains with NN cos>0.7",
+      "value": 0.7222222222222222,
+      "threshold": 0.05,
+      "pass": false
+    }
+  },
+  "discriminative_power": {
+    "good_passes_k1": true,
+    "good_passes_k2": true,
+    "bad_fails_k1": false,
+    "bad_fails_k2": true,
+    "metrics_discriminate": true,
+    "k1_separation_ratio": 6.151515151515152,
+    "k2_separation_ratio": 24.375
+  },
+  "pilot50_proxy": {
+    "n_matched": 50,
+    "pearson_sibling_cos_vs_improvement": {
+      "r": 0.03422908126638473,
+      "p": 0.8134455033656111
+    },
+    "spearman_sibling_cos_vs_improvement": {
+      "rho": 0.14915482135996927,
+      "p": 0.30122740846541246
+    },
+    "pearson_any_cos_vs_improvement": {
+      "r": 0.028113065679764973,
+      "p": 0.846332747083878
+    },
+    "pearson_base_ppl_vs_improvement": {
+      "r": -0.08350476449785967,
+      "p": 0.5642490984436965
+    },
+    "assessment": "Embedding proxy does NOT predict expert improvement. r=0.034 is effectively zero. Proxy validates name distinctness only.",
+    "closest_pilot_pairs": [
+      {
+        "cos": 0.6166600584983826,
+        "d1": "debate",
+        "d2": "critical-analysis",
+        "imp1": 37.3,
+        "imp2": 50.44
+      },
+      {
+        "cos": 0.6089514493942261,
+        "d1": "technical-writing",
+        "d2": "documentation",
+        "imp1": 42.29,
+        "imp2": 47.82
+      },
+      {
+        "cos": 0.5728023648262024,
+        "d1": "marketing",
+        "d2": "copywriting",
+        "imp1": 47.57,
+        "imp2": 56.98
+      },
+      {
+        "cos": 0.5454533696174622,
+        "d1": "creative-fiction",
+        "d2": "screenplay",
+        "imp1": 48.76,
+        "imp2": 53.54
+      },
+      {
+        "cos": 0.5360375046730042,
+        "d1": "screenplay",
+        "d2": "speechwriting",
+        "imp1": 53.54,
+        "imp2": 45.83
+      },
+      {
+        "cos": 0.5290525555610657,
+        "d1": "copywriting",
+        "d2": "speechwriting",
+        "imp1": 56.98,
+        "imp2": 45.83
+      },
+      {
+        "cos": 0.5210251808166504,
+        "d1": "math",
+        "d2": "finance",
+        "imp1": 24.2,
+        "imp2": 35.81
+      },
+      {
+        "cos": 0.5156121253967285,
+        "d1": "creative-fiction",
+        "d2": "speechwriting",
+        "imp1": 48.76,
+        "imp2": 45.83
+      },
+      {
+        "cos": 0.4940001368522644,
+        "d1": "finance",
+        "d2": "accounting",
+        "imp1": 35.81,
+        "imp2": 43.05
+      },
+      {
+        "cos": 0.47659918665885925,
+        "d1": "logic-puzzles",
+        "d2": "spatial-reasoning",
+        "imp1": 43.74,
+        "imp2": 36.95
+      }
+    ]
+  },
+  "runtime_seconds": 11.101279020309448
+}

@@ -245,7 +245,8 @@ def main():
             print(f"    seq_len={seq_len}: median={lat['median_ms']:.1f}ms "
                   f"(overhead: {overhead_pct:+.1f}%)")
 
-        # Cleanup merged model
+        # Cleanup: base_model was consumed by PeftModel wrapping, delete both
+        del base_model
         del merged_model
         gc.collect()
         torch.cuda.empty_cache()
@@ -283,6 +284,9 @@ def main():
                       f"(overhead: {overhead_pct:+.1f}%)")
 
                 # Re-load base model (PeftModel wrapping is destructive to state)
+                del base_model
+                gc.collect()
+                torch.cuda.empty_cache()
                 base_model = AutoModelForCausalLM.from_pretrained(
                     args.base, dtype=torch.float16, device_map={"": 0},
                     cache_dir=HF_CACHE, trust_remote_code=True)

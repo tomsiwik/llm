@@ -1,0 +1,237 @@
+{
+  "1:1 (N=15)": {
+    "premerge": {
+      "latency_us": 0.04062700463691726,
+      "k1_quality_lift": 0.00048302613400917757,
+      "k2_quality_lift": 0.000760301687542814,
+      "k1_quality_capture": 0.2429627214120671,
+      "k2_quality_capture": 0.3344971060330533,
+      "k1_lift_std": 0.0005414402700615473,
+      "k2_lift_std": 0.0008464471488050748
+    },
+    "hash_ring": {
+      "latency_us": 0.7942930024000816,
+      "k1_quality_lift": 0.01019867672081701,
+      "k2_quality_lift": 0.015887250468988624,
+      "k1_quality_capture": 0.2502988786071468,
+      "k2_quality_capture": 0.344548308267649,
+      "k1_lift_std": 0.006446116097269185,
+      "k2_lift_std": 0.009996068584827688
+    },
+    "embedding_sim": {
+      "latency_us": 2.9789685045216174,
+      "k1_quality_lift": 0.022736157742355243,
+      "k2_quality_lift": 0.03446564052847017,
+      "k1_quality_capture": 0.2598061081607938,
+      "k2_quality_capture": 0.35685286030582875,
+      "k1_lift_std": 0.07663223915899324,
+      "k2_lift_std": 0.1033678893918404
+    },
+    "hierarchical": {
+      "latency_us": 3.907232495748758,
+      "k1_quality_lift": 0.01573449695526719,
+      "k2_quality_lift": 0.024385192426584046,
+      "k1_quality_capture": 0.2544148760146295,
+      "k2_quality_capture": 0.3500985901598613,
+      "k1_lift_std": 0.042662885356672973,
+      "k2_lift_std": 0.06693193694135059
+    },
+    "tiny_classifier": {
+      "latency_us": 3.421450002861093,
+      "k1_quality_lift": 0.008783731343690074,
+      "k2_quality_lift": -0.007093039948021351,
+      "k1_quality_capture": 0.24922887922920553,
+      "k2_quality_capture": 0.3292485856359655,
+      "k1_lift_std": 0.015339164472676043,
+      "k2_lift_std": 0.016045267341032395
+    }
+  },
+  "2:1 (N=30)": {
+    "premerge": {
+      "latency_us": 0.04145300408708863,
+      "k1_quality_lift": -0.00037653609948000275,
+      "k2_quality_lift": -0.000397263316794472,
+      "k1_quality_capture": 0.23355708068200198,
+      "k2_quality_capture": 0.24306470773483543,
+      "k1_lift_std": 0.0007794902963785867,
+      "k2_lift_std": 0.0008223221401566745
+    },
+    "hash_ring": {
+      "latency_us": 0.8117219995256164,
+      "k1_quality_lift": -0.0022190753490820675,
+      "k2_quality_lift": -0.002343209015909148,
+      "k1_quality_capture": 0.23215226785490997,
+      "k2_quality_capture": 0.24160056453818082,
+      "k1_lift_std": 0.005966020476995875,
+      "k2_lift_std": 0.006294005270789801
+    },
+    "embedding_sim": {
+      "latency_us": 3.0478509952445165,
+      "k1_quality_lift": 0.03357929892913342,
+      "k2_quality_lift": 0.03969750805395037,
+      "k1_quality_capture": 0.25956200227746373,
+      "k2_quality_capture": 0.27339047635710684,
+      "k1_lift_std": 0.023326791629391722,
+      "k2_lift_std": 0.029088346397319102
+    },
+    "hierarchical": {
+      "latency_us": 3.890816507919226,
+      "k1_quality_lift": -0.023910697461151736,
+      "k2_quality_lift": -0.025170398086533662,
+      "k1_quality_capture": 0.21549803183837882,
+      "k2_quality_capture": 0.22428501412972213,
+      "k1_lift_std": 0.02993313365097113,
+      "k2_lift_std": 0.0314968831733758
+    },
+    "tiny_classifier": {
+      "latency_us": 3.417852507027419,
+      "k1_quality_lift": -0.0151542805803561,
+      "k2_quality_lift": -0.009470042715655044,
+      "k1_quality_capture": 0.22218798309398383,
+      "k2_quality_capture": 0.2361788811641107,
+      "k1_lift_std": 0.031158398910329205,
+      "k2_lift_std": 0.023332773543344416
+    }
+  },
+  "1:1 (N=5)": {
+    "premerge": {
+      "latency_us": 0.04088949481229065,
+      "k1_quality_lift": 0.0010291774853217663,
+      "k2_quality_lift": 0.0020195050511606287,
+      "k1_quality_capture": 0.3566746172419053,
+      "k2_quality_capture": 0.5367101561703806,
+      "k1_lift_std": 0.003587346057381859,
+      "k2_lift_std": 0.007338763532024544
+    },
+    "hash_ring": {
+      "latency_us": 0.7705465036451642,
+      "k1_quality_lift": 0.0019558022183192095,
+      "k2_quality_lift": 0.004490848893140244,
+      "k1_quality_capture": 0.3573192030272918,
+      "k2_quality_capture": 0.5378314535848165,
+      "k1_lift_std": 0.00812541476187681,
+      "k2_lift_std": 0.016752992488598475
+    },
+    "embedding_sim": {
+      "latency_us": 2.9153419895919797,
+      "k1_quality_lift": 0.07833511639134062,
+      "k2_quality_lift": 0.15624132628418308,
+      "k1_quality_capture": 0.40687604502793784,
+      "k2_quality_capture": 0.6085928041853026,
+      "k1_lift_std": 0.06724648361810644,
+      "k2_lift_std": 0.23571325375600682
+    },
+    "hierarchical": {
+      "latency_us": 3.8134115088723775,
+      "k1_quality_lift": 0.08052387603010512,
+      "k2_quality_lift": 0.1689985369036371,
+      "k1_quality_capture": 0.4082937367484922,
+      "k2_quality_capture": 0.6149937765220985,
+      "k1_lift_std": 0.2150472144951232,
+      "k2_lift_std": 0.454205996342319
+    },
+    "tiny_classifier": {
+      "latency_us": 3.339877490361687,
+      "k1_quality_lift": 0.09128337888835432,
+      "k2_quality_lift": 0.1355202544108053,
+      "k1_quality_capture": 0.4151611985635091,
+      "k2_quality_capture": 0.5987567990513036,
+      "k1_lift_std": 0.12491597432554011,
+      "k2_lift_std": 0.18210108808500722
+    }
+  },
+  "10:1 (N=50)": {
+    "premerge": {
+      "latency_us": 0.041057998714677524,
+      "k1_quality_lift": -0.00030944761385259654,
+      "k2_quality_lift": -0.0003279036965062947,
+      "k1_quality_capture": 0.3238725292453106,
+      "k2_quality_capture": 0.32717225078855905,
+      "k1_lift_std": 0.002005741275014576,
+      "k2_lift_std": 0.0020326470458227135
+    },
+    "hash_ring": {
+      "latency_us": 0.8319805015162274,
+      "k1_quality_lift": 0.0034359148055699315,
+      "k2_quality_lift": 0.0034631412651210795,
+      "k1_quality_capture": 0.3264043292781357,
+      "k2_quality_capture": 0.32972485423441883,
+      "k1_lift_std": 0.008354380436258524,
+      "k2_lift_std": 0.008515216269456866
+    },
+    "embedding_sim": {
+      "latency_us": 3.1477100055781193,
+      "k1_quality_lift": 0.008702950044431593,
+      "k2_quality_lift": 0.008904886978902607,
+      "k1_quality_capture": 0.3298972077273428,
+      "k2_quality_capture": 0.3335109313046123,
+      "k1_lift_std": 0.11434725224314701,
+      "k2_lift_std": 0.12760755395785553
+    },
+    "hierarchical": {
+      "latency_us": 3.930882006443426,
+      "k1_quality_lift": 0.07801772427631015,
+      "k2_quality_lift": 0.07722604626202244,
+      "k1_quality_capture": 0.37662005645069835,
+      "k2_quality_capture": 0.3795681199008761,
+      "k1_lift_std": 0.2578757968817495,
+      "k2_lift_std": 0.26002043500915173
+    },
+    "tiny_classifier": {
+      "latency_us": 3.4594095104694134,
+      "k1_quality_lift": 0.06207984550526574,
+      "k2_quality_lift": 0.04572285630899881,
+      "k1_quality_capture": 0.36593106069022824,
+      "k2_quality_capture": 0.3582053310524224,
+      "k1_lift_std": 0.15319150638360776,
+      "k2_lift_std": 0.07519964538671846
+    }
+  },
+  "6.7:1 (N=100)": {
+    "premerge": {
+      "latency_us": 0.04080549797436106,
+      "k1_quality_lift": 0.0003887770361531478,
+      "k2_quality_lift": 0.00039674551421185,
+      "k1_quality_capture": 0.22399756491828562,
+      "k2_quality_capture": 0.2273234090387617,
+      "k1_lift_std": 0.00018420506801130655,
+      "k2_lift_std": 0.00018890854238436455
+    },
+    "hash_ring": {
+      "latency_us": 0.8443834872196021,
+      "k1_quality_lift": 3.3724178913843834e-05,
+      "k2_quality_lift": 4.039857744845358e-05,
+      "k1_quality_capture": 0.22372486634990577,
+      "k2_quality_capture": 0.22705001813931336,
+      "k1_lift_std": 0.008600724376991754,
+      "k2_lift_std": 0.008782927486484817
+    },
+    "embedding_sim": {
+      "latency_us": 3.5034160132454417,
+      "k1_quality_lift": 0.010072382051563383,
+      "k2_quality_lift": 0.007199337134541651,
+      "k1_quality_capture": 0.23154285310661815,
+      "k2_quality_capture": 0.23259822741486266,
+      "k1_lift_std": 0.06738039199061605,
+      "k2_lift_std": 0.06844378169912729
+    },
+    "hierarchical": {
+      "latency_us": 3.9147549882727617,
+      "k1_quality_lift": -0.0155917876541634,
+      "k2_quality_lift": -0.015892946686330702,
+      "k1_quality_capture": 0.21159979159309047,
+      "k2_quality_capture": 0.2147404095896804,
+      "k1_lift_std": 0.038486778666074604,
+      "k2_lift_std": 0.03927755802923034
+    },
+    "tiny_classifier": {
+      "latency_us": 3.5313889966346323,
+      "k1_quality_lift": 0.025859860921147157,
+      "k2_quality_lift": 0.02436491195327224,
+      "k1_quality_capture": 0.2437932915920221,
+      "k2_quality_capture": 0.2458662096796167,
+      "k1_lift_std": 0.05245516350093904,
+      "k2_lift_std": 0.06598468674717826
+    }
+  }
+}

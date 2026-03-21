@@ -1,0 +1,32 @@
+{
+  "n_experts": 50,
+  "total_per_expert": 0.4771,
+  "training_cost": 0.085,
+  "non_training_overhead": 0.3921,
+  "overhead_ratio": 4.61,
+  "k1_pass": true,
+  "k1_threshold": 1.0,
+  "k2_pass": false,
+  "k2_threshold": 3.0,
+  "components": {
+    "Data generation (Groq API)": 0.35356,
+    "Training (pure, 300 steps)": 0.07083,
+    "Training (model loading)": 0.01417,
+    "Data transfer": 0.0,
+    "Orthogonality check": 0.0,
+    "GS projection": 0.0,
+    "Pre-merge composition": 0.0,
+    "Benchmark evaluation": 0.0136,
+    "Quality gate": 0.0,
+    "Setup (amortized)": 0.00176,
+    "GPU idle/waste": 0.0232
+  },
+  "scaling": {
+    "current_at_500": 0.455,
+    "8b_teacher": 0.119,
+    "a5000_gpu": 0.4,
+    "optimal": 0.061
+  },
+  "dominant_cost": "Data generation (Groq API)",
+  "dominant_pct": 74.1
+}

@@ -1,0 +1,540 @@
+{
+  "config": {
+    "n_corrections": 200,
+    "n_seeds": 10,
+    "delta_base": 0.02,
+    "delta_degen": 0.01,
+    "delta_wrong": 0.015,
+    "alpha": 0.7,
+    "domains": [
+      {
+        "name": "python_basics",
+        "type": "code_simple",
+        "difficulty_mean": 0.3,
+        "test_coverage": 0.95,
+        "is_code": true,
+        "initial_quality": 0.7
+      },
+      {
+        "name": "algorithm_design",
+        "type": "code_algo",
+        "difficulty_mean": 0.6,
+        "test_coverage": 0.8,
+        "is_code": true,
+        "initial_quality": 0.55
+      },
+      {
+        "name": "systems_programming",
+        "type": "code_systems",
+        "difficulty_mean": 0.75,
+        "test_coverage": 0.6,
+        "is_code": true,
+        "initial_quality": 0.5
+      },
+      {
+        "name": "creative_writing",
+        "type": "writing",
+        "difficulty_mean": 0.5,
+        "test_coverage": 0.0,
+        "is_code": false,
+        "initial_quality": 0.6
+      },
+      {
+        "name": "logical_reasoning",
+        "type": "reasoning",
+        "difficulty_mean": 0.65,
+        "test_coverage": 0.0,
+        "is_code": false,
+        "initial_quality": 0.55
+      },
+      {
+        "name": "medical_qa",
+        "type": "medical",
+        "difficulty_mean": 0.7,
+        "test_coverage": 0.0,
+        "is_code": false,
+        "initial_quality": 0.5
+      }
+    ],
+    "sources": [
+      {
+        "name": "human",
+        "base_accuracy": 0.97,
+        "hard_accuracy": 0.9,
+        "degeneracy_rate": 0.02,
+        "cost": 2.0
+      },
+      {
+        "name": "teacher_70b",
+        "base_accuracy": 0.92,
+        "hard_accuracy": 0.7,
+        "degeneracy_rate": 0.08,
+        "cost": 0.001
+      },
+      {
+        "name": "execution",
+        "base_accuracy": 0.99,
+        "hard_accuracy": 0.85,
+        "degeneracy_rate": 0.03,
+        "cost": 0.0001
+      }
+    ]
+  },
+  "aggregates": {
+    "per_domain": {
+      "human_python_basics": {
+        "source": "human",
+        "domain": "python_basics",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.2852347113563233,
+        "quality_delta_std": 0.01213003229284348,
+        "accuracy_mean": 0.9424999999999999,
+        "accuracy_std": 0.011236102527122087,
+        "error_rate_mean": 0.037,
+        "degeneracy_rate_mean": 0.0205,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0007130867783908081
+      },
+      "teacher_70b_python_basics": {
+        "source": "teacher_70b",
+        "domain": "python_basics",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.2298721827496255,
+        "quality_delta_std": 0.02764394309370721,
+        "accuracy_mean": 0.804,
+        "accuracy_std": 0.026343879744638966,
+        "error_rate_mean": 0.1295,
+        "degeneracy_rate_mean": 0.0665,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.1493609137481275
+      },
+      "execution_python_basics": {
+        "source": "execution",
+        "domain": "python_basics",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.291531624605485,
+        "quality_delta_std": 0.008134555850962366,
+        "accuracy_mean": 0.96,
+        "accuracy_std": 0.013416407864998729,
+        "error_rate_mean": 0.027000000000000003,
+        "degeneracy_rate_mean": 0.013000000000000001,
+        "total_cost_mean": 0.019999999999999997,
+        "eir_mean": 14.576581230274252
+      },
+      "human_algorithm_design": {
+        "source": "human",
+        "domain": "algorithm_design",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.425294561370968,
+        "quality_delta_std": 0.015941984603595076,
+        "accuracy_mean": 0.9265000000000001,
+        "accuracy_std": 0.017182840277439555,
+        "error_rate_mean": 0.058499999999999996,
+        "degeneracy_rate_mean": 0.015000000000000003,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0010632364034274201
+      },
+      "teacher_70b_algorithm_design": {
+        "source": "teacher_70b",
+        "domain": "algorithm_design",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.3001689837329711,
+        "quality_delta_std": 0.03216704219330689,
+        "accuracy_mean": 0.7375,
+        "accuracy_std": 0.03295830699535402,
+        "error_rate_mean": 0.1975,
+        "degeneracy_rate_mean": 0.065,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.5008449186648554
+      },
+      "execution_algorithm_design": {
+        "source": "execution",
+        "domain": "algorithm_design",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.4056605826819951,
+        "quality_delta_std": 0.020062065203815933,
+        "accuracy_mean": 0.883,
+        "accuracy_std": 0.026758176320519324,
+        "error_rate_mean": 0.06350000000000001,
+        "degeneracy_rate_mean": 0.053500000000000006,
+        "total_cost_mean": 0.019999999999999997,
+        "eir_mean": 20.283029134099756
+      },
+      "human_systems_programming": {
+        "source": "human",
+        "domain": "systems_programming",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.47454196780435687,
+        "quality_delta_std": 0.012168533776083793,
+        "accuracy_mean": 0.9015000000000001,
+        "accuracy_std": 0.01817278184538624,
+        "error_rate_mean": 0.0745,
+        "degeneracy_rate_mean": 0.024,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0011863549195108923
+      },
+      "teacher_70b_systems_programming": {
+        "source": "teacher_70b",
+        "domain": "systems_programming",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.2979885803853667,
+        "quality_delta_std": 0.05048725252942269,
+        "accuracy_mean": 0.6969999999999998,
+        "accuracy_std": 0.02740437921208943,
+        "error_rate_mean": 0.24050000000000002,
+        "degeneracy_rate_mean": 0.06250000000000001,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.4899429019268333
+      },
+      "execution_systems_programming": {
+        "source": "execution",
+        "domain": "systems_programming",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.42394527034398344,
+        "quality_delta_std": 0.03680994779715027,
+        "accuracy_mean": 0.7985,
+        "accuracy_std": 0.024191940806805874,
+        "error_rate_mean": 0.0885,
+        "degeneracy_rate_mean": 0.11300000000000002,
+        "total_cost_mean": 0.019999999999999997,
+        "eir_mean": 21.19726351719917
+      },
+      "human_creative_writing": {
+        "source": "human",
+        "domain": "creative_writing",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.3786716201826002,
+        "quality_delta_std": 0.01022228011424232,
+        "accuracy_mean": 0.917,
+        "accuracy_std": 0.023685438564654018,
+        "error_rate_mean": 0.05900000000000001,
+        "degeneracy_rate_mean": 0.024,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0009466790504565004
+      },
+      "teacher_70b_creative_writing": {
+        "source": "teacher_70b",
+        "domain": "creative_writing",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.28669619919444067,
+        "quality_delta_std": 0.03402625328203917,
+        "accuracy_mean": 0.766,
+        "accuracy_std": 0.024979991993593596,
+        "error_rate_mean": 0.16599999999999998,
+        "degeneracy_rate_mean": 0.06800000000000002,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.4334809959722032
+      },
+      "execution_creative_writing": {
+        "source": "execution",
+        "domain": "creative_writing",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.0,
+        "quality_delta_std": 0.0,
+        "accuracy_mean": 0.0,
+        "accuracy_std": 0.0,
+        "error_rate_mean": 0.0,
+        "degeneracy_rate_mean": 0.0,
+        "total_cost_mean": 0.0,
+        "eir_mean": 0.0
+      },
+      "human_logical_reasoning": {
+        "source": "human",
+        "domain": "logical_reasoning",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.4258679877571259,
+        "quality_delta_std": 0.016226634889989166,
+        "accuracy_mean": 0.9184999999999999,
+        "accuracy_std": 0.020862646045025055,
+        "error_rate_mean": 0.06550000000000002,
+        "degeneracy_rate_mean": 0.015999999999999997,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0010646699693928146
+      },
+      "teacher_70b_logical_reasoning": {
+        "source": "teacher_70b",
+        "domain": "logical_reasoning",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.27093769343025303,
+        "quality_delta_std": 0.05252499439127757,
+        "accuracy_mean": 0.7210000000000001,
+        "accuracy_std": 0.02799999999999999,
+        "error_rate_mean": 0.2205,
+        "degeneracy_rate_mean": 0.058499999999999996,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.3546884671512651
+      },
+      "execution_logical_reasoning": {
+        "source": "execution",
+        "domain": "logical_reasoning",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.0,
+        "quality_delta_std": 0.0,
+        "accuracy_mean": 0.0,
+        "accuracy_std": 0.0,
+        "error_rate_mean": 0.0,
+        "degeneracy_rate_mean": 0.0,
+        "total_cost_mean": 0.0,
+        "eir_mean": 0.0
+      },
+      "human_medical_qa": {
+        "source": "human",
+        "domain": "medical_qa",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.4738896685990291,
+        "quality_delta_std": 0.013802611928522604,
+        "accuracy_mean": 0.9129999999999999,
+        "accuracy_std": 0.011445523142259608,
+        "error_rate_mean": 0.06899999999999999,
+        "degeneracy_rate_mean": 0.018,
+        "total_cost_mean": 400.0,
+        "eir_mean": 0.0011847241714975725
+      },
+      "teacher_70b_medical_qa": {
+        "source": "teacher_70b",
+        "domain": "medical_qa",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.3300389830007698,
+        "quality_delta_std": 0.04726916844021232,
+        "accuracy_mean": 0.713,
+        "accuracy_std": 0.036,
+        "error_rate_mean": 0.2205,
+        "degeneracy_rate_mean": 0.06650000000000002,
+        "total_cost_mean": 0.2,
+        "eir_mean": 1.6501949150038489
+      },
+      "execution_medical_qa": {
+        "source": "execution",
+        "domain": "medical_qa",
+        "n_seeds": 10,
+        "quality_delta_mean": 0.0,
+        "quality_delta_std": 0.0,
+        "accuracy_mean": 0.0,
+        "accuracy_std": 0.0,
+        "error_rate_mean": 0.0,
+        "degeneracy_rate_mean": 0.0,
+        "total_cost_mean": 0.0,
+        "eir_mean": 0.0
+      }
+    },
+    "per_source": {
+      "human": {
+        "accuracy_mean": 0.9198333333333335,
+        "accuracy_std": 0.02171724864914726,
+        "error_rate_mean": 0.060583333333333336,
+        "degeneracy_rate_mean": 0.01958333333333333,
+        "quality_delta_mean": 0.4105834195117339,
+        "cost_mean": 400.0,
+        "n_applicable_domains": 6
+      },
+      "teacher_70b": {
+        "accuracy_mean": 0.73975,
+        "accuracy_std": 0.04646167775705049,
+        "error_rate_mean": 0.19575,
+        "degeneracy_rate_mean": 0.06450000000000002,
+        "quality_delta_mean": 0.2859504370822377,
+        "cost_mean": 0.19999999999999993,
+        "n_applicable_domains": 6
+      },
+      "execution": {
+        "accuracy_mean": 0.8805,
+        "accuracy_std": 0.06959825189375568,
+        "error_rate_mean": 0.05966666666666666,
+        "degeneracy_rate_mean": 0.059833333333333336,
+        "quality_delta_mean": 0.37371249254382116,
+        "cost_mean": 0.020000000000000004,
+        "n_applicable_domains": 3
+      }
+    }
+  },
+  "kill_criteria": {
+    "K1_teacher_error_rate_avg": 0.19575,
+    "K1_threshold": 0.2,
+    "K1_killed": false,
+    "K1_per_domain": {
+      "python_basics": 0.1295,
+      "algorithm_design": 0.1975,
+      "systems_programming": 0.24050000000000002,
+      "creative_writing": 0.16599999999999998,
+      "logical_reasoning": 0.2205,
+      "medical_qa": 0.2205
+    },
+    "K1_worst_domain": "systems_programming",
+    "K1_worst_error_rate": 0.24050000000000002,
+    "K2_exec_degeneracy_per_domain": {
+      "python_basics": 0.013000000000000001,
+      "algorithm_design": 0.053500000000000006,
+      "systems_programming": 0.11300000000000002
+    },
+    "K2_worst_domain": "systems_programming",
+    "K2_worst_degeneracy": 0.11300000000000002,
+    "K2_threshold": 0.1,
+    "K2_killed": true
+  },
+  "decision_tree": {
+    "per_domain_decisions": {
+      "python_basics": {
+        "optimal_source": "execution",
+        "reason": "highest EIR (14.6 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.2852347113563233,
+            "cost": 400.0,
+            "eir": 0.0007130867783908081,
+            "accuracy": 0.9424999999999999
+          },
+          "teacher_70b": {
+            "quality_delta": 0.2298721827496255,
+            "cost": 0.2,
+            "eir": 1.1493609137481275,
+            "accuracy": 0.804
+          },
+          "execution": {
+            "quality_delta": 0.291531624605485,
+            "cost": 0.019999999999999997,
+            "eir": 14.576581230274252,
+            "accuracy": 0.96
+          }
+        },
+        "domain_type": "code_simple",
+        "is_code": true
+      },
+      "algorithm_design": {
+        "optimal_source": "execution",
+        "reason": "highest EIR (20.3 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.425294561370968,
+            "cost": 400.0,
+            "eir": 0.0010632364034274201,
+            "accuracy": 0.9265000000000001
+          },
+          "teacher_70b": {
+            "quality_delta": 0.3001689837329711,
+            "cost": 0.2,
+            "eir": 1.5008449186648554,
+            "accuracy": 0.7375
+          },
+          "execution": {
+            "quality_delta": 0.4056605826819951,
+            "cost": 0.019999999999999997,
+            "eir": 20.283029134099756,
+            "accuracy": 0.883
+          }
+        },
+        "domain_type": "code_algo",
+        "is_code": true
+      },
+      "systems_programming": {
+        "optimal_source": "execution",
+        "reason": "highest EIR (21.2 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.47454196780435687,
+            "cost": 400.0,
+            "eir": 0.0011863549195108923,
+            "accuracy": 0.9015000000000001
+          },
+          "teacher_70b": {
+            "quality_delta": 0.2979885803853667,
+            "cost": 0.2,
+            "eir": 1.4899429019268333,
+            "accuracy": 0.6969999999999998
+          },
+          "execution": {
+            "quality_delta": 0.42394527034398344,
+            "cost": 0.019999999999999997,
+            "eir": 21.19726351719917,
+            "accuracy": 0.7985
+          }
+        },
+        "domain_type": "code_systems",
+        "is_code": true
+      },
+      "creative_writing": {
+        "optimal_source": "teacher_70b",
+        "reason": "highest EIR (1.4 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.3786716201826002,
+            "cost": 400.0,
+            "eir": 0.0009466790504565004,
+            "accuracy": 0.917
+          },
+          "teacher_70b": {
+            "quality_delta": 0.28669619919444067,
+            "cost": 0.2,
+            "eir": 1.4334809959722032,
+            "accuracy": 0.766
+          },
+          "execution": {
+            "quality_delta": 0.0,
+            "cost": 0.0,
+            "eir": 0.0,
+            "accuracy": 0.0
+          }
+        },
+        "domain_type": "writing",
+        "is_code": false
+      },
+      "logical_reasoning": {
+        "optimal_source": "teacher_70b",
+        "reason": "highest EIR (1.4 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.4258679877571259,
+            "cost": 400.0,
+            "eir": 0.0010646699693928146,
+            "accuracy": 0.9184999999999999
+          },
+          "teacher_70b": {
+            "quality_delta": 0.27093769343025303,
+            "cost": 0.2,
+            "eir": 1.3546884671512651,
+            "accuracy": 0.7210000000000001
+          },
+          "execution": {
+            "quality_delta": 0.0,
+            "cost": 0.0,
+            "eir": 0.0,
+            "accuracy": 0.0
+          }
+        },
+        "domain_type": "reasoning",
+        "is_code": false
+      },
+      "medical_qa": {
+        "optimal_source": "teacher_70b",
+        "reason": "highest EIR (1.7 quality/dollar)",
+        "all_sources": {
+          "human": {
+            "quality_delta": 0.4738896685990291,
+            "cost": 400.0,
+            "eir": 0.0011847241714975725,
+            "accuracy": 0.9129999999999999
+          },
+          "teacher_70b": {
+            "quality_delta": 0.3300389830007698,
+            "cost": 0.2,
+            "eir": 1.6501949150038489,
+            "accuracy": 0.713
+          },
+          "execution": {
+            "quality_delta": 0.0,
+            "cost": 0.0,
+            "eir": 0.0,
+            "accuracy": 0.0
+          }
+        },
+        "domain_type": "medical",
+        "is_code": false
+      }
+    },
+    "routing_rules": {
+      "code_with_good_tests": "execution (coverage > 0.8)",
+      "code_with_poor_tests": "teacher_70b (coverage < 0.6: degeneracy risk)",
+      "non_code": "teacher_70b (only automated option)",
+      "critical_accuracy": "human (when >95% accuracy required)"
+    }
+  }
+}

@@ -1,0 +1,499 @@
+{
+  "config": {
+    "n_seeds": 3,
+    "n_train_per_domain": 300,
+    "n_test_per_domain": 100,
+    "d_embed": 64,
+    "vocab_size": 32,
+    "context_len": 16,
+    "lsh_n_planes": 32,
+    "n_domains": 15,
+    "n_clusters": 3,
+    "feature_type": "char_ngram_1_2_3"
+  },
+  "seed_results": [
+    {
+      "seed": 42,
+      "results": {
+        "hash_ring": {
+          "domain_accuracy": 0.07133333333333333,
+          "cluster_accuracy": 0.32866666666666666,
+          "latency_us": 2.1280129750569663,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.068,
+              "cluster_acc": 0.332
+            },
+            "reasoning": {
+              "domain_acc": 0.064,
+              "cluster_acc": 0.332
+            },
+            "knowledge": {
+              "domain_acc": 0.082,
+              "cluster_acc": 0.322
+            }
+          }
+        },
+        "keyword_freq": {
+          "domain_accuracy": 0.284,
+          "cluster_accuracy": 0.948,
+          "latency_us": 5.764404932657878,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.274,
+              "cluster_acc": 0.968
+            },
+            "reasoning": {
+              "domain_acc": 0.25,
+              "cluster_acc": 0.888
+            },
+            "knowledge": {
+              "domain_acc": 0.328,
+              "cluster_acc": 0.988
+            }
+          }
+        },
+        "cosine_sim": {
+          "domain_accuracy": 0.2673333333333333,
+          "cluster_accuracy": 0.9146666666666666,
+          "latency_us": 0.18726030985514325,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.286,
+              "cluster_acc": 0.95
+            },
+            "reasoning": {
+              "domain_acc": 0.238,
+              "cluster_acc": 0.842
+            },
+            "knowledge": {
+              "domain_acc": 0.278,
+              "cluster_acc": 0.952
+            }
+          }
+        },
+        "lsh_partition": {
+          "domain_accuracy": 0.21066666666666667,
+          "cluster_accuracy": 0.7866666666666666,
+          "latency_us": 0.2947807312011719,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.234,
+              "cluster_acc": 0.894
+            },
+            "reasoning": {
+              "domain_acc": 0.158,
+              "cluster_acc": 0.584
+            },
+            "knowledge": {
+              "domain_acc": 0.24,
+              "cluster_acc": 0.882
+            }
+          }
+        },
+        "utterance_1nn": {
+          "domain_accuracy": 0.22133333333333333,
+          "cluster_accuracy": 0.9646666666666667,
+          "latency_us": 1.787079175313314,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.218,
+              "cluster_acc": 0.944
+            },
+            "reasoning": {
+              "domain_acc": 0.26,
+              "cluster_acc": 0.978
+            },
+            "knowledge": {
+              "domain_acc": 0.186,
+              "cluster_acc": 0.972
+            }
+          }
+        },
+        "utterance_agg": {
+          "domain_accuracy": 0.246,
+          "cluster_accuracy": 0.916,
+          "latency_us": 2.0437796910603843,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.252,
+              "cluster_acc": 0.896
+            },
+            "reasoning": {
+              "domain_acc": 0.24,
+              "cluster_acc": 0.872
+            },
+            "knowledge": {
+              "domain_acc": 0.246,
+              "cluster_acc": 0.98
+            }
+          }
+        },
+        "oracle": {
+          "domain_accuracy": 1.0,
+          "cluster_accuracy": 1.0,
+          "latency_us": 0.0,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "reasoning": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "knowledge": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 142,
+      "results": {
+        "hash_ring": {
+          "domain_accuracy": 0.066,
+          "cluster_accuracy": 0.32266666666666666,
+          "latency_us": 2.0575364430745444,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.09,
+              "cluster_acc": 0.332
+            },
+            "reasoning": {
+              "domain_acc": 0.064,
+              "cluster_acc": 0.33
+            },
+            "knowledge": {
+              "domain_acc": 0.044,
+              "cluster_acc": 0.306
+            }
+          }
+        },
+        "keyword_freq": {
+          "domain_accuracy": 0.27266666666666667,
+          "cluster_accuracy": 0.9086666666666666,
+          "latency_us": 5.729468663533528,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.216,
+              "cluster_acc": 0.768
+            },
+            "reasoning": {
+              "domain_acc": 0.316,
+              "cluster_acc": 0.97
+            },
+            "knowledge": {
+              "domain_acc": 0.286,
+              "cluster_acc": 0.988
+            }
+          }
+        },
+        "cosine_sim": {
+          "domain_accuracy": 0.254,
+          "cluster_accuracy": 0.9366666666666666,
+          "latency_us": 0.1772308349609375,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.202,
+              "cluster_acc": 0.876
+            },
+            "reasoning": {
+              "domain_acc": 0.282,
+              "cluster_acc": 0.976
+            },
+            "knowledge": {
+              "domain_acc": 0.278,
+              "cluster_acc": 0.958
+            }
+          }
+        },
+        "lsh_partition": {
+          "domain_accuracy": 0.178,
+          "cluster_accuracy": 0.824,
+          "latency_us": 0.3317578633626302,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.162,
+              "cluster_acc": 0.724
+            },
+            "reasoning": {
+              "domain_acc": 0.168,
+              "cluster_acc": 0.794
+            },
+            "knowledge": {
+              "domain_acc": 0.204,
+              "cluster_acc": 0.954
+            }
+          }
+        },
+        "utterance_1nn": {
+          "domain_accuracy": 0.22333333333333333,
+          "cluster_accuracy": 0.974,
+          "latency_us": 1.7639684677124023,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.218,
+              "cluster_acc": 0.978
+            },
+            "reasoning": {
+              "domain_acc": 0.238,
+              "cluster_acc": 0.984
+            },
+            "knowledge": {
+              "domain_acc": 0.214,
+              "cluster_acc": 0.96
+            }
+          }
+        },
+        "utterance_agg": {
+          "domain_accuracy": 0.20933333333333334,
+          "cluster_accuracy": 0.9386666666666666,
+          "latency_us": 1.9022734959920247,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.176,
+              "cluster_acc": 0.896
+            },
+            "reasoning": {
+              "domain_acc": 0.244,
+              "cluster_acc": 0.986
+            },
+            "knowledge": {
+              "domain_acc": 0.208,
+              "cluster_acc": 0.934
+            }
+          }
+        },
+        "oracle": {
+          "domain_accuracy": 1.0,
+          "cluster_accuracy": 1.0,
+          "latency_us": 0.0,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "reasoning": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "knowledge": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 242,
+      "results": {
+        "hash_ring": {
+          "domain_accuracy": 0.07,
+          "cluster_accuracy": 0.34,
+          "latency_us": 2.064339319864909,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.07,
+              "cluster_acc": 0.356
+            },
+            "reasoning": {
+              "domain_acc": 0.076,
+              "cluster_acc": 0.332
+            },
+            "knowledge": {
+              "domain_acc": 0.064,
+              "cluster_acc": 0.332
+            }
+          }
+        },
+        "keyword_freq": {
+          "domain_accuracy": 0.262,
+          "cluster_accuracy": 0.9486666666666667,
+          "latency_us": 5.725272496541342,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.328,
+              "cluster_acc": 0.996
+            },
+            "reasoning": {
+              "domain_acc": 0.204,
+              "cluster_acc": 0.868
+            },
+            "knowledge": {
+              "domain_acc": 0.254,
+              "cluster_acc": 0.982
+            }
+          }
+        },
+        "cosine_sim": {
+          "domain_accuracy": 0.242,
+          "cluster_accuracy": 0.9613333333333334,
+          "latency_us": 0.20323912302652994,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.268,
+              "cluster_acc": 0.948
+            },
+            "reasoning": {
+              "domain_acc": 0.216,
+              "cluster_acc": 0.968
+            },
+            "knowledge": {
+              "domain_acc": 0.242,
+              "cluster_acc": 0.968
+            }
+          }
+        },
+        "lsh_partition": {
+          "domain_accuracy": 0.19933333333333333,
+          "cluster_accuracy": 0.8533333333333334,
+          "latency_us": 0.3577884038289388,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.17,
+              "cluster_acc": 0.67
+            },
+            "reasoning": {
+              "domain_acc": 0.222,
+              "cluster_acc": 0.946
+            },
+            "knowledge": {
+              "domain_acc": 0.206,
+              "cluster_acc": 0.944
+            }
+          }
+        },
+        "utterance_1nn": {
+          "domain_accuracy": 0.222,
+          "cluster_accuracy": 0.9753333333333334,
+          "latency_us": 1.70714537302653,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.216,
+              "cluster_acc": 0.962
+            },
+            "reasoning": {
+              "domain_acc": 0.224,
+              "cluster_acc": 0.986
+            },
+            "knowledge": {
+              "domain_acc": 0.226,
+              "cluster_acc": 0.978
+            }
+          }
+        },
+        "utterance_agg": {
+          "domain_accuracy": 0.222,
+          "cluster_accuracy": 0.95,
+          "latency_us": 1.9362513224283855,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 0.23,
+              "cluster_acc": 0.908
+            },
+            "reasoning": {
+              "domain_acc": 0.21,
+              "cluster_acc": 0.986
+            },
+            "knowledge": {
+              "domain_acc": 0.226,
+              "cluster_acc": 0.956
+            }
+          }
+        },
+        "oracle": {
+          "domain_accuracy": 1.0,
+          "cluster_accuracy": 1.0,
+          "latency_us": 0.0,
+          "per_cluster": {
+            "code": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "reasoning": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            },
+            "knowledge": {
+              "domain_acc": 1.0,
+              "cluster_acc": 1.0
+            }
+          }
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "hash_ring": {
+      "domain_acc_mean": 0.06911111111111111,
+      "domain_acc_std": 0.002266230894930126,
+      "cluster_acc_mean": 0.3304444444444445,
+      "cluster_acc_std": 0.007187094057242783,
+      "latency_us_mean": 2.0832962459988065,
+      "latency_us_std": 0.03174123686312877
+    },
+    "keyword_freq": {
+      "domain_acc_mean": 0.2728888888888889,
+      "domain_acc_std": 0.008982836858403424,
+      "cluster_acc_mean": 0.935111111111111,
+      "cluster_acc_std": 0.01870102657775045,
+      "latency_us_mean": 5.73971536424425,
+      "latency_us_std": 0.01754200759500868
+    },
+    "cosine_sim": {
+      "domain_acc_mean": 0.2544444444444444,
+      "domain_acc_std": 0.010347063757175829,
+      "cluster_acc_mean": 0.9375555555555556,
+      "cluster_acc_std": 0.019061952279117667,
+      "latency_us_mean": 0.18924342261420357,
+      "latency_us_std": 0.010710036233585468
+    },
+    "lsh_partition": {
+      "domain_acc_mean": 0.19599999999999998,
+      "domain_acc_std": 0.013542799097948973,
+      "cluster_acc_mean": 0.8213333333333334,
+      "cluster_acc_std": 0.027281794227951697,
+      "latency_us_mean": 0.32810899946424693,
+      "latency_us_std": 0.025851851749325493
+    },
+    "utterance_1nn": {
+      "domain_acc_mean": 0.2222222222222222,
+      "domain_acc_std": 0.0008314794192830979,
+      "cluster_acc_mean": 0.9713333333333334,
+      "cluster_acc_std": 0.004745368112013924,
+      "latency_us_mean": 1.7527310053507488,
+      "latency_us_std": 0.03358634253435813
+    },
+    "utterance_agg": {
+      "domain_acc_mean": 0.22577777777777777,
+      "domain_acc_std": 0.015205587017383107,
+      "cluster_acc_mean": 0.934888888888889,
+      "cluster_acc_std": 0.014135150127812635,
+      "latency_us_mean": 1.9607681698269317,
+      "latency_us_std": 0.0603147724605609
+    },
+    "oracle": {
+      "domain_acc_mean": 1.0,
+      "domain_acc_std": 0.0,
+      "cluster_acc_mean": 1.0,
+      "cluster_acc_std": 0.0,
+      "latency_us_mean": 0.0,
+      "latency_us_std": 0.0
+    }
+  },
+  "kill_criteria": {
+    "k1_accuracy_pass": false,
+    "k1_best_strategy": "keyword_freq",
+    "k1_best_accuracy": 0.2728888888888889,
+    "k2_latency_pass": true,
+    "k2_best_latency_us": 5.73971536424425,
+    "k3_overhead_pass": true,
+    "k3_overhead_pct": 175.51124211297304,
+    "overall_kill": true
+  },
+  "elapsed_seconds": 5.435567140579224
+}

@@ -1,0 +1,192 @@
+{
+  "phase1_aggregate": {
+    "mean_attn_variation": 48.54152821432081,
+    "mean_ffn_variation": 46.56340293680738,
+    "attn_ffn_ratio": 1.0426505047843033,
+    "ratio_std": 0.010068226759423675,
+    "seeds": [
+      42,
+      7,
+      123
+    ]
+  },
+  "phase2": {
+    "attn_slope": 61.93916398453834,
+    "attn_r2": 0.881754774599542,
+    "ffn_slope": 61.574510298972214,
+    "ffn_r2": 0.88371922559499,
+    "sweep_results": [
+      {
+        "cos_val": 0.01,
+        "layer_type": "attn",
+        "actual_cos": 0.01209275242005256,
+        "layer_variation": 0.24471951268605352,
+        "layer_norm_cv": 3.5714411203013213e-06,
+        "flat_variation": 0.21616101392940568,
+        "flat_norm_cv": 4.085323825341882e-06
+      },
+      {
+        "cos_val": 0.01,
+        "layer_type": "ffn",
+        "actual_cos": 0.009148593099963517,
+        "layer_variation": 0.29818260732786817,
+        "layer_norm_cv": 2.457766448213076e-05,
+        "flat_variation": 0.21616101392940568,
+        "flat_norm_cv": 4.085323825341882e-06
+      },
+      {
+        "cos_val": 0.05,
+        "layer_type": "attn",
+        "actual_cos": 0.052008196766717106,
+        "layer_variation": 2.1120360080044587,
+        "layer_norm_cv": 0.00010359689816595333,
+        "flat_variation": 1.2531170723955376,
+        "flat_norm_cv": 5.1393552449088064e-05
+      },
+      {
+        "cos_val": 0.05,
+        "layer_type": "ffn",
+        "actual_cos": 0.04918299337875287,
+        "layer_variation": 2.082251595529505,
+        "layer_norm_cv": 0.00019804145682423462,
+        "flat_variation": 0.6464185355537944,
+        "flat_norm_cv": 1.9293647415804587e-05
+      },
+      {
+        "cos_val": 0.1,
+        "layer_type": "attn",
+        "actual_cos": 0.1019025022000478,
+        "layer_variation": 6.075526000654474,
+        "layer_norm_cv": 0.0005282446167463493,
+        "flat_variation": 3.4368804794891794,
+        "flat_norm_cv": 0.000216117867119904
+      },
+      {
+        "cos_val": 0.1,
+        "layer_type": "ffn",
+        "actual_cos": 0.09922599372723959,
+        "layer_variation": 5.932726450227587,
+        "layer_norm_cv": 0.0008327120588434212,
+        "flat_variation": 1.4287518447259173,
+        "flat_norm_cv": 6.098029895305327e-05
+      },
+      {
+        "cos_val": 0.2,
+        "layer_type": "attn",
+        "actual_cos": 0.20169111306670914,
+        "layer_variation": 15.681649816748756,
+        "layer_norm_cv": 0.0024144431918130134,
+        "flat_variation": 9.283614307055165,
+        "flat_norm_cv": 0.0009119070668078717
+      },
+      {
+        "cos_val": 0.2,
+        "layer_type": "ffn",
+        "actual_cos": 0.19931199442421296,
+        "layer_variation": 15.24623062214604,
+        "layer_norm_cv": 0.0032409557359198487,
+        "flat_variation": 3.7105683078867635,
+        "flat_norm_cv": 0.00023380406234001818
+      },
+      {
+        "cos_val": 0.3,
+        "layer_type": "attn",
+        "actual_cos": 0.3014797239333705,
+        "layer_variation": 25.330881953288188,
+        "layer_norm_cv": 0.00547536332413159,
+        "flat_variation": 15.727517578479544,
+        "flat_norm_cv": 0.0020276115659089216
+      },
+      {
+        "cos_val": 0.3,
+        "layer_type": "ffn",
+        "actual_cos": 0.29939799512118626,
+        "layer_variation": 24.88282505125946,
+        "layer_norm_cv": 0.006725242843697843,
+        "flat_variation": 6.543626112316636,
+        "flat_norm_cv": 0.000532309674609477
+      },
+      {
+        "cos_val": 0.5,
+        "layer_type": "attn",
+        "actual_cos": 0.5010569456666932,
+        "layer_variation": 41.86058076879203,
+        "layer_norm_cv": 0.01391087860686966,
+        "flat_variation": 28.371976686146706,
+        "flat_norm_cv": 0.005251280386698349
+      },
+      {
+        "cos_val": 0.5,
+        "layer_type": "ffn",
+        "actual_cos": 0.4995699965151332,
+        "layer_variation": 41.48749329235814,
+        "layer_norm_cv": 0.015699545898173902,
+        "flat_variation": 12.862685076934055,
+        "flat_norm_cv": 0.0015196624650803791
+      },
+      {
+        "cos_val": 0.7,
+        "layer_type": "attn",
+        "actual_cos": 0.7006341674000159,
+        "layer_variation": 52.02466775174124,
+        "layer_norm_cv": 0.022786612759642836,
+        "flat_variation": 39.34005499602973,
+        "flat_norm_cv": 0.00985341349677007
+      },
+      {
+        "cos_val": 0.7,
+        "layer_type": "ffn",
+        "actual_cos": 0.69974199790908,
+        "layer_variation": 51.70057141237854,
+        "layer_norm_cv": 0.024977409297047462,
+        "flat_variation": 19.43998656040724,
+        "flat_norm_cv": 0.0030965248545384958
+      },
+      {
+        "cos_val": 0.85,
+        "layer_type": "attn",
+        "actual_cos": 0.850317083700008,
+        "layer_variation": 49.44099625982895,
+        "layer_norm_cv": 0.02521937223269606,
+        "flat_variation": 46.01362875063104,
+        "flat_norm_cv": 0.015035369270009435
+      },
+      {
+        "cos_val": 0.85,
+        "layer_type": "ffn",
+        "actual_cos": 0.84987099895454,
+        "layer_variation": 49.17995220784932,
+        "layer_norm_cv": 0.02744959170222474,
+        "flat_variation": 24.30647789375633,
+        "flat_norm_cv": 0.004763124296315181
+      },
+      {
+        "cos_val": 0.9,
+        "layer_type": "attn",
+        "actual_cos": 0.9002113891333386,
+        "layer_variation": 43.219304484486756,
+        "layer_norm_cv": 0.02302581275958768,
+        "flat_variation": 47.857357402216095,
+        "flat_norm_cv": 0.017399327401839134
+      },
+      {
+        "cos_val": 0.9,
+        "layer_type": "ffn",
+        "actual_cos": 0.8999139993030268,
+        "layer_variation": 43.00434545349538,
+        "layer_norm_cv": 0.025041210919265523,
+        "flat_variation": 25.89008031753275,
+        "flat_norm_cv": 0.005430649539050862
+      }
+    ]
+  },
+  "phase3": {
+    "divergence_cos": 0.9747355328243382,
+    "relative_l2_diff": 22.40233831489577,
+    "flat_variation": 52.31649352798875,
+    "layerwise_variation": 47.48577878357103
+  },
+  "k1_killed": false,
+  "k2_killed": true,
+  "overall": "KILLED"
+}

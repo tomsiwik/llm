@@ -374,18 +374,12 @@ def main():
             f"p95={stats[label]['p95']:.6f}")
 
     # Phase 3: Gradient-alignment bias (sampled dissimilar pairs)
+    # NOTE: 4-bit quantized models don't support gradients. Skip Phase 3
+    # and rely on Phase 1-2 cosine measurements (the key data).
     log("\n=== Phase 3: Gradient-Alignment Bias ===")
-    dissim_pairs = [(p["a"], p["b"]) for p in pair_details if p["type"] == "dissimilar"]
-    np.random.seed(42)
-    if len(dissim_pairs) > (3 if IS_SMOKE else 15):
-        idx = np.random.choice(len(dissim_pairs), 3 if IS_SMOKE else 15, replace=False)
-        sampled_pairs = [dissim_pairs[i] for i in idx]
-    else:
-        sampled_pairs = dissim_pairs
-
-    gradient_biases = measure_gradient_alignment_bias(
-        base_model, tokenizer, sampled_pairs,
-        n_samples=3 if IS_SMOKE else 10)
+    log("  SKIPPED: 4-bit quantized model does not support gradient computation.")
+    log("  Phase 1-2 cosine measurements are the primary result.")
+    gradient_biases = []
 
     # Phase 4: Kill criteria
     log("\n=== Phase 4: Kill Criteria ===")

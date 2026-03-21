@@ -1,0 +1,697 @@
+{
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "config": {
+    "d": 32,
+    "H": 2,
+    "L": 2,
+    "n_train": 500,
+    "base_epochs": 15,
+    "expert_epochs": 20,
+    "n_tournament_rounds": 50
+  },
+  "per_comparison_accuracy": {
+    "values": [
+      0.9228,
+      0.8931,
+      0.932
+    ],
+    "mean": 0.9159666666666667,
+    "std": 0.016599665324604863
+  },
+  "kendall_tau": {
+    "values": [
+      -0.2,
+      0.4,
+      -0.4
+    ],
+    "mean": -0.06666666666666667,
+    "std": 0.33993463423951903
+  },
+  "pairwise_agreement": {
+    "values": [
+      0.4,
+      0.7,
+      0.3
+    ],
+    "mean": 0.46666666666666673,
+    "std": 0.16996731711975946
+  },
+  "overhead_pct": {
+    "values": [
+      98.4903098582443,
+      88.81245984863915,
+      87.69365825110138
+    ],
+    "mean": 91.66547598599495,
+    "std": 4.847452753183187
+  },
+  "k1_all_pass": true,
+  "k2_all_pass": true,
+  "k3_all_pass": false,
+  "overall": "KILLED",
+  "per_seed": [
+    {
+      "seed": 42,
+      "config": {
+        "d": 32,
+        "H": 2,
+        "L": 2,
+        "V": 42,
+        "N_experts": 5,
+        "n_train": 500,
+        "n_eval_task": 200,
+        "base_epochs": 15,
+        "expert_epochs": 20,
+        "n_tournament_queries": 200,
+        "n_tournament_rounds": 50
+      },
+      "oracle": {
+        "accuracy_matrix": {
+          "arithmetic": {
+            "arithmetic": 0.245,
+            "reverse": 0.0,
+            "repeat": 0.035,
+            "sort": 0.015,
+            "parity": 0.0
+          },
+          "reverse": {
+            "arithmetic": 0.0,
+            "reverse": 0.39,
+            "repeat": 0.0,
+            "sort": 0.12,
+            "parity": 0.035
+          },
+          "repeat": {
+            "arithmetic": 0.0,
+            "reverse": 0.0,
+            "repeat": 1.0,
+            "sort": 0.0,
+            "parity": 0.0
+          },
+          "sort": {
+            "arithmetic": 0.0,
+            "reverse": 0.05,
+            "repeat": 0.11,
+            "sort": 0.77,
+            "parity": 0.0
+          },
+          "parity": {
+            "arithmetic": 0.0,
+            "reverse": 0.0,
+            "repeat": 0.015,
+            "sort": 0.0,
+            "parity": 0.59
+          }
+        },
+        "avg_accuracy": {
+          "arithmetic": 0.059,
+          "reverse": 0.10900000000000001,
+          "repeat": 0.2,
+          "sort": 0.186,
+          "parity": 0.121
+        },
+        "ranking": [
+          "repeat",
+          "sort",
+          "parity",
+          "reverse",
+          "arithmetic"
+        ],
+        "per_domain_best": {
+          "arithmetic": "arithmetic",
+          "reverse": "reverse",
+          "repeat": "repeat",
+          "sort": "sort",
+          "parity": "parity"
+        }
+      },
+      "shadow_scoring": {
+        "per_comparison_accuracy": 0.9228,
+        "final_kendall_tau": -0.2,
+        "final_pairwise_agreement": 0.4,
+        "elo_ranking": [
+          "sort",
+          "reverse",
+          "arithmetic",
+          "parity",
+          "repeat"
+        ],
+        "elo_ratings": {
+          "arithmetic": 1523.8371328787834,
+          "reverse": 1549.5442060988298,
+          "repeat": 1384.3352437405338,
+          "sort": 1587.367897358498,
+          "parity": 1454.915519923354
+        },
+        "convergence_taus": [
+          -0.2,
+          0.0,
+          0.4,
+          -0.6,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.8,
+          -0.4,
+          -0.2,
+          -0.4,
+          -0.4,
+          0.0,
+          0.4,
+          0.2,
+          0.4,
+          0.0,
+          -0.2,
+          0.0,
+          0.0,
+          -0.2,
+          0.2,
+          0.0,
+          0.2,
+          -0.6,
+          0.0,
+          0.0,
+          -0.2,
+          0.2,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.4,
+          -0.2,
+          -0.2,
+          0.2,
+          -0.2,
+          -0.4,
+          -0.2,
+          0.0,
+          -0.4,
+          -0.2,
+          -0.2
+        ],
+        "convergence_agreements": [
+          0.4,
+          0.5,
+          0.7,
+          0.2,
+          0.4,
+          0.4,
+          0.4,
+          0.5,
+          0.1,
+          0.3,
+          0.4,
+          0.3,
+          0.3,
+          0.5,
+          0.7,
+          0.6,
+          0.7,
+          0.5,
+          0.4,
+          0.5,
+          0.5,
+          0.4,
+          0.6,
+          0.5,
+          0.6,
+          0.2,
+          0.5,
+          0.5,
+          0.4,
+          0.6,
+          0.3,
+          0.3,
+          0.3,
+          0.4,
+          0.4,
+          0.5,
+          0.4,
+          0.4,
+          0.5,
+          0.3,
+          0.4,
+          0.4,
+          0.6,
+          0.4,
+          0.3,
+          0.4,
+          0.5,
+          0.3,
+          0.4,
+          0.4
+        ],
+        "convergence_round_tau_0_8": null,
+        "tau_stability_last_10": 0.1661324772583615
+      },
+      "overhead": {
+        "baseline_ms_per_query": 0.29500484466552734,
+        "shadow_ms_per_query": 0.5855560302734375,
+        "overhead_pct": 98.4903098582443,
+        "macro_projected_pct": 1.8
+      },
+      "kill_criteria": {
+        "k1_overhead_pass": true,
+        "k2_correlation_pass": true,
+        "k3_convergence_pass": false,
+        "overall": "KILLED"
+      }
+    },
+    {
+      "seed": 123,
+      "config": {
+        "d": 32,
+        "H": 2,
+        "L": 2,
+        "V": 42,
+        "N_experts": 5,
+        "n_train": 500,
+        "n_eval_task": 200,
+        "base_epochs": 15,
+        "expert_epochs": 20,
+        "n_tournament_queries": 200,
+        "n_tournament_rounds": 50
+      },
+      "oracle": {
+        "accuracy_matrix": {
+          "arithmetic": {
+            "arithmetic": 0.355,
+            "reverse": 0.0,
+            "repeat": 0.0,
+            "sort": 0.005,
+            "parity": 0.0
+          },
+          "reverse": {
+            "arithmetic": 0.0,
+            "reverse": 0.92,
+            "repeat": 0.06,
+            "sort": 0.14,
+            "parity": 0.045
+          },
+          "repeat": {
+            "arithmetic": 0.0,
+            "reverse": 0.0,
+            "repeat": 1.0,
+            "sort": 0.02,
+            "parity": 0.0
+          },
+          "sort": {
+            "arithmetic": 0.0,
+            "reverse": 0.055,
+            "repeat": 0.07,
+            "sort": 0.705,
+            "parity": 0.02
+          },
+          "parity": {
+            "arithmetic": 0.0,
+            "reverse": 0.0,
+            "repeat": 0.0,
+            "sort": 0.0,
+            "parity": 0.755
+          }
+        },
+        "avg_accuracy": {
+          "arithmetic": 0.072,
+          "reverse": 0.233,
+          "repeat": 0.20400000000000001,
+          "sort": 0.16999999999999998,
+          "parity": 0.151
+        },
+        "ranking": [
+          "reverse",
+          "repeat",
+          "sort",
+          "parity",
+          "arithmetic"
+        ],
+        "per_domain_best": {
+          "arithmetic": "arithmetic",
+          "reverse": "reverse",
+          "repeat": "repeat",
+          "sort": "sort",
+          "parity": "parity"
+        }
+      },
+      "shadow_scoring": {
+        "per_comparison_accuracy": 0.8931,
+        "final_kendall_tau": 0.4,
+        "final_pairwise_agreement": 0.7,
+        "elo_ranking": [
+          "sort",
+          "reverse",
+          "repeat",
+          "arithmetic",
+          "parity"
+        ],
+        "elo_ratings": {
+          "arithmetic": 1396.1325357497335,
+          "reverse": 1600.2641686894387,
+          "repeat": 1451.14125838944,
+          "sort": 1675.1723449383326,
+          "parity": 1377.2896922330553
+        },
+        "convergence_taus": [
+          0.6,
+          0.2,
+          0.4,
+          0.8,
+          0.2,
+          0.4,
+          0.4,
+          0.6,
+          0.6,
+          0.4,
+          0.0,
+          0.6,
+          0.4,
+          0.6,
+          0.2,
+          0.6,
+          0.2,
+          0.2,
+          0.2,
+          0.6,
+          0.6,
+          0.6,
+          0.2,
+          0.6,
+          0.2,
+          0.4,
+          0.4,
+          0.6,
+          0.2,
+          0.2,
+          0.6,
+          0.2,
+          0.2,
+          0.8,
+          0.4,
+          0.6,
+          0.4,
+          0.4,
+          0.2,
+          0.6,
+          0.4,
+          0.0,
+          0.4,
+          0.4,
+          0.2,
+          0.4,
+          0.2,
+          0.2,
+          0.4,
+          0.4
+        ],
+        "convergence_agreements": [
+          0.8,
+          0.6,
+          0.7,
+          0.9,
+          0.6,
+          0.7,
+          0.7,
+          0.8,
+          0.8,
+          0.7,
+          0.5,
+          0.8,
+          0.7,
+          0.8,
+          0.6,
+          0.8,
+          0.6,
+          0.6,
+          0.6,
+          0.8,
+          0.8,
+          0.8,
+          0.6,
+          0.8,
+          0.6,
+          0.7,
+          0.7,
+          0.8,
+          0.6,
+          0.6,
+          0.8,
+          0.6,
+          0.6,
+          0.9,
+          0.7,
+          0.8,
+          0.7,
+          0.7,
+          0.6,
+          0.8,
+          0.7,
+          0.5,
+          0.7,
+          0.7,
+          0.6,
+          0.7,
+          0.6,
+          0.6,
+          0.7,
+          0.7
+        ],
+        "convergence_round_tau_0_8": 3,
+        "tau_stability_last_10": 0.1341640786499874
+      },
+      "overhead": {
+        "baseline_ms_per_query": 0.3043222427368164,
+        "shadow_ms_per_query": 0.5745983123779297,
+        "overhead_pct": 88.81245984863915,
+        "macro_projected_pct": 1.8
+      },
+      "kill_criteria": {
+        "k1_overhead_pass": true,
+        "k2_correlation_pass": true,
+        "k3_convergence_pass": true,
+        "overall": "SURVIVES"
+      }
+    },
+    {
+      "seed": 456,
+      "config": {
+        "d": 32,
+        "H": 2,
+        "L": 2,
+        "V": 42,
+        "N_experts": 5,
+        "n_train": 500,
+        "n_eval_task": 200,
+        "base_epochs": 15,
+        "expert_epochs": 20,
+        "n_tournament_queries": 200,
+        "n_tournament_rounds": 50
+      },
+      "oracle": {
+        "accuracy_matrix": {
+          "arithmetic": {
+            "arithmetic": 0.23,
+            "reverse": 0.0,
+            "repeat": 0.0,
+            "sort": 0.0,
+            "parity": 0.0
+          },
+          "reverse": {
+            "arithmetic": 0.0,
+            "reverse": 0.35,
+            "repeat": 0.04,
+            "sort": 0.12,
+            "parity": 0.0
+          },
+          "repeat": {
+            "arithmetic": 0.0,
+            "reverse": 0.005,
+            "repeat": 1.0,
+            "sort": 0.005,
+            "parity": 0.0
+          },
+          "sort": {
+            "arithmetic": 0.0,
+            "reverse": 0.05,
+            "repeat": 0.085,
+            "sort": 0.665,
+            "parity": 0.0
+          },
+          "parity": {
+            "arithmetic": 0.0,
+            "reverse": 0.0,
+            "repeat": 0.0,
+            "sort": 0.0,
+            "parity": 0.595
+          }
+        },
+        "avg_accuracy": {
+          "arithmetic": 0.046,
+          "reverse": 0.10200000000000001,
+          "repeat": 0.202,
+          "sort": 0.16,
+          "parity": 0.119
+        },
+        "ranking": [
+          "repeat",
+          "sort",
+          "parity",
+          "reverse",
+          "arithmetic"
+        ],
+        "per_domain_best": {
+          "arithmetic": "arithmetic",
+          "reverse": "reverse",
+          "repeat": "repeat",
+          "sort": "sort",
+          "parity": "parity"
+        }
+      },
+      "shadow_scoring": {
+        "per_comparison_accuracy": 0.932,
+        "final_kendall_tau": -0.4,
+        "final_pairwise_agreement": 0.3,
+        "elo_ranking": [
+          "reverse",
+          "arithmetic",
+          "sort",
+          "repeat",
+          "parity"
+        ],
+        "elo_ratings": {
+          "arithmetic": 1566.4346445548485,
+          "reverse": 1568.5536736068977,
+          "repeat": 1502.495171696759,
+          "sort": 1536.8669320989732,
+          "parity": 1325.6495780425205
+        },
+        "convergence_taus": [
+          0.4,
+          0.2,
+          0.2,
+          0.4,
+          0.4,
+          0.0,
+          0.2,
+          0.2,
+          0.4,
+          0.2,
+          -0.4,
+          0.6,
+          0.4,
+          0.4,
+          0.4,
+          0.0,
+          0.4,
+          0.2,
+          0.0,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.2,
+          0.4,
+          -0.4,
+          -0.2,
+          0.6,
+          0.2,
+          0.2,
+          0.2,
+          -0.4,
+          0.6,
+          0.0,
+          0.4,
+          0.2,
+          0.2,
+          0.2,
+          0.6,
+          0.2,
+          0.0,
+          0.2,
+          -0.2,
+          0.2,
+          0.4,
+          -0.2,
+          -0.2,
+          0.6,
+          0.2,
+          -0.4
+        ],
+        "convergence_agreements": [
+          0.7,
+          0.6,
+          0.6,
+          0.7,
+          0.7,
+          0.5,
+          0.6,
+          0.6,
+          0.7,
+          0.6,
+          0.3,
+          0.8,
+          0.7,
+          0.7,
+          0.7,
+          0.5,
+          0.7,
+          0.6,
+          0.5,
+          0.7,
+          0.7,
+          0.7,
+          0.7,
+          0.6,
+          0.7,
+          0.3,
+          0.4,
+          0.8,
+          0.6,
+          0.6,
+          0.6,
+          0.3,
+          0.8,
+          0.5,
+          0.7,
+          0.6,
+          0.6,
+          0.6,
+          0.8,
+          0.6,
+          0.5,
+          0.6,
+          0.4,
+          0.6,
+          0.7,
+          0.4,
+          0.4,
+          0.8,
+          0.6,
+          0.3
+        ],
+        "convergence_round_tau_0_8": null,
+        "tau_stability_last_10": 0.2973213749463701
+      },
+      "overhead": {
+        "baseline_ms_per_query": 0.2933168411254883,
+        "shadow_ms_per_query": 0.550537109375,
+        "overhead_pct": 87.69365825110138,
+        "macro_projected_pct": 1.8
+      },
+      "kill_criteria": {
+        "k1_overhead_pass": true,
+        "k2_correlation_pass": true,
+        "k3_convergence_pass": true,
+        "overall": "SURVIVES"
+      }
+    }
+  ]
+}

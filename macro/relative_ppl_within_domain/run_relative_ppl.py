@@ -113,7 +113,8 @@ def get_adapter_list():
             ppl_improvement = info.get("ppl_improvement_pct", 0)
             ranked.append((name, ppl_improvement))
         ranked.sort(key=lambda x: x[1], reverse=True)
-        return [name for name, _ in ranked]
+        if ranked:
+            return [name for name, _ in ranked]
     return sorted(
         d.name for d in ADAPTER_DIR.iterdir()
         if d.is_dir() and (d / "adapter_config.json").exists()

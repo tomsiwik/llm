@@ -1,0 +1,202 @@
+{
+  "experiment": "bitnet_sole_vs_monolithic",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "steps_per_domain": 400,
+  "monolithic_steps": 2000,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-21 11:21:08",
+  "design": "same_rank_budget_matched_steps",
+  "total_params": 2412820480,
+  "load_time_s": 1.2,
+  "base_ppls": {
+    "medical": 15.7992,
+    "code": 3.5189,
+    "math": 4.7385,
+    "legal": 25.5192,
+    "creative": 3.6013
+  },
+  "trainable_params_per_expert": 21626880,
+  "sole_train_results": {
+    "medical": {
+      "label": "SOLE-medical",
+      "n_steps": 400,
+      "train_time_s": 678.5,
+      "first_50_avg_loss": 2.9258,
+      "last_50_avg_loss": 1.7149,
+      "converged": true
+    },
+    "code": {
+      "label": "SOLE-code",
+      "n_steps": 400,
+      "train_time_s": 347.4,
+      "first_50_avg_loss": 1.0655,
+      "last_50_avg_loss": 1.1182,
+      "converged": false
+    },
+    "math": {
+      "label": "SOLE-math",
+      "n_steps": 400,
+      "train_time_s": 238.4,
+      "first_50_avg_loss": 1.3445,
+      "last_50_avg_loss": 1.2658,
+      "converged": true
+    },
+    "legal": {
+      "label": "SOLE-legal",
+      "n_steps": 400,
+      "train_time_s": 244.1,
+      "first_50_avg_loss": 3.1497,
+      "last_50_avg_loss": 2.8842,
+      "converged": true
+    },
+    "creative": {
+      "label": "SOLE-creative",
+      "n_steps": 400,
+      "train_time_s": 253.2,
+      "first_50_avg_loss": 1.2446,
+      "last_50_avg_loss": 1.6359,
+      "converged": false
+    }
+  },
+  "sole_total_time_s": 1761.6,
+  "mono_train_result": {
+    "label": "MONO-shuffled",
+    "n_steps": 2000,
+    "train_time_s": 1017.8,
+    "first_50_avg_loss": 1.8757,
+    "last_50_avg_loss": 1.4967,
+    "converged": true
+  },
+  "seq_total_time_s": 990.0,
+  "sole_routed_ppls": {
+    "medical": 8.0026,
+    "code": 2.7622,
+    "math": 3.1184,
+    "legal": 17.9459,
+    "creative": 3.1679
+  },
+  "sole_composed_ppls": {
+    "medical": 13.38,
+    "code": 3.2198,
+    "math": 4.3152,
+    "legal": 23.4554,
+    "creative": 3.3765
+  },
+  "mono_ppls": {
+    "medical": 8.358,
+    "code": 2.8416,
+    "math": 3.267,
+    "legal": 19.6702,
+    "creative": 3.0022
+  },
+  "seq_ppls": {
+    "medical": 25.4586,
+    "code": 3.294,
+    "math": 4.5164,
+    "legal": 23.6188,
+    "creative": 3.147
+  },
+  "cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.000566
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 0.004438
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.001335
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.002468
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.001017
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.001686
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.002264
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.000597
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000545
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.003646
+    }
+  ],
+  "mean_abs_cos": 0.001856,
+  "domain_comparison": {
+    "medical": {
+      "sole_routed_ppl": 8.0026,
+      "mono_ppl": 8.358,
+      "gap_pct": -4.25,
+      "winner": "SOLE"
+    },
+    "code": {
+      "sole_routed_ppl": 2.7622,
+      "mono_ppl": 2.8416,
+      "gap_pct": -2.79,
+      "winner": "SOLE"
+    },
+    "math": {
+      "sole_routed_ppl": 3.1184,
+      "mono_ppl": 3.267,
+      "gap_pct": -4.55,
+      "winner": "SOLE"
+    },
+    "legal": {
+      "sole_routed_ppl": 17.9459,
+      "mono_ppl": 19.6702,
+      "gap_pct": -8.77,
+      "winner": "SOLE"
+    },
+    "creative": {
+      "sole_routed_ppl": 3.1679,
+      "mono_ppl": 3.0022,
+      "gap_pct": 5.52,
+      "winner": "MONO"
+    }
+  },
+  "sole_wins": 4,
+  "mono_wins": 1,
+  "k1_mono_wins_80pct": false,
+  "k1_pass": true,
+  "avg_sole_routed_ppl": 6.9994,
+  "avg_sole_composed_ppl": 9.5494,
+  "avg_mono_ppl": 7.4278,
+  "avg_seq_ppl": 12.007,
+  "avg_base_ppl": 10.6354,
+  "routed_vs_mono_gap_pct": -5.77,
+  "composed_vs_mono_gap_pct": 28.56,
+  "seq_vs_base_gap_pct": 12.9,
+  "composition_ratio": 3.4572,
+  "seq_forgetting_pct": {
+    "medical": 61.14,
+    "code": -6.39,
+    "math": -4.69,
+    "legal": -7.45,
+    "creative": "last_trained"
+  },
+  "verdict": "SUPPORTED"
+}

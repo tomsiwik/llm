@@ -1,0 +1,20 @@
+event_loop:
+  prompt: |
+    Merge the completed Ralph loop back to the main branch.
+
+    ## Context
+    - Check RALPH_MERGE_LOOP_ID environment variable for loop ID
+    - Or extract loop ID from this prompt if provided
+    - Loop branch format: ralph/{loop_id}
+    - Worktree location: .worktrees/{loop_id}
+
+    ## Your Task
+    Safely merge the loop's changes into the main branch, ensuring all tests pass.
+  completion_promise: MERGE_COMPLETE
+  max_iterations: 15
+  max_runtime_seconds: 1800
+  starting_event: merge.start
+cli:
+  backend: auto
+core:
+  specs_dir: ./specs/

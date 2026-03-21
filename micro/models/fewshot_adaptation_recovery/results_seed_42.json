@@ -1,0 +1,74 @@
+{
+  "per_expert": [
+    {
+      "domain": "a_e",
+      "adapt_steps": 10,
+      "zeroshot_loss": 0.9877238631248474,
+      "adapted_loss": 0.9860267281532288,
+      "retrained_loss": 0.9863371849060059,
+      "original_loss": 0.9860395193099976,
+      "zs_gap": 0.0016843438148498313,
+      "adapted_gap": -1.2791156768776624e-05,
+      "gap_reduction_pct": 100.7594147731841,
+      "adapted_on_original_loss": 0.9843407034873962
+    },
+    {
+      "domain": "f_j",
+      "adapt_steps": 10,
+      "zeroshot_loss": 0.9950230836868286,
+      "adapted_loss": 0.9934458792209625,
+      "retrained_loss": 0.9967427313327789,
+      "original_loss": 0.9943721890449524,
+      "zs_gap": 0.0006508946418761763,
+      "adapted_gap": -0.0009263098239898904,
+      "gap_reduction_pct": 242.3133272224685,
+      "adapted_on_original_loss": 0.9926938891410828
+    }
+  ],
+  "aggregate": {
+    "10": {
+      "mean_gap_reduction_pct": 171.5363709978263,
+      "mean_adapted_loss": 0.9897363036870956,
+      "mean_zs_loss": 0.9913734734058379,
+      "mean_retrained_loss": 0.9915399581193924,
+      "mean_original_loss": 0.990205854177475,
+      "adapted_loss_ratio": 0.9995258051763698,
+      "zs_loss_ratio": 1.0011791681734026,
+      "retrained_loss_ratio": 1.0013472995905741,
+      "recovery_of_retrained_pct": -983.3754064393086,
+      "k2_adapted_on_orig_ratio": 0.9982947405773135
+    }
+  },
+  "kill_criteria": {
+    "k1_gap_reduction_pct": 171.5363709978263,
+    "k1_threshold": 50.0,
+    "k1_verdict": "SURVIVES",
+    "k2_worst_ratio": 0.9983122014851586,
+    "k2_any_expert_hurt_5pct": false,
+    "k2_verdict": "SURVIVES",
+    "overall_verdict": "SURVIVES"
+  },
+  "config": {
+    "n_embd": 32,
+    "n_head": 2,
+    "n_layer": 2,
+    "block_size": 16,
+    "lora_rank": 4,
+    "lora_alpha": 1.0,
+    "total_pretrain_steps": 200,
+    "expert_train_steps": 100,
+    "n_experts": 2,
+    "delta_rank": 16,
+    "adapt_steps_list": [
+      10
+    ],
+    "adapt_lr": 0.001,
+    "lr": 0.003
+  },
+  "seed": 42,
+  "timing": {
+    "pretrain_time": 0.8929429054260254,
+    "expert_train_time": 0.7129719257354736,
+    "total_time": 2.489729166030884
+  }
+}

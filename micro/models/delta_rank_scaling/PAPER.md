@@ -9,6 +9,9 @@
   3. Bootstrap CI on power law exponent (10K resamples)
   4. K1 kill accepted honestly (no retroactive reinterpretation)
   5. Multi-checkpoint rho measurement at 25/50/75/100% of training
+- **v2-confirmed** (2026-03-16): Full re-run confirms reproducibility. All
+  numbers match v2 to 4 decimal places across all 3 seeds. Status updated
+  from REVISE to WEAK_KILL (K1 killed, K2 survives).
 
 ## Hypothesis
 

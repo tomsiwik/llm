@@ -11,6 +11,7 @@ base, all-50, and random-k baselines.
 """
 
 import argparse
+import gc
 import json
 import os
 import time
@@ -18,6 +19,16 @@ from pathlib import Path
 
 import numpy as np
 import torch
+
+if not hasattr(torch.nn.Module, "set_submodule"):
+    def _set_submodule(self, target: str, module: "torch.nn.Module") -> None:
+        atoms = target.split(".")
+        mod = self
+        for item in atoms[:-1]:
+            mod = getattr(mod, item)
+        setattr(mod, atoms[-1], module)
+    torch.nn.Module.set_submodule = _set_submodule
+
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 ADAPTER_DIR = Path("/workspace/llm/adapters")
@@ -260,7 +271,14 @@ def main():
     print("\n=== Phase 1: Base model ===")
     t0 = time.time()
     base_model, tokenizer = load_base_model()
-    base_results = evaluate_mmlu_with_model(base_model, tokenizer, subjects, args.max_per_subject)
+    # Disable GC during heavy GPU inference (nanochat pattern: ~500ms/step saved)
+    gc.disable()
+    gc.collect()
+    try:
+        base_results = evaluate_mmlu_with_model(base_model, tokenizer, subjects, args.max_per_subject)
+    finally:
+        gc.enable()
+        gc.collect()
     base_acc = base_results["overall"]["accuracy"]
     print(f"Base accuracy: {base_acc:.4f} ({time.time() - t0:.0f}s)")
 
@@ -289,22 +307,74 @@ def main():
         if ids_space:
             choice_tokens[f" {letter}"] = ids_space[-1]
 
-    for k in k_values:
-        print(f"\n=== Phase 2: Selective top-{k} composition ===")
-        t1 = time.time()
+    # Disable GC during heavy GPU inference phases 2-3 (nanochat pattern: ~500ms/step saved)
+    gc.disable()
+    gc.collect()
+    try:
+        for k in k_values:
+            print(f"\n=== Phase 2: Selective top-{k} composition ===")
+            t1 = time.time()
 
-        total_correct = 0
-        total_count = 0
-        per_subject = {}
+            total_correct = 0
+            total_count = 0
+            per_subject = {}
 
-        for subject in subjects:
-            relevant = subject_to_adapters.get(subject, [])[:k]
+            for subject in subjects:
+                relevant = subject_to_adapters.get(subject, [])[:k]
 
-            if not relevant:
-                # No relevant adapter — use base model
+                if not relevant:
+                    # No relevant adapter — use base model
+                    try:
+                        ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
+                    except Exception:
+                        continue
+                    if len(ds) > args.max_per_subject:
+                        ds = ds.select(range(args.max_per_subject))
+
+                    correct = 0
+                    for ex in ds:
+                        prompt = format_mmlu_prompt(ex)
+                        inputs = tokenizer(
+                            prompt, return_tensors="pt", truncation=True, max_length=512
+                        ).to(base_model.device)
+                        with torch.no_grad():
+                            outputs = base_model(**inputs)
+                            logits = outputs.logits[0, -1]
+                            log_probs = torch.log_softmax(logits, dim=-1)
+                        scores = {}
+                        for letter in "ABCD":
+                            tid = choice_tokens[letter]
+                            tid_space = choice_tokens.get(f" {letter}", tid)
+                            scores[letter] = max(log_probs[tid].item(), log_probs[tid_space].item())
+                        pred = max(scores, key=scores.get)
+                        gold = "ABCD"[ex["answer"]]
+                        correct += int(pred == gold)
+
+                    acc = correct / max(1, len(ds))
+                    per_subject[subject] = {
+                        "correct": correct, "total": len(ds), "accuracy": round(acc, 4),
+                        "adapters_used": [], "note": "no_relevant_adapter",
+                    }
+                    total_correct += correct
+                    total_count += len(ds)
+                    print(f"  {subject}: {acc:.1%} (base, no relevant adapter)")
+                    continue
+
+                # Compose relevant adapters (reload fresh base — PeftModel modifies in-place)
+                fresh_model, _ = load_base_model()
+                try:
+                    composed = compose_adapters(fresh_model, relevant)
+                except Exception as e:
+                    print(f"  {subject}: FAILED to compose {relevant}: {e}")
+                    del fresh_model
+                    torch.cuda.empty_cache()
+                    continue
+
                 try:
                     ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
                 except Exception:
+                    del composed, fresh_model
+                    torch.cuda.empty_cache()
                     continue
                 if len(ds) > args.max_per_subject:
                     ds = ds.select(range(args.max_per_subject))
@@ -314,9 +384,82 @@ def main():
                     prompt = format_mmlu_prompt(ex)
                     inputs = tokenizer(
                         prompt, return_tensors="pt", truncation=True, max_length=512
-                    ).to(base_model.device)
+                    ).to(composed.device)
                     with torch.no_grad():
-                        outputs = base_model(**inputs)
+                        outputs = composed(**inputs)
+                        logits = outputs.logits[0, -1]
+                        log_probs = torch.log_softmax(logits, dim=-1)
+                    scores = {}
+                    for letter in "ABCD":
+                        tid = choice_tokens[letter]
+                        tid_space = choice_tokens.get(f" {letter}", tid)
+                        scores[letter] = max(log_probs[tid].item(), log_probs[tid_space].item())
+                    pred = max(scores, key=scores.get)
+                    gold = "ABCD"[ex["answer"]]
+                    correct += int(pred == gold)
+
+                acc = correct / max(1, len(ds))
+                delta = (acc - base_results["per_subject"].get(subject, {}).get("accuracy", base_acc)) * 100
+                per_subject[subject] = {
+                    "correct": correct, "total": len(ds), "accuracy": round(acc, 4),
+                    "adapters_used": relevant, "delta_vs_base_pp": round(delta, 4),
+                }
+                total_correct += correct
+                total_count += len(ds)
+                print(f"  {subject}: {acc:.1%} ({delta:+.2f}pp) adapters={relevant}")
+
+                del composed, fresh_model
+                torch.cuda.empty_cache()
+
+            overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
+            delta_pp = (overall_acc - base_acc) * 100
+            all_results["selective"][str(k)] = {
+                "k": k,
+                "per_subject": per_subject,
+                "overall": {"correct": total_correct, "total": total_count, "accuracy": round(overall_acc, 4)},
+                "delta_vs_base_pp": round(delta_pp, 4),
+            }
+            print(f"Top-{k} selective: {overall_acc:.4f} ({delta_pp:+.2f}pp) [{time.time() - t1:.0f}s]")
+
+        # Phase 3: Random-k baseline (for comparison)
+        for k in [3]:
+            print(f"\n=== Phase 3: Random-{k} baseline ===")
+            t2 = time.time()
+
+            total_correct = 0
+            total_count = 0
+            per_subject = {}
+
+            for subject in subjects:
+                # Pick k random adapters
+                random_adapters = list(rng.choice(available_adapters, size=min(k, len(available_adapters)), replace=False))
+
+                fresh_model, _ = load_base_model()
+                try:
+                    composed = compose_adapters(fresh_model, random_adapters)
+                except Exception as e:
+                    print(f"  {subject}: FAILED: {e}")
+                    del fresh_model
+                    torch.cuda.empty_cache()
+                    continue
+
+                try:
+                    ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
+                except Exception:
+                    del composed, fresh_model
+                    torch.cuda.empty_cache()
+                    continue
+                if len(ds) > args.max_per_subject:
+                    ds = ds.select(range(args.max_per_subject))
+
+                correct = 0
+                for ex in ds:
+                    prompt = format_mmlu_prompt(ex)
+                    inputs = tokenizer(
+                        prompt, return_tensors="pt", truncation=True, max_length=512
+                    ).to(composed.device)
+                    with torch.no_grad():
+                        outputs = composed(**inputs)
                         logits = outputs.logits[0, -1]
                         log_probs = torch.log_softmax(logits, dim=-1)
                     scores = {}
@@ -331,144 +474,26 @@ def main():
                 acc = correct / max(1, len(ds))
                 per_subject[subject] = {
                     "correct": correct, "total": len(ds), "accuracy": round(acc, 4),
-                    "adapters_used": [], "note": "no_relevant_adapter",
+                    "adapters_used": random_adapters,
                 }
                 total_correct += correct
                 total_count += len(ds)
-                print(f"  {subject}: {acc:.1%} (base, no relevant adapter)")
-                continue
 
-            # Compose relevant adapters (reload fresh base — PeftModel modifies in-place)
-            fresh_model, _ = load_base_model()
-            try:
-                composed = compose_adapters(fresh_model, relevant)
-            except Exception as e:
-                print(f"  {subject}: FAILED to compose {relevant}: {e}")
-                del fresh_model
-                torch.cuda.empty_cache()
-                continue
-
-            try:
-                ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
-            except Exception:
                 del composed, fresh_model
                 torch.cuda.empty_cache()
-                continue
-            if len(ds) > args.max_per_subject:
-                ds = ds.select(range(args.max_per_subject))
 
-            correct = 0
-            for ex in ds:
-                prompt = format_mmlu_prompt(ex)
-                inputs = tokenizer(
-                    prompt, return_tensors="pt", truncation=True, max_length=512
-                ).to(composed.device)
-                with torch.no_grad():
-                    outputs = composed(**inputs)
-                    logits = outputs.logits[0, -1]
-                    log_probs = torch.log_softmax(logits, dim=-1)
-                scores = {}
-                for letter in "ABCD":
-                    tid = choice_tokens[letter]
-                    tid_space = choice_tokens.get(f" {letter}", tid)
-                    scores[letter] = max(log_probs[tid].item(), log_probs[tid_space].item())
-                pred = max(scores, key=scores.get)
-                gold = "ABCD"[ex["answer"]]
-                correct += int(pred == gold)
-
-            acc = correct / max(1, len(ds))
-            delta = (acc - base_results["per_subject"].get(subject, {}).get("accuracy", base_acc)) * 100
-            per_subject[subject] = {
-                "correct": correct, "total": len(ds), "accuracy": round(acc, 4),
-                "adapters_used": relevant, "delta_vs_base_pp": round(delta, 4),
+            overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
+            delta_pp = (overall_acc - base_acc) * 100
+            all_results["random_baseline"][str(k)] = {
+                "k": k,
+                "per_subject": per_subject,
+                "overall": {"correct": total_correct, "total": total_count, "accuracy": round(overall_acc, 4)},
+                "delta_vs_base_pp": round(delta_pp, 4),
             }
-            total_correct += correct
-            total_count += len(ds)
-            print(f"  {subject}: {acc:.1%} ({delta:+.2f}pp) adapters={relevant}")
-
-            del composed, fresh_model
-            torch.cuda.empty_cache()
-
-        overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
-        delta_pp = (overall_acc - base_acc) * 100
-        all_results["selective"][str(k)] = {
-            "k": k,
-            "per_subject": per_subject,
-            "overall": {"correct": total_correct, "total": total_count, "accuracy": round(overall_acc, 4)},
-            "delta_vs_base_pp": round(delta_pp, 4),
-        }
-        print(f"Top-{k} selective: {overall_acc:.4f} ({delta_pp:+.2f}pp) [{time.time() - t1:.0f}s]")
-
-    # Phase 3: Random-k baseline (for comparison)
-    for k in [3]:
-        print(f"\n=== Phase 3: Random-{k} baseline ===")
-        t2 = time.time()
-
-        total_correct = 0
-        total_count = 0
-        per_subject = {}
-
-        for subject in subjects:
-            # Pick k random adapters
-            random_adapters = list(rng.choice(available_adapters, size=min(k, len(available_adapters)), replace=False))
-
-            fresh_model, _ = load_base_model()
-            try:
-                composed = compose_adapters(fresh_model, random_adapters)
-            except Exception as e:
-                print(f"  {subject}: FAILED: {e}")
-                del fresh_model
-                torch.cuda.empty_cache()
-                continue
-
-            try:
-                ds = load_dataset("cais/mmlu", subject, split="test", trust_remote_code=True)
-            except Exception:
-                del composed, fresh_model
-                torch.cuda.empty_cache()
-                continue
-            if len(ds) > args.max_per_subject:
-                ds = ds.select(range(args.max_per_subject))
-
-            correct = 0
-            for ex in ds:
-                prompt = format_mmlu_prompt(ex)
-                inputs = tokenizer(
-                    prompt, return_tensors="pt", truncation=True, max_length=512
-                ).to(composed.device)
-                with torch.no_grad():
-                    outputs = composed(**inputs)
-                    logits = outputs.logits[0, -1]
-                    log_probs = torch.log_softmax(logits, dim=-1)
-                scores = {}
-                for letter in "ABCD":
-                    tid = choice_tokens[letter]
-                    tid_space = choice_tokens.get(f" {letter}", tid)
-                    scores[letter] = max(log_probs[tid].item(), log_probs[tid_space].item())
-                pred = max(scores, key=scores.get)
-                gold = "ABCD"[ex["answer"]]
-                correct += int(pred == gold)
-
-            acc = correct / max(1, len(ds))
-            per_subject[subject] = {
-                "correct": correct, "total": len(ds), "accuracy": round(acc, 4),
-                "adapters_used": random_adapters,
-            }
-            total_correct += correct
-            total_count += len(ds)
-
-            del composed, fresh_model
-            torch.cuda.empty_cache()
-
-        overall_acc = total_correct / max(1, total_count) if total_count > 0 else 0.0
-        delta_pp = (overall_acc - base_acc) * 100
-        all_results["random_baseline"][str(k)] = {
-            "k": k,
-            "per_subject": per_subject,
-            "overall": {"correct": total_correct, "total": total_count, "accuracy": round(overall_acc, 4)},
-            "delta_vs_base_pp": round(delta_pp, 4),
-        }
-        print(f"Random-{k}: {overall_acc:.4f} ({delta_pp:+.2f}pp) [{time.time() - t2:.0f}s]")
+            print(f"Random-{k}: {overall_acc:.4f} ({delta_pp:+.2f}pp) [{time.time() - t2:.0f}s]")
+    finally:
+        gc.enable()
+        gc.collect()
 
     # Summary
     print("\n=== Summary ===")

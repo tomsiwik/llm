@@ -1,0 +1,286 @@
+{
+  "experiment": "capability_expert_taxonomy",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "capabilities": [
+    "reasoning",
+    "instruction",
+    "conciseness",
+    "multilingual",
+    "safety"
+  ],
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-20 12:43:14",
+  "failed_capabilities": [
+    "multilingual"
+  ],
+  "base_ppls": {
+    "reasoning": 8.307710703353454,
+    "instruction": 12.204393099087754,
+    "conciseness": 33.04280382999853,
+    "safety": 15.587797313367064
+  },
+  "train_results": {
+    "reasoning": {
+      "train_time_s": 162.9,
+      "first_50_avg_loss": 1.2444,
+      "last_50_avg_loss": 1.047,
+      "converged": true
+    },
+    "instruction": {
+      "train_time_s": 64.8,
+      "first_50_avg_loss": 1.5823,
+      "last_50_avg_loss": 1.5777,
+      "converged": false
+    },
+    "conciseness": {
+      "train_time_s": 40.3,
+      "first_50_avg_loss": 2.1714,
+      "last_50_avg_loss": 1.8695,
+      "converged": true
+    },
+    "safety": {
+      "train_time_s": 98.8,
+      "first_50_avg_loss": 2.3397,
+      "last_50_avg_loss": 2.1538,
+      "converged": true
+    }
+  },
+  "capability_ppls": {
+    "reasoning": 3.2036737790880894,
+    "instruction": 4.556355121786652,
+    "conciseness": 7.882181338842006,
+    "safety": 8.16352328484408
+  },
+  "n_domain_adapters_loaded": 5,
+  "cosines": [
+    {
+      "pair": "reasoning-instruction",
+      "abs_cos": 0.001023,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-conciseness",
+      "abs_cos": 0.000435,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-safety",
+      "abs_cos": 0.001035,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-python",
+      "abs_cos": 0.000599,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "reasoning-math",
+      "abs_cos": 0.007091,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "reasoning-medical",
+      "abs_cos": 0.000661,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "reasoning-legal",
+      "abs_cos": 0.00033,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "reasoning-creative",
+      "abs_cos": 0.001606,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "instruction-conciseness",
+      "abs_cos": 0.000382,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-safety",
+      "abs_cos": 0.000169,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-python",
+      "abs_cos": 0.000983,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "instruction-math",
+      "abs_cos": 0.00057,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "instruction-medical",
+      "abs_cos": 0.000978,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "instruction-legal",
+      "abs_cos": 0.00012,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "instruction-creative",
+      "abs_cos": 0.001714,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "conciseness-safety",
+      "abs_cos": 0.000137,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-python",
+      "abs_cos": 0.000258,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "conciseness-math",
+      "abs_cos": 0.000931,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "conciseness-medical",
+      "abs_cos": 0.000692,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "conciseness-legal",
+      "abs_cos": 0.000836,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "conciseness-creative",
+      "abs_cos": 0.00114,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "safety-python",
+      "abs_cos": 0.000176,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "safety-math",
+      "abs_cos": 0.000347,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "safety-medical",
+      "abs_cos": 0.000424,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "safety-legal",
+      "abs_cos": 0.000133,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "safety-creative",
+      "abs_cos": 0.000797,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "python-math",
+      "abs_cos": 7.2e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "python-medical",
+      "abs_cos": 0.001795,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "python-legal",
+      "abs_cos": 0.002303,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "python-creative",
+      "abs_cos": 0.001411,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-medical",
+      "abs_cos": 0.002632,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.00028,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000416,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 8.7e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.000775,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 5.9e-05,
+      "category": "domain-domain"
+    }
+  ],
+  "cap_cap_stats": {
+    "mean": 0.00053,
+    "max": 0.001035,
+    "min": 0.000137,
+    "n": 6
+  },
+  "cap_domain_stats": {
+    "mean": 0.001019,
+    "max": 0.007091,
+    "min": 0.00012,
+    "n": 20
+  },
+  "domain_domain_stats": {
+    "mean": 0.000983,
+    "max": 0.002632,
+    "min": 5.9e-05,
+    "n": 10
+  },
+  "composed_ppls": {
+    "reasoning": 7.519428680846902,
+    "instruction": 9.991394154524592,
+    "conciseness": 27.405982993884155,
+    "safety": 14.74210559417908,
+    "domain_python": 2.61501144166862,
+    "domain_math": 5.208705911448385,
+    "domain_medical": 6.543681973905867,
+    "domain_legal": 21.118387198588746,
+    "domain_creative": 6.140940912939543
+  },
+  "n_orthogonal_caps": 4,
+  "per_cap_mean_cos": {
+    "reasoning": 0.000831,
+    "instruction": 0.0005246666666666667,
+    "conciseness": 0.000318,
+    "safety": 0.00044699999999999997
+  },
+  "k1_pass": true,
+  "max_cap_cap_cos": 0.001035,
+  "k2_pass": true,
+  "cross_type_ratio": 0.5392,
+  "verdict": "SUPPORTED"
+}

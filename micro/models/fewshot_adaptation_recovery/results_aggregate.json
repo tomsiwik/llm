@@ -1,0 +1,322 @@
+{
+  "seeds": {
+    "42": {
+      "verdict": "KILLED",
+      "aggregate": {
+        "1": {
+          "mean_gap_reduction_pct": 1.528237412322205,
+          "mean_adapted_loss": 0.44924976825714114,
+          "mean_zs_loss": 0.44949229806661606,
+          "mean_retrained_loss": 0.4394539311528206,
+          "mean_original_loss": 0.43329899907112124,
+          "adapted_loss_ratio": 1.0368123841047732,
+          "zs_loss_ratio": 1.037372112629406,
+          "retrained_loss_ratio": 1.014204814908167,
+          "recovery_of_retrained_pct": 2.416028538640689,
+          "k2_adapted_on_orig_ratio": 0.9998760893193553
+        },
+        "5": {
+          "mean_gap_reduction_pct": 7.537674902071571,
+          "mean_adapted_loss": 0.44826644510030744,
+          "mean_zs_loss": 0.44949229806661606,
+          "mean_retrained_loss": 0.4394539311528206,
+          "mean_original_loss": 0.43329899907112124,
+          "adapted_loss_ratio": 1.0345429970096225,
+          "zs_loss_ratio": 1.037372112629406,
+          "retrained_loss_ratio": 1.014204814908167,
+          "recovery_of_retrained_pct": 12.211677225125566,
+          "k2_adapted_on_orig_ratio": 0.9996597090337451
+        },
+        "10": {
+          "mean_gap_reduction_pct": 13.553923330632706,
+          "mean_adapted_loss": 0.4472862809896469,
+          "mean_zs_loss": 0.44949229806661606,
+          "mean_retrained_loss": 0.4394539311528206,
+          "mean_original_loss": 0.43329899907112124,
+          "adapted_loss_ratio": 1.0322809005986875,
+          "zs_loss_ratio": 1.037372112629406,
+          "retrained_loss_ratio": 1.014204814908167,
+          "recovery_of_retrained_pct": 21.97585618949364,
+          "k2_adapted_on_orig_ratio": 0.9997796115575723
+        },
+        "25": {
+          "mean_gap_reduction_pct": 25.613717146791675,
+          "mean_adapted_loss": 0.4453528866171837,
+          "mean_zs_loss": 0.44949229806661606,
+          "mean_retrained_loss": 0.4394539311528206,
+          "mean_original_loss": 0.43329899907112124,
+          "adapted_loss_ratio": 1.027818867737758,
+          "zs_loss_ratio": 1.037372112629406,
+          "retrained_loss_ratio": 1.014204814908167,
+          "recovery_of_retrained_pct": 41.23590504877167,
+          "k2_adapted_on_orig_ratio": 1.0014871482638632
+        },
+        "50": {
+          "mean_gap_reduction_pct": 35.443129668601514,
+          "mean_adapted_loss": 0.44378944784402846,
+          "mean_zs_loss": 0.44949229806661606,
+          "mean_retrained_loss": 0.4394539311528206,
+          "mean_original_loss": 0.43329899907112124,
+          "adapted_loss_ratio": 1.0242106462174987,
+          "zs_loss_ratio": 1.037372112629406,
+          "retrained_loss_ratio": 1.014204814908167,
+          "recovery_of_retrained_pct": 56.81053771985782,
+          "k2_adapted_on_orig_ratio": 1.0047995468330788
+        }
+      },
+      "kill_criteria": {
+        "k1_gap_reduction_pct": 35.443129668601514,
+        "k1_threshold": 50.0,
+        "k1_verdict": "KILLED",
+        "k2_worst_ratio": 1.0138576148527865,
+        "k2_any_expert_hurt_5pct": false,
+        "k2_verdict": "KILLED",
+        "overall_verdict": "KILLED"
+      }
+    },
+    "123": {
+      "verdict": "KILLED",
+      "aggregate": {
+        "1": {
+          "mean_gap_reduction_pct": 1.4710382507691326,
+          "mean_adapted_loss": 0.4412364162504673,
+          "mean_zs_loss": 0.4415524177253246,
+          "mean_retrained_loss": 0.4278646968305111,
+          "mean_original_loss": 0.4204276196658611,
+          "adapted_loss_ratio": 1.0494943614816366,
+          "zs_loss_ratio": 1.0502459806904518,
+          "retrained_loss_ratio": 1.017689316345488,
+          "recovery_of_retrained_pct": 2.3086493161471577,
+          "k2_adapted_on_orig_ratio": 1.0000226054620698
+        },
+        "5": {
+          "mean_gap_reduction_pct": 7.285673078609073,
+          "mean_adapted_loss": 0.43995399847626687,
+          "mean_zs_loss": 0.4415524177253246,
+          "mean_retrained_loss": 0.4278646968305111,
+          "mean_original_loss": 0.4204276196658611,
+          "adapted_loss_ratio": 1.0464440914370101,
+          "zs_loss_ratio": 1.0502459806904518,
+          "retrained_loss_ratio": 1.017689316345488,
+          "recovery_of_retrained_pct": 11.677760389946465,
+          "k2_adapted_on_orig_ratio": 1.000073350790258
+        },
+        "10": {
+          "mean_gap_reduction_pct": 13.375193336946381,
+          "mean_adapted_loss": 0.43860727548599243,
+          "mean_zs_loss": 0.4415524177253246,
+          "mean_retrained_loss": 0.4278646968305111,
+          "mean_original_loss": 0.4204276196658611,
+          "adapted_loss_ratio": 1.0432408694618582,
+          "zs_loss_ratio": 1.0502459806904518,
+          "retrained_loss_ratio": 1.017689316345488,
+          "recovery_of_retrained_pct": 21.516673679640625,
+          "k2_adapted_on_orig_ratio": 1.0006602935673679
+        },
+        "25": {
+          "mean_gap_reduction_pct": 25.77994800554815,
+          "mean_adapted_loss": 0.43580303713679314,
+          "mean_zs_loss": 0.4415524177253246,
+          "mean_retrained_loss": 0.4278646968305111,
+          "mean_original_loss": 0.4204276196658611,
+          "adapted_loss_ratio": 1.0365709024615266,
+          "zs_loss_ratio": 1.0502459806904518,
+          "retrained_loss_ratio": 1.017689316345488,
+          "recovery_of_retrained_pct": 42.003929158797796,
+          "k2_adapted_on_orig_ratio": 1.0042002157127459
+        },
+        "50": {
+          "mean_gap_reduction_pct": 36.70940959429102,
+          "mean_adapted_loss": 0.4332117781043053,
+          "mean_zs_loss": 0.4415524177253246,
+          "mean_retrained_loss": 0.4278646968305111,
+          "mean_original_loss": 0.4204276196658611,
+          "adapted_loss_ratio": 1.0304075133042032,
+          "zs_loss_ratio": 1.0502459806904518,
+          "retrained_loss_ratio": 1.017689316345488,
+          "recovery_of_retrained_pct": 60.93519647650306,
+          "k2_adapted_on_orig_ratio": 1.0099662158746594
+        }
+      },
+      "kill_criteria": {
+        "k1_gap_reduction_pct": 36.70940959429102,
+        "k1_threshold": 50.0,
+        "k1_verdict": "KILLED",
+        "k2_worst_ratio": 1.017951300485212,
+        "k2_any_expert_hurt_5pct": false,
+        "k2_verdict": "KILLED",
+        "overall_verdict": "KILLED"
+      }
+    },
+    "7": {
+      "verdict": "KILLED",
+      "aggregate": {
+        "1": {
+          "mean_gap_reduction_pct": 1.1874239767710622,
+          "mean_adapted_loss": 0.44584781751036645,
+          "mean_zs_loss": 0.44604544937610624,
+          "mean_retrained_loss": 0.434310607612133,
+          "mean_original_loss": 0.42914696261286733,
+          "adapted_loss_ratio": 1.0389164000971036,
+          "zs_loss_ratio": 1.0393769226755147,
+          "retrained_loss_ratio": 1.0120323466064556,
+          "recovery_of_retrained_pct": 1.6841459791106115,
+          "k2_adapted_on_orig_ratio": 1.0001479067471268
+        },
+        "5": {
+          "mean_gap_reduction_pct": 6.826290094896962,
+          "mean_adapted_loss": 0.4448991186916828,
+          "mean_zs_loss": 0.44604544937610624,
+          "mean_retrained_loss": 0.434310607612133,
+          "mean_original_loss": 0.42914696261286733,
+          "adapted_loss_ratio": 1.0367057382461902,
+          "zs_loss_ratio": 1.0393769226755147,
+          "retrained_loss_ratio": 1.0120323466064556,
+          "recovery_of_retrained_pct": 9.768607940203037,
+          "k2_adapted_on_orig_ratio": 1.0002110292279882
+        },
+        "10": {
+          "mean_gap_reduction_pct": 12.684406496226769,
+          "mean_adapted_loss": 0.4439076654613018,
+          "mean_zs_loss": 0.44604544937610624,
+          "mean_retrained_loss": 0.434310607612133,
+          "mean_original_loss": 0.42914696261286733,
+          "adapted_loss_ratio": 1.0343954498910204,
+          "zs_loss_ratio": 1.0393769226755147,
+          "retrained_loss_ratio": 1.0120323466064556,
+          "recovery_of_retrained_pct": 18.217407252864977,
+          "k2_adapted_on_orig_ratio": 1.0004790089686475
+        },
+        "25": {
+          "mean_gap_reduction_pct": 22.721423414490737,
+          "mean_adapted_loss": 0.442168278247118,
+          "mean_zs_loss": 0.44604544937610624,
+          "mean_retrained_loss": 0.434310607612133,
+          "mean_original_loss": 0.42914696261286733,
+          "adapted_loss_ratio": 1.0303423227208,
+          "zs_loss_ratio": 1.0393769226755147,
+          "retrained_loss_ratio": 1.0120323466064556,
+          "recovery_of_retrained_pct": 33.03982453824823,
+          "k2_adapted_on_orig_ratio": 1.0025177550293671
+        },
+        "50": {
+          "mean_gap_reduction_pct": 33.000836820577206,
+          "mean_adapted_loss": 0.4404198706150055,
+          "mean_zs_loss": 0.44604544937610624,
+          "mean_retrained_loss": 0.434310607612133,
+          "mean_original_loss": 0.42914696261286733,
+          "adapted_loss_ratio": 1.026268176135986,
+          "zs_loss_ratio": 1.0393769226755147,
+          "retrained_loss_ratio": 1.0120323466064556,
+          "recovery_of_retrained_pct": 47.93911050332427,
+          "k2_adapted_on_orig_ratio": 1.0050019748301653
+        }
+      },
+      "kill_criteria": {
+        "k1_gap_reduction_pct": 33.000836820577206,
+        "k1_threshold": 50.0,
+        "k1_verdict": "KILLED",
+        "k2_worst_ratio": 1.0151087698285668,
+        "k2_any_expert_hurt_5pct": false,
+        "k2_verdict": "KILLED",
+        "overall_verdict": "KILLED"
+      }
+    }
+  },
+  "aggregate_across_seeds": {
+    "1": {
+      "mean_gap_reduction_pct": 1.3955665466207998,
+      "std_gap_reduction_pct": 0.1490199831305259,
+      "mean_adapted_loss_ratio": 1.0417410485611711,
+      "mean_recovery_of_retrained_pct": 2.136274611299486,
+      "mean_k2_ratio": 1.0000155338428507,
+      "per_seed_gap_reductions": [
+        1.528237412322205,
+        1.4710382507691326,
+        1.1874239767710622
+      ]
+    },
+    "5": {
+      "mean_gap_reduction_pct": 7.216546025192535,
+      "std_gap_reduction_pct": 0.2945063645098962,
+      "mean_adapted_loss_ratio": 1.039230942230941,
+      "mean_recovery_of_retrained_pct": 11.219348518425022,
+      "mean_k2_ratio": 0.9999813630173304,
+      "per_seed_gap_reductions": [
+        7.537674902071571,
+        7.285673078609073,
+        6.826290094896962
+      ]
+    },
+    "10": {
+      "mean_gap_reduction_pct": 13.20450772126862,
+      "std_gap_reduction_pct": 0.37493560858570824,
+      "mean_adapted_loss_ratio": 1.0366390733171886,
+      "mean_recovery_of_retrained_pct": 20.569979040666414,
+      "mean_k2_ratio": 1.0003063046978626,
+      "per_seed_gap_reductions": [
+        13.553923330632706,
+        13.375193336946381,
+        12.684406496226769
+      ]
+    },
+    "25": {
+      "mean_gap_reduction_pct": 24.705029522276856,
+      "std_gap_reduction_pct": 1.404262099879155,
+      "mean_adapted_loss_ratio": 1.0315773643066948,
+      "mean_recovery_of_retrained_pct": 38.7598862486059,
+      "mean_k2_ratio": 1.0027350396686587,
+      "per_seed_gap_reductions": [
+        25.613717146791675,
+        25.77994800554815,
+        22.721423414490737
+      ]
+    },
+    "50": {
+      "mean_gap_reduction_pct": 35.05112536115658,
+      "std_gap_reduction_pct": 1.5391834495979517,
+      "mean_adapted_loss_ratio": 1.026962111885896,
+      "mean_recovery_of_retrained_pct": 55.22828156656172,
+      "mean_k2_ratio": 1.0065892458459678,
+      "per_seed_gap_reductions": [
+        35.443129668601514,
+        36.70940959429102,
+        33.000836820577206
+      ]
+    }
+  },
+  "overall_verdict": "KILLED",
+  "k1_per_seed": [
+    35.443129668601514,
+    36.70940959429102,
+    33.000836820577206
+  ],
+  "k1_mean": 35.05112536115658,
+  "k2_per_seed": [
+    1.0138576148527865,
+    1.017951300485212,
+    1.0151087698285668
+  ],
+  "k2_mean": 1.0156392283888551,
+  "config": {
+    "n_embd": 64,
+    "n_head": 4,
+    "n_layer": 4,
+    "block_size": 32,
+    "lora_rank": 8,
+    "lora_alpha": 1.0,
+    "total_pretrain_steps": 1000,
+    "expert_train_steps": 300,
+    "n_experts": 4,
+    "delta_rank": 16,
+    "adapt_steps_list": [
+      1,
+      5,
+      10,
+      25,
+      50
+    ],
+    "adapt_lr": 0.001,
+    "lr": 0.003
+  }
+}

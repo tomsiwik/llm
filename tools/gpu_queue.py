@@ -58,7 +58,7 @@ def ssh_check():
 
 WORKER_SCRIPT = r'''#!/usr/bin/env python3
 """GPU Worker — persistent task processor. Runs on RunPod."""
-import json, os, sys, time, signal, subprocess, shutil
+import json, os, sys, time, signal, subprocess, shutil, gc
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -83,7 +83,7 @@ def pop_task():
     if not QUEUE_FILE.exists():
         return None
     with open(QUEUE_FILE, "r") as f:
-        lines = f.readlines()
+        lines = [l for l in f.readlines() if l.strip()]
     if not lines:
         return None
     task = json.loads(lines[0])
@@ -109,6 +109,24 @@ def mark_done(task, returncode, elapsed):
         ACTIVE_FILE.unlink()
     return task
 
+def _kill_process_group(proc):
+    """Kill a process and all its children via process group."""
+    try:
+        pgid = os.getpgid(proc.pid)
+        os.killpg(pgid, signal.SIGTERM)
+        try:
+            proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            os.killpg(pgid, signal.SIGKILL)
+            proc.wait(timeout=5)
+    except (ProcessLookupError, PermissionError, OSError):
+        # Process already exited
+        try:
+            proc.kill()
+            proc.wait(timeout=2)
+        except Exception:
+            pass
+
 def run_smoke_test(task, run_env):
     """Run script for max 60s to catch crashes before committing GPU hours.
     Returns True if smoke test passes, False if it fails."""
@@ -124,19 +142,18 @@ def run_smoke_test(task, run_env):
     t0 = time.time()
     try:
         with open(smoke_log, "w") as logf:
+            # start_new_session=True creates a process group so we can
+            # kill the entire tree (prevents orphaned child processes
+            # that leak memory — root cause of OOM crash 2026-03-16)
             proc = subprocess.Popen(
                 cmd, cwd=str(WORK_DIR), env=smoke_env,
                 stdout=logf, stderr=subprocess.STDOUT,
+                start_new_session=True,
             )
             try:
                 proc.wait(timeout=60)
             except subprocess.TimeoutExpired:
-                proc.terminate()
-                try:
-                    proc.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    proc.kill()
-                    proc.wait()
+                _kill_process_group(proc)
                 elapsed = time.time() - t0
                 log(f"SMOKE PASS: {task['id']} — survived {elapsed:.0f}s without crash")
                 return True
@@ -158,11 +175,36 @@ def run_smoke_test(task, run_env):
         log(f"SMOKE FAIL: {task['id']} — exception: {e}")
         return False
 
+def get_gpu_utilization():
+    """Get current GPU utilization percentage."""
+    try:
+        r = subprocess.run(
+            ["nvidia-smi", "--query-gpu=utilization.gpu", "--format=csv,noheader,nounits"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if r.returncode == 0:
+            return int(r.stdout.strip().split("\n")[0])
+    except Exception:
+        pass
+    return -1
+
+def _get_rss_mb():
+    """Get current worker RSS in MB."""
+    try:
+        with open("/proc/self/status") as f:
+            for line in f:
+                if line.startswith("VmRSS:"):
+                    return int(line.split()[1]) // 1024
+    except Exception:
+        pass
+    return -1
+
 def run_task(task):
     """Execute a task. Returns (returncode, elapsed_seconds)."""
     script = task["script"]
     args = task.get("args", [])
     env = task.get("env", {})
+    max_runtime = int(env.get("MAX_RUNTIME", 0)) or 28800  # 8hr default
 
     cmd = [sys.executable, script] + args
     run_env = os.environ.copy()
@@ -184,16 +226,38 @@ def run_task(task):
     mark_active(task)
 
     t0 = time.time()
+    util_log_interval = 60  # Log GPU util every 60s
+    last_util_log = 0
     with open(task_log, "w") as logf:
         proc = subprocess.Popen(
             cmd, cwd=str(WORK_DIR), env=run_env,
             stdout=logf, stderr=subprocess.STDOUT,
+            start_new_session=True,  # process group for clean kill
         )
-        proc.wait()
-    elapsed = time.time() - t0
+        # Poll so we can log GPU utilization
+        while proc.poll() is None:
+            elapsed = time.time() - t0
+            # Hard timeout — kill entire process group
+            if elapsed > max_runtime:
+                log(f"TIMEOUT: {task['id']} — killing after {elapsed:.0f}s (limit {max_runtime}s)")
+                _kill_process_group(proc)
+                break
+            # Log GPU utilization periodically after 120s warmup
+            if elapsed > 120 and elapsed - last_util_log > util_log_interval:
+                util = get_gpu_utilization()
+                rss = _get_rss_mb()
+                if util >= 0:
+                    log(f"UTIL: {task['id']} — GPU {util}%, worker RSS {rss}MB at {elapsed:.0f}s")
+                last_util_log = elapsed
+            time.sleep(5)
 
+    elapsed = time.time() - t0
     status = "OK" if proc.returncode == 0 else f"FAILED (rc={proc.returncode})"
     log(f"DONE: {task['id']} — {status} in {elapsed:.0f}s")
+
+    # Force memory cleanup between tasks
+    gc.collect()
+
     return proc.returncode, elapsed
 
 def main():
@@ -295,6 +359,8 @@ def cmd_submit(args):
         "--exclude", "references",
         "--exclude", "results",
         "--exclude", "adapters/*/adapter_model.safetensors",
+        "--exclude", "**/checkpoints/",
+        "--exclude", "**/results_*.json",
         "-e", "ssh",
         f"{REPO_ROOT}/", f"{SSH_ALIAS}:{REMOTE_DIR}/",
     ]
