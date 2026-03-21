@@ -1,0 +1,153 @@
+{
+  "seed": 123,
+  "config": {
+    "d": 64,
+    "H": 4,
+    "L": 4,
+    "V": 42,
+    "N_experts": 5,
+    "n_train": 1000,
+    "n_eval_task": 200,
+    "base_epochs": 20,
+    "expert_epochs": 25,
+    "n_tournament_queries": 200,
+    "n_tournament_rounds": 20
+  },
+  "oracle": {
+    "accuracy_matrix": {
+      "arithmetic": {
+        "arithmetic": 0.775,
+        "reverse": 0.01,
+        "repeat": 0.0,
+        "sort": 0.005,
+        "parity": 0.0
+      },
+      "reverse": {
+        "arithmetic": 0.0,
+        "reverse": 0.905,
+        "repeat": 0.08,
+        "sort": 0.145,
+        "parity": 0.015
+      },
+      "repeat": {
+        "arithmetic": 0.0,
+        "reverse": 0.01,
+        "repeat": 1.0,
+        "sort": 0.015,
+        "parity": 0.0
+      },
+      "sort": {
+        "arithmetic": 0.0,
+        "reverse": 0.05,
+        "repeat": 0.07,
+        "sort": 0.86,
+        "parity": 0.0
+      },
+      "parity": {
+        "arithmetic": 0.0,
+        "reverse": 0.0,
+        "repeat": 0.0,
+        "sort": 0.0,
+        "parity": 1.0
+      }
+    },
+    "avg_accuracy": {
+      "arithmetic": 0.158,
+      "reverse": 0.229,
+      "repeat": 0.205,
+      "sort": 0.196,
+      "parity": 0.2
+    },
+    "ranking": [
+      "reverse",
+      "repeat",
+      "parity",
+      "sort",
+      "arithmetic"
+    ],
+    "per_domain_best": {
+      "arithmetic": "arithmetic",
+      "reverse": "reverse",
+      "repeat": "repeat",
+      "sort": "sort",
+      "parity": "parity"
+    }
+  },
+  "shadow_scoring": {
+    "per_comparison_accuracy": 0.88375,
+    "final_kendall_tau": -0.4,
+    "final_pairwise_agreement": 0.3,
+    "elo_ranking": [
+      "arithmetic",
+      "reverse",
+      "sort",
+      "parity",
+      "repeat"
+    ],
+    "elo_ratings": {
+      "arithmetic": 1573.8360138588225,
+      "reverse": 1542.3958213381109,
+      "repeat": 1391.3310250098116,
+      "sort": 1538.5481243788122,
+      "parity": 1453.889015414445
+    },
+    "convergence_taus": [
+      -0.4,
+      0.0,
+      0.0,
+      0.0,
+      -0.4,
+      -0.2,
+      -0.2,
+      0.0,
+      0.0,
+      0.0,
+      -0.6,
+      0.0,
+      0.0,
+      -0.2,
+      0.2,
+      0.0,
+      0.0,
+      0.0,
+      0.2,
+      -0.4
+    ],
+    "convergence_agreements": [
+      0.3,
+      0.5,
+      0.5,
+      0.5,
+      0.3,
+      0.4,
+      0.4,
+      0.5,
+      0.5,
+      0.5,
+      0.2,
+      0.5,
+      0.5,
+      0.4,
+      0.6,
+      0.5,
+      0.5,
+      0.5,
+      0.6,
+      0.3
+    ],
+    "convergence_round_tau_0_8": null,
+    "tau_stability_last_10": 0.24000000000000002
+  },
+  "overhead": {
+    "baseline_ms_per_query": 1.1294794082641602,
+    "shadow_ms_per_query": 2.252635955810547,
+    "overhead_pct": 99.4401969020851,
+    "macro_projected_pct": 1.8
+  },
+  "kill_criteria": {
+    "k1_overhead_pass": true,
+    "k2_correlation_pass": true,
+    "k3_convergence_pass": false,
+    "overall": "KILLED"
+  }
+}

@@ -1,0 +1,488 @@
+{
+  "config": {
+    "d_values": [
+      64,
+      128,
+      256
+    ],
+    "n_per_d": {
+      "64": 12,
+      "128": 20,
+      "256": 40
+    },
+    "rank": 8,
+    "seeds": [
+      42,
+      137
+    ],
+    "n_iter_base": 500,
+    "n_iter_long": 2000
+  },
+  "per_dimension": {
+    "64": {
+      "d": 64,
+      "N": 12,
+      "welch_bound": 0.21320071635561044,
+      "tightness": {
+        "welch_bound": 0.21320071635561044,
+        "packing_ratio": 1.5,
+        "max_equiangular_estimate": 42.13333333333333,
+        "N_over_max_equiangular": 0.2848101265822785,
+        "etf_possibly_exists": true
+      },
+      "per_seed": {
+        "seed_42": {
+          "std_ap_500": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226882660028,
+            "time_s": 1.1015942096710205,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284271205739504
+          },
+          "std_ap_2000": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226846536001,
+            "time_s": 4.386756896972656,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.82842710363028
+          },
+          "taap_schedule": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.603022679234996,
+            "time_s": 1.112483024597168,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.828427078214774
+          },
+          "taap_momentum": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226855567007,
+            "time_s": 1.110055923461914,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284271078661973
+          },
+          "taap_selective": {
+            "max_coh": 0.9344332218170166,
+            "mean_coh": 0.5976139948223577,
+            "time_s": 1.1863958835601807,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.382880310113117,
+            "ratio_to_welch_mean": 2.8030580996058236
+          }
+        },
+        "seed_137": {
+          "std_ap_500": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226873629021,
+            "time_s": 1.1008000373840332,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284271163380326
+          },
+          "std_ap_2000": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226900722041,
+            "time_s": 4.376175165176392,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284271290457856
+          },
+          "taap_schedule": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226873629021,
+            "time_s": 1.1017811298370361,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284271163380326
+          },
+          "taap_momentum": {
+            "max_coh": 0.6030227541923523,
+            "mean_coh": 0.6030226747194926,
+            "time_s": 1.1085269451141357,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284274297959393,
+            "ratio_to_welch_mean": 2.8284270570351855
+          },
+          "taap_selective": {
+            "max_coh": 0.8849018812179565,
+            "mean_coh": 0.5960692104065057,
+            "time_s": 1.1860480308532715,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.150557729562104,
+            "ratio_to_welch_mean": 2.7958124184361823
+          }
+        }
+      }
+    },
+    "128": {
+      "d": 128,
+      "N": 20,
+      "welch_bound": 0.11470786693528089,
+      "tightness": {
+        "welch_bound": 0.11470786693528089,
+        "packing_ratio": 1.25,
+        "max_equiangular_estimate": 152.53333333333333,
+        "N_over_max_equiangular": 0.13111888111888112,
+        "etf_possibly_exists": true
+      },
+      "per_seed": {
+        "seed_42": {
+          "std_ap_500": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.32444284291643843,
+            "time_s": 2.7863709926605225,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427130455592
+          },
+          "std_ap_2000": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.32444284009306057,
+            "time_s": 11.123399019241333,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427105841955
+          },
+          "taap_schedule": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.3244428437007101,
+            "time_s": 2.826314926147461,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427137292714
+          },
+          "taap_momentum": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.3244428397793519,
+            "time_s": 2.8351969718933105,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427103107106
+          },
+          "taap_selective": {
+            "max_coh": 0.49938902258872986,
+            "mean_coh": 0.32169810564894424,
+            "time_s": 3.006960868835449,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.353572565955648,
+            "ratio_to_welch_mean": 2.804499065704438
+          }
+        },
+        "seed_137": {
+          "std_ap_500": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.3244428415047495,
+            "time_s": 2.769421100616455,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.8284271181487735
+          },
+          "std_ap_2000": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.32444284072047785,
+            "time_s": 11.246499061584473,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427111311652
+          },
+          "taap_schedule": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.32444283946564323,
+            "time_s": 2.8027729988098145,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.828427100372257
+          },
+          "taap_momentum": {
+            "max_coh": 0.32444292306900024,
+            "mean_coh": 0.32444284119104083,
+            "time_s": 2.805333137512207,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284278292094265,
+            "ratio_to_welch_mean": 2.8284271154139247
+          },
+          "taap_selective": {
+            "max_coh": 0.49829453229904175,
+            "mean_coh": 0.3210692166497833,
+            "time_s": 2.9998841285705566,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.344031020820774,
+            "ratio_to_welch_mean": 2.799016538516344
+          }
+        }
+      }
+    },
+    "256": {
+      "d": 256,
+      "N": 40,
+      "welch_bound": 0.08006407690254357,
+      "tightness": {
+        "welch_bound": 0.08006407690254357,
+        "packing_ratio": 1.25,
+        "max_equiangular_estimate": 578.1333333333333,
+        "N_over_max_equiangular": 0.06918819188191883,
+        "etf_possibly_exists": true
+      },
+      "per_seed": {
+        "seed_42": {
+          "std_ap_500": {
+            "max_coh": 0.2264554798603058,
+            "mean_coh": 0.22645540787623478,
+            "time_s": 14.86624789237976,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.828428036907917,
+            "ratio_to_welch_mean": 2.828427137827158
+          },
+          "std_ap_2000": {
+            "max_coh": 0.22645549476146698,
+            "mean_coh": 0.22645540644343082,
+            "time_s": 60.02080488204956,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.8284282230233604,
+            "ratio_to_welch_mean": 2.8284271199314426
+          },
+          "taap_schedule": {
+            "max_coh": 0.22645549476146698,
+            "mean_coh": 0.22645540682551188,
+            "time_s": 14.87131404876709,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284282230233604,
+            "ratio_to_welch_mean": 2.828427124703633
+          },
+          "taap_momentum": {
+            "max_coh": 0.2264554798603058,
+            "mean_coh": 0.22645540711207268,
+            "time_s": 15.07369875907898,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.828428036907917,
+            "ratio_to_welch_mean": 2.8284271282827764
+          },
+          "taap_selective": {
+            "max_coh": 0.34869053959846497,
+            "mean_coh": 0.2241867336898278,
+            "time_s": 15.60103702545166,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.355143443705742,
+            "ratio_to_welch_mean": 2.800091406320899
+          }
+        },
+        "seed_137": {
+          "std_ap_500": {
+            "max_coh": 0.22645549476146698,
+            "mean_coh": 0.22645540812458748,
+            "time_s": 15.103590965270996,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284282230233604,
+            "ratio_to_welch_mean": 2.828427140929082
+          },
+          "std_ap_2000": {
+            "max_coh": 0.2264554798603058,
+            "mean_coh": 0.2264554074177375,
+            "time_s": 60.06890821456909,
+            "n_iter": 2000,
+            "ratio_to_welch_max": 2.828428036907917,
+            "ratio_to_welch_mean": 2.828427132100529
+          },
+          "taap_schedule": {
+            "max_coh": 0.2264554798603058,
+            "mean_coh": 0.22645540716938484,
+            "time_s": 15.134519815444946,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.828428036907917,
+            "ratio_to_welch_mean": 2.828427128998605
+          },
+          "taap_momentum": {
+            "max_coh": 0.22645549476146698,
+            "mean_coh": 0.2264554069783443,
+            "time_s": 15.038071155548096,
+            "n_iter": 500,
+            "ratio_to_welch_max": 2.8284282230233604,
+            "ratio_to_welch_mean": 2.8284271266125094
+          },
+          "taap_selective": {
+            "max_coh": 0.354280024766922,
+            "mean_coh": 0.2241708843085246,
+            "time_s": 15.474735975265503,
+            "n_iter": 500,
+            "ratio_to_welch_max": 4.424956091083926,
+            "ratio_to_welch_mean": 2.79989344761187
+          }
+        }
+      }
+    }
+  },
+  "aggregate": {
+    "64": {
+      "d": 64,
+      "N": 12,
+      "welch_bound": 0.21320071635561044,
+      "methods": {
+        "std_ap_500": {
+          "avg_max_coh": 0.6030227541923523,
+          "avg_mean_coh": 0.6030226878144525,
+          "max_over_welch": 2.8284274297959393,
+          "mean_over_welch": 2.8284271184559917,
+          "avg_time_s": 1.1011971235275269,
+          "time_ratio_vs_std": 1.0
+        },
+        "std_ap_2000": {
+          "avg_max_coh": 0.6030227541923523,
+          "avg_mean_coh": 0.6030226873629021,
+          "max_over_welch": 2.8284274297959393,
+          "mean_over_welch": 2.8284271163380326,
+          "avg_time_s": 4.381466031074524,
+          "time_ratio_vs_std": 3.9788208100645295
+        },
+        "taap_schedule": {
+          "avg_max_coh": 0.6030227541923523,
+          "avg_mean_coh": 0.603022683298949,
+          "max_over_welch": 2.8284274297959393,
+          "mean_over_welch": 2.8284270972764034,
+          "avg_time_s": 1.107132077217102,
+          "time_ratio_vs_std": 1.005389547032745
+        },
+        "taap_momentum": {
+          "avg_max_coh": 0.6030227541923523,
+          "avg_mean_coh": 0.6030226801380967,
+          "max_over_welch": 2.8284274297959393,
+          "mean_over_welch": 2.8284270824506916,
+          "avg_time_s": 1.109291434288025,
+          "time_ratio_vs_std": 1.0073504648600689
+        },
+        "taap_selective": {
+          "avg_max_coh": 0.9096675515174866,
+          "avg_mean_coh": 0.5968416026144316,
+          "max_over_welch": 4.26671901983761,
+          "mean_over_welch": 2.7994352590210028,
+          "avg_time_s": 1.186221957206726,
+          "time_ratio_vs_std": 1.0772112747687121
+        }
+      }
+    },
+    "128": {
+      "d": 128,
+      "N": 20,
+      "welch_bound": 0.11470786693528089,
+      "methods": {
+        "std_ap_500": {
+          "avg_max_coh": 0.32444292306900024,
+          "avg_mean_coh": 0.32444284221059394,
+          "max_over_welch": 2.8284278292094265,
+          "mean_over_welch": 2.828427124302183,
+          "avg_time_s": 2.7778960466384888,
+          "time_ratio_vs_std": 1.0
+        },
+        "std_ap_2000": {
+          "avg_max_coh": 0.32444292306900024,
+          "avg_mean_coh": 0.3244428404067692,
+          "max_over_welch": 2.8284278292094265,
+          "mean_over_welch": 2.828427108576803,
+          "avg_time_s": 11.184949040412903,
+          "time_ratio_vs_std": 4.026410222926709
+        },
+        "taap_schedule": {
+          "avg_max_coh": 0.32444292306900024,
+          "avg_mean_coh": 0.32444284158317666,
+          "max_over_welch": 2.8284278292094265,
+          "mean_over_welch": 2.8284271188324857,
+          "avg_time_s": 2.8145439624786377,
+          "time_ratio_vs_std": 1.013192688000149
+        },
+        "taap_momentum": {
+          "avg_max_coh": 0.32444292306900024,
+          "avg_mean_coh": 0.32444284048519634,
+          "max_over_welch": 2.8284278292094265,
+          "mean_over_welch": 2.828427109260515,
+          "avg_time_s": 2.820265054702759,
+          "time_ratio_vs_std": 1.015252193513699
+        },
+        "taap_selective": {
+          "avg_max_coh": 0.4988417774438858,
+          "avg_mean_coh": 0.3213836611493638,
+          "max_over_welch": 4.348801793388211,
+          "mean_over_welch": 2.8017578021103913,
+          "avg_time_s": 3.003422498703003,
+          "time_ratio_vs_std": 1.0811860661011494
+        }
+      }
+    },
+    "256": {
+      "d": 256,
+      "N": 40,
+      "welch_bound": 0.08006407690254357,
+      "methods": {
+        "std_ap_500": {
+          "avg_max_coh": 0.22645548731088638,
+          "avg_mean_coh": 0.22645540800041114,
+          "max_over_welch": 2.828428129965639,
+          "mean_over_welch": 2.8284271393781206,
+          "avg_time_s": 14.984919428825378,
+          "time_ratio_vs_std": 1.0
+        },
+        "std_ap_2000": {
+          "avg_max_coh": 0.22645548731088638,
+          "avg_mean_coh": 0.22645540693058416,
+          "max_over_welch": 2.828428129965639,
+          "mean_over_welch": 2.8284271260159857,
+          "avg_time_s": 60.044856548309326,
+          "time_ratio_vs_std": 4.007018978881227
+        },
+        "taap_schedule": {
+          "avg_max_coh": 0.22645548731088638,
+          "avg_mean_coh": 0.22645540699744837,
+          "max_over_welch": 2.828428129965639,
+          "mean_over_welch": 2.8284271268511194,
+          "avg_time_s": 15.002916932106018,
+          "time_ratio_vs_std": 1.0012010410443728
+        },
+        "taap_momentum": {
+          "avg_max_coh": 0.22645548731088638,
+          "avg_mean_coh": 0.2264554070452085,
+          "max_over_welch": 2.828428129965639,
+          "mean_over_welch": 2.828427127447643,
+          "avg_time_s": 15.055884957313538,
+          "time_ratio_vs_std": 1.0047357964669232
+        },
+        "taap_selective": {
+          "avg_max_coh": 0.3514852821826935,
+          "avg_mean_coh": 0.2241788089991762,
+          "max_over_welch": 4.390049767394834,
+          "mean_over_welch": 2.7999924269663845,
+          "avg_time_s": 15.537886500358582,
+          "time_ratio_vs_std": 1.0369015712202965
+        }
+      }
+    }
+  },
+  "kill_criteria": {
+    "k1_taap_closer_to_welch": true,
+    "k1_details": {
+      "64": {
+        "std_ratio": 2.8284271184559917,
+        "best_taap": "taap_selective",
+        "best_taap_ratio": 2.7994352590210028,
+        "improvement_pct": 1.0250170225639503,
+        "pass": "True"
+      },
+      "128": {
+        "std_ratio": 2.828427124302183,
+        "best_taap": "taap_selective",
+        "best_taap_ratio": 2.8017578021103913,
+        "improvement_pct": 0.9429029287212504,
+        "pass": "True"
+      },
+      "256": {
+        "std_ratio": 2.8284271393781206,
+        "best_taap": "taap_selective",
+        "best_taap_ratio": 2.7999924269663845,
+        "improvement_pct": 1.0053188931707107,
+        "pass": "True"
+      }
+    },
+    "k2_runtime_under_3x": true
+  },
+  "elapsed_seconds": 304.28525614738464
+}

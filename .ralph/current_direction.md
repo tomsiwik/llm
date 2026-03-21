@@ -1,23 +1,29 @@
-# Current Direction: GPU queue processing 28+ macro experiments
+# Current Direction: exp_bitnet_scale_n25
 
-## Status
-All eligible open macro nodes have been activated and submitted to GPU queue.
-Worker is processing run_all_eval (held-out evaluation), 28 tasks pending.
+## Goal
+Test whether ternary LoRA composition on BitNet-2B-4T scales from N=15 (domains only) to N=25 (15 domains + 4 existing capabilities + 6 new capabilities) without degradation.
 
-## Active Macro Experiments (in GPU queue)
-1. **exp_pilot50_held_out_eval** (P2) — Currently running on worker
-2. **exp_reasoning_expert_distillation** (P1) — train + eval scripts queued
-3. **exp_reasoning_domain_composition** (P2) — composition test queued
-4. **exp_pilot50_composition_quality** (P3) — resubmitted after failure
-5. **exp_distillation_quality_vs_teacher** (P3) — 8B vs 70B teacher comparison
-6. **exp_sole_vs_full_finetune** (P3) — SOLE vs union LoRA baseline
-7. **exp_expert_continual_addition** (P3) — add 10 new experts to composed-50
-8. **exp_sole_inference_throughput** (P4) — throughput benchmarks
-9. **exp_scale_500_experts** (P4) — scale to 500 experts
-10. **exp_automated_correction_pipeline** (P4) — teacher correction pipeline
-11. **exp_composable_merge_pipeline** (P5) — merge pipeline with quality gates
+## Kill Criteria
+- K1: composition ratio N=25 > 5x (approaching catastrophe)
+- K2: cross-type cosine (capability-domain) > 0.01
 
-## Next Steps
-- Wait for GPU results to complete
-- Integrate findings as experiments finish
-- Generate new hypotheses from proven/killed results
+## Approach
+1. Reuse all 15 trained domain adapters from bitnet_scale_n15
+2. Reuse 4 trained capability adapters from capability_expert_taxonomy (reasoning, instruction, conciseness, safety)
+3. Train 6 new capability adapters: multilingual, coding-style, summarization, debate, translation, formal-writing
+4. Compose all 25 together with 1/N scaling
+5. Measure composition ratio, cross-type cosines, per-type degradation
+
+## Key Data Sources (HuggingFace, $0)
+- multilingual: Helsinki-NLP/tatoeba_mt (de-en pairs)
+- coding-style: bigcode/the-stack-smol (docstring-heavy Python)
+- summarization: EdinburghNLP/xsum (summaries)
+- debate: argilla/distilabel-capybara-dpo-7k-binarized (argument-style)
+- translation: Helsinki-NLP/opus_books (en-fr parallel)
+- formal-writing: ccdv/arxiv-summarization (academic writing)
+
+## Expected Runtime
+~60-90 min (6 new adapters * ~8 min each + eval overhead)
+
+## Scale
+Micro only. Apple Silicon, MLX, $0.

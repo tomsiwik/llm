@@ -1,0 +1,45 @@
+{
+  "seeds": [
+    42,
+    123,
+    7
+  ],
+  "per_seed_verdicts": [
+    "KILLED (K2: alignment error >5% for both methods)",
+    "KILLED (K2: alignment error >5% for both methods)",
+    "KILLED (K2: alignment error >5% for both methods)"
+  ],
+  "overall_verdict": "KILLED",
+  "methods": {
+    "naive_transfer": {
+      "mean_ratio": 1.1528221737594908,
+      "std_ratio": 0.0026179468891061085,
+      "ratios_per_seed": [
+        1.149504230352333,
+        1.155903786504037,
+        1.1530585044221027
+      ],
+      "mean_alignment_error": 0.0
+    },
+    "procrustes_weight": {
+      "mean_ratio": 1.1512398609856946,
+      "std_ratio": 0.0038652349251682267,
+      "ratios_per_seed": [
+        1.1457736187872833,
+        1.1539874289302465,
+        1.1539585352395543
+      ],
+      "mean_alignment_error": 0.8210664391517639
+    },
+    "procrustes_activation": {
+      "mean_ratio": 1.133130189039781,
+      "std_ratio": 0.008753783020930397,
+      "ratios_per_seed": [
+        1.1348131842800129,
+        1.142910307164565,
+        1.1216670756747646
+      ],
+      "mean_alignment_error": 0.25914958119392395
+    }
+  }
+}

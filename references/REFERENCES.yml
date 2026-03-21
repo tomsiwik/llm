@@ -237,6 +237,14 @@ entries:
   #   nodes: [exp_relora_composition_test, exp_base_free_composition]
   #   added: "2026-03-11"
 
+  # ── LTE (LoRA-the-Explorer) ────────────────────────────────────────────────
+
+  # - dir: "lte" (no dedicated folder -- code at github.com/minyoungg/LTE)
+  #   source: "https://arxiv.org/abs/2402.16828"
+  #   insight: "Parallel multi-head LoRA pretraining: K heads on different data shards, averaged merge. Achieves full-rank from scratch. Our micro experiment shows equivalent substrate quality to sequential (ReLoRA)."
+  #   nodes: [exp_lte_parallel_base_construction, exp_adapter_taxonomy_wild]
+  #   added: "2026-03-14"
+
   # ── Adapter Taxonomy (no folders, referenced in survey) ─────────────────────
   # - source: "Lialin et al. 2023 (ReLoRA)" — iterative LoRA achieves full-rank pretraining from scratch
   # - source: "Hyeon-Woo et al. 2024 (LTE)" — parallel multi-head LoRA pretraining
@@ -295,11 +303,27 @@ entries:
   - dir: "x-lora"
     source: "https://arxiv.org/abs/2402.07148"
     insight: "Dynamic layer-wise token-level LoRA mixing via gating on hidden states. LoRA MoE with learned routing; SOLE eliminates routing via structural orthogonality."
-    nodes: [exp5_macro_match, exp_oae_vs_lora_soups]
+    nodes: [exp5_macro_match, exp_oae_vs_lora_soups, exp_lora_flow_comparison]
     added: "2026-03-12"
+
+  # ── LoRA-Flow ──────────────────────────────────────────────────────────────
+
+  - dir: "lora-flow"
+    source: "https://arxiv.org/abs/2402.11455"
+    insight: "Dynamic per-layer per-token fusion gate for LoRA composition. w=softmax(W_gate@h)+b. 0.26M params for Llama-2-7b k=2. Outperforms static merging but gate scales O(k*d*L), infeasible at k>=100."
+    nodes: [exp_lora_flow_comparison, exp_oae_vs_lora_soups]
+    added: "2026-03-15"
 
   - dir: "elrea"
     source: "https://arxiv.org/abs/2502.00089"
     insight: "Gradient-direction clustering for expert specialization with dynamic contribution adjustment. Cluster-based expert training; SOLE uses independent distillation instead."
     nodes: [exp5_macro_match, exp_composition_naming]
     added: "2026-03-12"
+
+  # ── Semantic Routing ──────────────────────────────────────────────────────
+
+  - dir: "semantic-router"
+    source: "https://github.com/aurelio-labs/semantic-router"
+    insight: "Utterance-based semantic routing via cosine similarity to exemplar embeddings. O(NK*D) lookup, threshold-based confidence. Adapted for exp_semantic_router micro experiment."
+    nodes: [exp_semantic_router]
+    added: "2026-03-14"

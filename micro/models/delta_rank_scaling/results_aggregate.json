@@ -11,7 +11,7 @@
           "n_params": 202688,
           "pretrain_loss": 0.47843772172927856,
           "val_loss": 0.491444057226181,
-          "pretrain_time": 56.725858211517334,
+          "pretrain_time": 46.783809185028076,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -791,7 +791,7 @@
           "n_params": 798592,
           "pretrain_loss": 0.5069549083709717,
           "val_loss": 0.48668656051158904,
-          "pretrain_time": 138.44330286979675,
+          "pretrain_time": 117.23372006416321,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -1571,7 +1571,7 @@
           "n_params": 3170048,
           "pretrain_loss": 0.4918293058872223,
           "val_loss": 0.49135902523994446,
-          "pretrain_time": 246.89504384994507,
+          "pretrain_time": 217.9887499809265,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -2410,7 +2410,7 @@
           "n_params": 202688,
           "pretrain_loss": 0.46311715245246887,
           "val_loss": 0.5053524821996689,
-          "pretrain_time": 70.33851075172424,
+          "pretrain_time": 58.1125590801239,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -3190,7 +3190,7 @@
           "n_params": 798592,
           "pretrain_loss": 0.47382038831710815,
           "val_loss": 0.5048988938331604,
-          "pretrain_time": 115.81637501716614,
+          "pretrain_time": 101.17078018188477,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -3970,7 +3970,7 @@
           "n_params": 3170048,
           "pretrain_loss": 0.5066137909889221,
           "val_loss": 0.49969549775123595,
-          "pretrain_time": 294.85849046707153,
+          "pretrain_time": 262.67057609558105,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -4809,7 +4809,7 @@
           "n_params": 202688,
           "pretrain_loss": 0.48595425486564636,
           "val_loss": 0.502906110882759,
-          "pretrain_time": 75.28233194351196,
+          "pretrain_time": 60.41644501686096,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -5589,7 +5589,7 @@
           "n_params": 798592,
           "pretrain_loss": 0.49544376134872437,
           "val_loss": 0.5005137264728546,
-          "pretrain_time": 130.37918496131897,
+          "pretrain_time": 111.29078412055969,
           "weight_analyses": [
             {
               "key": "wte.weight",
@@ -6369,7 +6369,7 @@
           "n_params": 3170048,
           "pretrain_loss": 0.49450039863586426,
           "val_loss": 0.49571322500705717,
-          "pretrain_time": 345.9316940307617,
+          "pretrain_time": 303.0038492679596,
           "weight_analyses": [
             {
               "key": "wte.weight",

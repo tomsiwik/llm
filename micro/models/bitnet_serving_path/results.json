@@ -1,0 +1,268 @@
+{
+  "experiment": "bitnet_serving_path",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "adapter_source": "/Users/tom/Code/tomsiwik/llm/micro/models/bitnet_sole_vs_monolithic/adapters/sole",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-21 12:51:06",
+  "memory_packed_mb": 1717.9,
+  "memory_unpacked_mb": 1717.9,
+  "base_ppls": {
+    "medical": 15.7992,
+    "code": 3.5189,
+    "math": 4.7385,
+    "legal": 25.5192,
+    "creative": 3.6013
+  },
+  "reference_routed_ppls": {
+    "medical": 8.0026,
+    "code": 2.7622,
+    "math": 3.1184,
+    "legal": 17.9459,
+    "creative": 3.1679
+  },
+  "reference_composed_ppls": {
+    "medical": 13.38,
+    "code": 3.2198,
+    "math": 4.3152,
+    "legal": 23.4554,
+    "creative": 3.3765
+  },
+  "n_adapters_loaded": 5,
+  "single_merge_n1": {
+    "medical": {
+      "base_ppl": 15.7992,
+      "ref_routed_ppl": 8.0026,
+      "float_merge_ppl": 16.4266,
+      "qaf_merge_ppl": 61.7667,
+      "ref_benefit_pct": 49.35,
+      "float_benefit_pct": -3.97,
+      "qaf_benefit_pct": -290.95,
+      "qaf_vs_float_loss_pct": 286.98,
+      "avg_delta_ratio": 0.012381,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "code": {
+      "base_ppl": 3.5189,
+      "ref_routed_ppl": 2.7622,
+      "float_merge_ppl": 3.4865,
+      "qaf_merge_ppl": 24.1568,
+      "ref_benefit_pct": 21.5,
+      "float_benefit_pct": 0.92,
+      "qaf_benefit_pct": -586.48,
+      "qaf_vs_float_loss_pct": 587.4,
+      "avg_delta_ratio": 0.00866,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "math": {
+      "base_ppl": 4.7385,
+      "ref_routed_ppl": 3.1184,
+      "float_merge_ppl": 4.0652,
+      "qaf_merge_ppl": 50.4241,
+      "ref_benefit_pct": 34.19,
+      "float_benefit_pct": 14.21,
+      "qaf_benefit_pct": -964.14,
+      "qaf_vs_float_loss_pct": 978.35,
+      "avg_delta_ratio": 0.009442,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "legal": {
+      "base_ppl": 25.5192,
+      "ref_routed_ppl": 17.9459,
+      "float_merge_ppl": 25.2942,
+      "qaf_merge_ppl": 144.0278,
+      "ref_benefit_pct": 29.68,
+      "float_benefit_pct": 0.88,
+      "qaf_benefit_pct": -464.39,
+      "qaf_vs_float_loss_pct": 465.27,
+      "avg_delta_ratio": 0.009826,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "creative": {
+      "base_ppl": 3.6013,
+      "ref_routed_ppl": 3.1679,
+      "float_merge_ppl": 7.089,
+      "qaf_merge_ppl": 22.2663,
+      "ref_benefit_pct": 12.03,
+      "float_benefit_pct": -96.85,
+      "qaf_benefit_pct": -518.29,
+      "qaf_vs_float_loss_pct": 421.44,
+      "avg_delta_ratio": 0.009472,
+      "avg_ternary_changed_pct": 0.0
+    }
+  },
+  "multi_merge_scaling": {
+    "N=1": {
+      "domains": [
+        "medical"
+      ],
+      "float_ppls": {
+        "medical": 16.4266,
+        "code": 23.3423,
+        "math": 19.356,
+        "legal": 79.8483,
+        "creative": 7.382
+      },
+      "qaf_ppls": {
+        "medical": 61.7667,
+        "code": 23.8296,
+        "math": 50.2457,
+        "legal": 143.5038,
+        "creative": 22.1313
+      },
+      "avg_float_ppl": 29.271,
+      "avg_qaf_ppl": 60.2954,
+      "avg_delta_ratio": 0.012381,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "N=2": {
+      "domains": [
+        "medical",
+        "code"
+      ],
+      "float_ppls": {
+        "medical": 9.732,
+        "code": 3.0089,
+        "math": 6.473,
+        "legal": 30.2343,
+        "creative": 3.9665
+      },
+      "qaf_ppls": {
+        "medical": 62.487,
+        "code": 24.1212,
+        "math": 50.6593,
+        "legal": 144.6441,
+        "creative": 22.3878
+      },
+      "avg_float_ppl": 10.6829,
+      "avg_qaf_ppl": 60.8599,
+      "avg_delta_ratio": 0.008085,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "N=3": {
+      "domains": [
+        "medical",
+        "code",
+        "math"
+      ],
+      "float_ppls": {
+        "medical": 9.6613,
+        "code": 2.9757,
+        "math": 3.5398,
+        "legal": 27.5866,
+        "creative": 3.8409
+      },
+      "qaf_ppls": {
+        "medical": 62.32,
+        "code": 24.2725,
+        "math": 50.7042,
+        "legal": 144.4935,
+        "creative": 22.5099
+      },
+      "avg_float_ppl": 9.5209,
+      "avg_qaf_ppl": 60.86,
+      "avg_delta_ratio": 0.006611,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "N=4": {
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal"
+      ],
+      "float_ppls": {
+        "medical": 10.2776,
+        "code": 3.0125,
+        "math": 3.7327,
+        "legal": 20.7684,
+        "creative": 3.7339
+      },
+      "qaf_ppls": {
+        "medical": 62.4127,
+        "code": 24.1959,
+        "math": 50.6256,
+        "legal": 144.5537,
+        "creative": 22.4165
+      },
+      "avg_float_ppl": 8.305,
+      "avg_qaf_ppl": 60.8409,
+      "avg_delta_ratio": 0.005833,
+      "avg_ternary_changed_pct": 0.0
+    },
+    "N=5": {
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "creative"
+      ],
+      "float_ppls": {
+        "medical": 11.3487,
+        "code": 3.0019,
+        "math": 3.8532,
+        "legal": 21.1107,
+        "creative": 3.2773
+      },
+      "qaf_ppls": {
+        "medical": 62.4684,
+        "code": 24.3118,
+        "math": 50.7491,
+        "legal": 144.6592,
+        "creative": 22.4739
+      },
+      "avg_float_ppl": 8.5184,
+      "avg_qaf_ppl": 60.9325,
+      "avg_delta_ratio": 0.005277,
+      "avg_ternary_changed_pct": 0.0
+    }
+  },
+  "k1_base_avg_ppl": 10.6354,
+  "k1_float_benefit": 2.117,
+  "k1_qaf_benefit": -50.2971,
+  "k1_benefit_loss_pct": 2475.86,
+  "k1_pass": false,
+  "latency_base": {
+    "n_tokens": 100,
+    "n_runs": 5,
+    "mean_s": 7.619,
+    "min_s": 7.47,
+    "max_s": 7.747,
+    "p95_s": 7.747,
+    "tok_per_s": 13.1
+  },
+  "latency_merged_n5": {
+    "n_tokens": 100,
+    "n_runs": 5,
+    "mean_s": 7.833,
+    "min_s": 7.375,
+    "max_s": 8.333,
+    "p95_s": 8.333,
+    "tok_per_s": 12.8
+  },
+  "k2_pass": true,
+  "memory_before_merge_mb": 1728.6,
+  "memory_after_n15_merge_mb": 1728.6,
+  "memory_delta_mb": 0.0,
+  "n15_ppls": {
+    "medical": 62.4684,
+    "code": 24.3118,
+    "math": 50.7491,
+    "legal": 144.6592,
+    "creative": 22.4739
+  },
+  "n15_avg_ppl": 60.9325,
+  "k3_pass": true,
+  "verdict": "KILLED",
+  "killed_by": [
+    "K1"
+  ]
+}

@@ -57,21 +57,35 @@ You own the full research lifecycle — from literature review through write-up.
                        └──> you revise and resubmit
 ```
 
+## Focus Rule
+
+You work on exactly ONE hypothesis per invocation — the one given in your
+delegation prompt. Do NOT generate new hypotheses, do NOT pick different nodes,
+do NOT expand scope. Complete the assigned work and return.
+
 ## The Micro/Macro Contract
 
 This project operates at two scales with different rules:
 
-**`micro/` (where you work):**
+**`micro/` (local machine, Apple Silicon):**
 - Experiments must be evaluatable in **minutes, not hours** (ideally < 5 min, max ~1 hr, rare cases 2 hr)
 - Toy data (character-level names dataset), micro models (~200K params)
+- Runs LOCALLY on the user's Mac. Prefer MLX for GPU-accelerated work on Apple Silicon.
+  numpy/scipy for pure math. Do NOT use CUDA. Do NOT ssh to RunPod for micro work.
 - The point is to **test fundamental mechanisms cheaply** — isolate one variable, prove or disprove one hypothesis
 - Known limitations (small scale, toy data, limited domains) are **features, not bugs** — they force you to build from fundamentals
 - Results at this scale are **directional, not definitive** — they show whether a mechanism works in principle
 
-**`macro/` (future, not your concern yet):**
-- Full-scale benchmarks under heavy pressure
+**`macro/` (RunPod, CUDA GPU):**
+- Full-scale benchmarks on real models (Qwen2.5-7B, etc.)
 - Real data, real parameter counts, real baselines
+- Requires GPU access via 'ssh runpod'. Use tools/runpod_exec.py.
+- PyTorch + CUDA only. Do NOT use MLX on RunPod.
 - Where micro-validated ideas get stress-tested at scale
+
+**IMPORTANT:** If your delegation prompt specifies a scale constraint (e.g., "local only",
+"micro only"), you MUST only run experiments locally. Do NOT ssh to RunPod.
+If constrained to "macro only" or "GPU only", only use RunPod.
 
 Your job is to produce micro-experiments that are **rigorous within their deliberate constraints**. A micro-experiment that cleanly isolates a mechanism at d=64 is more valuable than a messy experiment at d=4096.
 
@@ -140,49 +154,97 @@ Also scan `PLAN*.md` for context on what's been planned.
 - List every assumption explicitly
 - Include a worked numerical example at micro scale (d=64, N=4)
 
-### GPU/Remote Execution Rules (MANDATORY for macro-scale work)
+### GPU Task Queue (MANDATORY for macro-scale work)
 
-When running experiments on a remote GPU (RunPod, etc.):
-- **NEVER poll, sleep, or loop waiting** for a remote job. This wastes tokens.
-- If a training/benchmark job takes >5 minutes: start it as `nohup` background,
-  write the check command to `.ralph/current_direction.md`, and **return immediately**
-  with a summary of what was started and how to check progress.
-- The orchestrator will call you again on the next iteration — check progress ONCE then.
-- If the job isn't done yet, report progress and move to a different experiment.
-- Each active session should produce results, not wait for results.
-- **Interleave**: start long job → do short experiment → check long job → continue.
+Use the persistent GPU worker for all RunPod experiments. The worker runs on
+RunPod and processes tasks back-to-back with zero idle time between tasks.
 
-**When blocked on a single GPU with dependent tasks:**
-If the next experiment depends on the running job AND there's no other GPU available:
-1. Do all PREP work that doesn't need GPU: write scripts, generate data locally,
-   set up eval datasets, write the benchmark harness, prepare MATH.md
-2. If no useful prep remains, **return early** with status:
-   "GPU blocked: [job] running, ETA [time]. Prep complete for [next steps].
-   Check command: [ssh command]. Resume when training completes."
-   Do NOT burn iterations polling. Exiting early is better than waiting.
+**Commands (run locally):**
+```bash
+uv run python3 tools/gpu_queue.py start                          # start worker (if not running)
+uv run python3 tools/gpu_queue.py submit <script.py> [-- --args] # add task to queue (auto-syncs repo)
+uv run python3 tools/gpu_queue.py status                         # check active + pending + GPU
+uv run python3 tools/gpu_queue.py results [task_id]              # fetch completed task results
+uv run python3 tools/gpu_queue.py log [N]                        # tail worker log
+```
 
-### 3. Implementation
+**Workflow:**
+1. Write experiment script locally (in macro/ or micro/models/)
+2. Submit: `uv run python3 tools/gpu_queue.py submit <script.py>`
+3. Queue multiple tasks at once — they chain back-to-back:
+   `submit script1.py && submit script2.py && submit script3.py`
+4. Check progress: `uv run python3 tools/gpu_queue.py status`
+5. When done: results in `gpu_queue/done/<task_id>.json`, log in `gpu_queue/<task_id>.log`
+
+**NEVER use `ssh runpod nohup`. NEVER poll/sleep.** Submit and move on.
+The worker handles execution. Check status only when you need results.
+
+**When blocked on GPU with dependent tasks:**
+If the next experiment depends on a running GPU task:
+1. Do all PREP work locally: write scripts, generate data, set up eval, MATH.md
+2. Submit the next task to the queue — it will run automatically after the current one
+3. Return with status update. The worker chains everything.
+
+### 3. Implementation (micro scale ONLY)
+
+For **micro-scale** experiments (local Apple Silicon), you implement AND run
+the experiment yourself. These are fast (<30 min) and don't need GPU engineering.
 
 **REUSE-FIRST RULE**: Before writing any code:
 1. Check if the mechanism already exists in a reference repo (`references/*/`)
-2. Check if a library implements it (e.g., `reedsolo` for Reed-Solomon, `sslib`
-   for Shamir, `TenSEAL` for homomorphic encryption, `scipy.linalg` for Procrustes)
+2. Check if a library implements it (e.g., `scipy.linalg` for Procrustes)
 3. Check `references/LLMs-from-scratch/` for standard ML building blocks
 4. Only write custom code for the PROJECT-SPECIFIC integration logic
-5. When using external code, add the repo to `references/` with a README.md
 
 Build in `micro/models/[name]/`:
-- `__init__.py` — register with `@register("name", parent="parent_model")`
-- `[name].py` — extend closest parent, override only what's needed
-- `test_[name].py` — tests that validate the mechanism works
+- Self-contained Python script that runs the experiment
+- Use MLX for GPU work on Apple Silicon, numpy/scipy for pure math
+- Keep runtime under 30 minutes
 
-### 4. Run Experiment
-- Run via `python -c "from micro.arena import run_single; ..."` or `run_multidomain`
-- Compare against parent model baseline
-- Record actual numbers honestly
+Run the experiment, record actual numbers honestly.
 
-### 5. Write-Up
-Save to `micro/models/[name]/`:
+### 3b. Experiment Spec (macro/GPU scale ONLY)
+
+For **macro-scale** experiments, you write the RESEARCH DESIGN only.
+You do NOT write the GPU script. The `experiment-programmer` agent handles that.
+
+Write a spec file at `macro/[name]/SPEC.md`:
+```markdown
+# Experiment Spec: [name]
+
+## Objective
+[What to measure and why]
+
+## Model & Data
+- Base model: [e.g., Qwen2.5-7B]
+- Adapters: [which ones, where stored]
+- Eval data: [what data, where stored, how many samples]
+
+## Procedure
+1. [Step-by-step what the script must do]
+2. [Be specific about composition method, weight handling]
+3. [Specify what metrics to compute]
+
+## Kill Criteria Assessment
+- K1: [metric] [threshold] → PASS/FAIL
+- K2: [metric] [threshold] → PASS/FAIL
+
+## Output
+- Save results to: results/[name]/results.json
+- Required fields in JSON: [list them]
+
+## Constraints
+- Max runtime: [e.g., 30 min]
+- Expected GPU memory: [e.g., 16GB with 4-bit]
+- Must support SMOKE_TEST=1
+```
+
+Do NOT write Python scripts for GPU tasks. The experiment-programmer agent
+will take your SPEC.md and produce an efficient, GPU-optimized script.
+
+### 4. Write-Up
+
+Save to `micro/models/[name]/` or `macro/[name]/`:
 
 **MATH.md** — rigorous mathematical foundations:
 - All variables defined before first use
@@ -192,7 +254,8 @@ Save to `micro/models/[name]/`:
 - Worked numerical example at micro scale
 - Assumptions listed with justification
 
-**PAPER.md** — research digest following existing convention:
+**PAPER.md** — research digest (for micro, write after running; for macro,
+write a TEMPLATE with placeholder results that the result-harvester fills in):
 ```
 # [Model Name]: Research Digest
 
@@ -202,18 +265,14 @@ Save to `micro/models/[name]/`:
 ## What This Model Is
 [What it does, how it works, why it exists.]
 
-## Lineage in the Arena
-[ASCII tree: parent -> child]
-
 ## Key References
 [Published papers this builds on]
 
 ## Empirical Results
-[Table comparing against parent baseline. Honest numbers.]
+[For micro: actual numbers. For macro: "TO BE FILLED from results/[name]/results.json"]
 
-## Micro-Scale Limitations
-[What this experiment deliberately does NOT test.
- What would need to be validated at macro scale.]
+## Limitations
+[What this experiment deliberately does NOT test.]
 
 ## What Would Kill This
 [Concrete failure criteria at both micro and macro scale.]

@@ -1,0 +1,290 @@
+{
+  "config": {
+    "N_EXPERTS": 5,
+    "DIM": 256,
+    "SEEDS": [
+      42,
+      7,
+      123
+    ],
+    "N_SINGLE_ORDERINGS": 100
+  },
+  "phase2_aggregate": {
+    "mean_k1_gap_pct": 9.149071619355375,
+    "mean_k2_improvement_pct": -8.919764746754288
+  },
+  "phase2_per_seed": [
+    {
+      "seed": 42,
+      "actual_cos": 0.8544534338925954,
+      "mean_single_norm": 0.27203298877028076,
+      "std_single_norm": 0.00045213079121155577,
+      "best_single_norm": 0.27312980481070387,
+      "worst_single_norm": 0.2715072595921369,
+      "canonical_norm": 0.2724930206600865,
+      "sym_100_norm": 0.2479959157120873,
+      "percentile": 0.0,
+      "k1_gap_pct": 9.202177373515111,
+      "k2_improvement_pct": -8.83608755204747,
+      "sym_convergence": {
+        "1": 0.27186092155284974,
+        "2": 0.25818069482412503,
+        "3": 0.25975830138062056,
+        "5": 0.2575202079596794,
+        "10": 0.25083395162363287,
+        "20": 0.2495657117741666,
+        "50": 0.24872035083046623,
+        "100": 0.2479959157120873,
+        "200": 0.24782649355318498
+      },
+      "cv_pct": 0.16620439795019096
+    },
+    {
+      "seed": 7,
+      "actual_cos": 0.8501320085243258,
+      "mean_single_norm": 0.27398959233869635,
+      "std_single_norm": 0.00027427182494320877,
+      "best_single_norm": 0.2743817787888942,
+      "worst_single_norm": 0.27334440681329536,
+      "canonical_norm": 0.273976942841501,
+      "sym_100_norm": 0.24938375681141553,
+      "percentile": 0.0,
+      "k1_gap_pct": 9.110671301796545,
+      "k2_improvement_pct": -8.980573063835195,
+      "sym_convergence": {
+        "1": 0.2741008150955093,
+        "2": 0.2600346392788308,
+        "3": 0.2599292686936629,
+        "5": 0.254357290089704,
+        "10": 0.2532132175351911,
+        "20": 0.24995962669219957,
+        "50": 0.24950537468211748,
+        "100": 0.24938375681141553,
+        "200": 0.24960146119427457
+      },
+      "cv_pct": 0.1001030085128794
+    },
+    {
+      "seed": 123,
+      "actual_cos": 0.8491342938743459,
+      "mean_single_norm": 0.27424643735346,
+      "std_single_norm": 0.00028558537324932976,
+      "best_single_norm": 0.27482511565954615,
+      "worst_single_norm": 0.27382698948769024,
+      "canonical_norm": 0.2739487420369909,
+      "sym_100_norm": 0.2497215832330247,
+      "percentile": 0.0,
+      "k1_gap_pct": 9.13436618275447,
+      "k2_improvement_pct": -8.942633624380198,
+      "sym_convergence": {
+        "1": 0.2742123951369489,
+        "2": 0.2591620485490497,
+        "3": 0.26170605584969575,
+        "5": 0.2573134574439797,
+        "10": 0.2585711689210167,
+        "20": 0.25169636385532024,
+        "50": 0.24996110063132237,
+        "100": 0.2497215832330247,
+        "200": 0.249562035566556
+      },
+      "cv_pct": 0.10413457910530874
+    }
+  ],
+  "phase3_summary": [
+    {
+      "cos_target": 0.3,
+      "cos_actual": 0.3207826914987791,
+      "seed": 42,
+      "canonical_norm": 0.41580027167499856,
+      "sym_100_norm": 0.3980912707322771,
+      "mean_random_norm": 0.41542155604770997,
+      "gaps_vs_sym100": {
+        "canonical": 4.448477584084235,
+        "reverse": 4.3142895923412725,
+        "norm_desc": 4.448477584084235,
+        "norm_asc": 4.448477584084235,
+        "random_fixed": 4.319393546373619
+      }
+    },
+    {
+      "cos_target": 0.3,
+      "cos_actual": 0.3006160397801872,
+      "seed": 7,
+      "canonical_norm": 0.41936705687849235,
+      "sym_100_norm": 0.4032623450518311,
+      "mean_random_norm": 0.4194129727876117,
+      "gaps_vs_sym100": {
+        "canonical": 3.993606649435941,
+        "reverse": 4.021518504037093,
+        "norm_desc": 3.993606649435941,
+        "norm_asc": 4.012423734696673,
+        "random_fixed": 3.9997557965567534
+      }
+    },
+    {
+      "cos_target": 0.3,
+      "cos_actual": 0.29596003808028054,
+      "seed": 123,
+      "canonical_norm": 0.4196520172395434,
+      "sym_100_norm": 0.4036441957546897,
+      "mean_random_norm": 0.4197409989077363,
+      "gaps_vs_sym100": {
+        "canonical": 3.9658247667661914,
+        "reverse": 4.003735831015639,
+        "norm_desc": 3.9658247667661914,
+        "norm_asc": 3.9658247667661914,
+        "random_fixed": 3.9480526127910656
+      }
+    },
+    {
+      "cos_target": 0.5,
+      "cos_actual": 0.514844779641985,
+      "seed": 42,
+      "canonical_norm": 0.37788141625113164,
+      "sym_100_norm": 0.34943808626419637,
+      "mean_random_norm": 0.3772474663408563,
+      "gaps_vs_sym100": {
+        "canonical": 8.139733791190235,
+        "reverse": 7.873874327017703,
+        "norm_desc": 8.139733791190235,
+        "norm_asc": 8.139733791190235,
+        "random_fixed": 7.892849073426634
+      }
+    },
+    {
+      "cos_target": 0.5,
+      "cos_actual": 0.5004400284144195,
+      "seed": 7,
+      "canonical_norm": 0.3810606608785195,
+      "sym_100_norm": 0.35355522903723213,
+      "mean_random_norm": 0.38113299895751845,
+      "gaps_vs_sym100": {
+        "canonical": 7.779670496229827,
+        "reverse": 7.845241001835834,
+        "norm_desc": 7.779670496229827,
+        "norm_asc": 7.779670496229827,
+        "random_fixed": 7.796870821223037
+      }
+    },
+    {
+      "cos_target": 0.5,
+      "cos_actual": 0.49711431291448616,
+      "seed": 123,
+      "canonical_norm": 0.3812851941703177,
+      "sym_100_norm": 0.3538597986540451,
+      "mean_random_norm": 0.381504464623286,
+      "gaps_vs_sym100": {
+        "canonical": 7.7503563899004355,
+        "reverse": 7.868667738679057,
+        "norm_desc": 7.7503563899004355,
+        "norm_asc": 7.7503563899004355,
+        "random_fixed": 7.712422241792885
+      }
+    },
+    {
+      "cos_target": 0.7,
+      "cos_actual": 0.7089068677851911,
+      "seed": 42,
+      "canonical_norm": 0.3251777199351911,
+      "sym_100_norm": 0.2935944023005254,
+      "mean_random_norm": 0.3245032418324385,
+      "gaps_vs_sym100": {
+        "canonical": 10.757465873731745,
+        "reverse": 10.406351846746324,
+        "norm_desc": 10.757465873731745,
+        "norm_asc": 10.757465873731745,
+        "random_fixed": 10.444886910898393
+      }
+    },
+    {
+      "cos_target": 0.7,
+      "cos_actual": 0.7002640170486517,
+      "seed": 7,
+      "canonical_norm": 0.3275551042655344,
+      "sym_100_norm": 0.2961815204305743,
+      "mean_random_norm": 0.3276150248063938,
+      "gaps_vs_sym100": {
+        "canonical": 10.592687818386086,
+        "reverse": 10.686129409966478,
+        "norm_desc": 10.592687818386086,
+        "norm_asc": 10.592687818386086,
+        "random_fixed": 10.618009854990355
+      }
+    },
+    {
+      "cos_target": 0.7,
+      "cos_actual": 0.6982685877486917,
+      "seed": 123,
+      "canonical_norm": 0.32762314171914675,
+      "sym_100_norm": 0.2963473515028398,
+      "mean_random_norm": 0.3279289796308873,
+      "gaps_vs_sym100": {
+        "canonical": 10.553760665550351,
+        "reverse": 10.76152910666594,
+        "norm_desc": 10.553760665550351,
+        "norm_asc": 10.553760665550351,
+        "random_fixed": 10.501206973577222
+      }
+    },
+    {
+      "cos_target": 0.85,
+      "cos_actual": 0.8544534338925954,
+      "seed": 42,
+      "canonical_norm": 0.2724930206600865,
+      "sym_100_norm": 0.24814989932842185,
+      "mean_random_norm": 0.2719947206850566,
+      "gaps_vs_sym100": {
+        "canonical": 9.809845338460923,
+        "reverse": 9.49289603617777,
+        "norm_desc": 9.809845338460923,
+        "norm_asc": 9.809845338460923,
+        "random_fixed": 9.536805502061275
+      }
+    },
+    {
+      "cos_target": 0.85,
+      "cos_actual": 0.8501320085243258,
+      "seed": 7,
+      "canonical_norm": 0.273976942841501,
+      "sym_100_norm": 0.24945511363196632,
+      "mean_random_norm": 0.2740090706228543,
+      "gaps_vs_sym100": {
+        "canonical": 9.830156957901833,
+        "reverse": 9.917737640215922,
+        "norm_desc": 9.830156957901833,
+        "norm_asc": 9.830156957901833,
+        "random_fixed": 9.853654533966797
+      }
+    },
+    {
+      "cos_target": 0.85,
+      "cos_actual": 0.8491342938743459,
+      "seed": 123,
+      "canonical_norm": 0.2739487420369909,
+      "sym_100_norm": 0.24951695982955177,
+      "mean_random_norm": 0.2742157845376937,
+      "gaps_vs_sym100": {
+        "canonical": 9.791631889122394,
+        "reverse": 10.012482579007017,
+        "norm_desc": 9.791631889122394,
+        "norm_asc": 9.791631889122394,
+        "random_fixed": 9.742836589041868
+      }
+    }
+  ],
+  "kill_criteria": {
+    "K1_killed": true,
+    "K1_description": "symmetric GS quality within 0.1% of best single ordering -- INVERTED: 9.15% WORSE",
+    "K1_value_gap_to_best_pct": 9.149071619355375,
+    "K1_threshold": 0.1,
+    "K1_note": "Symmetric GS is 9.15% worse than best single ordering. No benefit exists to justify any cost.",
+    "K2_killed": true,
+    "K2_description": "symmetric GS at cos=0.85 shows <1% improvement over random -- INVERTED: -8.92% degradation",
+    "K2_value_improvement_pct": -8.919764746754288,
+    "K2_threshold": 1.0,
+    "K2_note": "Symmetric GS shows -8.92% change (degradation, not improvement). <1% improvement criterion met trivially."
+  },
+  "overall": "KILLED",
+  "elapsed_seconds": 0.6926431655883789,
+  "verdict_note": "Hypothesis killed: symmetric GS provides no quality benefit at any cosine. It actively degrades quality by 0.2-9.6% via destructive interference of averaged residual components. Any single deterministic ordering is strictly superior."
+}

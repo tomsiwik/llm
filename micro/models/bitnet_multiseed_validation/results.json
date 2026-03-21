@@ -1,0 +1,368 @@
+{
+  "experiment": "bitnet_multiseed_validation",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_steps": 400,
+  "seeds": [
+    42,
+    137,
+    314
+  ],
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-21 00:54:58",
+  "base_ppls": {
+    "medical": 18.9752,
+    "code": 3.7802,
+    "math": 4.5409,
+    "legal": 26.9342,
+    "creative": 3.514
+  },
+  "trainable_params": 21626880,
+  "per_seed": {
+    "42": {
+      "train_results": {
+        "medical": {
+          "train_time_s": 134.6,
+          "first_50_loss": 2.9298,
+          "last_50_loss": 1.7142,
+          "converged": true
+        },
+        "code": {
+          "train_time_s": 132.6,
+          "first_50_loss": 1.0654,
+          "last_50_loss": 1.1176,
+          "converged": false
+        },
+        "math": {
+          "train_time_s": 176.3,
+          "first_50_loss": 1.3446,
+          "last_50_loss": 1.2651,
+          "converged": true
+        },
+        "legal": {
+          "train_time_s": 231.3,
+          "first_50_loss": 3.1512,
+          "last_50_loss": 2.8868,
+          "converged": true
+        },
+        "creative": {
+          "train_time_s": 231.5,
+          "first_50_loss": 1.2453,
+          "last_50_loss": 1.6355,
+          "converged": false
+        }
+      },
+      "individual_ppls": {
+        "medical": 9.0754,
+        "code": 2.9659,
+        "math": 3.0757,
+        "legal": 18.9434,
+        "creative": 3.1192
+      },
+      "composed_ppls": {
+        "medical": 15.51,
+        "code": 3.4647,
+        "math": 4.1777,
+        "legal": 24.7673,
+        "creative": 3.3043
+      },
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.002082
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 8.3e-05
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.00261
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.001355
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.004511
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.003272
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.001388
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002084
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000194
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.00261
+        }
+      ],
+      "mean_cos": 0.002019,
+      "best_individual_ppl": 2.9659,
+      "avg_composed_ppl": 10.2448,
+      "composition_ratio": 3.4542
+    },
+    "137": {
+      "train_results": {
+        "medical": {
+          "train_time_s": 172.0,
+          "first_50_loss": 2.9286,
+          "last_50_loss": 1.7146,
+          "converged": true
+        },
+        "code": {
+          "train_time_s": 191.2,
+          "first_50_loss": 1.0657,
+          "last_50_loss": 1.1181,
+          "converged": false
+        },
+        "math": {
+          "train_time_s": 223.0,
+          "first_50_loss": 1.3453,
+          "last_50_loss": 1.266,
+          "converged": true
+        },
+        "legal": {
+          "train_time_s": 224.3,
+          "first_50_loss": 3.15,
+          "last_50_loss": 2.885,
+          "converged": true
+        },
+        "creative": {
+          "train_time_s": 233.7,
+          "first_50_loss": 1.2448,
+          "last_50_loss": 1.6358,
+          "converged": false
+        }
+      },
+      "individual_ppls": {
+        "medical": 9.1055,
+        "code": 2.9671,
+        "math": 3.0802,
+        "legal": 18.884,
+        "creative": 3.1216
+      },
+      "composed_ppls": {
+        "medical": 15.4612,
+        "code": 3.4418,
+        "math": 4.1563,
+        "legal": 24.7094,
+        "creative": 3.2921
+      },
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000234
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.000529
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.003697
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.002998
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000881
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000941
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.002155
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.005592
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000546
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000831
+        }
+      ],
+      "mean_cos": 0.00184,
+      "best_individual_ppl": 2.9671,
+      "avg_composed_ppl": 10.2122,
+      "composition_ratio": 3.4418
+    },
+    "314": {
+      "train_results": {
+        "medical": {
+          "train_time_s": 177.1,
+          "first_50_loss": 2.9284,
+          "last_50_loss": 1.716,
+          "converged": true
+        },
+        "code": {
+          "train_time_s": 204.3,
+          "first_50_loss": 1.0653,
+          "last_50_loss": 1.1179,
+          "converged": false
+        },
+        "math": {
+          "train_time_s": 228.4,
+          "first_50_loss": 1.345,
+          "last_50_loss": 1.2661,
+          "converged": true
+        },
+        "legal": {
+          "train_time_s": 232.9,
+          "first_50_loss": 3.1498,
+          "last_50_loss": 2.8846,
+          "converged": true
+        },
+        "creative": {
+          "train_time_s": 239.5,
+          "first_50_loss": 1.2444,
+          "last_50_loss": 1.636,
+          "converged": false
+        }
+      },
+      "individual_ppls": {
+        "medical": 9.0754,
+        "code": 2.966,
+        "math": 3.0808,
+        "legal": 18.9056,
+        "creative": 3.1235
+      },
+      "composed_ppls": {
+        "medical": 15.3272,
+        "code": 3.4438,
+        "math": 4.1323,
+        "legal": 24.5943,
+        "creative": 3.2711
+      },
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000539
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.003014
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000205
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.001335
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.00164
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.001271
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.003046
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.001673
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.007482
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.002815
+        }
+      ],
+      "mean_cos": 0.002302,
+      "best_individual_ppl": 2.966,
+      "avg_composed_ppl": 10.1537,
+      "composition_ratio": 3.4234
+    }
+  },
+  "domain_stats": {
+    "medical": {
+      "individual_mean": 9.0854,
+      "individual_std": 0.0142,
+      "composed_mean": 15.4328,
+      "composed_std": 0.0773
+    },
+    "code": {
+      "individual_mean": 2.9663,
+      "individual_std": 0.0005,
+      "composed_mean": 3.4501,
+      "composed_std": 0.0104
+    },
+    "math": {
+      "individual_mean": 3.0789,
+      "individual_std": 0.0023,
+      "composed_mean": 4.1554,
+      "composed_std": 0.0185
+    },
+    "legal": {
+      "individual_mean": 18.911,
+      "individual_std": 0.0245,
+      "composed_mean": 24.6903,
+      "composed_std": 0.0719
+    },
+    "creative": {
+      "individual_mean": 3.1214,
+      "individual_std": 0.0018,
+      "composed_mean": 3.2892,
+      "composed_std": 0.0137
+    }
+  },
+  "aggregate": {
+    "composition_ratio_mean": 3.4398,
+    "composition_ratio_std": 0.0127,
+    "composition_ratio_cv_pct": 0.4,
+    "composition_ratio_values": [
+      3.4542,
+      3.4418,
+      3.4234
+    ],
+    "mean_cos_mean": 0.002054,
+    "mean_cos_std": 0.00019,
+    "mean_cos_values": [
+      0.002019,
+      0.00184,
+      0.002302
+    ],
+    "max_ratio": 3.4542,
+    "min_ratio": 3.4234
+  },
+  "k1_cv": 0.4,
+  "k1_pass": true,
+  "k2_max_ratio": 3.4542,
+  "k2_pass": true,
+  "verdict": "SUPPORTED",
+  "total_time_s": 3239.8
+}

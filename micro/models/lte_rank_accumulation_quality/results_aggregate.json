@@ -1,0 +1,335 @@
+{
+  "seeds": {
+    "42": {
+      "seed": 42,
+      "n_embd": 256,
+      "lora_rank": 8,
+      "n_par_heads": 4,
+      "pretrain_steps": 400,
+      "adapt_steps": 400,
+      "merge_every_par": 25,
+      "merge_every_seq": 100,
+      "expert_steps": 200,
+      "n_experts": 4,
+      "rank_capacity": {
+        "parallel_rank_per_interval": 32,
+        "sequential_rank_per_interval": 8,
+        "rank_ratio": 4.0,
+        "parallel_coverage_pct": 12.5,
+        "sequential_coverage_pct": 3.125,
+        "coverage_ratio": 4.0
+      },
+      "pretrained_loss": 0.7923349499702453,
+      "parallel_loss": 0.6669008374214173,
+      "sequential_loss": 0.6437465786933899,
+      "continued_loss": 0.7607432246208191,
+      "parallel_rank": 156.61345297298305,
+      "sequential_rank": 156.7596235538001,
+      "continued_rank": 155.52143179829685,
+      "parallel_time": 3.41336989402771,
+      "sequential_time": 3.3335890769958496,
+      "continued_time": 4.013293027877808,
+      "parallel_mean_cos": 0.024153862963430583,
+      "sequential_mean_cos": 0.03410201876734694,
+      "continued_mean_cos": 0.03835189094146093,
+      "parallel_max_cos": 0.08267376571893692,
+      "sequential_max_cos": 0.07913726568222046,
+      "continued_max_cos": 0.06417690962553024,
+      "parallel_expert_losses": [
+        0.582142299413681,
+        0.5851183235645294,
+        0.5928262412548065,
+        0.6077076256275177
+      ],
+      "sequential_expert_losses": [
+        0.574981689453125,
+        0.5814819395542145,
+        0.5827159762382508,
+        0.6043667733669281
+      ],
+      "continued_expert_losses": [
+        0.5734534084796905,
+        0.5760694205760956,
+        0.5805194556713105,
+        0.5862443089485169
+      ],
+      "parallel_mean_exp_loss": 0.5919486224651337,
+      "sequential_mean_exp_loss": 0.5858865946531295,
+      "continued_mean_exp_loss": 0.5790716484189034,
+      "parallel_n_intervals": 4,
+      "sequential_n_merges": 4,
+      "par_base_ratio": 0.8766438081035125,
+      "seq_base_ratio": 0.8462074427457562,
+      "par_cos_ratio": 0.6297958815034298,
+      "seq_cos_ratio": 0.8891874149963025,
+      "par_loss_ratio": 1.0222372725039595,
+      "seq_loss_ratio": 1.0117687444236338,
+      "par_compute_ratio": 1.0239324089406763,
+      "par_vs_seq_base": 1.0359679717040011,
+      "par_vs_seq_cos": 0.7082824957521252,
+      "par_vs_seq_loss": 1.010346759707965,
+      "par_vs_seq_rank": 0.999067549554507,
+      "k1_quality_diff_pct": 3.5967971704001123,
+      "k2": "SURVIVES",
+      "verdict": "PROVEN (parallel shows quality advantage at d=256)"
+    },
+    "123": {
+      "seed": 123,
+      "n_embd": 256,
+      "lora_rank": 8,
+      "n_par_heads": 4,
+      "pretrain_steps": 400,
+      "adapt_steps": 400,
+      "merge_every_par": 25,
+      "merge_every_seq": 100,
+      "expert_steps": 200,
+      "n_experts": 4,
+      "rank_capacity": {
+        "parallel_rank_per_interval": 32,
+        "sequential_rank_per_interval": 8,
+        "rank_ratio": 4.0,
+        "parallel_coverage_pct": 12.5,
+        "sequential_coverage_pct": 3.125,
+        "coverage_ratio": 4.0
+      },
+      "pretrained_loss": 0.6972807586193085,
+      "parallel_loss": 0.6483090579509735,
+      "sequential_loss": 0.6332111358642578,
+      "continued_loss": 1.0257177114486695,
+      "parallel_rank": 160.02043529745947,
+      "sequential_rank": 160.24957112609633,
+      "continued_rank": 150.22483300764623,
+      "parallel_time": 3.327666997909546,
+      "sequential_time": 3.3435041904449463,
+      "continued_time": 3.9659440517425537,
+      "parallel_mean_cos": 0.04162286485855778,
+      "sequential_mean_cos": 0.013149726612027735,
+      "continued_mean_cos": 0.1516923556725184,
+      "parallel_max_cos": 0.09561681747436523,
+      "sequential_max_cos": 0.03861892595887184,
+      "continued_max_cos": 0.2358296811580658,
+      "parallel_expert_losses": [
+        0.5754173696041107,
+        0.5941829323768616,
+        0.5477170765399932,
+        0.5648349046707153
+      ],
+      "sequential_expert_losses": [
+        0.5745291113853455,
+        0.588755464553833,
+        0.5463922321796417,
+        0.5641944944858551
+      ],
+      "continued_expert_losses": [
+        0.6580926954746247,
+        0.6589682638645172,
+        0.5950974345207214,
+        0.6406786203384399
+      ],
+      "parallel_mean_exp_loss": 0.5705380707979202,
+      "sequential_mean_exp_loss": 0.5684678256511688,
+      "continued_mean_exp_loss": 0.6382092535495758,
+      "parallel_n_intervals": 4,
+      "sequential_n_merges": 4,
+      "par_base_ratio": 0.6320540736638972,
+      "seq_base_ratio": 0.6173347001772315,
+      "par_cos_ratio": 0.27438999594772634,
+      "seq_cos_ratio": 0.08668681130069193,
+      "par_loss_ratio": 0.8939670924917216,
+      "seq_loss_ratio": 0.8907232580671439,
+      "par_compute_ratio": 0.9952632951435637,
+      "par_vs_seq_base": 1.023843424776611,
+      "par_vs_seq_cos": 3.1653026776481465,
+      "par_vs_seq_loss": 1.003641798273062,
+      "par_vs_seq_rank": 0.9985701314079802,
+      "k1_quality_diff_pct": 2.3843424776611055,
+      "k2": "SURVIVES",
+      "verdict": "INCONCLUSIVE"
+    },
+    "7": {
+      "seed": 7,
+      "n_embd": 256,
+      "lora_rank": 8,
+      "n_par_heads": 4,
+      "pretrain_steps": 400,
+      "adapt_steps": 400,
+      "merge_every_par": 25,
+      "merge_every_seq": 100,
+      "expert_steps": 200,
+      "n_experts": 4,
+      "rank_capacity": {
+        "parallel_rank_per_interval": 32,
+        "sequential_rank_per_interval": 8,
+        "rank_ratio": 4.0,
+        "parallel_coverage_pct": 12.5,
+        "sequential_coverage_pct": 3.125,
+        "coverage_ratio": 4.0
+      },
+      "pretrained_loss": 0.7566802620887756,
+      "parallel_loss": 0.659952849149704,
+      "sequential_loss": 0.6538626074790954,
+      "continued_loss": 1.3174778699874878,
+      "parallel_rank": 156.7383146441194,
+      "sequential_rank": 156.87436941804387,
+      "continued_rank": 151.56689400591335,
+      "parallel_time": 3.4180591106414795,
+      "sequential_time": 3.4300379753112793,
+      "continued_time": 3.9470291137695312,
+      "parallel_mean_cos": 0.04164181106413404,
+      "sequential_mean_cos": 0.01809727170621045,
+      "continued_mean_cos": 0.10100696794688702,
+      "parallel_max_cos": 0.06264220178127289,
+      "sequential_max_cos": 0.042802903801202774,
+      "continued_max_cos": 0.18297886848449707,
+      "parallel_expert_losses": [
+        0.5793228328227997,
+        0.5830872178077697,
+        0.5539371490478515,
+        0.5649682581424713
+      ],
+      "sequential_expert_losses": [
+        0.5738100469112396,
+        0.5789387047290802,
+        0.5490788638591766,
+        0.566285514831543
+      ],
+      "continued_expert_losses": [
+        0.683003830909729,
+        0.7383715510368347,
+        0.6666736841201782,
+        0.6886911988258362
+      ],
+      "parallel_mean_exp_loss": 0.5703288644552231,
+      "sequential_mean_exp_loss": 0.5670282825827598,
+      "continued_mean_exp_loss": 0.6941850662231446,
+      "parallel_n_intervals": 4,
+      "sequential_n_merges": 4,
+      "par_base_ratio": 0.5009213924446948,
+      "seq_base_ratio": 0.4962987404750934,
+      "par_cos_ratio": 0.41226671694192907,
+      "seq_cos_ratio": 0.1791685472189152,
+      "par_loss_ratio": 0.8215804289155803,
+      "seq_loss_ratio": 0.8168258151489429,
+      "par_compute_ratio": 0.9965076582950341,
+      "par_vs_seq_base": 1.0093142528719903,
+      "par_vs_seq_cos": 2.3009993847604555,
+      "par_vs_seq_loss": 1.0058208416984487,
+      "par_vs_seq_rank": 0.9991327150864084,
+      "k1_quality_diff_pct": 0.9314252871990281,
+      "k2": "SURVIVES",
+      "verdict": "INCONCLUSIVE"
+    }
+  },
+  "aggregate": {
+    "par_base_ratio": {
+      "mean": 0.6698730914040348,
+      "ci95": [
+        0.5009213924446948,
+        0.8766438081035125
+      ]
+    },
+    "seq_base_ratio": {
+      "mean": 0.6532802944660271,
+      "ci95": [
+        0.4962987404750934,
+        0.8462074427457562
+      ]
+    },
+    "par_cos_ratio": {
+      "mean": 0.4388175314643617,
+      "ci95": [
+        0.27438999594772634,
+        0.6297958815034298
+      ]
+    },
+    "seq_cos_ratio": {
+      "mean": 0.3850142578386366,
+      "ci95": [
+        0.08668681130069193,
+        0.8891874149963025
+      ]
+    },
+    "par_loss_ratio": {
+      "mean": 0.9125949313037537,
+      "ci95": [
+        0.8215804289155803,
+        1.0222372725039595
+      ]
+    },
+    "seq_loss_ratio": {
+      "mean": 0.9064392725465735,
+      "ci95": [
+        0.816825815148943,
+        1.0117687444236338
+      ]
+    },
+    "par_vs_seq_base": {
+      "mean": 1.023041883117534,
+      "ci95": [
+        1.0093142528719903,
+        1.0359679717040011
+      ]
+    },
+    "par_vs_seq_cos": {
+      "mean": 2.0581948527202427,
+      "ci95": [
+        0.7082824957521252,
+        3.1653026776481465
+      ]
+    },
+    "par_vs_seq_loss": {
+      "mean": 1.006603133226492,
+      "ci95": [
+        1.003641798273062,
+        1.010346759707965
+      ]
+    },
+    "par_vs_seq_rank": {
+      "mean": 0.9989234653496318,
+      "ci95": [
+        0.9985701314079801,
+        0.9991327150864086
+      ]
+    },
+    "k1_quality_diff_pct": {
+      "mean": 2.3041883117534154,
+      "ci95": [
+        0.9314252871990281,
+        3.5967971704001123
+      ]
+    },
+    "parallel_rank": {
+      "mean": 157.790734304854,
+      "ci95": [
+        156.61345297298305,
+        160.02043529745947
+      ]
+    },
+    "sequential_rank": {
+      "mean": 157.96118803264676,
+      "ci95": [
+        156.7596235538001,
+        160.24957112609633
+      ]
+    },
+    "continued_rank": {
+      "mean": 152.43771960395213,
+      "ci95": [
+        150.22483300764623,
+        155.52143179829685
+      ]
+    },
+    "overall": "INCONCLUSIVE",
+    "d64_comparison": {
+      "d64_par_vs_seq_base": 1.007,
+      "d256_par_vs_seq_base": 1.023041883117534,
+      "d64_par_vs_seq_cos": 1.462,
+      "d256_par_vs_seq_cos": 2.0581948527202427,
+      "d64_par_vs_seq_loss": 1.006,
+      "d256_par_vs_seq_loss": 1.006603133226492,
+      "scaling_effect_base": 0.016041883117534184,
+      "scaling_effect_cos": 0.5961948527202428,
+      "scaling_effect_loss": 0.0006031332264919698
+    }
+  }
+}

@@ -2,278 +2,196 @@
 
 ## Core Thesis
 
-A language model doesn't need to be retrained. It grows by acquiring experts,
-improves by evolving them, and scales by adding capacity — all at inference time.
+A language model grows by acquiring domain experts, improves by evolving them,
+and scales by adding capacity — all without retraining the base.
 
-Three pillars, each proven:
+## Status: Composition Crisis → Dual-Track Resolution
 
-1. **Orthogonality is free** — LoRA adapters can't interfere (cos=0.0002 at d=896)
-2. **Composition is plug-and-play** — hash ring routing, zero recalibration needed
-3. **Evolution through competition** — clone, correct, compete, prune
+**What works:**
+- Distillation pipeline ($0.44/expert, HumanEval +9.1pp, reasoning +10.6pp)
+- Structural orthogonality (cos scaling law validated d=64 to d=1024)
+- Grassmannian skeleton (AP packing, frozen-A, capacity bounds)
+- Individual adapter quality (mean -0.95pp on MMLU — nearly neutral)
+- Routing latency solved (<21us at N=1000)
+
+**What's broken:**
+- ~~Equal-weight composition catastrophic~~ **RESOLVED** by 1/N scaling (PPL=2.36)
+- Trained adapter orthogonality inflated (cos=0.142 at d=896, not 0.0002)
+- Orthogonality alone insufficient for semantic composability (arxiv 2510.03262)
+- Evolve phase has no validated scoring metric at macro
+
+**Two parallel resolution tracks:**
+
+### Track A: BitNet-SOLE (Ternary Composition) — $0, local
+Hypothesis: ternary {-1, 0, 1} base weights bound adapter magnitudes,
+preventing the logit-scale mismatch that causes composition catastrophe.
+
+- Base: microsoft/bitnet-b1.58-2B-4T (or scale to 30B)
+- Experts: LoRA (FP16) or BitLoRA (ternary) adapters
+- Serving: bitnet.cpp on CPU ($50/mo vs $115/mo GPU)
+- Architecture inspired by MoTE (2506.14435): frozen shared base + ternary routed experts
+
+### Track B: FP16 + Smart Routing — ~$5, GPU
+Hypothesis: PPL-probe weighted composition (r=0.990 oracle correlation at micro)
+fixes the N=5 regression on Qwen2.5-7B.
+
+- If <20% degradation with routing: FP16 SOLE works with mandatory routing
+- If still >50% degradation: FP16 equal-weight is dead, pivot to Track A
 
 ## What We Proved
 
+### Conclusive (survives peer review)
+
+| Finding | Result | Scale |
+|---------|--------|-------|
+| LoRA orthogonality scales as 1/sqrt(D) | cos 17-69x below sqrt(r/d) | Micro + Macro |
+| Distillation pipeline produces functional adapters | HumanEval +9.1pp, $0.44/expert | Macro (7B) |
+| Reasoning distillation works (K1) | +10.6pp on MATH-500 (67.6% vs 57.0%) | Macro (7B) |
+| Individual adapters don't harm general knowledge | Mean -0.95pp on 57 MMLU subjects | Macro (7B) |
+| Composition regression is from interference | Diagnosis: COMPOSITION_INTERFERENCE | Macro (7B) |
+| Routing latency is not a bottleneck | All strategies <21us at N=1000 | Micro |
+| Grassmannian AP packing is optimal | 1.2-1.5x beyond orthonormality, zero drift | Micro |
+| Expert removal is safe | Naive subtraction <0.2% error at SOLE cosines | Micro |
+| Safety bound complete | 5 micro experiments unified, transfers to production | Micro |
+
+### Killed (important negative results)
+
 | Finding | Result | Implication |
 |---------|--------|-------------|
-| LoRA orthogonality | cos=0.0002, 50x better than theory | Adapters can't interfere |
-| MoE beats joint training | -0.70% vs joint (equalized compute) | Composition > retraining |
-| Hash routing plug-and-play | 5.3% displacement at N=20 | No recalibration needed |
-| L2 norm stability | 0/25 catastrophic failures | Composition is safe |
-| Prune-then-compose | +0.012% gap | Contributors work independently |
-| Latency overhead | 0.98% theoretical, <5% with fused kernels | Near-free composition |
-| FFN-only KILLED at macro | PPL +66.7%, ortho 424% worse independently trained | All-modules adapters required; attention regularizes FFN diversity |
-| Attention amplifies domain overlap | cos=0.85 vs 0.59 (math-med) | Attention is composition risk factor but essential for quality |
-| Adapter taxonomy: LoRA optimal | FIT=0.875, 15 types, 3 composition classes | LoRA confirmed best for composable architecture |
-| Base-freedom theoretically possible | ReLoRA/LTE achieve full-rank from LoRA | Base model could be expressed as composable adapter |
-| ReLoRA base supports composition | cos ratio 1.77x (p=0.056 n.s.), loss ratio 1.052 | Base-freedom path empirically viable |
-| Base decomposable into adapter | rank-16 SVD: loss ratio 1.014, cos 1.22x (3 seeds) | Entire model is composable: skeleton + base adapter + N experts |
-| Expert quality degrades slower than base | rank-8: base -10%, experts -5% | Composition is robust to base perturbation |
-| Zero-shot base transfer works | rank-16: 4.2% loss, rank-32: 0.3% loss | Base swapping without expert retraining is viable |
-| Inference latency N-independent | pre-merge +2.6% max, dynamic O(k) not O(N) | Expert library size doesn't slow inference |
-| Architecture named SOLE | Structurally Orthogonal Latent Experts; 13-paper survey | Clear terminology for papers and communication |
-| Domain similarity predicts collisions | within-cluster \|cos\| 7.84x higher than cross (15 experts, 3 clusters) | Collision landscape is predictable, not random |
-| Full-sequence PPL ≠ task quality | Pearson r=0.08; reverse expert: PPL -27% but Acc +9.5pp | Shadow scoring needs answer-conditioned PPL |
-| Answer-conditioned PPL works | Pearson r=0.811 vs full-seq r=-0.31 (3 seeds) | Shadow scoring metric validated for Evolve |
-| Pre-merge vs dynamic vacuous at micro | 0% specialization → 0% gap; methodology validated | Needs macro retest with real expert specialization |
-| Content-aware routing killed at micro | Best 26.5% < 60% threshold; cluster-level trivial (96%) | Hash ring sufficient; hierarchical routing possible |
-| Collision rate decreases with N | beta=-0.575, only 1.23% at N=20 (24x below kill) | Composition gets safer as more experts added |
-| SOLE positioned vs LoRA Soups | 5 structural advantages; complementary not competing | Clear differentiation from closest prior work |
-| 50-expert distillation pipeline | 98% win rate, 42.2% avg PPL improvement (contaminated eval), $0.44/expert | Distill phase directionally validated; MMLU/HumanEval pending |
+| Equal-weight composition is catastrophic | **RESOLVED by 1/N scaling** (PPL trillions→2.36) | 1/N scaling mandatory; unscaled is dead |
+| Trained adapter orthogonality inflated | cos=0.142 (35.6x micro prediction) | Geometric orthogonality ≠ functional independence |
+| Composition fragile to expert dropout | **RESOLVED by 1/N scaling** — all 5 adapters net positive | CV=112.2% was unscaled artifact |
+| FFN-only adapters | PPL +66.7% | All-modules adapters required |
+| Answer-conditioned PPL at macro | r=-0.63 (vs r=0.811 micro) | Evolve scoring needs different approach |
 
-Scaling law **N_max = d^2/r^2** validated:
+### Supported (directional evidence, needs more validation)
 
-| Base Model | d | Composable Experts (r=16) |
-|------------|---|-------------------------:|
-| Qwen 0.5B  | 896 | ~122K |
-| Qwen 7B    | 4096 | ~609K |
-| Qwen 72B   | 8192 | ~2.4M |
+| Finding | Result | Caveat |
+|---------|--------|--------|
+| Pre-merge preserves gains over base | K3 PASS at N=5 | Only 5 adapters, contaminated eval |
+| ReLoRA base supports composition | cos_ratio=0.875x | GPT-2-124M only, not 7B |
+| PPL-probe weighting (micro) | r=0.990 oracle correlation | Never tested at macro |
+| 1/N scaling resolves composition catastrophe | PPL trillions→2.36 (10^12x improvement) | N=5 only; scaling to N=50+ untested |
+| LOO PPL ranks adapter contribution | sql < python < bash < math < medical | N=5, calibration from training tails |
+| SOLE vs monolithic: +32.7% gap (confounded) | Union bf16 vs SOLE NF4 QLoRA | Per-domain PPL unmeasured (blocking) |
+
+## Architecture
+
+### Current: SOLE (Structurally Orthogonal Latent Experts)
+
+```
+Frozen Base (Qwen2.5-7B or BitNet-30B)
+    │
+    ├── LoRA Expert 1 (rank-16, all-modules, ~6MB)
+    ├── LoRA Expert 2
+    ├── ...
+    └── LoRA Expert N
+
+Routing: PPL-probe weighted (per-query top-k selection)
+Serving: vLLM (GPU) or bitnet.cpp (CPU)
+Evolution: clone, correct, compete, prune
+```
+
+### Proposed: MoTE-SOLE (Mixture of Ternary Experts)
+
+```
+Frozen FP16 Base (shared expert, always active)
+    │
+    ├── Ternary Expert 1 ({-1,0,1} weights, ~0.6MB)
+    ├── Ternary Expert 2 (routed via top-k gating)
+    ├── ...
+    └── Ternary Expert N
+
+Router: trained with load-balancing loss
+Memory: 8 ternary experts fit in 1 FP16 expert's memory
+Serving: bitnet.cpp on CPU, $50/mo
+```
+
+### The Grassmannian Skeleton
+
+Pre-computed optimal subspace slots on Gr(r, d). Architecture-dependent, not
+weight-dependent. Experts hot-swappable. Clones share slots.
+
+```
+Skeleton: Gr(16, 4096) with N slots
+    ├── Slot 1: python_v2.safetensors
+    ├── Slot 2: math_v1.safetensors
+    ├── Slot 3: medical_v1.safetensors
+    │           └── challenger: medical_v2_delta
+    ├── Slot 4: (free)
+    ⋮
+    └── Slot N: ...
+```
+
+Capacity: N_max = d²/r² (609K at d=4096 r=16, 147K at d=6144 r=16).
 
 ## The Three Phases
 
-### Phase 1: Distill — Create Experts at Scale
-
-Experts are distilled from large teacher models into small LoRA adapters.
-A 70B teacher produces training data; a 7B student learns it as a rank-16 LoRA.
-
-```
-Teacher (70B, via Groq/Cerebras API)
-    │
-    │  generates 1,000 domain-specific instruction-response pairs
-    │  per domain ($0.19/expert via batch API)
-    │
-    ▼
-Student (7B base, frozen)
-    │
-    │  QLoRA fine-tuning, 300 steps, ~15 min on A5000
-    │  produces rank-16 adapter (~6MB)
-    │
-    ▼
-Expert registered on hash ring
-    │
-    │  compose add expert.safetensors --name python-async
-    │  immediately receives ~1/N of traffic
-    │
-    ▼
-Serving (no retraining, no recalibration)
-```
-
-**Economics at scale:**
-
-| Scale | Data Cost | Training Cost | Total | Per Expert |
-|-------|-----------|---------------|-------|------------|
-| 50 pilot | $10 | $3 | $13 | $0.26 |
-| 500 | $95 | $32 | $127 | $0.25 |
-| 5,000 | $950 | $320 | $1,270 | $0.25 |
-| 100,000 | $19K | $6.4K | $25K | $0.25 |
-
-A 7B model with 5,000 domain experts: stored knowledge equivalent to
-7B + 5,000 * 3.1M = 22.5B parameters. Active cost: 7.003B params per token.
+### Phase 1: Distill — Create Experts ($0.25-0.44 each)
+Teacher (70B via Groq) → training data → student (base + QLoRA rank-16).
+Validated: 98% PPL win rate, HumanEval +9.1pp, reasoning +10.6pp on MATH-500.
 
 ### Phase 2: Compose — Serve with Routing
-
-```
-Input tokens
-    │
-    ▼
-┌─────────────┐
-│  Base Model  │  Frozen Qwen2.5-7B (shared by all)
-│  (frozen)    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────────────────────────────────┐
-│  Router                                 │
-│  • Hash ring: zero-shot, plug-and-play  │
-│  • Softmax: calibrated, best quality    │
-│  Select top-k=2 experts per token       │
-└──────┬──────────────────────────────────┘
-       │
-       ▼
-┌─────────────────────────────────────────┐
-│  Expert Library (NVMe)                  │
-│  N adapters, only k=2 active per token  │
-│  Each: rank-16 LoRA, ~6MB              │
-└──────┬──────────────────────────────────┘
-       │ weighted sum of adapter outputs
-       ▼
-   Output logits
-```
-
-**vLLM handles serving.** Our compose CLI manages the expert registry and
-hash-ring routing. vLLM's fused MoE-LoRA kernel handles the inference.
+**Status: CRITICAL BLOCKER.** Equal-weight pre-merge is broken.
+Two fixes being tested: (A) BitNet ternary base, (B) PPL-probe weighted routing.
 
 ### Phase 3: Evolve — Learn Without Retraining
+Clone-and-compete mechanism. Never tested at macro.
+Shadow scoring metric needs replacement (answer-conditioned PPL killed at macro).
 
-This is what makes the model *living*. When an expert produces a wrong answer,
-instead of retraining in-place (which risks forgetting), we **clone and compete**:
+## Readiness Assessment (Honest)
 
-```
-                    ┌─── correction arrives ──┐
-                    │                         │
-                    ▼                         │
-  Expert v1 ── Clone ──→ Expert v2            │
-  (untouched)        (fine-tuned with fix,    │
-                      50-100 steps, ~30 sec)  │
-                    │                         │
-                    ▼                         │
-             Both serve on hash ring          │
-             Both see similar queries         │
-                    │                         │
-                    ▼                         │
-             Shadow scoring:                  │
-             When v1 selected, also score v2  │
-             Compare answer-conditioned PPL   │
-             (full-seq PPL killed as proxy)   │
-                    │                         │
-                    ▼                         │
-             After ~1K-10K queries:           │
-             Clear winner emerges             │
-                    │                         │
-               ┌────┴────┐                    │
-               ▼         ▼                    │
-          v2 wins    v1 wins                  │
-          prune v1   prune v2                 │
-               │         │                    │
-               └────┬────┘                    │
-                    │                         │
-                    ▼                         │
-             Next correction ────────────────┘
-```
+| Phase | Readiness | Blocker |
+|-------|-----------|---------|
+| Distill | **60%** | Quality validation on held-out benchmarks |
+| Compose | **20%** | Equal-weight broken; routing and ternary untested at macro |
+| Evolve | **10%** | No validated scoring metric; mechanism never tested |
+| Serving | **30%** | No production code; vLLM incompatible with RTX 5090 LoRA |
+| **Overall** | **~25-30%** | Composition is the existential blocker |
 
-**Why this works:**
+## Competitive Positioning (Honest)
 
-- **No forgetting risk.** Original expert is never modified. If the clone is
-  worse, discard it. Zero downside.
-- **No differentiable routing needed.** Hash ring places both experts; real
-  traffic is the test. No gradient computation for the tournament.
-- **Orthogonality headroom absorbs clones.** 600K slots means 1,000 active
-  experts + 100 competing clones uses 0.18% of capacity.
-- **Quality signal is free.** Next-token perplexity on real queries. No labels,
-  no human feedback required (though human feedback accelerates it).
-- **Expert lineage is traceable.** python_v1 → python_v2 → python_v3. Each
-  generation carries the corrections that survived competition.
+SOLE does NOT compete with frontier models (GPT-4, Claude, DeepSeek-V3) on
+general reasoning or instruction following. The 7B base is the quality ceiling.
 
-**Correction sources (automated):**
+**Where SOLE competes:**
+- Domain-specific Q&A (medical, legal, code) at 7B-class quality
+- Cost efficiency: $0.25/expert vs $1000+ for full fine-tune
+- Modularity: update one domain without touching others
+- Privacy: on-premise deployment (30B BitNet on $2000 workstation)
+- Edge: domain expert on smartphone (BitNet-2B + LoRA)
 
-| Source | Quality | Cost | Domains |
-|--------|---------|------|---------|
-| Unit test execution | Perfect | Free | Code |
-| 70B teacher judges 7B output | Good | $0.001/query | All |
-| Self-consistency (sample N) | Medium | N * inference | All |
-| Human feedback | Highest | Expensive | Critical domains |
-| Answer-conditioned PPL regression | Indirect | Free | All |
+**Where SOLE cannot compete:**
+- General reasoning (needs >100B dense parameters)
+- Long-context synthesis (limited by base attention capacity)
+- Tasks requiring frontier model depth
 
-**Expert lifecycle controls:**
+## Priority Queue (What to Run Next)
 
-- Max 3 concurrent clones per domain (prevents bloat)
-- Tournament timeout: 10K queries (conservative default)
-- Periodic lineage cleanup: retrain from accumulated corrections
-- Automatic regression detection: flag experts whose perplexity drifts >5%
+### P1: Must-run experiments ($0-5)
+1. ~~**BitNet N=5 composition** (Track A, $0, local)~~ — **SUPPORTED** (2026-03-19): non-catastrophic, but mechanism is quantization recovery (denominator effect), not interference reduction. FP16 wins 3/5 domains in absolute PPL. Gate-pass for downstream BitNet experiments.
+   - **Real BitNet-2B-4T** (2026-03-20): **SUPPORTED**. First LoRA fine-tuning on real BitNet-2B-4T via MLX. K1-K4 PASS. Composition ratio 3.59x. |cos|=0.001. $0 compute, 12 min. Caveats: train/val contamination, under-training, single seed.
+2. **PPL-probe macro composition** (Track B, ~$5, GPU) — make-or-break for FP16
+3. **Poisoned adapter detection** (~$3, GPU) — operationally critical
 
-## The Full Picture
+### P2: Run if P1 succeeds ($5-10)
+4. BitLoRA (ternary adapters) composition — if Track A passes
+5. ~~SOLE vs monolithic LoRA baseline~~ — **SUPPORTED** (4/5 domains, -5.8% avg PPL)
+6. Reasoning adapter K2/K3 — the killer demo
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    LIVING COMPOSABLE MODEL                   │
-│                                                             │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
-│  │ DISTILL  │───→│ COMPOSE  │───→│  EVOLVE  │──┐           │
-│  │          │    │          │    │          │  │           │
-│  │ Teacher  │    │ Hash ring│    │ Clone &  │  │           │
-│  │ → LoRA   │    │ routing  │    │ compete  │  │           │
-│  │ experts  │    │ + vLLM   │    │ + prune  │  │           │
-│  └──────────┘    └──────────┘    └──────────┘  │           │
-│       ▲                                        │           │
-│       │              feedback loop             │           │
-│       └────────────────────────────────────────┘           │
-│                                                             │
-│  Properties:                                                │
-│  • Never retrain the base model                             │
-│  • Add knowledge by adding experts ($0.25 each)             │
-│  • Fix mistakes by cloning + competing (30 sec + traffic)   │
-│  • Remove knowledge by pruning experts (instant)            │
-│  • Scale: 7B base → 600K experts → 1.86T stored params     │
-│  • Active cost: 7.003B params per token                     │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
+### P3: Defer
+- Base-freedom (ReLoRA at 7B) — park until compose works
+- Scale to 500 experts — blocked on composition fix
+- New micro experiments — diminishing returns
+- Grassmannian refinements — complete
 
-## Roadmap — Execution Cycles
+## Key References
 
-See `ORCHESTRATION_PLAN.md` for full cycle-by-cycle plan with gate criteria.
-
-### Current State: ~55% macro readiness
-
-| Pillar | Micro | Macro | Readiness |
-|--------|-------|-------|-----------|
-| Orthogonality & composition | Strong | Strong (d=896) | **90%** |
-| Adapter type | All-modules confirmed (FFN-only killed at macro) | Decision locked | **100%** |
-| Inference scaling | Proven N-indep | Partial (k=1 only) | **50%** |
-| Routing | Hash ring validated, content-aware killed | Pre-merge sufficient at small N | **40%** |
-| Distillation pipeline | N/A (macro-only) | **SUPPORTED** (98% win, 42.2% avg improvement on contaminated eval, $0.44/expert; MMLU/HumanEval pending) | **70%** |
-| Evolution / clone-compete | Answer-conditioned PPL proven (r=0.811) | Not tested | **15%** |
-| Base-freedom | Micro proven, delta_rank revise | In progress (ReLoRA macro) | **30%** |
-
-### Cycle 1 (COMPLETE — CPU; PARTIAL — GPU)
-- CPU DONE: content-aware routing (killed), pre-merge vs dynamic (killed), answer-conditioned PPL (proven), delta rank scaling (revise), SOLE vs LoRA Soups (proven), collision scaling (supported)
-- GPU DONE: FFN-only matched rank (killed — PPL +66.7%, ortho 424% worse)
-- GPU DONE: distillation pilot 50 (SUPPORTED — 98% win rate, 42.2% avg improvement on contaminated eval; MMLU/HumanEval pending)
-- GPU REMAINING: GPU latency validation (running), ReLoRA macro
-
-### Cycle 1.5 (RUNNING)
-- CPU: Cycle 2 micro experiments (composition vs monolithic, cross-domain, shadow scoring)
-- GPU: Finishing Cycle 1 critical path (distillation pilot 50) + Cycle 2 GPU tasks
-
-### Cycle 2: Close Phase 1 — Distill
-- Scale to 500 experts, teacher size comparison, merge pipeline
-- Baselines: composition vs monolithic, synthetic vs real data
-- **Gate:** 50-expert model beats base on >80% of domains **[PASSED: 98% on contaminated eval; downstream task eval pending]**
-
-### Cycle 3: Close Phase 2 — Compose + Serve
-- Content-aware routing at scale, FAISS indexing
-- vLLM production serving, expert add/remove, quantization
-- **Gate:** serving with <5% overhead, routing >80% accuracy at N=500
-
-### Cycle 4: Close Phase 3 — Evolve
-- Shadow scoring, clone-and-compete, evolution convergence
-- Correction pipeline, model collapse detection
-- **Gate:** tournament resolves >90%, monotonic improvement over 10 cycles
-
-### Cycle 5: Base-Freedom (stretch)
-- ReLoRA from scratch, LTE parallel construction, full base-free pipeline
-- **Gate:** entire model is composable adapters, no sacred weights
-
-### Open Research Questions
-
-- **Pre-merge dilution at large N:** At N=500, each expert is 0.2% strength. Does quality survive?
-- **Optimal clone training budget:** 50 steps? 100? 300?
-- **Tournament sample efficiency:** Bayesian stopping rule for clone-compete?
-- **Cross-expert errors:** Bugs in composition, not individual expert — how to detect?
-- **Expert merging:** After v5 beats v1, can we consolidate accumulated corrections?
-- **Decentralized evolution:** Contributors run own experts, compete on shared ring
-- **Delta rank scaling:** Ratio decreases (0.664 -> 0.538 over d=64 to d=256, power law d^(-0.15)). Revised with convergence control — K1 killed but r_95 metric promising. See micro/models/delta_rank_scaling/
-- **SOLE vs LoRA Soups:** Resolved (proven). 5 structural advantages identified. Complementary, not competing.
-- **CAT weight convergence:** Do CAT-optimized weights converge to ~1.0 at macro scale? Falsifiable test of SOLE theory. Needs pilot 50 experts.
-- **LoRA-Flow comparison:** Missing from SOLE positioning. Dynamic per-layer weights — superset of SOLE and CAT. Literature review needed.
-- **Held-out eval for pilot 50:** Current 42.2% improvement is on contaminated eval. MMLU subsets + HumanEval needed to upgrade from "supported" to "proven".
-- **Composition quality at scale:** Do N=50 pre-merged experts maintain individual quality? Key gate for scaling to 500+.
+- BitNet b1.58 (arxiv 2402.17764) — ternary weight architecture
+- MoTE (arxiv 2506.14435) — Mixture of Ternary Experts
+- LoTA-QAF (arxiv 2505.18724) — lossless ternary adaptation
+- Rethinking Inter-LoRA Orthogonality (arxiv 2510.03262) — orthogonality ≠ composability
+- QVAC BitNet LoRA (HuggingFace blog) — cross-platform LoRA on BitNet
+- BitLoRA (ScienceDirect 2026) — ternary adapters for BitNet
+- SOLE Adversarial Review (SOLE_ADVERSARIAL_REVIEW.md) — full project audit
+- BitNet-SOLE Research (references/BITNET_SOLE_RESEARCH.md) — integration analysis

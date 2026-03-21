@@ -1,0 +1,253 @@
+{
+  "experiment": "relora_composition_macro",
+  "base_model": "Qwen2.5-7B",
+  "hidden_size": 3584,
+  "intermediate_size": 18944,
+  "num_layers": 28,
+  "domains": [
+    "math",
+    "python",
+    "sql",
+    "medical",
+    "bash"
+  ],
+  "config": {
+    "relora_steps": 150,
+    "relora_lr": 0.0004,
+    "expert_steps": 100,
+    "expert_lr": 0.0002,
+    "lora_rank": 16,
+    "lora_alpha": 16,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "conventional": {
+    "cosines": {
+      "mean_abs_cos": 0.1791946039035399,
+      "max_abs_cos": 0.3195060831081007,
+      "min_abs_cos": 0.10087225135415614,
+      "std_abs_cos": 0.0689696285221096,
+      "pairs": [
+        {
+          "expert_i": "math",
+          "expert_j": "python",
+          "cosine": 0.3195060831081007,
+          "abs_cosine": 0.3195060831081007
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "sql",
+          "cosine": 0.27213416157392356,
+          "abs_cosine": 0.27213416157392356
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "medical",
+          "cosine": 0.18810919849702096,
+          "abs_cosine": 0.18810919849702096
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "bash",
+          "cosine": 0.15318858070076657,
+          "abs_cosine": 0.15318858070076657
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "sql",
+          "cosine": 0.23229941034986004,
+          "abs_cosine": 0.23229941034986004
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "medical",
+          "cosine": 0.12867582953306314,
+          "abs_cosine": 0.12867582953306314
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "bash",
+          "cosine": 0.14162094501947584,
+          "abs_cosine": 0.14162094501947584
+        },
+        {
+          "expert_i": "sql",
+          "expert_j": "medical",
+          "cosine": 0.11594228119573828,
+          "abs_cosine": 0.11594228119573828
+        },
+        {
+          "expert_i": "sql",
+          "expert_j": "bash",
+          "cosine": 0.10087225135415614,
+          "abs_cosine": 0.10087225135415614
+        },
+        {
+          "expert_i": "medical",
+          "expert_j": "bash",
+          "cosine": 0.13959729770329368,
+          "abs_cosine": 0.13959729770329368
+        }
+      ],
+      "n_experts": 5,
+      "delta_dim": 6525288448
+    },
+    "per_module": {
+      "attn_mean_abs_cos": 0.1701806536564499,
+      "ffn_mean_abs_cos": 0.18013198222053606,
+      "attn_max_abs_cos": 0.3066813633727455,
+      "ffn_max_abs_cos": 0.32103532650225924
+    },
+    "train_losses": {
+      "math": 1.2129436683654786,
+      "python": 0.9699632835388183,
+      "sql": 2.0491999626159667,
+      "medical": 2.6955543518066407,
+      "bash": 0.9065214633941651
+    },
+    "mean_train_loss": 1.566836545944214,
+    "delta_norms": {
+      "math": 9.894189678287262,
+      "python": 7.672930463926807,
+      "sql": 9.318626254567011,
+      "medical": 9.854167445695984,
+      "bash": 10.273770665796775
+    }
+  },
+  "relora": {
+    "cosines": {
+      "mean_abs_cos": 0.15800992084853907,
+      "max_abs_cos": 0.3800291316909605,
+      "min_abs_cos": 0.04434459349587168,
+      "std_abs_cos": 0.11479618368947114,
+      "pairs": [
+        {
+          "expert_i": "math",
+          "expert_j": "python",
+          "cosine": 0.27437679266059767,
+          "abs_cosine": 0.27437679266059767
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "sql",
+          "cosine": 0.08689913558403223,
+          "abs_cosine": 0.08689913558403223
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "medical",
+          "cosine": 0.15469971393398466,
+          "abs_cosine": 0.15469971393398466
+        },
+        {
+          "expert_i": "math",
+          "expert_j": "bash",
+          "cosine": 0.3800291316909605,
+          "abs_cosine": 0.3800291316909605
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "sql",
+          "cosine": 0.04434459349587168,
+          "abs_cosine": 0.04434459349587168
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "medical",
+          "cosine": 0.062457321045316726,
+          "abs_cosine": 0.062457321045316726
+        },
+        {
+          "expert_i": "python",
+          "expert_j": "bash",
+          "cosine": 0.317310103149579,
+          "abs_cosine": 0.317310103149579
+        },
+        {
+          "expert_i": "sql",
+          "expert_j": "medical",
+          "cosine": 0.09051639143337638,
+          "abs_cosine": 0.09051639143337638
+        },
+        {
+          "expert_i": "sql",
+          "expert_j": "bash",
+          "cosine": 0.06065899438669433,
+          "abs_cosine": 0.06065899438669433
+        },
+        {
+          "expert_i": "medical",
+          "expert_j": "bash",
+          "cosine": 0.1088070311049774,
+          "abs_cosine": 0.1088070311049774
+        }
+      ],
+      "n_experts": 5,
+      "delta_dim": 6525288448
+    },
+    "per_module": {
+      "attn_mean_abs_cos": 0.14599657767029747,
+      "ffn_mean_abs_cos": 0.1593318876068004,
+      "attn_max_abs_cos": 0.3506402816324523,
+      "ffn_max_abs_cos": 0.3874617185247735
+    },
+    "train_losses": {
+      "math": 0.7515738487243653,
+      "python": 0.8396730422973633,
+      "sql": 1.494358081817627,
+      "medical": 2.209942626953125,
+      "bash": 0.6013555431365967
+    },
+    "mean_train_loss": 1.1793806285858155,
+    "delta_norms": {
+      "math": 8.356321287109646,
+      "python": 5.95650280367364,
+      "sql": 8.84531815021318,
+      "medical": 8.634958210704161,
+      "bash": 8.048982352428249
+    },
+    "adapter_meta": {
+      "total_steps": 150,
+      "lr": 0.0004,
+      "rank": 16,
+      "train_loss": 1.282315559387207,
+      "trainable_params": 40370176,
+      "domains_mixed": [
+        "math",
+        "python",
+        "sql",
+        "medical",
+        "bash"
+      ]
+    }
+  },
+  "ratios": {
+    "cos_ratio": 0.8817783426822033,
+    "loss_ratio": 0.7527145263734828
+  },
+  "random_baseline": {
+    "expected_cos": 9.877344570187494e-06,
+    "delta_dim": 6525288448
+  },
+  "kill_criteria": {
+    "K1_cos_ratio_gt_5x": false,
+    "K2_loss_ratio_gt_1_20": false,
+    "K3_base_gap_gt_10pct": false
+  },
+  "verdict": "PROVEN",
+  "scaling_comparison": {
+    "micro_d64_cos_ratio": 1.77,
+    "micro_d64_loss_ratio": 1.052,
+    "macro_d3584_cos_ratio": 0.8817783426822033,
+    "macro_d3584_loss_ratio": 0.7527145263734828
+  },
+  "elapsed_phase3_s": 22.696309566497803,
+  "timestamp": "2026-03-13 14:49:22"
+}

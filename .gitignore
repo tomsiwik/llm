@@ -10,6 +10,13 @@ adapters/*/tokenizer_config.json
 *.safetensors
 *.gguf
 *.bin
+*.npz
+*.pt
+*.pth
+*.h5
+*.onnx
+*.pkl
+*.pickle
 
 # Training data (keep local)
 data/distillation/*/train.jsonl

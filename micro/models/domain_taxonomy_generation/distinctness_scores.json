@@ -1,0 +1,1892 @@
+[
+  {
+    "name": "c_programming",
+    "max_cos": 0.6935878396034241,
+    "most_similar": "embedded_c",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "cpp_modern",
+    "max_cos": 0.6455406546592712,
+    "most_similar": "c_programming",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "rust_systems",
+    "max_cos": 0.5281461477279663,
+    "most_similar": "clojure_lisp",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "go_concurrency",
+    "max_cos": 0.5557131767272949,
+    "most_similar": "ocaml_typed",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "assembly_x86",
+    "max_cos": 0.6055020093917847,
+    "most_similar": "c_programming",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "zig_programming",
+    "max_cos": 0.5561662912368774,
+    "most_similar": "embedded_c",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "d_programming",
+    "max_cos": 0.6133579015731812,
+    "most_similar": "c_programming",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "python_general",
+    "max_cos": 0.46172016859054565,
+    "most_similar": "ocaml_typed",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "java_enterprise",
+    "max_cos": 0.5062488913536072,
+    "most_similar": "elixir_concurrent",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "csharp_dotnet",
+    "max_cos": 0.5176612734794617,
+    "most_similar": "fsharp_dotnet",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "kotlin_jvm",
+    "max_cos": 0.4478726387023926,
+    "most_similar": "go_concurrency",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "scala_functional",
+    "max_cos": 0.7133213877677917,
+    "most_similar": "haskell_pure",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "ruby_rails",
+    "max_cos": 0.38031628727912903,
+    "most_similar": "technical_documentation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "php_web",
+    "max_cos": 0.39286595582962036,
+    "most_similar": "powershell_admin",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "javascript_core",
+    "max_cos": 0.49364328384399414,
+    "most_similar": "react_components",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "typescript_advanced",
+    "max_cos": 0.5136756300926208,
+    "most_similar": "fsharp_dotnet",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "react_components",
+    "max_cos": 0.5942723751068115,
+    "most_similar": "vue_framework",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "vue_framework",
+    "max_cos": 0.5942723751068115,
+    "most_similar": "react_components",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "angular_enterprise",
+    "max_cos": 0.4971897304058075,
+    "most_similar": "react_components",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "svelte_reactive",
+    "max_cos": 0.5123568773269653,
+    "most_similar": "cpp_modern",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "css_layouts",
+    "max_cos": 0.4569878578186035,
+    "most_similar": "html_semantic",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "html_semantic",
+    "max_cos": 0.4569878578186035,
+    "most_similar": "css_layouts",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "webassembly",
+    "max_cos": 0.46430274844169617,
+    "most_similar": "assembly_x86",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "bash_shell",
+    "max_cos": 0.49323007464408875,
+    "most_similar": "perl_text",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "powershell_admin",
+    "max_cos": 0.4769503176212311,
+    "most_similar": "cicd_pipelines",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "lua_scripting",
+    "max_cos": 0.5307011604309082,
+    "most_similar": "d_programming",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "perl_text",
+    "max_cos": 0.5380513072013855,
+    "most_similar": "awk_text_processing",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "makefile_build",
+    "max_cos": 0.4364207983016968,
+    "most_similar": "d_programming",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "awk_text_processing",
+    "max_cos": 0.5380513072013855,
+    "most_similar": "perl_text",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "sql_analytics",
+    "max_cos": 0.5708341002464294,
+    "most_similar": "sql_optimization",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "sql_optimization",
+    "max_cos": 0.5708341002464294,
+    "most_similar": "sql_analytics",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "nosql_mongodb",
+    "max_cos": 0.5695569515228271,
+    "most_similar": "graphql_api",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "graphql_api",
+    "max_cos": 0.5695569515228271,
+    "most_similar": "nosql_mongodb",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "elasticsearch_queries",
+    "max_cos": 0.5156863331794739,
+    "most_similar": "seo_sem",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "redis_patterns",
+    "max_cos": 0.4214949905872345,
+    "most_similar": "graphql_api",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "swift_ios",
+    "max_cos": 0.5993034243583679,
+    "most_similar": "objective_c_legacy",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "objective_c_legacy",
+    "max_cos": 0.5993034243583679,
+    "most_similar": "swift_ios",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "dart_flutter",
+    "max_cos": 0.46290814876556396,
+    "most_similar": "react_components",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "embedded_c",
+    "max_cos": 0.6935878396034241,
+    "most_similar": "c_programming",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "arduino_iot",
+    "max_cos": 0.3262478709220886,
+    "most_similar": "erlang_distributed",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "react_native",
+    "max_cos": 0.5304432511329651,
+    "most_similar": "react_components",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "haskell_pure",
+    "max_cos": 0.7133213877677917,
+    "most_similar": "scala_functional",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "elixir_concurrent",
+    "max_cos": 0.6131017208099365,
+    "most_similar": "erlang_distributed",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "clojure_lisp",
+    "max_cos": 0.5317481756210327,
+    "most_similar": "elixir_concurrent",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "ocaml_typed",
+    "max_cos": 0.5745136737823486,
+    "most_similar": "haskell_pure",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "erlang_distributed",
+    "max_cos": 0.6131017208099365,
+    "most_similar": "elixir_concurrent",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "fsharp_dotnet",
+    "max_cos": 0.5289424657821655,
+    "most_similar": "ocaml_typed",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "docker_containers",
+    "max_cos": 0.47111567854881287,
+    "most_similar": "kubernetes_orchestration",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "kubernetes_orchestration",
+    "max_cos": 0.47111567854881287,
+    "most_similar": "docker_containers",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "terraform_iac",
+    "max_cos": 0.479931503534317,
+    "most_similar": "cloud_aws",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "ansible_config",
+    "max_cos": 0.4055894613265991,
+    "most_similar": "powershell_admin",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "cicd_pipelines",
+    "max_cos": 0.4769503176212311,
+    "most_similar": "powershell_admin",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "monitoring_observability",
+    "max_cos": 0.39144256711006165,
+    "most_similar": "erlang_distributed",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "cloud_aws",
+    "max_cos": 0.5921081304550171,
+    "most_similar": "cloud_gcp",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "cloud_gcp",
+    "max_cos": 0.5921081304550171,
+    "most_similar": "cloud_aws",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "cloud_azure",
+    "max_cos": 0.49065595865249634,
+    "most_similar": "cloud_aws",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "classical_mechanics",
+    "max_cos": 0.5141822695732117,
+    "most_similar": "thermodynamics",
+    "desc_words": 16,
+    "indistinguishable": false
+  },
+  {
+    "name": "electromagnetism",
+    "max_cos": 0.4493868350982666,
+    "most_similar": "relativity_gravitation",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "thermodynamics",
+    "max_cos": 0.5141822695732117,
+    "most_similar": "classical_mechanics",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "quantum_mechanics",
+    "max_cos": 0.44839784502983093,
+    "most_similar": "classical_mechanics",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "particle_physics",
+    "max_cos": 0.39760491251945496,
+    "most_similar": "predicate_logic",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "condensed_matter",
+    "max_cos": 0.4983569085597992,
+    "most_similar": "physical_chemistry",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "astrophysics_cosmology",
+    "max_cos": 0.4647313952445984,
+    "most_similar": "relativity_gravitation",
+    "desc_words": 16,
+    "indistinguishable": false
+  },
+  {
+    "name": "optics_photonics",
+    "max_cos": 0.42502352595329285,
+    "most_similar": "quantum_mechanics",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "fluid_dynamics",
+    "max_cos": 0.46897047758102417,
+    "most_similar": "differential_equations",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "relativity_gravitation",
+    "max_cos": 0.4647313952445984,
+    "most_similar": "astrophysics_cosmology",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "organic_chemistry",
+    "max_cos": 0.5340417623519897,
+    "most_similar": "inorganic_chemistry",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "inorganic_chemistry",
+    "max_cos": 0.5592931509017944,
+    "most_similar": "physical_chemistry",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "physical_chemistry",
+    "max_cos": 0.589126706123352,
+    "most_similar": "computational_chemistry",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "analytical_chemistry",
+    "max_cos": 0.3949611186981201,
+    "most_similar": "pharmacology",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "biochemistry",
+    "max_cos": 0.529641330242157,
+    "most_similar": "cell_biology",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "polymer_chemistry",
+    "max_cos": 0.3241267204284668,
+    "most_similar": "organic_chemistry",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "computational_chemistry",
+    "max_cos": 0.589126706123352,
+    "most_similar": "physical_chemistry",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "environmental_chemistry",
+    "max_cos": 0.6309025287628174,
+    "most_similar": "environmental_engineering",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "cell_biology",
+    "max_cos": 0.529641330242157,
+    "most_similar": "biochemistry",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "molecular_biology",
+    "max_cos": 0.5459601879119873,
+    "most_similar": "genetics_genomics",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "genetics_genomics",
+    "max_cos": 0.5459601879119873,
+    "most_similar": "molecular_biology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "evolutionary_biology",
+    "max_cos": 0.45971786975860596,
+    "most_similar": "ecology_conservation",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "ecology_conservation",
+    "max_cos": 0.45971786975860596,
+    "most_similar": "evolutionary_biology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "microbiology",
+    "max_cos": 0.47923946380615234,
+    "most_similar": "marine_biology",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "neuroscience",
+    "max_cos": 0.4393216669559479,
+    "most_similar": "biomedical_engineering",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "immunology",
+    "max_cos": 0.3312048017978668,
+    "most_similar": "microbiology",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "plant_biology",
+    "max_cos": 0.4498887360095978,
+    "most_similar": "evolutionary_biology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "marine_biology",
+    "max_cos": 0.5217766165733337,
+    "most_similar": "oceanography",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "geology_mineralogy",
+    "max_cos": 0.46764352917671204,
+    "most_similar": "volcanology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "meteorology_climate",
+    "max_cos": 0.41806042194366455,
+    "most_similar": "oceanography",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "oceanography",
+    "max_cos": 0.5217766165733337,
+    "most_similar": "marine_biology",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "astronomy_observation",
+    "max_cos": 0.5423001050949097,
+    "most_similar": "planetary_science",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "planetary_science",
+    "max_cos": 0.5423001050949097,
+    "most_similar": "astronomy_observation",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "seismology",
+    "max_cos": 0.4612617790699005,
+    "most_similar": "geology_mineralogy",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "volcanology",
+    "max_cos": 0.46764352917671204,
+    "most_similar": "geology_mineralogy",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "paleontology",
+    "max_cos": 0.4098571836948395,
+    "most_similar": "geology_mineralogy",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "calculus_analysis",
+    "max_cos": 0.5210251808166504,
+    "most_similar": "financial_analysis",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "linear_algebra",
+    "max_cos": 0.4769268333911896,
+    "most_similar": "time_series",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "abstract_algebra",
+    "max_cos": 0.47095468640327454,
+    "most_similar": "linear_algebra",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "number_theory",
+    "max_cos": 0.49906909465789795,
+    "most_similar": "cryptography_applied",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "topology",
+    "max_cos": 0.3593229055404663,
+    "most_similar": "abstract_algebra",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "combinatorics_graph_theory",
+    "max_cos": 0.36516183614730835,
+    "most_similar": "game_theory_strategy",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "differential_equations",
+    "max_cos": 0.46897047758102417,
+    "most_similar": "fluid_dynamics",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "probability_theory",
+    "max_cos": 0.49674898386001587,
+    "most_similar": "thermodynamics",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "numerical_methods",
+    "max_cos": 0.4370129406452179,
+    "most_similar": "optimization_problems",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "mathematical_logic",
+    "max_cos": 0.674220860004425,
+    "most_similar": "predicate_logic",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "descriptive_statistics",
+    "max_cos": 0.4328044056892395,
+    "most_similar": "regression_analysis",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "hypothesis_testing",
+    "max_cos": 0.5718672871589661,
+    "most_similar": "multivariate_analysis",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "regression_analysis",
+    "max_cos": 0.4981786012649536,
+    "most_similar": "multivariate_analysis",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "bayesian_inference",
+    "max_cos": 0.597637951374054,
+    "most_similar": "probabilistic_reasoning",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "experimental_design",
+    "max_cos": 0.4048391580581665,
+    "most_similar": "hypothesis_testing",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "time_series",
+    "max_cos": 0.4769268333911896,
+    "most_similar": "linear_algebra",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "multivariate_analysis",
+    "max_cos": 0.5718672871589661,
+    "most_similar": "hypothesis_testing",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "causal_inference_stats",
+    "max_cos": 0.5386847853660583,
+    "most_similar": "causal_reasoning",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "machine_learning_theory",
+    "max_cos": 0.5932512879371643,
+    "most_similar": "deep_learning_theory",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "deep_learning_theory",
+    "max_cos": 0.5932512879371643,
+    "most_similar": "machine_learning_theory",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "clinical_medicine",
+    "max_cos": 0.5879809260368347,
+    "most_similar": "pharmacology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "surgery_procedures",
+    "max_cos": 0.42442765831947327,
+    "most_similar": "nursing_care",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "pharmacology",
+    "max_cos": 0.5879809260368347,
+    "most_similar": "clinical_medicine",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "radiology_imaging",
+    "max_cos": 0.3443906605243683,
+    "most_similar": "emergency_medicine",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "psychiatry_mental_health",
+    "max_cos": 0.5461741089820862,
+    "most_similar": "psychology_clinical",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "nursing_care",
+    "max_cos": 0.5715980529785156,
+    "most_similar": "emergency_medicine",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "public_health_epidemiology",
+    "max_cos": 0.37678098678588867,
+    "most_similar": "pediatrics",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "emergency_medicine",
+    "max_cos": 0.5715980529785156,
+    "most_similar": "nursing_care",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "pediatrics",
+    "max_cos": 0.37678098678588867,
+    "most_similar": "public_health_epidemiology",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "geriatrics",
+    "max_cos": 0.4696170687675476,
+    "most_similar": "nursing_care",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "contract_law",
+    "max_cos": 0.5291417837142944,
+    "most_similar": "legal_writing_analysis",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "constitutional_law",
+    "max_cos": 0.5653643608093262,
+    "most_similar": "criminal_law",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "criminal_law",
+    "max_cos": 0.5653643608093262,
+    "most_similar": "constitutional_law",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "intellectual_property",
+    "max_cos": 0.4725603461265564,
+    "most_similar": "international_law",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "corporate_law",
+    "max_cos": 0.5164716839790344,
+    "most_similar": "corporate_finance",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "international_law",
+    "max_cos": 0.5636017918586731,
+    "most_similar": "constitutional_law",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "family_law",
+    "max_cos": 0.5447919964790344,
+    "most_similar": "constitutional_law",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "environmental_law",
+    "max_cos": 0.5206307768821716,
+    "most_similar": "environmental_engineering",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "legal_writing_analysis",
+    "max_cos": 0.5568116903305054,
+    "most_similar": "criminal_law",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "financial_analysis",
+    "max_cos": 0.6203153133392334,
+    "most_similar": "real_estate_finance",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "investment_portfolio",
+    "max_cos": 0.5724873542785645,
+    "most_similar": "personal_finance",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "accounting_gaap",
+    "max_cos": 0.4940001368522644,
+    "most_similar": "financial_analysis",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "tax_planning",
+    "max_cos": 0.4829901456832886,
+    "most_similar": "personal_finance",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "corporate_finance",
+    "max_cos": 0.6557512879371643,
+    "most_similar": "personal_finance",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "banking_regulation",
+    "max_cos": 0.4451296329498291,
+    "most_similar": "corporate_finance",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "insurance_actuarial",
+    "max_cos": 0.4805375039577484,
+    "most_similar": "risk_assessment",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "real_estate_finance",
+    "max_cos": 0.6203153133392334,
+    "most_similar": "financial_analysis",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "cryptocurrency_blockchain",
+    "max_cos": 0.4187202453613281,
+    "most_similar": "cryptography_applied",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "venture_capital",
+    "max_cos": 0.5815117359161377,
+    "most_similar": "corporate_finance",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "project_management_agile",
+    "max_cos": 0.42775067687034607,
+    "most_similar": "change_management",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "product_management",
+    "max_cos": 0.5301945805549622,
+    "most_similar": "market_research",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "operations_management",
+    "max_cos": 0.6242992877960205,
+    "most_similar": "industrial_engineering",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "supply_chain_logistics",
+    "max_cos": 0.502869188785553,
+    "most_similar": "operations_management",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "human_resources",
+    "max_cos": 0.33155882358551025,
+    "most_similar": "organizational_behavior",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "organizational_behavior",
+    "max_cos": 0.47726213932037354,
+    "most_similar": "executive_leadership",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "change_management",
+    "max_cos": 0.42775067687034607,
+    "most_similar": "project_management_agile",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "executive_leadership",
+    "max_cos": 0.5547142028808594,
+    "most_similar": "public_relations",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "civil_engineering",
+    "max_cos": 0.4687066972255707,
+    "most_similar": "mechanical_engineering",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "mechanical_engineering",
+    "max_cos": 0.5404667854309082,
+    "most_similar": "industrial_engineering",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "electrical_engineering",
+    "max_cos": 0.44598451256752014,
+    "most_similar": "industrial_engineering",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "chemical_engineering",
+    "max_cos": 0.5159128308296204,
+    "most_similar": "physical_chemistry",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "aerospace_engineering",
+    "max_cos": 0.49509233236312866,
+    "most_similar": "mechanical_engineering",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "biomedical_engineering",
+    "max_cos": 0.45466503500938416,
+    "most_similar": "mechanical_engineering",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "materials_science",
+    "max_cos": 0.535467803478241,
+    "most_similar": "physical_chemistry",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "industrial_engineering",
+    "max_cos": 0.6242992877960205,
+    "most_similar": "operations_management",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "environmental_engineering",
+    "max_cos": 0.6309025287628174,
+    "most_similar": "environmental_chemistry",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "digital_marketing",
+    "max_cos": 0.5898149013519287,
+    "most_similar": "seo_sem",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "brand_strategy",
+    "max_cos": 0.5432509779930115,
+    "most_similar": "advertising_creative",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "content_marketing",
+    "max_cos": 0.6042262315750122,
+    "most_similar": "social_media_marketing",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "seo_sem",
+    "max_cos": 0.5898149013519287,
+    "most_similar": "digital_marketing",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "social_media_marketing",
+    "max_cos": 0.6042262315750122,
+    "most_similar": "content_marketing",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "public_relations",
+    "max_cos": 0.5547142028808594,
+    "most_similar": "executive_leadership",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "market_research",
+    "max_cos": 0.5301945805549622,
+    "most_similar": "product_management",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "advertising_creative",
+    "max_cos": 0.7256550788879395,
+    "most_similar": "copywriting_ads",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "network_security",
+    "max_cos": 0.5996702313423157,
+    "most_similar": "security_architecture",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "application_security",
+    "max_cos": 0.4967895448207855,
+    "most_similar": "security_architecture",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "cryptography_applied",
+    "max_cos": 0.49906909465789795,
+    "most_similar": "number_theory",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "incident_response_forensics",
+    "max_cos": 0.4015568196773529,
+    "most_similar": "investigative_journalism",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "penetration_testing",
+    "max_cos": 0.4321410059928894,
+    "most_similar": "security_architecture",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "security_architecture",
+    "max_cos": 0.5996702313423157,
+    "most_similar": "network_security",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "compliance_governance",
+    "max_cos": 0.41656693816185,
+    "most_similar": "security_architecture",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "fiction_short_story",
+    "max_cos": 0.6591020822525024,
+    "most_similar": "fiction_novel",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "fiction_novel",
+    "max_cos": 0.6591020822525024,
+    "most_similar": "fiction_short_story",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "poetry_verse",
+    "max_cos": 0.5053167939186096,
+    "most_similar": "literary_translation",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "screenplay_film",
+    "max_cos": 0.6790414452552795,
+    "most_similar": "playwriting_theater",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "playwriting_theater",
+    "max_cos": 0.6790414452552795,
+    "most_similar": "screenplay_film",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "creative_nonfiction",
+    "max_cos": 0.5933610200881958,
+    "most_similar": "advertising_creative",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "comedy_humor_writing",
+    "max_cos": 0.48034152388572693,
+    "most_similar": "playwriting_theater",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "childrens_literature",
+    "max_cos": 0.448880136013031,
+    "most_similar": "visual_arts_critique",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "technical_documentation",
+    "max_cos": 0.7040279507637024,
+    "most_similar": "user_guides",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "api_documentation",
+    "max_cos": 0.6089514493942261,
+    "most_similar": "technical_documentation",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "academic_papers",
+    "max_cos": 0.5649746656417847,
+    "most_similar": "white_papers",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "grant_proposals",
+    "max_cos": 0.4428386986255646,
+    "most_similar": "fundraising_appeals",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "business_reports",
+    "max_cos": 0.56023770570755,
+    "most_similar": "white_papers",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "white_papers",
+    "max_cos": 0.5649746656417847,
+    "most_similar": "academic_papers",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "user_guides",
+    "max_cos": 0.7040279507637024,
+    "most_similar": "technical_documentation",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "release_notes",
+    "max_cos": 0.5358383655548096,
+    "most_similar": "user_guides",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "news_reporting",
+    "max_cos": 0.5775173306465149,
+    "most_similar": "source_evaluation",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "investigative_journalism",
+    "max_cos": 0.5966707468032837,
+    "most_similar": "data_journalism",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "feature_writing",
+    "max_cos": 0.6048526763916016,
+    "most_similar": "screenplay_film",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "editorial_opinion",
+    "max_cos": 0.7166228890419006,
+    "most_similar": "debate_argumentation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "data_journalism",
+    "max_cos": 0.5966707468032837,
+    "most_similar": "investigative_journalism",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "broadcast_writing",
+    "max_cos": 0.613889753818512,
+    "most_similar": "podcast_scripting",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "podcast_scripting",
+    "max_cos": 0.613889753818512,
+    "most_similar": "broadcast_writing",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "copywriting_ads",
+    "max_cos": 0.7256550788879395,
+    "most_similar": "advertising_creative",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "speechwriting_rhetoric",
+    "max_cos": 0.5389694571495056,
+    "most_similar": "playwriting_theater",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "proposal_writing",
+    "max_cos": 0.4141877591609955,
+    "most_similar": "grant_proposals",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "fundraising_appeals",
+    "max_cos": 0.4428386986255646,
+    "most_similar": "grant_proposals",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "political_messaging",
+    "max_cos": 0.5276166796684265,
+    "most_similar": "advertising_creative",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "sales_copy",
+    "max_cos": 0.5320830941200256,
+    "most_similar": "copywriting_ads",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_spanish",
+    "max_cos": 0.5131271481513977,
+    "most_similar": "english_french",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_french",
+    "max_cos": 0.5131271481513977,
+    "most_similar": "english_spanish",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_german",
+    "max_cos": 0.6028022766113281,
+    "most_similar": "technical_translation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_chinese",
+    "max_cos": 0.5535786151885986,
+    "most_similar": "literary_translation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_japanese",
+    "max_cos": 0.4531993269920349,
+    "most_similar": "english_german",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "english_arabic",
+    "max_cos": 0.41387397050857544,
+    "most_similar": "english_spanish",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "technical_translation",
+    "max_cos": 0.6028022766113281,
+    "most_similar": "english_german",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "literary_translation",
+    "max_cos": 0.5535786151885986,
+    "most_similar": "english_chinese",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "propositional_logic",
+    "max_cos": 0.6261045932769775,
+    "most_similar": "mathematical_logic",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "predicate_logic",
+    "max_cos": 0.674220860004425,
+    "most_similar": "mathematical_logic",
+    "desc_words": 9,
+    "indistinguishable": false
+  },
+  {
+    "name": "modal_logic",
+    "max_cos": 0.6001248359680176,
+    "most_similar": "propositional_logic",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "set_theory_foundations",
+    "max_cos": 0.47350090742111206,
+    "most_similar": "proof_techniques",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "proof_techniques",
+    "max_cos": 0.5180150866508484,
+    "most_similar": "formal_verification",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "formal_verification",
+    "max_cos": 0.5733636021614075,
+    "most_similar": "mathematical_logic",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "causal_reasoning",
+    "max_cos": 0.6650589108467102,
+    "most_similar": "counterfactual_reasoning",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "analogical_reasoning",
+    "max_cos": 0.40346962213516235,
+    "most_similar": "causal_reasoning",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "spatial_reasoning",
+    "max_cos": 0.47659918665885925,
+    "most_similar": "puzzle_solving",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "temporal_reasoning",
+    "max_cos": 0.5393543839454651,
+    "most_similar": "modal_logic",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "probabilistic_reasoning",
+    "max_cos": 0.597637951374054,
+    "most_similar": "bayesian_inference",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "abductive_reasoning",
+    "max_cos": 0.4442961812019348,
+    "most_similar": "probabilistic_reasoning",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "counterfactual_reasoning",
+    "max_cos": 0.6650589108467102,
+    "most_similar": "causal_reasoning",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "argument_analysis",
+    "max_cos": 0.6166600584983826,
+    "most_similar": "debate_argumentation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "fallacy_identification",
+    "max_cos": 0.5184715390205383,
+    "most_similar": "argument_analysis",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "source_evaluation",
+    "max_cos": 0.5775173306465149,
+    "most_similar": "news_reporting",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "debate_argumentation",
+    "max_cos": 0.7166228890419006,
+    "most_similar": "editorial_opinion",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "ethical_reasoning_applied",
+    "max_cos": 0.3687642514705658,
+    "most_similar": "debate_argumentation",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "decision_analysis",
+    "max_cos": 0.5150114297866821,
+    "most_similar": "risk_assessment",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "risk_assessment",
+    "max_cos": 0.5150114297866821,
+    "most_similar": "decision_analysis",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "algorithmic_thinking",
+    "max_cos": 0.4771984815597534,
+    "most_similar": "optimization_problems",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "constraint_satisfaction",
+    "max_cos": 0.47722774744033813,
+    "most_similar": "temporal_reasoning",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "optimization_problems",
+    "max_cos": 0.4771984815597534,
+    "most_similar": "algorithmic_thinking",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "puzzle_solving",
+    "max_cos": 0.48336073756217957,
+    "most_similar": "memory_techniques",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "systems_thinking_analysis",
+    "max_cos": 0.4376020133495331,
+    "most_similar": "causal_reasoning",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "design_thinking",
+    "max_cos": 0.43620064854621887,
+    "most_similar": "systems_thinking_analysis",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "game_theory_strategy",
+    "max_cos": 0.5736315250396729,
+    "most_similar": "economics_micro",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "learning_strategies",
+    "max_cos": 0.659389853477478,
+    "most_similar": "memory_techniques",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "memory_techniques",
+    "max_cos": 0.659389853477478,
+    "most_similar": "learning_strategies",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "cognitive_biases",
+    "max_cos": 0.4041794240474701,
+    "most_similar": "counterfactual_reasoning",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "self_regulation",
+    "max_cos": 0.40010833740234375,
+    "most_similar": "organizational_behavior",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "expertise_development",
+    "max_cos": 0.47036704421043396,
+    "most_similar": "learning_strategies",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "k12_teaching",
+    "max_cos": 0.595855176448822,
+    "most_similar": "curriculum_design",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "higher_education",
+    "max_cos": 0.42620447278022766,
+    "most_similar": "k12_teaching",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "special_education",
+    "max_cos": 0.38982629776000977,
+    "most_similar": "elearning_design",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "curriculum_design",
+    "max_cos": 0.595855176448822,
+    "most_similar": "k12_teaching",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "educational_assessment",
+    "max_cos": 0.5942431688308716,
+    "most_similar": "curriculum_design",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "elearning_design",
+    "max_cos": 0.40405672788619995,
+    "most_similar": "design_thinking",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "music_theory",
+    "max_cos": 0.40367183089256287,
+    "most_similar": "visual_arts_critique",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "visual_arts_critique",
+    "max_cos": 0.6186286807060242,
+    "most_similar": "art_history",
+    "desc_words": 15,
+    "indistinguishable": false
+  },
+  {
+    "name": "film_analysis",
+    "max_cos": 0.5991125702857971,
+    "most_similar": "screenplay_film",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "architecture_design",
+    "max_cos": 0.5171943306922913,
+    "most_similar": "home_improvement",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "art_history",
+    "max_cos": 0.6186286807060242,
+    "most_similar": "visual_arts_critique",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "cultural_studies",
+    "max_cos": 0.5025871396064758,
+    "most_similar": "art_history",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "psychology_clinical",
+    "max_cos": 0.5461741089820862,
+    "most_similar": "psychiatry_mental_health",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "sociology_research",
+    "max_cos": 0.41182419657707214,
+    "most_similar": "economics_micro",
+    "desc_words": 10,
+    "indistinguishable": false
+  },
+  {
+    "name": "economics_macro",
+    "max_cos": 0.4809911847114563,
+    "most_similar": "economics_micro",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "economics_micro",
+    "max_cos": 0.5736315250396729,
+    "most_similar": "game_theory_strategy",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "political_science",
+    "max_cos": 0.39727380871772766,
+    "most_similar": "sociology_research",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "anthropology",
+    "max_cos": 0.47615864872932434,
+    "most_similar": "cultural_studies",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "geography_human",
+    "max_cos": 0.41608911752700806,
+    "most_similar": "spatial_reasoning",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "linguistics",
+    "max_cos": 0.41917142271995544,
+    "most_similar": "anthropology",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "cooking_culinary",
+    "max_cos": 0.3605143427848816,
+    "most_similar": "photography_technique",
+    "desc_words": 14,
+    "indistinguishable": false
+  },
+  {
+    "name": "fitness_nutrition",
+    "max_cos": 0.3330242931842804,
+    "most_similar": "cooking_culinary",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "personal_finance",
+    "max_cos": 0.6557512879371643,
+    "most_similar": "corporate_finance",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "home_improvement",
+    "max_cos": 0.5171943306922913,
+    "most_similar": "architecture_design",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "gardening_agriculture",
+    "max_cos": 0.40495890378952026,
+    "most_similar": "plant_biology",
+    "desc_words": 13,
+    "indistinguishable": false
+  },
+  {
+    "name": "automotive_repair",
+    "max_cos": 0.3806678056716919,
+    "most_similar": "aerospace_engineering",
+    "desc_words": 12,
+    "indistinguishable": false
+  },
+  {
+    "name": "photography_technique",
+    "max_cos": 0.48262980580329895,
+    "most_similar": "film_analysis",
+    "desc_words": 11,
+    "indistinguishable": false
+  },
+  {
+    "name": "travel_planning",
+    "max_cos": 0.3817993402481079,
+    "most_similar": "decision_analysis",
+    "desc_words": 12,
+    "indistinguishable": false
+  }
+]

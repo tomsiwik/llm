@@ -35,6 +35,10 @@ serve = [
 eval = [
     "lm-eval>=0.4",
 ]
+serverless = [
+    "httpx",
+    "python-dotenv",
+]
 
 [project.scripts]
 compose = "composer.compose:main"

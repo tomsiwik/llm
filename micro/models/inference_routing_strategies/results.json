@@ -1,0 +1,396 @@
+{
+  "config": {
+    "n_domains": 15,
+    "n_experts": 30,
+    "n_clusters": 3,
+    "embed_dim": 64,
+    "n_queries_train": 3000,
+    "n_queries_test": 2000,
+    "specialization_strength": 0.8,
+    "n_seeds": 3,
+    "n_latency_iters": 5000
+  },
+  "aggregated": {
+    "premerge": {
+      "latency_mean_us": 0.040336996244150214,
+      "latency_std_us": 0.0002794822748821904,
+      "latency_p99_us": 0.08300048648379743,
+      "batch_per_query_us": 0.0,
+      "oracle_agreement_mean": 0.0,
+      "oracle_agreement_std": 0.0,
+      "quality_capture_mean": 0.2336367815991436,
+      "quality_capture_std": 0.0014174409780566978,
+      "quality_lift_mean": -0.00026240582186537166,
+      "quality_lift_std": 0.000519815092717577
+    },
+    "hash_ring": {
+      "latency_mean_us": 0.8156211981258821,
+      "latency_std_us": 0.00502571748615771,
+      "latency_p99_us": 0.9166669769911095,
+      "batch_per_query_us": 0.8468333338290298,
+      "oracle_agreement_mean": 0.030833333333333334,
+      "oracle_agreement_std": 0.0024944382578492947,
+      "quality_capture_mean": 0.23313180692114335,
+      "quality_capture_std": 0.003118536593415718,
+      "quality_lift_mean": -0.0009180894214183572,
+      "quality_lift_std": 0.0025591567780979016
+    },
+    "embedding_sim": {
+      "latency_mean_us": 3.0966185352857187,
+      "latency_std_us": 0.011513161745188842,
+      "latency_p99_us": 3.305666420298318,
+      "batch_per_query_us": 0.2244166668485074,
+      "oracle_agreement_mean": 0.058666666666666666,
+      "oracle_agreement_std": 0.002013840995599094,
+      "quality_capture_mean": 0.272846665613846,
+      "quality_capture_std": 0.007909697668026988,
+      "quality_lift_mean": 0.050913672298719646,
+      "quality_lift_std": 0.010265693818920755
+    },
+    "tiny_classifier": {
+      "latency_mean_us": 3.4589436020420785,
+      "latency_std_us": 0.027182711330165626,
+      "latency_p99_us": 3.59733349190113,
+      "batch_per_query_us": 0.10915266648225952,
+      "oracle_agreement_mean": 0.06033333333333333,
+      "oracle_agreement_std": 0.011506037062728805,
+      "quality_capture_mean": 0.23805239230110073,
+      "quality_capture_std": 0.021206388584957936,
+      "quality_lift_mean": 0.005547685955560691,
+      "quality_lift_std": 0.02584857122772489
+    },
+    "hierarchical": {
+      "latency_mean_us": 3.919948132352147,
+      "latency_std_us": 0.03499264189575248,
+      "latency_p99_us": 4.138669886136388,
+      "batch_per_query_us": 3.9420693334856574,
+      "oracle_agreement_mean": 0.025999999999999995,
+      "oracle_agreement_std": 0.00837655458208604,
+      "quality_capture_mean": 0.21215854316490823,
+      "quality_capture_std": 0.01976521504335275,
+      "quality_lift_mean": -0.02826543176193903,
+      "quality_lift_std": 0.024442405225739774
+    }
+  },
+  "per_seed": [
+    {
+      "premerge": {
+        "latency": {
+          "mean_us": 0.04002160330855986,
+          "std_us": 0.018507156752203976,
+          "p50_us": 0.04199955583317205,
+          "p99_us": 0.08300048648379743,
+          "batch_per_query_us": 0.0
+        },
+        "quality": {
+          "oracle_agreement": 0.0,
+          "quality_capture": 0.231873430451473,
+          "router_mean_quality": 0.21694764870864156,
+          "oracle_mean_quality": 0.9356296160635138,
+          "random_mean_quality": 0.21697689346113133,
+          "random_capture": 0.23190468721375124,
+          "quality_lift_over_random": -4.0693858897348295e-05
+        }
+      },
+      "hash_ring": {
+        "latency": {
+          "mean_us": 0.8135289906931575,
+          "std_us": 0.039456377705695246,
+          "p50_us": 0.7920007192296907,
+          "p99_us": 0.9170007615466602,
+          "batch_per_query_us": 0.8776660006333259
+        },
+        "quality": {
+          "oracle_agreement": 0.0315,
+          "quality_capture": 0.22872712237546816,
+          "router_mean_quality": 0.21400386969147162,
+          "oracle_mean_quality": 0.9356296160635138,
+          "random_mean_quality": 0.21697689346113133,
+          "random_capture": 0.23190468721375124,
+          "quality_lift_over_random": -0.004136940800688564
+        }
+      },
+      "embedding_sim": {
+        "latency": {
+          "mean_us": 3.0857459973049117,
+          "std_us": 0.06551116830785318,
+          "p50_us": 3.0829996831016615,
+          "p99_us": 3.291999746579677,
+          "batch_per_query_us": 0.21491700044862228
+        },
+        "quality": {
+          "oracle_agreement": 0.057,
+          "quality_capture": 0.278498171949898,
+          "router_mean_quality": 0.26057113769587353,
+          "oracle_mean_quality": 0.9356296160635138,
+          "random_mean_quality": 0.21697689346113133,
+          "random_capture": 0.23190468721375124,
+          "quality_lift_over_random": 0.06066107156301989
+        }
+      },
+      "tiny_classifier": {
+        "latency": {
+          "mean_us": 3.4717354057647754,
+          "std_us": 0.06322260133376917,
+          "p50_us": 3.4589993447298184,
+          "p99_us": 3.6250003176974133,
+          "batch_per_query_us": 0.11433300005592173
+        },
+        "quality": {
+          "oracle_agreement": 0.065,
+          "quality_capture": 0.20808848443908484,
+          "router_mean_quality": 0.1946937488029794,
+          "oracle_mean_quality": 0.9356296160635138,
+          "random_mean_quality": 0.21697689346113133,
+          "random_capture": 0.23190468721375124,
+          "quality_lift_over_random": -0.031006832587317405
+        }
+      },
+      "hierarchical": {
+        "latency": {
+          "mean_us": 3.9638518008359824,
+          "std_us": 0.09128349700616378,
+          "p50_us": 3.957999979320448,
+          "p99_us": 4.167000042798463,
+          "batch_per_query_us": 4.026750000775792
+        },
+        "quality": {
+          "oracle_agreement": 0.016,
+          "quality_capture": 0.18523436386781647,
+          "router_mean_quality": 0.17331075674741434,
+          "oracle_mean_quality": 0.9356296160635138,
+          "random_mean_quality": 0.21697689346113133,
+          "random_capture": 0.23190468721375124,
+          "quality_lift_over_random": -0.06076110942096393
+        }
+      }
+    },
+    {
+      "premerge": {
+        "latency": {
+          "mean_us": 0.04028838957310654,
+          "std_us": 0.01851021216158119,
+          "p50_us": 0.04199955583317205,
+          "p99_us": 0.08300048648379743,
+          "batch_per_query_us": 0.0
+        },
+        "quality": {
+          "oracle_agreement": 0.0,
+          "quality_capture": 0.2353440799300042,
+          "router_mean_quality": 0.21655977688151642,
+          "oracle_mean_quality": 0.9201836602217716,
+          "random_mean_quality": 0.21724883440695975,
+          "random_capture": 0.2360929060124813,
+          "quality_lift_over_random": -0.0009802580554244056
+        }
+      },
+      "hash_ring": {
+        "latency": {
+          "mean_us": 0.8225497975217877,
+          "std_us": 0.03987112885578049,
+          "p50_us": 0.8329998308909126,
+          "p99_us": 0.9169998520519584,
+          "batch_per_query_us": 0.8336250002685119
+        },
+        "quality": {
+          "oracle_agreement": 0.0275,
+          "quality_capture": 0.23552642833098442,
+          "router_mean_quality": 0.216727570900566,
+          "oracle_mean_quality": 0.9201836602217716,
+          "random_mean_quality": 0.21724883440695975,
+          "random_capture": 0.2360929060124813,
+          "quality_lift_over_random": -0.000741553110261009
+        }
+      },
+      "embedding_sim": {
+        "latency": {
+          "mean_us": 3.112551007325237,
+          "std_us": 0.12200891015068047,
+          "p50_us": 3.0840001272736117,
+          "p99_us": 3.3749993235687725,
+          "batch_per_query_us": 0.24850000045262277
+        },
+        "quality": {
+          "oracle_agreement": 0.0575,
+          "quality_capture": 0.27838095627941084,
+          "router_mean_quality": 0.25616160728522525,
+          "oracle_mean_quality": 0.9201836602217716,
+          "random_mean_quality": 0.21724883440695975,
+          "random_capture": 0.2360929060124813,
+          "quality_lift_over_random": 0.05535758287855419
+        }
+      },
+      "tiny_classifier": {
+        "latency": {
+          "mean_us": 3.4211530030006543,
+          "std_us": 0.062380659304450595,
+          "p50_us": 3.4169997888966464,
+          "p99_us": 3.5420007407083176,
+          "batch_per_query_us": 0.10716699944168795
+        },
+        "quality": {
+          "oracle_agreement": 0.0715,
+          "quality_capture": 0.2541250086234189,
+          "router_mean_quality": 0.23384168058898688,
+          "oracle_mean_quality": 0.9201836602217716,
+          "random_mean_quality": 0.21724883440695975,
+          "random_capture": 0.2360929060124813,
+          "quality_lift_over_random": 0.023605099040004775
+        }
+      },
+      "hierarchical": {
+        "latency": {
+          "mean_us": 3.9177720003863215,
+          "std_us": 0.10776733906292145,
+          "p50_us": 3.915999513992574,
+          "p99_us": 4.208010059301159,
+          "batch_per_query_us": 3.893749999406282
+        },
+        "quality": {
+          "oracle_agreement": 0.0255,
+          "quality_capture": 0.21911586414358522,
+          "router_mean_quality": 0.20162683788030067,
+          "oracle_mean_quality": 0.9201836602217716,
+          "random_mean_quality": 0.21724883440695975,
+          "random_capture": 0.2360929060124813,
+          "quality_lift_over_random": -0.022223961529506994
+        }
+      }
+    },
+    {
+      "premerge": {
+        "latency": {
+          "mean_us": 0.04070099585078424,
+          "std_us": 0.018184173604243056,
+          "p50_us": 0.04199955583317205,
+          "p99_us": 0.08300048648379743,
+          "batch_per_query_us": 0.0
+        },
+        "quality": {
+          "oracle_agreement": 0.0,
+          "quality_capture": 0.2336928344159537,
+          "router_mean_quality": 0.21503523880484857,
+          "oracle_mean_quality": 0.9201618840486303,
+          "random_mean_quality": 0.21487038788580207,
+          "random_capture": 0.23351368015852983,
+          "quality_lift_over_random": 0.0002337344487256389
+        }
+      },
+      "hash_ring": {
+        "latency": {
+          "mean_us": 0.810784806162701,
+          "std_us": 0.03396764279629088,
+          "p50_us": 0.7920007192296907,
+          "p99_us": 0.91600031737471,
+          "batch_per_query_us": 0.8292090005852515
+        },
+        "quality": {
+          "oracle_agreement": 0.0335,
+          "quality_capture": 0.23514187005697756,
+          "router_mean_quality": 0.21636858617034668,
+          "oracle_mean_quality": 0.9201618840486303,
+          "random_mean_quality": 0.21487038788580207,
+          "random_capture": 0.23351368015852983,
+          "quality_lift_over_random": 0.0021242256466945013
+        }
+      },
+      "embedding_sim": {
+        "latency": {
+          "mean_us": 3.091558601227007,
+          "std_us": 0.18474667835106007,
+          "p50_us": 3.0829996831016615,
+          "p99_us": 3.250000190746505,
+          "batch_per_query_us": 0.20983299964427715
+        },
+        "quality": {
+          "oracle_agreement": 0.0615,
+          "quality_capture": 0.26166086861222915,
+          "router_mean_quality": 0.2407703578440299,
+          "oracle_mean_quality": 0.9201618840486303,
+          "random_mean_quality": 0.21487038788580207,
+          "random_capture": 0.23351368015852983,
+          "quality_lift_over_random": 0.03672236245458486
+        }
+      },
+      "tiny_classifier": {
+        "latency": {
+          "mean_us": 3.4839423973608064,
+          "std_us": 0.10514001989091332,
+          "p50_us": 3.45900025422452,
+          "p99_us": 3.6249994172976585,
+          "batch_per_query_us": 0.10595799994916888
+        },
+        "quality": {
+          "oracle_agreement": 0.0445,
+          "quality_capture": 0.2519436838407984,
+          "router_mean_quality": 0.23182897479710152,
+          "oracle_mean_quality": 0.9201618840486303,
+          "random_mean_quality": 0.21487038788580207,
+          "random_capture": 0.23351368015852983,
+          "quality_lift_over_random": 0.024044791413994702
+        }
+      },
+      "hierarchical": {
+        "latency": {
+          "mean_us": 3.8782205958341365,
+          "std_us": 0.2028937772142779,
+          "p50_us": 3.8749994928366505,
+          "p99_us": 4.0409995563095436,
+          "batch_per_query_us": 3.905708000274899
+        },
+        "quality": {
+          "oracle_agreement": 0.0365,
+          "quality_capture": 0.23212540148332303,
+          "router_mean_quality": 0.21359294676443924,
+          "oracle_mean_quality": 0.9201618840486303,
+          "random_mean_quality": 0.21487038788580207,
+          "random_capture": 0.23351368015852983,
+          "quality_lift_over_random": -0.0018112243353461733
+        }
+      }
+    }
+  ],
+  "kill_criteria": {
+    "K1_best_under_50ms": true,
+    "K1_worst_latency_ms": 0.003919948132352147,
+    "K2_routing_under_expert_compute": true,
+    "K2_worst_ratio": 0.003919948132352147,
+    "K3_best_over_90pct_oracle": false,
+    "K3_best_quality_capture": 0.272846665613846,
+    "all_pass": false
+  },
+  "pareto_frontier": [
+    "embedding_sim",
+    "premerge"
+  ],
+  "scaling": {
+    "10": {
+      "premerge": 0.0406609842684702,
+      "hash_ring": 0.7880944958742475,
+      "embedding_sim": 2.9858805010007927,
+      "tiny_classifier": 3.4353899955021916,
+      "hierarchical": 3.913470514362416
+    },
+    "30": {
+      "premerge": 0.04369100088297273,
+      "hash_ring": 0.827334994028206,
+      "embedding_sim": 3.1591539977853245,
+      "tiny_classifier": 3.460307495060988,
+      "hierarchical": 3.88164201467589
+    },
+    "50": {
+      "premerge": 0.041083995711233,
+      "hash_ring": 0.8388649953303684,
+      "embedding_sim": 3.221248005047528,
+      "tiny_classifier": 3.5032989985666063,
+      "hierarchical": 3.983862493896595
+    },
+    "100": {
+      "premerge": 0.04123449980397709,
+      "hash_ring": 0.8575899951210886,
+      "embedding_sim": 3.5129409970977576,
+      "tiny_classifier": 3.70885000211274,
+      "hierarchical": 4.253938499914511
+    }
+  }
+}

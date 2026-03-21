@@ -74,7 +74,8 @@ def get_adapter_ranking():
             ppl_improvement = info.get("ppl_improvement_pct", 0)
             ranked.append((name, ppl_improvement))
         ranked.sort(key=lambda x: x[1], reverse=True)
-        return [name for name, _ in ranked]
+        if ranked:
+            return [name for name, _ in ranked]
     adapters = sorted(
         [d.name for d in ADAPTER_DIR.iterdir()
          if d.is_dir() and (d / "adapter_config.json").exists()]
@@ -240,11 +241,18 @@ def compose_adapters(base_model, adapter_names):
     return model
 
 
+MAX_RUNTIME = int(os.environ.get("MAX_RUNTIME", 43200))  # 12h default
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-per-subject", type=int, default=50, help="Reduce for speed with ensembling")
     args = parser.parse_args()
 
+    if os.environ.get("SMOKE_TEST") == "1":
+        args.max_per_subject = 5
+
+    start_time = time.time()
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     np.random.seed(SEED)
 
@@ -280,6 +288,9 @@ def main():
     for n in N_VALUES:
         if n > len(ranked_adapters):
             continue
+        if time.time() - start_time > MAX_RUNTIME:
+            print(f"MAX_RUNTIME ({MAX_RUNTIME}s) exceeded, stopping early")
+            break
         selected = ranked_adapters[:n]
 
         # Weight-space merge (reload fresh base each time — PeftModel modifies in-place)

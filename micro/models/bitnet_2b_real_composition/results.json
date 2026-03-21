@@ -1,0 +1,130 @@
+{
+  "experiment": "bitnet_2b_real_composition",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-20 12:10:58",
+  "total_params": 2412820480,
+  "load_time_s": 1.2881441116333008,
+  "base_ppls": {
+    "python": 2.7411413485606433,
+    "math": 5.53283729711185,
+    "medical": 6.961070940934386,
+    "legal": 21.88669597579324,
+    "creative": 6.336049751074344
+  },
+  "trainable_params": 21626880,
+  "train_results": {
+    "python": {
+      "train_time_s": 85.8,
+      "first_50_avg_loss": 1.0281,
+      "last_50_avg_loss": 1.1195,
+      "converged": false
+    },
+    "math": {
+      "train_time_s": 99.4,
+      "first_50_avg_loss": 1.2937,
+      "last_50_avg_loss": 1.1576,
+      "converged": true
+    },
+    "medical": {
+      "train_time_s": 69.2,
+      "first_50_avg_loss": 2.8034,
+      "last_50_avg_loss": 1.6255,
+      "converged": true
+    },
+    "legal": {
+      "train_time_s": 138.8,
+      "first_50_avg_loss": 3.0384,
+      "last_50_avg_loss": 2.7534,
+      "converged": true
+    },
+    "creative": {
+      "train_time_s": 156.6,
+      "first_50_avg_loss": 1.168,
+      "last_50_avg_loss": 1.582,
+      "converged": false
+    }
+  },
+  "k2_pass": true,
+  "individual_ppls": {
+    "python": 2.217879865748791,
+    "math": 3.6036968713946225,
+    "medical": 4.7421944845839885,
+    "legal": 16.530172045991478,
+    "creative": 4.923663481280721
+  },
+  "k4_domains_improved": 5,
+  "k4_pass": true,
+  "composed_ppls": {
+    "python": 2.49745180975393,
+    "math": 4.917513567509172,
+    "medical": 6.14312354404623,
+    "legal": 20.3242664133754,
+    "creative": 5.93482181227453
+  },
+  "best_individual_ppl": 2.217879865748791,
+  "avg_composed_ppl": 7.9634,
+  "avg_individual_ppl": 6.4035,
+  "composition_ratio": 3.5906,
+  "k3_pass": true,
+  "cosine_similarities": [
+    {
+      "pair": "python-math",
+      "abs_cos": 0.0001
+    },
+    {
+      "pair": "python-medical",
+      "abs_cos": 0.0018
+    },
+    {
+      "pair": "python-legal",
+      "abs_cos": 0.0023
+    },
+    {
+      "pair": "python-creative",
+      "abs_cos": 0.0014
+    },
+    {
+      "pair": "math-medical",
+      "abs_cos": 0.0026
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.0003
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.0004
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.0001
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.0008
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.0001
+    }
+  ],
+  "mean_abs_cos": 0.001,
+  "unit_weight_ppls": {
+    "python": 2.6596697752478278,
+    "math": 4.970181901777166,
+    "medical": 6.501285977333473,
+    "legal": 19.579746247410558,
+    "creative": 5.78765309780369
+  },
+  "avg_unit_ppl": 7.8997,
+  "verdict": "SUPPORTED"
+}

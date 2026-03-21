@@ -1,0 +1,1131 @@
+{
+  "config": {
+    "dimensions": [
+      64,
+      128,
+      256,
+      512,
+      896,
+      1536,
+      2048,
+      3584
+    ],
+    "rank": 16,
+    "n_experts_base": 8,
+    "n_layers_experiment": 2,
+    "tau": 0.01,
+    "seeds": 3,
+    "adapter_type": "all-modules (q/k/v/o/gate/up/down)",
+    "note": "FFN-only killed at macro. All-modules LoRA required.",
+    "memory_optimization": "per-module Gram accumulation (no full concatenation)"
+  },
+  "architecture": {
+    "64": {
+      "name": "micro-64",
+      "params_B": 0.001,
+      "n_heads": 4,
+      "n_kv_heads": 2,
+      "head_dim": 16,
+      "d_ff": 256,
+      "n_real_layers": 2,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 122880,
+      "module_shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          32
+        ],
+        [
+          64,
+          32
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          256
+        ],
+        [
+          64,
+          256
+        ],
+        [
+          256,
+          64
+        ]
+      ]
+    },
+    "128": {
+      "name": "micro-128",
+      "params_B": 0.005,
+      "n_heads": 4,
+      "n_kv_heads": 2,
+      "head_dim": 32,
+      "d_ff": 512,
+      "n_real_layers": 2,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 491520,
+      "module_shapes": [
+        [
+          128,
+          128
+        ],
+        [
+          128,
+          64
+        ],
+        [
+          128,
+          64
+        ],
+        [
+          128,
+          128
+        ],
+        [
+          128,
+          512
+        ],
+        [
+          128,
+          512
+        ],
+        [
+          512,
+          128
+        ]
+      ]
+    },
+    "256": {
+      "name": "micro-256",
+      "params_B": 0.02,
+      "n_heads": 8,
+      "n_kv_heads": 2,
+      "head_dim": 32,
+      "d_ff": 1024,
+      "n_real_layers": 2,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 1900544,
+      "module_shapes": [
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          64
+        ],
+        [
+          256,
+          64
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          1024
+        ],
+        [
+          256,
+          1024
+        ],
+        [
+          1024,
+          256
+        ]
+      ]
+    },
+    "512": {
+      "name": "micro-512",
+      "params_B": 0.08,
+      "n_heads": 8,
+      "n_kv_heads": 2,
+      "head_dim": 64,
+      "d_ff": 2048,
+      "n_real_layers": 2,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 7602176,
+      "module_shapes": [
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          128
+        ],
+        [
+          512,
+          128
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          2048
+        ],
+        [
+          512,
+          2048
+        ],
+        [
+          2048,
+          512
+        ]
+      ]
+    },
+    "896": {
+      "name": "Qwen2.5-0.5B",
+      "params_B": 0.5,
+      "n_heads": 14,
+      "n_kv_heads": 2,
+      "head_dim": 64,
+      "d_ff": 4864,
+      "n_real_layers": 24,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 29818880,
+      "module_shapes": [
+        [
+          896,
+          896
+        ],
+        [
+          896,
+          128
+        ],
+        [
+          896,
+          128
+        ],
+        [
+          896,
+          896
+        ],
+        [
+          896,
+          4864
+        ],
+        [
+          896,
+          4864
+        ],
+        [
+          4864,
+          896
+        ]
+      ]
+    },
+    "1536": {
+      "name": "Qwen2.5-1.5B",
+      "params_B": 1.5,
+      "n_heads": 12,
+      "n_kv_heads": 2,
+      "head_dim": 128,
+      "d_ff": 8960,
+      "n_real_layers": 28,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 93585408,
+      "module_shapes": [
+        [
+          1536,
+          1536
+        ],
+        [
+          1536,
+          256
+        ],
+        [
+          1536,
+          256
+        ],
+        [
+          1536,
+          1536
+        ],
+        [
+          1536,
+          8960
+        ],
+        [
+          1536,
+          8960
+        ],
+        [
+          8960,
+          1536
+        ]
+      ]
+    },
+    "2048": {
+      "name": "Qwen2.5-3B",
+      "params_B": 3.0,
+      "n_heads": 16,
+      "n_kv_heads": 2,
+      "head_dim": 128,
+      "d_ff": 11008,
+      "n_real_layers": 36,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 154140672,
+      "module_shapes": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          256
+        ],
+        [
+          2048,
+          256
+        ],
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          11008
+        ],
+        [
+          2048,
+          11008
+        ],
+        [
+          11008,
+          2048
+        ]
+      ]
+    },
+    "3584": {
+      "name": "Qwen2.5-7B",
+      "params_B": 7.0,
+      "n_heads": 28,
+      "n_kv_heads": 4,
+      "head_dim": 128,
+      "d_ff": 18944,
+      "n_real_layers": 28,
+      "modules_per_layer": 7,
+      "D_flat_2layer": 466092032,
+      "module_shapes": [
+        [
+          3584,
+          3584
+        ],
+        [
+          3584,
+          512
+        ],
+        [
+          3584,
+          512
+        ],
+        [
+          3584,
+          3584
+        ],
+        [
+          3584,
+          18944
+        ],
+        [
+          3584,
+          18944
+        ],
+        [
+          18944,
+          3584
+        ]
+      ]
+    }
+  },
+  "per_dimension": {
+    "64": {
+      "model": "micro-64",
+      "params_B": 0.001,
+      "D_flat": 122880,
+      "theoretical_cos_bound": 0.5,
+      "theoretical_n_max": 16.0,
+      "welch_bound_N8": 0.3779644730092272,
+      "mean_cos": {
+        "values": [
+          0.0024607431914700976,
+          0.0017990251881425231,
+          0.0021621213218980585
+        ],
+        "mean": 0.00214062990050356,
+        "std": 0.0002705723438406383
+      },
+      "max_cos": {
+        "values": [
+          0.005012022043538188,
+          0.006656978222338797,
+          0.008032661759376657
+        ],
+        "mean": 0.006567220675084547,
+        "std": 0.0012348031924675285
+      },
+      "signal_retention": {
+        "values": [
+          1.001163671686105,
+          1.001873256946051,
+          1.0095303629115768
+        ],
+        "mean": 1.0041890971812444,
+        "std": 0.003787938534506788
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999333498686405,
+          0.9999125261418486,
+          0.999889006235546
+        ],
+        "mean": 0.999911627415345,
+        "std": 1.811436319610008e-05
+      },
+      "below_tau": true
+    },
+    "128": {
+      "model": "micro-128",
+      "params_B": 0.005,
+      "D_flat": 491520,
+      "theoretical_cos_bound": 0.3535533905932738,
+      "theoretical_n_max": 64.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          0.0011489293103321158,
+          0.0009694658291180409,
+          0.000992550118242563
+        ],
+        "mean": 0.0010369817525642398,
+        "std": 7.971788953863105e-05
+      },
+      "max_cos": {
+        "values": [
+          0.003564807685882339,
+          0.0024190640579848546,
+          0.0027370169182212517
+        ],
+        "mean": 0.0029069628873628155,
+        "std": 0.0004829377734501766
+      },
+      "signal_retention": {
+        "values": [
+          0.9988998564036913,
+          1.0007187221730147,
+          0.9994566644560557
+        ],
+        "mean": 0.9996917476775873,
+        "std": 0.000760927619198375
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999357981445851,
+          0.9999515225665695,
+          0.9999514884745891
+        ],
+        "mean": 0.9999462697285812,
+        "std": 7.40454113396908e-06
+      },
+      "below_tau": true
+    },
+    "256": {
+      "model": "micro-256",
+      "params_B": 0.02,
+      "D_flat": 1900544,
+      "theoretical_cos_bound": 0.25,
+      "theoretical_n_max": 256.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          0.0005483313965109076,
+          0.0006042176827578356,
+          0.0005339798509242898
+        ],
+        "mean": 0.0005621763100643443,
+        "std": 3.0299609223508347e-05
+      },
+      "max_cos": {
+        "values": [
+          0.0013927360753981535,
+          0.0022554152143739194,
+          0.001334035285907096
+        ],
+        "mean": 0.0016607288585597229,
+        "std": 0.00042118906444762235
+      },
+      "signal_retention": {
+        "values": [
+          1.001371023458726,
+          0.9993341172893397,
+          0.998976546879796
+        ],
+        "mean": 0.9998938958759539,
+        "std": 0.0010546385071941455
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999769573361703,
+          0.9999907152599175,
+          0.9999815583360016
+        ],
+        "mean": 0.9999830769773631,
+        "std": 5.7183808982833115e-06
+      },
+      "below_tau": true
+    },
+    "512": {
+      "model": "micro-512",
+      "params_B": 0.08,
+      "D_flat": 7602176,
+      "theoretical_cos_bound": 0.1767766952966369,
+      "theoretical_n_max": 1024.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          0.0003027064690455518,
+          0.00026724381697952745,
+          0.00031727788476381785
+        ],
+        "mean": 0.000295742723596299,
+        "std": 2.101146191601516e-05
+      },
+      "max_cos": {
+        "values": [
+          0.0006958833677698965,
+          0.0012064457208083355,
+          0.0008405531935035257
+        ],
+        "mean": 0.0009142940940272525,
+        "std": 0.00021485928634430265
+      },
+      "signal_retention": {
+        "values": [
+          0.9998532885839467,
+          0.9998677251686527,
+          1.000489423000898
+        ],
+        "mean": 1.0000701455844991,
+        "std": 0.0002965324801446205
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999846015013837,
+          0.9999831897763656,
+          0.9999865520595864
+        ],
+        "mean": 0.9999847811124453,
+        "std": 1.378509391664507e-06
+      },
+      "below_tau": true
+    },
+    "896": {
+      "model": "Qwen2.5-0.5B",
+      "params_B": 0.5,
+      "D_flat": 29818880,
+      "theoretical_cos_bound": 0.1336306209562122,
+      "theoretical_n_max": 3136.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          0.000126872056487869,
+          0.00015715998121610284,
+          0.00015075540330384535
+        ],
+        "mean": 0.00014492914700260572,
+        "std": 1.3033253442677322e-05
+      },
+      "max_cos": {
+        "values": [
+          0.00031763163286565053,
+          0.0004104635242279961,
+          0.0005744467641233202
+        ],
+        "mean": 0.0004341806404056556,
+        "std": 0.00010617714478035273
+      },
+      "signal_retention": {
+        "values": [
+          0.9997955119984262,
+          0.99978173469915,
+          1.0000181192139765
+        ],
+        "mean": 0.9998651219705176,
+        "std": 0.00010833150010767107
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999956024490356,
+          0.9999957318617231,
+          0.9999900823725949
+        ],
+        "mean": 0.9999938055611178,
+        "std": 2.6332219167256467e-06
+      },
+      "below_tau": true
+    },
+    "1536": {
+      "model": "Qwen2.5-1.5B",
+      "params_B": 1.5,
+      "D_flat": 93585408,
+      "theoretical_cos_bound": 0.10206207261596575,
+      "theoretical_n_max": 9216.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          8.118375253030454e-05,
+          5.9936993143568886e-05,
+          5.3124758849006895e-05
+        ],
+        "mean": 6.474850150762678e-05,
+        "std": 1.1949609230844453e-05
+      },
+      "max_cos": {
+        "values": [
+          0.0002119453158090957,
+          0.00014643627826478587,
+          0.00015137784867514214
+        ],
+        "mean": 0.00016991981424967456,
+        "std": 2.978491637860578e-05
+      },
+      "signal_retention": {
+        "values": [
+          0.9999738205322122,
+          1.0001878781885583,
+          0.9999472488057171
+        ],
+        "mean": 1.0000363158421626,
+        "std": 0.00010771837601193712
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999976042170879,
+          0.999997891286204,
+          0.9999959278604881
+        ],
+        "mean": 0.99999714112126,
+        "std": 8.658727561867197e-07
+      },
+      "below_tau": true
+    },
+    "2048": {
+      "model": "Qwen2.5-3B",
+      "params_B": 3.0,
+      "D_flat": 154140672,
+      "theoretical_cos_bound": 0.08838834764831845,
+      "theoretical_n_max": 16384.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          7.661560335633227e-05,
+          5.788467375976686e-05,
+          5.203330573267234e-05
+        ],
+        "mean": 6.21778609495905e-05,
+        "std": 1.0484780439592698e-05
+      },
+      "max_cos": {
+        "values": [
+          0.00023815477811918768,
+          0.00016324824827746711,
+          0.0001685267066293982
+        ],
+        "mean": 0.000189976577675351,
+        "std": 3.413521914531624e-05
+      },
+      "signal_retention": {
+        "values": [
+          1.0001280719683476,
+          1.0000100339155749,
+          1.0000020608042495
+        ],
+        "mean": 1.0000467222293907,
+        "std": 5.76149728648616e-05
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999988361205404,
+          0.9999980096980207,
+          0.9999973291699842
+        ],
+        "mean": 0.9999980583295152,
+        "std": 6.161703019011226e-07
+      },
+      "below_tau": true
+    },
+    "3584": {
+      "model": "Qwen2.5-7B",
+      "params_B": 7.0,
+      "D_flat": 466092032,
+      "theoretical_cos_bound": 0.0668153104781061,
+      "theoretical_n_max": 50176.0,
+      "welch_bound_N8": 0.0,
+      "mean_cos": {
+        "values": [
+          3.174061188402636e-05,
+          3.379870230755802e-05,
+          3.530574730377048e-05
+        ],
+        "mean": 3.361502049845162e-05,
+        "std": 1.4612441948618015e-06
+      },
+      "max_cos": {
+        "values": [
+          8.907331479063016e-05,
+          8.312106257886659e-05,
+          0.0001073849290875897
+        ],
+        "mean": 9.319310215236214e-05,
+        "std": 1.0325156670892013e-05
+      },
+      "signal_retention": {
+        "values": [
+          0.9998918461742311,
+          1.000015289612118,
+          0.9998219399302896
+        ],
+        "mean": 0.9999096919055462,
+        "std": 7.993696458423581e-05
+      },
+      "effective_rank_ratio": {
+        "values": [
+          0.9999990275979581,
+          0.9999987793250701,
+          0.9999985281085734
+        ],
+        "mean": 0.9999987783438672,
+        "std": 2.039168677620884e-07
+      },
+      "below_tau": true
+    }
+  },
+  "n_max": {
+    "64": {
+      "model": "micro-64",
+      "n_max_per_seed": [
+        16,
+        16,
+        16
+      ],
+      "n_max_mean": 16.0,
+      "n_max_theory": 16.0,
+      "ratio_to_theory": 1.0,
+      "method": "empirical"
+    },
+    "128": {
+      "model": "micro-128",
+      "n_max_per_seed": [
+        64,
+        64,
+        64
+      ],
+      "n_max_mean": 64.0,
+      "n_max_theory": 64.0,
+      "ratio_to_theory": 1.0,
+      "method": "empirical"
+    },
+    "256": {
+      "model": "micro-256",
+      "n_max_per_seed": [
+        128,
+        128,
+        128
+      ],
+      "n_max_mean": 128.0,
+      "n_max_theory": 256.0,
+      "ratio_to_theory": 0.5,
+      "method": "empirical"
+    },
+    "512": {
+      "model": "micro-512",
+      "n_max_per_seed": [
+        100000,
+        100000,
+        100000
+      ],
+      "n_max_mean": 100000.0,
+      "n_max_theory": 1024.0,
+      "ratio_to_theory": 97.65625,
+      "method": "analytical"
+    },
+    "896": {
+      "model": "Qwen2.5-0.5B",
+      "n_max_per_seed": [
+        100000,
+        100000,
+        100000
+      ],
+      "n_max_mean": 100000.0,
+      "n_max_theory": 3136.0,
+      "ratio_to_theory": 31.887755102040817,
+      "method": "analytical"
+    },
+    "1536": {
+      "model": "Qwen2.5-1.5B",
+      "n_max_per_seed": [
+        100000,
+        100000,
+        100000
+      ],
+      "n_max_mean": 100000.0,
+      "n_max_theory": 9216.0,
+      "ratio_to_theory": 10.850694444444445,
+      "method": "analytical"
+    },
+    "2048": {
+      "model": "Qwen2.5-3B",
+      "n_max_per_seed": [
+        100000,
+        100000,
+        100000
+      ],
+      "n_max_mean": 100000.0,
+      "n_max_theory": 16384.0,
+      "ratio_to_theory": 6.103515625,
+      "method": "analytical"
+    },
+    "3584": {
+      "model": "Qwen2.5-7B",
+      "n_max_per_seed": [
+        100000,
+        100000,
+        100000
+      ],
+      "n_max_mean": 100000.0,
+      "n_max_theory": 50176.0,
+      "ratio_to_theory": 1.992984693877551,
+      "method": "analytical"
+    }
+  },
+  "degradation_curves": {
+    "64": {
+      "4": {
+        "mean_cos_mean": 0.00139806173577124,
+        "max_cos_mean": 0.0030005080015983194,
+        "signal_retention_mean": 0.9977525229806284
+      },
+      "8": {
+        "mean_cos_mean": 0.0019110400624379805,
+        "max_cos_mean": 0.0060196537252580964,
+        "signal_retention_mean": 0.9984778822379958
+      },
+      "16": {
+        "mean_cos_mean": 0.002414756354331287,
+        "max_cos_mean": 0.009021014385143293,
+        "signal_retention_mean": 1.0020477399967573
+      },
+      "32": {
+        "mean_cos_mean": 0.002338225997396701,
+        "max_cos_mean": 0.010192353057841089,
+        "signal_retention_mean": 1.0011389337664687
+      }
+    },
+    "128": {
+      "4": {
+        "mean_cos_mean": 0.0006096007385601722,
+        "max_cos_mean": 0.0010018021022330532,
+        "signal_retention_mean": 1.0000387721818493
+      },
+      "8": {
+        "mean_cos_mean": 0.00116210349671355,
+        "max_cos_mean": 0.0033879706910239483,
+        "signal_retention_mean": 1.0012434043948386
+      },
+      "16": {
+        "mean_cos_mean": 0.0012608199291471525,
+        "max_cos_mean": 0.004881586100881222,
+        "signal_retention_mean": 0.9996331672113993
+      },
+      "32": {
+        "mean_cos_mean": 0.001163584121045571,
+        "max_cos_mean": 0.004771151341482618,
+        "signal_retention_mean": 1.0019899782307944
+      },
+      "64": {
+        "mean_cos_mean": 0.00122043786083406,
+        "max_cos_mean": 0.00554101864966524,
+        "signal_retention_mean": 1.001839722137566
+      }
+    },
+    "256": {
+      "4": {
+        "mean_cos_mean": 0.0005772951304260306,
+        "max_cos_mean": 0.0009761668207392803,
+        "signal_retention_mean": 1.0007748766113216
+      },
+      "8": {
+        "mean_cos_mean": 0.0005608036080131373,
+        "max_cos_mean": 0.0014573513304811877,
+        "signal_retention_mean": 1.0001185051365564
+      },
+      "16": {
+        "mean_cos_mean": 0.0006662414228282092,
+        "max_cos_mean": 0.0022836124399800207,
+        "signal_retention_mean": 0.9995790285663274
+      },
+      "32": {
+        "mean_cos_mean": 0.0006034623057905507,
+        "max_cos_mean": 0.0022876769577895736,
+        "signal_retention_mean": 1.0000256528393925
+      },
+      "64": {
+        "mean_cos_mean": 0.0006240043292331001,
+        "max_cos_mean": 0.002988183191924769,
+        "signal_retention_mean": 0.9993056366777392
+      }
+    }
+  },
+  "scaling_laws": {
+    "cosine_vs_d": {
+      "a": 0.1762514110634375,
+      "beta": -1.048744967852213,
+      "r2": 0.9946779971275781
+    },
+    "cosine_vs_D_flat": {
+      "a": 0.8255660471203113,
+      "beta": -0.5062745195618751,
+      "r2": 0.9971508057101031
+    },
+    "ratio_to_sqrt_r_d": {
+      "values": [
+        0.00428125980100712,
+        0.002933027316819538,
+        0.002248705240257377,
+        0.0016729734827321745,
+        0.0010845504268822922,
+        0.0006344031612140517,
+        0.0007034621938740745,
+        0.0005031035590183558
+      ],
+      "mean": 0.0017576856477256229
+    },
+    "sr_deficit": {
+      "a": 0.033214264240285035,
+      "beta": -0.8564690589853908,
+      "r2": 0.6383830295032035
+    }
+  },
+  "saturation_points": {
+    "cosine": {
+      "breakpoint_d": 895.9999999999999,
+      "slope_below": -0.9941731335841626,
+      "slope_above": -1.0152913130472558,
+      "bic": -36.36335514311986,
+      "bic_single": -32.522791306951426,
+      "bic_improvement": 3.8405638361684353,
+      "prefers_piecewise": true
+    },
+    "signal_retention": {
+      "breakpoint_d": 127.99999999999997,
+      "slope_below": -0.006475749031236401,
+      "slope_above": 6.611115354895875e-05,
+      "bic": -159.1979902494838,
+      "bic_single": -104.2471303457606,
+      "bic_improvement": 54.95085990372321,
+      "prefers_piecewise": true
+    },
+    "eff_rank_ratio": {
+      "breakpoint_d": 255.99999999999994,
+      "slope_below": 5.1542678029321316e-05,
+      "slope_above": 6.8717776698657145e-06,
+      "bic": -231.0786938872852,
+      "bic_single": -175.7998451003076,
+      "bic_improvement": 55.27884878697759,
+      "prefers_piecewise": true
+    }
+  },
+  "kill_criteria": {
+    "K1": {
+      "cos_0.5B": 0.00014492914700260572,
+      "cos_1.5B": 6.474850150762678e-05,
+      "cos_improvement_pct": 55.324030502668556,
+      "sr_0.5B": 0.9998651219705176,
+      "sr_1.5B": 1.0000363158421626,
+      "erk_0.5B": 0.9999938055611178,
+      "erk_1.5B": 0.99999714112126,
+      "below_tau_0.5B": true,
+      "below_tau_1.5B": true,
+      "testable": false,
+      "interpretation": "NOT TESTABLE by this experiment. K1 specifies 'PPL improvement <5%' which requires real training and evaluation, not geometric analysis. What this experiment DOES show: geometric interference is not the limiting factor at any d (max|cos| < tau even at d=64). The bottleneck for small bases is model quality (attention capacity, embeddings), not expert interference."
+    },
+    "K2": {
+      "phase_transition_detected": true,
+      "cos_exponent_beta": -1.048744967852213,
+      "killed": false,
+      "interpretation": "SURVIVES: cos scales as d^-1.05, phase transition: True"
+    }
+  },
+  "ffn_vs_allmodules": {
+    "64_ffn_only": {
+      "d": 64,
+      "mode": "ffn_only",
+      "n_modules": 3,
+      "D_flat": 98304,
+      "mean_cos": 0.0024520197139457065,
+      "std_cos": 8.025462852191962e-05,
+      "signal_retention": 1.0024249037645754
+    },
+    "64_attn_only": {
+      "d": 64,
+      "mode": "attn_only",
+      "n_modules": 4,
+      "D_flat": 24576,
+      "mean_cos": 0.0046278380327082315,
+      "std_cos": 0.0006298296589771341,
+      "signal_retention": 1.005421245883525
+    },
+    "64_all_modules": {
+      "d": 64,
+      "mode": "all_modules",
+      "n_modules": 7,
+      "D_flat": 122880,
+      "mean_cos": 0.0023350138672874766,
+      "std_cos": 0.00015683175131387474,
+      "signal_retention": 1.0007506822264194
+    },
+    "256_ffn_only": {
+      "d": 256,
+      "mode": "ffn_only",
+      "n_modules": 3,
+      "D_flat": 1572864,
+      "mean_cos": 0.0005987593991247686,
+      "std_cos": 6.810980292321065e-05,
+      "signal_retention": 1.0002264493009205
+    },
+    "256_attn_only": {
+      "d": 256,
+      "mode": "attn_only",
+      "n_modules": 4,
+      "D_flat": 327680,
+      "mean_cos": 0.0012713680917518756,
+      "std_cos": 0.00019558028981366687,
+      "signal_retention": 1.0015147626082408
+    },
+    "256_all_modules": {
+      "d": 256,
+      "mode": "all_modules",
+      "n_modules": 7,
+      "D_flat": 1900544,
+      "mean_cos": 0.0005380578631971558,
+      "std_cos": 3.60384329323801e-05,
+      "signal_retention": 1.0000558054673678
+    },
+    "512_ffn_only": {
+      "d": 512,
+      "mode": "ffn_only",
+      "n_modules": 3,
+      "D_flat": 6291456,
+      "mean_cos": 0.0002717660878248447,
+      "std_cos": 1.8166553130706492e-05,
+      "signal_retention": 1.0003875259347648
+    },
+    "512_attn_only": {
+      "d": 512,
+      "mode": "attn_only",
+      "n_modules": 4,
+      "D_flat": 1310720,
+      "mean_cos": 0.0006229505578122342,
+      "std_cos": 6.18600135229106e-05,
+      "signal_retention": 1.0007028070839143
+    },
+    "512_all_modules": {
+      "d": 512,
+      "mode": "all_modules",
+      "n_modules": 7,
+      "D_flat": 7602176,
+      "mean_cos": 0.00027604326795597616,
+      "std_cos": 2.87293593786414e-05,
+      "signal_retention": 0.9997701141254193
+    }
+  },
+  "random_baseline": {
+    "64": {
+      "d": 64,
+      "D_flat": 122880,
+      "lora_mean_cos": 0.00214062990050356,
+      "random_mean_cos": 0.0022565778735264834,
+      "ratio_lora_to_random": 0.9486177834218834,
+      "theory_1_sqrt_D": 0.00285272165367274,
+      "lora_vs_theory_ratio": 0.7503816216165371,
+      "random_vs_theory_ratio": 0.7910263066223967
+    },
+    "128": {
+      "d": 128,
+      "D_flat": 491520,
+      "lora_mean_cos": 0.0010369817525642398,
+      "random_mean_cos": 0.0011214572251561168,
+      "ratio_lora_to_random": 0.924673477777882,
+      "theory_1_sqrt_D": 0.00142636082683637,
+      "lora_vs_theory_ratio": 0.7270122209288638,
+      "random_vs_theory_ratio": 0.7862366969537987
+    },
+    "256": {
+      "d": 256,
+      "D_flat": 1900544,
+      "lora_mean_cos": 0.0005621763100643443,
+      "random_mean_cos": 0.0004983122555843084,
+      "ratio_lora_to_random": 1.1281607140188645,
+      "theory_1_sqrt_D": 0.0007253724147541088,
+      "lora_vs_theory_ratio": 0.7750174925729899,
+      "random_vs_theory_ratio": 0.6869743671645265
+    },
+    "512": {
+      "d": 512,
+      "D_flat": 7602176,
+      "lora_mean_cos": 0.000295742723596299,
+      "random_mean_cos": 0.00029843310075043395,
+      "ratio_lora_to_random": 0.9909849907822901,
+      "theory_1_sqrt_D": 0.0003626862073770544,
+      "lora_vs_theory_ratio": 0.815423133223371,
+      "random_vs_theory_ratio": 0.8228410528999744
+    },
+    "896": {
+      "d": 896,
+      "D_flat": 29818880,
+      "lora_mean_cos": 0.00014492914700260572,
+      "random_mean_cos": 0.00014161015711091338,
+      "ratio_lora_to_random": 1.0234375129539106,
+      "theory_1_sqrt_D": 0.00018312782458534976,
+      "lora_vs_theory_ratio": 0.7914097561676603,
+      "random_vs_theory_ratio": 0.7732858588341589
+    }
+  },
+  "nmax_validation": {
+    "d": 256,
+    "empirical_nmax": [
+      128,
+      128,
+      128
+    ],
+    "analytical_nmax": [
+      100000,
+      100000,
+      100000
+    ],
+    "empirical_mean": 128.0,
+    "analytical_mean": 100000.0,
+    "ratio_analytical_to_empirical": 781.25,
+    "validated": false,
+    "note": "VALIDATION FAILED: Cannot validate analytical estimate because empirical search is capped at 128 and the true N_max at d=256 exceeds 2048 (tested separately: max|cos|=0.004 at N=2048). The Gaussian tail formula gives N_max ~ 485M before clipping to 100K. All analytical N_max values should be treated as 'exceeds the empirical search range' rather than precise estimates."
+  },
+  "minimum_viable_d": {
+    "d": 64,
+    "model": "micro-64",
+    "params_B": 0.001
+  },
+  "timing": {
+    "total_seconds": 193.19631481170654
+  }
+}

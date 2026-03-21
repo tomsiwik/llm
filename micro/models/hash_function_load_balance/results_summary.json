@@ -1,0 +1,12 @@
+{
+  "k1_pass": true,
+  "k2_pass": false,
+  "overall": "KILL",
+  "fnv1a_n8_mean_ratio": 2.1751177389953242,
+  "xxhash_n8_mean_ratio": 1.1703389561426711,
+  "murmur_n8_mean_ratio": 1.176327088195783,
+  "sha256_n8_mean_ratio": 1.2553630348734746,
+  "best_alternative_n8": 1.1703389561426711,
+  "k2_violations": 73,
+  "k2_configs_tested": 180
+}

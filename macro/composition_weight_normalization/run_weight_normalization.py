@@ -21,15 +21,29 @@ import gc
 import json
 import math
 import os
+import signal
 import shutil
 import sys
 import tempfile
 import time
 from pathlib import Path
 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 IS_SMOKE = os.environ.get("SMOKE_TEST") == "1"
+MAX_RUNTIME = int(os.environ.get("MAX_RUNTIME", "300" if IS_SMOKE else "7800"))  # 130 min default
 os.environ.setdefault("OMP_NUM_THREADS", "4")
 os.environ.setdefault("MKL_NUM_THREADS", "4")
+
+
+def _timeout_handler(signum, frame):
+    print(f"\n[TIMEOUT] MAX_RUNTIME={MAX_RUNTIME}s reached. Saving partial results and exiting.", flush=True)
+    sys.exit(1)
+
+
+if hasattr(signal, "SIGALRM"):
+    signal.signal(signal.SIGALRM, _timeout_handler)
+    signal.alarm(MAX_RUNTIME)
 
 REPO_ROOT = Path("/workspace/llm")
 ADAPTER_DIR = REPO_ROOT / "adapters"
@@ -171,6 +185,16 @@ def eval_composed_adapter(base_model, tokenizer, composed_dir, eval_domains):
 def main():
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
+    # RunPod compatibility: monkey-patch set_submodule if missing (older PyTorch)
+    if not hasattr(torch.nn.Module, "set_submodule"):
+        def _set_submodule(self, target, module):
+            atoms = target.split(".")
+            mod = self
+            for item in atoms[:-1]:
+                mod = getattr(mod, item)
+            setattr(mod, atoms[-1], module)
+        torch.nn.Module.set_submodule = _set_submodule
 
     t0 = time.time()
     log("=" * 60)

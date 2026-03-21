@@ -28,6 +28,18 @@ import sys
 import time
 from pathlib import Path
 
+# ── Monkey-patch set_submodule for PyTorch builds missing it ──────────────────
+import torch
+if not hasattr(torch.nn.Module, "set_submodule"):
+    def _set_submodule(self, target: str, module: "torch.nn.Module") -> None:
+        atoms = target.split(".")
+        mod = self
+        for item in atoms[:-1]:
+            mod = getattr(mod, item)
+        setattr(mod, atoms[-1], module)
+    torch.nn.Module.set_submodule = _set_submodule
+    print(f"[patch] set_submodule monkey-patched onto torch {torch.__version__}")
+
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 # Paths (RunPod layout)
@@ -182,6 +194,11 @@ def train_reasoning_adapter(args):
 
     adapter_out.mkdir(parents=True, exist_ok=True)
 
+    # Nanochat pattern: disable GC during training to avoid ~500ms/step overhead
+    # from Python cycle detection on long-lived PyTorch tensors
+    gc.disable()
+    gc.collect()
+
     log("=" * 72)
     log("REASONING EXPERT DISTILLATION")
     log(f"  Base model: {base_model}")
@@ -238,6 +255,10 @@ def train_reasoning_adapter(args):
     # Train
     t0 = time.time()
     ckpt_dir = adapter_out / "checkpoints"
+    # Nanochat pattern: explicit precision detection (no autocast)
+    # SM 80+ (A100/H100/A5000/4090) → bf16, older → fp16
+    use_bf16 = torch.cuda.is_bf16_supported() if torch.cuda.is_available() else False
+
     trainer = SFTTrainer(
         model=model,
         train_dataset=dataset,
@@ -250,15 +271,21 @@ def train_reasoning_adapter(args):
             warmup_steps=WARMUP_STEPS,
             lr_scheduler_type="cosine",
             logging_steps=25,
-            save_steps=steps,
-            bf16=torch.cuda.is_bf16_supported() if torch.cuda.is_available() else False,
-            fp16=not torch.cuda.is_bf16_supported() if torch.cuda.is_available() else False,
+            save_steps=100,  # Intermediate checkpoints every 100 steps
+            save_total_limit=2,  # Keep only last 2 checkpoints to save disk
+            bf16=use_bf16,
+            fp16=not use_bf16 if torch.cuda.is_available() else False,
             optim="adamw_8bit",
             seed=SEED,
             dataset_text_field="text",
             max_length=MAX_SEQ_LENGTH,
             packing=True,
             report_to="none",
+            # Nanochat pattern: warmdown ratio for cosine schedule (decay to near-zero)
+            warmup_ratio=0.0,  # Use warmup_steps instead
+            # Nanochat: PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True (set in gpu_queue worker)
+            dataloader_pin_memory=True,  # Faster H-to-D transfers
+            dataloader_num_workers=2,  # Async data loading
         ),
     )
 
@@ -305,7 +332,8 @@ def train_reasoning_adapter(args):
     log(f"Adapter saved to {adapter_out}")
     log(f"Training metadata saved to {adapter_out / 'train_meta.json'}")
 
-    # Cleanup
+    # Re-enable GC and cleanup
+    gc.enable()
     del model, trainer
     gc.collect()
     if torch.cuda.is_available():

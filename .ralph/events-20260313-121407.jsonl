@@ -1,0 +1,2 @@
+{"ts":"2026-03-13T12:14:07.735202+00:00","iteration":0,"hat":"loop","topic":"merge.start","triggered":"planner","payload":"Merge loop chirpy-lily from branch ralph/chirpy-lily"}
+{"ts":"2026-03-13T12:14:09.554994+00:00","iteration":5,"hat":"loop","topic":"loop.terminate","payload":"## Reason\nconsecutive_failures\n\n## Status\nToo many consecutive failures.\n\n## Summary\n- Iterations: 5\n- Duration: 1s\n- Exit code: 1"}

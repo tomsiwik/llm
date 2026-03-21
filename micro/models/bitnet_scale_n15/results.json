@@ -1,0 +1,683 @@
+{
+  "experiment": "bitnet_scale_n15",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_steps": 400,
+  "seed": 42,
+  "original_domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "new_domains": [
+    "sql",
+    "javascript",
+    "physics",
+    "chemistry",
+    "science",
+    "wikitext",
+    "finance",
+    "cooking",
+    "health",
+    "dialogue"
+  ],
+  "all_domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative",
+    "sql",
+    "javascript",
+    "physics",
+    "chemistry",
+    "science",
+    "wikitext",
+    "finance",
+    "cooking",
+    "health",
+    "dialogue"
+  ],
+  "n_original": 5,
+  "n_new": 10,
+  "n_total": 15,
+  "timestamp": "2026-03-21 09:46:35",
+  "base_ppls": {
+    "medical": 18.9752,
+    "code": 3.7802,
+    "math": 4.5409,
+    "legal": 26.9342,
+    "creative": 3.514,
+    "sql": 12.4723,
+    "javascript": 18.2939,
+    "physics": 73.6998,
+    "chemistry": 9.2106,
+    "science": 45.3109,
+    "wikitext": 25.361,
+    "finance": 24.308,
+    "cooking": 8.4266,
+    "health": 10.0711,
+    "dialogue": 5.5738
+  },
+  "trainable_params": 21626880,
+  "train_results": {
+    "sql": {
+      "train_time_s": 121.1,
+      "first_50_loss": 2.5873,
+      "last_50_loss": 1.8665,
+      "converged": true
+    },
+    "javascript": {
+      "train_time_s": 226.0,
+      "first_50_loss": 2.18,
+      "last_50_loss": 2.0853,
+      "converged": false
+    },
+    "physics": {
+      "train_time_s": 101.5,
+      "first_50_loss": 3.7461,
+      "last_50_loss": 3.2529,
+      "converged": true
+    },
+    "chemistry": {
+      "train_time_s": 197.8,
+      "first_50_loss": 2.3053,
+      "last_50_loss": 2.0973,
+      "converged": true
+    },
+    "science": {
+      "train_time_s": 121.7,
+      "first_50_loss": 3.4863,
+      "last_50_loss": 3.1377,
+      "converged": true
+    },
+    "wikitext": {
+      "train_time_s": 174.4,
+      "first_50_loss": 3.9788,
+      "last_50_loss": 2.7972,
+      "converged": true
+    },
+    "finance": {
+      "train_time_s": 195.3,
+      "first_50_loss": 3.1211,
+      "last_50_loss": 2.8907,
+      "converged": true
+    },
+    "cooking": {
+      "train_time_s": 153.7,
+      "first_50_loss": 2.0071,
+      "last_50_loss": 1.7229,
+      "converged": true
+    },
+    "health": {
+      "train_time_s": 151.4,
+      "first_50_loss": 2.3242,
+      "last_50_loss": 2.1876,
+      "converged": true
+    },
+    "dialogue": {
+      "train_time_s": 149.7,
+      "first_50_loss": 3.1065,
+      "last_50_loss": 2.7138,
+      "converged": true
+    }
+  },
+  "individual_ppls": {
+    "medical": 9.0754,
+    "code": 2.9659,
+    "math": 3.0757,
+    "legal": 18.9434,
+    "creative": 3.1192,
+    "sql": 5.0703,
+    "javascript": 13.1562,
+    "physics": 20.3082,
+    "chemistry": 7.2232,
+    "science": 23.0564,
+    "wikitext": 13.516,
+    "finance": 18.6486,
+    "cooking": 5.3323,
+    "health": 6.9858,
+    "dialogue": 4.9466
+  },
+  "n5_composed_ppls": {
+    "medical": 15.51,
+    "code": 3.4647,
+    "math": 4.1777,
+    "legal": 24.7673,
+    "creative": 3.3043
+  },
+  "n5_best_individual": 2.9659,
+  "n5_avg_composed": 10.2448,
+  "n5_composition_ratio": 3.4542,
+  "n15_composed_ppls": {
+    "medical": 17.8454,
+    "code": 3.7014,
+    "math": 4.4537,
+    "legal": 26.2907,
+    "creative": 3.4636,
+    "sql": 11.8047,
+    "javascript": 17.9423,
+    "physics": 63.8568,
+    "chemistry": 8.9847,
+    "science": 41.8778,
+    "wikitext": 24.661,
+    "finance": 23.8408,
+    "cooking": 8.2794,
+    "health": 9.8247,
+    "dialogue": 5.4957
+  },
+  "n15_best_individual": 2.9659,
+  "n15_avg_composed": 18.1548,
+  "n15_composition_ratio": 6.1212,
+  "cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.002082
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 8.3e-05
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.00261
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.001355
+    },
+    {
+      "pair": "medical-sql",
+      "abs_cos": 3.1e-05
+    },
+    {
+      "pair": "medical-javascript",
+      "abs_cos": 0.00037
+    },
+    {
+      "pair": "medical-physics",
+      "abs_cos": 0.000254
+    },
+    {
+      "pair": "medical-chemistry",
+      "abs_cos": 0.000166
+    },
+    {
+      "pair": "medical-science",
+      "abs_cos": 9e-06
+    },
+    {
+      "pair": "medical-wikitext",
+      "abs_cos": 0.000124
+    },
+    {
+      "pair": "medical-finance",
+      "abs_cos": 0.000869
+    },
+    {
+      "pair": "medical-cooking",
+      "abs_cos": 0.000479
+    },
+    {
+      "pair": "medical-health",
+      "abs_cos": 0.000268
+    },
+    {
+      "pair": "medical-dialogue",
+      "abs_cos": 0.000338
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.004511
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.003272
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.001388
+    },
+    {
+      "pair": "code-sql",
+      "abs_cos": 0.000262
+    },
+    {
+      "pair": "code-javascript",
+      "abs_cos": 0.000171
+    },
+    {
+      "pair": "code-physics",
+      "abs_cos": 0.000472
+    },
+    {
+      "pair": "code-chemistry",
+      "abs_cos": 0.000579
+    },
+    {
+      "pair": "code-science",
+      "abs_cos": 0.000473
+    },
+    {
+      "pair": "code-wikitext",
+      "abs_cos": 9e-05
+    },
+    {
+      "pair": "code-finance",
+      "abs_cos": 0.000101
+    },
+    {
+      "pair": "code-cooking",
+      "abs_cos": 0.000331
+    },
+    {
+      "pair": "code-health",
+      "abs_cos": 0.000124
+    },
+    {
+      "pair": "code-dialogue",
+      "abs_cos": 0.000148
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.002084
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000194
+    },
+    {
+      "pair": "math-sql",
+      "abs_cos": 0.00012
+    },
+    {
+      "pair": "math-javascript",
+      "abs_cos": 0.000402
+    },
+    {
+      "pair": "math-physics",
+      "abs_cos": 0.000164
+    },
+    {
+      "pair": "math-chemistry",
+      "abs_cos": 0.000309
+    },
+    {
+      "pair": "math-science",
+      "abs_cos": 0.000203
+    },
+    {
+      "pair": "math-wikitext",
+      "abs_cos": 0.00041
+    },
+    {
+      "pair": "math-finance",
+      "abs_cos": 0.000318
+    },
+    {
+      "pair": "math-cooking",
+      "abs_cos": 0.000137
+    },
+    {
+      "pair": "math-health",
+      "abs_cos": 0.000616
+    },
+    {
+      "pair": "math-dialogue",
+      "abs_cos": 0.000571
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.00261
+    },
+    {
+      "pair": "legal-sql",
+      "abs_cos": 9.1e-05
+    },
+    {
+      "pair": "legal-javascript",
+      "abs_cos": 2.8e-05
+    },
+    {
+      "pair": "legal-physics",
+      "abs_cos": 0.000157
+    },
+    {
+      "pair": "legal-chemistry",
+      "abs_cos": 0.000395
+    },
+    {
+      "pair": "legal-science",
+      "abs_cos": 9.8e-05
+    },
+    {
+      "pair": "legal-wikitext",
+      "abs_cos": 0.000375
+    },
+    {
+      "pair": "legal-finance",
+      "abs_cos": 0.000507
+    },
+    {
+      "pair": "legal-cooking",
+      "abs_cos": 0.000118
+    },
+    {
+      "pair": "legal-health",
+      "abs_cos": 0.00011
+    },
+    {
+      "pair": "legal-dialogue",
+      "abs_cos": 0.000136
+    },
+    {
+      "pair": "creative-sql",
+      "abs_cos": 5.6e-05
+    },
+    {
+      "pair": "creative-javascript",
+      "abs_cos": 0.000311
+    },
+    {
+      "pair": "creative-physics",
+      "abs_cos": 0.000154
+    },
+    {
+      "pair": "creative-chemistry",
+      "abs_cos": 0.000226
+    },
+    {
+      "pair": "creative-science",
+      "abs_cos": 0.000561
+    },
+    {
+      "pair": "creative-wikitext",
+      "abs_cos": 0.000201
+    },
+    {
+      "pair": "creative-finance",
+      "abs_cos": 0.000862
+    },
+    {
+      "pair": "creative-cooking",
+      "abs_cos": 6.3e-05
+    },
+    {
+      "pair": "creative-health",
+      "abs_cos": 0.000143
+    },
+    {
+      "pair": "creative-dialogue",
+      "abs_cos": 0.000108
+    },
+    {
+      "pair": "sql-javascript",
+      "abs_cos": 0.000224
+    },
+    {
+      "pair": "sql-physics",
+      "abs_cos": 0.000713
+    },
+    {
+      "pair": "sql-chemistry",
+      "abs_cos": 0.004152
+    },
+    {
+      "pair": "sql-science",
+      "abs_cos": 0.000195
+    },
+    {
+      "pair": "sql-wikitext",
+      "abs_cos": 0.002424
+    },
+    {
+      "pair": "sql-finance",
+      "abs_cos": 6.8e-05
+    },
+    {
+      "pair": "sql-cooking",
+      "abs_cos": 0.000526
+    },
+    {
+      "pair": "sql-health",
+      "abs_cos": 0.000466
+    },
+    {
+      "pair": "sql-dialogue",
+      "abs_cos": 0.002345
+    },
+    {
+      "pair": "javascript-physics",
+      "abs_cos": 0.002545
+    },
+    {
+      "pair": "javascript-chemistry",
+      "abs_cos": 0.001102
+    },
+    {
+      "pair": "javascript-science",
+      "abs_cos": 0.003335
+    },
+    {
+      "pair": "javascript-wikitext",
+      "abs_cos": 0.00014
+    },
+    {
+      "pair": "javascript-finance",
+      "abs_cos": 0.000994
+    },
+    {
+      "pair": "javascript-cooking",
+      "abs_cos": 0.003038
+    },
+    {
+      "pair": "javascript-health",
+      "abs_cos": 0.0035
+    },
+    {
+      "pair": "javascript-dialogue",
+      "abs_cos": 0.000567
+    },
+    {
+      "pair": "physics-chemistry",
+      "abs_cos": 0.002532
+    },
+    {
+      "pair": "physics-science",
+      "abs_cos": 0.005267
+    },
+    {
+      "pair": "physics-wikitext",
+      "abs_cos": 0.00047
+    },
+    {
+      "pair": "physics-finance",
+      "abs_cos": 0.001801
+    },
+    {
+      "pair": "physics-cooking",
+      "abs_cos": 0.00111
+    },
+    {
+      "pair": "physics-health",
+      "abs_cos": 0.006259
+    },
+    {
+      "pair": "physics-dialogue",
+      "abs_cos": 0.000435
+    },
+    {
+      "pair": "chemistry-science",
+      "abs_cos": 0.003143
+    },
+    {
+      "pair": "chemistry-wikitext",
+      "abs_cos": 0.001146
+    },
+    {
+      "pair": "chemistry-finance",
+      "abs_cos": 0.00411
+    },
+    {
+      "pair": "chemistry-cooking",
+      "abs_cos": 0.004047
+    },
+    {
+      "pair": "chemistry-health",
+      "abs_cos": 0.002255
+    },
+    {
+      "pair": "chemistry-dialogue",
+      "abs_cos": 0.001195
+    },
+    {
+      "pair": "science-wikitext",
+      "abs_cos": 0.002273
+    },
+    {
+      "pair": "science-finance",
+      "abs_cos": 0.001536
+    },
+    {
+      "pair": "science-cooking",
+      "abs_cos": 0.003056
+    },
+    {
+      "pair": "science-health",
+      "abs_cos": 0.00177
+    },
+    {
+      "pair": "science-dialogue",
+      "abs_cos": 2.6e-05
+    },
+    {
+      "pair": "wikitext-finance",
+      "abs_cos": 0.003432
+    },
+    {
+      "pair": "wikitext-cooking",
+      "abs_cos": 0.000398
+    },
+    {
+      "pair": "wikitext-health",
+      "abs_cos": 0.00122
+    },
+    {
+      "pair": "wikitext-dialogue",
+      "abs_cos": 0.000923
+    },
+    {
+      "pair": "finance-cooking",
+      "abs_cos": 0.000827
+    },
+    {
+      "pair": "finance-health",
+      "abs_cos": 0.004101
+    },
+    {
+      "pair": "finance-dialogue",
+      "abs_cos": 0.001133
+    },
+    {
+      "pair": "cooking-health",
+      "abs_cos": 0.000336
+    },
+    {
+      "pair": "cooking-dialogue",
+      "abs_cos": 0.000286
+    },
+    {
+      "pair": "health-dialogue",
+      "abs_cos": 0.001485
+    }
+  ],
+  "mean_cos": 0.001111,
+  "n5_cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.002082
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 8.3e-05
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.00261
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.001355
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.004511
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.003272
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.001388
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.002084
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000194
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.00261
+    }
+  ],
+  "n5_mean_cos": 0.002019,
+  "degradation": {
+    "medical": {
+      "ppl_n5": 15.51,
+      "ppl_n15": 17.8454,
+      "pct_change": 15.06,
+      "pass": false
+    },
+    "code": {
+      "ppl_n5": 3.4647,
+      "ppl_n15": 3.7014,
+      "pct_change": 6.83,
+      "pass": true
+    },
+    "math": {
+      "ppl_n5": 4.1777,
+      "ppl_n15": 4.4537,
+      "pct_change": 6.61,
+      "pass": true
+    },
+    "legal": {
+      "ppl_n5": 24.7673,
+      "ppl_n15": 26.2907,
+      "pct_change": 6.15,
+      "pass": true
+    },
+    "creative": {
+      "ppl_n5": 3.3043,
+      "ppl_n15": 3.4636,
+      "pct_change": 4.82,
+      "pass": true
+    }
+  },
+  "k1_pass": true,
+  "k1_threshold": 6.8796,
+  "k1_n5_reference": 3.4398,
+  "k1_ratio_of_ratios": 1.7795,
+  "k2_pass": true,
+  "k3_pass": false,
+  "k3_worst_domain": "medical",
+  "k3_max_degradation_pct": 15.06,
+  "verdict": "KILLED",
+  "total_time_s": 1868.4,
+  "total_time_min": 31.1
+}

@@ -1,0 +1,4266 @@
+{
+  "config": {
+    "d_values": [
+      64,
+      128,
+      256,
+      512,
+      1024
+    ],
+    "n_values": [
+      2,
+      5,
+      10,
+      25,
+      50
+    ],
+    "rank": 8,
+    "seeds": [
+      42,
+      137
+    ],
+    "karcher_max_iter": 30,
+    "karcher_tol": 1e-08
+  },
+  "results": [
+    {
+      "d": 64,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.9376360667295827,
+      "timing": {
+        "naive_s": 3.1666975701227784e-05,
+        "chordal_s": 0.0006032500241417438,
+        "geodesic_s": 0.002230375015642494,
+        "chordal_over_naive": 19.0498148554917,
+        "geodesic_over_naive": 70.43220788387501
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5798135917305365,
+        "chordal_mean": 0.6339940225122596,
+        "geodesic_mean": 0.6339940225122596
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7080895536886653,
+        "chordal_mean": 0.5577848920292734,
+        "geodesic_mean": 0.5577848920292734
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.24749077691877694,
+        "geodesic_vs_naive_fro": 0.24749077691877694,
+        "naive_norm": 0.40176813845413856,
+        "chordal_rel": 0.6160039914340489,
+        "geodesic_rel": 0.6160039914340489
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.736960482700303,
+      "projection_preservation": {
+        "naive_mean": 0.8157061563438878,
+        "chordal_mean": 0.7989554140127788,
+        "geodesic_mean": 0.7989554140127788
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.0996188261298901e-14
+      }
+    },
+    {
+      "d": 64,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 1.0106023080539845,
+      "timing": {
+        "naive_s": 4.533299943432212e-05,
+        "chordal_s": 0.0006117089942563325,
+        "geodesic_s": 0.006311250006547198,
+        "chordal_over_naive": 13.493680142267419,
+        "geodesic_over_naive": 139.21977555645435
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.35219132917960766,
+        "chordal_mean": 0.4225627171389844,
+        "geodesic_mean": 0.40646029750191437
+      },
+      "delta_cosine": {
+        "naive_mean": 0.45407091988435566,
+        "chordal_mean": 0.30107851275373826,
+        "geodesic_mean": 0.2914851873821963
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.48378565324630035,
+        "geodesic_vs_naive_fro": 0.49532564991669864,
+        "naive_norm": 0.6457631821825623,
+        "chordal_rel": 0.7491688386618647,
+        "geodesic_rel": 0.7670391616979275
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.048474420624736,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5774547829936714,
+      "projection_preservation": {
+        "naive_mean": 0.630573687378315,
+        "chordal_mean": 0.6509091800574505,
+        "geodesic_mean": 0.6399643887722
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010405026460316193
+      }
+    },
+    {
+      "d": 64,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 1.006818764383561,
+      "timing": {
+        "naive_s": 6.995900184847414e-05,
+        "chordal_s": 0.000851667020469904,
+        "geodesic_s": 0.01062508299946785,
+        "chordal_over_naive": 12.173801769135439,
+        "geodesic_over_naive": 151.87585183792314
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2556728410701249,
+        "chordal_mean": 0.32344376197127184,
+        "geodesic_mean": 0.3074063676378269
+      },
+      "delta_cosine": {
+        "naive_mean": 0.32265528002508587,
+        "chordal_mean": 0.1866248779683688,
+        "geodesic_mean": 0.18107766939910735
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7525172544002652,
+        "geodesic_vs_naive_fro": 0.7640220704445201,
+        "naive_norm": 0.9228754196643119,
+        "chordal_rel": 0.8154050247366941,
+        "geodesic_rel": 0.8278712967806929
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1565934413362589,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.481216152812543,
+      "projection_preservation": {
+        "naive_mean": 0.5245986429074809,
+        "chordal_mean": 0.5664866002700102,
+        "geodesic_mean": 0.552450927771721
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01694596786091434
+      }
+    },
+    {
+      "d": 64,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.9985469403204401,
+      "timing": {
+        "naive_s": 0.00014750001719221473,
+        "chordal_s": 0.0013045409868936986,
+        "geodesic_s": 0.02489383300417103,
+        "chordal_over_naive": 8.844344642981874,
+        "geodesic_over_naive": 168.77172950922858
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.18182661105310288,
+        "chordal_mean": 0.24299625494858693,
+        "geodesic_mean": 0.2313820939743631
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20378136234536906,
+        "chordal_mean": 0.09808323497113752,
+        "geodesic_mean": 0.09529601446501046
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.259029024420469,
+        "geodesic_vs_naive_fro": 1.2702491940765828,
+        "naive_norm": 1.4366708877311236,
+        "chordal_rel": 0.876351734535947,
+        "geodesic_rel": 0.884161574459573
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.0911877674105037,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.43729017800159364,
+      "projection_preservation": {
+        "naive_mean": 0.4396469483409996,
+        "chordal_mean": 0.49079184563194694,
+        "geodesic_mean": 0.4791113707934228
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.013250884247489419
+      }
+    },
+    {
+      "d": 64,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.9967352085322992,
+      "timing": {
+        "naive_s": 0.00027037502150051296,
+        "chordal_s": 0.0023235830012708902,
+        "geodesic_s": 0.0458234999969136,
+        "chordal_over_naive": 8.593926274607737,
+        "geodesic_over_naive": 169.48126251679895
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1599697400838551,
+        "chordal_mean": 0.20689094400462843,
+        "geodesic_mean": 0.19820690689994866
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14342726293047964,
+        "chordal_mean": 0.06563114242772898,
+        "geodesic_mean": 0.06390850120094138
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.8077262752943561,
+        "geodesic_vs_naive_fro": 1.8198533971597566,
+        "naive_norm": 2.0325645779310952,
+        "chordal_rel": 0.889381963516457,
+        "geodesic_rel": 0.895348377571426
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1371109868524238,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.39367082766723377,
+      "projection_preservation": {
+        "naive_mean": 0.4068116042667091,
+        "chordal_mean": 0.4562979844765481,
+        "geodesic_mean": 0.44747080454059845
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01759467456036975
+      }
+    },
+    {
+      "d": 128,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.6200733750247254,
+      "timing": {
+        "naive_s": 8.795899339020252e-05,
+        "chordal_s": 0.0021466659964062274,
+        "geodesic_s": 0.0020835830073338,
+        "chordal_over_naive": 24.405304263581282,
+        "geodesic_over_naive": 23.688117917523645
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5501408452918246,
+        "chordal_mean": 0.5954587153107185,
+        "geodesic_mean": 0.5954587153107185
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7057280217300548,
+        "chordal_mean": 0.546061133710583,
+        "geodesic_mean": 0.546061133710583
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.3589332022303966,
+        "geodesic_vs_naive_fro": 0.3589332022303966,
+        "naive_norm": 0.5665823816935468,
+        "chordal_rel": 0.6335057598464763,
+        "geodesic_rel": 0.6335057598464763
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6667822005483123,
+      "projection_preservation": {
+        "naive_mean": 0.7758786896385981,
+        "chordal_mean": 0.7708172403122058,
+        "geodesic_mean": 0.7708172403122058
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 4.402378347397751e-15
+      }
+    },
+    {
+      "d": 128,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.6921218976610483,
+      "timing": {
+        "naive_s": 0.00010370800737291574,
+        "chordal_s": 0.0021281249937601388,
+        "geodesic_s": 0.009136208012932912,
+        "chordal_over_naive": 20.52035370911887,
+        "geodesic_over_naive": 88.09549276248954
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.30240253575320364,
+        "chordal_mean": 0.34790953411786385,
+        "geodesic_mean": 0.33631271563803267
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4482677499231544,
+        "chordal_mean": 0.2709214437623343,
+        "geodesic_mean": 0.26288223818818235
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7220364995462019,
+        "geodesic_vs_naive_fro": 0.7337560771793569,
+        "naive_norm": 0.9054510303227586,
+        "chordal_rel": 0.7974329647499805,
+        "geodesic_rel": 0.8103763236293419
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.048094361798516,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.4528695980526058,
+      "projection_preservation": {
+        "naive_mean": 0.5816147031099098,
+        "chordal_mean": 0.5959634556022945,
+        "geodesic_mean": 0.5814745724707082
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.004394578820771231
+      }
+    },
+    {
+      "d": 128,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.6933409994893371,
+      "timing": {
+        "naive_s": 0.00020462501561269164,
+        "chordal_s": 0.002622416999656707,
+        "geodesic_s": 0.014707666996400803,
+        "chordal_over_naive": 12.815720462156703,
+        "geodesic_over_naive": 71.87619242135601
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.19514149291461536,
+        "chordal_mean": 0.24434169280391654,
+        "geodesic_mean": 0.22952490000295325
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3160151694929112,
+        "chordal_mean": 0.15769234170013874,
+        "geodesic_mean": 0.15082204204347868
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0986330727537235,
+        "geodesic_vs_naive_fro": 1.1141915721246458,
+        "naive_norm": 1.2679526406891688,
+        "chordal_rel": 0.8664622301323374,
+        "geodesic_rel": 0.8787327983473031
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2463067442399482,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.34967126564790696,
+      "projection_preservation": {
+        "naive_mean": 0.4603298170601636,
+        "chordal_mean": 0.4948344229226616,
+        "geodesic_mean": 0.48000041040232444
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01336254859086262
+      }
+    },
+    {
+      "d": 128,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.7002724539272912,
+      "timing": {
+        "naive_s": 0.00045291701098904014,
+        "chordal_s": 0.003576374991098419,
+        "geodesic_s": 0.03138733300147578,
+        "chordal_over_naive": 7.8963141244985415,
+        "geodesic_over_naive": 69.30040656440546
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1290891833664828,
+        "chordal_mean": 0.16752975613173102,
+        "geodesic_mean": 0.15701987926490552
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20277728147692387,
+        "chordal_mean": 0.08523237401270842,
+        "geodesic_mean": 0.0822639137352802
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.8446514212245755,
+        "geodesic_vs_naive_fro": 1.8582240797310365,
+        "naive_norm": 2.0330864535222846,
+        "chordal_rel": 0.9073157799210905,
+        "geodesic_rel": 0.9139916684367739
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2597290268394477,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2801019768372272,
+      "projection_preservation": {
+        "naive_mean": 0.36530154417211586,
+        "chordal_mean": 0.4097897910481924,
+        "geodesic_mean": 0.3963921293511665
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014394023385002671
+      }
+    },
+    {
+      "d": 128,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.7034778436158102,
+      "timing": {
+        "naive_s": 0.0008849170117173344,
+        "chordal_s": 0.004979707999154925,
+        "geodesic_s": 0.05802175001008436,
+        "chordal_over_naive": 5.627316384720576,
+        "geodesic_over_naive": 65.56744784178477
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1003652553915617,
+        "chordal_mean": 0.13288556158496515,
+        "geodesic_mean": 0.12484453883668697
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14208143917813623,
+        "chordal_mean": 0.05262951651122839,
+        "geodesic_mean": 0.05013095743678028
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6435045468002163,
+        "geodesic_vs_naive_fro": 2.6630599773604358,
+        "naive_norm": 2.8462873192053797,
+        "chordal_rel": 0.9287553399697625,
+        "geodesic_rel": 0.9356258447245948
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2684018197564502,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.25342364771589754,
+      "projection_preservation": {
+        "naive_mean": 0.32107936294992273,
+        "chordal_mean": 0.36353316589996704,
+        "geodesic_mean": 0.3527033724438812
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.016857250187457613
+      }
+    },
+    {
+      "d": 256,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.46691959580508247,
+      "timing": {
+        "naive_s": 0.0005843749968335032,
+        "chordal_s": 0.011263207998126745,
+        "geodesic_s": 0.012993207987165079,
+        "chordal_over_naive": 19.273938924761687,
+        "geodesic_over_naive": 22.23436672953177
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5403813728042399,
+        "chordal_mean": 0.5725375208288481,
+        "geodesic_mean": 0.5725375208288481
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7082366020740487,
+        "chordal_mean": 0.5399413140969915,
+        "geodesic_mean": 0.5399413140969915
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.5282942634863395,
+        "geodesic_vs_naive_fro": 0.5282942634863395,
+        "naive_norm": 0.8163440906231515,
+        "chordal_rel": 0.6471465519926397,
+        "geodesic_rel": 0.6471465519926397
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6233429139173792,
+      "projection_preservation": {
+        "naive_mean": 0.7617349312254807,
+        "chordal_mean": 0.7570396956888499,
+        "geodesic_mean": 0.7570396956888499
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 6.574236538708354e-15
+      }
+    },
+    {
+      "d": 256,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.485513028510035,
+      "timing": {
+        "naive_s": 0.0010631249751895666,
+        "chordal_s": 0.011466374999145046,
+        "geodesic_s": 0.021665875014150515,
+        "chordal_over_naive": 10.78553816977206,
+        "geodesic_over_naive": 20.379424357223154
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2633246204313251,
+        "chordal_mean": 0.30232408084564844,
+        "geodesic_mean": 0.29218627092254895
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44563807722223875,
+        "chordal_mean": 0.24059925785723796,
+        "geodesic_mean": 0.2404607887312511
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0641168743539828,
+        "geodesic_vs_naive_fro": 1.0643754479302008,
+        "naive_norm": 1.2642627424492305,
+        "chordal_rel": 0.8416896572404647,
+        "geodesic_rel": 0.8418941824293642
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1067560070296143,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3651636389165208,
+      "projection_preservation": {
+        "naive_mean": 0.5304347178943247,
+        "chordal_mean": 0.5463906118815098,
+        "geodesic_mean": 0.5394833479358448
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.007978429343298834
+      }
+    },
+    {
+      "d": 256,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.4957398447223947,
+      "timing": {
+        "naive_s": 0.001934333995450288,
+        "chordal_s": 0.01385954100987874,
+        "geodesic_s": 0.03205870901001617,
+        "chordal_over_naive": 7.165019610097075,
+        "geodesic_over_naive": 16.57351268468676
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.16675596679305857,
+        "chordal_mean": 0.20011944354393893,
+        "geodesic_mean": 0.18763315849724777
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3159469135697866,
+        "chordal_mean": 0.14174005501278095,
+        "geodesic_mean": 0.13694456775872915
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5921250931417248,
+        "geodesic_vs_naive_fro": 1.6051772621702736,
+        "naive_norm": 1.7815638972159287,
+        "chordal_rel": 0.8936671289925429,
+        "geodesic_rel": 0.900993371429845
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3176843787333128,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.259457984996608,
+      "projection_preservation": {
+        "naive_mean": 0.4191509467583091,
+        "chordal_mean": 0.44903694135248273,
+        "geodesic_mean": 0.4335841245534347
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014944097349896069
+      }
+    },
+    {
+      "d": 256,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.4967671175134073,
+      "timing": {
+        "naive_s": 0.004113667004276067,
+        "chordal_s": 0.02466104199993424,
+        "geodesic_s": 0.06304629100486636,
+        "chordal_over_naive": 5.994904783080309,
+        "geodesic_over_naive": 15.326056032083082
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.09594966065575176,
+        "chordal_mean": 0.12250677627521023,
+        "geodesic_mean": 0.11355666962275798
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20015817414430162,
+        "chordal_mean": 0.07149049520246682,
+        "geodesic_mean": 0.06947472135223079
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6477505339314233,
+        "geodesic_vs_naive_fro": 2.658615983082693,
+        "naive_norm": 2.834954799381339,
+        "chordal_rel": 0.933965696563921,
+        "geodesic_rel": 0.9377983676010893
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3852519913689514,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.18915814237094103,
+      "projection_preservation": {
+        "naive_mean": 0.3155869932415227,
+        "chordal_mean": 0.34791308279227445,
+        "geodesic_mean": 0.3359235251993586
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014591622466149196
+      }
+    },
+    {
+      "d": 256,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.4968585309979865,
+      "timing": {
+        "naive_s": 0.008922500011976808,
+        "chordal_s": 0.029400542000075802,
+        "geodesic_s": 0.10948808302055113,
+        "chordal_over_naive": 3.2951013685190254,
+        "geodesic_over_naive": 12.27100956834784
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.0665473777808065,
+        "chordal_mean": 0.08992679358661128,
+        "geodesic_mean": 0.08385217077574142
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1413736331248979,
+        "chordal_mean": 0.042966036750671906,
+        "geodesic_mean": 0.04192920127308594
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.8080619196360725,
+        "geodesic_vs_naive_fro": 3.8172270496933063,
+        "naive_norm": 3.997226952667463,
+        "chordal_rel": 0.9526759337732487,
+        "geodesic_rel": 0.9549688058482549
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2996810304783954,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.15310198068050856,
+      "projection_preservation": {
+        "naive_mean": 0.2599228676927512,
+        "chordal_mean": 0.299415237515598,
+        "geodesic_mean": 0.28928728559566613
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.021704785854018773
+      }
+    },
+    {
+      "d": 512,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.3812590535541288,
+      "timing": {
+        "naive_s": 0.0031679579988121986,
+        "chordal_s": 0.06243812502361834,
+        "geodesic_s": 0.06071379198692739,
+        "chordal_over_naive": 19.709265415459747,
+        "geodesic_over_naive": 19.164961154690673
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.531695087997651,
+        "chordal_mean": 0.558300728187775,
+        "geodesic_mean": 0.558300728187775
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7073357884793066,
+        "chordal_mean": 0.5314740675019021,
+        "geodesic_mean": 0.5314740675019021
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7455296122809468,
+        "geodesic_vs_naive_fro": 0.7455296122809468,
+        "naive_norm": 1.1298127709961057,
+        "chordal_rel": 0.6598700522951662,
+        "geodesic_rel": 0.6598700522951662
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 7.884953353001448e-08,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6017797405624143,
+      "projection_preservation": {
+        "naive_mean": 0.7499930078045637,
+        "chordal_mean": 0.7470385601057292,
+        "geodesic_mean": 0.7470385601057292
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.1819219838013461e-14
+      }
+    },
+    {
+      "d": 512,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.3592522209267458,
+      "timing": {
+        "naive_s": 0.007039291987894103,
+        "chordal_s": 0.05434441700344905,
+        "geodesic_s": 0.07336604199372232,
+        "chordal_over_naive": 7.720153830372208,
+        "geodesic_over_naive": 10.422360959013258
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2494247790779805,
+        "chordal_mean": 0.27502204520850015,
+        "geodesic_mean": 0.2654779108006202
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44728185825414524,
+        "chordal_mean": 0.23411219552603685,
+        "geodesic_mean": 0.2288442410487243
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5195679978357153,
+        "geodesic_vs_naive_fro": 1.5320619724717774,
+        "naive_norm": 1.7831764062838333,
+        "chordal_rel": 0.8521691922800381,
+        "geodesic_rel": 0.8591757759203521
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.212388479121533,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.32002499514776755,
+      "projection_preservation": {
+        "naive_mean": 0.5124093937567444,
+        "chordal_mean": 0.5241780491632875,
+        "geodesic_mean": 0.5156788755070716
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.008986570991957413
+      }
+    },
+    {
+      "d": 512,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.3526158482667772,
+      "timing": {
+        "naive_s": 0.010645334026776254,
+        "chordal_s": 0.05858329200418666,
+        "geodesic_s": 0.09402437499375083,
+        "chordal_over_naive": 5.503189646922478,
+        "geodesic_over_naive": 8.83244948042503
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.14630878220786236,
+        "chordal_mean": 0.1685308892540912,
+        "geodesic_mean": 0.15965017567088502
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3163574137733823,
+        "chordal_mean": 0.13029680959171938,
+        "geodesic_mean": 0.12663751858340244
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.313469046361739,
+        "geodesic_vs_naive_fro": 2.326539830840662,
+        "naive_norm": 2.539014169968763,
+        "chordal_rel": 0.9111682296716765,
+        "geodesic_rel": 0.916316205856104
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.264535478386597,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.21085058976414933,
+      "projection_preservation": {
+        "naive_mean": 0.39129178601208303,
+        "chordal_mean": 0.4100882945796836,
+        "geodesic_mean": 0.39936874924631943
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010345955970809862
+      }
+    },
+    {
+      "d": 512,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.3504356510906404,
+      "timing": {
+        "naive_s": 0.032387624989496544,
+        "chordal_s": 0.08374445801018737,
+        "geodesic_s": 0.1642624160158448,
+        "chordal_over_naive": 2.5856930860890874,
+        "geodesic_over_naive": 5.071764788838819
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.07637427627336457,
+        "chordal_mean": 0.09425091497466212,
+        "geodesic_mean": 0.08773625858114614
+      },
+      "delta_cosine": {
+        "naive_mean": 0.19994311057529465,
+        "chordal_mean": 0.06110117994021484,
+        "geodesic_mean": 0.058787321538646416
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.806047981094864,
+        "geodesic_vs_naive_fro": 3.820524805030714,
+        "naive_norm": 3.9971714208205626,
+        "chordal_rel": 0.9521853281722744,
+        "geodesic_rel": 0.9558070952699883
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3655457848273524,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.131775368391303,
+      "projection_preservation": {
+        "naive_mean": 0.28017546814638716,
+        "chordal_mean": 0.3067517443416672,
+        "geodesic_mean": 0.29615940415933695
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.012595482314655364
+      }
+    },
+    {
+      "d": 512,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.35121190518330536,
+      "timing": {
+        "naive_s": 0.06365558298421092,
+        "chordal_s": 0.13814358398667537,
+        "geodesic_s": 0.2491237500216812,
+        "chordal_over_naive": 2.170172316557691,
+        "geodesic_over_naive": 3.9136198011645518
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.04915938769066084,
+        "chordal_mean": 0.06471514745541697,
+        "geodesic_mean": 0.059833637080980905
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14156563028997568,
+        "chordal_mean": 0.035931292467384066,
+        "geodesic_mean": 0.03483439598381669
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 5.481737551761095,
+        "geodesic_vs_naive_fro": 5.493072343244474,
+        "naive_norm": 5.6673068354596605,
+        "chordal_rel": 0.9672561784483804,
+        "geodesic_rel": 0.9692562098235052
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3379122053336436,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.1012178893675884,
+      "projection_preservation": {
+        "naive_mean": 0.22298454367479123,
+        "chordal_mean": 0.25331012411013065,
+        "geodesic_mean": 0.24423317599930422
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01613056027645777
+      }
+    },
+    {
+      "d": 1024,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.2713065657528861,
+      "timing": {
+        "naive_s": 0.010329874989110976,
+        "chordal_s": 0.22364637500140816,
+        "geodesic_s": 0.18589683301979676,
+        "chordal_over_naive": 21.65044351816071,
+        "geodesic_over_naive": 17.9960389855401
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5214925910147126,
+        "chordal_mean": 0.539015401892267,
+        "geodesic_mean": 0.539015401892267
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7065710561344627,
+        "chordal_mean": 0.5157808404630584,
+        "geodesic_mean": 0.5157808404630584
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0900093736564491,
+        "geodesic_vs_naive_fro": 1.0900093736564491,
+        "naive_norm": 1.5948242678205604,
+        "chordal_rel": 0.6834667590969278,
+        "geodesic_rel": 0.6834667590969278
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5655765746836463,
+      "projection_preservation": {
+        "naive_mean": 0.7379388836207144,
+        "chordal_mean": 0.7344212833072923,
+        "geodesic_mean": 0.7344212833072923
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 2.6567021128330564e-14
+      }
+    },
+    {
+      "d": 1024,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.25291279102290043,
+      "timing": {
+        "naive_s": 0.02378991700243205,
+        "chordal_s": 0.19887950000702403,
+        "geodesic_s": 0.2518674999882933,
+        "chordal_over_naive": 8.359823196806131,
+        "geodesic_over_naive": 10.58715337100776
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.23359138763850384,
+        "chordal_mean": 0.2529979830071117,
+        "geodesic_mean": 0.24638911959457524
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4469993142938068,
+        "chordal_mean": 0.22469078561441697,
+        "geodesic_mean": 0.22193459481084865
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.1924198309055267,
+        "geodesic_vs_naive_fro": 2.201772701280312,
+        "naive_norm": 2.5367037455680728,
+        "chordal_rel": 0.864279021441092,
+        "geodesic_rel": 0.8679660386543263
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.16345237540859,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2795371643541399,
+      "projection_preservation": {
+        "naive_mean": 0.4939880169063898,
+        "chordal_mean": 0.5031782828987859,
+        "geodesic_mean": 0.4964138253039083
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.007445460383557534
+      }
+    },
+    {
+      "d": 1024,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.24821470140555238,
+      "timing": {
+        "naive_s": 0.0487579999899026,
+        "chordal_s": 0.23858866697992198,
+        "geodesic_s": 0.26091245797579177,
+        "chordal_over_naive": 4.893323496233066,
+        "geodesic_over_naive": 5.351172280032501
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1286090931286729,
+        "chordal_mean": 0.1451357761925301,
+        "geodesic_mean": 0.1388605016411693
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3161793044705348,
+        "chordal_mean": 0.1182934689152991,
+        "geodesic_mean": 0.11677526777759137
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.3095401287143593,
+        "geodesic_vs_naive_fro": 3.316449764740409,
+        "naive_norm": 3.568840912465945,
+        "chordal_rel": 0.9273431374186927,
+        "geodesic_rel": 0.9292792382972481
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3552487347510749,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.17047259071855173,
+      "projection_preservation": {
+        "naive_mean": 0.3619531474436583,
+        "chordal_mean": 0.37936632227519934,
+        "geodesic_mean": 0.37249563719312906
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.013591864523240101
+      }
+    },
+    {
+      "d": 1024,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.2477589745784032,
+      "timing": {
+        "naive_s": 0.1102421669929754,
+        "chordal_s": 0.29615637499955483,
+        "geodesic_s": 0.3934760410047602,
+        "chordal_over_naive": 2.6864164872450833,
+        "geodesic_over_naive": 3.5691972657779156
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06473202850132682,
+        "chordal_mean": 0.07641165944712731,
+        "geodesic_mean": 0.07119434745693366
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20011629937263045,
+        "chordal_mean": 0.05573246979234486,
+        "geodesic_mean": 0.053516652468180805
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 5.440694423665879,
+        "geodesic_vs_naive_fro": 5.458456965957717,
+        "naive_norm": 5.66476236523517,
+        "chordal_rel": 0.9604453060653695,
+        "geodesic_rel": 0.9635809260872874
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.415263706841911,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.09962054942396101,
+      "projection_preservation": {
+        "naive_mean": 0.25694427087314914,
+        "chordal_mean": 0.27611558050567697,
+        "geodesic_mean": 0.2667660003507861
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01566757492500871
+      }
+    },
+    {
+      "d": 1024,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 42,
+      "mean_coherence": 0.24924720525576563,
+      "timing": {
+        "naive_s": 0.22174495898070745,
+        "chordal_s": 0.43707554100546986,
+        "geodesic_s": 0.6542694169911556,
+        "chordal_over_naive": 1.9710731780085107,
+        "geodesic_over_naive": 2.950549225554567
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.03967836734299887,
+        "chordal_mean": 0.04963999704320376,
+        "geodesic_mean": 0.04588775253600883
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14148680652475182,
+        "chordal_mean": 0.03143319986735145,
+        "geodesic_mean": 0.030331116510269387
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 7.8058002031485385,
+        "geodesic_vs_naive_fro": 7.8197240126121965,
+        "naive_norm": 8.005839401833624,
+        "chordal_rel": 0.9750133385589437,
+        "geodesic_rel": 0.9767525452510576
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.377760140807395,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.06993373643294883,
+      "projection_preservation": {
+        "naive_mean": 0.19979247904434602,
+        "chordal_mean": 0.2220989071706259,
+        "geodesic_mean": 0.21399741469935243
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.017207517071442656
+      }
+    },
+    {
+      "d": 64,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.9376360667295827,
+      "timing": {
+        "naive_s": 2.3792003048583865e-05,
+        "chordal_s": 0.0008153750095516443,
+        "geodesic_s": 0.001078582979971543,
+        "chordal_over_naive": 34.27096944660894,
+        "geodesic_over_naive": 45.333845064202855
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5798135917305365,
+        "chordal_mean": 0.6339940225122596,
+        "geodesic_mean": 0.6339940225122596
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7080895536886653,
+        "chordal_mean": 0.5577848920292734,
+        "geodesic_mean": 0.5577848920292734
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.24749077691877694,
+        "geodesic_vs_naive_fro": 0.24749077691877694,
+        "naive_norm": 0.40176813845413856,
+        "chordal_rel": 0.6160039914340489,
+        "geodesic_rel": 0.6160039914340489
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.736960482700303,
+      "projection_preservation": {
+        "naive_mean": 0.8157061563438878,
+        "chordal_mean": 0.7989554140127788,
+        "geodesic_mean": 0.7989554140127788
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.0996188261298901e-14
+      }
+    },
+    {
+      "d": 64,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 1.0106023080539845,
+      "timing": {
+        "naive_s": 3.704201662912965e-05,
+        "chordal_s": 0.0005410000158008188,
+        "geodesic_s": 0.006517916015582159,
+        "chordal_over_naive": 14.60503679422732,
+        "geodesic_over_naive": 175.96007476700132
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.35219132917960766,
+        "chordal_mean": 0.4225627171389844,
+        "geodesic_mean": 0.40646029750191437
+      },
+      "delta_cosine": {
+        "naive_mean": 0.45407091988435566,
+        "chordal_mean": 0.30107851275373826,
+        "geodesic_mean": 0.2914851873821963
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.48378565324630035,
+        "geodesic_vs_naive_fro": 0.49532564991669864,
+        "naive_norm": 0.6457631821825623,
+        "chordal_rel": 0.7491688386618647,
+        "geodesic_rel": 0.7670391616979275
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.048474420624736,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5774547829936714,
+      "projection_preservation": {
+        "naive_mean": 0.630573687378315,
+        "chordal_mean": 0.6509091800574505,
+        "geodesic_mean": 0.6399643887722
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010405026460316193
+      }
+    },
+    {
+      "d": 64,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.47140453339668126,
+      "timing": {
+        "naive_s": 6.575000588782132e-05,
+        "chordal_s": 0.0007450840203091502,
+        "geodesic_s": 0.011159250017954037,
+        "chordal_over_naive": 11.33207533974016,
+        "geodesic_over_naive": 169.72241853473403
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1249996372910154,
+        "chordal_mean": 0.12502195374053354,
+        "geodesic_mean": 0.12500221969488665
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3135098981325351,
+        "chordal_mean": 0.1116903653851193,
+        "geodesic_mean": 0.10494391849005891
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.8387532271451512,
+        "geodesic_vs_naive_fro": 0.8447687610280465,
+        "naive_norm": 0.8965225511495568,
+        "chordal_rel": 0.9355628880385313,
+        "geodesic_rel": 0.942272740317408
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.4395276194432776,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.37768071618159793,
+      "projection_preservation": {
+        "naive_mean": 0.38158360638171507,
+        "chordal_mean": 0.32662022151127645,
+        "geodesic_mean": 0.353597924860614
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.011162979268334256
+      }
+    },
+    {
+      "d": 64,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.8416254115301733,
+      "timing": {
+        "naive_s": 0.00014720900799147785,
+        "chordal_s": 0.0019532080041244626,
+        "geodesic_s": 0.02530108398059383,
+        "chordal_over_naive": 13.268264155665914,
+        "geodesic_over_naive": 171.87184619883146
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.12499999999999982,
+        "chordal_mean": 0.12500000000001088,
+        "geodesic_mean": 0.1250000000000004
+      },
+      "delta_cosine": {
+        "naive_mean": 0.19807352983857723,
+        "chordal_mean": 0.06814942248271805,
+        "geodesic_mean": 0.07028791163925246
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.3112481472212347,
+        "geodesic_vs_naive_fro": 1.305989108459881,
+        "naive_norm": 1.396795084889074,
+        "chordal_rel": 0.9387548405680186,
+        "geodesic_rel": 0.9349897652049625
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.454314714718521,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.37430113960938666,
+      "projection_preservation": {
+        "naive_mean": 0.3652980991855291,
+        "chordal_mean": 0.35103959653765926,
+        "geodesic_mean": 0.35246092379963
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.04959167430311689
+      }
+    },
+    {
+      "d": 64,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.9258200997725516,
+      "timing": {
+        "naive_s": 0.0002705839870031923,
+        "chordal_s": 0.0023725420178379864,
+        "geodesic_s": 0.04628870799206197,
+        "chordal_over_naive": 8.768227728901028,
+        "geodesic_over_naive": 171.06965014716803
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.12499999999920024,
+        "chordal_mean": 0.12500000011518864,
+        "geodesic_mean": 0.12500000002349013
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14178461938841852,
+        "chordal_mean": 0.04971951253504977,
+        "geodesic_mean": 0.0486241439686969
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.8821367935710682,
+        "geodesic_vs_naive_fro": 1.8876941800602687,
+        "naive_norm": 2.0099875296338756,
+        "chordal_rel": 0.9363922739928164,
+        "geodesic_rel": 0.9391571600467178
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.265919276768251,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.38605416102204826,
+      "projection_preservation": {
+        "naive_mean": 0.3585455172897865,
+        "chordal_mean": 0.35037737986490847,
+        "geodesic_mean": 0.3523515897618882
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.04913336913650674
+      }
+    },
+    {
+      "d": 128,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.6200733750247254,
+      "timing": {
+        "naive_s": 0.0007958750065881759,
+        "chordal_s": 0.002077874989481643,
+        "geodesic_s": 0.0026634589885361493,
+        "chordal_over_naive": 2.610805682150081,
+        "geodesic_over_naive": 3.346579508702114
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5501408452918246,
+        "chordal_mean": 0.5954587153107185,
+        "geodesic_mean": 0.5954587153107185
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7057280217300548,
+        "chordal_mean": 0.546061133710583,
+        "geodesic_mean": 0.546061133710583
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.3589332022303966,
+        "geodesic_vs_naive_fro": 0.3589332022303966,
+        "naive_norm": 0.5665823816935468,
+        "chordal_rel": 0.6335057598464763,
+        "geodesic_rel": 0.6335057598464763
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6667822005483123,
+      "projection_preservation": {
+        "naive_mean": 0.7758786896385981,
+        "chordal_mean": 0.7708172403122058,
+        "geodesic_mean": 0.7708172403122058
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 4.402378347397751e-15
+      }
+    },
+    {
+      "d": 128,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.6921218976610483,
+      "timing": {
+        "naive_s": 0.0016287089965771884,
+        "chordal_s": 0.0041417499887757,
+        "geodesic_s": 0.009719708992633969,
+        "chordal_over_naive": 2.5429650093907448,
+        "geodesic_over_naive": 5.967738259603411
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.30240253575320364,
+        "chordal_mean": 0.34790953411786385,
+        "geodesic_mean": 0.33631271563803267
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4482677499231544,
+        "chordal_mean": 0.2709214437623343,
+        "geodesic_mean": 0.26288223818818235
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7220364995462019,
+        "geodesic_vs_naive_fro": 0.7337560771793569,
+        "naive_norm": 0.9054510303227586,
+        "chordal_rel": 0.7974329647499805,
+        "geodesic_rel": 0.8103763236293419
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.048094361798516,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.4528695980526058,
+      "projection_preservation": {
+        "naive_mean": 0.5816147031099098,
+        "chordal_mean": 0.5959634556022945,
+        "geodesic_mean": 0.5814745724707082
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.004394578820771231
+      }
+    },
+    {
+      "d": 128,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.6933409994893371,
+      "timing": {
+        "naive_s": 0.0016110839787870646,
+        "chordal_s": 0.002579292020527646,
+        "geodesic_s": 0.014854959008516744,
+        "chordal_over_naive": 1.6009668362970846,
+        "geodesic_over_naive": 9.220474664331642
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.19514149291461536,
+        "chordal_mean": 0.24434169280391654,
+        "geodesic_mean": 0.22952490000295325
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3160151694929112,
+        "chordal_mean": 0.15769234170013874,
+        "geodesic_mean": 0.15082204204347868
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0986330727537235,
+        "geodesic_vs_naive_fro": 1.1141915721246458,
+        "naive_norm": 1.2679526406891688,
+        "chordal_rel": 0.8664622301323374,
+        "geodesic_rel": 0.8787327983473031
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2463067442399482,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.34967126564790696,
+      "projection_preservation": {
+        "naive_mean": 0.4603298170601636,
+        "chordal_mean": 0.4948344229226616,
+        "geodesic_mean": 0.48000041040232444
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01336254859086262
+      }
+    },
+    {
+      "d": 128,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.43301270189221935,
+      "timing": {
+        "naive_s": 0.0011294579890090972,
+        "chordal_s": 0.003892083012033254,
+        "geodesic_s": 0.03245595798944123,
+        "chordal_over_naive": 3.4459741308730565,
+        "geodesic_over_naive": 28.73587004144854
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.0624999999999996,
+        "chordal_mean": 0.06250000000001117,
+        "geodesic_mean": 0.06250000000000094
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20025956432503758,
+        "chordal_mean": 0.05109473226895523,
+        "geodesic_mean": 0.04939381540060433
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.9418442926185269,
+        "geodesic_vs_naive_fro": 1.946002817882816,
+        "naive_norm": 2.0080468739438295,
+        "chordal_rel": 0.9670313565961337,
+        "geodesic_rel": 0.969102286970444
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.5106798076781023,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.21159633373135014,
+      "projection_preservation": {
+        "naive_mean": 0.26079729665615087,
+        "chordal_mean": 0.23876943911718476,
+        "geodesic_mean": 0.2500787334632124
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.02639081860729373
+      }
+    },
+    {
+      "d": 128,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.5890150893739515,
+      "timing": {
+        "naive_s": 0.0027727920096367598,
+        "chordal_s": 0.005379624984925613,
+        "geodesic_s": 0.05959966601221822,
+        "chordal_over_naive": 1.9401473194631544,
+        "geodesic_over_naive": 21.49445966559384
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06250000000000003,
+        "chordal_mean": 0.0625000000000003,
+        "geodesic_mean": 0.06250000000000017
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14131799560870825,
+        "chordal_mean": 0.03429935825705355,
+        "geodesic_mean": 0.03523796870802029
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.7464725933960037,
+        "geodesic_vs_naive_fro": 2.741763659090345,
+        "naive_norm": 2.8311466801494687,
+        "chordal_rel": 0.9700919463667652,
+        "geodesic_rel": 0.968428685915205
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.9431231494135222,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.210580362299433,
+      "projection_preservation": {
+        "naive_mean": 0.2550074801906284,
+        "chordal_mean": 0.24910284696014384,
+        "geodesic_mean": 0.2497823062590589
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.034098443011952646
+      }
+    },
+    {
+      "d": 256,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.46691959580508247,
+      "timing": {
+        "naive_s": 0.0005611670203506947,
+        "chordal_s": 0.013411707972409204,
+        "geodesic_s": 0.012734541000099853,
+        "chordal_over_naive": 23.899672443380076,
+        "geodesic_over_naive": 22.69296045256108
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5403813728042399,
+        "chordal_mean": 0.5725375208288481,
+        "geodesic_mean": 0.5725375208288481
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7082366020740487,
+        "chordal_mean": 0.5399413140969915,
+        "geodesic_mean": 0.5399413140969915
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.5282942634863395,
+        "geodesic_vs_naive_fro": 0.5282942634863395,
+        "naive_norm": 0.8163440906231515,
+        "chordal_rel": 0.6471465519926397,
+        "geodesic_rel": 0.6471465519926397
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6233429139173792,
+      "projection_preservation": {
+        "naive_mean": 0.7617349312254807,
+        "chordal_mean": 0.7570396956888499,
+        "geodesic_mean": 0.7570396956888499
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 6.574236538708354e-15
+      }
+    },
+    {
+      "d": 256,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.485513028510035,
+      "timing": {
+        "naive_s": 0.0011545419984031469,
+        "chordal_s": 0.016093875019578263,
+        "geodesic_s": 0.023774250003043562,
+        "chordal_over_naive": 13.939618516985771,
+        "geodesic_over_naive": 20.591931723511014
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2633246204313251,
+        "chordal_mean": 0.30232408084564844,
+        "geodesic_mean": 0.29218627092254895
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44563807722223875,
+        "chordal_mean": 0.24059925785723796,
+        "geodesic_mean": 0.2404607887312511
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0641168743539828,
+        "geodesic_vs_naive_fro": 1.0643754479302008,
+        "naive_norm": 1.2642627424492305,
+        "chordal_rel": 0.8416896572404647,
+        "geodesic_rel": 0.8418941824293642
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1067560070296143,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3651636389165208,
+      "projection_preservation": {
+        "naive_mean": 0.5304347178943247,
+        "chordal_mean": 0.5463906118815098,
+        "geodesic_mean": 0.5394833479358448
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.007978429343298834
+      }
+    },
+    {
+      "d": 256,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.4957398447223947,
+      "timing": {
+        "naive_s": 0.00182641702122055,
+        "chordal_s": 0.015843708999454975,
+        "geodesic_s": 0.03796320900437422,
+        "chordal_over_naive": 8.67474887463927,
+        "geodesic_over_naive": 20.78561936474088
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.16675596679305857,
+        "chordal_mean": 0.20011944354393893,
+        "geodesic_mean": 0.18763315849724777
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3159469135697866,
+        "chordal_mean": 0.14174005501278095,
+        "geodesic_mean": 0.13694456775872915
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5921250931417248,
+        "geodesic_vs_naive_fro": 1.6051772621702736,
+        "naive_norm": 1.7815638972159287,
+        "chordal_rel": 0.8936671289925429,
+        "geodesic_rel": 0.900993371429845
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3176843787333128,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.259457984996608,
+      "projection_preservation": {
+        "naive_mean": 0.4191509467583091,
+        "chordal_mean": 0.44903694135248273,
+        "geodesic_mean": 0.4335841245534347
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014944097349896069
+      }
+    },
+    {
+      "d": 256,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.4967671175134073,
+      "timing": {
+        "naive_s": 0.003873292007483542,
+        "chordal_s": 0.024748625000938773,
+        "geodesic_s": 0.06295549997594208,
+        "chordal_over_naive": 6.389558275782524,
+        "geodesic_over_naive": 16.253744838836447
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.09594966065575176,
+        "chordal_mean": 0.12250677627521023,
+        "geodesic_mean": 0.11355666962275798
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20015817414430162,
+        "chordal_mean": 0.07149049520246682,
+        "geodesic_mean": 0.06947472135223079
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6477505339314233,
+        "geodesic_vs_naive_fro": 2.658615983082693,
+        "naive_norm": 2.834954799381339,
+        "chordal_rel": 0.933965696563921,
+        "geodesic_rel": 0.9377983676010893
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3852519913689514,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.18915814237094103,
+      "projection_preservation": {
+        "naive_mean": 0.3155869932415227,
+        "chordal_mean": 0.34791308279227445,
+        "geodesic_mean": 0.3359235251993586
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014591622466149196
+      }
+    },
+    {
+      "d": 256,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.30304576336566325,
+      "timing": {
+        "naive_s": 0.008102124993456528,
+        "chordal_s": 0.03345158399315551,
+        "geodesic_s": 0.11070454100263305,
+        "chordal_over_naive": 4.128742030044195,
+        "geodesic_over_naive": 13.66364269769236
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.03125000000000002,
+        "chordal_mean": 0.03125000000000021,
+        "geodesic_mean": 0.03125000000000012
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14135015015170452,
+        "chordal_mean": 0.02520416749990577,
+        "geodesic_mean": 0.024734533927640447
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.9325688459858594,
+        "geodesic_vs_naive_fro": 3.934947766944732,
+        "naive_norm": 3.9966366833151734,
+        "chordal_rel": 0.9839695618076121,
+        "geodesic_rel": 0.9845647925346892
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.9041925393624846,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.11091083908637453,
+      "projection_preservation": {
+        "naive_mean": 0.18113384840029093,
+        "chordal_mean": 0.1759611227564129,
+        "geodesic_mean": 0.1768413984152543
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.02279605708723366
+      }
+    },
+    {
+      "d": 512,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.3812590535541288,
+      "timing": {
+        "naive_s": 0.003755249985260889,
+        "chordal_s": 0.07025479100411758,
+        "geodesic_s": 0.05616679199738428,
+        "chordal_over_naive": 18.708419221054005,
+        "geodesic_over_naive": 14.95687163779649
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.531695087997651,
+        "chordal_mean": 0.558300728187775,
+        "geodesic_mean": 0.558300728187775
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7073357884793066,
+        "chordal_mean": 0.5314740675019021,
+        "geodesic_mean": 0.5314740675019021
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7455296122809468,
+        "geodesic_vs_naive_fro": 0.7455296122809468,
+        "naive_norm": 1.1298127709961057,
+        "chordal_rel": 0.6598700522951662,
+        "geodesic_rel": 0.6598700522951662
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 7.884953353001448e-08,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6017797405624143,
+      "projection_preservation": {
+        "naive_mean": 0.7499930078045637,
+        "chordal_mean": 0.7470385601057292,
+        "geodesic_mean": 0.7470385601057292
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.1819219838013461e-14
+      }
+    },
+    {
+      "d": 512,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.3592522209267458,
+      "timing": {
+        "naive_s": 0.008645916997920722,
+        "chordal_s": 0.06510508302017115,
+        "geodesic_s": 0.08632745800423436,
+        "chordal_over_naive": 7.530153601500967,
+        "geodesic_over_naive": 9.984765991276051
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2494247790779805,
+        "chordal_mean": 0.27502204520850015,
+        "geodesic_mean": 0.2654779108006202
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44728185825414524,
+        "chordal_mean": 0.23411219552603685,
+        "geodesic_mean": 0.2288442410487243
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5195679978357153,
+        "geodesic_vs_naive_fro": 1.5320619724717774,
+        "naive_norm": 1.7831764062838333,
+        "chordal_rel": 0.8521691922800381,
+        "geodesic_rel": 0.8591757759203521
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.212388479121533,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.32002499514776755,
+      "projection_preservation": {
+        "naive_mean": 0.5124093937567444,
+        "chordal_mean": 0.5241780491632875,
+        "geodesic_mean": 0.5156788755070716
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.008986570991957413
+      }
+    },
+    {
+      "d": 512,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.3526158482667772,
+      "timing": {
+        "naive_s": 0.012886750017059967,
+        "chordal_s": 0.07249133300501853,
+        "geodesic_s": 0.08969054199405946,
+        "chordal_over_naive": 5.62526105566196,
+        "geodesic_over_naive": 6.9599039226588335
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.14630878220786236,
+        "chordal_mean": 0.1685308892540912,
+        "geodesic_mean": 0.15965017567088502
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3163574137733823,
+        "chordal_mean": 0.13029680959171938,
+        "geodesic_mean": 0.12663751858340244
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.313469046361739,
+        "geodesic_vs_naive_fro": 2.326539830840662,
+        "naive_norm": 2.539014169968763,
+        "chordal_rel": 0.9111682296716765,
+        "geodesic_rel": 0.916316205856104
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.264535478386597,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.21085058976414933,
+      "projection_preservation": {
+        "naive_mean": 0.39129178601208303,
+        "chordal_mean": 0.4100882945796836,
+        "geodesic_mean": 0.39936874924631943
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010345955970809862
+      }
+    },
+    {
+      "d": 1024,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.2713065657528861,
+      "timing": {
+        "naive_s": 0.011860500002512708,
+        "chordal_s": 0.21299245802219957,
+        "geodesic_s": 0.18243816698668525,
+        "chordal_over_naive": 17.958134815317738,
+        "geodesic_over_naive": 15.38199628582562
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5214925910147126,
+        "chordal_mean": 0.539015401892267,
+        "geodesic_mean": 0.539015401892267
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7065710561344627,
+        "chordal_mean": 0.5157808404630584,
+        "geodesic_mean": 0.5157808404630584
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0900093736564491,
+        "geodesic_vs_naive_fro": 1.0900093736564491,
+        "naive_norm": 1.5948242678205604,
+        "chordal_rel": 0.6834667590969278,
+        "geodesic_rel": 0.6834667590969278
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5655765746836463,
+      "projection_preservation": {
+        "naive_mean": 0.7379388836207144,
+        "chordal_mean": 0.7344212833072923,
+        "geodesic_mean": 0.7344212833072923
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 2.6567021128330564e-14
+      }
+    },
+    {
+      "d": 1024,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 42,
+      "mean_coherence": 0.25291279102290043,
+      "timing": {
+        "naive_s": 0.021745957987150177,
+        "chordal_s": 0.21325141700799577,
+        "geodesic_s": 0.22675191599410027,
+        "chordal_over_naive": 9.806485284943868,
+        "geodesic_over_naive": 10.427313256472278
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.23359138763850384,
+        "chordal_mean": 0.2529979830071117,
+        "geodesic_mean": 0.24638911959457524
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4469993142938068,
+        "chordal_mean": 0.22469078561441697,
+        "geodesic_mean": 0.22193459481084865
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.1924198309055267,
+        "geodesic_vs_naive_fro": 2.201772701280312,
+        "naive_norm": 2.5367037455680728,
+        "chordal_rel": 0.864279021441092,
+        "geodesic_rel": 0.8679660386543263
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.16345237540859,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2795371643541399,
+      "projection_preservation": {
+        "naive_mean": 0.4939880169063898,
+        "chordal_mean": 0.5031782828987859,
+        "geodesic_mean": 0.4964138253039083
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.007445460383557534
+      }
+    },
+    {
+      "d": 64,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 1.000485523017193,
+      "timing": {
+        "naive_s": 2.3540982510894537e-05,
+        "chordal_s": 0.0007492080039810389,
+        "geodesic_s": 0.0009384170116391033,
+        "chordal_over_naive": 31.825689672651205,
+        "geodesic_over_naive": 39.86312003778148
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5832586430555665,
+        "chordal_mean": 0.6495196458774127,
+        "geodesic_mean": 0.6495196458774127
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7020490239121826,
+        "chordal_mean": 0.5600472612486864,
+        "geodesic_mean": 0.5600472612486864
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.2336105382606061,
+        "geodesic_vs_naive_fro": 0.2336105382606061,
+        "naive_norm": 0.38731097844050505,
+        "chordal_rel": 0.6031601252338141,
+        "geodesic_rel": 0.6031601252338141
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.7417953428205576,
+      "projection_preservation": {
+        "naive_mean": 0.8207177674565405,
+        "chordal_mean": 0.8069516508006465,
+        "geodesic_mean": 0.8069516508006465
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.492312133058439e-15
+      }
+    },
+    {
+      "d": 64,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.9788577899221856,
+      "timing": {
+        "naive_s": 4.1791005060076714e-05,
+        "chordal_s": 0.0007252909999806434,
+        "geodesic_s": 0.006815375003498048,
+        "chordal_over_naive": 17.35519399301358,
+        "geodesic_over_naive": 163.08234256870819
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.3532369060373275,
+        "chordal_mean": 0.4171483292201682,
+        "geodesic_mean": 0.4000876347567421
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4528439785604822,
+        "chordal_mean": 0.2958349343348662,
+        "geodesic_mean": 0.29192164489434974
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.49324941125358923,
+        "geodesic_vs_naive_fro": 0.4970499859909548,
+        "naive_norm": 0.6499529593444048,
+        "chordal_rel": 0.7589001698694019,
+        "geodesic_rel": 0.764747631109057
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1028766554874472,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5677643107162025,
+      "projection_preservation": {
+        "naive_mean": 0.6358075709758857,
+        "chordal_mean": 0.6476543633245656,
+        "geodesic_mean": 0.6357883669645289
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.002953998696426114
+      }
+    },
+    {
+      "d": 64,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.9922649829593485,
+      "timing": {
+        "naive_s": 6.358401151373982e-05,
+        "chordal_s": 0.001352666993625462,
+        "geodesic_s": 0.011029999994207174,
+        "chordal_over_naive": 21.273696978574012,
+        "geodesic_over_naive": 173.471282034851
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.24842922952182872,
+        "chordal_mean": 0.32098575535967466,
+        "geodesic_mean": 0.30319769031248256
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31659495471075755,
+        "chordal_mean": 0.17434566029410536,
+        "geodesic_mean": 0.16624338882749998
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7477850976455371,
+        "geodesic_vs_naive_fro": 0.7622631678945226,
+        "naive_norm": 0.8958895892318643,
+        "chordal_rel": 0.8346844372716598,
+        "geodesic_rel": 0.8508449892224855
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.210695351800668,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.47221308312532295,
+      "projection_preservation": {
+        "naive_mean": 0.5250121570455636,
+        "chordal_mean": 0.5706744852337773,
+        "geodesic_mean": 0.5544541123495136
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010602871418742475
+      }
+    },
+    {
+      "d": 64,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.9986273508736626,
+      "timing": {
+        "naive_s": 0.00013895798474550247,
+        "chordal_s": 0.0012717090139631182,
+        "geodesic_s": 0.024043833022005856,
+        "chordal_over_naive": 9.151751993901009,
+        "geodesic_over_naive": 173.02951727489025
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1825162290019409,
+        "chordal_mean": 0.2449626824886968,
+        "geodesic_mean": 0.23342917442473352
+      },
+      "delta_cosine": {
+        "naive_mean": 0.19759279358744272,
+        "chordal_mean": 0.09432526075661923,
+        "geodesic_mean": 0.09279344945340957
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.2288065190399546,
+        "geodesic_vs_naive_fro": 1.234625701603071,
+        "naive_norm": 1.3981540410629918,
+        "chordal_rel": 0.8788777795225731,
+        "geodesic_rel": 0.8830398263301567
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.0843549838821958,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.42107342162375483,
+      "projection_preservation": {
+        "naive_mean": 0.4375905820699195,
+        "chordal_mean": 0.49871271158340136,
+        "geodesic_mean": 0.48540306419058654
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.009930593460708159
+      }
+    },
+    {
+      "d": 64,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.9999800872176473,
+      "timing": {
+        "naive_s": 0.0002687920059543103,
+        "chordal_s": 0.002173958986531943,
+        "geodesic_s": 0.046081375010544434,
+        "chordal_over_naive": 8.087885570903014,
+        "geodesic_over_naive": 171.438785342364
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.16211505644933805,
+        "chordal_mean": 0.2092729179158108,
+        "geodesic_mean": 0.20074267423893544
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1416976524508424,
+        "chordal_mean": 0.0643778180552902,
+        "geodesic_mean": 0.06361925982906091
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.785571403962908,
+        "geodesic_vs_naive_fro": 1.7904272330823279,
+        "naive_norm": 2.004150885033486,
+        "chordal_rel": 0.8909366142525112,
+        "geodesic_rel": 0.8933595002516054
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.0372761168478535,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.4140461042810628,
+      "projection_preservation": {
+        "naive_mean": 0.40943808871064435,
+        "chordal_mean": 0.45804387624729154,
+        "geodesic_mean": 0.4476305190484937
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01268358791348317
+      }
+    },
+    {
+      "d": 128,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.7809750315770171,
+      "timing": {
+        "naive_s": 7.895901217125356e-05,
+        "chordal_s": 0.003290082997409627,
+        "geodesic_s": 0.0020770409901160747,
+        "chordal_over_naive": 41.66823908933653,
+        "geodesic_over_naive": 26.305306170892784
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5782691373342016,
+        "chordal_mean": 0.6170239123692525,
+        "geodesic_mean": 0.6170239123692525
+      },
+      "delta_cosine": {
+        "naive_mean": 0.709684408552381,
+        "chordal_mean": 0.5642487221455676,
+        "geodesic_mean": 0.5642487221455676
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.36006631440858056,
+        "geodesic_vs_naive_fro": 0.36006631440858056,
+        "naive_norm": 0.5936056199407471,
+        "chordal_rel": 0.6065749755612521,
+        "geodesic_rel": 0.6065749755612521
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 4.2146848510894035e-08,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6978558949931029,
+      "projection_preservation": {
+        "naive_mean": 0.7972595925100664,
+        "chordal_mean": 0.7865633228226724,
+        "geodesic_mean": 0.7865633228226724
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.228304092435654e-15
+      }
+    },
+    {
+      "d": 128,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.7049539203344455,
+      "timing": {
+        "naive_s": 0.0006187499966472387,
+        "chordal_s": 0.0025265000003855675,
+        "geodesic_s": 0.009165750001557171,
+        "chordal_over_naive": 4.083232345980882,
+        "geodesic_over_naive": 14.813333416117562
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2967563136867687,
+        "chordal_mean": 0.35285541204546667,
+        "geodesic_mean": 0.3380310603805261
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4494759131998354,
+        "chordal_mean": 0.2692972362876083,
+        "geodesic_mean": 0.2630472572637954
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7202169946871502,
+        "geodesic_vs_naive_fro": 0.7290623479074327,
+        "naive_norm": 0.8988204282942365,
+        "chordal_rel": 0.8012913058217465,
+        "geodesic_rel": 0.8111323741173003
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1025456193981538,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.4577781050365799,
+      "projection_preservation": {
+        "naive_mean": 0.5764063716630232,
+        "chordal_mean": 0.5907903465395924,
+        "geodesic_mean": 0.5803706001773579
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.005485286376651162
+      }
+    },
+    {
+      "d": 128,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.7032970505661077,
+      "timing": {
+        "naive_s": 0.002249790995847434,
+        "chordal_s": 0.0026294999988749623,
+        "geodesic_s": 0.015290207986254245,
+        "chordal_over_naive": 1.1687752345566227,
+        "geodesic_over_naive": 6.796279305267132
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1991680119327959,
+        "chordal_mean": 0.25015185921019467,
+        "geodesic_mean": 0.232322037487037
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31517820537480634,
+        "chordal_mean": 0.1580832069979093,
+        "geodesic_mean": 0.15415029579691614
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0969293428734497,
+        "geodesic_vs_naive_fro": 1.1064162147572862,
+        "naive_norm": 1.268661274663574,
+        "chordal_rel": 0.8646353165972813,
+        "geodesic_rel": 0.8721131769791648
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3818365083135444,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.35125777846415146,
+      "projection_preservation": {
+        "naive_mean": 0.46462026288769553,
+        "chordal_mean": 0.502182736889422,
+        "geodesic_mean": 0.4833598829002252
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.016435892518963508
+      }
+    },
+    {
+      "d": 128,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.7051341186036514,
+      "timing": {
+        "naive_s": 0.0020110410114284605,
+        "chordal_s": 0.0037046250072307885,
+        "geodesic_s": 0.031016833003377542,
+        "chordal_over_naive": 1.8421429429722869,
+        "geodesic_over_naive": 15.423272239160358
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.12490372261171535,
+        "chordal_mean": 0.16736275102528814,
+        "geodesic_mean": 0.1558181527138682
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1992836400285151,
+        "chordal_mean": 0.08035620465383574,
+        "geodesic_mean": 0.07846510950272073
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.8235447841264334,
+        "geodesic_vs_naive_fro": 1.8317005827310313,
+        "naive_norm": 1.9928827268505118,
+        "chordal_rel": 0.9150286464714887,
+        "geodesic_rel": 0.9191211093619103
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.4020848285655725,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.27639369183381546,
+      "projection_preservation": {
+        "naive_mean": 0.3608424587475163,
+        "chordal_mean": 0.4075528705034353,
+        "geodesic_mean": 0.3931723391243656
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.021205486869600176
+      }
+    },
+    {
+      "d": 128,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.7044017143700262,
+      "timing": {
+        "naive_s": 0.003929958009393886,
+        "chordal_s": 0.00511466697207652,
+        "geodesic_s": 0.05817537501570769,
+        "chordal_over_naive": 1.3014558832055692,
+        "geodesic_over_naive": 14.803052571210557
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.0981349117432255,
+        "chordal_mean": 0.13134645563650657,
+        "geodesic_mean": 0.12406943019498144
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14153234437533693,
+        "chordal_mean": 0.05023748787018332,
+        "geodesic_mean": 0.049532840516846324
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6568184503884966,
+        "geodesic_vs_naive_fro": 2.661999555701051,
+        "naive_norm": 2.841874459206255,
+        "chordal_rel": 0.934882412480161,
+        "geodesic_rel": 0.936705542033182
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1799630579579248,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.24477649702050658,
+      "projection_preservation": {
+        "naive_mean": 0.3162273858855852,
+        "chordal_mean": 0.3604869212069215,
+        "geodesic_mean": 0.35175706509464255
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014545331410836663
+      }
+    },
+    {
+      "d": 256,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.46138309397369615,
+      "timing": {
+        "naive_s": 0.0029673750104848295,
+        "chordal_s": 0.013564458990003914,
+        "geodesic_s": 0.014547792001394555,
+        "chordal_over_naive": 4.571198093289753,
+        "geodesic_over_naive": 4.902579535782246
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5353322316419444,
+        "chordal_mean": 0.5669168267857524,
+        "geodesic_mean": 0.5669168267857524
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7058031152839406,
+        "chordal_mean": 0.5230891249061613,
+        "geodesic_mean": 0.5230891249061613
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.5370626609512874,
+        "geodesic_vs_naive_fro": 0.5370626609512874,
+        "naive_norm": 0.7999672822043807,
+        "chordal_rel": 0.6713557827907207,
+        "geodesic_rel": 0.6713557827907207
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6254496507781478,
+      "projection_preservation": {
+        "naive_mean": 0.7592394329631091,
+        "chordal_mean": 0.7527685277259633,
+        "geodesic_mean": 0.7527685277259633
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.915982497866032e-15
+      }
+    },
+    {
+      "d": 256,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.4944017143927109,
+      "timing": {
+        "naive_s": 0.000997625000309199,
+        "chordal_s": 0.013789292017463595,
+        "geodesic_s": 0.025225457997294143,
+        "chordal_over_naive": 13.822119547114204,
+        "geodesic_over_naive": 25.285511078286817
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.272289133614812,
+        "chordal_mean": 0.30468943900398654,
+        "geodesic_mean": 0.2936793692765306
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4492715747202025,
+        "chordal_mean": 0.2530084016597226,
+        "geodesic_mean": 0.2504580917615495
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0565616871339085,
+        "geodesic_vs_naive_fro": 1.061688815496421,
+        "naive_norm": 1.2785132246362594,
+        "chordal_rel": 0.8263987159260736,
+        "geodesic_rel": 0.8304089430115004
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1894493355809703,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3736178253630225,
+      "projection_preservation": {
+        "naive_mean": 0.5433809189295148,
+        "chordal_mean": 0.5507024609417167,
+        "geodesic_mean": 0.5424551706009078
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.015176077298910963
+      }
+    },
+    {
+      "d": 256,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.5011005562329536,
+      "timing": {
+        "naive_s": 0.0018789999885484576,
+        "chordal_s": 0.01728670799639076,
+        "geodesic_s": 0.0332136659999378,
+        "chordal_over_naive": 9.199951091934215,
+        "geodesic_over_naive": 17.676245983160236
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.16785318357588652,
+        "chordal_mean": 0.20134859950247655,
+        "geodesic_mean": 0.18951958344062442
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31581330100263394,
+        "chordal_mean": 0.1427910373817605,
+        "geodesic_mean": 0.13751782280922922
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5908626643543267,
+        "geodesic_vs_naive_fro": 1.6055870600114128,
+        "naive_norm": 1.7835263395145944,
+        "chordal_rel": 0.8919759855003301,
+        "geodesic_rel": 0.9002317624579576
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2637540371312217,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.26436657680096387,
+      "projection_preservation": {
+        "naive_mean": 0.42065912277703943,
+        "chordal_mean": 0.4477156961454784,
+        "geodesic_mean": 0.4353900150850484
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.008445594815990795
+      }
+    },
+    {
+      "d": 256,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.49944467152055344,
+      "timing": {
+        "naive_s": 0.004976333992090076,
+        "chordal_s": 0.03118458401877433,
+        "geodesic_s": 0.08245575000182725,
+        "chordal_over_naive": 6.266577779614971,
+        "geodesic_over_naive": 16.56957714914058
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.09570032646568627,
+        "chordal_mean": 0.12309180759878896,
+        "geodesic_mean": 0.11404558144950469
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20021845719194595,
+        "chordal_mean": 0.07009991093415623,
+        "geodesic_mean": 0.06709259764638022
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6630925956469382,
+        "geodesic_vs_naive_fro": 2.6784607828831866,
+        "naive_norm": 2.842820373324525,
+        "chordal_rel": 0.9367783559720992,
+        "geodesic_rel": 0.9421843209006101
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3645337402707867,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.18452121988055836,
+      "projection_preservation": {
+        "naive_mean": 0.31498002117012613,
+        "chordal_mean": 0.3494670503684219,
+        "geodesic_mean": 0.3370212719257734
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.017361430939391635
+      }
+    },
+    {
+      "d": 256,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.4960369831555774,
+      "timing": {
+        "naive_s": 0.008664790977491066,
+        "chordal_s": 0.036034999997355044,
+        "geodesic_s": 0.10941775000537746,
+        "chordal_over_naive": 4.158784682857885,
+        "geodesic_over_naive": 12.627857993299212
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06774016631533428,
+        "chordal_mean": 0.08980229560960233,
+        "geodesic_mean": 0.08377018847005935
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1414102628267427,
+        "chordal_mean": 0.04264815739857771,
+        "geodesic_mean": 0.04145912340992674
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.797346121569178,
+        "geodesic_vs_naive_fro": 3.8076834940469855,
+        "naive_norm": 3.982788147807932,
+        "chordal_rel": 0.9534391437965842,
+        "geodesic_rel": 0.9560346553061524
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3041119171658764,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.1526112969272925,
+      "projection_preservation": {
+        "naive_mean": 0.26338855177931353,
+        "chordal_mean": 0.2988963259804616,
+        "geodesic_mean": 0.28907791844211855
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.017877621302537335
+      }
+    },
+    {
+      "d": 512,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.3581141186022204,
+      "timing": {
+        "naive_s": 0.003913874999852851,
+        "chordal_s": 0.06576070800656453,
+        "geodesic_s": 0.05803924999781884,
+        "chordal_over_naive": 16.80194385590672,
+        "geodesic_over_naive": 14.829101593689357
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5306576504401388,
+        "chordal_mean": 0.5527056451297085,
+        "geodesic_mean": 0.5527056451297085
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7078606875808879,
+        "chordal_mean": 0.5267680727075085,
+        "geodesic_mean": 0.5267680727075085
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.764017651570733,
+        "geodesic_vs_naive_fro": 0.764017651570733,
+        "naive_norm": 1.1437555638729457,
+        "chordal_rel": 0.6679903256458423,
+        "geodesic_rel": 0.6679903256458423
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.595944719616542,
+      "projection_preservation": {
+        "naive_mean": 0.749782617735313,
+        "chordal_mean": 0.7439686407648575,
+        "geodesic_mean": 0.7439686407648575
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.416576787063201e-14
+      }
+    },
+    {
+      "d": 512,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.35663142403466636,
+      "timing": {
+        "naive_s": 0.007147291995352134,
+        "chordal_s": 0.08703299998887815,
+        "geodesic_s": 0.0715512500028126,
+        "chordal_over_naive": 12.17705951365573,
+        "geodesic_over_naive": 10.010959402434123
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.24846614495614064,
+        "chordal_mean": 0.2735201754287642,
+        "geodesic_mean": 0.26519549366758266
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4477903511394016,
+        "chordal_mean": 0.23404100224578023,
+        "geodesic_mean": 0.23184010977379738
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.524567029440366,
+        "geodesic_vs_naive_fro": 1.529847559188911,
+        "naive_norm": 1.7881379873648242,
+        "chordal_rel": 0.852600325150028,
+        "geodesic_rel": 0.8555534136621328
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1474052113156656,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3222607590543437,
+      "projection_preservation": {
+        "naive_mean": 0.5144429798098281,
+        "chordal_mean": 0.523083777276803,
+        "geodesic_mean": 0.5154846461454597
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.00758406840119905
+      }
+    },
+    {
+      "d": 512,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.3504759847296391,
+      "timing": {
+        "naive_s": 0.011738041997887194,
+        "chordal_s": 0.08293254199088551,
+        "geodesic_s": 0.10148437498719431,
+        "chordal_over_naive": 7.0652790308479965,
+        "geodesic_over_naive": 8.645766900941497
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.14427694770433658,
+        "chordal_mean": 0.16761735715960174,
+        "geodesic_mean": 0.15961764023597352
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3162629910791179,
+        "chordal_mean": 0.13031614593763147,
+        "geodesic_mean": 0.12631346718212952
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.3164097520225733,
+        "geodesic_vs_naive_fro": 2.330713988855784,
+        "naive_norm": 2.5424091575657206,
+        "chordal_rel": 0.9111081688521233,
+        "geodesic_rel": 0.9167344217275286
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2718153393601832,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2075772062786994,
+      "projection_preservation": {
+        "naive_mean": 0.3877824113953281,
+        "chordal_mean": 0.40884503063912747,
+        "geodesic_mean": 0.3992868111253154
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.011424703946509204
+      }
+    },
+    {
+      "d": 512,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.3506609688730765,
+      "timing": {
+        "naive_s": 0.02672866699867882,
+        "chordal_s": 0.1366814999782946,
+        "geodesic_s": 0.168005333020119,
+        "chordal_over_naive": 5.113666909952924,
+        "geodesic_over_naive": 6.2855859227257165
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.07571993575213912,
+        "chordal_mean": 0.09393953908699551,
+        "geodesic_mean": 0.08728838062146728
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20018952559270808,
+        "chordal_mean": 0.06077452034738058,
+        "geodesic_mean": 0.058279817662323534
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.798255131574082,
+        "geodesic_vs_naive_fro": 3.813890633763573,
+        "naive_norm": 3.98668886672078,
+        "chordal_rel": 0.9527342761258185,
+        "geodesic_rel": 0.9566562029960114
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3902691233857774,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.13274677595815382,
+      "projection_preservation": {
+        "naive_mean": 0.27794644068191576,
+        "chordal_mean": 0.30502444919489974,
+        "geodesic_mean": 0.29462522755476006
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.017698708566538567
+      }
+    },
+    {
+      "d": 512,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.35217563361501164,
+      "timing": {
+        "naive_s": 0.07073595802648924,
+        "chordal_s": 0.1438700420258101,
+        "geodesic_s": 0.25556333299027756,
+        "chordal_over_naive": 2.0339025022031025,
+        "geodesic_over_naive": 3.6129196538848607
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.04963912592619871,
+        "chordal_mean": 0.06477968697229473,
+        "geodesic_mean": 0.059953126362243044
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14143185575109601,
+        "chordal_mean": 0.0358691990508516,
+        "geodesic_mean": 0.03468122122277791
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 5.469342612732279,
+        "geodesic_vs_naive_fro": 5.481551393238684,
+        "naive_norm": 5.654192196840982,
+        "chordal_rel": 0.967307516675507,
+        "geodesic_rel": 0.9694667606632202
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3840097421802589,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.10133597202399315,
+      "projection_preservation": {
+        "naive_mean": 0.2245613617945602,
+        "chordal_mean": 0.2540904057615923,
+        "geodesic_mean": 0.2446517834736213
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01725992346681575
+      }
+    },
+    {
+      "d": 1024,
+      "N": 2,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.24119845912016444,
+      "timing": {
+        "naive_s": 0.01246941601857543,
+        "chordal_s": 0.2060843330109492,
+        "geodesic_s": 0.18959508297848515,
+        "chordal_over_naive": 16.527184007971957,
+        "geodesic_over_naive": 15.204808524797738
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5163753144140334,
+        "chordal_mean": 0.5365174530788555,
+        "geodesic_mean": 0.5365174530788555
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7068572849858394,
+        "chordal_mean": 0.5143615814942746,
+        "geodesic_mean": 0.5143615814942746
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0946870152705626,
+        "geodesic_vs_naive_fro": 1.0946870152705626,
+        "naive_norm": 1.5959315743801605,
+        "chordal_rel": 0.68592352757713,
+        "geodesic_rel": 0.68592352757713
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5614937410165415,
+      "projection_preservation": {
+        "naive_mean": 0.7366779599880813,
+        "chordal_mean": 0.7325662828205165,
+        "geodesic_mean": 0.7325662828205165
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 3.9878939839440336e-14
+      }
+    },
+    {
+      "d": 1024,
+      "N": 5,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.2544336026725703,
+      "timing": {
+        "naive_s": 0.019873958983225748,
+        "chordal_s": 0.19619937500101514,
+        "geodesic_s": 0.233554832986556,
+        "chordal_over_naive": 9.872183753957309,
+        "geodesic_over_naive": 11.751802103631375
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.23524011699530237,
+        "chordal_mean": 0.2513606830572416,
+        "geodesic_mean": 0.2444400863172369
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44695205547966876,
+        "chordal_mean": 0.22396218705727872,
+        "geodesic_mean": 0.22033340996149745
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.198717794715835,
+        "geodesic_vs_naive_fro": 2.210491697889281,
+        "naive_norm": 2.5406280687560168,
+        "chordal_rel": 0.8654229329176887,
+        "geodesic_rel": 0.8700571819517122
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1903471078342978,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.28005017015576394,
+      "projection_preservation": {
+        "naive_mean": 0.4935857686569041,
+        "chordal_mean": 0.5017684160465304,
+        "geodesic_mean": 0.4946871435758487
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010225983427347924
+      }
+    },
+    {
+      "d": 1024,
+      "N": 10,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.2515968530530956,
+      "timing": {
+        "naive_s": 0.0433682499860879,
+        "chordal_s": 0.22948899999028072,
+        "geodesic_s": 0.2878586250008084,
+        "chordal_over_naive": 5.291636163873306,
+        "geodesic_over_naive": 6.637543020369753
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.13145696228911877,
+        "chordal_mean": 0.14764187894140096,
+        "geodesic_mean": 0.14017121714911984
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31611693740174684,
+        "chordal_mean": 0.12180427566164617,
+        "geodesic_mean": 0.11926715797323287
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.288146463305956,
+        "geodesic_vs_naive_fro": 3.299918617382537,
+        "naive_norm": 3.563352279233608,
+        "chordal_rel": 0.9227677214146107,
+        "geodesic_rel": 0.9260713953581572
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3796326923912805,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.17311166179360604,
+      "projection_preservation": {
+        "naive_mean": 0.3678536393011051,
+        "chordal_mean": 0.3833148578183445,
+        "geodesic_mean": 0.3744399926119762
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01324132941708146
+      }
+    },
+    {
+      "d": 1024,
+      "N": 25,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.25000025280765215,
+      "timing": {
+        "naive_s": 0.11470054200617597,
+        "chordal_s": 0.3177640419744421,
+        "geodesic_s": 0.4327961250091903,
+        "chordal_over_naive": 2.770379602542177,
+        "geodesic_over_naive": 3.773270094799436
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06366928797452147,
+        "chordal_mean": 0.07628896371008148,
+        "geodesic_mean": 0.07140066245258199
+      },
+      "delta_cosine": {
+        "naive_mean": 0.19999716060748457,
+        "chordal_mean": 0.055077953009646734,
+        "geodesic_mean": 0.05333617815081202
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 5.435019260949086,
+        "geodesic_vs_naive_fro": 5.44883692450851,
+        "naive_norm": 5.653489812754871,
+        "chordal_rel": 0.9613565144642354,
+        "geodesic_rel": 0.9638006090000122
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.4083479628826605,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.09861330547189615,
+      "projection_preservation": {
+        "naive_mean": 0.25466220953643665,
+        "chordal_mean": 0.2749884985071768,
+        "geodesic_mean": 0.2669362627952425
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.014068243217079154
+      }
+    },
+    {
+      "d": 1024,
+      "N": 50,
+      "r": 8,
+      "regime": "random",
+      "seed": 137,
+      "mean_coherence": 0.24962096645956744,
+      "timing": {
+        "naive_s": 0.2324898749939166,
+        "chordal_s": 0.6142159999872092,
+        "geodesic_s": 0.6291944590047933,
+        "chordal_over_naive": 2.6419042979969816,
+        "geodesic_over_naive": 2.706330583305002
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.03959565748137963,
+        "chordal_mean": 0.04942061264755838,
+        "geodesic_mean": 0.045682620213429566
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14135928114165427,
+        "chordal_mean": 0.030896769613032248,
+        "geodesic_mean": 0.029726774608345285
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 7.790447277555689,
+        "geodesic_vs_naive_fro": 7.8049818074602575,
+        "naive_norm": 7.9835198952451965,
+        "chordal_rel": 0.9758161036456492,
+        "geodesic_rel": 0.9776366702748155
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3845052753377607,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.06977027419809938,
+      "projection_preservation": {
+        "naive_mean": 0.20016643085814645,
+        "chordal_mean": 0.22126468166273047,
+        "geodesic_mean": 0.21337017230484226
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.01529607185041752
+      }
+    },
+    {
+      "d": 64,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 1.000485523017193,
+      "timing": {
+        "naive_s": 2.4832988856360316e-05,
+        "chordal_s": 0.001055791013641283,
+        "geodesic_s": 0.001489791990024969,
+        "chordal_over_naive": 42.51566413323098,
+        "geodesic_over_naive": 59.99245594810461
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5832586430555665,
+        "chordal_mean": 0.6495196458774127,
+        "geodesic_mean": 0.6495196458774127
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7020490239121826,
+        "chordal_mean": 0.5600472612486864,
+        "geodesic_mean": 0.5600472612486864
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.2336105382606061,
+        "geodesic_vs_naive_fro": 0.2336105382606061,
+        "naive_norm": 0.38731097844050505,
+        "chordal_rel": 0.6031601252338141,
+        "geodesic_rel": 0.6031601252338141
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.7417953428205576,
+      "projection_preservation": {
+        "naive_mean": 0.8207177674565405,
+        "chordal_mean": 0.8069516508006465,
+        "geodesic_mean": 0.8069516508006465
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.492312133058439e-15
+      }
+    },
+    {
+      "d": 64,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.9788577899221856,
+      "timing": {
+        "naive_s": 3.775002551265061e-05,
+        "chordal_s": 0.00199087499640882,
+        "geodesic_s": 0.006376916979206726,
+        "chordal_over_naive": 52.738374858624866,
+        "geodesic_over_naive": 168.92483892679024
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.3532369060373275,
+        "chordal_mean": 0.4171483292201682,
+        "geodesic_mean": 0.4000876347567421
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4528439785604822,
+        "chordal_mean": 0.2958349343348662,
+        "geodesic_mean": 0.29192164489434974
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.49324941125358923,
+        "geodesic_vs_naive_fro": 0.4970499859909548,
+        "naive_norm": 0.6499529593444048,
+        "chordal_rel": 0.7589001698694019,
+        "geodesic_rel": 0.764747631109057
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1028766554874472,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5677643107162025,
+      "projection_preservation": {
+        "naive_mean": 0.6358075709758857,
+        "chordal_mean": 0.6476543633245656,
+        "geodesic_mean": 0.6357883669645289
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.002953998696426114
+      }
+    },
+    {
+      "d": 64,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.4714045292902799,
+      "timing": {
+        "naive_s": 6.474999827332795e-05,
+        "chordal_s": 0.0007810000097379088,
+        "geodesic_s": 0.010918458021478727,
+        "chordal_over_naive": 12.061776533816854,
+        "geodesic_over_naive": 168.62483880522817
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.12499837266109967,
+        "chordal_mean": 0.12501848081139325,
+        "geodesic_mean": 0.12500190342233328
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3169465465748812,
+        "chordal_mean": 0.10837391657199821,
+        "geodesic_mean": 0.11134592319831933
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.8421539112290598,
+        "geodesic_vs_naive_fro": 0.8394138849820596,
+        "naive_norm": 0.8965279204836857,
+        "chordal_rel": 0.9393504563412921,
+        "geodesic_rel": 0.9362941920751197
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.470530662104046,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3811240229360445,
+      "projection_preservation": {
+        "naive_mean": 0.39351939048858114,
+        "chordal_mean": 0.3498654893342582,
+        "geodesic_mean": 0.35352223660911086
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010267761286209301
+      }
+    },
+    {
+      "d": 64,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.8416254115301732,
+      "timing": {
+        "naive_s": 0.0001380419998895377,
+        "chordal_s": 0.0012609169934876263,
+        "geodesic_s": 0.024277958000311628,
+        "chordal_over_naive": 9.134299666019198,
+        "geodesic_over_naive": 175.87370524723667
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.12500000000000017,
+        "chordal_mean": 0.12500000000000824,
+        "geodesic_mean": 0.1250000000000007
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20026975627113486,
+        "chordal_mean": 0.0725976922677946,
+        "geodesic_mean": 0.06941752857748064
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.321117089287282,
+        "geodesic_vs_naive_fro": 1.3294870552341045,
+        "naive_norm": 1.4173449086136292,
+        "chordal_rel": 0.9321069848690028,
+        "geodesic_rel": 0.9380123688697182
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.4258910624919436,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3841942617022267,
+      "projection_preservation": {
+        "naive_mean": 0.36779393018011836,
+        "chordal_mean": 0.35530533306049855,
+        "geodesic_mean": 0.35323056761148225
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.04375372601365164
+      }
+    },
+    {
+      "d": 64,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.9258200997725514,
+      "timing": {
+        "naive_s": 0.00026558301760815084,
+        "chordal_s": 0.0022975419997237623,
+        "geodesic_s": 0.04654237499926239,
+        "chordal_over_naive": 8.650937173677365,
+        "geodesic_over_naive": 175.24605081463608
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1250000000066051,
+        "chordal_mean": 0.12500000012003504,
+        "geodesic_mean": 0.12500000002253445
+      },
+      "delta_cosine": {
+        "naive_mean": 0.14191411855196803,
+        "chordal_mean": 0.04950106516556625,
+        "geodesic_mean": 0.050411424294043355
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.88262814485156,
+        "geodesic_vs_naive_fro": 1.8777776144771894,
+        "naive_norm": 2.0083239621053206,
+        "chordal_rel": 0.9374125790333179,
+        "geodesic_rel": 0.9349973659173594
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.263128271516618,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3949696940738461,
+      "projection_preservation": {
+        "naive_mean": 0.3604408855278631,
+        "chordal_mean": 0.34968016036313393,
+        "geodesic_mean": 0.35284513924116345
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.05077165620429266
+      }
+    },
+    {
+      "d": 128,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.7809750315770171,
+      "timing": {
+        "naive_s": 5.9125013649463654e-05,
+        "chordal_s": 0.0020598749979399145,
+        "geodesic_s": 0.00222395799937658,
+        "chordal_over_naive": 34.83931538946208,
+        "geodesic_over_naive": 37.61450293376388
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5782691373342016,
+        "chordal_mean": 0.6170239123692525,
+        "geodesic_mean": 0.6170239123692525
+      },
+      "delta_cosine": {
+        "naive_mean": 0.709684408552381,
+        "chordal_mean": 0.5642487221455676,
+        "geodesic_mean": 0.5642487221455676
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.36006631440858056,
+        "geodesic_vs_naive_fro": 0.36006631440858056,
+        "naive_norm": 0.5936056199407471,
+        "chordal_rel": 0.6065749755612521,
+        "geodesic_rel": 0.6065749755612521
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 4.2146848510894035e-08,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6978558949931029,
+      "projection_preservation": {
+        "naive_mean": 0.7972595925100664,
+        "chordal_mean": 0.7865633228226724,
+        "geodesic_mean": 0.7865633228226724
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.228304092435654e-15
+      }
+    },
+    {
+      "d": 128,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.7049539203344455,
+      "timing": {
+        "naive_s": 0.0005935840017627925,
+        "chordal_s": 0.00395241699879989,
+        "geodesic_s": 0.01069554200512357,
+        "chordal_over_naive": 6.658563888282407,
+        "geodesic_over_naive": 18.018581992372688
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.2967563136867687,
+        "chordal_mean": 0.35285541204546667,
+        "geodesic_mean": 0.3380310603805261
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4494759131998354,
+        "chordal_mean": 0.2692972362876083,
+        "geodesic_mean": 0.2630472572637954
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.7202169946871502,
+        "geodesic_vs_naive_fro": 0.7290623479074327,
+        "naive_norm": 0.8988204282942365,
+        "chordal_rel": 0.8012913058217465,
+        "geodesic_rel": 0.8111323741173003
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1025456193981538,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.4577781050365799,
+      "projection_preservation": {
+        "naive_mean": 0.5764063716630232,
+        "chordal_mean": 0.5907903465395924,
+        "geodesic_mean": 0.5803706001773579
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.005485286376651162
+      }
+    },
+    {
+      "d": 128,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.7032970505661077,
+      "timing": {
+        "naive_s": 0.0006890410149935633,
+        "chordal_s": 0.002797916007693857,
+        "geodesic_s": 0.014896709006279707,
+        "chordal_over_naive": 4.060594285116676,
+        "geodesic_over_naive": 21.619480817725872
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.1991680119327959,
+        "chordal_mean": 0.25015185921019467,
+        "geodesic_mean": 0.232322037487037
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31517820537480634,
+        "chordal_mean": 0.1580832069979093,
+        "geodesic_mean": 0.15415029579691614
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0969293428734497,
+        "geodesic_vs_naive_fro": 1.1064162147572862,
+        "naive_norm": 1.268661274663574,
+        "chordal_rel": 0.8646353165972813,
+        "geodesic_rel": 0.8721131769791648
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3818365083135444,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.35125777846415146,
+      "projection_preservation": {
+        "naive_mean": 0.46462026288769553,
+        "chordal_mean": 0.502182736889422,
+        "geodesic_mean": 0.4833598829002252
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.016435892518963508
+      }
+    },
+    {
+      "d": 128,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.43301270189221935,
+      "timing": {
+        "naive_s": 0.002397583011770621,
+        "chordal_s": 0.003715583006851375,
+        "geodesic_s": 0.03447691598557867,
+        "chordal_over_naive": 1.549720276048923,
+        "geodesic_over_naive": 14.379863310808739
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06250000000000003,
+        "chordal_mean": 0.06250000000000958,
+        "geodesic_mean": 0.06250000000000075
+      },
+      "delta_cosine": {
+        "naive_mean": 0.19963539007487044,
+        "chordal_mean": 0.04952150034225857,
+        "geodesic_mean": 0.04938370298112187
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.9347190464510373,
+        "geodesic_vs_naive_fro": 1.934947285305977,
+        "naive_norm": 1.9969614557399076,
+        "chordal_rel": 0.9688314418338092,
+        "geodesic_rel": 0.9689457349035546
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 2.562783805963503,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2103061837294528,
+      "projection_preservation": {
+        "naive_mean": 0.26158341636855786,
+        "chordal_mean": 0.2393668825236282,
+        "geodesic_mean": 0.24979063577432178
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.025837359585438157
+      }
+    },
+    {
+      "d": 128,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.5890150893739515,
+      "timing": {
+        "naive_s": 0.005365874996641651,
+        "chordal_s": 0.0062800000014249235,
+        "geodesic_s": 0.06050979197607376,
+        "chordal_over_naive": 1.1703589825248255,
+        "geodesic_over_naive": 11.276780024496494
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.06250000000000001,
+        "chordal_mean": 0.06250000000000028,
+        "geodesic_mean": 0.06250000000000014
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1401274499981111,
+        "chordal_mean": 0.03437103635562018,
+        "geodesic_mean": 0.03553213104419051
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.7287318059877657,
+        "geodesic_vs_naive_fro": 2.7228191515484266,
+        "naive_norm": 2.8146662588668443,
+        "chordal_rel": 0.9694690435825685,
+        "geodesic_rel": 0.9673683844295649
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.982625857450927,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.21098283525763356,
+      "projection_preservation": {
+        "naive_mean": 0.2559647477196729,
+        "chordal_mean": 0.24855403849218077,
+        "geodesic_mean": 0.2496028265116715
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.031732185997555395
+      }
+    },
+    {
+      "d": 256,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.46138309397369615,
+      "timing": {
+        "naive_s": 0.0013505839742720127,
+        "chordal_s": 0.013987250014906749,
+        "geodesic_s": 0.011574459000257775,
+        "chordal_over_naive": 10.356446012508115,
+        "geodesic_over_naive": 8.569966192954867
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5353322316419444,
+        "chordal_mean": 0.5669168267857524,
+        "geodesic_mean": 0.5669168267857524
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7058031152839406,
+        "chordal_mean": 0.5230891249061613,
+        "geodesic_mean": 0.5230891249061613
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.5370626609512874,
+        "geodesic_vs_naive_fro": 0.5370626609512874,
+        "naive_norm": 0.7999672822043807,
+        "chordal_rel": 0.6713557827907207,
+        "geodesic_rel": 0.6713557827907207
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.6254496507781478,
+      "projection_preservation": {
+        "naive_mean": 0.7592394329631091,
+        "chordal_mean": 0.7527685277259633,
+        "geodesic_mean": 0.7527685277259633
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 7.915982497866032e-15
+      }
+    },
+    {
+      "d": 256,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.4944017143927109,
+      "timing": {
+        "naive_s": 0.0017764999938663095,
+        "chordal_s": 0.013135332992533222,
+        "geodesic_s": 0.02494987501995638,
+        "chordal_over_naive": 7.393939227630372,
+        "geodesic_over_naive": 14.044399159077049
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.272289133614812,
+        "chordal_mean": 0.30468943900398654,
+        "geodesic_mean": 0.2936793692765306
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4492715747202025,
+        "chordal_mean": 0.2530084016597226,
+        "geodesic_mean": 0.2504580917615495
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0565616871339085,
+        "geodesic_vs_naive_fro": 1.061688815496421,
+        "naive_norm": 1.2785132246362594,
+        "chordal_rel": 0.8263987159260736,
+        "geodesic_rel": 0.8304089430115004
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1894493355809703,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3736178253630225,
+      "projection_preservation": {
+        "naive_mean": 0.5433809189295148,
+        "chordal_mean": 0.5507024609417167,
+        "geodesic_mean": 0.5424551706009078
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.015176077298910963
+      }
+    },
+    {
+      "d": 256,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.5011005562329536,
+      "timing": {
+        "naive_s": 0.002292499993927777,
+        "chordal_s": 0.014743292005732656,
+        "geodesic_s": 0.04282099998090416,
+        "chordal_over_naive": 6.431097947561055,
+        "geodesic_over_naive": 18.67873504659787
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.16785318357588652,
+        "chordal_mean": 0.20134859950247655,
+        "geodesic_mean": 0.18951958344062442
+      },
+      "delta_cosine": {
+        "naive_mean": 0.31581330100263394,
+        "chordal_mean": 0.1427910373817605,
+        "geodesic_mean": 0.13751782280922922
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.5908626643543267,
+        "geodesic_vs_naive_fro": 1.6055870600114128,
+        "naive_norm": 1.7835263395145944,
+        "chordal_rel": 0.8919759855003301,
+        "geodesic_rel": 0.9002317624579576
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2637540371312217,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.26436657680096387,
+      "projection_preservation": {
+        "naive_mean": 0.42065912277703943,
+        "chordal_mean": 0.4477156961454784,
+        "geodesic_mean": 0.4353900150850484
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.008445594815990795
+      }
+    },
+    {
+      "d": 256,
+      "N": 25,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.49944467152055344,
+      "timing": {
+        "naive_s": 0.004366167006082833,
+        "chordal_s": 0.022882374993059784,
+        "geodesic_s": 0.06757729197852314,
+        "chordal_over_naive": 5.240838236645699,
+        "geodesic_over_naive": 15.477486748531646
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.09570032646568627,
+        "chordal_mean": 0.12309180759878896,
+        "geodesic_mean": 0.11404558144950469
+      },
+      "delta_cosine": {
+        "naive_mean": 0.20021845719194595,
+        "chordal_mean": 0.07009991093415623,
+        "geodesic_mean": 0.06709259764638022
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.6630925956469382,
+        "geodesic_vs_naive_fro": 2.6784607828831866,
+        "naive_norm": 2.842820373324525,
+        "chordal_rel": 0.9367783559720992,
+        "geodesic_rel": 0.9421843209006101
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.3645337402707867,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.18452121988055836,
+      "projection_preservation": {
+        "naive_mean": 0.31498002117012613,
+        "chordal_mean": 0.3494670503684219,
+        "geodesic_mean": 0.3370212719257734
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.017361430939391635
+      }
+    },
+    {
+      "d": 256,
+      "N": 50,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.30304576336566325,
+      "timing": {
+        "naive_s": 0.010411916999146342,
+        "chordal_s": 0.038825166993774474,
+        "geodesic_s": 0.11145629102247767,
+        "chordal_over_naive": 3.7289162982146027,
+        "geodesic_over_naive": 10.704684932814564
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.03125000000000003,
+        "chordal_mean": 0.0312500000000002,
+        "geodesic_mean": 0.0312500000000001
+      },
+      "delta_cosine": {
+        "naive_mean": 0.1413407041276242,
+        "chordal_mean": 0.024595146469373753,
+        "geodesic_mean": 0.024554229737179866
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 3.920064692600127,
+        "geodesic_vs_naive_fro": 3.9202632788593736,
+        "naive_norm": 3.980738186328942,
+        "chordal_rel": 0.9847582305369426,
+        "geodesic_rel": 0.9848081173292789
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.8645939711516124,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.11101192619476224,
+      "projection_preservation": {
+        "naive_mean": 0.1807522264461841,
+        "chordal_mean": 0.1762027995048511,
+        "geodesic_mean": 0.17689016779511843
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.022501518890774334
+      }
+    },
+    {
+      "d": 512,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.3581141186022204,
+      "timing": {
+        "naive_s": 0.0051633330003824085,
+        "chordal_s": 0.06118266700650565,
+        "geodesic_s": 0.05141370900673792,
+        "chordal_over_naive": 11.849452088791159,
+        "geodesic_over_naive": 9.957465265736317
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5306576504401388,
+        "chordal_mean": 0.5527056451297085,
+        "geodesic_mean": 0.5527056451297085
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7078606875808879,
+        "chordal_mean": 0.5267680727075085,
+        "geodesic_mean": 0.5267680727075085
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 0.764017651570733,
+        "geodesic_vs_naive_fro": 0.764017651570733,
+        "naive_norm": 1.1437555638729457,
+        "chordal_rel": 0.6679903256458423,
+        "geodesic_rel": 0.6679903256458423
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.595944719616542,
+      "projection_preservation": {
+        "naive_mean": 0.749782617735313,
+        "chordal_mean": 0.7439686407648575,
+        "geodesic_mean": 0.7439686407648575
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 1.416576787063201e-14
+      }
+    },
+    {
+      "d": 512,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.35663142403466636,
+      "timing": {
+        "naive_s": 0.0085708329861518,
+        "chordal_s": 0.057695374998729676,
+        "geodesic_s": 0.07804800002486445,
+        "chordal_over_naive": 6.73159482770813,
+        "geodesic_over_naive": 9.106232749018606
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.24846614495614064,
+        "chordal_mean": 0.2735201754287642,
+        "geodesic_mean": 0.26519549366758266
+      },
+      "delta_cosine": {
+        "naive_mean": 0.4477903511394016,
+        "chordal_mean": 0.23404100224578023,
+        "geodesic_mean": 0.23184010977379738
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.524567029440366,
+        "geodesic_vs_naive_fro": 1.529847559188911,
+        "naive_norm": 1.7881379873648242,
+        "chordal_rel": 0.852600325150028,
+        "geodesic_rel": 0.8555534136621328
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1474052113156656,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.3222607590543437,
+      "projection_preservation": {
+        "naive_mean": 0.5144429798098281,
+        "chordal_mean": 0.523083777276803,
+        "geodesic_mean": 0.5154846461454597
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.00758406840119905
+      }
+    },
+    {
+      "d": 512,
+      "N": 10,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.3504759847296391,
+      "timing": {
+        "naive_s": 0.01139479098492302,
+        "chordal_s": 0.07226087502203882,
+        "geodesic_s": 0.10092462500324473,
+        "chordal_over_naive": 6.341570908817069,
+        "geodesic_over_naive": 8.857084358702394
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.14427694770433658,
+        "chordal_mean": 0.16761735715960174,
+        "geodesic_mean": 0.15961764023597352
+      },
+      "delta_cosine": {
+        "naive_mean": 0.3162629910791179,
+        "chordal_mean": 0.13031614593763147,
+        "geodesic_mean": 0.12631346718212952
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.3164097520225733,
+        "geodesic_vs_naive_fro": 2.330713988855784,
+        "naive_norm": 2.5424091575657206,
+        "chordal_rel": 0.9111081688521233,
+        "geodesic_rel": 0.9167344217275286
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.2718153393601832,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.2075772062786994,
+      "projection_preservation": {
+        "naive_mean": 0.3877824113953281,
+        "chordal_mean": 0.40884503063912747,
+        "geodesic_mean": 0.3992868111253154
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.011424703946509204
+      }
+    },
+    {
+      "d": 1024,
+      "N": 2,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.24119845912016444,
+      "timing": {
+        "naive_s": 0.010700374987209216,
+        "chordal_s": 0.1827816670120228,
+        "geodesic_s": 0.1857554159942083,
+        "chordal_over_naive": 17.081800145369897,
+        "geodesic_over_naive": 17.35971087146503
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.5163753144140334,
+        "chordal_mean": 0.5365174530788555,
+        "geodesic_mean": 0.5365174530788555
+      },
+      "delta_cosine": {
+        "naive_mean": 0.7068572849858394,
+        "chordal_mean": 0.5143615814942746,
+        "geodesic_mean": 0.5143615814942746
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 1.0946870152705626,
+        "geodesic_vs_naive_fro": 1.0946870152705626,
+        "naive_norm": 1.5959315743801605,
+        "chordal_rel": 0.68592352757713,
+        "geodesic_rel": 0.68592352757713
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 0.0,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.5614937410165415,
+      "projection_preservation": {
+        "naive_mean": 0.7366779599880813,
+        "chordal_mean": 0.7325662828205165,
+        "geodesic_mean": 0.7325662828205165
+      },
+      "karcher_convergence": {
+        "converged": true,
+        "iterations": 1,
+        "final_grad_norm": 3.9878939839440336e-14
+      }
+    },
+    {
+      "d": 1024,
+      "N": 5,
+      "r": 8,
+      "regime": "ap_packed",
+      "seed": 137,
+      "mean_coherence": 0.2544336026725703,
+      "timing": {
+        "naive_s": 0.01937354198889807,
+        "chordal_s": 0.2717979169974569,
+        "geodesic_s": 0.23404154099989682,
+        "chordal_over_naive": 14.029335325115543,
+        "geodesic_over_naive": 12.08047248840782
+      },
+      "subspace_preservation": {
+        "naive_mean": 0.23524011699530237,
+        "chordal_mean": 0.2513606830572416,
+        "geodesic_mean": 0.2444400863172369
+      },
+      "delta_cosine": {
+        "naive_mean": 0.44695205547966876,
+        "chordal_mean": 0.22396218705727872,
+        "geodesic_mean": 0.22033340996149745
+      },
+      "reconstruction": {
+        "chordal_vs_naive_fro": 2.198717794715835,
+        "geodesic_vs_naive_fro": 2.210491697889281,
+        "naive_norm": 2.5406280687560168,
+        "chordal_rel": 0.8654229329176887,
+        "geodesic_rel": 0.8700571819517122
+      },
+      "chordal_vs_geodesic": {
+        "chordal_distance": 1.1903471078342978,
+        "max_possible": 2.8284271247461903
+      },
+      "energy_in_top_r": 0.28005017015576394,
+      "projection_preservation": {
+        "naive_mean": 0.4935857686569041,
+        "chordal_mean": 0.5017684160465304,
+        "geodesic_mean": 0.4946871435758487
+      },
+      "karcher_convergence": {
+        "converged": false,
+        "iterations": 30,
+        "final_grad_norm": 0.010225983427347924
+      }
+    }
+  ],
+  "kill_criteria": {
+    "k1_quality_killed": false,
+    "k1_mean_advantage_pct": 15.06104093689101,
+    "k2_latency_killed": false,
+    "k3_divergence_killed": true,
+    "k3_mean_chordal_dist": 1.0992445806721822,
+    "verdict": "MIXED"
+  },
+  "elapsed_seconds": 101.97771501541138
+}
