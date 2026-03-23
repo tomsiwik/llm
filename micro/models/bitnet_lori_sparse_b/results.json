@@ -1,0 +1,272 @@
+{
+  "experiment": "bitnet_lori_sparse_b",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "sparsity": 0.9,
+  "dense_iters": 400,
+  "calibration_iters": 200,
+  "sparse_train_iters": 400,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-23 13:12:45",
+  "total_params": 2412820480,
+  "load_time_s": 1.2,
+  "base_ppls": {
+    "python": 2.7411413485606433,
+    "math": 5.53283729711185,
+    "medical": 6.961070940934386,
+    "legal": 21.88669597579324,
+    "creative": 6.336049751074344
+  },
+  "trainable_params": 21626880,
+  "dense_train_results": {
+    "python": {
+      "reloaded": true
+    },
+    "math": {
+      "reloaded": true
+    },
+    "medical": {
+      "reloaded": true
+    },
+    "legal": {
+      "reloaded": true
+    },
+    "creative": {
+      "reloaded": true
+    }
+  },
+  "sparse_train_results": {
+    "python": {
+      "calibration": {
+        "train_time_s": 68.6,
+        "first_50_avg_loss": 1.0278,
+        "last_50_avg_loss": 1.1182,
+        "converged": false,
+        "n_iters": 200
+      },
+      "training": {
+        "train_time_s": 132.7,
+        "first_50_avg_loss": 0.9932,
+        "last_50_avg_loss": 1.0875,
+        "converged": false,
+        "n_iters": 400
+      },
+      "total_train_time_s": 201.3
+    },
+    "math": {
+      "calibration": {
+        "train_time_s": 98.7,
+        "first_50_avg_loss": 1.2961,
+        "last_50_avg_loss": 1.1552,
+        "converged": true,
+        "n_iters": 200
+      },
+      "training": {
+        "train_time_s": 155.6,
+        "first_50_avg_loss": 1.2698,
+        "last_50_avg_loss": 1.2444,
+        "converged": false,
+        "n_iters": 400
+      },
+      "total_train_time_s": 254.3
+    },
+    "medical": {
+      "calibration": {
+        "train_time_s": 50.8,
+        "first_50_avg_loss": 2.8045,
+        "last_50_avg_loss": 1.6224,
+        "converged": true,
+        "n_iters": 200
+      },
+      "training": {
+        "train_time_s": 117.8,
+        "first_50_avg_loss": 2.8287,
+        "last_50_avg_loss": 1.7605,
+        "converged": true,
+        "n_iters": 400
+      },
+      "total_train_time_s": 168.6
+    },
+    "legal": {
+      "calibration": {
+        "train_time_s": 84.9,
+        "first_50_avg_loss": 3.0378,
+        "last_50_avg_loss": 2.7531,
+        "converged": true,
+        "n_iters": 200
+      },
+      "training": {
+        "train_time_s": 170.9,
+        "first_50_avg_loss": 3.0325,
+        "last_50_avg_loss": 2.8628,
+        "converged": true,
+        "n_iters": 400
+      },
+      "total_train_time_s": 255.8
+    },
+    "creative": {
+      "calibration": {
+        "train_time_s": 103.7,
+        "first_50_avg_loss": 1.1691,
+        "last_50_avg_loss": 1.5809,
+        "converged": false,
+        "n_iters": 200
+      },
+      "training": {
+        "train_time_s": 199.8,
+        "first_50_avg_loss": 1.1635,
+        "last_50_avg_loss": 1.5803,
+        "converged": false,
+        "n_iters": 400
+      },
+      "total_train_time_s": 303.5
+    }
+  },
+  "dense_individual_ppls": {
+    "python": 2.1798340901584012,
+    "math": 3.499444237728746,
+    "medical": 4.417909704375248,
+    "legal": 16.37843315501217,
+    "creative": 4.795227465997348
+  },
+  "sparse_individual_ppls": {
+    "python": 2.196203736584974,
+    "math": 3.532322167290857,
+    "medical": 4.4704988412767905,
+    "legal": 16.46124195853069,
+    "creative": 4.844060445135955
+  },
+  "k1_individual_ratios": {
+    "python": 1.0075,
+    "math": 1.0094,
+    "medical": 1.0119,
+    "legal": 1.0051,
+    "creative": 1.0102
+  },
+  "k1_max_ratio": 1.0119,
+  "k1_mean_ratio": 1.0088,
+  "k1_pass": true,
+  "dense_composed_ppls": {
+    "python": 2.5093212927175945,
+    "math": 4.8769354715066715,
+    "medical": 6.092143559470959,
+    "legal": 20.295001815968096,
+    "creative": 5.907433385429925
+  },
+  "sparse_composed_ppls": {
+    "python": 2.522955506842867,
+    "math": 4.92333793443204,
+    "medical": 6.167745248802998,
+    "legal": 20.41819699833644,
+    "creative": 5.9322079291138525
+  },
+  "avg_dense_composed_ppl": 7.9362,
+  "avg_sparse_composed_ppl": 7.9929,
+  "k2_composed_ratios": {
+    "python": 1.0054,
+    "math": 1.0095,
+    "medical": 1.0124,
+    "legal": 1.0061,
+    "creative": 1.0042
+  },
+  "k2_avg_ratio": 1.0071,
+  "k2_pass": false,
+  "dense_cosines": [
+    {
+      "pair": "python-math",
+      "abs_cos": 0.001615
+    },
+    {
+      "pair": "python-medical",
+      "abs_cos": 0.000633
+    },
+    {
+      "pair": "python-legal",
+      "abs_cos": 0.00173
+    },
+    {
+      "pair": "python-creative",
+      "abs_cos": 0.000921
+    },
+    {
+      "pair": "math-medical",
+      "abs_cos": 0.001028
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.000647
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.004203
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.001845
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.000789
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.002193
+    }
+  ],
+  "dense_mean_cos": 0.00156,
+  "sparse_cosines": [
+    {
+      "pair": "python-math",
+      "abs_cos": 0.00341
+    },
+    {
+      "pair": "python-medical",
+      "abs_cos": 0.004406
+    },
+    {
+      "pair": "python-legal",
+      "abs_cos": 0.006147
+    },
+    {
+      "pair": "python-creative",
+      "abs_cos": 0.001356
+    },
+    {
+      "pair": "math-medical",
+      "abs_cos": 0.000962
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.000644
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.002315
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.000367
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.001609
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.001634
+    }
+  ],
+  "sparse_mean_cos": 0.002285,
+  "cos_ratio": 1.4644,
+  "b_params_per_adapter": 10936320,
+  "dense_b_nonzero": 10620423,
+  "sparse_b_nonzero": 1093629,
+  "actual_sparsity": 0.9,
+  "verdict": "KILLED (K2: sparsity hurts composition)"
+}

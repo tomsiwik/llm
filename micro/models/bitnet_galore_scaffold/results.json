@@ -1,0 +1,779 @@
+{
+  "experiment": "bitnet_galore_scaffold",
+  "d_model": 256,
+  "n_layers": 6,
+  "n_heads": 4,
+  "pretrain_steps": 2000,
+  "galore_rank": 64,
+  "galore_update_freq": 200,
+  "lora_rank": 16,
+  "adapter_train_steps": 400,
+  "timestamp": "2026-03-22 21:58:36",
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "n_seeds": 3,
+  "actual_vocab_size": 133,
+  "total_pretrain_sequences": 2500,
+  "total_params": 6395648,
+  "per_seed": [
+    {
+      "seed": 42,
+      "total_params": 6395648,
+      "pretrain": {
+        "standard": {
+          "final_loss": 2.2981,
+          "train_time_s": 37.8
+        },
+        "galore": {
+          "final_loss": 2.0546,
+          "train_time_s": 61.4
+        }
+      },
+      "base_ppls": {
+        "standard": {
+          "python": 10.9,
+          "math": 20.64,
+          "medical": 16.82,
+          "legal": 19.22,
+          "creative": 12.03
+        },
+        "galore": {
+          "python": 9.27,
+          "math": 15.43,
+          "medical": 15.59,
+          "legal": 17.08,
+          "creative": 9.05
+        }
+      },
+      "ppl_ratio": 0.8343,
+      "ternary_ppls": {
+        "standard": {
+          "python": 13.04,
+          "math": 23.2,
+          "medical": 17.13,
+          "legal": 19.21,
+          "creative": 14.31
+        },
+        "galore": {
+          "python": 22.79,
+          "math": 38.42,
+          "medical": 34.89,
+          "legal": 36.2,
+          "creative": 33.67
+        }
+      },
+      "ternary_ppl_ratio": 1.9101,
+      "adapter_training": {
+        "standard": {
+          "python": {
+            "first_50_loss": 3.2511,
+            "last_50_loss": 2.829,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 2.9621,
+            "last_50_loss": 2.639,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.8911,
+            "last_50_loss": 2.6209,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.8425,
+            "last_50_loss": 2.8319,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.322,
+            "last_50_loss": 2.1842,
+            "converged": true,
+            "trainable_params": 6856704
+          }
+        },
+        "galore": {
+          "python": {
+            "first_50_loss": 3.4413,
+            "last_50_loss": 3.1231,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 3.2251,
+            "last_50_loss": 2.7461,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.952,
+            "last_50_loss": 2.6601,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.8717,
+            "last_50_loss": 2.8458,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.3295,
+            "last_50_loss": 2.2368,
+            "converged": false,
+            "trainable_params": 6856704
+          }
+        }
+      },
+      "individual_ppls": {
+        "standard": {
+          "python": {
+            "ppl": 38.79,
+            "improvement_pct": -197.44
+          },
+          "math": {
+            "ppl": 34.25,
+            "improvement_pct": -47.61
+          },
+          "medical": {
+            "ppl": 16.65,
+            "improvement_pct": 2.83
+          },
+          "legal": {
+            "ppl": 20.08,
+            "improvement_pct": -4.53
+          },
+          "creative": {
+            "ppl": 9.19,
+            "improvement_pct": 35.81
+          }
+        },
+        "galore": {
+          "python": {
+            "ppl": 39.14,
+            "improvement_pct": -71.76
+          },
+          "math": {
+            "ppl": 39.17,
+            "improvement_pct": -1.94
+          },
+          "medical": {
+            "ppl": 15.9,
+            "improvement_pct": 54.43
+          },
+          "legal": {
+            "ppl": 20.54,
+            "improvement_pct": 43.27
+          },
+          "creative": {
+            "ppl": 10.54,
+            "improvement_pct": 68.69
+          }
+        }
+      },
+      "composition": {
+        "standard": {
+          "composed_ppls": {
+            "python": 47.58,
+            "math": 38.02,
+            "medical": 16.54,
+            "legal": 18.33,
+            "creative": 9.97
+          },
+          "mean_composed": 26.09,
+          "mean_individual": 23.79,
+          "composition_ratio": 1.0965
+        },
+        "galore": {
+          "composed_ppls": {
+            "python": 57.51,
+            "math": 45.65,
+            "medical": 17.17,
+            "legal": 19.37,
+            "creative": 10.85
+          },
+          "mean_composed": 30.11,
+          "mean_individual": 25.06,
+          "composition_ratio": 1.2016
+        }
+      },
+      "cosines": {
+        "standard": {
+          "mean_abs_cosine": 0.002846,
+          "max_abs_cosine": 0.004999,
+          "all_cosines": [
+            0.002754,
+            0.003451,
+            0.004953,
+            0.001875,
+            0.001192,
+            0.001746,
+            0.004999,
+            0.001698,
+            0.001843,
+            0.003951
+          ]
+        },
+        "galore": {
+          "mean_abs_cosine": 0.003296,
+          "max_abs_cosine": 0.00608,
+          "all_cosines": [
+            0.004378,
+            0.002377,
+            0.002786,
+            0.000309,
+            0.002984,
+            0.004651,
+            0.001523,
+            0.00608,
+            0.003582,
+            0.004287
+          ]
+        }
+      },
+      "kill_criteria": {
+        "k1_ppl_ratio": 1.9101,
+        "k1_pass": true,
+        "k2_comp_ratio_standard": 1.0965,
+        "k2_comp_ratio_galore": 1.2016,
+        "k2_ratio_of_ratios": 1.0959,
+        "k2_pass": true,
+        "overall": "PASS"
+      }
+    },
+    {
+      "seed": 123,
+      "total_params": 6395648,
+      "pretrain": {
+        "standard": {
+          "final_loss": 2.3163,
+          "train_time_s": 38.0
+        },
+        "galore": {
+          "final_loss": 2.0628,
+          "train_time_s": 61.9
+        }
+      },
+      "base_ppls": {
+        "standard": {
+          "python": 11.45,
+          "math": 22.05,
+          "medical": 17.95,
+          "legal": 19.47,
+          "creative": 13.09
+        },
+        "galore": {
+          "python": 9.22,
+          "math": 15.22,
+          "medical": 15.1,
+          "legal": 16.64,
+          "creative": 8.42
+        }
+      },
+      "ppl_ratio": 0.769,
+      "ternary_ppls": {
+        "standard": {
+          "python": 13.28,
+          "math": 24.24,
+          "medical": 18.79,
+          "legal": 20.56,
+          "creative": 15.47
+        },
+        "galore": {
+          "python": 24.51,
+          "math": 32.35,
+          "medical": 26.86,
+          "legal": 26.93,
+          "creative": 27.24
+        }
+      },
+      "ternary_ppl_ratio": 1.4933,
+      "adapter_training": {
+        "standard": {
+          "python": {
+            "first_50_loss": 3.1865,
+            "last_50_loss": 2.8524,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 3.0062,
+            "last_50_loss": 2.6684,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.9056,
+            "last_50_loss": 2.6315,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.8299,
+            "last_50_loss": 2.8296,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.3203,
+            "last_50_loss": 2.3397,
+            "converged": false,
+            "trainable_params": 6856704
+          }
+        },
+        "galore": {
+          "python": {
+            "first_50_loss": 3.5471,
+            "last_50_loss": 3.1928,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 3.2801,
+            "last_50_loss": 2.9312,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.9889,
+            "last_50_loss": 2.6901,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.9082,
+            "last_50_loss": 2.8704,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.4086,
+            "last_50_loss": 2.4377,
+            "converged": false,
+            "trainable_params": 6856704
+          }
+        }
+      },
+      "individual_ppls": {
+        "standard": {
+          "python": {
+            "ppl": 56.24,
+            "improvement_pct": -323.51
+          },
+          "math": {
+            "ppl": 39.85,
+            "improvement_pct": -64.38
+          },
+          "medical": {
+            "ppl": 17.66,
+            "improvement_pct": 5.99
+          },
+          "legal": {
+            "ppl": 21.12,
+            "improvement_pct": -2.71
+          },
+          "creative": {
+            "ppl": 10.13,
+            "improvement_pct": 34.52
+          }
+        },
+        "galore": {
+          "python": {
+            "ppl": 33.68,
+            "improvement_pct": -37.4
+          },
+          "math": {
+            "ppl": 42.48,
+            "improvement_pct": -31.33
+          },
+          "medical": {
+            "ppl": 18.18,
+            "improvement_pct": 32.32
+          },
+          "legal": {
+            "ppl": 20.1,
+            "improvement_pct": 25.36
+          },
+          "creative": {
+            "ppl": 11.75,
+            "improvement_pct": 56.87
+          }
+        }
+      },
+      "composition": {
+        "standard": {
+          "composed_ppls": {
+            "python": 62.36,
+            "math": 45.99,
+            "medical": 18.99,
+            "legal": 21.28,
+            "creative": 10.74
+          },
+          "mean_composed": 31.87,
+          "mean_individual": 29.0,
+          "composition_ratio": 1.099
+        },
+        "galore": {
+          "composed_ppls": {
+            "python": 54.67,
+            "math": 44.33,
+            "medical": 18.14,
+            "legal": 19.77,
+            "creative": 12.25
+          },
+          "mean_composed": 29.83,
+          "mean_individual": 25.24,
+          "composition_ratio": 1.182
+        }
+      },
+      "cosines": {
+        "standard": {
+          "mean_abs_cosine": 0.002142,
+          "max_abs_cosine": 0.004948,
+          "all_cosines": [
+            0.003206,
+            0.000495,
+            0.002381,
+            0.002633,
+            0.004948,
+            0.001679,
+            0.000228,
+            0.001504,
+            0.002166,
+            0.002185
+          ]
+        },
+        "galore": {
+          "mean_abs_cosine": 0.002363,
+          "max_abs_cosine": 0.005824,
+          "all_cosines": [
+            2e-05,
+            0.004197,
+            0.001867,
+            0.001195,
+            0.003742,
+            0.001975,
+            0.000257,
+            0.002153,
+            0.002405,
+            0.005824
+          ]
+        }
+      },
+      "kill_criteria": {
+        "k1_ppl_ratio": 1.4933,
+        "k1_pass": true,
+        "k2_comp_ratio_standard": 1.099,
+        "k2_comp_ratio_galore": 1.182,
+        "k2_ratio_of_ratios": 1.0755,
+        "k2_pass": true,
+        "overall": "PASS"
+      }
+    },
+    {
+      "seed": 456,
+      "total_params": 6395648,
+      "pretrain": {
+        "standard": {
+          "final_loss": 2.2831,
+          "train_time_s": 38.2
+        },
+        "galore": {
+          "final_loss": 2.0518,
+          "train_time_s": 61.5
+        }
+      },
+      "base_ppls": {
+        "standard": {
+          "python": 11.04,
+          "math": 21.32,
+          "medical": 16.82,
+          "legal": 18.34,
+          "creative": 12.17
+        },
+        "galore": {
+          "python": 9.42,
+          "math": 15.47,
+          "medical": 15.57,
+          "legal": 16.95,
+          "creative": 9.01
+        }
+      },
+      "ppl_ratio": 0.8335,
+      "ternary_ppls": {
+        "standard": {
+          "python": 13.73,
+          "math": 22.69,
+          "medical": 17.65,
+          "legal": 20.01,
+          "creative": 15.64
+        },
+        "galore": {
+          "python": 35.08,
+          "math": 44.37,
+          "medical": 49.87,
+          "legal": 48.01,
+          "creative": 33.42
+        }
+      },
+      "ternary_ppl_ratio": 2.349,
+      "adapter_training": {
+        "standard": {
+          "python": {
+            "first_50_loss": 3.2598,
+            "last_50_loss": 2.9614,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 3.0046,
+            "last_50_loss": 2.6599,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.8744,
+            "last_50_loss": 2.6134,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.8251,
+            "last_50_loss": 2.7978,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.2896,
+            "last_50_loss": 2.2869,
+            "converged": false,
+            "trainable_params": 6856704
+          }
+        },
+        "galore": {
+          "python": {
+            "first_50_loss": 3.4813,
+            "last_50_loss": 3.1819,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "math": {
+            "first_50_loss": 3.2872,
+            "last_50_loss": 2.8495,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "medical": {
+            "first_50_loss": 2.9576,
+            "last_50_loss": 2.6771,
+            "converged": true,
+            "trainable_params": 6856704
+          },
+          "legal": {
+            "first_50_loss": 2.9078,
+            "last_50_loss": 2.8673,
+            "converged": false,
+            "trainable_params": 6856704
+          },
+          "creative": {
+            "first_50_loss": 2.3584,
+            "last_50_loss": 2.2922,
+            "converged": false,
+            "trainable_params": 6856704
+          }
+        }
+      },
+      "individual_ppls": {
+        "standard": {
+          "python": {
+            "ppl": 42.64,
+            "improvement_pct": -210.53
+          },
+          "math": {
+            "ppl": 42.21,
+            "improvement_pct": -86.05
+          },
+          "medical": {
+            "ppl": 17.13,
+            "improvement_pct": 2.96
+          },
+          "legal": {
+            "ppl": 19.22,
+            "improvement_pct": 3.96
+          },
+          "creative": {
+            "ppl": 9.66,
+            "improvement_pct": 38.23
+          }
+        },
+        "galore": {
+          "python": {
+            "ppl": 53.62,
+            "improvement_pct": -52.86
+          },
+          "math": {
+            "ppl": 49.81,
+            "improvement_pct": -12.25
+          },
+          "medical": {
+            "ppl": 16.71,
+            "improvement_pct": 66.49
+          },
+          "legal": {
+            "ppl": 21.15,
+            "improvement_pct": 55.94
+          },
+          "creative": {
+            "ppl": 10.16,
+            "improvement_pct": 69.61
+          }
+        }
+      },
+      "composition": {
+        "standard": {
+          "composed_ppls": {
+            "python": 54.25,
+            "math": 45.16,
+            "medical": 17.78,
+            "legal": 19.41,
+            "creative": 10.18
+          },
+          "mean_composed": 29.36,
+          "mean_individual": 26.17,
+          "composition_ratio": 1.1217
+        },
+        "galore": {
+          "composed_ppls": {
+            "python": 62.35,
+            "math": 53.46,
+            "medical": 17.04,
+            "legal": 20.18,
+            "creative": 10.75
+          },
+          "mean_composed": 32.76,
+          "mean_individual": 30.29,
+          "composition_ratio": 1.0814
+        }
+      },
+      "cosines": {
+        "standard": {
+          "mean_abs_cosine": 0.002254,
+          "max_abs_cosine": 0.005546,
+          "all_cosines": [
+            0.002565,
+            0.001357,
+            0.001521,
+            0.005546,
+            0.001376,
+            0.00045,
+            0.00389,
+            0.004619,
+            0.000913,
+            0.000308
+          ]
+        },
+        "galore": {
+          "mean_abs_cosine": 0.002442,
+          "max_abs_cosine": 0.009622,
+          "all_cosines": [
+            0.001717,
+            5e-06,
+            0.002945,
+            0.00089,
+            0.003729,
+            0.000617,
+            0.000451,
+            0.001933,
+            0.002513,
+            0.009622
+          ]
+        }
+      },
+      "kill_criteria": {
+        "k1_ppl_ratio": 2.349,
+        "k1_pass": false,
+        "k2_comp_ratio_standard": 1.1217,
+        "k2_comp_ratio_galore": 1.0814,
+        "k2_ratio_of_ratios": 0.9641,
+        "k2_pass": true,
+        "overall": "KILL"
+      }
+    }
+  ],
+  "aggregate": {
+    "k1_ppl_ratios": [
+      1.9101,
+      1.4933,
+      2.349
+    ],
+    "k1_mean": 1.9175,
+    "k1_std": 0.3494,
+    "k2_ratios": [
+      1.0959,
+      1.0755,
+      0.9641
+    ],
+    "k2_mean": 1.0452,
+    "k2_std": 0.0579,
+    "prequant_ppl_ratios": [
+      0.8343,
+      0.769,
+      0.8335
+    ],
+    "prequant_ppl_ratio_mean": 0.8123,
+    "quant_degradation_standard": [
+      1.0914,
+      1.0992,
+      1.1259
+    ],
+    "quant_degradation_standard_mean": 1.1055,
+    "quant_degradation_galore": [
+      2.4988,
+      2.1345,
+      3.173
+    ],
+    "quant_degradation_galore_mean": 2.6021,
+    "comp_ratio_standard": [
+      1.0965,
+      1.099,
+      1.1217
+    ],
+    "comp_ratio_standard_mean": 1.1057,
+    "comp_ratio_galore": [
+      1.2016,
+      1.182,
+      1.0814
+    ],
+    "comp_ratio_galore_mean": 1.155,
+    "mean_cos_standard": [
+      0.002846,
+      0.002142,
+      0.002254
+    ],
+    "mean_cos_standard_mean": 0.002414,
+    "mean_cos_galore": [
+      0.003296,
+      0.002363,
+      0.002442
+    ],
+    "mean_cos_galore_mean": 0.0027
+  },
+  "kill_criteria": {
+    "k1_ppl_ratio_mean": 1.9175,
+    "k1_ppl_ratio_std": 0.3494,
+    "k1_pass": true,
+    "k2_ratio_of_ratios_mean": 1.0452,
+    "k2_ratio_of_ratios_std": 0.0579,
+    "k2_pass": true,
+    "overall": "PASS"
+  },
+  "total_time_s": 571.3,
+  "total_time_min": 9.5
+}

@@ -1,0 +1,157 @@
+{
+  "experiment": "bitnet_retrain_evolve",
+  "hypothesis": "Retrain-from-scratch + quality gate produces monotonic adapter improvement",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "config": {
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "train_iters": 300,
+    "lr": 0.0001,
+    "seq_len": 256,
+    "n_contrastive": 50,
+    "seed": 42
+  },
+  "base": {
+    "kr_test": {
+      "score": 0.54,
+      "n_correct": 27,
+      "n_total": 50,
+      "mean_margin": 12.973
+    },
+    "val_loss": 3.2815,
+    "val_ppl": 26.62
+  },
+  "original_legal": {
+    "kr_test": {
+      "score": 0.56,
+      "n_correct": 28,
+      "n_total": 50,
+      "mean_margin": 14.26
+    },
+    "val_loss": 4.0533,
+    "val_ppl": 57.59,
+    "note": "Degenerate: trained on 80 copies of same fallback sentence, train_loss=0.000"
+  },
+  "rounds": {
+    "round1": {
+      "train": {
+        "train_loss_final": 2.6874,
+        "n_steps": 300,
+        "time_s": 148.8
+      },
+      "kr_test": {
+        "score": 0.56,
+        "n_correct": 28,
+        "n_total": 50,
+        "mean_margin": 15.6773
+      },
+      "kr_delta": 0.02,
+      "val_loss": 2.5708,
+      "val_ppl": 13.08,
+      "cosines": {
+        "medical": 0.014333,
+        "math": 0.012834,
+        "code": 0.014387,
+        "creative": 0.014132
+      },
+      "max_cosine": 0.014387,
+      "n_train_samples": 800
+    },
+    "round2": {
+      "train": {
+        "train_loss_final": 2.6862,
+        "n_steps": 300,
+        "time_s": 216.2
+      },
+      "kr_test": {
+        "score": 0.56,
+        "n_correct": 28,
+        "n_total": 50,
+        "mean_margin": 15.6118
+      },
+      "kr_delta": 0.02,
+      "val_loss": 2.5712,
+      "val_ppl": 13.08,
+      "cosines": {
+        "medical": 0.014571,
+        "math": 0.012954,
+        "code": 0.015773,
+        "creative": 0.01286
+      },
+      "max_cosine": 0.015773,
+      "n_train_samples": 1200
+    },
+    "round3": {
+      "train": {
+        "train_loss_final": 2.6866,
+        "n_steps": 300,
+        "time_s": 214.7
+      },
+      "kr_test": {
+        "score": 0.56,
+        "n_correct": 28,
+        "n_total": 50,
+        "mean_margin": 15.4871
+      },
+      "kr_delta": 0.02,
+      "val_loss": 2.5713,
+      "val_ppl": 13.08,
+      "cosines": {
+        "medical": 0.013616,
+        "math": 0.014222,
+        "code": 0.015835,
+        "creative": 0.014082
+      },
+      "max_cosine": 0.015835,
+      "n_train_samples": 1600
+    }
+  },
+  "quality_gate": {
+    "round1": {
+      "kr_delta": 0.02,
+      "kr_gate_pass": false,
+      "max_cosine": 0.014387,
+      "cos_gate_pass": false,
+      "gate_pass": false
+    },
+    "round2": {
+      "kr_delta": 0.02,
+      "kr_gate_pass": false,
+      "max_cosine": 0.015773,
+      "cos_gate_pass": false,
+      "gate_pass": false
+    },
+    "round3": {
+      "kr_delta": 0.02,
+      "kr_gate_pass": false,
+      "max_cosine": 0.015835,
+      "cos_gate_pass": false,
+      "gate_pass": false
+    }
+  },
+  "analysis": {
+    "monotonic_kr": true,
+    "all_beat_original": false,
+    "all_beat_base": true,
+    "monotonic_ppl": true,
+    "kr_scores": {
+      "base": 0.54,
+      "original": 0.56,
+      "round1": 0.56,
+      "round2": 0.56,
+      "round3": 0.56
+    }
+  },
+  "kill_criteria": {
+    "K1": {
+      "pass": false,
+      "description": "retrained better than original on KR-Test"
+    },
+    "K2": {
+      "pass": false,
+      "description": "quality gate distinguishes good from bad"
+    }
+  },
+  "verdict": "KILLED (K1: retraining does not help)",
+  "runtime_s": 760.5
+}

@@ -1,0 +1,162 @@
+{
+  "experiment": "bitnet_clone_compete_powered",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "target_domain": "legal",
+  "cold_start_train_steps": 400,
+  "tournament_target_n": 250,
+  "timestamp": "2026-03-22 04:27:17",
+  "cold_start": {
+    "train_steps": 400,
+    "train_time_s": 187.1,
+    "pre_train_ppl": 20.7844,
+    "post_train_ppl": 13.8737,
+    "first_50_loss": 3.0884,
+    "last_50_loss": 2.7062
+  },
+  "arm_ppls": {
+    "base": 20.7844,
+    "original": 15.8157,
+    "clone_v2": 13.0375,
+    "cold_start": 13.8737
+  },
+  "tournament_n_available": 500,
+  "tournament_clone_vs_original": {
+    "label_a": "original",
+    "label_b": "clone_v2",
+    "n_total": 500,
+    "n_decisive": 419,
+    "a_wins": 298,
+    "b_wins": 121,
+    "ties": 81,
+    "win_rate_b": 0.2888,
+    "win_rate_ci_95": [
+      0.2458,
+      0.3348
+    ],
+    "binom_p": 0.0,
+    "binom_significant": true,
+    "wilcoxon_stat": 36017.5,
+    "wilcoxon_p": 0.001298,
+    "t_stat": 4.3065,
+    "t_p": 2e-05,
+    "cohens_d": 0.1926,
+    "mean_ppl_diff": 0.628,
+    "ppl_diff_ci_95": [
+      0.3415,
+      0.9146
+    ],
+    "aggregate_ppl_a": 13.8641,
+    "aggregate_ppl_b": 13.236
+  },
+  "tournament_cold_vs_original": {
+    "label_a": "original",
+    "label_b": "cold_start",
+    "n_total": 500,
+    "n_decisive": 348,
+    "a_wins": 183,
+    "b_wins": 165,
+    "ties": 152,
+    "win_rate_b": 0.4741,
+    "win_rate_ci_95": [
+      0.4207,
+      0.5281
+    ],
+    "binom_p": 0.36216,
+    "binom_significant": false,
+    "wilcoxon_stat": 24163.5,
+    "wilcoxon_p": 0.000963,
+    "t_stat": 5.9798,
+    "t_p": 0.0,
+    "cohens_d": 0.2674,
+    "mean_ppl_diff": 0.6347,
+    "ppl_diff_ci_95": [
+      0.4262,
+      0.8432
+    ],
+    "aggregate_ppl_a": 13.8641,
+    "aggregate_ppl_b": 13.2294
+  },
+  "tournament_clone_vs_cold_start": {
+    "label_a": "cold_start",
+    "label_b": "clone_v2",
+    "n_total": 500,
+    "n_decisive": 373,
+    "a_wins": 266,
+    "b_wins": 107,
+    "ties": 127,
+    "win_rate_b": 0.2869,
+    "win_rate_ci_95": [
+      0.2415,
+      0.3357
+    ],
+    "binom_p": 0.0,
+    "binom_significant": true,
+    "wilcoxon_stat": 24255.0,
+    "wilcoxon_p": 0.0,
+    "t_stat": -0.0827,
+    "t_p": 0.934091,
+    "cohens_d": -0.0037,
+    "mean_ppl_diff": -0.0066,
+    "ppl_diff_ci_95": [
+      -0.1644,
+      0.1511
+    ],
+    "aggregate_ppl_a": 13.2294,
+    "aggregate_ppl_b": 13.236
+  },
+  "composition_quality": {
+    "original": {
+      "python": 2.7425,
+      "math": 4.4154,
+      "medical": 6.2727,
+      "legal": 19.2781,
+      "creative": 5.8678
+    },
+    "clone_v2": {
+      "python": 2.7399,
+      "math": 4.4109,
+      "medical": 6.27,
+      "legal": 19.108,
+      "creative": 5.8558
+    },
+    "cold_start": {
+      "python": 2.7482,
+      "math": 4.4179,
+      "medical": 6.2891,
+      "legal": 19.2529,
+      "creative": 5.8766
+    }
+  },
+  "regression_clone_vs_original": {
+    "python": -0.095,
+    "math": -0.102,
+    "medical": -0.043,
+    "legal": -0.882,
+    "creative": -0.205
+  },
+  "regression_cold_vs_original": {
+    "python": 0.208,
+    "math": 0.057,
+    "medical": 0.261,
+    "legal": -0.131,
+    "creative": 0.15
+  },
+  "max_regression_clone_pct": 0,
+  "max_regression_cold_pct": 0.261,
+  "k1_win_rate": 0.2888,
+  "k1_p_value": 0.0,
+  "k1_pass": false,
+  "k1_kill": false,
+  "k2_p_value": 0.001298,
+  "k2_pass": true,
+  "k3_clone_vs_cold_p": 0.0,
+  "k3_clone_vs_cold_win_rate": 0.2869,
+  "k3_cold_matches_clone": false,
+  "k3_pass": true,
+  "cold_start_also_beats_original": false,
+  "verdict": "INCONCLUSIVE",
+  "verdict_detail": "Mixed results, see detailed stats",
+  "all_k_pass": false,
+  "total_time_s": 703.6
+}

@@ -1,0 +1,206 @@
+{
+  "experiment": "bitnet_effective_delta_cosine",
+  "timestamp": "2026-03-22 21:16:46",
+  "adapter_source": "bitnet_2b_real_composition (200 steps, r=16)",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "n_pairs": 10,
+  "dimensions": {
+    "D_raw": 21626880,
+    "D_effective": 2084044800,
+    "D_a": 10690560,
+    "D_b": 10936320,
+    "ratio_eff_over_raw_dim": 96.4
+  },
+  "pairs": [
+    {
+      "pair": "medical-code",
+      "cos_raw": 0.00179495,
+      "cos_effective": 0.0124878,
+      "cos_a_only": 0.00212521,
+      "cos_b_only": 0.00057617,
+      "a_coherence_mean": 0.464138,
+      "ratio_eff_over_raw": 6.9572
+    },
+    {
+      "pair": "medical-math",
+      "cos_raw": 0.00263197,
+      "cos_effective": 0.0151609,
+      "cos_a_only": 0.00294687,
+      "cos_b_only": 0.00149212,
+      "a_coherence_mean": 0.476748,
+      "ratio_eff_over_raw": 5.7603
+    },
+    {
+      "pair": "medical-legal",
+      "cos_raw": 8.731e-05,
+      "cos_effective": 0.01350961,
+      "cos_a_only": 0.00013198,
+      "cos_b_only": 7.585e-05,
+      "a_coherence_mean": 0.514988,
+      "ratio_eff_over_raw": 154.7335
+    },
+    {
+      "pair": "medical-creative",
+      "cos_raw": 0.00077557,
+      "cos_effective": 0.0131223,
+      "cos_a_only": 0.00079813,
+      "cos_b_only": 0.00069487,
+      "a_coherence_mean": 0.458425,
+      "ratio_eff_over_raw": 16.9196
+    },
+    {
+      "pair": "code-math",
+      "cos_raw": 7.178e-05,
+      "cos_effective": 0.0188659,
+      "cos_a_only": 9.05e-05,
+      "cos_b_only": 1.91e-06,
+      "a_coherence_mean": 0.395609,
+      "ratio_eff_over_raw": 262.8167
+    },
+    {
+      "pair": "code-legal",
+      "cos_raw": 0.0023032,
+      "cos_effective": 0.01986689,
+      "cos_a_only": 0.00224575,
+      "cos_b_only": 0.0025305,
+      "a_coherence_mean": 0.42287,
+      "ratio_eff_over_raw": 8.6258
+    },
+    {
+      "pair": "code-creative",
+      "cos_raw": 0.00141115,
+      "cos_effective": 0.02200128,
+      "cos_a_only": 0.00145564,
+      "cos_b_only": 0.00123703,
+      "a_coherence_mean": 0.397108,
+      "ratio_eff_over_raw": 15.591
+    },
+    {
+      "pair": "math-legal",
+      "cos_raw": 0.00028003,
+      "cos_effective": 0.02391344,
+      "cos_a_only": 0.0003202,
+      "cos_b_only": 0.00012378,
+      "a_coherence_mean": 0.444608,
+      "ratio_eff_over_raw": 85.3965
+    },
+    {
+      "pair": "math-creative",
+      "cos_raw": 0.0004159,
+      "cos_effective": 0.02537796,
+      "cos_a_only": 0.000551,
+      "cos_b_only": 0.00010243,
+      "a_coherence_mean": 0.417379,
+      "ratio_eff_over_raw": 61.0197
+    },
+    {
+      "pair": "legal-creative",
+      "cos_raw": 5.94e-05,
+      "cos_effective": 0.02402663,
+      "cos_a_only": 3.396e-05,
+      "cos_b_only": 0.00042011,
+      "a_coherence_mean": 0.437173,
+      "ratio_eff_over_raw": 404.5014
+    }
+  ],
+  "statistics": {
+    "raw": {
+      "mean": 0.00098313,
+      "max": 0.00263197,
+      "min": 5.94e-05
+    },
+    "effective": {
+      "mean": 0.01883327,
+      "max": 0.02537796,
+      "min": 0.0124878
+    },
+    "a_only": {
+      "mean": 0.00106992,
+      "max": 0.00294687,
+      "min": 3.396e-05
+    },
+    "b_only": {
+      "mean": 0.00072548,
+      "max": 0.0025305,
+      "min": 1.91e-06
+    },
+    "ratio_eff_over_raw": {
+      "mean": 102.2322,
+      "max": 404.5014,
+      "min": 5.7603
+    }
+  },
+  "b_condition_numbers": {
+    "medical": {
+      "mean": 16.8,
+      "max": 65.18,
+      "median": 12.65
+    },
+    "code": {
+      "mean": 10.76,
+      "max": 34.62,
+      "median": 7.73
+    },
+    "math": {
+      "mean": 11.46,
+      "max": 43.99,
+      "median": 10.1
+    },
+    "legal": {
+      "mean": 10.06,
+      "max": 40.49,
+      "median": 8.25
+    },
+    "creative": {
+      "mean": 11.17,
+      "max": 32.58,
+      "median": 10.2
+    }
+  },
+  "layer_analysis": [
+    {
+      "layer": 0,
+      "module": "self_attn.q_proj",
+      "mean_cos_eff": 0.0048767,
+      "max_cos_eff": 0.01678512,
+      "mean_a_coherence": 0.166749
+    },
+    {
+      "layer": 14,
+      "module": "self_attn.q_proj",
+      "mean_cos_eff": 0.00102117,
+      "max_cos_eff": 0.00241562,
+      "mean_a_coherence": 0.151191
+    },
+    {
+      "layer": 29,
+      "module": "self_attn.q_proj",
+      "mean_cos_eff": 0.00221141,
+      "max_cos_eff": 0.00735989,
+      "mean_a_coherence": 0.187347
+    }
+  ],
+  "kill_criteria": {
+    "K1_max_eff_cosine": {
+      "threshold": 0.05,
+      "measured": 0.02537796,
+      "margin": 2.0,
+      "result": "PASS"
+    },
+    "K2_max_ratio": {
+      "threshold": 5.0,
+      "measured": 404.5014,
+      "margin": 0.0,
+      "result": "FAIL"
+    }
+  },
+  "verdict": "KILLED",
+  "decorrelation_filter": 0.1,
+  "runtime_seconds": 478.4
+}

@@ -1,0 +1,149 @@
+{
+  "experiment": "bitnet_monolithic_rank_matched",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 80,
+  "monolithic_steps": 2000,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-22 01:33:35",
+  "design": "rank_matched_total_params",
+  "prior_experiment": "bitnet_sole_vs_monolithic",
+  "sole_routed_ppls_prior": {
+    "medical": 8.0026,
+    "code": 2.7622,
+    "math": 3.1184,
+    "legal": 17.9459,
+    "creative": 3.1679
+  },
+  "base_ppls_prior": {
+    "medical": 15.7992,
+    "code": 3.5189,
+    "math": 4.7385,
+    "legal": 25.5192,
+    "creative": 3.6013
+  },
+  "mono_r16_ppls_prior": {
+    "medical": 8.358,
+    "code": 2.8416,
+    "math": 3.267,
+    "legal": 19.6702,
+    "creative": 3.0022
+  },
+  "sole_total_params": 108134400,
+  "load_time_s": 1.2,
+  "n_train_samples": 3700,
+  "base_ppls_verified": {
+    "medical": 15.7992,
+    "code": 3.5189,
+    "math": 4.7385,
+    "legal": 25.5192,
+    "creative": 3.6013
+  },
+  "trainable_params_r80": 108134400,
+  "param_ratio_vs_sole": 1.0,
+  "train_result": {
+    "label": "MONO-r80",
+    "n_steps": 2000,
+    "train_time_s": 1190.7,
+    "first_50_avg_loss": 1.8511,
+    "last_50_avg_loss": 1.4635,
+    "converged": true
+  },
+  "train_losses_sampled": [
+    1.7061,
+    1.716,
+    1.3998,
+    1.0188,
+    0.8746,
+    0.308,
+    0.8349,
+    2.7407,
+    1.0807,
+    2.6682,
+    1.0636,
+    0.6498,
+    1.1809,
+    1.2603,
+    1.5509,
+    0.6752,
+    2.4293,
+    1.0714,
+    1.3506,
+    1.1894
+  ],
+  "mono_r80_ppls": {
+    "medical": 8.2525,
+    "code": 2.8209,
+    "math": 3.2325,
+    "legal": 19.0429,
+    "creative": 2.9792
+  },
+  "domain_comparison": {
+    "medical": {
+      "base_ppl": 15.7992,
+      "sole_routed_ppl": 8.0026,
+      "mono_r16_ppl": 8.358,
+      "mono_r80_ppl": 8.2525,
+      "winner_vs_sole": "SOLE",
+      "gap_pct_vs_sole": -3.03,
+      "mono_r80_vs_r16_pct": -1.26,
+      "mono_r80_vs_base_pct": 47.77
+    },
+    "code": {
+      "base_ppl": 3.5189,
+      "sole_routed_ppl": 2.7622,
+      "mono_r16_ppl": 2.8416,
+      "mono_r80_ppl": 2.8209,
+      "winner_vs_sole": "SOLE",
+      "gap_pct_vs_sole": -2.08,
+      "mono_r80_vs_r16_pct": -0.73,
+      "mono_r80_vs_base_pct": 19.84
+    },
+    "math": {
+      "base_ppl": 4.7385,
+      "sole_routed_ppl": 3.1184,
+      "mono_r16_ppl": 3.267,
+      "mono_r80_ppl": 3.2325,
+      "winner_vs_sole": "SOLE",
+      "gap_pct_vs_sole": -3.53,
+      "mono_r80_vs_r16_pct": -1.06,
+      "mono_r80_vs_base_pct": 31.78
+    },
+    "legal": {
+      "base_ppl": 25.5192,
+      "sole_routed_ppl": 17.9459,
+      "mono_r16_ppl": 19.6702,
+      "mono_r80_ppl": 19.0429,
+      "winner_vs_sole": "SOLE",
+      "gap_pct_vs_sole": -5.76,
+      "mono_r80_vs_r16_pct": -3.19,
+      "mono_r80_vs_base_pct": 25.38
+    },
+    "creative": {
+      "base_ppl": 3.6013,
+      "sole_routed_ppl": 3.1679,
+      "mono_r16_ppl": 3.0022,
+      "mono_r80_ppl": 2.9792,
+      "winner_vs_sole": "MONO-80",
+      "gap_pct_vs_sole": 6.33,
+      "mono_r80_vs_r16_pct": -0.77,
+      "mono_r80_vs_base_pct": 17.27
+    }
+  },
+  "sole_wins": 4,
+  "mono_r80_wins": 1,
+  "avg_sole_routed_ppl": 6.9994,
+  "avg_mono_r80_ppl": 7.2656,
+  "avg_mono_r16_ppl": 7.4278,
+  "avg_base_ppl": 10.6354,
+  "overall_gap_pct": -3.66,
+  "r80_vs_r16_gap_pct": -2.18,
+  "k1_killed": false,
+  "k1_description": "Mono r=80 wins 1/5 domains (threshold: >=3 to kill)",
+  "verdict": "SUPPORTED"
+}

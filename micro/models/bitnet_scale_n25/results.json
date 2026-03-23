@@ -1,0 +1,1849 @@
+{
+  "experiment": "bitnet_scale_n25",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_steps": 400,
+  "seed": 42,
+  "domain_names": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative",
+    "sql",
+    "javascript",
+    "physics",
+    "chemistry",
+    "science",
+    "wikitext",
+    "finance",
+    "cooking",
+    "health",
+    "dialogue"
+  ],
+  "existing_cap_names": [
+    "reasoning",
+    "instruction",
+    "conciseness",
+    "safety"
+  ],
+  "new_cap_names": [
+    "multilingual",
+    "coding_style",
+    "summarization",
+    "debate",
+    "translation",
+    "formal_writing"
+  ],
+  "all_names": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative",
+    "sql",
+    "javascript",
+    "physics",
+    "chemistry",
+    "science",
+    "wikitext",
+    "finance",
+    "cooking",
+    "health",
+    "dialogue",
+    "reasoning",
+    "instruction",
+    "conciseness",
+    "safety",
+    "multilingual",
+    "coding_style",
+    "summarization",
+    "debate",
+    "translation",
+    "formal_writing"
+  ],
+  "n_domains": 15,
+  "n_existing_caps": 4,
+  "n_new_caps": 6,
+  "n_total": 25,
+  "timestamp": "2026-03-21 13:22:14",
+  "base_ppls": {
+    "medical": 18.9752,
+    "code": 3.7802,
+    "math": 4.5409,
+    "legal": 26.9342,
+    "creative": 3.514,
+    "sql": 12.4723,
+    "javascript": 18.2939,
+    "physics": 73.6998,
+    "chemistry": 9.2106,
+    "science": 45.3109,
+    "wikitext": 25.361,
+    "finance": 24.308,
+    "cooking": 8.4266,
+    "health": 10.0711,
+    "dialogue": 5.5738,
+    "reasoning": 8.629,
+    "instruction": 12.2044,
+    "conciseness": 33.0428,
+    "safety": 19.0294,
+    "multilingual": 32.0822,
+    "coding_style": 3.376,
+    "summarization": 39.7213,
+    "debate": 34.2393,
+    "translation": 55.5932,
+    "formal_writing": 25.5809
+  },
+  "trainable_params": 21626880,
+  "train_results": {
+    "multilingual": {
+      "train_time_s": 161.3,
+      "first_50_loss": 3.1175,
+      "last_50_loss": 3.2147,
+      "converged": false
+    },
+    "coding_style": {
+      "train_time_s": 149.8,
+      "first_50_loss": 1.1208,
+      "last_50_loss": 0.9697,
+      "converged": true
+    },
+    "summarization": {
+      "train_time_s": 94.9,
+      "first_50_loss": 3.3657,
+      "last_50_loss": 2.7996,
+      "converged": true
+    },
+    "debate": {
+      "train_time_s": 137.8,
+      "first_50_loss": 3.0981,
+      "last_50_loss": 3.1901,
+      "converged": false
+    },
+    "translation": {
+      "train_time_s": 123.5,
+      "first_50_loss": 3.6825,
+      "last_50_loss": 2.854,
+      "converged": true
+    },
+    "formal_writing": {
+      "train_time_s": 158.3,
+      "first_50_loss": 2.8264,
+      "last_50_loss": 2.5562,
+      "converged": true
+    }
+  },
+  "individual_ppls": {
+    "medical": 9.0754,
+    "code": 2.9659,
+    "math": 3.0757,
+    "legal": 18.9434,
+    "creative": 3.1192,
+    "sql": 5.0703,
+    "javascript": 13.1562,
+    "physics": 20.3082,
+    "chemistry": 7.2232,
+    "science": 23.0564,
+    "wikitext": 13.516,
+    "finance": 18.6486,
+    "cooking": 5.3323,
+    "health": 6.9858,
+    "dialogue": 4.9466,
+    "reasoning": 3.5895,
+    "instruction": 4.7536,
+    "conciseness": 9.4694,
+    "safety": 9.3094,
+    "multilingual": 18.5609,
+    "coding_style": 2.8653,
+    "summarization": 18.9538,
+    "debate": 24.7381,
+    "translation": 16.7066,
+    "formal_writing": 12.9298
+  },
+  "n15_composed_ppls": {
+    "medical": 17.8454,
+    "code": 3.7014,
+    "math": 4.4537,
+    "legal": 26.2907,
+    "creative": 3.4636,
+    "sql": 11.8047,
+    "javascript": 17.9423,
+    "physics": 63.8568,
+    "chemistry": 8.9847,
+    "science": 41.8778,
+    "wikitext": 24.661,
+    "finance": 23.8408,
+    "cooking": 8.2794,
+    "health": 9.8247,
+    "dialogue": 5.4957
+  },
+  "n15_best_individual": 2.9659,
+  "n15_avg_composed": 18.1548,
+  "n15_composition_ratio": 6.1212,
+  "n25_composed_ppls": {
+    "medical": 18.3819,
+    "code": 3.744,
+    "math": 4.5053,
+    "legal": 26.5896,
+    "creative": 3.4913,
+    "sql": 12.1581,
+    "javascript": 18.1458,
+    "physics": 68.7613,
+    "chemistry": 9.0982,
+    "science": 43.5612,
+    "wikitext": 25.0388,
+    "finance": 24.0643,
+    "cooking": 8.3606,
+    "health": 9.9597,
+    "dialogue": 5.5422,
+    "reasoning": 8.5739,
+    "instruction": 11.8366,
+    "conciseness": 32.1567,
+    "safety": 18.7841,
+    "multilingual": 31.7203,
+    "coding_style": 3.3558,
+    "summarization": 38.4221,
+    "debate": 33.643,
+    "translation": 54.3272,
+    "formal_writing": 25.3156
+  },
+  "n25_best_individual": 2.8653,
+  "n25_avg_composed": 21.5815,
+  "n25_composition_ratio": 7.532,
+  "composed_base_ratios": {
+    "medical": 0.9687,
+    "code": 0.9904,
+    "math": 0.9922,
+    "legal": 0.9872,
+    "creative": 0.9935,
+    "sql": 0.9748,
+    "javascript": 0.9919,
+    "physics": 0.933,
+    "chemistry": 0.9878,
+    "science": 0.9614,
+    "wikitext": 0.9873,
+    "finance": 0.99,
+    "cooking": 0.9922,
+    "health": 0.9889,
+    "dialogue": 0.9943,
+    "reasoning": 0.9936,
+    "instruction": 0.9699,
+    "conciseness": 0.9732,
+    "safety": 0.9871,
+    "multilingual": 0.9887,
+    "coding_style": 0.994,
+    "summarization": 0.9673,
+    "debate": 0.9826,
+    "translation": 0.9772,
+    "formal_writing": 0.9896
+  },
+  "avg_composed_base_ratio": 0.9823,
+  "cosines": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.002082,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 8.3e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.00261,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-creative",
+      "abs_cos": 0.001355,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-sql",
+      "abs_cos": 0.000467,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-javascript",
+      "abs_cos": 0.000572,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-physics",
+      "abs_cos": 0.000101,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-chemistry",
+      "abs_cos": 0.000424,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-science",
+      "abs_cos": 0.000112,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-wikitext",
+      "abs_cos": 0.000384,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-finance",
+      "abs_cos": 0.000258,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-cooking",
+      "abs_cos": 0.000221,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-health",
+      "abs_cos": 0.000203,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-dialogue",
+      "abs_cos": 0.000124,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "medical-reasoning",
+      "abs_cos": 7.1e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-instruction",
+      "abs_cos": 1.4e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-conciseness",
+      "abs_cos": 0.000535,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-safety",
+      "abs_cos": 0.000148,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-multilingual",
+      "abs_cos": 1.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-coding_style",
+      "abs_cos": 0.000128,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-summarization",
+      "abs_cos": 0.000588,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-debate",
+      "abs_cos": 0.000345,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-translation",
+      "abs_cos": 5.4e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "medical-formal_writing",
+      "abs_cos": 0.000191,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.004511,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.003272,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-creative",
+      "abs_cos": 0.001388,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-sql",
+      "abs_cos": 1.6e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-javascript",
+      "abs_cos": 9.7e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-physics",
+      "abs_cos": 1.7e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-chemistry",
+      "abs_cos": 0.000116,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-science",
+      "abs_cos": 2.2e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-wikitext",
+      "abs_cos": 0.000254,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-finance",
+      "abs_cos": 0.00011,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-cooking",
+      "abs_cos": 1.4e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-health",
+      "abs_cos": 0.000101,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-dialogue",
+      "abs_cos": 9.3e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "code-reasoning",
+      "abs_cos": 3.1e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-instruction",
+      "abs_cos": 7.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-conciseness",
+      "abs_cos": 0.000124,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-safety",
+      "abs_cos": 3.6e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-multilingual",
+      "abs_cos": 8e-06,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-coding_style",
+      "abs_cos": 0.000245,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-summarization",
+      "abs_cos": 0.000164,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-debate",
+      "abs_cos": 0.000126,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-translation",
+      "abs_cos": 9.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "code-formal_writing",
+      "abs_cos": 0.000132,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.002084,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-creative",
+      "abs_cos": 0.000194,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-sql",
+      "abs_cos": 3.2e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-javascript",
+      "abs_cos": 0.000215,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-physics",
+      "abs_cos": 0.000662,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-chemistry",
+      "abs_cos": 0.000144,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-science",
+      "abs_cos": 6.9e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-wikitext",
+      "abs_cos": 0.000353,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-finance",
+      "abs_cos": 3.9e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-cooking",
+      "abs_cos": 0.000327,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-health",
+      "abs_cos": 0.000157,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-dialogue",
+      "abs_cos": 0.000131,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "math-reasoning",
+      "abs_cos": 6.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-instruction",
+      "abs_cos": 0.000381,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-conciseness",
+      "abs_cos": 0.000271,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-safety",
+      "abs_cos": 0.000302,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-multilingual",
+      "abs_cos": 0.000298,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-coding_style",
+      "abs_cos": 4.8e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-summarization",
+      "abs_cos": 9e-06,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-debate",
+      "abs_cos": 0.000212,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-translation",
+      "abs_cos": 8.8e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "math-formal_writing",
+      "abs_cos": 0.000351,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-creative",
+      "abs_cos": 0.00261,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-sql",
+      "abs_cos": 0.000182,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-javascript",
+      "abs_cos": 0.000358,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-physics",
+      "abs_cos": 8.6e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-chemistry",
+      "abs_cos": 0.00018,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-science",
+      "abs_cos": 0.000705,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-wikitext",
+      "abs_cos": 0.000265,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-finance",
+      "abs_cos": 3.7e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-cooking",
+      "abs_cos": 0.000549,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-health",
+      "abs_cos": 8.4e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-dialogue",
+      "abs_cos": 0.000347,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "legal-reasoning",
+      "abs_cos": 0.000225,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-instruction",
+      "abs_cos": 0.000345,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-conciseness",
+      "abs_cos": 9.9e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-safety",
+      "abs_cos": 2e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-multilingual",
+      "abs_cos": 0.000374,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-coding_style",
+      "abs_cos": 1.5e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-summarization",
+      "abs_cos": 0.000331,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-debate",
+      "abs_cos": 0.0004,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-translation",
+      "abs_cos": 8e-06,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "legal-formal_writing",
+      "abs_cos": 0.000338,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-sql",
+      "abs_cos": 0.000145,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-javascript",
+      "abs_cos": 7.4e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-physics",
+      "abs_cos": 0.000151,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-chemistry",
+      "abs_cos": 5.6e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-science",
+      "abs_cos": 0.000506,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-wikitext",
+      "abs_cos": 0.000273,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-finance",
+      "abs_cos": 1.1e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-cooking",
+      "abs_cos": 0.000184,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-health",
+      "abs_cos": 0.000201,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-dialogue",
+      "abs_cos": 9.4e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "creative-reasoning",
+      "abs_cos": 0.000184,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-instruction",
+      "abs_cos": 0.00013,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-conciseness",
+      "abs_cos": 0.000101,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-safety",
+      "abs_cos": 0.000153,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-multilingual",
+      "abs_cos": 4.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-coding_style",
+      "abs_cos": 8e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-summarization",
+      "abs_cos": 0.000106,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-debate",
+      "abs_cos": 1e-06,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-translation",
+      "abs_cos": 0.000287,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "creative-formal_writing",
+      "abs_cos": 1.3e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-javascript",
+      "abs_cos": 0.000224,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-physics",
+      "abs_cos": 0.000713,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-chemistry",
+      "abs_cos": 0.004152,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-science",
+      "abs_cos": 0.000195,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-wikitext",
+      "abs_cos": 0.002424,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-finance",
+      "abs_cos": 6.8e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-cooking",
+      "abs_cos": 0.000526,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-health",
+      "abs_cos": 0.000466,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-dialogue",
+      "abs_cos": 0.002345,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "sql-reasoning",
+      "abs_cos": 0.000961,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-instruction",
+      "abs_cos": 0.000178,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-conciseness",
+      "abs_cos": 0.000911,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-safety",
+      "abs_cos": 9.6e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-multilingual",
+      "abs_cos": 0.000133,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-coding_style",
+      "abs_cos": 0.000422,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-summarization",
+      "abs_cos": 0.000243,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-debate",
+      "abs_cos": 0.000412,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-translation",
+      "abs_cos": 0.000117,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "sql-formal_writing",
+      "abs_cos": 0.000179,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-physics",
+      "abs_cos": 0.002545,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-chemistry",
+      "abs_cos": 0.001102,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-science",
+      "abs_cos": 0.003335,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-wikitext",
+      "abs_cos": 0.00014,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-finance",
+      "abs_cos": 0.000994,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-cooking",
+      "abs_cos": 0.003038,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-health",
+      "abs_cos": 0.0035,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-dialogue",
+      "abs_cos": 0.000567,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "javascript-reasoning",
+      "abs_cos": 0.000104,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-instruction",
+      "abs_cos": 0.000732,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-conciseness",
+      "abs_cos": 0.000591,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-safety",
+      "abs_cos": 0.000392,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-multilingual",
+      "abs_cos": 0.000126,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-coding_style",
+      "abs_cos": 0.000211,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-summarization",
+      "abs_cos": 0.000414,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-debate",
+      "abs_cos": 0.000146,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-translation",
+      "abs_cos": 0.000154,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "javascript-formal_writing",
+      "abs_cos": 0.000461,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-chemistry",
+      "abs_cos": 0.002532,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-science",
+      "abs_cos": 0.005267,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-wikitext",
+      "abs_cos": 0.00047,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-finance",
+      "abs_cos": 0.001801,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-cooking",
+      "abs_cos": 0.00111,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-health",
+      "abs_cos": 0.006259,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-dialogue",
+      "abs_cos": 0.000435,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "physics-reasoning",
+      "abs_cos": 0.000347,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-instruction",
+      "abs_cos": 0.000762,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-conciseness",
+      "abs_cos": 0.001206,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-safety",
+      "abs_cos": 0.000122,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-multilingual",
+      "abs_cos": 0.000604,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-coding_style",
+      "abs_cos": 0.000463,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-summarization",
+      "abs_cos": 0.000271,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-debate",
+      "abs_cos": 0.000748,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-translation",
+      "abs_cos": 6.7e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "physics-formal_writing",
+      "abs_cos": 0.000274,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-science",
+      "abs_cos": 0.003143,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-wikitext",
+      "abs_cos": 0.001146,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-finance",
+      "abs_cos": 0.00411,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-cooking",
+      "abs_cos": 0.004047,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-health",
+      "abs_cos": 0.002255,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-dialogue",
+      "abs_cos": 0.001195,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "chemistry-reasoning",
+      "abs_cos": 0.001223,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-instruction",
+      "abs_cos": 0.000857,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-conciseness",
+      "abs_cos": 0.000837,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-safety",
+      "abs_cos": 0.000566,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-multilingual",
+      "abs_cos": 0.000407,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-coding_style",
+      "abs_cos": 0.000473,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-summarization",
+      "abs_cos": 0.000655,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-debate",
+      "abs_cos": 0.000338,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-translation",
+      "abs_cos": 0.000581,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "chemistry-formal_writing",
+      "abs_cos": 0.000145,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-wikitext",
+      "abs_cos": 0.002273,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "science-finance",
+      "abs_cos": 0.001536,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "science-cooking",
+      "abs_cos": 0.003056,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "science-health",
+      "abs_cos": 0.00177,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "science-dialogue",
+      "abs_cos": 2.6e-05,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "science-reasoning",
+      "abs_cos": 0.001175,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-instruction",
+      "abs_cos": 0.000355,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-conciseness",
+      "abs_cos": 0.000319,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-safety",
+      "abs_cos": 0.000925,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-multilingual",
+      "abs_cos": 0.000411,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-coding_style",
+      "abs_cos": 7.5e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-summarization",
+      "abs_cos": 0.000177,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-debate",
+      "abs_cos": 0.000268,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-translation",
+      "abs_cos": 0.000564,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "science-formal_writing",
+      "abs_cos": 0.000679,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-finance",
+      "abs_cos": 0.003432,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "wikitext-cooking",
+      "abs_cos": 0.000398,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "wikitext-health",
+      "abs_cos": 0.00122,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "wikitext-dialogue",
+      "abs_cos": 0.000923,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "wikitext-reasoning",
+      "abs_cos": 0.000678,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-instruction",
+      "abs_cos": 0.000797,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-conciseness",
+      "abs_cos": 0.002819,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-safety",
+      "abs_cos": 0.002136,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-multilingual",
+      "abs_cos": 0.00021,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-coding_style",
+      "abs_cos": 0.000128,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-summarization",
+      "abs_cos": 0.000234,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-debate",
+      "abs_cos": 0.000247,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-translation",
+      "abs_cos": 0.000201,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "wikitext-formal_writing",
+      "abs_cos": 0.000659,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-cooking",
+      "abs_cos": 0.000827,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "finance-health",
+      "abs_cos": 0.004101,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "finance-dialogue",
+      "abs_cos": 0.001133,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "finance-reasoning",
+      "abs_cos": 0.000735,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-instruction",
+      "abs_cos": 0.000719,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-conciseness",
+      "abs_cos": 0.001515,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-safety",
+      "abs_cos": 0.0007,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-multilingual",
+      "abs_cos": 2e-06,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-coding_style",
+      "abs_cos": 0.000527,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-summarization",
+      "abs_cos": 0.000228,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-debate",
+      "abs_cos": 0.000379,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-translation",
+      "abs_cos": 0.000236,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "finance-formal_writing",
+      "abs_cos": 0.000353,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-health",
+      "abs_cos": 0.000336,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "cooking-dialogue",
+      "abs_cos": 0.000286,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "cooking-reasoning",
+      "abs_cos": 0.00039,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-instruction",
+      "abs_cos": 0.001717,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-conciseness",
+      "abs_cos": 5.5e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-safety",
+      "abs_cos": 0.000195,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-multilingual",
+      "abs_cos": 1e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-coding_style",
+      "abs_cos": 5.4e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-summarization",
+      "abs_cos": 0.000237,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-debate",
+      "abs_cos": 0.00017,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-translation",
+      "abs_cos": 1.8e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "cooking-formal_writing",
+      "abs_cos": 3.6e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-dialogue",
+      "abs_cos": 0.001485,
+      "category": "domain-domain"
+    },
+    {
+      "pair": "health-reasoning",
+      "abs_cos": 0.000621,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-instruction",
+      "abs_cos": 0.000268,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-conciseness",
+      "abs_cos": 0.00069,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-safety",
+      "abs_cos": 0.000456,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-multilingual",
+      "abs_cos": 0.000453,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-coding_style",
+      "abs_cos": 0.000296,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-summarization",
+      "abs_cos": 4.5e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-debate",
+      "abs_cos": 0.000697,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-translation",
+      "abs_cos": 0.000458,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "health-formal_writing",
+      "abs_cos": 0.001288,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-reasoning",
+      "abs_cos": 0.000767,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-instruction",
+      "abs_cos": 0.000556,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-conciseness",
+      "abs_cos": 0.000609,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-safety",
+      "abs_cos": 0.000313,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-multilingual",
+      "abs_cos": 0.000448,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-coding_style",
+      "abs_cos": 0.000341,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-summarization",
+      "abs_cos": 1.1e-05,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-debate",
+      "abs_cos": 0.000191,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-translation",
+      "abs_cos": 0.000233,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "dialogue-formal_writing",
+      "abs_cos": 0.000218,
+      "category": "capability-domain"
+    },
+    {
+      "pair": "reasoning-instruction",
+      "abs_cos": 0.001023,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-conciseness",
+      "abs_cos": 0.000435,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-safety",
+      "abs_cos": 0.001035,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-multilingual",
+      "abs_cos": 0.000644,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-coding_style",
+      "abs_cos": 0.000207,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-summarization",
+      "abs_cos": 2e-06,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-debate",
+      "abs_cos": 0.000274,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-translation",
+      "abs_cos": 0.000186,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "reasoning-formal_writing",
+      "abs_cos": 2e-06,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-conciseness",
+      "abs_cos": 0.000382,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-safety",
+      "abs_cos": 0.000169,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-multilingual",
+      "abs_cos": 0.000189,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-coding_style",
+      "abs_cos": 0.000113,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-summarization",
+      "abs_cos": 0.000194,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-debate",
+      "abs_cos": 7e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-translation",
+      "abs_cos": 8e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "instruction-formal_writing",
+      "abs_cos": 0.000111,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-safety",
+      "abs_cos": 0.000137,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-multilingual",
+      "abs_cos": 2.6e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-coding_style",
+      "abs_cos": 9.5e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-summarization",
+      "abs_cos": 1.1e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-debate",
+      "abs_cos": 0.000247,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-translation",
+      "abs_cos": 0.000103,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "conciseness-formal_writing",
+      "abs_cos": 7.4e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-multilingual",
+      "abs_cos": 4.1e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-coding_style",
+      "abs_cos": 4.5e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-summarization",
+      "abs_cos": 4.6e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-debate",
+      "abs_cos": 0.000194,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-translation",
+      "abs_cos": 0.000917,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "safety-formal_writing",
+      "abs_cos": 9.4e-05,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "multilingual-coding_style",
+      "abs_cos": 0.004195,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "multilingual-summarization",
+      "abs_cos": 0.000928,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "multilingual-debate",
+      "abs_cos": 0.001291,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "multilingual-translation",
+      "abs_cos": 0.000748,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "multilingual-formal_writing",
+      "abs_cos": 0.001979,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "coding_style-summarization",
+      "abs_cos": 0.002478,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "coding_style-debate",
+      "abs_cos": 0.000569,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "coding_style-translation",
+      "abs_cos": 0.000281,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "coding_style-formal_writing",
+      "abs_cos": 0.00286,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "summarization-debate",
+      "abs_cos": 0.002822,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "summarization-translation",
+      "abs_cos": 0.002173,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "summarization-formal_writing",
+      "abs_cos": 0.002694,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "debate-translation",
+      "abs_cos": 0.001903,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "debate-formal_writing",
+      "abs_cos": 0.004721,
+      "category": "capability-capability"
+    },
+    {
+      "pair": "translation-formal_writing",
+      "abs_cos": 0.001765,
+      "category": "capability-capability"
+    }
+  ],
+  "dd_stats": {
+    "mean": 0.00108,
+    "max": 0.006259,
+    "min": 1.1e-05,
+    "n": 105
+  },
+  "cc_stats": {
+    "mean": 0.000857,
+    "max": 0.004721,
+    "min": 2e-06,
+    "n": 45
+  },
+  "cd_stats": {
+    "mean": 0.000377,
+    "max": 0.002819,
+    "min": 1e-06,
+    "n": 150
+  },
+  "mean_cos_all": 0.000695,
+  "degradation_domain": {
+    "medical": {
+      "ppl_n15": 17.8454,
+      "ppl_n25": 18.3819,
+      "pct_change": 3.01
+    },
+    "code": {
+      "ppl_n15": 3.7014,
+      "ppl_n25": 3.744,
+      "pct_change": 1.15
+    },
+    "math": {
+      "ppl_n15": 4.4537,
+      "ppl_n25": 4.5053,
+      "pct_change": 1.16
+    },
+    "legal": {
+      "ppl_n15": 26.2907,
+      "ppl_n25": 26.5896,
+      "pct_change": 1.14
+    },
+    "creative": {
+      "ppl_n15": 3.4636,
+      "ppl_n25": 3.4913,
+      "pct_change": 0.8
+    },
+    "sql": {
+      "ppl_n15": 11.8047,
+      "ppl_n25": 12.1581,
+      "pct_change": 2.99
+    },
+    "javascript": {
+      "ppl_n15": 17.9423,
+      "ppl_n25": 18.1458,
+      "pct_change": 1.13
+    },
+    "physics": {
+      "ppl_n15": 63.8568,
+      "ppl_n25": 68.7613,
+      "pct_change": 7.68
+    },
+    "chemistry": {
+      "ppl_n15": 8.9847,
+      "ppl_n25": 9.0982,
+      "pct_change": 1.26
+    },
+    "science": {
+      "ppl_n15": 41.8778,
+      "ppl_n25": 43.5612,
+      "pct_change": 4.02
+    },
+    "wikitext": {
+      "ppl_n15": 24.661,
+      "ppl_n25": 25.0388,
+      "pct_change": 1.53
+    },
+    "finance": {
+      "ppl_n15": 23.8408,
+      "ppl_n25": 24.0643,
+      "pct_change": 0.94
+    },
+    "cooking": {
+      "ppl_n15": 8.2794,
+      "ppl_n25": 8.3606,
+      "pct_change": 0.98
+    },
+    "health": {
+      "ppl_n15": 9.8247,
+      "ppl_n25": 9.9597,
+      "pct_change": 1.37
+    },
+    "dialogue": {
+      "ppl_n15": 5.4957,
+      "ppl_n25": 5.5422,
+      "pct_change": 0.85
+    }
+  },
+  "k1_pass": false,
+  "k1_ratio_25": 7.532,
+  "k1_ratio_of_ratios": 1.2305,
+  "k2_pass": true,
+  "k2_cd_max": 0.002819,
+  "k2_cd_mean": 0.000377,
+  "n_below_base": 25,
+  "verdict": "KILLED",
+  "total_time_s": 1232.0,
+  "total_time_min": 20.5
+}

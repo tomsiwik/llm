@@ -1,13 +1,20 @@
 # Ralph Orchestrator — Infinite Research Loop
-# 4-hat pipeline using Claude Code sub-agents for the heavy lifting.
-# Separation of concerns: research design vs GPU engineering vs review.
+# 5-hat pipeline using Claude Code sub-agents for the heavy lifting.
+# Separation of concerns: research design vs engineering vs review vs learning.
 #
 # Flow:
 #   research.start → Researcher (ideation + math)
-#                  → Programmer (GPU-optimized scripts)
-#                  → submit to gpu_queue
-#   gpu.results.ready → Harvester (collect results, write PAPER.md)
-#                     → experiment.done → Reviewer → integrate
+#                  → Programmer (GPU/local scripts)
+#                  → submit to queue or run locally
+#   results.ready  → Harvester (collect results, write PAPER.md)
+#                  → experiment.done → Reviewer → verdict
+#   verdict        → Analyst (multi-angle research sweep: WHY + literature + implications)
+#                  → learning.complete → Researcher picks next experiment
+#
+# The Analyst hat is the key addition: after every PROCEED or KILL, it
+# researches WHY the result happened, finds confirming/contradicting
+# literature, and writes LEARNINGS.md so future experiments build on
+# accumulated knowledge rather than running blind.
 #
 # Start:     ralph run -a
 # Continue:  ralph emit "experiment.done"
@@ -38,9 +45,8 @@ hats:
     description: "Designs experiments via experiment-ideator. For micro: runs them. For macro: produces SPEC.md for the programmer."
     triggers:
       - "research.start"
-      - "experiment.integrated"
+      - "learning.complete"
       - "review.revise"
-      - "review.killed"
     publishes:
       - "experiment.designed"
       - "experiment.done"
@@ -57,11 +63,16 @@ hats:
         Read micro/models/[name]/REVIEW-adversarial.md for the numbered fixes.
         Include these fixes in your delegation prompt.
 
-      If triggered by review.killed:
-        Read micro/models/[name]/REVIEW-adversarial.md to understand why.
-        Include the kill reason so the researcher avoids the same mistake.
+      If triggered by learning.complete:
+        Read the LEARNINGS.md from the just-completed experiment. The analyst
+        has already researched WHY the last result happened and what alternatives
+        exist. USE THIS CONTEXT when picking the next experiment:
+        - If the learning suggests an alternative approach, consider it
+        - If the learning found contradicting literature, investigate
+        - If the learning recommends modifying a hypothesis, do it first
+        - Include the key learnings in the delegation prompt to the experiment-ideator
 
-      If triggered by research.start or experiment.integrated:
+      If triggered by research.start:
         Read the prompt context (PROMPT.md or inline -p prompt). Check for a
         SCALE CONSTRAINT (e.g., "CPU only", "micro only", "GPU only", "macro only").
         If a scale constraint exists, ONLY consider nodes matching that scale
@@ -104,10 +115,14 @@ hats:
 
       ## Baseline-First Rule (MANDATORY)
 
-      Before delegating, identify which references are relevant to the hypothesis.
-      Check references/REFERENCES.yml for matching node IDs. Include relevant
-      reference paths in the delegation prompt so the researcher builds on
-      prior art instead of reinventing.
+      Before delegating, consult prior art using NotebookLM (/notebooklm):
+      1. Query: "What existing methods address [this hypothesis]? What pitfalls
+         should I avoid? What implementations or algorithms are standard?"
+      2. Check references/REFERENCES.yml for matching node IDs
+      3. Include relevant findings and reference paths in the delegation prompt
+         so the researcher builds on prior art instead of reinventing
+
+      Web search is a FALLBACK for topics not covered in the NotebookLM sources.
 
       ## Delegate
 
@@ -136,6 +151,27 @@ hats:
         Verify macro/[name]/SPEC.md + MATH.md exist.
         Emit experiment.designed with the experiment name and spec path.
         The programmer hat takes it from here.
+
+      ## CRITICAL: Budget time for review + learning
+
+      The full cycle is: Researcher → Reviewer → Analyst → Researcher.
+      Each experiment MUST complete all 3 steps before the next experiment starts.
+      If the loop is near its runtime limit, do NOT start a new experiment —
+      it is better to finish the review+learning cycle on the last experiment
+      than to run another experiment that will be orphaned without review.
+
+      ## Orphan check (MANDATORY at start of every trigger)
+
+      Before picking new work, check if the PREVIOUS experiment was properly
+      reviewed and analyzed:
+      1. Read .ralph/current_direction.md to find the last experiment name
+      2. Check if [experiment_dir]/REVIEW-adversarial.md exists
+      3. Check if [experiment_dir]/LEARNINGS.md exists
+      4. If EITHER is missing, do NOT pick new work. Instead:
+         - If REVIEW-adversarial.md missing: emit experiment.done again
+           (triggers the reviewer to process the orphaned experiment)
+         - If LEARNINGS.md missing: the analyst hat hasn't run yet — this
+           will resolve itself once the reviewer emits review.proceed/killed
 
   # ── Programmer: GPU-optimize and submit ─────────────────────────────────
   programmer:
@@ -253,11 +289,11 @@ hats:
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
     name: "🔴 Reviewer"
-    description: "Spawns adversarial-reviewer sub-agent, then integrates results"
+    description: "Spawns adversarial-reviewer sub-agent, then integrates results and routes to analyst"
     triggers:
       - "experiment.done"
     publishes:
-      - "experiment.integrated"
+      - "review.proceed"
       - "review.revise"
       - "review.killed"
     instructions: |
@@ -286,10 +322,12 @@ hats:
       Extract the verdict: PROCEED, REVISE, or KILL.
 
       If REVISE: emit review.revise with the numbered fixes. Stop here.
+
       If KILL:
         - In HYPOTHESES.yml: set the node status to `killed`, append evidence
         - Increment `meta.consecutive_kills`
-        - Emit review.killed with explanation. Stop here.
+        - Emit review.killed with experiment name, kill reason, and key numbers.
+          The ANALYST hat will research why this happened.
 
       ## Step 3: Integrate (only if PROCEED)
 
@@ -301,4 +339,115 @@ hats:
       - Update VISION.md readiness table if applicable
 
       Reset .ralph/agent/scratchpad.md to a 1-line summary.
-      Emit experiment.integrated.
+      Emit review.proceed with experiment name, verdict, and key findings.
+      The ANALYST hat will research implications and literature context.
+
+  # ── Analyst: multi-angle research sweep after every result ───────────────
+  analyst:
+    name: "🧠 Analyst"
+    description: "Researches WHY a result happened, finds confirming/contradicting literature, writes LEARNINGS.md. Produces knowledge, not just verdicts."
+    triggers:
+      - "review.proceed"
+      - "review.killed"
+    publishes:
+      - "learning.complete"
+    instructions: |
+      You are the knowledge-production step. After every experiment result
+      (whether PROCEED or KILL), you research WHY it happened and what the
+      broader research community knows about this phenomenon. You produce
+      LEARNINGS.md — a document that future experiments can reference.
+
+      Do NOT skip this step. Do NOT just summarize the PAPER.md.
+      The goal is to ADD knowledge that wasn't in the experiment.
+
+      ## Step 1: Understand the result
+
+      Read the experiment_dir from the event payload.
+      Read [experiment_dir]/PAPER.md and REVIEW-adversarial.md.
+      Identify:
+      - What was the core finding? (1 sentence)
+      - Was it proven, supported, or killed?
+      - What was surprising or unexpected?
+      - What mechanism explains the result?
+
+      ## Step 2: Multi-angle research via NotebookLM (THE CORE VALUE)
+
+      Use /notebooklm as the PRIMARY research tool. NotebookLM has our curated
+      source library (BitNet papers, MoTE, LoTA-QAF, MoLoRA, LoRA Soups, our own
+      VISION.md, FINDINGS.md, all PAPER.md files) and can synthesize across them.
+
+      Query NotebookLM from 3 angles:
+
+      Angle 1 (confirming): "What does existing research say about [core finding]?
+        Have other papers observed [this phenomenon]? What mechanisms explain it?"
+
+      Angle 2 (contradicting): "Are there papers that found the OPPOSITE of
+        [our finding]? What conditions lead to different outcomes? What did we
+        miss that could explain a discrepancy?"
+
+      Angle 3 (alternatives): "What alternative approaches exist for [the problem
+        this experiment addressed]? What methods from other fields could apply?
+        What would [MoTE / LoTA-QAF / MoLoRA / LoRA Soups] do differently here?"
+
+      FALLBACK ONLY: If NotebookLM doesn't have relevant sources for a specific
+      angle, use a targeted web search to fill the gap. Add any valuable new
+      papers found to the NotebookLM notebook for future queries.
+
+      For each relevant finding:
+      - Extract: source (paper title + arxiv ID, or NotebookLM source name)
+      - Key method and result
+      - Whether it CONFIRMS, CONTRADICTS, or EXTENDS our result
+
+      ## Step 3: Identify implications and gaps
+
+      Based on the literature sweep, answer:
+      1. WHY did this result happen? (mechanistic explanation grounded in literature)
+      2. What does this imply for the next experiment? (concrete recommendation)
+      3. What alternative approaches exist that we haven't tried?
+      4. Should any existing HYPOTHESES.yml node be updated based on this learning?
+      5. Is there a new hypothesis worth adding? (only if strongly motivated by literature)
+
+      ## Step 4: Write LEARNINGS.md
+
+      Write [experiment_dir]/LEARNINGS.md with this structure:
+
+      ```markdown
+      # Learnings: [experiment_name]
+
+      ## Core Finding
+      [1-2 sentence summary]
+
+      ## Why This Happened (Literature-Grounded)
+      [Mechanistic explanation citing specific papers]
+
+      ## Confirming Evidence
+      [Papers that found the same thing, with arxiv IDs]
+
+      ## Contradicting Evidence
+      [Papers that found the opposite, with explanation of discrepancy]
+
+      ## Alternative Approaches (What We Could Try Instead)
+      [Concrete methods from literature with paper references]
+
+      ## Implications for Next Experiments
+      [How this changes our approach going forward]
+
+      ## New References to Add
+      [Any papers that should be added to references/REFERENCES.yml]
+      ```
+
+      ## Step 5: Update references
+
+      If you found important new papers, add them to references/REFERENCES.yml
+      with the relevant node IDs.
+
+      ## Step 6: Emit
+
+      Emit learning.complete with:
+      - Experiment name
+      - 1-line core learning
+      - Number of confirming/contradicting papers found
+      - Whether any hypothesis should be modified
+
+      The RESEARCHER hat will use your LEARNINGS.md when picking the next
+      experiment — ensuring accumulated knowledge informs future work.

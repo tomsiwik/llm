@@ -229,6 +229,26 @@ entries:
   # - source: "Hoffmann 2022 (Chinchilla)" — scaling laws
   # - source: "Frankle et al. (Linear Mode Connectivity)" — weight averaging viability
 
+  # ── KR-Test & Adapter Quality Metrics ────────────────────────────────────────
+
+  # - dir: "cold-contrastive-lora-decoding" (no dedicated folder)
+  #   source: "https://arxiv.org/abs/2505.14620"
+  #   insight: "Log-prob divergence between adapter and base as knowledge signal — contrastive decoding extracts +5.54% task accuracy"
+  #   nodes: [exp_bitnet_kr_test_evaluation, exp_bitnet_retrain_evolve]
+  #   added: "2026-03-23"
+
+  # - dir: "loralib-benchmark" (no dedicated folder)
+  #   source: "https://arxiv.org/abs/2509.18137"
+  #   insight: "PPL vs K-shot vs manual expert selection across 40 tasks/680 LoRAs — K-shot manual selection 0.8-1.4% better than PPL"
+  #   nodes: [exp_bitnet_kr_test_evaluation, exp_bitnet_retrain_evolve]
+  #   added: "2026-03-23"
+
+  # - dir: "logprob-semantic-plausibility" (no dedicated folder)
+  #   source: "https://arxiv.org/abs/2403.14859"
+  #   insight: "Log-probs reliable for semantic plausibility but sensitive to surface features — perturbation method is critical design choice"
+  #   nodes: [exp_bitnet_kr_test_evaluation]
+  #   added: "2026-03-23"
+
   # ── ReLoRA ──────────────────────────────────────────────────────────────────
 
   # - dir: "relora" (no dedicated folder -- code at github.com/Guitaricet/relora)
@@ -327,3 +347,260 @@ entries:
     insight: "Utterance-based semantic routing via cosine similarity to exemplar embeddings. O(NK*D) lookup, threshold-based confidence. Adapted for exp_semantic_router micro experiment."
     nodes: [exp_semantic_router]
     added: "2026-03-14"
+
+  # ── Orthogonality Theory & Composition Foundations ─────────────────────────
+
+  # (no dedicated folder — referenced in cosine_convergence LEARNINGS.md)
+  # - source: "Cao et al. 2025, Efficient Modular Learning through Naive LoRA Summation" arXiv:2508.11985
+  #   insight: "Independently trained LoRA modules are near-orthogonal in high dimensions; RMS cosine correlates linearly with composition PPL. Confirms our additive 1/N approach."
+  #   nodes: [exp_bitnet_cosine_convergence_trajectory, exp_bitnet_scale_n25, exp_bitnet_effective_delta_cosine]
+  #   added: "2026-03-21"
+
+  # - source: "Zhang et al. 2025, Rethinking Inter-LoRA Orthogonality in Adapter Merging" arXiv:2510.03262
+  #   insight: "Strict orthogonality does not ensure semantic disentanglement; orthogonality alone insufficient for compositionality. Challenges metric-centric view of composition quality."
+  #   nodes: [exp_bitnet_effective_delta_cosine, exp_ortho_diagnostic]
+  #   added: "2026-03-22"
+
+  # - source: "Steele 2026, Subspace Geometry Governs Catastrophic Forgetting" arXiv:2603.02224
+  #   insight: "F = α(1-cos²θ_min)+β — forgetting is governed by minimum principal angle between task gradient subspaces. Explains why our cosine plateaus: high-angle regime is geometrically stable."
+  #   nodes: [exp_bitnet_cosine_convergence_trajectory, exp_ortho_diagnostic]
+  #   added: "2026-03-21"
+
+  # - source: "SC-LoRA: Subspace-Constrained LoRA" arXiv:2505.23724
+  #   insight: "Balances fine-tuning efficiency and knowledge preservation via subspace constraints. Alternative to observing natural orthogonality."
+  #   nodes: [exp_bitnet_cosine_convergence_trajectory]
+  #   added: "2026-03-21"
+
+  # - source: "LoRAtorio: Intrinsic LoRA Skill Composition" arXiv:2508.11624
+  #   insight: "Dynamic module selection via patch-level cosine similarity — avoids additive assumption entirely. Alternative composition paradigm."
+  #   nodes: [exp_bitnet_cosine_convergence_trajectory, exp5_macro_match]
+  #   added: "2026-03-21"
+
+  # ── Rank Scaling & LoRA MoE (monolithic rank-matched learnings) ──────────
+
+  # - source: "Kalajdzievski 2023, rsLoRA: Rank Stabilization Scaling Factor" arXiv:2312.03732
+  #   insight: "α/r scaling causes gradient collapse at high rank; α/√r fixes it. Our fixed scale=20.0 at r=80 is suboptimal — confound in monolithic rank-matched ablation."
+  #   nodes: [exp_bitnet_monolithic_rank_matched]
+  #   added: "2026-03-22"
+
+  # - source: "MoLoRA: Composable Specialization via Per-Token Adapter Routing" arXiv:2603.15965
+  #   insight: "Per-token learned routing over multiple specialized LoRA adapters. SOLE at token granularity — next step beyond domain-level routing."
+  #   nodes: [exp_bitnet_monolithic_rank_matched, exp5_macro_match]
+  #   added: "2026-03-22"
+
+  # - source: "CeRA: Breaking the Linear Ceiling of Low-Rank Adaptation" arXiv:2602.22911
+  #   insight: "Manifold expansion overcomes LoRA rank scaling plateau. Could strengthen monolithic baseline if applied."
+  #   nodes: [exp_bitnet_monolithic_rank_matched]
+  #   added: "2026-03-22"
+
+  # - source: "MoLA: Higher Layers Need More LoRA Experts" arXiv:2402.08562
+  #   insight: "Multiple small LoRA experts outperform single larger LoRA at parameter parity. Expert redundancy obvious in lower layers, higher layers benefit from specialization."
+  #   nodes: [exp_bitnet_monolithic_rank_matched, exp5_macro_match]
+  #   added: "2026-03-22"
+
+  # ── Adapter Composition & Merging (from instruction_task_eval analyst pass) ──
+
+  - dir: "adapter-merging-traces"
+    source: "https://arxiv.org/abs/2603.15965"
+    insight: "Domain + instruction adapters cause geometric misalignment when merged; trace leakage under strict decoding. Geometry-aware merge and rank-1 logit intervention help."
+    nodes: [exp_bitnet_instruction_task_eval]
+    added: "2026-03-22"
+
+  - dir: "task-aware-lora-retrieval"
+    source: "https://arxiv.org/abs/2602.21222"
+    insight: "Vector DB similarity retrieval for dynamic LoRA adapter selection and weighted fusion. Zero-shot composition without oracle routing labels."
+    nodes: [exp_bitnet_instruction_task_eval]
+    added: "2026-03-22"
+
+  # ── Base-Free / Scaffold Replacement (from basefree_exploration analyst pass) ──
+
+  # - source: "Cross-LoRA: Data-Free LoRA Transfer" arXiv:2508.05232
+  #   insight: "Subspace alignment via rank-truncated SVD for cross-model LoRA transfer. Confirms adapter-base coordinate coupling."
+  #   nodes: [exp_bitnet_basefree_exploration, exp_bitnet_scaffold_fresh_adapters]
+  #   added: "2026-03-22"
+
+  # - source: "Sparse ReBasin (Weight Symmetry)" arXiv:2505.05143
+  #   insight: "Different random inits → different basins; permutation alignment needed. Explains why scaffold replacement fails fundamentally."
+  #   nodes: [exp_bitnet_basefree_exploration]
+  #   added: "2026-03-22"
+
+  - dir: "galore"
+    source: "https://arxiv.org/abs/2403.03507"
+    insight: "Memory-efficient LLM training via gradient low-rank projection. Matches full-rank at <1% gap at 1B. ICML 2024 oral. GaLore 2 (arXiv:2504.20437) scales to 7B."
+    nodes: [exp_bitnet_galore_scaffold, exp_bitnet_meta_scaffold]
+    added: "2026-03-22"
+
+  # - source: "Q-GaLore: Quantized GaLore with INT4 Projection" arXiv:2407.08296 (ICML 2025)
+  #   insight: "GaLore weights need special in-training quantization; naive PTQ degrades quality. Confirms GaLore quantization-hostility."
+  #   nodes: [exp_bitnet_galore_scaffold, exp_bitnet_scaffold_fresh_adapters]
+  #   added: "2026-03-22"
+
+  # - source: "Training Dynamics Impact PTQ Robustness" arXiv:2510.06213
+  #   insight: "Subspace-restricted training (like GaLore) produces worst-case weight structure for PTQ. Mechanistic explanation for degradation."
+  #   nodes: [exp_bitnet_galore_scaffold]
+  #   added: "2026-03-22"
+
+  # - source: "Low-Bit Quantization Favors Undertrained LLMs" arXiv:2411.17691 (ACL 2025)
+  #   insight: "Well-converged models are MORE fragile to PTQ; GaLore's mixed convergence profile (projected vs non-projected dims) is worst case."
+  #   nodes: [exp_bitnet_galore_scaffold]
+  #   added: "2026-03-22"
+
+  # - source: "Continual QAT Pre-Training (16→1.58 bit)" arXiv:2502.11895 (ACL 2025)
+  #   insight: "FP16 warmup → QAT transition beats both cold ternary start and post-hoc PTQ. Most actionable alternative for base-free path."
+  #   nodes: [exp_bitnet_galore_scaffold, exp_bitnet_scaffold_fresh_adapters, exp_bitnet_meta_scaffold]
+  #   added: "2026-03-22"
+
+  # - source: "LoQT: Low-Rank Adapters for Quantized Pretraining" arXiv:2405.16528 (NeurIPS 2024)
+  #   insight: "Periodic merge of low-rank factors into quantized weights prevents PTQ degradation accumulation."
+  #   nodes: [exp_bitnet_galore_scaffold]
+  #   added: "2026-03-22"
+
+  # - source: "LR-QAT: Low-Rank QAT for LLMs" arXiv:2406.06385 (Qualcomm)
+  #   insight: "Integer-grid-aligned low-rank adapters for lossless quantized merge. Low-rank training without QAT does not produce quantization-friendly weights."
+  #   nodes: [exp_bitnet_scaffold_fresh_adapters, exp_bitnet_lori_sparse_b]
+  #   added: "2026-03-22"
+
+  # - source: "BitDistill: Knowledge Distillation into BitNet" arXiv:2510.13998 (Microsoft)
+  #   insight: "Dual-distillation (logits + attention) produces 1.58-bit models near FP16 quality. Alternative to from-scratch scaffold training."
+  #   nodes: [exp_bitnet_scaffold_fresh_adapters]
+  #   added: "2026-03-22"
+
+  # - source: "Spectra/TriLM: Ternary Models at Scale" arXiv:2407.12327
+  #   insight: "Ternary models 99M-3.9B from scratch. Data scaling > parameter scaling for ternary. Validates ternary pretraining approach."
+  #   nodes: [exp_bitnet_galore_scaffold, exp_bitnet_scaffold_fresh_adapters]
+  #   added: "2026-03-22"
+
+  # - source: "RaBiT: Residual-Aware Binarization Training" arXiv:2602.05367
+  #   insight: "Residual multi-path composition: train adapter N+1 to correct residual of 1..N. Alternative to naive 1/N averaging."
+  #   nodes: [exp_bitnet_per_token_routing]
+  #   added: "2026-03-22"
+
+  # - source: "ShortGPT (ACL 2025)" arXiv:2403.03853
+  #   insight: "Block Influence metric for layer importance; 25% layers removable with 85% accuracy. Confirms middle-layer redundancy found in basefree exploration."
+  #   nodes: [exp_bitnet_basefree_exploration]
+  #   added: "2026-03-22"
+
+  # ── Intrinsic Dimensionality & Random Features ──────────────────────────────
+
+  # - source: "Aghajanyan et al. 2020, Intrinsic Dimensionality" arXiv:2012.13255 (ACL 2021)
+  #   insight: "Pretrained models have low intrinsic dimension for fine-tuning; pretraining creates this structure. Explains why rank-16 LoRA works on pretrained but not random bases."
+  #   nodes: [exp_bitnet_scaffold_fresh_adapters, exp_bitnet_basefree_exploration]
+  #   added: "2026-03-22"
+
+  # - source: "SLTrain: Sparse + Low-Rank Training" NeurIPS 2024
+  #   insight: "Combines sparse and low-rank updates for memory-efficient from-scratch training. Higher effective rank than pure LoRA."
+  #   nodes: [exp_bitnet_scaffold_fresh_adapters, exp_bitnet_galore_scaffold]
+  #   added: "2026-03-22"
+
+  # ── Clone-Compete / Evolve Phase References ─────────────────────────────────
+
+  # - source: "The Appeal and Reality of Recycling LoRAs" arXiv:2602.12323
+  #   insight: "Random LoRAs merge equally well as carefully selected ones. Warm-start inheritance adds no value over cold-start retraining. Adaptive merging works via regularization, not knowledge transfer."
+  #   nodes: [exp_bitnet_clone_compete, exp_bitnet_clone_compete_powered]
+  #   added: "2026-03-22"
+
+  # - source: "Less is More: Undertraining Experts Improves Model Upcycling" arXiv:2506.14126
+  #   insight: "Long training of experts hurts merging via hard-example memorization. Easy examples survive merging; hard examples don't. Explains clone's concentrated hard-sample improvement."
+  #   nodes: [exp_bitnet_clone_compete_powered]
+  #   added: "2026-03-22"
+
+  # - source: "Merge before Forget: Continual LoRA Merging" arXiv:2512.23017
+  #   insight: "Continuous merging of LoRA adapters prevents forgetting. Alternative Evolve protocol: merge continuously instead of discrete tournament rounds."
+  #   nodes: [exp_bitnet_clone_compete_powered]
+  #   added: "2026-03-22"
+
+  # ── Adversarial Review Discoveries (2026-03-23) ───────────────────────────
+
+  - dir: "osrm-orthogonal-subspaces"
+    source: "https://arxiv.org/abs/2505.22934"
+    insight: "THE FIX for orthogonality-semantics gap. Weight-space orthogonality is insufficient — need data-aware orthogonality: A_j ⊥ Cov(h_i). Constrains LoRA subspace BEFORE training. +12.78% on Llama-3.2-1B. Plug-and-play with any merging method."
+    nodes: [exp_bitnet_semantic_compositionality]
+    added: "2026-03-23"
+
+  - dir: "rethinking-lora-orthogonality"
+    source: "https://arxiv.org/abs/2510.03262"
+    insight: "THREAT (moderated): strict orthogonality does not yield semantic compositionality. BUT paper is about diffusion models, not LLMs. OSRM (2505.22934) provides the LLM-specific fix. Our Grassmannian skeleton may already approximate data-orthogonality at d=2560 via JL-lemma."
+    nodes: [exp_bitnet_semantic_compositionality]
+    added: "2026-03-23"
+
+  - dir: "flyloraimplicit-moe"
+    source: "https://arxiv.org/abs/2510.08396"
+    insight: "Frozen sparse random A as implicit router — same mechanism as our Grassmannian skeleton. JL-lemma proves approximate inter-task orthogonality. 180 GitHub stars. Our ternary angle + marketplace vision is the novel delta."
+    nodes: [exp_bitnet_semantic_compositionality, exp_bitnet_per_token_routing]
+    added: "2026-03-23"
+
+  - dir: "spectral-surgery"
+    source: "https://arxiv.org/abs/2603.03995"
+    insight: "Training-free LoRA refinement: SVD + gradient-based singular value reweighting. +4.4pp CommonsenseQA. Candidate for Evolve quality gate."
+    nodes: [exp_bitnet_spectral_surgery_quality_gate]
+    added: "2026-03-23"
+
+  - dir: "eigenlorax-subspace"
+    source: "https://arxiv.org/abs/2502.04700"
+    insight: "SVD of stacked adapters reveals shared principal subspace. 100x fewer params, 2x faster convergence. Candidate for Evolve mechanism replacing clone-compete."
+    nodes: [exp_bitnet_eigenlorax_subspace]
+    added: "2026-03-23"
+
+  - dir: "zkloraa-verification"
+    source: "https://arxiv.org/abs/2501.13965"
+    insight: "Zero-knowledge proof for LoRA compatibility. 1-2 sec verification per module at 70B. Directly enables decentralized expert marketplace with IP protection."
+    nodes: []
+    added: "2026-03-23"
+
+  - dir: "sherry-ternary-sparsity"
+    source: "https://arxiv.org/abs/2601.07892"
+    insight: "1.25-bit ternary via 3:4 sparsity. Identifies WEIGHT TRAPPING in sparse ternary training — may explain our GaLore quantization degradation. Arenas mechanism maintains representational diversity."
+    nodes: [exp_bitnet_galore_scaffold, exp_bitnet_meta_scaffold]
+    added: "2026-03-23"
+
+  - dir: "lora-lego-rank-clustering"
+    source: "https://arxiv.org/abs/2409.16167"
+    insight: "Minimal Semantic Units = individual ranks in LoRA. Rank-wise clustering + dual reweighting for merging. Permutation invariance and concat-sum equivalence properties."
+    nodes: [exp_bitnet_semantic_compositionality]
+    added: "2026-03-23"
+
+  - dir: "lora-mixer-frozen-deploy"
+    source: "https://arxiv.org/abs/2507.00029"
+    insight: "Frozen pre-trained LoRA deployment from external repos with Specialization Balance Loss. Directly validates our marketplace vision of grab-and-deploy adapters."
+    nodes: [exp_bitnet_per_token_routing, exp_bitnet_llamacpp_serving]
+    added: "2026-03-23"
+
+  - dir: "lori-sparse-b"
+    source: "https://arxiv.org/abs/2504.07448"
+    insight: "Frozen A + 90% sparse B. 95% fewer params than LoRA. Orthogonality via subspace separation + sparsity prevents catastrophic forgetting. 171 GitHub stars."
+    nodes: [exp_bitnet_lori_sparse_b]
+    added: "2026-03-23"
+
+  # ── Inter-LoRA Orthogonality Research ───────────────────────────────────────
+
+  - dir: "rethinking-lora-orthogonality"
+    source: "https://arxiv.org/abs/2510.03262"
+    insight: "Orthogonality between LoRA adapters does NOT guarantee semantic disentanglement — parameter-space orthogonality is necessary but insufficient for composability"
+    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine]
+    added: "2026-03-23"
+
+  - dir: "orthogonal-subspace-merging"
+    source: "https://arxiv.org/abs/2505.22934"
+    insight: "ACL 2025: Orthogonal subspace constraints during LoRA training for robust model merging — comparison point for Grassmannian skeleton approach"
+    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine]
+    added: "2026-03-23"
+
+  # ── Per-Token / Adaptive LoRA Routing ───────────────────────────────────────
+
+  - dir: "molora-per-token"
+    source: "https://arxiv.org/abs/2603.15965"
+    insight: "True per-token LoRA routing enables Qwen3-1.7B > Qwen3-8B. Per-token strictly better than per-sequence. 4 adapters, learned gating."
+    nodes: [exp_bitnet_per_token_routing]
+    added: "2026-03-23"
+
+  - dir: "ld-mole-adaptive-routing"
+    source: "https://arxiv.org/abs/2509.25684"
+    insight: "ICLR 2026: Differentiable routing with analytical sparsity control replaces fixed TopK — adaptive expert count per token per layer, avoids routing collapse"
+    nodes: [exp_bitnet_per_token_routing]
+    added: "2026-03-23"
+
+  - dir: "lora-soups"
+    source: "https://arxiv.org/abs/2410.13025"
+    insight: "Simple weight averaging of LoRA adapters composes skills for practical tasks — challenges need for learned routing when domain boundaries are soft"
+    nodes: [exp_bitnet_per_token_routing]
+    added: "2026-03-23"
