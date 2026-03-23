@@ -1,29 +1,29 @@
-# Current Direction: exp_bitnet_scale_n25
+# Current Direction: exp_bitnet_retrain_evolve
 
-## Goal
-Test whether ternary LoRA composition on BitNet-2B-4T scales from N=15 (domains only) to N=25 (15 domains + 4 existing capabilities + 6 new capabilities) without degradation.
+## Hypothesis
+Retrain-from-scratch + quality gate produces monotonic adapter improvement.
+
+## Focus
+Legal domain adapter: the worst adapter (degenerate, trained on fallback data).
+Three rounds of retrain with progressively better data from nguha/legalbench.
+Quality gate = KR-Test delta > 0.03 AND |cos| < 0.01 with existing experts.
+
+## Key Insight
+The original legal adapter failed because HuggingFace download failed and it
+trained on 80 copies of the same fallback sentence. Retraining from scratch on
+REAL legalbench data (multiple subtasks, diverse examples) should produce a
+fundamentally better adapter. This is the Evolve mechanism: retrain, evaluate,
+gate, accept.
 
 ## Kill Criteria
-- K1: composition ratio N=25 > 5x (approaching catastrophe)
-- K2: cross-type cosine (capability-domain) > 0.01
+- K1: retrained adapter not better than original on KR-Test
+- K2: quality gate fails to distinguish good from bad adapters
 
-## Approach
-1. Reuse all 15 trained domain adapters from bitnet_scale_n15
-2. Reuse 4 trained capability adapters from capability_expert_taxonomy (reasoning, instruction, conciseness, safety)
-3. Train 6 new capability adapters: multilingual, coding-style, summarization, debate, translation, formal-writing
-4. Compose all 25 together with 1/N scaling
-5. Measure composition ratio, cross-type cosines, per-type degradation
-
-## Key Data Sources (HuggingFace, $0)
-- multilingual: Helsinki-NLP/tatoeba_mt (de-en pairs)
-- coding-style: bigcode/the-stack-smol (docstring-heavy Python)
-- summarization: EdinburghNLP/xsum (summaries)
-- debate: argilla/distilabel-capybara-dpo-7k-binarized (argument-style)
-- translation: Helsinki-NLP/opus_books (en-fr parallel)
-- formal-writing: ccdv/arxiv-summarization (academic writing)
-
-## Expected Runtime
-~60-90 min (6 new adapters * ~8 min each + eval overhead)
-
-## Scale
-Micro only. Apple Silicon, MLX, $0.
+## Plan
+1. Download REAL legalbench data (multiple subtasks, not just contract_nli)
+2. Round 1: Train legal adapter from scratch on 800 diverse legalbench samples
+3. Evaluate via KR-Test + cosine + PPL
+4. Round 2: Add more data (1200 samples from different subtasks)
+5. Round 3: Add even more data (1600 samples, widest coverage)
+6. Verify monotonic improvement across rounds
+7. Quality gate: each round must beat previous on KR-Test delta

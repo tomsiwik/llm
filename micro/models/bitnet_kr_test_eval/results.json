@@ -1,0 +1,348 @@
+{
+  "experiment": "bitnet_kr_test_eval",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "hypothesis": "KR-Test replaces PPL as primary adapter quality metric",
+  "timestamp": "2026-03-23 00:15:05",
+  "n_contrastive_pairs": 200,
+  "pair_stats": {
+    "medical": {
+      "n_pairs": 50,
+      "n_val_samples": 100
+    },
+    "math": {
+      "n_pairs": 50,
+      "n_val_samples": 100
+    },
+    "code": {
+      "n_pairs": 50,
+      "n_val_samples": 100
+    },
+    "legal": {
+      "n_pairs": 0,
+      "n_val_samples": 20
+    },
+    "creative": {
+      "n_pairs": 50,
+      "n_val_samples": 100
+    }
+  },
+  "base": {
+    "score": 0.895,
+    "n_correct": 179,
+    "n_total": 200,
+    "mean_margin": 33.941328125,
+    "domain_scores": {
+      "medical": {
+        "score": 1.0,
+        "correct": 50,
+        "total": 50,
+        "mean_margin": 23.88125
+      },
+      "math": {
+        "score": 0.96,
+        "correct": 48,
+        "total": 50,
+        "mean_margin": 57.373125
+      },
+      "code": {
+        "score": 0.74,
+        "correct": 37,
+        "total": 50,
+        "mean_margin": 16.1434375
+      },
+      "creative": {
+        "score": 0.88,
+        "correct": 44,
+        "total": 50,
+        "mean_margin": 38.3675
+      }
+    }
+  },
+  "random_adapter": {
+    "score": 0.895,
+    "n_correct": 179,
+    "n_total": 200,
+    "mean_margin": 33.922779682874676,
+    "domain_scores": {
+      "medical": {
+        "score": 1.0,
+        "correct": 50,
+        "total": 50,
+        "mean_margin": 23.8966978931427
+      },
+      "math": {
+        "score": 0.96,
+        "correct": 48,
+        "total": 50,
+        "mean_margin": 57.31084547042847
+      },
+      "code": {
+        "score": 0.74,
+        "correct": 37,
+        "total": 50,
+        "mean_margin": 16.160632519721986
+      },
+      "creative": {
+        "score": 0.88,
+        "correct": 44,
+        "total": 50,
+        "mean_margin": 38.322942848205564
+      }
+    }
+  },
+  "individual_adapters": {
+    "medical": {
+      "score": 0.945,
+      "n_correct": 189,
+      "n_total": 200,
+      "mean_margin": 39.44435387253761,
+      "domain_scores": {
+        "medical": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 34.49666556358338
+        },
+        "math": {
+          "score": 0.98,
+          "correct": 49,
+          "total": 50,
+          "mean_margin": 60.44491749763489
+        },
+        "code": {
+          "score": 0.84,
+          "correct": 42,
+          "total": 50,
+          "mean_margin": 19.897558121681215
+        },
+        "creative": {
+          "score": 0.96,
+          "correct": 48,
+          "total": 50,
+          "mean_margin": 42.93827430725098
+        }
+      }
+    },
+    "math": {
+      "score": 0.93,
+      "n_correct": 186,
+      "n_total": 200,
+      "mean_margin": 38.41250219404697,
+      "domain_scores": {
+        "medical": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 26.523762464523315
+        },
+        "math": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 66.67929872512818
+        },
+        "code": {
+          "score": 0.78,
+          "correct": 39,
+          "total": 50,
+          "mean_margin": 18.04601202249527
+        },
+        "creative": {
+          "score": 0.94,
+          "correct": 47,
+          "total": 50,
+          "mean_margin": 42.400935564041134
+        }
+      }
+    },
+    "code": {
+      "score": 0.94,
+      "n_correct": 188,
+      "n_total": 200,
+      "mean_margin": 37.76268274188042,
+      "domain_scores": {
+        "medical": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 28.937965145111082
+        },
+        "math": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 60.06437407493591
+        },
+        "code": {
+          "score": 0.82,
+          "correct": 41,
+          "total": 50,
+          "mean_margin": 20.20480806827545
+        },
+        "creative": {
+          "score": 0.94,
+          "correct": 47,
+          "total": 50,
+          "mean_margin": 41.84358367919922
+        }
+      }
+    },
+    "legal": {
+      "score": 0.9,
+      "n_correct": 180,
+      "n_total": 200,
+      "mean_margin": 36.56771152973175,
+      "domain_scores": {
+        "medical": {
+          "score": 0.98,
+          "correct": 49,
+          "total": 50,
+          "mean_margin": 28.848934121131897
+        },
+        "math": {
+          "score": 0.98,
+          "correct": 49,
+          "total": 50,
+          "mean_margin": 59.94379001617432
+        },
+        "code": {
+          "score": 0.72,
+          "correct": 36,
+          "total": 50,
+          "mean_margin": 16.700184149742128
+        },
+        "creative": {
+          "score": 0.92,
+          "correct": 46,
+          "total": 50,
+          "mean_margin": 40.77793783187866
+        }
+      }
+    },
+    "creative": {
+      "score": 0.95,
+      "n_correct": 190,
+      "n_total": 200,
+      "mean_margin": 41.785211158394816,
+      "domain_scores": {
+        "medical": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 31.27007180213928
+        },
+        "math": {
+          "score": 1.0,
+          "correct": 50,
+          "total": 50,
+          "mean_margin": 62.87642850875854
+        },
+        "code": {
+          "score": 0.82,
+          "correct": 41,
+          "total": 50,
+          "mean_margin": 21.11586297273636
+        },
+        "creative": {
+          "score": 0.98,
+          "correct": 49,
+          "total": 50,
+          "mean_margin": 51.87848134994507
+        }
+      }
+    }
+  },
+  "composed_1_over_n": {
+    "score": 0.92,
+    "n_correct": 184,
+    "n_total": 200,
+    "mean_margin": 36.406746342033145,
+    "domain_scores": {
+      "medical": {
+        "score": 1.0,
+        "correct": 50,
+        "total": 50,
+        "mean_margin": 25.906045036315916
+      },
+      "math": {
+        "score": 0.96,
+        "correct": 48,
+        "total": 50,
+        "mean_margin": 60.22551957130432
+      },
+      "code": {
+        "score": 0.78,
+        "correct": 39,
+        "total": 50,
+        "mean_margin": 17.44445425927639
+      },
+      "creative": {
+        "score": 0.94,
+        "correct": 47,
+        "total": 50,
+        "mean_margin": 42.05096650123596
+      }
+    }
+  },
+  "analysis": {
+    "k1_correlation": {
+      "domains": [
+        "medical",
+        "math",
+        "code",
+        "creative"
+      ],
+      "kr_scores_own_domain": [
+        1.0,
+        1.0,
+        0.82,
+        0.98
+      ],
+      "kr_deltas_over_base": [
+        0.0,
+        0.040000000000000036,
+        0.07999999999999996,
+        0.09999999999999998
+      ],
+      "task_deltas": [
+        0.0012,
+        0.0667,
+        0.1,
+        0.3598
+      ],
+      "pearson_r_raw": 0.02889020174411678,
+      "spearman_rho_raw": -0.5999999999999999,
+      "pearson_r_delta": 0.8418349317344919,
+      "spearman_rho_delta": 0.9999999999999998,
+      "best_abs_r": 0.9999999999999998,
+      "pass": true
+    },
+    "k2_discrimination": {
+      "mean_trained_own_domain": 0.95,
+      "mean_random": 0.895,
+      "noise_floor": 0.395,
+      "discrimination_delta": 0.05499999999999994,
+      "discrimination_ratio": 0.13924050632911375,
+      "trained_per_domain": {
+        "medical": 1.0,
+        "math": 1.0,
+        "code": 0.82,
+        "creative": 0.98
+      },
+      "random_per_domain": {
+        "medical": 1.0,
+        "math": 0.96,
+        "code": 0.74,
+        "creative": 0.88
+      },
+      "pass": false
+    }
+  },
+  "kill_criteria": {
+    "K1": "PASS: best |r| = 1.0000 (threshold 0.5)",
+    "K2": "FAIL: ratio = 0.14x (threshold 2.0x)"
+  },
+  "verdict": "KILLED (K2: discrimination < 2x noise floor)",
+  "total_time_s": 998.7132542133331,
+  "total_time_min": 16.64522090355555
+}

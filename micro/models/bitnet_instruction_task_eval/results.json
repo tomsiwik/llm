@@ -1,0 +1,1552 @@
+{
+  "experiment": "bitnet_instruction_task_eval",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "hypothesis": "Instruction-tuned LoRA adapters pass task evaluation where NTP adapters failed",
+  "training_format": "instruction_qa_pairs",
+  "timestamp": "2026-03-22 02:56:27",
+  "base": {
+    "math": {
+      "metric": "accuracy",
+      "value": 0.0,
+      "correct": 0,
+      "total": 15,
+      "pct": 0.0,
+      "details": [
+        {
+          "idx": 0,
+          "level": 2,
+          "predicted": "2",
+          "answer": "\\left( 3, \\frac{\\pi}{2} \\right",
+          "correct": false
+        },
+        {
+          "idx": 1,
+          "level": 2,
+          "predicted": "1.4",
+          "answer": "\\text{Evelyn}",
+          "correct": false
+        },
+        {
+          "idx": 2,
+          "level": 2,
+          "predicted": "3",
+          "answer": "42",
+          "correct": false
+        },
+        {
+          "idx": 3,
+          "level": 2,
+          "predicted": "2",
+          "answer": "5",
+          "correct": false
+        },
+        {
+          "idx": 4,
+          "level": 1,
+          "predicted": "7",
+          "answer": "\\sqrt{51}",
+          "correct": false
+        },
+        {
+          "idx": 5,
+          "level": 1,
+          "predicted": "5",
+          "answer": "-50",
+          "correct": false
+        },
+        {
+          "idx": 6,
+          "level": 1,
+          "predicted": "2",
+          "answer": "28",
+          "correct": false
+        },
+        {
+          "idx": 7,
+          "level": 2,
+          "predicted": "18",
+          "answer": "78",
+          "correct": false
+        },
+        {
+          "idx": 8,
+          "level": 2,
+          "predicted": "90",
+          "answer": "-2 + 7i",
+          "correct": false
+        },
+        {
+          "idx": 9,
+          "level": 2,
+          "predicted": "1",
+          "answer": "225",
+          "correct": false
+        },
+        {
+          "idx": 10,
+          "level": 2,
+          "predicted": "2",
+          "answer": "3",
+          "correct": false
+        },
+        {
+          "idx": 11,
+          "level": 2,
+          "predicted": "21",
+          "answer": "3, 5, 7",
+          "correct": false
+        },
+        {
+          "idx": 12,
+          "level": 1,
+          "predicted": "2",
+          "answer": "2000",
+          "correct": false
+        },
+        {
+          "idx": 13,
+          "level": 2,
+          "predicted": "6",
+          "answer": "12",
+          "correct": false
+        },
+        {
+          "idx": 14,
+          "level": 2,
+          "predicted": "2",
+          "answer": "4",
+          "correct": false
+        }
+      ]
+    },
+    "code": {
+      "metric": "syntax_valid_rate",
+      "value": 0.9,
+      "valid": 9,
+      "total": 10,
+      "pct": 90.0,
+      "details": [
+        {
+          "idx": 0,
+          "valid": false,
+          "len": 367
+        },
+        {
+          "idx": 1,
+          "valid": true,
+          "len": 418
+        },
+        {
+          "idx": 2,
+          "valid": true,
+          "len": 429
+        },
+        {
+          "idx": 3,
+          "valid": true,
+          "len": 410
+        },
+        {
+          "idx": 4,
+          "valid": true,
+          "len": 441
+        },
+        {
+          "idx": 5,
+          "valid": true,
+          "len": 434
+        },
+        {
+          "idx": 6,
+          "valid": true,
+          "len": 381
+        },
+        {
+          "idx": 7,
+          "valid": true,
+          "len": 507
+        },
+        {
+          "idx": 8,
+          "valid": true,
+          "len": 458
+        },
+        {
+          "idx": 9,
+          "valid": true,
+          "len": 459
+        }
+      ]
+    },
+    "medical": {
+      "metric": "keyword_f1",
+      "value": 0.2532,
+      "total": 15,
+      "pct": 25.3,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.1892,
+          "len": 493
+        },
+        {
+          "idx": 1,
+          "f1": 0.2941,
+          "len": 443
+        },
+        {
+          "idx": 2,
+          "f1": 0.2597,
+          "len": 486
+        },
+        {
+          "idx": 3,
+          "f1": 0.3333,
+          "len": 472
+        },
+        {
+          "idx": 4,
+          "f1": 0.3736,
+          "len": 493
+        },
+        {
+          "idx": 5,
+          "f1": 0.4578,
+          "len": 441
+        },
+        {
+          "idx": 6,
+          "f1": 0.1875,
+          "len": 437
+        },
+        {
+          "idx": 7,
+          "f1": 0.1967,
+          "len": 428
+        },
+        {
+          "idx": 8,
+          "f1": 0.1159,
+          "len": 448
+        },
+        {
+          "idx": 9,
+          "f1": 0.1231,
+          "len": 441
+        },
+        {
+          "idx": 10,
+          "f1": 0.3636,
+          "len": 493
+        },
+        {
+          "idx": 11,
+          "f1": 0.2278,
+          "len": 469
+        },
+        {
+          "idx": 12,
+          "f1": 0.3824,
+          "len": 421
+        },
+        {
+          "idx": 13,
+          "f1": 0.1714,
+          "len": 469
+        },
+        {
+          "idx": 14,
+          "f1": 0.1212,
+          "len": 503
+        }
+      ]
+    },
+    "legal": {
+      "metric": "keyword_f1",
+      "value": 0.0779,
+      "total": 15,
+      "pct": 7.8,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 1,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 2,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 3,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 4,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 5,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 6,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 7,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 8,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 9,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 10,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 11,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 12,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 13,
+          "f1": 0.0779,
+          "len": 544
+        },
+        {
+          "idx": 14,
+          "f1": 0.0779,
+          "len": 544
+        }
+      ]
+    },
+    "creative": {
+      "metric": "creative_ppl",
+      "value": 4.3899,
+      "total": 20,
+      "total_tokens": 3527
+    }
+  },
+  "training": {
+    "medical": {
+      "train_loss_final": 0.9488,
+      "val_loss": 1.4781,
+      "n_steps": 300,
+      "time_s": 112.6
+    },
+    "math": {
+      "train_loss_final": 0.7992,
+      "val_loss": 0.8273,
+      "n_steps": 300,
+      "time_s": 165.8
+    },
+    "code": {
+      "train_loss_final": 0.8411,
+      "val_loss": 0.9016,
+      "n_steps": 300,
+      "time_s": 123.4
+    },
+    "legal": {
+      "train_loss_final": 0.0,
+      "val_loss": 0.0,
+      "n_steps": 300,
+      "time_s": 76.6
+    },
+    "creative": {
+      "train_loss_final": 1.4818,
+      "val_loss": 1.0546,
+      "n_steps": 300,
+      "time_s": 182.9
+    }
+  },
+  "orthogonality": {
+    "pairs": {
+      "medical-math": 0.001428,
+      "medical-code": 2.5e-05,
+      "medical-legal": 0.00064,
+      "medical-creative": 0.001106,
+      "math-code": 0.000531,
+      "math-legal": 0.001453,
+      "math-creative": 0.00114,
+      "code-legal": 0.001088,
+      "code-creative": 0.000698,
+      "legal-creative": 0.000291
+    },
+    "mean_abs_cos": 0.00084
+  },
+  "individual": {
+    "medical": {
+      "medical": {
+        "metric": "keyword_f1",
+        "value": 0.2544,
+        "total": 15,
+        "pct": 25.4,
+        "details": [
+          {
+            "idx": 0,
+            "f1": 0.2785,
+            "len": 460
+          },
+          {
+            "idx": 1,
+            "f1": 0.225,
+            "len": 483
+          },
+          {
+            "idx": 2,
+            "f1": 0.2683,
+            "len": 527
+          },
+          {
+            "idx": 3,
+            "f1": 0.3059,
+            "len": 488
+          },
+          {
+            "idx": 4,
+            "f1": 0.3441,
+            "len": 503
+          },
+          {
+            "idx": 5,
+            "f1": 0.3922,
+            "len": 531
+          },
+          {
+            "idx": 6,
+            "f1": 0.2121,
+            "len": 434
+          },
+          {
+            "idx": 7,
+            "f1": 0.1842,
+            "len": 493
+          },
+          {
+            "idx": 8,
+            "f1": 0.1039,
+            "len": 444
+          },
+          {
+            "idx": 9,
+            "f1": 0.1791,
+            "len": 430
+          },
+          {
+            "idx": 10,
+            "f1": 0.3333,
+            "len": 504
+          },
+          {
+            "idx": 11,
+            "f1": 0.2927,
+            "len": 515
+          },
+          {
+            "idx": 12,
+            "f1": 0.3457,
+            "len": 496
+          },
+          {
+            "idx": 13,
+            "f1": 0.1739,
+            "len": 497
+          },
+          {
+            "idx": 14,
+            "f1": 0.1765,
+            "len": 483
+          }
+        ]
+      }
+    },
+    "math": {
+      "math": {
+        "metric": "accuracy",
+        "value": 0.0667,
+        "correct": 1,
+        "total": 15,
+        "pct": 6.7,
+        "details": [
+          {
+            "idx": 0,
+            "level": 2,
+            "predicted": "3",
+            "answer": "\\left( 3, \\frac{\\pi}{2} \\right",
+            "correct": false
+          },
+          {
+            "idx": 1,
+            "level": 2,
+            "predicted": "2",
+            "answer": "\\text{Evelyn}",
+            "correct": false
+          },
+          {
+            "idx": 2,
+            "level": 2,
+            "predicted": "",
+            "answer": "42",
+            "correct": false
+          },
+          {
+            "idx": 3,
+            "level": 2,
+            "predicted": "5",
+            "answer": "5",
+            "correct": true
+          },
+          {
+            "idx": 4,
+            "level": 1,
+            "predicted": "4",
+            "answer": "\\sqrt{51}",
+            "correct": false
+          },
+          {
+            "idx": 5,
+            "level": 1,
+            "predicted": "500",
+            "answer": "-50",
+            "correct": false
+          },
+          {
+            "idx": 6,
+            "level": 1,
+            "predicted": "124",
+            "answer": "28",
+            "correct": false
+          },
+          {
+            "idx": 7,
+            "level": 2,
+            "predicted": "24.33",
+            "answer": "78",
+            "correct": false
+          },
+          {
+            "idx": 8,
+            "level": 2,
+            "predicted": "2",
+            "answer": "-2 + 7i",
+            "correct": false
+          },
+          {
+            "idx": 9,
+            "level": 2,
+            "predicted": "3",
+            "answer": "225",
+            "correct": false
+          },
+          {
+            "idx": 10,
+            "level": 2,
+            "predicted": "1",
+            "answer": "3",
+            "correct": false
+          },
+          {
+            "idx": 11,
+            "level": 2,
+            "predicted": "3",
+            "answer": "3, 5, 7",
+            "correct": false
+          },
+          {
+            "idx": 12,
+            "level": 1,
+            "predicted": "20",
+            "answer": "2000",
+            "correct": false
+          },
+          {
+            "idx": 13,
+            "level": 2,
+            "predicted": "4",
+            "answer": "12",
+            "correct": false
+          },
+          {
+            "idx": 14,
+            "level": 2,
+            "predicted": "8",
+            "answer": "4",
+            "correct": false
+          }
+        ]
+      }
+    },
+    "code": {
+      "code": {
+        "metric": "syntax_valid_rate",
+        "value": 1.0,
+        "valid": 10,
+        "total": 10,
+        "pct": 100.0,
+        "details": [
+          {
+            "idx": 0,
+            "valid": true,
+            "len": 233
+          },
+          {
+            "idx": 1,
+            "valid": true,
+            "len": 436
+          },
+          {
+            "idx": 2,
+            "valid": true,
+            "len": 423
+          },
+          {
+            "idx": 3,
+            "valid": true,
+            "len": 373
+          },
+          {
+            "idx": 4,
+            "valid": true,
+            "len": 340
+          },
+          {
+            "idx": 5,
+            "valid": true,
+            "len": 374
+          },
+          {
+            "idx": 6,
+            "valid": true,
+            "len": 146
+          },
+          {
+            "idx": 7,
+            "valid": true,
+            "len": 444
+          },
+          {
+            "idx": 8,
+            "valid": true,
+            "len": 393
+          },
+          {
+            "idx": 9,
+            "valid": true,
+            "len": 384
+          }
+        ]
+      }
+    },
+    "legal": {
+      "legal": {
+        "metric": "keyword_f1",
+        "value": 0.2647,
+        "total": 15,
+        "pct": 26.5,
+        "details": [
+          {
+            "idx": 0,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 1,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 2,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 3,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 4,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 5,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 6,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 7,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 8,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 9,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 10,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 11,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 12,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 13,
+            "f1": 0.2647,
+            "len": 520
+          },
+          {
+            "idx": 14,
+            "f1": 0.2647,
+            "len": 520
+          }
+        ]
+      }
+    },
+    "creative": {
+      "creative": {
+        "metric": "creative_ppl",
+        "value": 2.811,
+        "total": 20,
+        "total_tokens": 3527
+      }
+    }
+  },
+  "composed": {
+    "math": {
+      "metric": "accuracy",
+      "value": 0.0667,
+      "correct": 1,
+      "total": 15,
+      "pct": 6.7,
+      "details": [
+        {
+          "idx": 0,
+          "level": 2,
+          "predicted": "2",
+          "answer": "\\left( 3, \\frac{\\pi}{2} \\right",
+          "correct": false
+        },
+        {
+          "idx": 1,
+          "level": 2,
+          "predicted": "2.5",
+          "answer": "\\text{Evelyn}",
+          "correct": false
+        },
+        {
+          "idx": 2,
+          "level": 2,
+          "predicted": "3",
+          "answer": "42",
+          "correct": false
+        },
+        {
+          "idx": 3,
+          "level": 2,
+          "predicted": "45",
+          "answer": "5",
+          "correct": false
+        },
+        {
+          "idx": 4,
+          "level": 1,
+          "predicted": "7",
+          "answer": "\\sqrt{51}",
+          "correct": false
+        },
+        {
+          "idx": 5,
+          "level": 1,
+          "predicted": "2",
+          "answer": "-50",
+          "correct": false
+        },
+        {
+          "idx": 6,
+          "level": 1,
+          "predicted": "To solve this problem, we need",
+          "answer": "28",
+          "correct": false
+        },
+        {
+          "idx": 7,
+          "level": 2,
+          "predicted": "20",
+          "answer": "78",
+          "correct": false
+        },
+        {
+          "idx": 8,
+          "level": 2,
+          "predicted": "2",
+          "answer": "-2 + 7i",
+          "correct": false
+        },
+        {
+          "idx": 9,
+          "level": 2,
+          "predicted": "8",
+          "answer": "225",
+          "correct": false
+        },
+        {
+          "idx": 10,
+          "level": 2,
+          "predicted": "7",
+          "answer": "3",
+          "correct": false
+        },
+        {
+          "idx": 11,
+          "level": 2,
+          "predicted": "3",
+          "answer": "3, 5, 7",
+          "correct": false
+        },
+        {
+          "idx": 12,
+          "level": 1,
+          "predicted": "2",
+          "answer": "2000",
+          "correct": false
+        },
+        {
+          "idx": 13,
+          "level": 2,
+          "predicted": "16",
+          "answer": "12",
+          "correct": false
+        },
+        {
+          "idx": 14,
+          "level": 2,
+          "predicted": "4",
+          "answer": "4",
+          "correct": true
+        }
+      ]
+    },
+    "code": {
+      "metric": "syntax_valid_rate",
+      "value": 0.8,
+      "valid": 8,
+      "total": 10,
+      "pct": 80.0,
+      "details": [
+        {
+          "idx": 0,
+          "valid": true,
+          "len": 430
+        },
+        {
+          "idx": 1,
+          "valid": false,
+          "len": 410
+        },
+        {
+          "idx": 2,
+          "valid": true,
+          "len": 412
+        },
+        {
+          "idx": 3,
+          "valid": true,
+          "len": 406
+        },
+        {
+          "idx": 4,
+          "valid": true,
+          "len": 451
+        },
+        {
+          "idx": 5,
+          "valid": true,
+          "len": 399
+        },
+        {
+          "idx": 6,
+          "valid": true,
+          "len": 343
+        },
+        {
+          "idx": 7,
+          "valid": true,
+          "len": 478
+        },
+        {
+          "idx": 8,
+          "valid": true,
+          "len": 457
+        },
+        {
+          "idx": 9,
+          "valid": false,
+          "len": 523
+        }
+      ]
+    },
+    "medical": {
+      "metric": "keyword_f1",
+      "value": 0.2635,
+      "total": 15,
+      "pct": 26.4,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.2078,
+          "len": 468
+        },
+        {
+          "idx": 1,
+          "f1": 0.2258,
+          "len": 409
+        },
+        {
+          "idx": 2,
+          "f1": 0.2667,
+          "len": 474
+        },
+        {
+          "idx": 3,
+          "f1": 0.3333,
+          "len": 467
+        },
+        {
+          "idx": 4,
+          "f1": 0.3441,
+          "len": 493
+        },
+        {
+          "idx": 5,
+          "f1": 0.4842,
+          "len": 495
+        },
+        {
+          "idx": 6,
+          "f1": 0.2254,
+          "len": 450
+        },
+        {
+          "idx": 7,
+          "f1": 0.1918,
+          "len": 486
+        },
+        {
+          "idx": 8,
+          "f1": 0.2059,
+          "len": 432
+        },
+        {
+          "idx": 9,
+          "f1": 0.1231,
+          "len": 452
+        },
+        {
+          "idx": 10,
+          "f1": 0.4267,
+          "len": 456
+        },
+        {
+          "idx": 11,
+          "f1": 0.25,
+          "len": 559
+        },
+        {
+          "idx": 12,
+          "f1": 0.3256,
+          "len": 522
+        },
+        {
+          "idx": 13,
+          "f1": 0.1935,
+          "len": 463
+        },
+        {
+          "idx": 14,
+          "f1": 0.1493,
+          "len": 489
+        }
+      ]
+    },
+    "legal": {
+      "metric": "keyword_f1",
+      "value": 0.1194,
+      "total": 15,
+      "pct": 11.9,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 1,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 2,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 3,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 4,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 5,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 6,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 7,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 8,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 9,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 10,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 11,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 12,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 13,
+          "f1": 0.1194,
+          "len": 514
+        },
+        {
+          "idx": 14,
+          "f1": 0.1194,
+          "len": 514
+        }
+      ]
+    },
+    "creative": {
+      "metric": "creative_ppl",
+      "value": 3.3974,
+      "total": 20,
+      "total_tokens": 3527
+    }
+  },
+  "routed": {
+    "medical": {
+      "metric": "keyword_f1",
+      "value": 0.2544,
+      "total": 15,
+      "pct": 25.4,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.2785,
+          "len": 460
+        },
+        {
+          "idx": 1,
+          "f1": 0.225,
+          "len": 483
+        },
+        {
+          "idx": 2,
+          "f1": 0.2683,
+          "len": 527
+        },
+        {
+          "idx": 3,
+          "f1": 0.3059,
+          "len": 488
+        },
+        {
+          "idx": 4,
+          "f1": 0.3441,
+          "len": 503
+        },
+        {
+          "idx": 5,
+          "f1": 0.3922,
+          "len": 531
+        },
+        {
+          "idx": 6,
+          "f1": 0.2121,
+          "len": 434
+        },
+        {
+          "idx": 7,
+          "f1": 0.1842,
+          "len": 493
+        },
+        {
+          "idx": 8,
+          "f1": 0.1039,
+          "len": 444
+        },
+        {
+          "idx": 9,
+          "f1": 0.1791,
+          "len": 430
+        },
+        {
+          "idx": 10,
+          "f1": 0.3333,
+          "len": 504
+        },
+        {
+          "idx": 11,
+          "f1": 0.2927,
+          "len": 515
+        },
+        {
+          "idx": 12,
+          "f1": 0.3457,
+          "len": 496
+        },
+        {
+          "idx": 13,
+          "f1": 0.1739,
+          "len": 497
+        },
+        {
+          "idx": 14,
+          "f1": 0.1765,
+          "len": 483
+        }
+      ]
+    },
+    "math": {
+      "metric": "accuracy",
+      "value": 0.0667,
+      "correct": 1,
+      "total": 15,
+      "pct": 6.7,
+      "details": [
+        {
+          "idx": 0,
+          "level": 2,
+          "predicted": "3",
+          "answer": "\\left( 3, \\frac{\\pi}{2} \\right",
+          "correct": false
+        },
+        {
+          "idx": 1,
+          "level": 2,
+          "predicted": "2",
+          "answer": "\\text{Evelyn}",
+          "correct": false
+        },
+        {
+          "idx": 2,
+          "level": 2,
+          "predicted": "",
+          "answer": "42",
+          "correct": false
+        },
+        {
+          "idx": 3,
+          "level": 2,
+          "predicted": "5",
+          "answer": "5",
+          "correct": true
+        },
+        {
+          "idx": 4,
+          "level": 1,
+          "predicted": "4",
+          "answer": "\\sqrt{51}",
+          "correct": false
+        },
+        {
+          "idx": 5,
+          "level": 1,
+          "predicted": "500",
+          "answer": "-50",
+          "correct": false
+        },
+        {
+          "idx": 6,
+          "level": 1,
+          "predicted": "124",
+          "answer": "28",
+          "correct": false
+        },
+        {
+          "idx": 7,
+          "level": 2,
+          "predicted": "24.33",
+          "answer": "78",
+          "correct": false
+        },
+        {
+          "idx": 8,
+          "level": 2,
+          "predicted": "2",
+          "answer": "-2 + 7i",
+          "correct": false
+        },
+        {
+          "idx": 9,
+          "level": 2,
+          "predicted": "3",
+          "answer": "225",
+          "correct": false
+        },
+        {
+          "idx": 10,
+          "level": 2,
+          "predicted": "1",
+          "answer": "3",
+          "correct": false
+        },
+        {
+          "idx": 11,
+          "level": 2,
+          "predicted": "3",
+          "answer": "3, 5, 7",
+          "correct": false
+        },
+        {
+          "idx": 12,
+          "level": 1,
+          "predicted": "20",
+          "answer": "2000",
+          "correct": false
+        },
+        {
+          "idx": 13,
+          "level": 2,
+          "predicted": "4",
+          "answer": "12",
+          "correct": false
+        },
+        {
+          "idx": 14,
+          "level": 2,
+          "predicted": "8",
+          "answer": "4",
+          "correct": false
+        }
+      ]
+    },
+    "code": {
+      "metric": "syntax_valid_rate",
+      "value": 1.0,
+      "valid": 10,
+      "total": 10,
+      "pct": 100.0,
+      "details": [
+        {
+          "idx": 0,
+          "valid": true,
+          "len": 233
+        },
+        {
+          "idx": 1,
+          "valid": true,
+          "len": 436
+        },
+        {
+          "idx": 2,
+          "valid": true,
+          "len": 423
+        },
+        {
+          "idx": 3,
+          "valid": true,
+          "len": 373
+        },
+        {
+          "idx": 4,
+          "valid": true,
+          "len": 340
+        },
+        {
+          "idx": 5,
+          "valid": true,
+          "len": 374
+        },
+        {
+          "idx": 6,
+          "valid": true,
+          "len": 146
+        },
+        {
+          "idx": 7,
+          "valid": true,
+          "len": 444
+        },
+        {
+          "idx": 8,
+          "valid": true,
+          "len": 393
+        },
+        {
+          "idx": 9,
+          "valid": true,
+          "len": 384
+        }
+      ]
+    },
+    "legal": {
+      "metric": "keyword_f1",
+      "value": 0.2647,
+      "total": 15,
+      "pct": 26.5,
+      "details": [
+        {
+          "idx": 0,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 1,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 2,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 3,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 4,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 5,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 6,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 7,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 8,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 9,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 10,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 11,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 12,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 13,
+          "f1": 0.2647,
+          "len": 520
+        },
+        {
+          "idx": 14,
+          "f1": 0.2647,
+          "len": 520
+        }
+      ]
+    },
+    "creative": {
+      "metric": "creative_ppl",
+      "value": 2.811,
+      "total": 20,
+      "total_tokens": 3527
+    }
+  },
+  "comparisons_composed": {
+    "math": {
+      "base": 0.0,
+      "composed": 0.0667,
+      "better": true,
+      "delta": 0.0667
+    },
+    "code": {
+      "base": 0.9,
+      "composed": 0.8,
+      "better": false,
+      "delta": -0.1
+    },
+    "medical": {
+      "base": 0.2532,
+      "composed": 0.2635,
+      "better": true,
+      "delta": 0.0103
+    },
+    "legal": {
+      "base": 0.0779,
+      "composed": 0.1194,
+      "better": true,
+      "delta": 0.0415
+    },
+    "creative": {
+      "base": 4.3899,
+      "composed": 3.3974,
+      "better": true,
+      "delta": -0.9925
+    }
+  },
+  "comparisons_routed": {
+    "math": {
+      "base": 0.0,
+      "routed": 0.0667,
+      "better": true,
+      "delta": 0.0667
+    },
+    "code": {
+      "base": 0.9,
+      "routed": 1.0,
+      "better": true,
+      "delta": 0.1
+    },
+    "medical": {
+      "base": 0.2532,
+      "routed": 0.2544,
+      "better": true,
+      "delta": 0.0012
+    },
+    "legal": {
+      "base": 0.0779,
+      "routed": 0.2647,
+      "better": true,
+      "delta": 0.1868
+    },
+    "creative": {
+      "base": 4.3899,
+      "routed": 2.811,
+      "better": true,
+      "delta": -1.5789
+    }
+  },
+  "kill_criteria": {
+    "K1_composed": {
+      "n_worse": 1,
+      "worse_pct": 20.0,
+      "pass": true
+    },
+    "K1_routed": {
+      "n_worse": 0,
+      "worse_pct": 0.0,
+      "pass": true
+    },
+    "K2": {
+      "base_acc": 0.0,
+      "adapter_acc": 6.7,
+      "improvement_pp": 6.7,
+      "pass": true
+    }
+  },
+  "verdict": "SUPPORTED",
+  "total_time_s": 3622.3,
+  "total_time_min": 60.4,
+  "ntp_comparison": {
+    "math_base": 5.0,
+    "math_composed": 0.0,
+    "math_individual": 5.0,
+    "medical_base_f1": 13.0,
+    "medical_composed_f1": 15.6,
+    "medical_individual_f1": 17.9,
+    "code_base": 10.0,
+    "code_composed": 5.0,
+    "code_individual": 5.0,
+    "legal_base_f1": 14.8,
+    "legal_composed_f1": 14.0,
+    "legal_individual_f1": 11.0,
+    "verdict": "KILLED (K1 60%, K2 0pp)"
+  }
+}

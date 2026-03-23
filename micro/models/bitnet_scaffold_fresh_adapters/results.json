@@ -1,0 +1,178 @@
+{
+  "experiment": "bitnet_scaffold_fresh_adapters",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 400,
+  "domains": [
+    "medical",
+    "math",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-22 22:57:27",
+  "base_ppls_pretrained": {
+    "medical": 6.961070940934386,
+    "math": 5.825316658335637,
+    "legal": 26.93424520769963,
+    "creative": 6.9936318550329695
+  },
+  "condition_A_pretrained": {
+    "medical": {
+      "train_time_s": 135.8,
+      "first_50_loss": 2.9249,
+      "last_50_loss": 1.7132,
+      "converged": true,
+      "individual_ppl": 4.5,
+      "base_ppl": 6.96,
+      "ppl_improvement_pct": 35.4
+    },
+    "math": {
+      "train_time_s": 157.2,
+      "first_50_loss": 1.3451,
+      "last_50_loss": 1.2659,
+      "converged": true,
+      "individual_ppl": 3.64,
+      "base_ppl": 5.83,
+      "ppl_improvement_pct": 37.5
+    },
+    "legal": {
+      "train_time_s": 158.6,
+      "first_50_loss": 3.15,
+      "last_50_loss": 2.8863,
+      "converged": true,
+      "individual_ppl": 18.89,
+      "base_ppl": 26.93,
+      "ppl_improvement_pct": 29.9
+    },
+    "creative": {
+      "train_time_s": 171.1,
+      "first_50_loss": 1.2444,
+      "last_50_loss": 1.6357,
+      "converged": false,
+      "individual_ppl": 5.12,
+      "base_ppl": 6.99,
+      "ppl_improvement_pct": 26.8
+    }
+  },
+  "composed_ppls_pretrained": {
+    "medical": 6.09,
+    "math": 5.08,
+    "legal": 24.26,
+    "creative": 6.39
+  },
+  "cosines_pretrained": {
+    "medical-math": 0.004975,
+    "medical-legal": 0.003718,
+    "medical-creative": 0.002324,
+    "math-legal": 0.001367,
+    "math-creative": 0.004401,
+    "legal-creative": 0.00046
+  },
+  "base_ppls_scaffold": {
+    "medical": 414534460.53,
+    "math": 567940613.63,
+    "legal": 354213916.66,
+    "creative": 142521012.08
+  },
+  "condition_B_scaffold": {
+    "medical": {
+      "train_time_s": 133.4,
+      "first_50_loss": 15.0522,
+      "last_50_loss": 8.6264,
+      "converged": true,
+      "individual_ppl": 2887.45,
+      "scaffold_base_ppl": 414534460.53
+    },
+    "math": {
+      "train_time_s": 159.0,
+      "first_50_loss": 12.7141,
+      "last_50_loss": 5.2984,
+      "converged": true,
+      "individual_ppl": 214.7,
+      "scaffold_base_ppl": 567940613.63
+    },
+    "legal": {
+      "train_time_s": 161.7,
+      "first_50_loss": 14.4353,
+      "last_50_loss": 8.1088,
+      "converged": true,
+      "individual_ppl": 2131.7,
+      "scaffold_base_ppl": 354213916.66
+    },
+    "creative": {
+      "train_time_s": 170.3,
+      "first_50_loss": 10.6654,
+      "last_50_loss": 5.2915,
+      "converged": true,
+      "individual_ppl": 185.87,
+      "scaffold_base_ppl": 142521012.08
+    }
+  },
+  "composed_ppls_scaffold": {
+    "medical": 2855054.82,
+    "math": 829196.93,
+    "legal": 1199102.44,
+    "creative": 429726.47
+  },
+  "cosines_scaffold": {
+    "medical-math": 0.005507,
+    "medical-legal": 0.00089,
+    "medical-creative": 0.001867,
+    "math-legal": 0.001295,
+    "math-creative": 0.001813,
+    "legal-creative": 0.001135
+  },
+  "k1_per_domain": {
+    "medical": {
+      "scaffold_ppl": 2887.45,
+      "pretrained_ppl": 4.5,
+      "ratio": 641.66,
+      "pass": false
+    },
+    "math": {
+      "scaffold_ppl": 214.7,
+      "pretrained_ppl": 3.64,
+      "ratio": 58.98,
+      "pass": false
+    },
+    "legal": {
+      "scaffold_ppl": 2131.7,
+      "pretrained_ppl": 18.89,
+      "ratio": 112.85,
+      "pass": false
+    },
+    "creative": {
+      "scaffold_ppl": 185.87,
+      "pretrained_ppl": 5.12,
+      "ratio": 36.3,
+      "pass": false
+    }
+  },
+  "k1_pass": false,
+  "k2_convergence": {
+    "medical": {
+      "first_50_loss": 15.0522,
+      "last_50_loss": 8.6264,
+      "converged": true
+    },
+    "math": {
+      "first_50_loss": 12.7141,
+      "last_50_loss": 5.2984,
+      "converged": true
+    },
+    "legal": {
+      "first_50_loss": 14.4353,
+      "last_50_loss": 8.1088,
+      "converged": true
+    },
+    "creative": {
+      "first_50_loss": 10.6654,
+      "last_50_loss": 5.2915,
+      "converged": true
+    }
+  },
+  "k2_pass": true,
+  "verdict": "KILLED",
+  "mean_cos_pretrained": 0.002874,
+  "mean_cos_scaffold": 0.002084
+}

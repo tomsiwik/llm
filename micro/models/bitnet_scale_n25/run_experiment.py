@@ -118,9 +118,8 @@ NEW_CAPABILITIES = {
         "max_samples_val": 50,
     },
     "formal_writing": {
-        "description": "Academic/formal writing style (scientific abstracts)",
-        "hf_dataset": "scientific_papers",
-        "hf_subset": "arxiv",
+        "description": "Academic/formal writing style (PubMed abstracts)",
+        "hf_dataset": "ccdv/pubmed-summarization",
         "text_key": "abstract",
         "max_samples_train": 500,
         "max_samples_val": 50,

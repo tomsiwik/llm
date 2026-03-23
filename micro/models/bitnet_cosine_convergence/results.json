@@ -1,0 +1,1197 @@
+{
+  "experiment": "bitnet_cosine_convergence_trajectory",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "total_steps": 2000,
+  "cosine_interval": 100,
+  "timestamp": "2026-03-21 17:31:01",
+  "trainable_params": 21626880,
+  "base_ppls": {
+    "medical": 18.975173414306624,
+    "code": 3.780181709498771,
+    "math": 4.540858346249787,
+    "legal": 26.93424520769963,
+    "creative": 3.514021317923881
+  },
+  "domain_loss_curves": {
+    "medical": {
+      "first_50": 2.8069,
+      "last_50": 0.4986,
+      "losses_every_100": [
+        2.4408,
+        1.8927,
+        1.303,
+        1.397,
+        1.5357,
+        1.6818,
+        1.7628,
+        1.47,
+        1.6436,
+        1.1175,
+        0.7344,
+        0.8431,
+        0.942,
+        0.8734,
+        0.9712,
+        1.0232,
+        1.1154,
+        0.6874,
+        0.4959,
+        0.5145
+      ],
+      "train_time_s": 694.8
+    },
+    "code": {
+      "first_50": 1.0463,
+      "last_50": 0.6871,
+      "losses_every_100": [
+        1.0049,
+        1.1006,
+        0.9896,
+        1.081,
+        1.0134,
+        0.8998,
+        0.9039,
+        0.9855,
+        0.7412,
+        0.8459,
+        0.7846,
+        0.8719,
+        0.844,
+        0.7491,
+        0.7575,
+        0.8299,
+        0.5972,
+        0.6109,
+        0.5668,
+        0.6635
+      ],
+      "train_time_s": 780.8
+    },
+    "math": {
+      "first_50": 1.3134,
+      "last_50": 0.759,
+      "losses_every_100": [
+        1.2539,
+        1.1768,
+        1.167,
+        1.2611,
+        1.2124,
+        1.1617,
+        1.1685,
+        1.111,
+        0.8934,
+        0.9261,
+        0.9318,
+        1.0271,
+        0.9936,
+        0.962,
+        0.978,
+        0.9297,
+        0.6803,
+        0.6771,
+        0.6647,
+        0.7414
+      ],
+      "train_time_s": 885.4
+    },
+    "legal": {
+      "first_50": 3.1053,
+      "last_50": 1.6219,
+      "losses_every_100": [
+        2.9463,
+        2.9002,
+        2.9084,
+        2.9207,
+        2.7902,
+        2.442,
+        2.5319,
+        2.5288,
+        2.5927,
+        2.4841,
+        1.9307,
+        1.9929,
+        1.964,
+        2.1361,
+        2.0471,
+        1.4656,
+        1.4655,
+        1.4046,
+        1.661,
+        1.5798
+      ],
+      "train_time_s": 878.3
+    },
+    "creative": {
+      "first_50": 1.2165,
+      "last_50": 1.2271,
+      "losses_every_100": [
+        1.4345,
+        1.6418,
+        1.5837,
+        1.5942,
+        1.5786,
+        1.5914,
+        1.2852,
+        1.1382,
+        1.1845,
+        1.4173,
+        1.4023,
+        1.4203,
+        1.4109,
+        1.4325,
+        1.1596,
+        0.8712,
+        0.9687,
+        1.1888,
+        1.178,
+        1.1987
+      ],
+      "train_time_s": 936.9
+    }
+  },
+  "domain_convergence": {
+    "medical": {
+      "converged": false,
+      "plateau_step": null,
+      "final_loss": 0.2715
+    },
+    "code": {
+      "converged": true,
+      "plateau_step": 1800,
+      "final_loss": 0.3008
+    },
+    "math": {
+      "converged": true,
+      "plateau_step": 1800,
+      "final_loss": 1.2266
+    },
+    "legal": {
+      "converged": true,
+      "plateau_step": 1800,
+      "final_loss": 2.5781
+    },
+    "creative": {
+      "converged": true,
+      "plateau_step": 1800,
+      "final_loss": 1.5
+    }
+  },
+  "cosine_trajectory": {
+    "100": {
+      "mean_abs_cos": 0.000942,
+      "max_abs_cos": 0.003504,
+      "min_abs_cos": 5.6e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000352
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002392
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.00057
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000487
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000948
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 5.6e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000409
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.003504
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000543
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000156
+        }
+      ]
+    },
+    "200": {
+      "mean_abs_cos": 0.000877,
+      "max_abs_cos": 0.003345,
+      "min_abs_cos": 3.2e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000167
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001946
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000508
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000494
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000865
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 3.2e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000411
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.003345
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000566
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000435
+        }
+      ]
+    },
+    "300": {
+      "mean_abs_cos": 0.000874,
+      "max_abs_cos": 0.00316,
+      "min_abs_cos": 7.6e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000148
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002065
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000237
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.00039
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000903
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 7.6e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000324
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.00316
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000766
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.00067
+        }
+      ]
+    },
+    "400": {
+      "mean_abs_cos": 0.000875,
+      "max_abs_cos": 0.003047,
+      "min_abs_cos": 1e-06,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000313
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002018
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000255
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000454
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000989
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 1e-06
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000412
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.003047
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000681
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000582
+        }
+      ]
+    },
+    "500": {
+      "mean_abs_cos": 0.000911,
+      "max_abs_cos": 0.003091,
+      "min_abs_cos": 0.000158,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000339
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002235
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000158
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000591
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.000927
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000207
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000252
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.003091
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000732
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000578
+        }
+      ]
+    },
+    "600": {
+      "mean_abs_cos": 0.000906,
+      "max_abs_cos": 0.002866,
+      "min_abs_cos": 5.9e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 6.3e-05
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002225
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 5.9e-05
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000424
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.00106
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000232
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000473
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002866
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000941
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000712
+        }
+      ]
+    },
+    "700": {
+      "mean_abs_cos": 0.000935,
+      "max_abs_cos": 0.002762,
+      "min_abs_cos": 0.000207,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.00028
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002109
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000207
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000495
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001074
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000445
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000335
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002762
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.000974
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.00067
+        }
+      ]
+    },
+    "800": {
+      "mean_abs_cos": 0.000927,
+      "max_abs_cos": 0.002839,
+      "min_abs_cos": 0.000298,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000302
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001999
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000298
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000505
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001002
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000405
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.0003
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002839
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001005
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000611
+        }
+      ]
+    },
+    "900": {
+      "mean_abs_cos": 0.000978,
+      "max_abs_cos": 0.002788,
+      "min_abs_cos": 0.000255,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000585
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.002185
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000412
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.00039
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001083
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000255
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000278
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002788
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001374
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000435
+        }
+      ]
+    },
+    "1000": {
+      "mean_abs_cos": 0.00092,
+      "max_abs_cos": 0.00275,
+      "min_abs_cos": 7.4e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.00046
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001616
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000445
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000446
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.00127
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 9e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 7.4e-05
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.00275
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001489
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000562
+        }
+      ]
+    },
+    "1100": {
+      "mean_abs_cos": 0.00095,
+      "max_abs_cos": 0.002699,
+      "min_abs_cos": 9e-06,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000388
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001481
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000298
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000479
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001428
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 9e-06
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000136
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002699
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001762
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.000817
+        }
+      ]
+    },
+    "1200": {
+      "mean_abs_cos": 0.001002,
+      "max_abs_cos": 0.002749,
+      "min_abs_cos": 1.9e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000421
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001292
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.00046
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000491
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001458
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 1.9e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000356
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002749
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001787
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.00099
+        }
+      ]
+    },
+    "1300": {
+      "mean_abs_cos": 0.001046,
+      "max_abs_cos": 0.002683,
+      "min_abs_cos": 5.2e-05,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000461
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001399
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000482
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000554
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.00145
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 5.2e-05
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000604
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002683
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001661
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001114
+        }
+      ]
+    },
+    "1400": {
+      "mean_abs_cos": 0.001087,
+      "max_abs_cos": 0.002613,
+      "min_abs_cos": 0.000226,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000437
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001316
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000327
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000757
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001587
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000226
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000667
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002613
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001778
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001167
+        }
+      ]
+    },
+    "1500": {
+      "mean_abs_cos": 0.001145,
+      "max_abs_cos": 0.00274,
+      "min_abs_cos": 0.000339,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000443
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001278
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000339
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.00092
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001598
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000449
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000668
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.00274
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001713
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.0013
+        }
+      ]
+    },
+    "1600": {
+      "mean_abs_cos": 0.001112,
+      "max_abs_cos": 0.002824,
+      "min_abs_cos": 0.000146,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000373
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001248
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000146
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.001003
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001374
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000544
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000687
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002824
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001643
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001274
+        }
+      ]
+    },
+    "1700": {
+      "mean_abs_cos": 0.00122,
+      "max_abs_cos": 0.002878,
+      "min_abs_cos": 0.000177,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000712
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001542
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000177
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.001056
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001418
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000662
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.00068
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002878
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.001905
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001171
+        }
+      ]
+    },
+    "1800": {
+      "mean_abs_cos": 0.001254,
+      "max_abs_cos": 0.002763,
+      "min_abs_cos": 0.000274,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000967
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001403
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000274
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000984
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001551
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000405
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000858
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002763
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.002092
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001247
+        }
+      ]
+    },
+    "1900": {
+      "mean_abs_cos": 0.001252,
+      "max_abs_cos": 0.00248,
+      "min_abs_cos": 0.000222,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.001019
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001225
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000324
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000939
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001689
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000222
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.000969
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.00248
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.00226
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.001389
+        }
+      ]
+    },
+    "2000": {
+      "mean_abs_cos": 0.001249,
+      "max_abs_cos": 0.002581,
+      "min_abs_cos": 0.000111,
+      "cosines": [
+        {
+          "pair": "medical-code",
+          "abs_cos": 0.000899
+        },
+        {
+          "pair": "medical-math",
+          "abs_cos": 0.001001
+        },
+        {
+          "pair": "medical-legal",
+          "abs_cos": 0.000321
+        },
+        {
+          "pair": "medical-creative",
+          "abs_cos": 0.000905
+        },
+        {
+          "pair": "code-math",
+          "abs_cos": 0.001723
+        },
+        {
+          "pair": "code-legal",
+          "abs_cos": 0.000111
+        },
+        {
+          "pair": "code-creative",
+          "abs_cos": 0.001173
+        },
+        {
+          "pair": "math-legal",
+          "abs_cos": 0.002581
+        },
+        {
+          "pair": "math-creative",
+          "abs_cos": 0.002354
+        },
+        {
+          "pair": "legal-creative",
+          "abs_cos": 0.00142
+        }
+      ]
+    }
+  },
+  "composition_trajectory": {
+    "200": {
+      "ppls": {
+        "medical": 15.19,
+        "code": 3.41,
+        "math": 4.09,
+        "legal": 24.34,
+        "creative": 3.24
+      },
+      "avg_composed": 10.05,
+      "composition_ratio_vs_base": 0.8706
+    },
+    "400": {
+      "ppls": {
+        "medical": 14.77,
+        "code": 3.39,
+        "math": 4.07,
+        "legal": 24.3,
+        "creative": 3.25
+      },
+      "avg_composed": 9.96,
+      "composition_ratio_vs_base": 0.8621
+    },
+    "800": {
+      "ppls": {
+        "medical": 14.56,
+        "code": 3.4,
+        "math": 4.04,
+        "legal": 24.21,
+        "creative": 3.23
+      },
+      "avg_composed": 9.89,
+      "composition_ratio_vs_base": 0.8562
+    },
+    "1200": {
+      "ppls": {
+        "medical": 14.5,
+        "code": 3.4,
+        "math": 4.03,
+        "legal": 24.27,
+        "creative": 3.23
+      },
+      "avg_composed": 9.89,
+      "composition_ratio_vs_base": 0.856
+    },
+    "1600": {
+      "ppls": {
+        "medical": 14.45,
+        "code": 3.4,
+        "math": 4.03,
+        "legal": 24.27,
+        "creative": 3.23
+      },
+      "avg_composed": 9.88,
+      "composition_ratio_vs_base": 0.8551
+    },
+    "2000": {
+      "ppls": {
+        "medical": 14.56,
+        "code": 3.4,
+        "math": 4.03,
+        "legal": 24.35,
+        "creative": 3.22
+      },
+      "avg_composed": 9.91,
+      "composition_ratio_vs_base": 0.8583
+    }
+  },
+  "k1_final_mean_cos": 0.001249,
+  "k1_pass": true,
+  "k2_monotonic_fraction": 0.579,
+  "k2_second_half_cv": 0.093,
+  "k2_pass": true,
+  "verdict": "SUPPORTED",
+  "total_time_minutes": 72.4
+}

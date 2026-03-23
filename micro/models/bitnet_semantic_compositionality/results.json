@@ -1,0 +1,630 @@
+{
+  "experiment": "bitnet_semantic_compositionality",
+  "hypothesis": "exp_bitnet_semantic_compositionality",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "n_adapters": 5,
+  "domains": [
+    "medical",
+    "math",
+    "code",
+    "legal",
+    "creative"
+  ],
+  "runtime_min": 97.0,
+  "part_a_semantic_composition": {
+    "medical+math": {
+      "base": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 82.4,
+        "ppl": 17.14
+      },
+      "individual_medical": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 104.2,
+        "ppl": 6.24
+      },
+      "individual_math": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 0.9,
+        "non_empty": 1.0,
+        "avg_len": 62.4,
+        "ppl": 8.22
+      },
+      "composed": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 101.3,
+        "ppl": 5.61
+      },
+      "composed_better_than_best_individual": true
+    },
+    "medical+code": {
+      "base": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 86.6,
+        "ppl": 42.08
+      },
+      "individual_medical": {
+        "cross_domain_rate": 0.8,
+        "keyword_a": 0.8,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 103.4,
+        "ppl": 12.33
+      },
+      "individual_code": {
+        "cross_domain_rate": 0.5,
+        "keyword_a": 0.5,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 55.5,
+        "ppl": 7.23
+      },
+      "composed": {
+        "cross_domain_rate": 0.7,
+        "keyword_a": 0.7,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 54.9,
+        "ppl": 7.09
+      },
+      "composed_better_than_best_individual": false
+    },
+    "math+code": {
+      "base": {
+        "cross_domain_rate": 1.0,
+        "keyword_a": 1.0,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 87.5,
+        "ppl": 23.4
+      },
+      "individual_math": {
+        "cross_domain_rate": 1.0,
+        "keyword_a": 1.0,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 71.9,
+        "ppl": 9.66
+      },
+      "individual_code": {
+        "cross_domain_rate": 0.9,
+        "keyword_a": 0.9,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 56.9,
+        "ppl": 3.59
+      },
+      "composed": {
+        "cross_domain_rate": 1.0,
+        "keyword_a": 1.0,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 65.6,
+        "ppl": 3.5
+      },
+      "composed_better_than_best_individual": true
+    },
+    "legal+math": {
+      "base": {
+        "cross_domain_rate": 0.5,
+        "keyword_a": 0.5,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 88.3,
+        "ppl": 28.92
+      },
+      "individual_legal": {
+        "cross_domain_rate": 0.3,
+        "keyword_a": 0.4,
+        "keyword_b": 0.9,
+        "non_empty": 1.0,
+        "avg_len": 96.4,
+        "ppl": 55.84
+      },
+      "individual_math": {
+        "cross_domain_rate": 0.2,
+        "keyword_a": 0.3,
+        "keyword_b": 0.9,
+        "non_empty": 1.0,
+        "avg_len": 64.3,
+        "ppl": 12.7
+      },
+      "composed": {
+        "cross_domain_rate": 0.4,
+        "keyword_a": 0.4,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 97.5,
+        "ppl": 11.53
+      },
+      "composed_better_than_best_individual": true
+    },
+    "legal+code": {
+      "base": {
+        "cross_domain_rate": 0.6,
+        "keyword_a": 0.6,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 95.0,
+        "ppl": 68.76
+      },
+      "individual_legal": {
+        "cross_domain_rate": 0.6,
+        "keyword_a": 0.6,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 73.5,
+        "ppl": 101.96
+      },
+      "individual_code": {
+        "cross_domain_rate": 0.6,
+        "keyword_a": 0.6,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 59.8,
+        "ppl": 13.23
+      },
+      "composed": {
+        "cross_domain_rate": 0.6,
+        "keyword_a": 0.6,
+        "keyword_b": 1.0,
+        "non_empty": 1.0,
+        "avg_len": 63.1,
+        "ppl": 14.03
+      },
+      "composed_better_than_best_individual": true
+    }
+  },
+  "kr_test_cross_domain": {
+    "medical+math": {
+      "n_pairs": 30,
+      "base_kr_score": 0.7,
+      "composed_kr_score": 0.4667,
+      "individual_medical_kr_score": 0.9667,
+      "composed_better_than_base": false
+    },
+    "medical+code": {
+      "n_pairs": 30,
+      "base_kr_score": 0.2667,
+      "composed_kr_score": 0.2333,
+      "individual_medical_kr_score": 0.7667,
+      "composed_better_than_base": false
+    },
+    "math+code": {
+      "n_pairs": 30,
+      "base_kr_score": 0.2,
+      "composed_kr_score": 0.3,
+      "individual_math_kr_score": 0.7,
+      "composed_better_than_base": true
+    },
+    "legal+math": {
+      "n_pairs": 20,
+      "base_kr_score": 0.35,
+      "composed_kr_score": 1.0,
+      "individual_legal_kr_score": 1.0,
+      "composed_better_than_base": true
+    },
+    "legal+code": {
+      "n_pairs": 20,
+      "base_kr_score": 0.05,
+      "composed_kr_score": 1.0,
+      "individual_legal_kr_score": 1.0,
+      "composed_better_than_base": true
+    }
+  },
+  "coherence_samples": [
+    {
+      "pair": "medical+math",
+      "query": "Calculate the BMI for a patient who weighs 85kg and is 1.75m tall. Is this in the healthy range?",
+      "base_response": "To calculate the Body Mass Index (BMI), you can use the formula:\n\n\\[ \\text{BMI} = \\frac{\\text{weight (kg)}}{\\text{height (m)}^2} \\]\n\nGiven:\n- Weight = 85 kg\n- Height = 1.75 m\n\nFirst, calculate the BMI:\n\n\\[ \\text{BMI} = \\frac{85}{1.75^2} \\]\n\\[ \\text{BMI} = \\frac{85}{3.0625} \\]\n\\[ \\text{BMI} \\approx 2",
+      "composed_response": "The BMI is calculated by dividing the weight in kilograms by the square of the height in meters. For this patient, the BMI is 85 / (1.75^2) = 24.5. This is in the healthy range. 85kg / 1.75^2 = 24.5. 85 / 3.0625 = 24.5. 85 / 3.0625 = 24.5. 85 / 3.0625 = 24.5. 85 / 3.0625 = 24.5. 85 / 3.0625 = 24.5. "
+    },
+    {
+      "pair": "medical+math",
+      "query": "A patient takes 500mg of medication every 8 hours. What is the total daily dose in grams?",
+      "base_response": "To calculate the total daily dose in grams, we need to determine the total amount of medication the patient takes in a day.\n\n1. **Determine the number of doses per day:**\n   - The patient takes a dose every 8 hours.\n   - There are 24 hours in a day.\n   - Number of doses per day = 24 hours / 8 hours ",
+      "composed_response": "To calculate the total daily dose, we need to multiply the dose per dose by the number of doses per day. Since there are 24 hours in a day and the patient takes a dose every 8 hours, the patient takes 24/8 = 3 doses per day.\n\nThe total daily dose is 500mg x 3 doses = 1500mg.\n\nTo convert the dose to "
+    },
+    {
+      "pair": "medical+math",
+      "query": "If a clinical trial shows 23 out of 150 patients had adverse effects, what is the percentage?",
+      "base_response": "To find the percentage of patients who had adverse effects, you can use the following formula:\n\n\\[ \\text{Percentage} = \\left( \\frac{\\text{Number of patients with adverse effects}}{\\text{Total number of patients}} \\right) \\times 100 \\]\n\nGiven:\n- Number of patients with adverse effects = 23\n- Total nu",
+      "composed_response": "To find the percentage of patients with adverse effects, we need to divide the number of patients with adverse effects by the total number of patients and multiply by 100.\n\nPercentage = (Number of patients with adverse effects / Total number of patients) * 100\nPercentage = (23 / 150) * 100\nPercentag"
+    },
+    {
+      "pair": "medical+math",
+      "query": "A drug has a half-life of 6 hours. How much of a 200mg dose remains after 18 hours?",
+      "base_response": "To solve this problem, we need to understand the concept of half-life and how it affects the amount of drug remaining over time.\n\n1. **Half-life Definition**: The half-life of a substance is the time it takes for half of the substance to decay or be eliminated from the body.\n\n2. **Initial Amount**: ",
+      "composed_response": "To find the amount of the drug remaining after 18 hours, we need to calculate the number of half-lives that have passed. Since the half-life is 6 hours, 18 hours is equivalent to 3 half-lives. \n\nWe can use the formula: \nAmount remaining = Initial amount x (1/2)^(number of half-lives)\n\nPlugging in th"
+    },
+    {
+      "pair": "medical+code",
+      "query": "Write a Python function to calculate BMI given weight in kg and height in meters.",
+      "base_response": "Certainly! The Body Mass Index (BMI) is a measure used to determine whether an individual's weight is within a healthy range for their height. The formula to calculate BMI is:\n\n\\[ \\text{BMI} = \\frac{\\text{weight (kg)}}{\\text{height (m)}^2} \\]\n\nHere's a Python function to calculate BMI:\n\n```python\nde",
+      "composed_response": "def calculate_bmi(weight, height):\n    bmi = weight / (height ** 2)\n    return bmi\n\n# Example usage:\nweight = 70\nheight = 1.75\nbmi = calculate_bmi(weight, height)\nprint(f\"BMI: {bmi:.2f}\")  # Output: BMI: 24.00\n``` Response:\nThe function `calculate_bmi` takes two arguments, `weight` and `height`, and"
+    },
+    {
+      "pair": "medical+code",
+      "query": "Write code to parse a FHIR patient resource and extract medication dosages.",
+      "base_response": "To parse a FHIR patient resource and extract medication dosages, you can use the `fhir` library in Python. Below is an example of how you can achieve this:\n\n1. Install the `fhir` library if you haven't already:\n   ```bash\n   pip install fhir\n   ```\n\n2. Use the following code to parse a FHIR patient ",
+      "composed_response": "```python\nimport xml.etree.ElementTree as ET\n\ndef parse_fhir_patient(patient):\n    medication_data = {}\n    for resource in patient.findall('resource'):\n        medication_name = resource.find('medication').text\n        dosage = resource.find('dosage').text\n        medication_data[medication_name] ="
+    },
+    {
+      "pair": "medical+code",
+      "query": "Create a Python function that converts between common medical units (mg to g, mL to L).",
+      "base_response": "Certainly! Below is a Python function that converts between common medical units such as milligrams (mg) to grams (g) and milliliters (mL) to liters (L).\n\n```python\ndef convert_units(medical_unit, value, from_unit, to_unit):\n    \"\"\"\n    Convert a given value from one medical unit to another.\n\n    Pa",
+      "composed_response": "def convert_units(unit, value):\n    if unit =='mg':\n        return value * 0.001\n    elif unit =='mL':\n        return value * 0.001\n    elif unit == 'L':\n        return value * 0.001\n    else:\n        raise ValueError('Invalid unit') \n\n# Example usage:\nprint(convert_units('mg', 100))  # Output: 100."
+    },
+    {
+      "pair": "medical+code",
+      "query": "Write a function to classify blood pressure readings as normal, elevated, or hypertensive.",
+      "base_response": "Certainly! Below is a Python function that classifies blood pressure readings into normal, elevated, or hypertensive. The function takes a single parameter, which is the blood pressure reading, and returns a classification based on the reading.\n\n```python\ndef classify_blood_pressure(blood_pressure_r",
+      "composed_response": "def classify_blood_pressure(blood_pressure):\n    if blood_pressure <= 120:\n        return \"Normal\"\n    elif blood_pressure > 120 and blood_pressure <= 139:\n        return \"Elevated\"\n    else:\n        return \"Hypertensive\" \n\n# Example usage:\nprint(classify_blood_pressure(130)) # Output: Elevated\nprin"
+    },
+    {
+      "pair": "math+code",
+      "query": "Write a Python function to solve a quadratic equation ax^2 + bx + c = 0.",
+      "base_response": "Certainly! To solve a quadratic equation \\( ax^2 + bx + c = 0 \\), you can use the quadratic formula:\n\n\\[ x = \\frac{{-b \\pm \\sqrt{{b^2 - 4ac}}}}{2a} \\]\n\nHere's a Python function to solve the quadratic equation:\n\n```python\nimport math\n\ndef solve_quadratic(a, b, c):\n    \"\"\"\n    Solves the quadratic equ",
+      "composed_response": "def solve_quadratic(a, b, c):\n    # Calculate the discriminant\n    discriminant = b**2 - 4*a*c\n    \n    # Check if the discriminant is positive, zero or negative\n    if discriminant > 0:\n        # Two distinct real roots\n        root1 = (-b + (discriminant**0.5)) / (2*a)\n        root2 = (-b - (discr"
+    },
+    {
+      "pair": "math+code",
+      "query": "Implement Newton's method for finding square roots in Python.",
+      "base_response": "```python\ndef newtons_method_sqrt(a, tolerance=1e-10, max_iterations=1000):\n    \"\"\"\n    Compute the square root of a number using Newton's method.\n\n    Parameters:\n    a (float): The number to find the square root of.\n    tolerance (float): The tolerance for convergence. Default is 1e-10.\n    max_it",
+      "composed_response": "def newton_sqrt(x, tol=1e-10, max_iter=100):\n    x = abs(x)\n    if x < 0:\n        x = -x\n    if x == 1:\n        return 1\n    if x == 0:\n        return 0\n    if x == 1.0:\n        return 1.0\n    if x == -1.0:\n        return -1.0\n    if x == 0.0:\n        return 0.0\n    if x == 1.0:\n        return 1.0\n "
+    },
+    {
+      "pair": "math+code",
+      "query": "Write code to compute the Fibonacci sequence using matrix exponentiation.",
+      "base_response": "```python\nimport numpy as np\n\ndef matrix_mult(A, B):\n    return np.dot(A, B)\n\ndef matrix_pow(matrix, n):\n    result = np.eye(matrix.shape[0])\n    base = matrix\n    while n > 0:\n        if n % 2 == 1:\n            result = matrix_mult(result, base)\n        base = matrix_mult(base, base)\n        n //= ",
+      "composed_response": "def matrix_mult(A, B):\n    return [[A[0][0]*B[0][0] + A[0][1]*B[1][0], A[0][0]*B[0][1] + A[0][1]*B[1][1]],\n            [A[1][0]*B[0][0] + A[1][1]*B[1][0], A[1][0]*B[0][1] + A[1][1]*B[1][1]]]\n\ndef matrix_pow(A, n):\n    if n == 0:\n        return [[1, 0], [0, 1]]\n    elif n % 2 == 0"
+    },
+    {
+      "pair": "math+code",
+      "query": "Create a function that performs Gaussian elimination on a matrix.",
+      "base_response": "Certainly! Gaussian elimination is a method for solving systems of linear equations. Below is a Python function that performs Gaussian elimination on a matrix. This function assumes that the input matrix is a square matrix (i.e., the number of rows is equal to the number of columns).\n\n```python\nimpo",
+      "composed_response": "def gaussian_elimination(matrix):\n    n = len(matrix)\n    for i in range(n):\n        # Find the pivot\n        max_row = i\n        for j in range(i+1, n):\n            if abs(matrix[j][i]) > abs(matrix[max_row][i]):\n                max_row = j\n        # Swap rows\n        matrix[i], matrix[max_row] = m"
+    },
+    {
+      "pair": "legal+math",
+      "query": "Calculate the statute of limitations expiry date if the incident occurred on March 15, 2020 with a 3-year limit.",
+      "base_response": "To calculate the statute of limitations expiry date, you need to add the statute of limitations period to the date of the incident. \n\nGiven:\n- Incident date: March 15, 2020\n- Statute of limitations period: 3 years\n\nStep-by-step calculation:\n1. Start from the incident date: March 15, 2020.\n2. Add the",
+      "composed_response": "The statute of limitations expiry date is calculated by adding the number of years specified to the date of the incident. In this case, the incident occurred on March 15, 2020, and the statute of limitations is 3 years.\n\nTo find the expiry date, we add 3 years to March 15, 2020:\n\n- March 15, 2020 + "
+    },
+    {
+      "pair": "legal+math",
+      "query": "If a lawsuit settlement is $500,000 and attorney fees are 33.3%, what does the plaintiff receive?",
+      "base_response": "To determine what the plaintiff receives after attorney fees, we need to calculate the amount of attorney fees and then subtract that from the total settlement amount.\n\n1. Calculate the attorney fees:\n   \\[\n   \\text{Attorney fees} = \\text{Total settlement} \\times \\text{Percentage of attorney fees}\n ",
+      "composed_response": "To find out how much the plaintiff receives after attorney fees, you need to calculate the amount of attorney fees and subtract that from the total settlement amount.\n\n1. Calculate the attorney fees:\n   Attorney fees = 33.3% of $500,000\n   Attorney fees = 0.333 * $500,000\n   Attorney fees = $166,500"
+    },
+    {
+      "pair": "legal+math",
+      "query": "Calculate compound interest on a $100,000 judgment at 5% annual rate over 3 years.",
+      "base_response": "To calculate the compound interest on a $100,000 judgment at a 5% annual rate over 3 years, we use the formula for compound interest:\n\n\\[ A = P \\left(1 + \\frac{r}{n}\\right)^{nt} \\]\n\nWhere:\n- \\( A \\) is the amount of money accumulated after n years, including interest.\n- \\( P \\) is the principal amou",
+      "composed_response": "To calculate compound interest, we use the formula:\n\n\\[ A = P \\left(1 + \\frac{r}{n}\\right)^{nt} \\]\n\nWhere:\n- \\( A \\) is the amount of money accumulated after n years, including interest.\n- \\( P \\) is the principal amount (the initial amount of money).\n- \\( r \\) is the annual interest rate (decimal)."
+    },
+    {
+      "pair": "legal+math",
+      "query": "A contract specifies 2% monthly late fees. What is the effective annual rate?",
+      "base_response": "To calculate the effective annual rate (EAR) for a contract with a 2% monthly late fee, you can use the following formula:\n\n\\[ \\text{EAR} = \\left(1 + \\frac{\\text{Monthly Late Fee}}{100}\\right)^{\\frac{12}{12}} - 1 \\]\n\nWhere:\n- Monthly Late Fee = 2%\n- Number of months in a year = 12\n\nPlugging in the v",
+      "composed_response": "To calculate the effective annual rate (EAR) for a contract with a 2% monthly late fee, you need to consider the compounding effect of the late fees over the year.\n\n1. Calculate the monthly late fee: 2% of $1 = $0.02\n2. Calculate the total late fee for the year: $0.02 * 12 = $0.24\n3. Calculate the E"
+    },
+    {
+      "pair": "legal+code",
+      "query": "Write a Python function to check if a contract date is within the statute of limitations.",
+      "base_response": "Certainly! To determine if a contract date is within the statute of limitations, you need to know the statute of limitations period for the specific type of contract. For this example, let's assume we are dealing with a contract that has a statute of limitations of 5 years.\n\nHere's a Python function",
+      "composed_response": "def is_contract_valid(contract_date, statute_of_limitations):\n    \"\"\"\n    Checks if a contract date is within the statute of limitations.\n\n    Args:\n    contract_date (str): The date of the contract in 'YYYY-MM-DD' format.\n    statute_of_limitations (int): The statute of limitations in days.\n\n    Re"
+    },
+    {
+      "pair": "legal+code",
+      "query": "Create code to parse legal citations in the format 'Volume Reporter Page' (e.g., '347 U.S. 483').",
+      "base_response": "To parse legal citations in the format 'Volume Reporter Page' (e.g., '347 U.S. 483'), you can use Python with regular expressions. Here's a sample code snippet that demonstrates how to achieve this:\n\n```python\nimport re\n\ndef parse_citation(citation):\n    # Define the regular expression pattern for t",
+      "composed_response": "import re\n\ndef parse_citation(citation):\n    # Regular expression to match the citation format\n    pattern = r'Volume Reporter Page \\((\\d+)\\) \\((\\d+)\\)'\n    match = re.match(pattern, citation)\n    \n    if match:\n        volume = int(match.group(1))\n        reporter = int(match.group(2))\n        page"
+    },
+    {
+      "pair": "legal+code",
+      "query": "Write a function to calculate attorney fee percentages from settlement amounts.",
+      "base_response": "Certainly! Below is a Python function that calculates attorney fee percentages from settlement amounts. The function takes two arguments: the total settlement amount and the attorney's fee percentage.\n\n```python\ndef calculate_attorney_fee_percentages(settlement_amount, attorney_fee_percentage):\n    ",
+      "composed_response": "def calculate_attorney_fee_percentages(settlement_amount):\n    \"\"\"\n    Calculate attorney fee percentages from a settlement amount.\n\n    Args:\n    settlement_amount (float): The total settlement amount.\n\n    Returns:\n    dict: A dictionary with attorney fee percentages for different cases.\n    \"\"\"\n "
+    },
+    {
+      "pair": "legal+code",
+      "query": "Create a Python script to detect potentially problematic clauses in a contract text.",
+      "base_response": "Certainly! Below is a Python script that uses the `nltk` library to detect potentially problematic clauses in a contract text. This script will analyze the text for common problematic clauses such as those related to non-compete, non-disclosure, and other legal issues.\n\nFirst, you need to install th",
+      "composed_response": "import re\n\ndef detect_potentially_problematic_clauses(contract_text):\n    problematic_clauses = []\n    problematic_pattern = re.compile(r'(\\b(termination|breach|non-compete|non-disclosure|non-compete|non-compete|non-compete|non-compete|non-compete|non-compete|non-compete|non-compete|non-compete|non-"
+    }
+  ],
+  "part_b_osrm_diagnostic": {
+    "a_only": {
+      "math_on_medical_data": {
+        "self_norm_A_i_h_i": 44805.356375,
+        "cross_norm_A_j_h_i": 34553.790479,
+        "ratio": 0.7712,
+        "passes_threshold": false
+      },
+      "code_on_medical_data": {
+        "self_norm_A_i_h_i": 44805.356375,
+        "cross_norm_A_j_h_i": 31253.12576,
+        "ratio": 0.6975,
+        "passes_threshold": false
+      },
+      "legal_on_medical_data": {
+        "self_norm_A_i_h_i": 44805.356375,
+        "cross_norm_A_j_h_i": 34144.079161,
+        "ratio": 0.7621,
+        "passes_threshold": false
+      },
+      "creative_on_medical_data": {
+        "self_norm_A_i_h_i": 44805.356375,
+        "cross_norm_A_j_h_i": 34627.225141,
+        "ratio": 0.7728,
+        "passes_threshold": false
+      },
+      "medical_on_math_data": {
+        "self_norm_A_i_h_i": 40201.189464,
+        "cross_norm_A_j_h_i": 39713.924978,
+        "ratio": 0.9879,
+        "passes_threshold": false
+      },
+      "code_on_math_data": {
+        "self_norm_A_i_h_i": 40201.189464,
+        "cross_norm_A_j_h_i": 32269.835059,
+        "ratio": 0.8027,
+        "passes_threshold": false
+      },
+      "legal_on_math_data": {
+        "self_norm_A_i_h_i": 40201.189464,
+        "cross_norm_A_j_h_i": 34645.756551,
+        "ratio": 0.8618,
+        "passes_threshold": false
+      },
+      "creative_on_math_data": {
+        "self_norm_A_i_h_i": 40201.189464,
+        "cross_norm_A_j_h_i": 37072.028331,
+        "ratio": 0.9222,
+        "passes_threshold": false
+      },
+      "medical_on_code_data": {
+        "self_norm_A_i_h_i": 29709.869944,
+        "cross_norm_A_j_h_i": 34687.23303,
+        "ratio": 1.1675,
+        "passes_threshold": false
+      },
+      "math_on_code_data": {
+        "self_norm_A_i_h_i": 29709.869944,
+        "cross_norm_A_j_h_i": 31867.546126,
+        "ratio": 1.0726,
+        "passes_threshold": false
+      },
+      "legal_on_code_data": {
+        "self_norm_A_i_h_i": 29709.869944,
+        "cross_norm_A_j_h_i": 30309.730073,
+        "ratio": 1.0202,
+        "passes_threshold": false
+      },
+      "creative_on_code_data": {
+        "self_norm_A_i_h_i": 29709.869944,
+        "cross_norm_A_j_h_i": 31557.670047,
+        "ratio": 1.0622,
+        "passes_threshold": false
+      },
+      "medical_on_legal_data": {
+        "self_norm_A_i_h_i": 47002.046067,
+        "cross_norm_A_j_h_i": 39461.697347,
+        "ratio": 0.8396,
+        "passes_threshold": false
+      },
+      "math_on_legal_data": {
+        "self_norm_A_i_h_i": 47002.046067,
+        "cross_norm_A_j_h_i": 35609.319271,
+        "ratio": 0.7576,
+        "passes_threshold": false
+      },
+      "code_on_legal_data": {
+        "self_norm_A_i_h_i": 47002.046067,
+        "cross_norm_A_j_h_i": 31874.386816,
+        "ratio": 0.6781,
+        "passes_threshold": false
+      },
+      "creative_on_legal_data": {
+        "self_norm_A_i_h_i": 47002.046067,
+        "cross_norm_A_j_h_i": 34874.331071,
+        "ratio": 0.742,
+        "passes_threshold": false
+      },
+      "medical_on_creative_data": {
+        "self_norm_A_i_h_i": 43463.203727,
+        "cross_norm_A_j_h_i": 39980.671105,
+        "ratio": 0.9199,
+        "passes_threshold": false
+      },
+      "math_on_creative_data": {
+        "self_norm_A_i_h_i": 43463.203727,
+        "cross_norm_A_j_h_i": 38379.83508,
+        "ratio": 0.883,
+        "passes_threshold": false
+      },
+      "code_on_creative_data": {
+        "self_norm_A_i_h_i": 43463.203727,
+        "cross_norm_A_j_h_i": 32838.862798,
+        "ratio": 0.7556,
+        "passes_threshold": false
+      },
+      "legal_on_creative_data": {
+        "self_norm_A_i_h_i": 43463.203727,
+        "cross_norm_A_j_h_i": 35337.304834,
+        "ratio": 0.813,
+        "passes_threshold": false
+      }
+    },
+    "full_ba": {
+      "full_math_on_medical_data": {
+        "self_norm_BA_i_h_i": 50737.654483,
+        "cross_norm_BA_j_h_i": 30397.074939,
+        "ratio": 0.5991,
+        "passes_threshold": false
+      },
+      "full_code_on_medical_data": {
+        "self_norm_BA_i_h_i": 50737.654483,
+        "cross_norm_BA_j_h_i": 23206.462891,
+        "ratio": 0.4574,
+        "passes_threshold": false
+      },
+      "full_legal_on_medical_data": {
+        "self_norm_BA_i_h_i": 50737.654483,
+        "cross_norm_BA_j_h_i": 25782.009755,
+        "ratio": 0.5081,
+        "passes_threshold": false
+      },
+      "full_creative_on_medical_data": {
+        "self_norm_BA_i_h_i": 50737.654483,
+        "cross_norm_BA_j_h_i": 31097.131172,
+        "ratio": 0.6129,
+        "passes_threshold": false
+      },
+      "full_medical_on_math_data": {
+        "self_norm_BA_i_h_i": 36917.304708,
+        "cross_norm_BA_j_h_i": 42083.890818,
+        "ratio": 1.14,
+        "passes_threshold": false
+      },
+      "full_code_on_math_data": {
+        "self_norm_BA_i_h_i": 36917.304708,
+        "cross_norm_BA_j_h_i": 23691.180072,
+        "ratio": 0.6417,
+        "passes_threshold": false
+      },
+      "full_legal_on_math_data": {
+        "self_norm_BA_i_h_i": 36917.304708,
+        "cross_norm_BA_j_h_i": 25910.520901,
+        "ratio": 0.7019,
+        "passes_threshold": false
+      },
+      "full_creative_on_math_data": {
+        "self_norm_BA_i_h_i": 36917.304708,
+        "cross_norm_BA_j_h_i": 33976.919788,
+        "ratio": 0.9204,
+        "passes_threshold": false
+      },
+      "full_medical_on_code_data": {
+        "self_norm_BA_i_h_i": 22594.971322,
+        "cross_norm_BA_j_h_i": 37047.124269,
+        "ratio": 1.6396,
+        "passes_threshold": false
+      },
+      "full_math_on_code_data": {
+        "self_norm_BA_i_h_i": 22594.971322,
+        "cross_norm_BA_j_h_i": 28533.87511,
+        "ratio": 1.2628,
+        "passes_threshold": false
+      },
+      "full_legal_on_code_data": {
+        "self_norm_BA_i_h_i": 22594.971322,
+        "cross_norm_BA_j_h_i": 22926.244638,
+        "ratio": 1.0147,
+        "passes_threshold": false
+      },
+      "full_creative_on_code_data": {
+        "self_norm_BA_i_h_i": 22594.971322,
+        "cross_norm_BA_j_h_i": 28779.115864,
+        "ratio": 1.2737,
+        "passes_threshold": false
+      },
+      "full_medical_on_legal_data": {
+        "self_norm_BA_i_h_i": 39896.907673,
+        "cross_norm_BA_j_h_i": 42470.412381,
+        "ratio": 1.0645,
+        "passes_threshold": false
+      },
+      "full_math_on_legal_data": {
+        "self_norm_BA_i_h_i": 39896.907673,
+        "cross_norm_BA_j_h_i": 32346.049916,
+        "ratio": 0.8107,
+        "passes_threshold": false
+      },
+      "full_code_on_legal_data": {
+        "self_norm_BA_i_h_i": 39896.907673,
+        "cross_norm_BA_j_h_i": 24309.524872,
+        "ratio": 0.6093,
+        "passes_threshold": false
+      },
+      "full_creative_on_legal_data": {
+        "self_norm_BA_i_h_i": 39896.907673,
+        "cross_norm_BA_j_h_i": 31920.952196,
+        "ratio": 0.8001,
+        "passes_threshold": false
+      },
+      "full_medical_on_creative_data": {
+        "self_norm_BA_i_h_i": 41803.378,
+        "cross_norm_BA_j_h_i": 41984.432643,
+        "ratio": 1.0043,
+        "passes_threshold": false
+      },
+      "full_math_on_creative_data": {
+        "self_norm_BA_i_h_i": 41803.378,
+        "cross_norm_BA_j_h_i": 34091.680234,
+        "ratio": 0.8155,
+        "passes_threshold": false
+      },
+      "full_code_on_creative_data": {
+        "self_norm_BA_i_h_i": 41803.378,
+        "cross_norm_BA_j_h_i": 24031.909071,
+        "ratio": 0.5749,
+        "passes_threshold": false
+      },
+      "full_legal_on_creative_data": {
+        "self_norm_BA_i_h_i": 41803.378,
+        "cross_norm_BA_j_h_i": 26240.066047,
+        "ratio": 0.6277,
+        "passes_threshold": false
+      }
+    },
+    "a_only_summary": {
+      "mean_ratio": 0.8645,
+      "max_ratio": 1.1675,
+      "min_ratio": 0.6781,
+      "n_fail": 20,
+      "n_total": 20
+    },
+    "full_ba_summary": {
+      "mean_ratio": 0.854,
+      "max_ratio": 1.6396,
+      "min_ratio": 0.4574,
+      "n_fail": 20,
+      "n_total": 20
+    }
+  },
+  "kill_criteria": {
+    "K1": {
+      "description": "composed worse than best individual on >50% of pairs",
+      "fail_rate": 0.2,
+      "pass": true
+    },
+    "K2": {
+      "description": "semantic coherence rated lower than base on manual inspection",
+      "coherence_rate": 0.9,
+      "pass": true
+    },
+    "K3": {
+      "description": "OSRM ||A_j * h_i|| > 0.1 * ||A_i * h_i|| for >50% pairs",
+      "a_only_fail_rate": 1.0,
+      "ba_full_fail_rate": 1.0,
+      "pass": false
+    }
+  },
+  "verdict": "KILLED"
+}

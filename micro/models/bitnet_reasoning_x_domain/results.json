@@ -1,0 +1,212 @@
+{
+  "experiment": "bitnet_reasoning_x_domain",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "hypothesis": "Reasoning adapter composes with domain adapters without interference",
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-21 13:58:50",
+  "measurement": "PPL-only (task eval killed at 2B scale)",
+  "base_ppls": {
+    "domain_python": 2.7411413485606433,
+    "domain_math": 5.53283729711185,
+    "domain_medical": 6.961070940934386,
+    "domain_legal": 21.88669597579324,
+    "domain_creative": 6.336049751074344,
+    "reasoning": 8.307710703353454
+  },
+  "individual_ppls": {
+    "reasoning_on_reasoning": 3.2036737790880894,
+    "reasoning_on_python": 4.2931456003843,
+    "reasoning_on_math": 5.557780642941401,
+    "reasoning_on_medical": 11.94922791499844,
+    "reasoning_on_legal": 27.143910703722064,
+    "reasoning_on_creative": 7.769612286188894,
+    "python_on_python": 2.217879865748791,
+    "python_on_reasoning": 8.51364619143177,
+    "math_on_math": 3.6036968713946225,
+    "math_on_reasoning": 5.998022434955305,
+    "medical_on_medical": 4.7421944845839885,
+    "medical_on_reasoning": 9.247112354361061,
+    "legal_on_legal": 16.530172045991478,
+    "legal_on_reasoning": 9.130595870446587,
+    "creative_on_creative": 4.923663481280721,
+    "creative_on_reasoning": 8.120947817328442
+  },
+  "composed_ppls": {
+    "python_domain": 2.311437113451254,
+    "python_reasoning": 4.029922992286393,
+    "math_domain": 3.9062233915933526,
+    "math_reasoning": 3.626470020142756,
+    "medical_domain": 5.4712111021607335,
+    "medical_reasoning": 3.823922704820199,
+    "legal_domain": 18.533808333895713,
+    "legal_reasoning": 3.8913920364101617,
+    "creative_domain": 5.421152168336337,
+    "creative_reasoning": 3.858353313456885
+  },
+  "cosines": {
+    "python": 0.000599,
+    "math": 0.007091,
+    "medical": 0.000661,
+    "legal": 0.00033,
+    "creative": 0.001606
+  },
+  "mean_cos": 0.002057,
+  "max_cos": 0.007091,
+  "k1": {
+    "n_improved": 5,
+    "n_total": 5,
+    "pct_improved": 100.0,
+    "threshold_pct": 50,
+    "pass": true,
+    "details": {
+      "python": {
+        "domain_on_reasoning": 8.51364619143177,
+        "composed_on_reasoning": 4.029922992286393,
+        "improvement_pct": 52.67,
+        "improved": true
+      },
+      "math": {
+        "domain_on_reasoning": 5.998022434955305,
+        "composed_on_reasoning": 3.626470020142756,
+        "improvement_pct": 39.54,
+        "improved": true
+      },
+      "medical": {
+        "domain_on_reasoning": 9.247112354361061,
+        "composed_on_reasoning": 3.823922704820199,
+        "improvement_pct": 58.65,
+        "improved": true
+      },
+      "legal": {
+        "domain_on_reasoning": 9.130595870446587,
+        "composed_on_reasoning": 3.8913920364101617,
+        "improvement_pct": 57.38,
+        "improved": true
+      },
+      "creative": {
+        "domain_on_reasoning": 8.120947817328442,
+        "composed_on_reasoning": 3.858353313456885,
+        "improvement_pct": 52.49,
+        "improved": true
+      }
+    }
+  },
+  "k2": {
+    "n_degraded_over_3pct": 5,
+    "n_total": 5,
+    "worst_degradation_pct": 15.37,
+    "threshold_pct": 3.0,
+    "pass": false,
+    "details": {
+      "python": {
+        "domain_alone": 2.217879865748791,
+        "domain_composed": 2.311437113451254,
+        "degradation_pct": 4.22,
+        "pass": false
+      },
+      "math": {
+        "domain_alone": 3.6036968713946225,
+        "domain_composed": 3.9062233915933526,
+        "degradation_pct": 8.39,
+        "pass": false
+      },
+      "medical": {
+        "domain_alone": 4.7421944845839885,
+        "domain_composed": 5.4712111021607335,
+        "degradation_pct": 15.37,
+        "pass": false
+      },
+      "legal": {
+        "domain_alone": 16.530172045991478,
+        "domain_composed": 18.533808333895713,
+        "degradation_pct": 12.12,
+        "pass": false
+      },
+      "creative": {
+        "domain_alone": 4.923663481280721,
+        "domain_composed": 5.421152168336337,
+        "degradation_pct": 10.1,
+        "pass": false
+      }
+    }
+  },
+  "dilution_control": {
+    "python": {
+      "diluted_domain_ppl": 2.3089476822289567,
+      "diluted_reasoning_ppl": 8.667650189157664,
+      "composed_domain_ppl": 2.311437113451254,
+      "interference_pct": 0.11
+    },
+    "math": {
+      "diluted_domain_ppl": 4.203683539952845,
+      "diluted_reasoning_ppl": 7.280018202024816,
+      "composed_domain_ppl": 3.9062233915933526,
+      "interference_pct": -7.08
+    },
+    "medical": {
+      "diluted_domain_ppl": 5.440295250224128,
+      "diluted_reasoning_ppl": 8.066094691291072,
+      "composed_domain_ppl": 5.4712111021607335,
+      "interference_pct": 0.57
+    },
+    "legal": {
+      "diluted_domain_ppl": 18.64631267946703,
+      "diluted_reasoning_ppl": 8.355068715856573,
+      "composed_domain_ppl": 18.533808333895713,
+      "interference_pct": -0.6
+    },
+    "creative": {
+      "diluted_domain_ppl": 5.445086576203206,
+      "diluted_reasoning_ppl": 8.19227760068667,
+      "composed_domain_ppl": 5.421152168336337,
+      "interference_pct": -0.44
+    }
+  },
+  "k2_interference": {
+    "n_interfered_over_3pct": 0,
+    "worst_interference_pct": 0.57,
+    "pass": true
+  },
+  "unit_weight_composition": {
+    "python": {
+      "domain_ppl": 2.236668953466217,
+      "reasoning_ppl": 3.497217468124325,
+      "domain_degradation_pct": 0.85,
+      "reasoning_improvement_pct": 58.92
+    },
+    "math": {
+      "domain_ppl": 3.7990604565259054,
+      "reasoning_ppl": 3.6047322127100596,
+      "domain_degradation_pct": 5.42,
+      "reasoning_improvement_pct": 39.9
+    },
+    "medical": {
+      "domain_ppl": 4.9266865695273925,
+      "reasoning_ppl": 3.3637352337495816,
+      "domain_degradation_pct": 3.89,
+      "reasoning_improvement_pct": 63.62
+    },
+    "legal": {
+      "domain_ppl": 16.879176317872293,
+      "reasoning_ppl": 3.3788448380454374,
+      "domain_degradation_pct": 2.11,
+      "reasoning_improvement_pct": 62.99
+    },
+    "creative": {
+      "domain_ppl": 5.062225290730252,
+      "reasoning_ppl": 3.401078876336621,
+      "domain_degradation_pct": 2.81,
+      "reasoning_improvement_pct": 58.12
+    }
+  },
+  "verdict": "SUPPORTED [raw K2 KILL: worst degradation +15.37% -- dilution-dominated]",
+  "total_time_s": 202.6,
+  "total_time_min": 3.4
+}
