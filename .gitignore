@@ -27,6 +27,13 @@ data/distillation/*/val.jsonl
 results/*.jsonl
 results/*.csv
 
+# SQLite databases
+*.db
+
+# Node modules
+node_modules/
+bun.lock
+
 # Lock files
 .ralph/loop.lock
 uv.lock
