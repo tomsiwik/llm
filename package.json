@@ -1,0 +1,5 @@
+{
+  "name": "experiment-tracker",
+  "private": true,
+  "workspaces": ["packages/*"]
+}

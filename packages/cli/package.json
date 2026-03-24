@@ -1,0 +1,26 @@
+{
+  "name": "@experiment/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "experiment": "./src/index.ts"
+  },
+  "oclif": {
+    "bin": "experiment",
+    "commands": {
+      "strategy": "pattern",
+      "target": "./src/commands"
+    },
+    "topicSeparator": " "
+  },
+  "dependencies": {
+    "@experiment/db": "workspace:*",
+    "@oclif/core": "^4",
+    "drizzle-orm": "^0.45.1",
+    "yaml": "^2.7"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^6.0.2"
+  }
+}
