@@ -34,6 +34,11 @@ results/*.csv
 node_modules/
 bun.lock
 
-# Lock files
+# Ralph runtime state
 .ralph/loop.lock
+.ralph/agent/
+.ralph/events-*.jsonl
+.ralph/current-events
+.ralph/current-loop-id
+.ralph/diagnostics/
 # uv.lock — committed for reproducible installs

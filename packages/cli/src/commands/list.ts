@@ -17,7 +17,7 @@ export default class List extends Command {
     let query = db.select().from(experiments);
 
     // Get all experiments first, then filter in JS (simpler for POC)
-    let rows = query.all();
+    let rows = await query.all();
 
     // Filter by status
     if (flags.status) {
@@ -27,26 +27,26 @@ export default class List extends Command {
 
     // Filter by tag
     if (flags.tag) {
-      const tag = db.select().from(tags).where(eq(tags.name, flags.tag.toLowerCase())).get();
+      const tag = await db.select().from(tags).where(eq(tags.name, flags.tag.toLowerCase())).get();
       if (!tag) {
         this.log(`No experiments with tag "${flags.tag}"`);
         return;
       }
-      const taggedIds = db
+      const taggedIds = (await db
         .select({ id: experimentTags.experimentId })
         .from(experimentTags)
         .where(eq(experimentTags.tagId, tag.id))
-        .all()
+        .all())
         .map((r) => r.id);
       rows = rows.filter((r) => taggedIds.includes(r.id));
     }
 
     // Filter blocking
     if (flags.blocking) {
-      const blockers = db
+      const blockers = (await db
         .select({ id: experimentDependencies.dependsOnId })
         .from(experimentDependencies)
-        .all()
+        .all())
         .map((r) => r.id);
       const blockerSet = new Set(blockers);
       rows = rows.filter((r) => blockerSet.has(r.id));

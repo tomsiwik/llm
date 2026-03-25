@@ -22,14 +22,14 @@ export default class Add extends Command {
   async run() {
     const { args, flags } = await this.parse(Add);
 
-    const existing = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
+    const existing = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (existing) {
       this.error(`Experiment "${args.id}" already exists`);
     }
 
     const now = new Date().toISOString().slice(0, 10);
 
-    db.insert(experiments)
+    await db.insert(experiments)
       .values({
         id: args.id,
         title: flags.title,
@@ -46,13 +46,13 @@ export default class Add extends Command {
 
     // Link grounding reference if provided
     if (flags["grounded-by"]) {
-      const ref = db
+      const ref = await db
         .select()
         .from(references)
         .where(eq(references.arxivId, flags["grounded-by"]))
         .get();
       if (ref) {
-        db.insert(experimentReferences)
+        await db.insert(experimentReferences)
           .values({ experimentId: args.id, referenceId: ref.id })
           .onConflictDoNothing()
           .run();

@@ -23,7 +23,7 @@ export default class RefAdd extends Command {
       this.error("Either --url or --arxiv must be provided");
     }
 
-    const result = db
+    const result = await db
       .insert(references)
       .values({
         arxivId: flags.arxiv ?? null,
@@ -41,10 +41,10 @@ export default class RefAdd extends Command {
     if (flags.tag) {
       for (const tagName of flags.tag) {
         const clean = tagName.trim().toLowerCase();
-        db.insert(tags).values({ name: clean }).onConflictDoNothing().run();
-        const tag = db.select().from(tags).where(eq(tags.name, clean)).get();
+        await db.insert(tags).values({ name: clean }).onConflictDoNothing().run();
+        const tag = await db.select().from(tags).where(eq(tags.name, clean)).get();
         if (tag) {
-          db.insert(referenceTags)
+          await db.insert(referenceTags)
             .values({ referenceId: refId, tagId: tag.id })
             .onConflictDoNothing()
             .run();

@@ -25,7 +25,9 @@ cli:
 event_loop:
   prompt_file: "PROMPT.md"
   starting_event: "research.start"
+  completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 200
+  max_runtime_seconds: 36000
   idle_timeout_secs: 36000
 
 features:
@@ -34,7 +36,7 @@ features:
 
 memories:
   inject: auto
-  budget: 1500
+  budget: 800
   file: ".ralph/memories.md"
 
 hats:
@@ -65,61 +67,34 @@ hats:
       If triggered by learning.complete:
         Read the LEARNINGS.md from the just-completed experiment. The analyst
         has already researched WHY the last result happened and what alternatives
-        exist. USE THIS CONTEXT when picking the next experiment:
-        - If the learning suggests an alternative approach, consider it
-        - If the learning found contradicting literature, investigate
-        - If the learning recommends modifying a hypothesis, do it first
-        - Include the key learnings in the delegation prompt to the experiment-ideator
+        exist. USE THIS CONTEXT when picking the next experiment.
 
-      If triggered by research.start:
-        Read the prompt context (PROMPT.md or inline -p prompt). Check for a
-        SCALE CONSTRAINT (e.g., "CPU only", "micro only", "GPU only", "macro only").
-        If a scale constraint exists, ONLY consider nodes matching that scale
-        in HYPOTHESES.yml. Example: "CPU only" → only pick `scale: micro` nodes.
-        "GPU" → only pick `scale: macro` nodes.
+      ## Node Selection (via experiment CLI)
 
-        ## Node Selection (CRITICAL — follow this order exactly)
+      Use the `experiment` CLI to find and manage work. Invoke /experiment skill
+      if you need the full command reference.
 
-        Read HYPOTHESES.yml. Select work using this PRIORITY ORDER:
+      1. Run: `experiment list --status active` — finish active work first.
+      2. Run: `experiment list --status open` — find available experiments.
+      3. Run: `experiment list --blocking` — prioritize critical-path work.
+      4. Run: `experiment get <id>` — read kill criteria, deps, and details.
+      5. Run: `experiment update <id> --status active` — claim the experiment.
 
-        1. FIRST: Pick any `active` node that has unfinished work (script not
-           written, results not collected, PAPER.md incomplete). FINISH existing
-           work before starting new work.
+      Priority: lowest number wins. Prefer blocking experiments over non-blocking.
 
-        2. SECOND: Pick the `open` or `active` node that UNBLOCKS THE MOST
-           downstream nodes. Count how many other nodes have this node in their
-           `depends_on`. The node that unblocks the most wins. This ensures
-           critical-path work is done first.
+      ## Hypothesis Generation (SOFT-FREEZE)
 
-        3. TIE-BREAK: Among nodes that unblock the same number of downstream
-           nodes, pick the lowest priority number (P1 > P2 > P3).
-
-        4. NEVER pick a P5+ node when P1-P4 nodes with unsatisfied deps exist
-           that could be unblocked by completing a different P1-P4 node first.
-
-        The node must have all `depends_on` satisfied (deps must be `proven`,
-        `supported`, or `killed`) AND `scale` must match the constraint.
-        Set the chosen node to `active` in HYPOTHESES.yml.
-
-        ## Hypothesis Generation (SOFT-FREEZE)
-
-        Do NOT generate new hypotheses unless ALL of these are true:
-        - You just completed (proven/killed) an experiment
-        - There are fewer than 5 `open` nodes remaining at matching scale
-        - Generate exactly 1 new hypothesis (not 2-3)
-        - New hypothesis MUST be P5 or higher (deprioritized)
-        - New hypothesis MUST relate to a finding from the just-completed work
-
-        The goal is to DRAIN the backlog, not grow it.
+      Do NOT generate new hypotheses unless:
+      - There are fewer than 3 `open` nodes remaining at matching scale
+      - Generate exactly 1 new hypothesis via `experiment add`
+      - New hypothesis MUST relate to a finding from the just-completed work
 
       ## Baseline-First Rule (MANDATORY)
 
       Before delegating, consult prior art using NotebookLM (/notebooklm):
-      1. Query: "What existing methods address [this hypothesis]? What pitfalls
-         should I avoid? What implementations or algorithms are standard?"
-      2. Check references/REFERENCES.yml for matching node IDs
-      3. Include relevant findings and reference paths in the delegation prompt
-         so the researcher builds on prior art instead of reinventing
+      1. Query: "What existing methods address [this hypothesis]?"
+      2. Run: `experiment refs --tag <relevant-tag>` for matching references
+      3. Include relevant findings in the delegation prompt
 
       Web search is a FALLBACK for topics not covered in the NotebookLM sources.
 
@@ -128,12 +103,11 @@ hats:
       Use the Agent tool with subagent_type="experiment-ideator" to run
       the research design cycle. Give it a clear prompt:
 
-        "Work on hypothesis [node_id] from HYPOTHESES.yml: '[title]'.
-         Kill criteria: [kill_criteria].
+        "Work on experiment [id]: '[title]'.
+         Kill criteria: [from experiment get output].
          SCALE: [micro or macro].
          If micro: run the full cycle — survey, math, implement, run, write PAPER.md.
          If macro: survey, math, write MATH.md + SPEC.md (experiment spec).
-           Do NOT write the GPU script. The experiment-programmer handles that.
          Write your chosen direction to .ralph/current_direction.md.
          BASELINE-FIRST: Check these references before implementing:
          [list relevant references/*/]."
@@ -144,20 +118,13 @@ hats:
 
       For MICRO experiments:
         Verify micro/models/[name]/PAPER.md exists with results.
+        Update the DB: `experiment update <id> --status supported` (or killed)
+        Add evidence: `experiment evidence <id> --claim "..." --source "..." --verdict pass`
         Emit experiment.done with a brief summary.
 
       For MACRO experiments:
         Verify macro/[name]/SPEC.md + MATH.md exist.
         Emit experiment.designed with the experiment name and spec path.
-        The programmer hat takes it from here.
-
-      ## CRITICAL: Budget time for review + learning
-
-      The full cycle is: Researcher → Reviewer → Analyst → Researcher.
-      Each experiment MUST complete all 3 steps before the next experiment starts.
-      If the loop is near its runtime limit, do NOT start a new experiment —
-      it is better to finish the review+learning cycle on the last experiment
-      than to run another experiment that will be orphaned without review.
 
       ## Orphan check (MANDATORY at start of every trigger)
 
@@ -166,11 +133,7 @@ hats:
       1. Read .ralph/current_direction.md to find the last experiment name
       2. Check if [experiment_dir]/REVIEW-adversarial.md exists
       3. Check if [experiment_dir]/LEARNINGS.md exists
-      4. If EITHER is missing, do NOT pick new work. Instead:
-         - If REVIEW-adversarial.md missing: emit experiment.done again
-           (triggers the reviewer to process the orphaned experiment)
-         - If LEARNINGS.md missing: the analyst hat hasn't run yet — this
-           will resolve itself once the reviewer emits review.proceed/killed
+      4. If EITHER is missing, resolve before picking new work.
 
   # ── Programmer: GPU-optimize and submit ─────────────────────────────────
   programmer:
@@ -323,17 +286,15 @@ hats:
       If REVISE: emit review.revise with the numbered fixes. Stop here.
 
       If KILL:
-        - In HYPOTHESES.yml: set the node status to `killed`, append evidence
-        - Increment `meta.consecutive_kills`
+        - Run: `experiment update <id> --status killed`
+        - Run: `experiment evidence <id> --claim "KILLED: [reason]" --source "REVIEW-adversarial.md" --verdict fail`
         - Emit review.killed with experiment name, kill reason, and key numbers.
-          The ANALYST hat will research why this happened.
 
       ## Step 3: Integrate (only if PROCEED)
 
       Do this yourself (fast, no sub-agent needed):
-      - In HYPOTHESES.yml: set the node status to `proven` or `supported`,
-        append evidence with date/claim/source,
-        reset `meta.consecutive_kills` to 0, update `meta.last_proven`
+      - Run: `experiment update <id> --status supported` (or `proven`)
+      - Run: `experiment evidence <id> --claim "[key finding]" --source "PAPER.md" --verdict pass`
       - Append results to FINDINGS.md with date and caveats
       - Update VISION.md readiness table if applicable
 
@@ -403,8 +364,8 @@ hats:
       1. WHY did this result happen? (mechanistic explanation grounded in literature)
       2. What does this imply for the next experiment? (concrete recommendation)
       3. What alternative approaches exist that we haven't tried?
-      4. Should any existing HYPOTHESES.yml node be updated based on this learning?
-      5. Is there a new hypothesis worth adding? (only if strongly motivated by literature)
+      4. Should any experiment be updated? Use `experiment update` if so.
+      5. Is there a new hypothesis worth adding? Use `experiment add` if strongly motivated by literature.
 
       ## Step 4: Write LEARNINGS.md
 
@@ -437,8 +398,8 @@ hats:
 
       ## Step 5: Update references
 
-      If you found important new papers, add them to references/REFERENCES.yml
-      with the relevant node IDs.
+      If you found important new papers, add them via:
+        `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
 
       ## Step 6: Emit
 

@@ -19,14 +19,14 @@ export default class Evidence extends Command {
   async run() {
     const { args, flags } = await this.parse(Evidence);
 
-    const exp = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
+    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (!exp) {
       this.error(`Experiment "${args.id}" not found`);
     }
 
     const date = flags.date ?? new Date().toISOString().slice(0, 10);
 
-    db.insert(evidence)
+    await db.insert(evidence)
       .values({
         experimentId: args.id,
         date,

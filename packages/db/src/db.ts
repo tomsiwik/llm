@@ -1,20 +1,39 @@
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { createClient, type Client } from "@libsql/client";
+import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-const url = process.env.TURSO_DATABASE_URL;
-const authToken = process.env.TURSO_AUTH_TOKEN;
+let _client: Client | null = null;
+let _db: LibSQLDatabase<typeof schema> | null = null;
 
-if (!url) throw new Error("TURSO_DATABASE_URL is not set");
+function getClient(): Client {
+  if (!_client) {
+    const url = process.env.TURSO_DATABASE_URL;
+    const authToken = process.env.TURSO_AUTH_TOKEN;
+    if (!url) throw new Error("TURSO_DATABASE_URL is not set — add it to .env");
+    _client = createClient({ url, authToken });
+  }
+  return _client;
+}
 
-const client = createClient({ url, authToken });
+export function getDb(): LibSQLDatabase<typeof schema> {
+  if (!_db) {
+    _db = drizzle(getClient(), { schema });
+  }
+  return _db;
+}
 
-export const db = drizzle(client, { schema });
-export type Db = typeof db;
+// Convenience: named export that matches the old `db` usage via a proxy
+export const db = new Proxy({} as LibSQLDatabase<typeof schema>, {
+  get(_target, prop) {
+    return (getDb() as any)[prop];
+  },
+});
+
+export type Db = LibSQLDatabase<typeof schema>;
 
 // Run FTS + trigger setup (idempotent)
 export async function initFts() {
-  await client.executeMultiple(`
+  await getClient().executeMultiple(`
     CREATE VIRTUAL TABLE IF NOT EXISTS experiments_fts
       USING fts5(id, title, notes, content=experiments, content_rowid=rowid);
 

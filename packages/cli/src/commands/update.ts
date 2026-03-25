@@ -21,7 +21,7 @@ export default class Update extends Command {
   async run() {
     const { args, flags } = await this.parse(Update);
 
-    const existing = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
+    const existing = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (!existing) {
       this.error(`Experiment "${args.id}" not found`);
     }
@@ -37,7 +37,7 @@ export default class Update extends Command {
     if (flags.notes) updates.notes = flags.notes;
     if (flags.title) updates.title = flags.title;
 
-    db.update(experiments).set(updates).where(eq(experiments.id, args.id)).run();
+    await db.update(experiments).set(updates).where(eq(experiments.id, args.id)).run();
 
     this.log(`Updated ${args.id}: ${Object.keys(updates).filter((k) => k !== "updatedAt").join(", ")}`);
   }
