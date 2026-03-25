@@ -25,9 +25,8 @@ cli:
 event_loop:
   prompt_file: "PROMPT.md"
   starting_event: "research.start"
-  completion_promise: "LOOP_COMPLETE"
-  max_iterations: 1000
-  idle_timeout_secs: 28800
+  max_iterations: 200
+  idle_timeout_secs: 36000
 
 features:
   parallel: true
