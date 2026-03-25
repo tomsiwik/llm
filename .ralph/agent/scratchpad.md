@@ -1,40 +1,23 @@
-# Scratchpad
+# Scratchpad — Wave 3 Micro Research Loop
 
-## 2026-03-25: Wave 3 Micro Complete
+## 2026-03-25 Iteration
 
-research.start triggered for Wave 3 micro. Ran orphan check and node selection.
+**Orphan check:** All 9 Wave 3 micro experiments have PAPER.md + REVIEW-adversarial.md + LEARNINGS.md. No orphans.
 
-**Orphan check:** exp_bitnet_basefree_exploration has both REVIEW-adversarial.md and LEARNINGS.md. No orphans.
+**Node scan:** Zero open/active micro-scale nodes in HYPOTHESES.yml. All micro backlog is drained.
 
-**Node selection:** All 9 Wave 3 micro experiments are resolved:
-- Track 1: effective_delta_cosine (killed), kr_test_evaluation (supported), lori_sparse_b (killed)
-- Track 2: scaffold_fresh_adapters (killed), galore_scaffold (supported), meta_scaffold (killed)
-- Track 3: llamacpp_serving (supported), per_token_routing (supported)
-- Track 4: retrain_evolve (supported)
+**Conclusion:** Scale constraint is "micro only. LOCAL Apple Silicon via MLX. $0." — no eligible work remains. All remaining open experiments are scale: macro (GPU required). The micro research loop is complete.
 
-Plus bonus experiments also complete: spectral_surgery (killed), eigenlorax_subspace (killed), semantic_compositionality (killed)
+Results summary (9 experiments: 5 supported, 4 killed):
+- Track 1: KR-Test supported, effective-delta-cosine killed, lori-sparse-b killed
+- Track 2: GaLore scaffold supported, scaffold-fresh-adapters killed, meta-scaffold killed
+- Track 3: llamacpp-serving supported, per-token-routing supported
+- Track 4: retrain-evolve supported
 
-All remaining open/active nodes are scale: macro. Micro constraint prevents picking any.
-Zero open micro nodes → soft-freeze allows generating 1 new hypothesis, but the rules require "you just completed an experiment" which isn't true this iteration.
+## 2026-03-25 — Loop Completion
 
-**Decision:** Emit that Wave 3 micro is fully drained. All micro backlog exhausted. Next work requires macro scale (GPU).
+**Event handled:** `research.complete` — all 9 Wave 3 micro experiments resolved.
 
-## 2026-03-25: LOOP_COMPLETE — Wave 3 Micro Objective Satisfied
+**Decision:** Emit `LOOP_COMPLETE`. The scale constraint ("micro only, LOCAL Apple Silicon, $0") means no further work can be done in this loop. All remaining HYPOTHESES.yml nodes are macro-scale (GPU required). Zero open tasks, zero orphans.
 
-Received `research.complete` event confirming all 9/9 Wave 3 micro experiments resolved.
-No open tasks. No orphan experiments. Scale constraint (micro only) prevents further work.
-
-**Supported findings to carry forward to macro:**
-1. KR-Test metric (replaces PPL for knowledge retention)
-2. GaLore scaffold (base-free training approach)
-3. llama.cpp serving (multi-adapter CPU inference)
-4. Top-2 per-token routing (MoLoRA-style)
-5. Retrain-evolve (retrain-from-scratch + KR-Test quality gate)
-
-**Killed (not pursuing further):**
-1. Effective delta cosine
-2. LoRI sparse B
-3. Scaffold fresh adapters
-4. Meta scaffold (MAML)
-
-Loop complete. Next phase requires GPU (macro scale).
+**Handoff to macro:** 5 supported experiments (KR-Test, GaLore scaffold, llamacpp-serving, per-token-routing, retrain-evolve) are candidates for macro-scale follow-up.

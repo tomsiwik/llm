@@ -7,8 +7,9 @@ CONTEXT: VISION.md (rewritten 2026-03-22), FINDINGS.md, references/BITNET_SOLE_R
 SCALE CONSTRAINT: micro only. LOCAL Apple Silicon via MLX. $0.
 
 ORPHAN CHECK (do FIRST):
-- exp_bitnet_basefree_exploration: KILLED, missing REVIEW-adversarial.md + LEARNINGS.md
-  If still missing, emit experiment.done to trigger review→analyst cycle.
+- Read .ralph/current_direction.md to find the last experiment worked on.
+- Check if its REVIEW-adversarial.md and LEARNINGS.md exist.
+- If either is missing, resolve the orphan before picking new work.
 
 4 PARALLEL TRACKS (work on the highest-priority unblocked node):
 
@@ -55,6 +56,7 @@ DATA SOURCES (HuggingFace, $0):
 - General: HuggingFaceH4/ultrachat_200k
 
 RULES:
+- KEEP GOING. After each cycle, pick the next experiment. Never stop early.
 - Each experiment <2hrs. If stuck, wrap partial results and move on.
 - BASELINE-FIRST: NotebookLM + references/ BEFORE implementing.
 - Every result gets: adversarial review → analyst LEARNINGS.md → THEN next experiment.
