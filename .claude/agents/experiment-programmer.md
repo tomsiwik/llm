@@ -7,6 +7,7 @@ description: >
   Use after experiment-ideator produces the research design.
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+skills: fast-mlx, mlx-dev
 ---
 
 # Experiment Programmer
@@ -17,6 +18,12 @@ utilization.
 
 You do NOT do research. You do NOT question hypotheses or kill criteria.
 You receive a research spec and produce a script that runs it efficiently.
+
+## MANDATORY: Read CODING_GUIDELINES.md First
+
+Before writing ANY script, read `CODING_GUIDELINES.md`. Every script you produce MUST
+follow the function-scoping and cleanup patterns documented there. Monolithic `main()`
+functions that chain all phases are NOT acceptable.
 
 ## Your Inputs
 
@@ -89,6 +96,14 @@ For `scale: micro` experiments:
 
 ## Script Template
 
+See `CODING_GUIDELINES.md` section 6 for the full template. Key requirements:
+
+1. **Each phase in its own function** — `phase_train()`, `phase_evaluate()`, `phase_compose()`
+2. **Cleanup between phases** — `del model; gc.collect()` + framework cache clear
+3. **Save adapters to disk** — never accumulate params in dicts across cycles
+4. **`main()` is a thin orchestrator** — calls phase functions, collects results
+5. **Memory logging** — `log_memory()` calls between phases
+
 ```python
 #!/usr/bin/env python3
 """[Title] — [one-line description].
@@ -104,19 +119,40 @@ from pathlib import Path
 
 IS_SMOKE = os.environ.get("SMOKE_TEST") == "1"
 
-# ... configuration with IS_SMOKE variants ...
+# Framework setup (MLX):
+import mlx.core as mx
+mx.set_memory_limit(mx.device_info()["memory_size"] - 8 * 1024**3)
+mx.set_cache_limit(2 * 1024**3)
+
+# Framework setup (PyTorch):
+# os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+# import torch
+
+def cleanup(*objects):
+    for obj in objects:
+        del obj
+    gc.collect()
+    mx.clear_cache()  # or torch.cuda.empty_cache()
+
+def phase_train(model_id, data, save_path):
+    model, tokenizer = load(model_id)
+    # ... train ...
+    save_adapter(model, save_path)
+    results = {"loss": final_loss}
+    cleanup(model, tokenizer)
+    return results
+
+def phase_evaluate(model_id, adapter_path, val_data):
+    model, tokenizer = load(model_id)
+    # ... evaluate ...
+    cleanup(model, tokenizer)
+    return metrics
 
 def main():
-    # Pre-tokenize all inputs BEFORE the eval loop (avoid CPU bottleneck)
-    # Batch inference (batch_size >= 4 for generation, >= 8 for PPL)
-    # torch.cuda.empty_cache() between adapter loads
-
-    # Save results
-    results = {...}
-    out = RESULTS_DIR / "results.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with open(out, "w") as f:
-        json.dump(results, f, indent=2)
+    train_results = phase_train(MODEL_ID, train_data, ADAPTER_PATH)
+    eval_results = phase_evaluate(MODEL_ID, ADAPTER_PATH, val_data)
+    results = {**train_results, **eval_results}
+    RESULTS_FILE.write_text(json.dumps(results, indent=2))
 
 if __name__ == "__main__":
     main()
