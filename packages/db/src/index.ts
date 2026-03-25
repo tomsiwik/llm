@@ -1,2 +1,2 @@
 export * from "./schema";
-export { getDb, type Db } from "./db";
+export { db, initFts, type Db } from "./db";

@@ -1,13 +1,11 @@
 import { Command } from "@oclif/core";
 import { sql } from "drizzle-orm";
-import { getDb, experiments, evidence, killCriteria, tags, experimentTags, references } from "@experiment/db";
+import { db, experiments, evidence, killCriteria, tags, experimentTags, references } from "@experiment/db";
 
 export default class Stats extends Command {
   static description = "Show experiment tracking dashboard";
 
   async run() {
-    const db = getDb();
-
     // Status distribution
     const statusDist = db
       .select({ status: experiments.status, count: sql<number>`count(*)` })

@@ -1,7 +1,7 @@
 import { Command, Args } from "@oclif/core";
 import { eq } from "drizzle-orm";
 import {
-  getDb,
+  db,
   experiments,
   killCriteria,
   successCriteria,
@@ -22,7 +22,6 @@ export default class Get extends Command {
 
   async run() {
     const { args } = await this.parse(Get);
-    const db = getDb();
 
     const exp = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (!exp) {

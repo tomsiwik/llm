@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { eq, inArray, sql } from "drizzle-orm";
-import { getDb, experiments, experimentTags, tags, experimentDependencies } from "@experiment/db";
+import { db, experiments, experimentTags, tags, experimentDependencies } from "@experiment/db";
 
 export default class List extends Command {
   static description = "List experiments with optional filters";
@@ -13,7 +13,6 @@ export default class List extends Command {
 
   async run() {
     const { flags } = await this.parse(List);
-    const db = getDb();
 
     let query = db.select().from(experiments);
 

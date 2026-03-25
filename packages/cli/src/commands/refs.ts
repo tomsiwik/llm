@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { eq, sql } from "drizzle-orm";
-import { getDb, references, referenceTags, tags, experimentReferences } from "@experiment/db";
+import { db, references, referenceTags, tags, experimentReferences } from "@experiment/db";
 
 export default class Refs extends Command {
   static description = "List references";
@@ -12,7 +12,6 @@ export default class Refs extends Command {
 
   async run() {
     const { flags } = await this.parse(Refs);
-    const db = getDb();
 
     let rows = db.select().from(references).all();
 
