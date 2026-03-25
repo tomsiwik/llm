@@ -7,11 +7,10 @@ export default class Stats extends Command {
 
   async run() {
     // Status distribution
-    const statusDist = db
+    const statusDist = await db
       .select({ status: experiments.status, count: sql<number>`count(*)` })
       .from(experiments)
-      .groupBy(experiments.status)
-      .all();
+      .groupBy(experiments.status);
 
     const total = statusDist.reduce((sum, r) => sum + r.count, 0);
     const killed = statusDist.find((r) => r.status === "killed")?.count ?? 0;
@@ -29,26 +28,25 @@ export default class Stats extends Command {
     this.log(`  Success rate: ${(((proven + supported) / total) * 100).toFixed(1)}% (${proven + supported}/${total})`);
 
     // Evidence count
-    const evCount = db.select({ count: sql<number>`count(*)` }).from(evidence).get();
+    const [evCount] = await db.select({ count: sql<number>`count(*)` }).from(evidence);
     this.log(`\n  Evidence entries: ${evCount?.count}`);
 
     // Kill criteria count
-    const kcCount = db.select({ count: sql<number>`count(*)` }).from(killCriteria).get();
+    const [kcCount] = await db.select({ count: sql<number>`count(*)` }).from(killCriteria);
     this.log(`  Kill criteria: ${kcCount?.count}`);
 
     // References
-    const refCount = db.select({ count: sql<number>`count(*)` }).from(references).get();
+    const [refCount] = await db.select({ count: sql<number>`count(*)` }).from(references);
     this.log(`  References: ${refCount?.count}`);
 
     // Top tags
-    const topTags = db
+    const topTags = await db
       .select({ name: tags.name, count: sql<number>`count(*)` })
       .from(experimentTags)
       .innerJoin(tags, sql`${experimentTags.tagId} = ${tags.id}`)
       .groupBy(tags.name)
       .orderBy(sql`count(*) DESC`)
-      .limit(15)
-      .all();
+      .limit(15);
 
     this.log("\n  Top Tags:");
     for (const t of topTags) {
@@ -56,11 +54,10 @@ export default class Stats extends Command {
     }
 
     // Scale distribution
-    const scaleDist = db
+    const scaleDist = await db
       .select({ scale: experiments.scale, count: sql<number>`count(*)` })
       .from(experiments)
-      .groupBy(experiments.scale)
-      .all();
+      .groupBy(experiments.scale);
     this.log("\n  Scale:");
     for (const s of scaleDist) {
       this.log(`    ${s.scale.padEnd(10)} ${s.count}`);
