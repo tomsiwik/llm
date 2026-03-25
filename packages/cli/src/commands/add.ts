@@ -1,6 +1,6 @@
 import { Command, Args, Flags } from "@oclif/core";
 import { eq } from "drizzle-orm";
-import { getDb, experiments, experimentReferences, references } from "@experiment/db";
+import { db, experiments, experimentReferences, references } from "@experiment/db";
 
 export default class Add extends Command {
   static description = "Add a new experiment";
@@ -21,7 +21,6 @@ export default class Add extends Command {
 
   async run() {
     const { args, flags } = await this.parse(Add);
-    const db = getDb();
 
     const existing = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (existing) {

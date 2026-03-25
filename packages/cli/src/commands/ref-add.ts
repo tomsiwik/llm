@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { eq } from "drizzle-orm";
-import { getDb, references, referenceTags, tags } from "@experiment/db";
+import { db, references, referenceTags, tags } from "@experiment/db";
 
 export default class RefAdd extends Command {
   static description = "Add a literature reference";
@@ -17,7 +17,6 @@ export default class RefAdd extends Command {
 
   async run() {
     const { flags } = await this.parse(RefAdd);
-    const db = getDb();
 
     const url = flags.url ?? (flags.arxiv ? `https://huggingface.co/papers/${flags.arxiv}` : null);
     if (!url) {

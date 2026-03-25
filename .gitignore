@@ -36,4 +36,4 @@ bun.lock
 
 # Lock files
 .ralph/loop.lock
-uv.lock
+# uv.lock — committed for reproducible installs

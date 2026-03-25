@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import { resolve } from "path";
 import { eq } from "drizzle-orm";
 import {
-  getDb,
+  db,
   experiments,
   experimentDependencies,
   killCriteria,
@@ -30,7 +30,6 @@ export default class Import extends Command {
 
   async run() {
     const { flags } = await this.parse(Import);
-    const db = getDb();
 
     const hypPath = resolve(flags.hypotheses);
     const refPath = resolve(flags.references);
