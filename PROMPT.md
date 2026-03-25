@@ -4,7 +4,7 @@ ARCHITECTURE: Ternary base (BitNet-2B-4T) + ternary LoRA adapters (QAT+STE) + Gr
 STATE: Read .ralph/current_direction.md for active work.
 CONTEXT: VISION.md, FINDINGS.md, references/BITNET_SOLE_RESEARCH.md.
 
-SCALE CONSTRAINT: micro only. LOCAL Apple Silicon via MLX. $0.
+SCALE: prefer micro (LOCAL Apple Silicon via MLX, $0). May work on macro experiments if no micro work remains.
 
 EXPERIMENT SELECTION (do this EVERY iteration):
 1. Run: `experiment list --status open,active` to see available work.

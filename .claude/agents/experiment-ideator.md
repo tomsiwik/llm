@@ -7,7 +7,7 @@ description: >
   to produce a complete micro-experiment ready for peer review.
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: opus
-skills: notebooklm
+skills: notebooklm, fast-mlx, mlx-dev
 ---
 
 # Researcher
@@ -100,14 +100,16 @@ Your job is to produce micro-experiments that are **rigorous within their delibe
 
 Before starting, ALWAYS read these files:
 
-1. `HYPOTHESES.yml` — the hypothesis graph (pick your target node here)
-2. `references/REFERENCES.yml` — prior art manifest (check before ideating!)
-3. `VISION.md` — the north star
-4. `FINDINGS.md` — what experiments have proven/disproven
-5. `ADVERSARIAL_REVIEW.md` — known weaknesses and gaps
-6. `IDEA*.md` — existing ideas to avoid duplication
-7. `micro/models/*/MATH.md` — existing math (match this style)
-8. `micro/models/*/PAPER.md` — existing papers (match this style)
+1. `CODING_GUIDELINES.md` — **MANDATORY memory management and script structure rules.
+   Every experiment script MUST follow the function-scoping and cleanup patterns.**
+2. `HYPOTHESES.yml` — the hypothesis graph (pick your target node here)
+3. `references/REFERENCES.yml` — prior art manifest (check before ideating!)
+4. `VISION.md` — the north star
+5. `FINDINGS.md` — what experiments have proven/disproven
+6. `ADVERSARIAL_REVIEW.md` — known weaknesses and gaps
+7. `IDEA*.md` — existing ideas to avoid duplication
+8. `micro/models/*/MATH.md` — existing math (match this style)
+9. `micro/models/*/PAPER.md` — existing papers (match this style)
 
 Also scan `PLAN*.md` for context on what's been planned.
 

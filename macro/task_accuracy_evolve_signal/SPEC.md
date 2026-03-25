@@ -16,7 +16,7 @@ Secondary objectives:
 
 - **Base model**: Qwen2.5-7B at `/workspace/models/Qwen2.5-7B`
 - **Adapters**: All available at `/workspace/llm/adapters/` (up to 20).
-  Use adapter discovery pattern from GPU_CODING_GUIDELINES.md.
+  Use adapter discovery pattern from CODING_GUIDELINES.md.
 - **Eval data**: MMLU test split via `datasets` library (`cais/mmlu`)
 - **Subjects**: 10 diverse subjects spanning knowledge domains:
   ```
@@ -219,7 +219,7 @@ Required fields in JSON:
 - **Must support SMOKE_TEST=1**: When set, use 2 subjects, 3 adapters,
   2 draws, gold_size=20, subset_sizes=[5, 10]
 - **Must NOT use sequential HF generate()** -- vLLM batch inference only
-- **Adapter discovery**: Use filesystem scan pattern from GPU_CODING_GUIDELINES.md
+- **Adapter discovery**: Use filesystem scan pattern from CODING_GUIDELINES.md
   (fall through to directory listing if benchmark JSON is empty)
 
 ## Implementation Notes
