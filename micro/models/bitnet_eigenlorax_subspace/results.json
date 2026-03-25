@@ -1,0 +1,53 @@
+{
+  "experiment": "eigenlorax_subspace",
+  "n_adapters": 25,
+  "adapter_params_each": 21626880,
+  "n_module_keys": 420,
+  "extraction_time_s": 24.3,
+  "total_time_s": 385.9,
+  "k1": {
+    "k1_pass": true,
+    "k1_avg_variance_k16": 0.6563,
+    "k1_min_variance_k16": 0.1398,
+    "k1_avg_variance_k8": 0.4748,
+    "k1_lora_a_avg": 0.3126,
+    "k1_lora_b_avg": 1.0000,
+    "k3_pass": true,
+    "k3_extraction_time_s": 24.3
+  },
+  "k2": {
+    "holdout_domain": "wikitext",
+    "K": 16,
+    "base_ppl": 25.4414,
+    "scratch_ppl": 13.5198,
+    "subspace_ppl": 24.4395,
+    "ppl_gap_pct": 80.8,
+    "scratch_params": 21626880,
+    "subspace_params": 6720,
+    "actual_subspace_trainable": 6720,
+    "compression_ratio": 3218.3,
+    "scratch_time_s": 137.9,
+    "subspace_time_s": 158.4,
+    "speedup": 0.87,
+    "holdout_recon_error": 1.0081,
+    "k2_pass": false
+  },
+  "variance_summary": {
+    "lora_a": {
+      "avg_cumvar_k8": 0.2464,
+      "avg_cumvar_k16": 0.3126,
+      "avg_k_for_50pct": 63.1,
+      "min_cumvar_k16": 0.1398
+    },
+    "lora_b": {
+      "avg_cumvar_k8": 0.7032,
+      "avg_cumvar_k16": 1.0000,
+      "avg_k_for_50pct": 5.4,
+      "min_cumvar_k16": 1.0000
+    }
+  },
+  "verdict": "KILLED",
+  "kill_reasons": [
+    "K2 FAIL (PPL gap +80.8% > 20%)"
+  ]
+}

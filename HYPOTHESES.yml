@@ -1,9 +1,9 @@
 meta:
-  consecutive_kills: 0
-  last_killed: '2026-03-23'
-  last_killed_node: exp_bitnet_lori_sparse_b
-  last_supported: '2026-03-23'
-  last_supported_node: exp_bitnet_retrain_evolve
+  consecutive_kills: 3
+  last_killed: '2026-03-24'
+  last_killed_node: exp_bitnet_float_merge_fp32
+  last_supported: '2026-03-24'
+  last_supported_node: exp_bitnet_llamacpp_serving
   last_proven: '2026-03-22'
   last_proven_node: exp_bitnet_instruction_tuned_task_eval
   roadmap_updated: '2026-03-22'
@@ -3106,7 +3106,7 @@ nodes:
 
   exp_bitnet_float_merge_fp32:
     title: "Float merge (fp32) as lossless serving path for pre-composed BitNet-2B adapters"
-    status: open
+    status: killed
     scale: micro
     priority: 5
     depends_on:
@@ -3117,19 +3117,41 @@ nodes:
     - fp32 float-merged model PPL > 1.05x runtime-composed PPL at N=5 (merge quality insufficient)
     - fp32 merged model memory > 2x ternary base memory (cost too high)
     - fp32 merge latency > runtime LoRA composition latency (no serving benefit)
-    evidence: []
+    evidence:
+    - date: '2026-03-24'
+      claim: "v2 REVISED after fixing 1/N^2 scaling bug in runtime LoRA baseline.
+        K1 PASS: fp32 merge PPL 7.19 vs runtime LoRA 7.17 at N=5 (ratio 1.0015,
+        essentially identical -- prior 7% gap was entirely from bug). K2 INCONCLUSIVE:
+        MLX lazy eval makes RSS identical (1720-1799 MB); theoretical fp32 is 2x bf16.
+        K3 FAIL: fp32 merged 8.5 tok/s vs runtime LoRA 12.0 tok/s (29% slower).
+        KILLED on K3. bf16 merge: PPL 7.22 (0.6% worse than runtime LoRA), 16.7 tok/s
+        (39% faster), 0.6% overhead vs base. All three methods are PPL-equivalent.
+        Latency: 5 runs, stddev reported."
+      source: micro/models/bitnet_float_merge_fp32/results.json
+    - date: '2026-03-24'
+      claim: "ORIGINAL v1 (superseded): Claimed fp32 merge PPL 7% better than runtime
+        LoRA. This was caused by 1/N^2 scaling bug in compose_adapters_runtime, which
+        applied 1/N to both A and B independently. Fixed in v2."
+      source: micro/models/bitnet_float_merge_fp32/REVIEW-adversarial.md
+    - date: '2026-03-24'
+      claim: "v2 adversarial review: PROCEED. All 4 required fixes verified (1/N^2
+        scaling bug, PPL explanation retracted, K2 INCONCLUSIVE, stddev added).
+        Cross-term difference (product-of-sums vs sum-of-products) noted as 0.15%
+        at N=5 -- monitor at larger N. bf16 truncation needs verification at N>>5.
+        Hardware-specific latency (Apple Silicon). Systemic 1/N^2 bug flagged."
+      source: micro/models/bitnet_float_merge_fp32/REVIEW-adversarial.md
     tags:
     - bitnet
     - serving
     - float-merge
+    - revised
     created: '2026-03-21'
-    notes: "Follow-up from exp_bitnet_serving_path kill. QAF requantization erases adapters
-      (116x below grid flip threshold), but float merge at N=5 showed PPL 8.52 vs
-      runtime composed 9.55 (actually better). Adversarial reviewer flagged this as
-      architecturally important. Test: merge adapters into fp32 copy of base weights,
-      measure PPL quality vs runtime LoRA, memory cost (~8GB for fp32 vs ~1.7GB ternary),
-      and inference latency. Tradeoff: fp32 loses ternary speed (bitnet.cpp) but eliminates
-      per-token adapter overhead. $0."
+    notes: "KILLED on K3 (fp32 latency). After v2 fix: all three methods (runtime
+      LoRA, fp32 merge, bf16 merge) are PPL-equivalent within 0.6%. bf16 merge is
+      the optimal serving path for latency (39% faster than runtime LoRA, 0.6% base
+      overhead). Runtime LoRA has best PPL by 0.6% and supports hot-swap. Dual-mode
+      serving recommended. The 1/N^2 scaling bug was systemic -- affects any code
+      that averages both A and B params by 1/N."
 
   # ═══════════════════════════════════════════════════════════════════════════
   # ADVERSARIAL REVIEW FOLLOW-UPS (P0 — must run before paper)
@@ -3480,7 +3502,7 @@ nodes:
 
   exp_bitnet_meta_scaffold:
     title: "MAML-optimized scaffold maximizes adapter composition quality (no prior work exists)"
-    status: open
+    status: killed
     scale: micro
     priority: 3
     depends_on:
@@ -3491,13 +3513,30 @@ nodes:
     kill_criteria:
     - meta-scaffold does not outperform GaLore scaffold on adapter composition quality
     - MAML outer loop does not converge within 100 meta-steps
-    evidence: []
+    evidence:
+    - date: '2026-03-24'
+      claim: 'KILLED. K1 FAIL: meta comp ratio 1.172 > GaLore baseline 1.155 (does not
+        beat GaLore). K2 FAIL: FOMAML outer loop did not converge (1.2% reduction, threshold
+        5%). FOMAML destabilized scaffold (base PPL 11-20 -> 59-170, ternary PPL 12x worse).
+        Adapter resilience notable: adapters only 3% worse despite 12x worse scaffold.
+        Confirms GaLore scaffold is hard to beat with explicit meta-optimization.'
+      source: micro/models/bitnet_meta_scaffold/results.json
+    - date: '2026-03-24'
+      claim: 'Adversarial review KILL CONFIRMED. Stronger reasons than paper states: (1) FOMAML
+        implementation incorrect — outer gradient computed at restored scaffold + mean-adapter,
+        not inner-loop endpoint (tests direct optimization, not meta-learning). (2) Composition
+        penalty gradient-disconnected — lambda*comp_penalty never flows into outer gradient.
+        (3) Meta-loss "1.2% reduction" misleading — actual trajectory -6.8% (worse). Adapter
+        resilience finding (3% degradation on 12x worse scaffold) is valid but needs adapter/base
+        ratio caveat (5.4% micro vs <0.5% production).'
+      source: micro/models/bitnet_meta_scaffold/REVIEW-adversarial.md
     tags:
     - bitnet
     - basefree
     - meta-learning
     - novel
     - exploratory
+    - killed
     created: '2026-03-22'
     notes: "NO PRIOR WORK EXISTS. MAML inner loop = LoRA adapter training per domain. MAML
       outer loop = optimize scaffold weights to maximize: (a) adapter orthogonality and
@@ -3509,7 +3548,7 @@ nodes:
 
   exp_bitnet_llamacpp_serving:
     title: "llama.cpp --lora serves multiple BitNet adapters on CPU with hot-swap"
-    status: open
+    status: supported
     scale: micro
     priority: 2
     depends_on:
@@ -3520,18 +3559,30 @@ nodes:
     - llama.cpp cannot load BitNet GGUF + LoRA adapter (tooling blocker)
     - multi-adapter overhead > 50% throughput loss vs base-only (too expensive)
     - hot-swap causes any output corruption
-    evidence: []
+    evidence:
+    - date: '2026-03-24'
+      claim: 'K1 PASS: llama.cpp loads BitNet-2B-4T TQ2_0 GGUF + 5 LoRA adapters (rank-16,
+        82.5 MB each). Required 3 patches to convert script (arch name casing, sub_norm
+        tensor mapping, vocab detection). Metal/GPU NOT supported (TQ kernels missing).
+        K2 PASS: 5x adapter overhead = 47.1% (threshold 50%, 95% CI [41.8%, 52.4%]).
+        Affine model: overhead = 9.5% + 7.5%*N. True base 63.9 t/s, 5x LoRA 33.8 t/s
+        on Apple M1 Max CPU-only. K3 PASS: deterministic reproducibility + server API
+        hot-swap both produce consistent outputs. /lora-adapters endpoint enables
+        instantaneous adapter switching with per-adapter scaling. Production serving
+        path validated.'
+      source: micro/models/bitnet_llamacpp_serving/results.json
     tags:
     - bitnet
     - serving
     - production
     - llamacpp
     created: '2026-03-22'
-    notes: "llama.cpp is the only CPU runtime multi-LoRA path (from deep research). Supports
-      N adapters with per-adapter scaling via llama_set_adapters_lora(). BGMV-style batched
-      adapter compute. Overhead ~2-5% per adapter at rank-16 on d=896. Convert BitNet-2B to
-      GGUF, convert adapters via convert_lora_to_gguf.py, test multi-adapter composition +
-      hot-swap. Goal: validate the production serving path on commodity CPU. $0, ~4 hrs."
+    notes: "SUPPORTED: llama.cpp CPU-only serves BitNet-2B-4T with runtime LoRA. 3 patches
+      needed for GGUF conversion. Metal lacks TQ kernels. Throughput: 63.9 t/s base,
+      33.8 t/s with 5 active adapters (47.1% overhead, 95% CI [41.8%, 52.4%]).
+      Affine model: overhead = 9.5% + 7.5%*N. Hot-swap via /lora-adapters API works.
+      Memory: ~1.53 GiB total with 5 adapters (82.5 MB each). Up to ~5 rank-16
+      adapters within 50% budget, or ~10 at rank-8."
 
   exp_bitnet_per_token_routing:
     title: "MoLoRA-style per-token routing beats 1/N uniform composition on BitNet-2B"
@@ -3796,7 +3847,7 @@ nodes:
 
   exp_bitnet_spectral_surgery_quality_gate:
     title: "Spectral Surgery post-hoc LoRA refinement as Evolve quality gate"
-    status: open
+    status: killed
     scale: micro
     priority: 2
     depends_on:
@@ -3807,7 +3858,16 @@ nodes:
     - spectral-refined adapter PPL not better than unrefined (surgery doesn't help)
     - spectral-refined adapter KR-Test not better than unrefined (no quality improvement)
     - SVD + reweighting takes >5 min per adapter (too slow for production gate)
-    evidence: []
+    evidence:
+    - date: '2026-03-24'
+      claim: "KILLED: All 3 kill criteria FAIL. K1: PPL improved on only 1/5 domains
+        (python +0.4%, others -0.1% to -0.6%). K2: KR-Test unchanged on all 5/5
+        domains (delta=0.000). K3: Surgery takes 420-468s per adapter (>5 min threshold).
+        Root cause: short-trained (200 iter) rank-16 LoRA adapters already have
+        efficient spectra -- nothing for surgery to fix. Nuclear-norm constraint
+        makes surgery zero-sum. Also harmful to composition: cosine increased 3.2x
+        (0.001 -> 0.0032)."
+      source: micro/models/bitnet_spectral_surgery/results.json
     tags:
     - bitnet
     - evolve
@@ -3823,7 +3883,7 @@ nodes:
 
   exp_bitnet_eigenlorax_subspace:
     title: "EigenLoRAx principal subspace extraction from N=25 trained adapters"
-    status: open
+    status: killed
     scale: micro
     priority: 2
     depends_on:
@@ -3834,7 +3894,15 @@ nodes:
     - principal subspace explains <50% variance of existing adapters (no shared structure)
     - new adapter trained on subspace coefficients only is worse than from-scratch LoRA by >20% PPL
     - subspace extraction takes >10 min for N=25 (impractical at scale)
-    evidence: []
+    evidence:
+    - date: '2026-03-24'
+      claim: "KILLED (K2 FAIL). LoRA-A subspace explains only 31.3% variance at K=16 (Grassmannian
+        skeleton prevents shared structure). B-space trivially 100% (rank-16 < N=25). Subspace-trained
+        adapter PPL 24.44 vs from-scratch 13.52 (+80.8% gap, threshold 20%). Holdout reconstruction
+        error 1.008 (near-zero). Extraction fast (24.3s). Root cause: Grassmannian A matrices are
+        maximally orthogonal BY DESIGN -- same property enabling composition prevents subspace transfer.
+        EigenLoRAx incompatible with orthogonal adapter architecture."
+      source: micro/models/bitnet_eigenlorax_subspace/results.json
     tags:
     - bitnet
     - evolve
