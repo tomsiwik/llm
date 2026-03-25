@@ -13,31 +13,31 @@ export default class Refs extends Command {
   async run() {
     const { flags } = await this.parse(Refs);
 
-    let rows = db.select().from(references).all();
+    let rows = await db.select().from(references).all();
 
     if (flags.unused) {
       const linkedIds = new Set(
-        db
+        (await db
           .select({ id: experimentReferences.referenceId })
           .from(experimentReferences)
-          .all()
+          .all())
           .map((r) => r.id),
       );
       rows = rows.filter((r) => !linkedIds.has(r.id));
     }
 
     if (flags.tag) {
-      const tag = db.select().from(tags).where(eq(tags.name, flags.tag.toLowerCase())).get();
+      const tag = await db.select().from(tags).where(eq(tags.name, flags.tag.toLowerCase())).get();
       if (!tag) {
         this.log(`No references with tag "${flags.tag}"`);
         return;
       }
       const taggedIds = new Set(
-        db
+        (await db
           .select({ id: referenceTags.referenceId })
           .from(referenceTags)
           .where(eq(referenceTags.tagId, tag.id))
-          .all()
+          .all())
           .map((r) => r.id),
       );
       rows = rows.filter((r) => taggedIds.has(r.id));

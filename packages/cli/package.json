@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@experiment/db": "workspace:*",
+    "@libsql/client": "^0.17.2",
     "@oclif/core": "^4",
     "drizzle-orm": "^0.45.1",
     "yaml": "^2.7"

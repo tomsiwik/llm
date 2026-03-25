@@ -44,7 +44,7 @@ export default class Import extends Command {
     let expSkipped = 0;
 
     for (const [id, node] of Object.entries(nodes)) {
-      const existing = db.select().from(experiments).where(eq(experiments.id, id)).get();
+      const existing = await db.select().from(experiments).where(eq(experiments.id, id)).get();
       if (existing) {
         expSkipped++;
         continue;
@@ -52,7 +52,7 @@ export default class Import extends Command {
 
       const now = new Date().toISOString().slice(0, 10);
 
-      db.insert(experiments)
+      await db.insert(experiments)
         .values({
           id,
           title: node.title,
@@ -70,7 +70,7 @@ export default class Import extends Command {
       // Kill criteria
       for (const kc of node.kill_criteria) {
         if (typeof kc === "string" && kc.trim()) {
-          db.insert(killCriteria)
+          await db.insert(killCriteria)
             .values({
               experimentId: id,
               text: kc,
@@ -84,7 +84,7 @@ export default class Import extends Command {
       // Evidence
       for (const ev of node.evidence) {
         if (typeof ev === "string") {
-          db.insert(evidenceTable)
+          await db.insert(evidenceTable)
             .values({
               experimentId: id,
               date: node.created || now,
@@ -94,7 +94,7 @@ export default class Import extends Command {
             })
             .run();
         } else if (ev && typeof ev === "object") {
-          db.insert(evidenceTable)
+          await db.insert(evidenceTable)
             .values({
               experimentId: id,
               date: ev.date || node.created || now,
@@ -112,10 +112,10 @@ export default class Import extends Command {
         const clean = tagName.trim().toLowerCase();
 
         // Upsert tag
-        db.insert(tagsTable).values({ name: clean }).onConflictDoNothing().run();
-        const tag = db.select().from(tagsTable).where(eq(tagsTable.name, clean)).get();
+        await db.insert(tagsTable).values({ name: clean }).onConflictDoNothing().run();
+        const tag = await db.select().from(tagsTable).where(eq(tagsTable.name, clean)).get();
         if (tag) {
-          db.insert(experimentTags)
+          await db.insert(experimentTags)
             .values({ experimentId: id, tagId: tag.id })
             .onConflictDoNothing()
             .run();
@@ -132,7 +132,7 @@ export default class Import extends Command {
       if (node.depends_on) {
         for (const depId of node.depends_on) {
           if (nodes[depId]) {
-            db.insert(experimentDependencies)
+            await db.insert(experimentDependencies)
               .values({ experimentId: id, dependsOnId: depId })
               .onConflictDoNothing()
               .run();
@@ -144,7 +144,7 @@ export default class Import extends Command {
       if (node.blocks) {
         for (const blockedId of node.blocks) {
           if (nodes[blockedId]) {
-            db.insert(experimentDependencies)
+            await db.insert(experimentDependencies)
               .values({ experimentId: blockedId, dependsOnId: id })
               .onConflictDoNothing()
               .run();
@@ -166,7 +166,7 @@ export default class Import extends Command {
       const arxivId = extractArxivId(ref.source);
       const title = ref.dir || ref.insight.slice(0, 60);
 
-      const result = db
+      const result = await db
         .insert(refsTable)
         .values({
           arxivId: arxivId,
@@ -183,7 +183,7 @@ export default class Import extends Command {
       // Link to experiments
       for (const nodeId of ref.nodes) {
         if (nodes[nodeId]) {
-          db.insert(experimentReferences)
+          await db.insert(experimentReferences)
             .values({ experimentId: nodeId, referenceId: refId })
             .onConflictDoNothing()
             .run();

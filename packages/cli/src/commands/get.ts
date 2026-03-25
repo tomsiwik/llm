@@ -23,7 +23,7 @@ export default class Get extends Command {
   async run() {
     const { args } = await this.parse(Get);
 
-    const exp = db.select().from(experiments).where(eq(experiments.id, args.id)).get();
+    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
     if (!exp) {
       this.error(`Experiment "${args.id}" not found`);
     }
@@ -38,29 +38,29 @@ export default class Get extends Command {
     this.log(`  Created:  ${exp.createdAt}  Updated: ${exp.updatedAt}`);
 
     // Dependencies
-    const deps = db
+    const deps = (await db
       .select({ id: experimentDependencies.dependsOnId })
       .from(experimentDependencies)
       .where(eq(experimentDependencies.experimentId, args.id))
-      .all();
+      .all());
     if (deps.length > 0) {
       this.log(`\n  Depends on:`);
       for (const d of deps) this.log(`    - ${d.id}`);
     }
 
     // Blocks (reverse deps)
-    const blocks = db
+    const blocks = (await db
       .select({ id: experimentDependencies.experimentId })
       .from(experimentDependencies)
       .where(eq(experimentDependencies.dependsOnId, args.id))
-      .all();
+      .all());
     if (blocks.length > 0) {
       this.log(`  Blocks:`);
       for (const b of blocks) this.log(`    - ${b.id}`);
     }
 
     // Kill criteria
-    const kcs = db.select().from(killCriteria).where(eq(killCriteria.experimentId, args.id)).all();
+    const kcs = await db.select().from(killCriteria).where(eq(killCriteria.experimentId, args.id)).all();
     if (kcs.length > 0) {
       this.log(`\n  Kill Criteria:`);
       for (const kc of kcs) {
@@ -71,7 +71,7 @@ export default class Get extends Command {
     }
 
     // Success criteria
-    const scs = db.select().from(successCriteria).where(eq(successCriteria.experimentId, args.id)).all();
+    const scs = await db.select().from(successCriteria).where(eq(successCriteria.experimentId, args.id)).all();
     if (scs.length > 0) {
       this.log(`\n  Success Criteria:`);
       for (const sc of scs) {
@@ -82,7 +82,7 @@ export default class Get extends Command {
     }
 
     // Evidence
-    const evs = db.select().from(evidence).where(eq(evidence.experimentId, args.id)).all();
+    const evs = await db.select().from(evidence).where(eq(evidence.experimentId, args.id)).all();
     if (evs.length > 0) {
       this.log(`\n  Evidence (${evs.length}):`);
       for (const ev of evs) {
@@ -93,7 +93,7 @@ export default class Get extends Command {
     }
 
     // Tags
-    const expTags = db
+    const expTags = await db
       .select({ name: tags.name })
       .from(experimentTags)
       .innerJoin(tags, eq(experimentTags.tagId, tags.id))
@@ -104,7 +104,7 @@ export default class Get extends Command {
     }
 
     // References
-    const refs = db
+    const refs = await db
       .select({
         title: references.title,
         url: references.url,
