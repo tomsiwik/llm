@@ -1,0 +1,401 @@
+{
+  "experiment": "bitnet_float_merge_fp32",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "val_batches": 50,
+  "timestamp": "2026-03-24 05:03:46",
+  "memory_packed_mb": 1719.5,
+  "memory_unpacked_bf16_mb": 1719.5,
+  "base_ppls": {
+    "python": 2.9959,
+    "math": 4.9586,
+    "medical": 7.3097,
+    "legal": 20.7844,
+    "creative": 6.2958
+  },
+  "avg_base_ppl": 8.4689,
+  "n_adapters_loaded": 5,
+  "precision_analysis": {
+    "sample_layer": "model.layers.15.self_attn.o_proj",
+    "base_weight_mean": 1.71875,
+    "delta_mean": 0.007854,
+    "delta_max": 0.143582,
+    "delta_base_ratio": 0.004569,
+    "fp32_ulp": 2.05e-07,
+    "bf16_ulp": 0.0134,
+    "fp32_delta_ulp_ratio": 38332,
+    "bf16_delta_ulp_ratio": 0.6,
+    "fp32_merge_error": 0.0,
+    "bf16_merge_error": 0.0022,
+    "bf16_delta_loss_pct": 28.0
+  },
+  "runtime_lora": {
+    "N=1": {
+      "domains": [
+        "python"
+      ],
+      "ppls": {
+        "python": 2.4501,
+        "math": 5.1092,
+        "medical": 7.5653,
+        "legal": 20.409,
+        "creative": 6.1066
+      },
+      "avg_ppl": 8.328
+    },
+    "N=2": {
+      "domains": [
+        "python",
+        "math"
+      ],
+      "ppls": {
+        "python": 2.4902,
+        "math": 3.5326,
+        "medical": 6.6021,
+        "legal": 19.7027,
+        "creative": 5.985
+      },
+      "avg_ppl": 7.6625
+    },
+    "N=3": {
+      "domains": [
+        "python",
+        "math",
+        "medical"
+      ],
+      "ppls": {
+        "python": 2.5747,
+        "math": 3.7666,
+        "medical": 5.4144,
+        "legal": 19.6113,
+        "creative": 5.9339
+      },
+      "avg_ppl": 7.4602
+    },
+    "N=4": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal"
+      ],
+      "ppls": {
+        "python": 2.5894,
+        "math": 3.9511,
+        "medical": 5.6273,
+        "legal": 17.7412,
+        "creative": 5.8819
+      },
+      "avg_ppl": 7.1582
+    },
+    "N=5": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal",
+        "creative"
+      ],
+      "ppls": {
+        "python": 2.6242,
+        "math": 4.0502,
+        "medical": 5.7855,
+        "legal": 17.942,
+        "creative": 5.4708
+      },
+      "avg_ppl": 7.1745
+    }
+  },
+  "latency_runtime_lora_n5": {
+    "n_tokens": 50,
+    "n_runs": 5,
+    "mean_s": 4.159,
+    "stddev_s": 0.081,
+    "min_s": 4.012,
+    "max_s": 4.246,
+    "tok_per_s": 12.0,
+    "tok_per_s_stddev": 0.2
+  },
+  "fp32_merge": {
+    "N=1": {
+      "domains": [
+        "python"
+      ],
+      "ppls": {
+        "python": 2.4593,
+        "math": 5.1244,
+        "medical": 7.5631,
+        "legal": 20.447,
+        "creative": 6.111
+      },
+      "avg_ppl": 8.3409
+    },
+    "N=2": {
+      "domains": [
+        "python",
+        "math"
+      ],
+      "ppls": {
+        "python": 2.5014,
+        "math": 3.547,
+        "medical": 6.5803,
+        "legal": 19.6966,
+        "creative": 5.9878
+      },
+      "avg_ppl": 7.6626
+    },
+    "N=3": {
+      "domains": [
+        "python",
+        "math",
+        "medical"
+      ],
+      "ppls": {
+        "python": 2.5725,
+        "math": 3.7819,
+        "medical": 5.4216,
+        "legal": 19.5967,
+        "creative": 5.9361
+      },
+      "avg_ppl": 7.4618
+    },
+    "N=4": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal"
+      ],
+      "ppls": {
+        "python": 2.6012,
+        "math": 3.9542,
+        "medical": 5.6282,
+        "legal": 17.7872,
+        "creative": 5.8873
+      },
+      "avg_ppl": 7.1716
+    },
+    "N=5": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal",
+        "creative"
+      ],
+      "ppls": {
+        "python": 2.6354,
+        "math": 4.0493,
+        "medical": 5.7789,
+        "legal": 17.9865,
+        "creative": 5.4761
+      },
+      "avg_ppl": 7.1852
+    }
+  },
+  "memory_fp32_merged_mb": 1798.6,
+  "latency_fp32_merged_n5": {
+    "n_tokens": 50,
+    "n_runs": 5,
+    "mean_s": 5.897,
+    "stddev_s": 0.014,
+    "min_s": 5.871,
+    "max_s": 5.913,
+    "tok_per_s": 8.5,
+    "tok_per_s_stddev": 0.0
+  },
+  "bf16_merge": {
+    "N=1": {
+      "domains": [
+        "python"
+      ],
+      "ppls": {
+        "python": 2.4488,
+        "math": 5.1005,
+        "medical": 7.5225,
+        "legal": 20.4372,
+        "creative": 6.1087
+      },
+      "avg_ppl": 8.3235
+    },
+    "N=2": {
+      "domains": [
+        "python",
+        "math"
+      ],
+      "ppls": {
+        "python": 2.4956,
+        "math": 3.5547,
+        "medical": 6.5497,
+        "legal": 19.7027,
+        "creative": 5.9891
+      },
+      "avg_ppl": 7.6584
+    },
+    "N=3": {
+      "domains": [
+        "python",
+        "math",
+        "medical"
+      ],
+      "ppls": {
+        "python": 2.5664,
+        "math": 3.7948,
+        "medical": 5.4363,
+        "legal": 19.5942,
+        "creative": 5.9353
+      },
+      "avg_ppl": 7.4654
+    },
+    "N=4": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal"
+      ],
+      "ppls": {
+        "python": 2.5991,
+        "math": 3.9745,
+        "medical": 5.6322,
+        "legal": 17.8381,
+        "creative": 5.884
+      },
+      "avg_ppl": 7.1856
+    },
+    "N=5": {
+      "domains": [
+        "python",
+        "math",
+        "medical",
+        "legal",
+        "creative"
+      ],
+      "ppls": {
+        "python": 2.6337,
+        "math": 4.0758,
+        "medical": 5.8,
+        "legal": 18.0636,
+        "creative": 5.5066
+      },
+      "avg_ppl": 7.2159
+    }
+  },
+  "latency_bf16_merged_n5": {
+    "n_tokens": 50,
+    "n_runs": 5,
+    "mean_s": 2.993,
+    "stddev_s": 0.093,
+    "min_s": 2.878,
+    "max_s": 3.137,
+    "tok_per_s": 16.7,
+    "tok_per_s_stddev": 0.5
+  },
+  "latency_base": {
+    "n_tokens": 50,
+    "n_runs": 5,
+    "mean_s": 2.983,
+    "stddev_s": 0.075,
+    "min_s": 2.867,
+    "max_s": 3.074,
+    "tok_per_s": 16.8,
+    "tok_per_s_stddev": 0.4
+  },
+  "k1_fp32_n5_avg": 7.1852,
+  "k1_runtime_n5_avg": 7.1745,
+  "k1_ratio": 1.0015,
+  "k1_pass": true,
+  "k1_per_domain": {
+    "python": {
+      "fp32": 2.6354,
+      "runtime": 2.6242,
+      "ratio": 1.0043
+    },
+    "math": {
+      "fp32": 4.0493,
+      "runtime": 4.0502,
+      "ratio": 0.9998
+    },
+    "medical": {
+      "fp32": 5.7789,
+      "runtime": 5.7855,
+      "ratio": 0.9989
+    },
+    "legal": {
+      "fp32": 17.9865,
+      "runtime": 17.942,
+      "ratio": 1.0025
+    },
+    "creative": {
+      "fp32": 5.4761,
+      "runtime": 5.4708,
+      "ratio": 1.001
+    }
+  },
+  "k2_ternary_mem_mb": 1719.5,
+  "k2_fp32_mem_mb": 1798.6,
+  "k2_ratio": 1.05,
+  "k2_pass": true,
+  "theoretical_sizes_mb": {
+    "ternary_packed": 575,
+    "bf16": 4602,
+    "fp32": 9204
+  },
+  "k3_fp32_tps": 8.5,
+  "k3_runtime_tps": 12.0,
+  "k3_base_tps": 16.8,
+  "k3_pass": false,
+  "crossover_analysis": {
+    "N=1": {
+      "runtime_avg": 8.328,
+      "fp32_avg": 8.3409,
+      "bf16_avg": 8.3235,
+      "fp32_runtime_ratio": 1.0015
+    },
+    "N=2": {
+      "runtime_avg": 7.6625,
+      "fp32_avg": 7.6626,
+      "bf16_avg": 7.6584,
+      "fp32_runtime_ratio": 1.0
+    },
+    "N=3": {
+      "runtime_avg": 7.4602,
+      "fp32_avg": 7.4618,
+      "bf16_avg": 7.4654,
+      "fp32_runtime_ratio": 1.0002
+    },
+    "N=4": {
+      "runtime_avg": 7.1582,
+      "fp32_avg": 7.1716,
+      "bf16_avg": 7.1856,
+      "fp32_runtime_ratio": 1.0019
+    },
+    "N=5": {
+      "runtime_avg": 7.1745,
+      "fp32_avg": 7.1852,
+      "bf16_avg": 7.2159,
+      "fp32_runtime_ratio": 1.0015
+    }
+  },
+  "killed_by": [
+    "K3"
+  ],
+  "verdict": "KILLED",
+  "key_findings": {
+    "fp32_vs_runtime_ppl_ratio_n5": 1.0015,
+    "bf16_vs_runtime_ppl_ratio_n5": 1.0058,
+    "fp32_preserves_delta": true,
+    "bf16_delta_loss_pct": -2.4,
+    "memory_overhead_vs_bf16": 4.6,
+    "latency_fp32_vs_base_pct": 49.4,
+    "latency_runtime_vs_base_pct": 28.6
+  }
+}

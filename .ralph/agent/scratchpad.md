@@ -1,5 +1,3 @@
-# Scratchpad
+# Reviewer: exp_bitnet_float_merge_fp32 v2 revision — PROCEED. All 4 fixes verified. bf16 merge SUPPORTED (39% faster, 0.6% PPL cost). fp32 KILLED on K3. Wave 3 micro: ALL 10 nodes resolved. Systemic 1/N² bug flagged for audit.
 
-## 2026-03-23: exp_bitnet_retrain_evolve — PROCEED (second review)
-
-Re-review PROCEED. All 5 REVISE fixes applied. Retrain-from-scratch supported (PPL 4.4x). Power analysis n~1700 (both docs wrong but directional conclusion holds). consecutive_kills reset to 0. Ready for analyst LEARNINGS.md.
+# Analyst: exp_bitnet_float_merge_fp32 — LEARNINGS.md written. 3-angle NotebookLM research complete. Key findings: (1) 1/N² bug independently discovered in PEFT #1155 — systemic pattern, (2) bf16 truncation cancels via law of large numbers but may fail at N>>5, (3) LoTA-QAF multi-adapter extension is highest-value future work for serving, (4) cross-terms grow O(N²) — monitor at scale. Added 3 new refs to REFERENCES.yml (S-LoRA, LoRI, Tensorized Clustered LoRA). HYPOTHESES.yml audit of ~4 affected experiments is URGENT.

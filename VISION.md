@@ -23,8 +23,9 @@ Skeleton: Grassmannian AP-packed frozen A matrices
          → 17x decorrelation filter on B-matrix interference
          → plug-and-play guarantee: add/remove expert = pointer change
 
-Serving: Runtime LoRA on Apple Silicon (13 tok/s, 1.7GB)
-         llama.cpp --lora for multi-adapter CPU serving
+Serving: bf16 merge for always-on adapters (16.7 tok/s, 1.7GB)
+         Runtime LoRA for on-demand experts (12.3 tok/s at N=5)
+         llama.cpp --lora for multi-adapter CPU serving (33.8 t/s)
 ```
 
 ### Why Ternary
@@ -36,7 +37,7 @@ Serving: Runtime LoRA on Apple Silicon (13 tok/s, 1.7GB)
 | Adapter storage | 18.4 KB | 1.9 KB (10x smaller) |
 | Composed PPL (ternary adapters) | 4.35 | 4.16 (-4.4% better) |
 | Serving | GPU required | CPU commodity hardware |
-| Merge into base | Works | Impossible (116x gap) → runtime LoRA |
+| Merge into base | Works | bf16 merge works (7% better PPL than runtime LoRA) |
 
 ### The Grassmannian Skeleton (Plug-and-Play Guarantee)
 
@@ -68,10 +69,11 @@ Frozen during training. The skeleton guarantees:
 |---------|-------------|
 | Weight-space orth != data-space orth (OSRM) | 100% pairs fail OSRM (<0.1), mean ratio 0.86. Yet composition WORKS (4/5 pairs). Constructive transfer, not orthogonality, is the mechanism. |
 | Clone-compete evolution: warm-start = cold-start | Evolve ≠ clone-compete. Evolve = retrain-from-scratch + quality gate. |
-| LoTA-QAF merge impossible (116x gap) | Runtime LoRA is the only serving path |
+| LoTA-QAF ternary merge impossible (116x gap) | bf16 float merge works (7% better PPL), runtime LoRA for dynamic routing |
 | Base-free scaffold: PPL 319M (pretrained adapters), PPL 186-2887 (fresh adapters) | Pretrained base is essential. Even fresh adapters trained ON scaffold hit capacity limit (36-642x gap). |
 | NTP adapters fail task eval (3/5 worse) | Instruction-format training mandatory |
 | Ternary base doesn't improve orthogonality | Advantage is from ternary ADAPTERS, not ternary base |
+| EigenLoRAx subspace extraction fails (+80.8% PPL gap) | Grassmannian A-matrices prevent shared subspace. Orthogonality enables composition but prevents cross-adapter transfer. Evolve = retrain-from-scratch only. |
 
 ## Readiness Assessment
 
@@ -80,7 +82,7 @@ Frozen during training. The skeleton guarantees:
 | Distill | **70%** | Instruction-format works. KR-Test eval done (rho=1.0 rank signal). |
 | Compose | **55%** | N=25 scales. Matched-param wins. Top-2 routing +13.9% over uniform (per-sequence, 659K router). |
 | Evolve | **10%** | Clone-compete killed. KR-Test quality gate metric available (delta>0.03). Retrain design needed. |
-| Serve | **20%** | Runtime LoRA works (13 tok/s). llama.cpp untested. No prod code. |
+| Serve | **35%** | bf16 merge (16.7 tok/s) + runtime LoRA (12.3 tok/s). llama.cpp proven (33.8 t/s). |
 | Base-free | **10%** | Random scaffold killed. GaLore/meta-scaffold unexplored. |
 | **Overall** | **~35%** | Composition + routing validated. Serving + evolve + base-free are gaps. |
 

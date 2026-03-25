@@ -1,0 +1,71 @@
+{
+  "experiment": "exp_bitnet_llamacpp_serving",
+  "model": "BitNet-2B-4T (TQ2_0, 1.11 GiB)",
+  "backend": "CPU-only (Metal lacks TQ kernels, commit 7cadbfc 2026-03-24)",
+  "adapters": {
+    "format": "GGUF LoRA (float32)",
+    "rank": 16,
+    "projections": 7,
+    "layers": 30,
+    "size_per_adapter_mb": 82.5,
+    "domains": ["math", "python", "legal", "medical", "creative"]
+  },
+  "k1": {
+    "pass": true,
+    "note": "All 5 adapters load successfully. Required 3 patches to convert script: arch name casing, sub_norm tensor mapping, vocab type detection.",
+    "base_loads": true,
+    "all_adapters_load": true
+  },
+  "k2": {
+    "pass": true,
+    "threshold_pct": 50,
+    "method": "llama-server API, 3 runs per config, 64 gen tokens",
+    "throughput": {
+      "true_base_tps": 63.9,
+      "true_base_std": 2.3,
+      "base_adapters_loaded_tps": 60.8,
+      "base_adapters_loaded_std": 3.1,
+      "lora_1x_tps": 53.0,
+      "lora_1x_std": 1.3,
+      "lora_3x_tps": 41.9,
+      "lora_3x_std": 0.2,
+      "lora_5x_tps": 33.8,
+      "lora_5x_std": 0.6
+    },
+    "overhead_pct": {
+      "loading_only": 4.7,
+      "1x_active": 17.0,
+      "3x_active": 34.4,
+      "5x_active": 47.1
+    },
+    "per_adapter_marginal_overhead_pct": 9.4,
+    "note": "47.1% at 5 active adapters, just under 50% threshold. Overhead is bandwidth-bound (10x higher than FLOP prediction)."
+  },
+  "k3": {
+    "pass": true,
+    "cli_test": {
+      "method": "Sequential runs with seed=42, temp=0",
+      "adapter_a_consistent": true,
+      "adapter_b_differs": true,
+      "a_matches_after_swap": true
+    },
+    "server_test": {
+      "method": "llama-server /lora-adapters API hot-swap",
+      "swap_succeeds": true,
+      "output_matches_after_roundtrip": true,
+      "swap_latency": "instantaneous (no model reload)"
+    }
+  },
+  "patches_required": [
+    "Architecture name: register both BitnetForCausalLM and BitNetForCausalLM",
+    "Tensor mapping: add self_attn.attn_sub_norm and mlp.ffn_sub_norm for 2B-4T",
+    "Vocabulary: detect GPT-2 tokenizer (no tokenizer.model file)"
+  ],
+  "metal_status": "NOT SUPPORTED — kernel_mul_mm_tq2_0_f32 and kernel_mul_mm_tq1_0_f32 fail to compile. CPU-only serving.",
+  "summary": {
+    "k1_pass": true,
+    "k2_pass": true,
+    "k3_pass": true,
+    "overall": "SUPPORTED"
+  }
+}

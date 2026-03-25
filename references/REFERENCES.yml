@@ -531,9 +531,21 @@ entries:
 
   - dir: "spectral-surgery"
     source: "https://arxiv.org/abs/2603.03995"
-    insight: "Training-free LoRA refinement: SVD + gradient-based singular value reweighting. +4.4pp CommonsenseQA. Candidate for Evolve quality gate."
+    insight: "Training-free LoRA refinement: SVD + gradient-based singular value reweighting. +4.4pp CommonsenseQA on converged adapters. KILLED for our short-trained ternary adapters — already-efficient spectra make surgery zero-sum. SVD re-factorization increases cosine 3.2x (composition-hostile)."
     nodes: [exp_bitnet_spectral_surgery_quality_gate]
     added: "2026-03-23"
+
+  - dir: "essa-evolutionary-alignment"
+    source: "https://arxiv.org/abs/2507.04453"
+    insight: "Gradient-free evolutionary search on LoRA singular values for alignment. Matches GRPO at 72B scale in INT4/INT8. Alternative to spectral surgery — no assumption about spectral inefficiency. Requires reward signal."
+    nodes: [exp_bitnet_spectral_surgery_quality_gate, exp_bitnet_retrain_evolve]
+    added: "2026-03-24"
+
+  - dir: "make-lora-great-again"
+    source: "https://arxiv.org/abs/2502.16894"
+    insight: "Adaptive singular values during LoRA training + MoE optimization alignment. Training-time spectral shaping — addresses inefficiency as it forms rather than post-hoc. Relevant if we ever move to longer training regimes."
+    nodes: [exp_bitnet_spectral_surgery_quality_gate]
+    added: "2026-03-24"
 
   - dir: "eigenlorax-subspace"
     source: "https://arxiv.org/abs/2502.04700"
@@ -576,13 +588,13 @@ entries:
   - dir: "rethinking-lora-orthogonality"
     source: "https://arxiv.org/abs/2510.03262"
     insight: "Orthogonality between LoRA adapters does NOT guarantee semantic disentanglement — parameter-space orthogonality is necessary but insufficient for composability"
-    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine]
+    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine, exp_bitnet_eigenlorax_subspace]
     added: "2026-03-23"
 
   - dir: "orthogonal-subspace-merging"
     source: "https://arxiv.org/abs/2505.22934"
     insight: "ACL 2025: Orthogonal subspace constraints during LoRA training for robust model merging — comparison point for Grassmannian skeleton approach"
-    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine]
+    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_effective_delta_cosine, exp_bitnet_eigenlorax_subspace]
     added: "2026-03-23"
 
   # ── Per-Token / Adaptive LoRA Routing ───────────────────────────────────────
@@ -604,3 +616,66 @@ entries:
     insight: "Simple weight averaging of LoRA adapters composes skills for practical tasks — challenges need for learned routing when domain boundaries are soft"
     nodes: [exp_bitnet_per_token_routing]
     added: "2026-03-23"
+
+  # ── Hypernetwork Adapter Generation ──────────────────────────────────────
+
+  - dir: "zhyper-hypernetwork"
+    source: "https://arxiv.org/abs/2510.19733"
+    insight: "Factorized hypernetwork generates context-aware LoRA adapters from text descriptions. 26x fewer params than baselines. Alternative to subspace transfer for Evolve — hypernetwork IS the shared knowledge, not a principal subspace."
+    nodes: [exp_bitnet_eigenlorax_subspace, exp_bitnet_retrain_evolve]
+    added: "2026-03-24"
+
+  - dir: "hypelora-hypernetwork"
+    source: "https://arxiv.org/abs/2603.19278"
+    insight: "Hyper-network-generated LoRA adapters with calibration focus. Notes that fixing matrix A improves calibration — compatible with our frozen Grassmannian A design."
+    nodes: [exp_bitnet_eigenlorax_subspace, exp_bitnet_retrain_evolve]
+    added: "2026-03-24"
+
+  # ── Meta-Learning for Scaffold Optimization (from meta_scaffold analyst pass) ──
+
+  # - source: "Rajeswaran & Finn et al. 2019, Meta-Learning with Implicit Gradients" arXiv:1909.04630 (NeurIPS 2019)
+  #   insight: "iMAML eliminates backprop through inner loop via implicit differentiation + Hessian-vector products. Memory O(1) in K. Correct alternative to FOMAML for scaffold optimization."
+  #   nodes: [exp_bitnet_meta_scaffold]
+  #   added: "2026-03-24"
+
+  # - source: "Nichol et al. 2018, On First-Order Meta-Learning Algorithms" arXiv:1803.02999
+  #   insight: "FOMAML has irreducible bias growing with inner-loop steps K. Reptile as simpler alternative with implicit regularization toward init. FOMAML degrades past K>4."
+  #   nodes: [exp_bitnet_meta_scaffold]
+  #   added: "2026-03-24"
+
+  # - source: "Recover-LoRA: Data-Free Accuracy Recovery of Degraded Language Models" arXiv:2510.08600
+  #   insight: "LoRA adapters can recover degraded model quality via synthetic data distillation. Confirms adapter resilience to base degradation — but uses explicit recovery, not passive resilience."
+  #   nodes: [exp_bitnet_meta_scaffold, exp_bitnet_scaffold_fresh_adapters]
+  #   added: "2026-03-24"
+
+  # ── LoRA Serving & Inference Overhead ─────────────────────────────────────
+
+  - dir: "compress-then-serve"
+    source: "https://arxiv.org/abs/2407.00066"
+    insight: "Joint SVD compression of LoRA adapters into shared basis + per-adapter scaling. 75% throughput at 1000+ adapters. Key for scaling beyond N=5 simultaneous."
+    nodes: [exp_bitnet_llamacpp_serving, exp_bitnet_per_token_routing]
+    added: "2026-03-24"
+
+  - dir: "lorafusion-overhead"
+    source: "https://arxiv.org/abs/2510.00206"
+    insight: "Documents ~40% throughput loss from LoRA despite <1% param increase. Confirms LoRA inference is bandwidth-bound, not compute-bound — FLOP predictions 10x too optimistic."
+    nodes: [exp_bitnet_llamacpp_serving]
+    added: "2026-03-24"
+
+  - dir: "slora-concurrent-serving"
+    source: "https://arxiv.org/abs/2311.03285"
+    insight: "S-LoRA serves 1000s of concurrent LoRA adapters on single GPU by separating base computation from per-adapter LoRA. Validates runtime adapter isolation over weight merging for dynamic serving."
+    nodes: [exp_bitnet_llamacpp_serving, exp_bitnet_float_merge_fp32]
+    added: "2026-03-24"
+
+  - dir: "lori-cross-task-interference"
+    source: "https://arxiv.org/abs/2504.07448"
+    insight: "LoRI reduces cross-task interference in multi-LoRA via sparse B matrices (90% sparsity). Directly relevant to our lori_sparse_b experiment and validates interference as primary multi-adapter failure mode."
+    nodes: [exp_bitnet_lori_sparse_b, exp_bitnet_float_merge_fp32]
+    added: "2026-03-24"
+
+  - dir: "tensorized-clustered-lora-merge"
+    source: "https://arxiv.org/abs/2508.03999"
+    insight: "CP decomposition disentangles task-specific vs shared factors in merged LoRA adapters. Addresses cross-term interference that grows O(N^2) in naive merging."
+    nodes: [exp_bitnet_float_merge_fp32, exp_bitnet_per_token_routing]
+    added: "2026-03-24"

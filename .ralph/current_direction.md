@@ -1,29 +1,25 @@
-# Current Direction: exp_bitnet_retrain_evolve
+# Current Direction: Revising exp_bitnet_float_merge_fp32
 
-## Hypothesis
-Retrain-from-scratch + quality gate produces monotonic adapter improvement.
+## Status: COMPLETE - all 4 fixes applied, experiment re-run, write-ups updated
 
-## Focus
-Legal domain adapter: the worst adapter (degenerate, trained on fallback data).
-Three rounds of retrain with progressively better data from nguha/legalbench.
-Quality gate = KR-Test delta > 0.03 AND |cos| < 0.01 with existing experts.
+## Fixes Applied
+1. **Fix 1 (CRITICAL)**: Fixed 1/N^2 scaling bug in `compose_adapters_runtime`. Now sums A/B params without scaling; 1/N scaling applied via `lora_scale = LORA_SCALE/N` when constructing LoRALinear. Result: the "7% PPL gap" disappeared entirely -- all three methods now within 0.6%.
+2. **Fix 2**: Retracted wrong explanation. The "bf16 truncation in per-token computation" claim was incorrect -- the gap was from the 1/N^2 bug. Updated PAPER.md with correct analysis.
+3. **Fix 3**: K2 marked INCONCLUSIVE with note about MLX lazy evaluation.
+4. **Fix 4**: Increased BENCH_RUNS from 3 to 5, added stddev for all latency measurements.
 
-## Key Insight
-The original legal adapter failed because HuggingFace download failed and it
-trained on 80 copies of the same fallback sentence. Retraining from scratch on
-REAL legalbench data (multiple subtasks, diverse examples) should produce a
-fundamentally better adapter. This is the Evolve mechanism: retrain, evaluate,
-gate, accept.
+## Key Revised Results
+- Runtime LoRA N=5: PPL 7.17 (was 7.72 -- massive improvement from bug fix)
+- fp32 merge N=5: PPL 7.19 (unchanged)
+- bf16 merge N=5: PPL 7.22 (unchanged)
+- All three methods PPL-equivalent within 0.6%
+- Verdict still KILLED on K3 (fp32 latency)
+- bf16 merge remains the recommended serving path (39% faster than runtime, 0.6% PPL cost)
 
-## Kill Criteria
-- K1: retrained adapter not better than original on KR-Test
-- K2: quality gate fails to distinguish good from bad adapters
-
-## Plan
-1. Download REAL legalbench data (multiple subtasks, not just contract_nli)
-2. Round 1: Train legal adapter from scratch on 800 diverse legalbench samples
-3. Evaluate via KR-Test + cosine + PPL
-4. Round 2: Add more data (1200 samples from different subtasks)
-5. Round 3: Add even more data (1600 samples, widest coverage)
-6. Verify monotonic improvement across rounds
-7. Quality gate: each round must beat previous on KR-Test delta
+## Files Updated
+- micro/models/bitnet_float_merge_fp32/run_experiment.py (code fixes)
+- micro/models/bitnet_float_merge_fp32/results.json (new results)
+- micro/models/bitnet_float_merge_fp32/PAPER.md (full rewrite)
+- micro/models/bitnet_float_merge_fp32/MATH.md (corrected sections)
+- HYPOTHESES.yml (updated evidence)
+- FINDINGS.md (corrected entry)

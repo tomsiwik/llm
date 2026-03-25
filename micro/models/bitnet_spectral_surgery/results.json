@@ -1,0 +1,172 @@
+{
+  "experiment": "bitnet_spectral_surgery",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "n_cal": 128,
+  "eta_sup": 1.0,
+  "eta_amp": 0.5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-24 01:46:24",
+  "setup_time_s": 1.3,
+  "baseline_ppls": {
+    "python": 2.217879865748791,
+    "math": 3.6036968713946225,
+    "medical": 4.7421944845839885,
+    "legal": 16.530172045991478,
+    "creative": 4.923663481280721
+  },
+  "baseline_kr": {
+    "python": 0.9142857142857143,
+    "math": 0.9534883720930233,
+    "medical": 0.9714285714285714,
+    "legal": 0.8947368421052632,
+    "creative": 0.98
+  },
+  "base_kr": {
+    "python": 0.9428571428571428,
+    "math": 0.9534883720930233,
+    "medical": 0.9714285714285714,
+    "legal": 0.868421052631579,
+    "creative": 0.98
+  },
+  "surgery_times": {
+    "python": 451.1,
+    "math": 440.5,
+    "medical": 420.5,
+    "legal": 453.8,
+    "creative": 467.5
+  },
+  "refined_ppls": {
+    "python": 2.209904954053387,
+    "math": 3.606257224303936,
+    "medical": 4.758821245137854,
+    "legal": 16.594607775609198,
+    "creative": 4.950850952320985
+  },
+  "refined_kr": {
+    "python": 0.9142857142857143,
+    "math": 0.9534883720930233,
+    "medical": 0.9714285714285714,
+    "legal": 0.8947368421052632,
+    "creative": 0.98
+  },
+  "composed_baseline_ppls": {
+    "python": 2.49745180975393,
+    "math": 4.917513567509172,
+    "medical": 6.14312354404623,
+    "legal": 20.3242664133754,
+    "creative": 5.93482181227453
+  },
+  "composed_refined_ppls": {
+    "python": 2.530579368327636,
+    "math": 4.929169199810722,
+    "medical": 6.211070928510549,
+    "legal": 20.379985455338417,
+    "creative": 5.936129185727173
+  },
+  "cosines_before": [
+    {
+      "pair": "python-math",
+      "cos": 0.0001
+    },
+    {
+      "pair": "python-medical",
+      "cos": 0.0018
+    },
+    {
+      "pair": "python-legal",
+      "cos": 0.0023
+    },
+    {
+      "pair": "python-creative",
+      "cos": 0.0014
+    },
+    {
+      "pair": "math-medical",
+      "cos": 0.0026
+    },
+    {
+      "pair": "math-legal",
+      "cos": 0.0003
+    },
+    {
+      "pair": "math-creative",
+      "cos": 0.0004
+    },
+    {
+      "pair": "medical-legal",
+      "cos": 0.0001
+    },
+    {
+      "pair": "medical-creative",
+      "cos": 0.0008
+    },
+    {
+      "pair": "legal-creative",
+      "cos": 0.0001
+    }
+  ],
+  "cosines_after": [
+    {
+      "pair": "python-math",
+      "cos": 0.0019
+    },
+    {
+      "pair": "python-medical",
+      "cos": 0.0081
+    },
+    {
+      "pair": "python-legal",
+      "cos": 0.0024
+    },
+    {
+      "pair": "python-creative",
+      "cos": 0.0004
+    },
+    {
+      "pair": "math-medical",
+      "cos": 0.0012
+    },
+    {
+      "pair": "math-legal",
+      "cos": 0.0027
+    },
+    {
+      "pair": "math-creative",
+      "cos": 0.0016
+    },
+    {
+      "pair": "medical-legal",
+      "cos": 0.0081
+    },
+    {
+      "pair": "medical-creative",
+      "cos": 0.0004
+    },
+    {
+      "pair": "legal-creative",
+      "cos": 0.0047
+    }
+  ],
+  "mean_cos_before": 0.001,
+  "mean_cos_after": 0.0032,
+  "k1_ppl_improved": 1,
+  "k1_ppl_total": 5,
+  "k1_pass": false,
+  "k2_kr_improved": 0,
+  "k2_kr_total": 5,
+  "k2_pass": false,
+  "max_surgery_time_s": 467.5,
+  "k3_pass": false,
+  "avg_composed_ppl_before": 7.9634,
+  "avg_composed_ppl_after": 7.9974,
+  "composed_ppl_delta_pct": -0.43,
+  "verdict": "KILLED",
+  "partial_verdict": "K1=FAIL, K2=FAIL, K3=FAIL"
+}

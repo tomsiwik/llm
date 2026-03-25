@@ -1,0 +1,4 @@
+# Large model files (download from HuggingFace)
+*.gguf
+# Local patched copy of llama.cpp convert script
+convert_hf_to_gguf.py
