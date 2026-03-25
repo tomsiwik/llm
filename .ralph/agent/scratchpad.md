@@ -1,3 +1,40 @@
-# Reviewer: exp_bitnet_float_merge_fp32 v2 revision — PROCEED. All 4 fixes verified. bf16 merge SUPPORTED (39% faster, 0.6% PPL cost). fp32 KILLED on K3. Wave 3 micro: ALL 10 nodes resolved. Systemic 1/N² bug flagged for audit.
+# Scratchpad
 
-# Analyst: exp_bitnet_float_merge_fp32 — LEARNINGS.md written. 3-angle NotebookLM research complete. Key findings: (1) 1/N² bug independently discovered in PEFT #1155 — systemic pattern, (2) bf16 truncation cancels via law of large numbers but may fail at N>>5, (3) LoTA-QAF multi-adapter extension is highest-value future work for serving, (4) cross-terms grow O(N²) — monitor at scale. Added 3 new refs to REFERENCES.yml (S-LoRA, LoRI, Tensorized Clustered LoRA). HYPOTHESES.yml audit of ~4 affected experiments is URGENT.
+## 2026-03-25: Wave 3 Micro Complete
+
+research.start triggered for Wave 3 micro. Ran orphan check and node selection.
+
+**Orphan check:** exp_bitnet_basefree_exploration has both REVIEW-adversarial.md and LEARNINGS.md. No orphans.
+
+**Node selection:** All 9 Wave 3 micro experiments are resolved:
+- Track 1: effective_delta_cosine (killed), kr_test_evaluation (supported), lori_sparse_b (killed)
+- Track 2: scaffold_fresh_adapters (killed), galore_scaffold (supported), meta_scaffold (killed)
+- Track 3: llamacpp_serving (supported), per_token_routing (supported)
+- Track 4: retrain_evolve (supported)
+
+Plus bonus experiments also complete: spectral_surgery (killed), eigenlorax_subspace (killed), semantic_compositionality (killed)
+
+All remaining open/active nodes are scale: macro. Micro constraint prevents picking any.
+Zero open micro nodes → soft-freeze allows generating 1 new hypothesis, but the rules require "you just completed an experiment" which isn't true this iteration.
+
+**Decision:** Emit that Wave 3 micro is fully drained. All micro backlog exhausted. Next work requires macro scale (GPU).
+
+## 2026-03-25: LOOP_COMPLETE — Wave 3 Micro Objective Satisfied
+
+Received `research.complete` event confirming all 9/9 Wave 3 micro experiments resolved.
+No open tasks. No orphan experiments. Scale constraint (micro only) prevents further work.
+
+**Supported findings to carry forward to macro:**
+1. KR-Test metric (replaces PPL for knowledge retention)
+2. GaLore scaffold (base-free training approach)
+3. llama.cpp serving (multi-adapter CPU inference)
+4. Top-2 per-token routing (MoLoRA-style)
+5. Retrain-evolve (retrain-from-scratch + KR-Test quality gate)
+
+**Killed (not pursuing further):**
+1. Effective delta cosine
+2. LoRI sparse B
+3. Scaffold fresh adapters
+4. Meta scaffold (MAML)
+
+Loop complete. Next phase requires GPU (macro scale).
