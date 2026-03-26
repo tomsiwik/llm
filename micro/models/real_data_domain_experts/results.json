@@ -1,0 +1,298 @@
+{
+  "experiment": "real_data_domain_experts",
+  "revision": "v2_correct_composition",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "timestamp": "2026-03-26 05:12:01",
+  "base_ppls": {
+    "medical": 6.495228827246388,
+    "code": 4.97642219032554,
+    "math": 3.838964886810244,
+    "legal": 21.63002761203492,
+    "finance": 19.429601006642617
+  },
+  "train_results": {
+    "medical": {
+      "train_time_s": 64.1,
+      "first_50_avg_loss": 1.581,
+      "last_50_avg_loss": 1.197,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "code": {
+      "train_time_s": 65.5,
+      "first_50_avg_loss": 1.1575,
+      "last_50_avg_loss": 0.9164,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "math": {
+      "train_time_s": 73.1,
+      "first_50_avg_loss": 1.1367,
+      "last_50_avg_loss": 0.9533,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "legal": {
+      "train_time_s": 69.7,
+      "first_50_avg_loss": 2.9467,
+      "last_50_avg_loss": 2.8226,
+      "converged": false,
+      "trainable_params": 10936320
+    },
+    "finance": {
+      "train_time_s": 70.6,
+      "first_50_avg_loss": 3.1232,
+      "last_50_avg_loss": 2.8095,
+      "converged": true,
+      "trainable_params": 10936320
+    }
+  },
+  "individual_ppls": {
+    "medical": 3.4579711947601206,
+    "code": 3.1429427577734366,
+    "math": 2.3824459792793573,
+    "legal": 14.655635537879995,
+    "finance": 14.012010383211852
+  },
+  "individual_ppls_ci": {
+    "medical": {
+      "ppl": 3.4579711947601206,
+      "ci_lo": 3.18,
+      "ci_hi": 3.84
+    },
+    "code": {
+      "ppl": 3.1429427577734366,
+      "ci_lo": 2.38,
+      "ci_hi": 4.46
+    },
+    "math": {
+      "ppl": 2.3824459792793573,
+      "ci_lo": 2.22,
+      "ci_hi": 2.57
+    },
+    "legal": {
+      "ppl": 14.655635537879995,
+      "ci_lo": 12.61,
+      "ci_hi": 17.03
+    },
+    "finance": {
+      "ppl": 14.012010383211852,
+      "ci_lo": 12.34,
+      "ci_hi": 16.15
+    }
+  },
+  "base_ppls_ci": {
+    "medical": {
+      "ppl": 6.495228827246388,
+      "ci_lo": 5.57,
+      "ci_hi": 8.05
+    },
+    "code": {
+      "ppl": 4.97642219032554,
+      "ci_lo": 3.83,
+      "ci_hi": 6.79
+    },
+    "math": {
+      "ppl": 3.838964886810244,
+      "ci_lo": 3.51,
+      "ci_hi": 4.2
+    },
+    "legal": {
+      "ppl": 21.63002761203492,
+      "ci_lo": 18.5,
+      "ci_hi": 25.57
+    },
+    "finance": {
+      "ppl": 19.429601006642617,
+      "ci_lo": 16.79,
+      "ci_hi": 23.19
+    }
+  },
+  "correct_composed_ppls": {
+    "medical": 4.159027358453299,
+    "code": 3.4618206332785464,
+    "math": 2.9061638612177645,
+    "legal": 16.078596842814843,
+    "finance": 14.959038605537481
+  },
+  "correct_composed_ppls_ci": {
+    "medical": {
+      "ppl": 4.159027358453299,
+      "ci_lo": 3.75,
+      "ci_hi": 4.78
+    },
+    "code": {
+      "ppl": 3.4618206332785464,
+      "ci_lo": 2.64,
+      "ci_hi": 4.79
+    },
+    "math": {
+      "ppl": 2.9061638612177645,
+      "ci_lo": 2.7,
+      "ci_hi": 3.14
+    },
+    "legal": {
+      "ppl": 16.078596842814843,
+      "ci_lo": 13.87,
+      "ci_hi": 18.72
+    },
+    "finance": {
+      "ppl": 14.959038605537481,
+      "ci_lo": 13.13,
+      "ci_hi": 17.36
+    }
+  },
+  "broken_composed_ppls": {
+    "medical": 5.307192374203894,
+    "code": 4.565162687105418,
+    "math": 3.5912477648408214,
+    "legal": 20.211516088162703,
+    "finance": 18.17018819747688
+  },
+  "broken_composed_ppls_ci": {
+    "medical": {
+      "ppl": 5.307192374203894,
+      "ci_lo": 4.66,
+      "ci_hi": 6.35
+    },
+    "code": {
+      "ppl": 4.565162687105418,
+      "ci_lo": 3.52,
+      "ci_hi": 6.24
+    },
+    "math": {
+      "ppl": 3.5912477648408214,
+      "ci_lo": 3.3,
+      "ci_hi": 3.92
+    },
+    "legal": {
+      "ppl": 20.211516088162703,
+      "ci_lo": 17.3,
+      "ci_hi": 23.8
+    },
+    "finance": {
+      "ppl": 18.17018819747688,
+      "ci_lo": 15.73,
+      "ci_hi": 21.54
+    }
+  },
+  "composed_ppls": {
+    "medical": 4.159027358453299,
+    "code": 3.4618206332785464,
+    "math": 2.9061638612177645,
+    "legal": 16.078596842814843,
+    "finance": 14.959038605537481
+  },
+  "cosine_similarities": [
+    {
+      "pair": "medical-code",
+      "abs_cos": 0.017206
+    },
+    {
+      "pair": "medical-math",
+      "abs_cos": 0.021749
+    },
+    {
+      "pair": "medical-legal",
+      "abs_cos": 0.019969
+    },
+    {
+      "pair": "medical-finance",
+      "abs_cos": 0.034403
+    },
+    {
+      "pair": "code-math",
+      "abs_cos": 0.013622
+    },
+    {
+      "pair": "code-legal",
+      "abs_cos": 0.0086
+    },
+    {
+      "pair": "code-finance",
+      "abs_cos": 0.044066
+    },
+    {
+      "pair": "math-legal",
+      "abs_cos": 0.011094
+    },
+    {
+      "pair": "math-finance",
+      "abs_cos": 0.002494
+    },
+    {
+      "pair": "legal-finance",
+      "abs_cos": 0.031368
+    }
+  ],
+  "mean_abs_cos": 0.020457,
+  "routing_heads": {
+    "medical": {
+      "accuracy": 1.0,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 1.0
+    },
+    "code": {
+      "accuracy": 1.0,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 1.0
+    },
+    "math": {
+      "accuracy": 1.0,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 1.0
+    },
+    "legal": {
+      "accuracy": 0.996,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 0.995
+    },
+    "finance": {
+      "accuracy": 1.0,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 1.0
+    }
+  },
+  "specialization_improvements": {
+    "medical": 46.76,
+    "code": 36.84,
+    "math": 37.94,
+    "legal": 32.24,
+    "finance": 27.88
+  },
+  "k1_pass": true,
+  "k1_specialized_count": 5,
+  "composition_vs_base": {
+    "medical": -35.97,
+    "code": -30.44,
+    "math": -24.3,
+    "legal": -25.67,
+    "finance": -23.01
+  },
+  "k2_pass": true,
+  "k2_degraded_count": 0,
+  "broken_composition_vs_base": {
+    "medical": -18.29,
+    "code": -8.26,
+    "math": -6.45,
+    "legal": -6.56,
+    "finance": -6.48
+  },
+  "verdict": "SUPPORTED",
+  "avg_base_ppl": 11.274,
+  "avg_individual_ppl": 7.5302,
+  "avg_correct_composed_ppl": 8.3129,
+  "avg_broken_composed_ppl": 10.3691,
+  "avg_composed_ppl": 8.3129,
+  "avg_routing_accuracy": 0.9992,
+  "total_time_s": 95.2
+}

@@ -1,0 +1,87 @@
+{
+  "experiment": "molora_per_token_routing",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "lora_rank": 16,
+  "router_hidden_dim": 64,
+  "router_train_steps": 600,
+  "router_temperature": 1.0,
+  "top_k": 2,
+  "seed": 42,
+  "router_n_params": 164229,
+  "timestamp": "2026-03-26 03:31:27",
+  "uniform_ppls": {
+    "python": 2.515,
+    "math": 4.9444,
+    "medical": 6.2049,
+    "legal": 20.4417,
+    "creative": 5.961
+  },
+  "per_seq_ppls": {
+    "python": 2.2205,
+    "math": 3.6033,
+    "medical": 6.5295,
+    "legal": 20.7086,
+    "creative": 4.9345
+  },
+  "per_token_ppls": {
+    "python": 2.2208,
+    "math": 3.606,
+    "medical": 6.3763,
+    "legal": 20.8529,
+    "creative": 5.1135
+  },
+  "per_token_diversity": {
+    "python": 1.68,
+    "math": 2.72,
+    "medical": 2.96,
+    "legal": 2.8,
+    "creative": 1.92
+  },
+  "per_domain_improvements": {
+    "python": -0.01,
+    "math": -0.07,
+    "medical": 2.35,
+    "legal": -0.7,
+    "creative": -3.63
+  },
+  "avg_uniform_ppl": 8.0134,
+  "avg_per_seq_ppl": 7.5993,
+  "avg_per_token_ppl": 7.6339,
+  "avg_diversity": 2.42,
+  "timing": {
+    "base_forward_ms": 36.65,
+    "router_ms": 0.21,
+    "overhead_pct": 0.58
+  },
+  "K1_per_token_ppl": 7.6339,
+  "K1_baseline": 13.65,
+  "K1_pass": true,
+  "K2_overhead_pct": 0.58,
+  "K2_threshold": 10.0,
+  "K2_pass": true,
+  "K3_avg_diversity": 2.42,
+  "K3_threshold": 1.0,
+  "K3_pass": true,
+  "S1_target": 13.0,
+  "S1_pass": true,
+  "S2_diversity_target": 2.0,
+  "S2_pass": true,
+  "S3_top_improvers": [
+    "medical",
+    "python"
+  ],
+  "S3_pass": true,
+  "improvement_vs_per_seq_pct": -0.46,
+  "verdict": "SUPPORTED",
+  "kill_reasons": null,
+  "total_time_s": 76.3,
+  "d_model": 2560
+}

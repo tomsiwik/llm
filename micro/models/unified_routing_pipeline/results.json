@@ -1,0 +1,331 @@
+{
+  "experiment": "unified_routing_pipeline",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "lora_rank": 16,
+  "otsu_threshold": 2.102779522613065,
+  "timestamp": "2026-03-26 04:27:04",
+  "baselines": {
+    "base_ppls": {
+      "python": 2.7418,
+      "math": 5.542,
+      "medical": 6.9576,
+      "legal": 21.8678,
+      "creative": 6.3528
+    },
+    "uniform_ppls": {
+      "python": 2.5137,
+      "math": 4.9526,
+      "medical": 6.1945,
+      "legal": 20.3888,
+      "creative": 5.9584
+    },
+    "routed_ppls": {
+      "python": 2.2212,
+      "math": 3.6088,
+      "medical": 4.7531,
+      "legal": 16.5931,
+      "creative": 4.9365
+    },
+    "avg_base_ppl": 8.6924,
+    "avg_uniform_ppl": 8.0016,
+    "avg_routed_ppl": 6.4225,
+    "time_s": 44.4
+  },
+  "unified_pipeline": {
+    "threshold_sweep": {
+      "p20": {
+        "threshold": 0.2148,
+        "unified_ppl_tw": 5.7228,
+        "unified_ppl_avg": 6.4697,
+        "f_skip": 0.2,
+        "n_skipped": 2730,
+        "n_routed": 10922,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.2456,
+            "f_skip": 0.498,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 3.7576,
+            "f_skip": 0.3532,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 4.7511,
+            "f_skip": 0.194,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 16.6151,
+            "f_skip": 0.0712,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 4.9791,
+            "f_skip": 0.0958,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "p30": {
+        "threshold": 0.6367,
+        "unified_ppl_tw": 5.7842,
+        "unified_ppl_avg": 6.513,
+        "f_skip": 0.2997,
+        "n_skipped": 4092,
+        "n_routed": 9560,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.27,
+            "f_skip": 0.6478,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 3.8579,
+            "f_skip": 0.4863,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 4.7469,
+            "f_skip": 0.2687,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 16.6403,
+            "f_skip": 0.1245,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.0501,
+            "f_skip": 0.2015,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "p40": {
+        "threshold": 1.0703,
+        "unified_ppl_tw": 5.8541,
+        "unified_ppl_avg": 6.5733,
+        "f_skip": 0.3994,
+        "n_skipped": 5452,
+        "n_routed": 8200,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.2951,
+            "f_skip": 0.7596,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 4.0088,
+            "f_skip": 0.5914,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 4.764,
+            "f_skip": 0.3473,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 16.7009,
+            "f_skip": 0.185,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.0978,
+            "f_skip": 0.33,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "otsu": {
+        "threshold": 2.1028,
+        "unified_ppl_tw": 6.1269,
+        "unified_ppl_avg": 6.872,
+        "f_skip": 0.6311,
+        "n_skipped": 8616,
+        "n_routed": 5036,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.3621,
+            "f_skip": 0.8901,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 4.2176,
+            "f_skip": 0.7571,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 5.0586,
+            "f_skip": 0.5907,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 17.3561,
+            "f_skip": 0.3741,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.3658,
+            "f_skip": 0.6665,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "p60": {
+        "threshold": 1.9609,
+        "unified_ppl_tw": 6.0799,
+        "unified_ppl_avg": 6.8214,
+        "f_skip": 0.5998,
+        "n_skipped": 8189,
+        "n_routed": 5463,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.3442,
+            "f_skip": 0.8759,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 4.184,
+            "f_skip": 0.7415,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 5.0097,
+            "f_skip": 0.554,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 17.2461,
+            "f_skip": 0.3432,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.3231,
+            "f_skip": 0.6218,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "p70": {
+        "threshold": 2.4531,
+        "unified_ppl_tw": 6.2404,
+        "unified_ppl_avg": 7.0002,
+        "f_skip": 0.6976,
+        "n_skipped": 9523,
+        "n_routed": 4129,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.3741,
+            "f_skip": 0.9143,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 4.3587,
+            "f_skip": 0.8101,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 5.2029,
+            "f_skip": 0.6633,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 17.6055,
+            "f_skip": 0.4507,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.46,
+            "f_skip": 0.7482,
+            "n_tokens": 4540
+          }
+        }
+      },
+      "p80": {
+        "threshold": 3.0156,
+        "unified_ppl_tw": 6.3964,
+        "unified_ppl_avg": 7.1742,
+        "f_skip": 0.7987,
+        "n_skipped": 10904,
+        "n_routed": 2748,
+        "n_total": 13652,
+        "per_domain": {
+          "python": {
+            "ppl": 2.4014,
+            "f_skip": 0.9433,
+            "n_tokens": 2030
+          },
+          "math": {
+            "ppl": 4.4867,
+            "f_skip": 0.8712,
+            "n_tokens": 2112
+          },
+          "medical": {
+            "ppl": 5.3266,
+            "f_skip": 0.7673,
+            "n_tokens": 1500
+          },
+          "legal": {
+            "ppl": 18.0323,
+            "f_skip": 0.5994,
+            "n_tokens": 3470
+          },
+          "creative": {
+            "ppl": 5.6242,
+            "f_skip": 0.863,
+            "n_tokens": 4540
+          }
+        }
+      }
+    },
+    "otsu_ppl_avg": 6.872,
+    "otsu_ppl_tw": 6.1269,
+    "otsu_f_skip": 0.6311
+  },
+  "overhead": {
+    "base_time_s": 0.516,
+    "compose_time_s": 0.513,
+    "unified_time_s": 1.665,
+    "ms_per_seq_base": 51.6,
+    "ms_per_seq_compose": 51.3,
+    "ms_per_seq_unified": 166.5,
+    "overhead_vs_base_pct": 222.74,
+    "f_route": 1.0,
+    "n_routed": 10,
+    "n_total": 10,
+    "K2_pass": false,
+    "n_sequences": 10,
+    "n_trials": 5
+  },
+  "K1_pass": false,
+  "K1_unified_ppl": 6.872,
+  "K1_threshold": 6.42,
+  "K1_margin_pct": 7.04,
+  "K2_pass": false,
+  "K2_overhead_pct": 222.74,
+  "S1_pass": false,
+  "S1_beats_all": false,
+  "S1_saves_compute": true,
+  "verdict": "KILLED",
+  "kill_reasons": [
+    "K1: Unified PPL 6.8720 > 6.42 threshold",
+    "K2: Overhead 222.7% > 10% threshold"
+  ],
+  "total_time_s": 59.0
+}

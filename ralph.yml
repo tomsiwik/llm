@@ -3,32 +3,37 @@
 # Separation of concerns: research design vs engineering vs review vs learning.
 #
 # Flow:
-#   research.start → Researcher (ideation + math)
-#                  → Programmer (GPU/local scripts)
-#                  → submit to queue or run locally
-#   results.ready  → Harvester (collect results, write PAPER.md)
+#   research.start → Researcher (ideation + math + run micro experiments)
 #                  → experiment.done → Reviewer → verdict
 #   verdict        → Analyst (multi-angle research sweep: WHY + literature + implications)
 #                  → learning.complete → Researcher picks next experiment
 #
-# The Analyst hat is the key addition: after every PROCEED or KILL, it
-# researches WHY the result happened, finds confirming/contradicting
-# literature, and writes LEARNINGS.md so future experiments build on
-# accumulated knowledge rather than running blind.
-#
-# Start:     ralph run -a
+# Start:     ralph run -a -v
 # Continue:  ralph emit "experiment.done"
 
 cli:
   backend: "claude"
+  default_mode: "autonomous"
+  idle_timeout_secs: 14400
+
+adapters:
+  claude:
+    timeout: 14400
 
 event_loop:
   prompt_file: "PROMPT.md"
   starting_event: "research.start"
   completion_promise: "RESEARCH_BACKLOG_DRAINED"
-  max_iterations: 200
-  max_runtime_seconds: 36000
-  idle_timeout_secs: 36000
+  max_iterations: 1000
+  max_runtime_seconds: 86400
+  verbose: true
+
+core:
+  guardrails:
+    - "ALL experiments MUST run on Apple Silicon via MLX. No CUDA. No RunPod. Target: M5 Pro 48GB."
+    - "Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code."
+    - "Use `experiment get <id> --yaml` for full structured experiment details."
+    - "After completing an experiment, update structured kill criteria via `experiment kill-update`."
 
 features:
   parallel: true
@@ -39,22 +44,26 @@ memories:
   budget: 800
   file: ".ralph/memories.md"
 
+tasks:
+  enabled: true
+
 hats:
-  # ── Researcher: design experiments (NO script writing for GPU) ──────────
+  # ── Researcher: design + run experiments on Apple Silicon ──────────────
   researcher:
     name: "🔬 Researcher"
-    description: "Designs experiments via experiment-ideator. For micro: runs them. For macro: produces SPEC.md for the programmer."
+    description: "Designs and runs micro experiments via experiment-ideator on Apple Silicon MLX."
     triggers:
       - "research.start"
       - "learning.complete"
       - "review.revise"
     publishes:
-      - "experiment.designed"
       - "experiment.done"
     instructions: |
       You coordinate a research cycle by delegating to the experiment-ideator
       sub-agent. Do NOT do the research yourself. Do NOT stop to ask for
       confirmation. Complete all steps in one session.
+
+      ALL experiments run on Apple Silicon via MLX. No CUDA. No RunPod.
 
       ## Before delegating
 
@@ -71,13 +80,12 @@ hats:
 
       ## Node Selection (via experiment CLI)
 
-      Use the `experiment` CLI to find and manage work. Invoke /experiment skill
-      if you need the full command reference.
+      Use the `experiment` CLI to find and manage work:
 
       1. Run: `experiment list --status active` — finish active work first.
       2. Run: `experiment list --status open` — find available experiments.
       3. Run: `experiment list --blocking` — prioritize critical-path work.
-      4. Run: `experiment get <id>` — read kill criteria, deps, and details.
+      4. Run: `experiment get <id> --yaml` — read FULL structured details.
       5. Run: `experiment update <id> --status active` — claim the experiment.
 
       Priority: lowest number wins. Prefer blocking experiments over non-blocking.
@@ -104,27 +112,25 @@ hats:
       the research design cycle. Give it a clear prompt:
 
         "Work on experiment [id]: '[title]'.
-         Kill criteria: [from experiment get output].
-         SCALE: [micro or macro].
-         If micro: run the full cycle — survey, math, implement, run, write PAPER.md.
-         If macro: survey, math, write MATH.md + SPEC.md (experiment spec).
+         Kill criteria: [from experiment get --yaml output].
+         SCALE: micro. PLATFORM: Apple Silicon MLX.
+         Run the full cycle — survey, math, implement, run, write PAPER.md.
          Write your chosen direction to .ralph/current_direction.md.
          BASELINE-FIRST: Check these references before implementing:
-         [list relevant references/*/]."
+         [list relevant references/*/].
+         Invoke /fast-mlx and /mlx-dev before writing any MLX code."
 
       Wait for the sub-agent to complete.
 
       ## After sub-agent returns
 
-      For MICRO experiments:
-        Verify micro/models/[name]/PAPER.md exists with results.
-        Update the DB: `experiment update <id> --status supported` (or killed)
-        Add evidence: `experiment evidence <id> --claim "..." --source "..." --verdict pass`
-        Emit experiment.done with a brief summary.
-
-      For MACRO experiments:
-        Verify macro/[name]/SPEC.md + MATH.md exist.
-        Emit experiment.designed with the experiment name and spec path.
+      Verify micro/models/[name]/PAPER.md exists with results.
+      Update the DB:
+        `experiment update <id> --status supported` (or killed)
+        `experiment update <id> --dir "micro/models/[name]/"`
+        `experiment kill-update <id> --criterion <N> --result pass|fail`
+        `experiment evidence <id> --claim "..." --source "results.json" --verdict pass`
+      Emit experiment.done with a brief summary of results and kill criteria verdicts.
 
       ## Orphan check (MANDATORY at start of every trigger)
 
@@ -134,119 +140,6 @@ hats:
       2. Check if [experiment_dir]/REVIEW-adversarial.md exists
       3. Check if [experiment_dir]/LEARNINGS.md exists
       4. If EITHER is missing, resolve before picking new work.
-
-  # ── Programmer: GPU-optimize and submit ─────────────────────────────────
-  programmer:
-    name: "⚙️ Programmer"
-    description: "Takes a SPEC.md and produces GPU-optimized scripts, then submits to gpu_queue"
-    triggers:
-      - "experiment.designed"
-    publishes:
-      - "script.submitted"
-    instructions: |
-      You take a research design (SPEC.md + MATH.md) and produce efficient
-      GPU scripts. Do NOT question the research — that's the researcher's job.
-      Focus on making the script FAST and GPU-efficient.
-
-      ## Step 1: Read the spec
-
-      The experiment name is in the event payload from experiment.designed.
-      Read macro/[name]/SPEC.md and MATH.md to understand what to implement.
-
-      ## Step 2: Produce script
-
-      Use the Agent tool with subagent_type="experiment-programmer" to write
-      the script. Give it the full spec:
-
-        "Write an efficient GPU script for the experiment at macro/[name]/.
-         Read SPEC.md for what to implement and MATH.md for the math.
-         Read GPU_CODING_GUIDELINES.md for MANDATORY coding rules.
-         Write the script to macro/[name]/run_[name].py.
-         Follow ALL rules in GPU_CODING_GUIDELINES.md — especially:
-         - Function scoping for each GPU phase (never two models in one scope)
-         - Cleanup pattern: del + gc.collect + empty_cache + function return
-         - SMOKE_TEST=1 support and MAX_RUNTIME timeout
-         - Monkey-patch set_submodule for RunPod compatibility
-         For SOLE composition: weights = [1.0/n] * n (average, NOT sum).
-         Target GPU utilization >50%. Batch all inference."
-
-      ## Step 3: Validate locally
-
-      After the programmer produces the script, run a quick smoke test:
-        SMOKE_TEST=1 python3 macro/[name]/run_[name].py
-      If it crashes, fix the error and retry (max 2 attempts).
-
-      ## Step 4: Submit to GPU queue
-
-      uv run python3 tools/gpu_queue.py submit macro/[name]/run_[name].py
-
-      ## Step 5: Also check for completed results
-
-      While you're here, check if any previous GPU tasks have completed:
-        uv run python3 tools/gpu_queue.py status
-
-      If there are completed tasks (OK or FAILED), note them in the event payload.
-
-      Emit script.submitted with the task_id and experiment name.
-
-  # ── Harvester: collect GPU results, write PAPER.md ──────────────────────
-  harvester:
-    name: "📊 Harvester"
-    description: "Monitors GPU queue, collects results, writes PAPER.md from actual data"
-    triggers:
-      - "script.submitted"
-      - "harvest.check"
-    publishes:
-      - "experiment.done"
-      - "harvest.check"
-    instructions: |
-      You monitor the GPU queue and harvest completed results.
-
-      ## Step 1: Check GPU queue status
-
-      Run: uv run python3 tools/gpu_queue.py status
-
-      Look at RECENT COMPLETED tasks. For each completed task (OK or FAILED):
-
-      ## Step 2: For OK tasks — harvest results
-
-      1. Run: uv run python3 tools/gpu_queue.py results <task_id>
-      2. Read the results JSON and task log
-      3. Find the experiment's PAPER.md template (or SPEC.md)
-      4. Write/update PAPER.md with ACTUAL results:
-         - Fill in the "TO BE FILLED" placeholders with real numbers
-         - Assess kill criteria based on actual data
-         - Write honest limitations
-      5. Update .ralph/current_direction.md with results summary
-
-      ## Step 3: For FAILED tasks — triage
-
-      1. Read the error from: uv run python3 tools/gpu_queue.py results <task_id>
-      2. Common fixes:
-         - dtype mismatch: add .to(torch.bfloat16) or .float()
-         - missing module: add import or pip install to script
-         - GradScaler: remove mixed precision or fix scaler usage
-         - OOM: reduce batch size
-         - weight bug: check composition weights are 1/N not 1.0
-      3. Fix the script locally
-      4. Resubmit: uv run python3 tools/gpu_queue.py submit <fixed_script.py>
-      5. Do NOT emit experiment.done for failed tasks
-
-      ## Step 4: Check if queue has pending work
-
-      If there are still PENDING or ACTIVE tasks:
-        Emit harvest.check (triggers self again later to re-check).
-        Include a note about which tasks are still running.
-
-      If ALL tasks for an experiment are done:
-        Emit experiment.done with the experiment name and results summary.
-
-      ## GPU Utilization Monitoring
-
-      When checking status, note the GPU utilization percentage.
-      If a task is ACTIVE but GPU util is <10% for >2 minutes, it may be stuck
-      on CPU-bound work (e.g., sequential token generation). Note this in your
-      event payload so future scripts can be optimized.
 
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
@@ -266,7 +159,7 @@ hats:
 
       The experiment name is in the event payload from experiment.done.
       Also read .ralph/current_direction.md as a fallback.
-      Find the experiment_dir — it's either micro/models/[name]/ or macro/[name]/.
+      Find the experiment_dir — it's micro/models/[name]/.
       Verify that PAPER.md exists in the experiment dir before reviewing.
 
       Use the Agent tool with subagent_type="adversarial-reviewer" to review
@@ -305,7 +198,7 @@ hats:
   # ── Analyst: multi-angle research sweep after every result ───────────────
   analyst:
     name: "🧠 Analyst"
-    description: "Researches WHY a result happened, finds confirming/contradicting literature, writes LEARNINGS.md. Produces knowledge, not just verdicts."
+    description: "Researches WHY a result happened, finds confirming/contradicting literature, writes LEARNINGS.md."
     triggers:
       - "review.proceed"
       - "review.killed"
@@ -333,8 +226,7 @@ hats:
       ## Step 2: Multi-angle research via NotebookLM (THE CORE VALUE)
 
       Use /notebooklm as the PRIMARY research tool. NotebookLM has our curated
-      source library (BitNet papers, MoTE, LoTA-QAF, MoLoRA, LoRA Soups, our own
-      VISION.md, FINDINGS.md, all PAPER.md files) and can synthesize across them.
+      source library and can synthesize across them.
 
       Query NotebookLM from 3 angles:
 
@@ -342,32 +234,15 @@ hats:
         Have other papers observed [this phenomenon]? What mechanisms explain it?"
 
       Angle 2 (contradicting): "Are there papers that found the OPPOSITE of
-        [our finding]? What conditions lead to different outcomes? What did we
-        miss that could explain a discrepancy?"
+        [our finding]? What conditions lead to different outcomes?"
 
       Angle 3 (alternatives): "What alternative approaches exist for [the problem
-        this experiment addressed]? What methods from other fields could apply?
-        What would [MoTE / LoTA-QAF / MoLoRA / LoRA Soups] do differently here?"
+        this experiment addressed]? What methods from other fields could apply?"
 
       FALLBACK ONLY: If NotebookLM doesn't have relevant sources for a specific
-      angle, use a targeted web search to fill the gap. Add any valuable new
-      papers found to the NotebookLM notebook for future queries.
+      angle, use a targeted web search to fill the gap.
 
-      For each relevant finding:
-      - Extract: source (paper title + arxiv ID, or NotebookLM source name)
-      - Key method and result
-      - Whether it CONFIRMS, CONTRADICTS, or EXTENDS our result
-
-      ## Step 3: Identify implications and gaps
-
-      Based on the literature sweep, answer:
-      1. WHY did this result happen? (mechanistic explanation grounded in literature)
-      2. What does this imply for the next experiment? (concrete recommendation)
-      3. What alternative approaches exist that we haven't tried?
-      4. Should any experiment be updated? Use `experiment update` if so.
-      5. Is there a new hypothesis worth adding? Use `experiment add` if strongly motivated by literature.
-
-      ## Step 4: Write LEARNINGS.md
+      ## Step 3: Write LEARNINGS.md
 
       Write [experiment_dir]/LEARNINGS.md with this structure:
 
@@ -391,17 +266,14 @@ hats:
 
       ## Implications for Next Experiments
       [How this changes our approach going forward]
-
-      ## New References to Add
-      [Any papers that should be added to references/REFERENCES.yml]
       ```
 
-      ## Step 5: Update references
+      ## Step 4: Update references
 
       If you found important new papers, add them via:
         `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
 
-      ## Step 6: Emit
+      ## Step 5: Emit
 
       Emit learning.complete with:
       - Experiment name

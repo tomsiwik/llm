@@ -1,0 +1,943 @@
+{
+  "experiment": "bitnet_scale_n50",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_steps": 200,
+  "seed": 42,
+  "n_total": 50,
+  "all_names": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "creative",
+    "sql",
+    "javascript",
+    "physics",
+    "chemistry",
+    "science",
+    "wikitext",
+    "finance",
+    "cooking",
+    "health",
+    "dialogue",
+    "reasoning",
+    "instruction",
+    "conciseness",
+    "safety",
+    "multilingual",
+    "coding_style",
+    "summarization",
+    "debate",
+    "translation",
+    "formal_writing",
+    "history",
+    "philosophy",
+    "sports",
+    "poetry",
+    "news",
+    "reviews",
+    "qa_pairs",
+    "stories",
+    "science_qa",
+    "recipes",
+    "trivia",
+    "eli5",
+    "movie_plots",
+    "tweets",
+    "abstracts",
+    "contracts",
+    "emails",
+    "bash_code",
+    "math_proofs",
+    "dialogues_2",
+    "product_desc",
+    "bio_text",
+    "travel",
+    "tech_docs",
+    "music_text"
+  ],
+  "timestamp": "2026-03-26 08:47:13",
+  "n_domains_with_data": 49,
+  "base_ppls": {
+    "code": 3.7539,
+    "math": 4.5187,
+    "legal": 28.3542,
+    "creative": 3.4203,
+    "sql": 15.1372,
+    "javascript": 16.3586,
+    "physics": 71.7498,
+    "chemistry": 8.5209,
+    "science": 43.0163,
+    "wikitext": 23.8802,
+    "finance": 24.2802,
+    "cooking": 8.6185,
+    "health": 10.1004,
+    "dialogue": 5.5478,
+    "reasoning": 8.926,
+    "instruction": 10.9904,
+    "conciseness": 37.6315,
+    "safety": 22.1038,
+    "multilingual": 33.8727,
+    "coding_style": 3.3178,
+    "summarization": 42.6062,
+    "debate": 33.1842,
+    "translation": 55.417,
+    "formal_writing": 25.4102,
+    "history": 26.857,
+    "philosophy": 2.0862,
+    "sports": 16.4446,
+    "poetry": 47.8967,
+    "news": 15.2518,
+    "reviews": 28.1245,
+    "qa_pairs": 131.8972,
+    "stories": 6.7761,
+    "science_qa": 8.6507,
+    "recipes": 2.9072,
+    "trivia": 110.8176,
+    "eli5": 2.7123,
+    "movie_plots": 3.2437,
+    "tweets": 191.4105,
+    "abstracts": 48.5899,
+    "contracts": 16.2585,
+    "emails": 50.6037,
+    "bash_code": 2.7253,
+    "math_proofs": 2.8348,
+    "dialogues_2": 2.7626,
+    "product_desc": 29.5957,
+    "bio_text": 2.6785,
+    "travel": 2.401,
+    "tech_docs": 2.8244,
+    "music_text": 3.1454
+  },
+  "trainable_params": 21626880,
+  "train_results": {
+    "code": {
+      "cached": true
+    },
+    "math": {
+      "cached": true
+    },
+    "legal": {
+      "cached": true
+    },
+    "creative": {
+      "cached": true
+    },
+    "sql": {
+      "cached": true
+    },
+    "javascript": {
+      "cached": true
+    },
+    "physics": {
+      "cached": true
+    },
+    "chemistry": {
+      "cached": true
+    },
+    "science": {
+      "cached": true
+    },
+    "wikitext": {
+      "cached": true
+    },
+    "finance": {
+      "cached": true
+    },
+    "cooking": {
+      "cached": true
+    },
+    "health": {
+      "cached": true
+    },
+    "dialogue": {
+      "cached": true
+    },
+    "reasoning": {
+      "cached": true
+    },
+    "instruction": {
+      "cached": true
+    },
+    "conciseness": {
+      "cached": true
+    },
+    "safety": {
+      "cached": true
+    },
+    "multilingual": {
+      "cached": true
+    },
+    "coding_style": {
+      "cached": true
+    },
+    "summarization": {
+      "cached": true
+    },
+    "debate": {
+      "cached": true
+    },
+    "translation": {
+      "cached": true
+    },
+    "formal_writing": {
+      "cached": true
+    },
+    "history": {
+      "cached": true
+    },
+    "philosophy": {
+      "cached": true
+    },
+    "sports": {
+      "cached": true
+    },
+    "poetry": {
+      "cached": true
+    },
+    "news": {
+      "cached": true
+    },
+    "reviews": {
+      "cached": true
+    },
+    "qa_pairs": {
+      "cached": true
+    },
+    "stories": {
+      "cached": true
+    },
+    "science_qa": {
+      "cached": true
+    },
+    "recipes": {
+      "cached": true
+    },
+    "trivia": {
+      "cached": true
+    },
+    "eli5": {
+      "cached": true
+    },
+    "movie_plots": {
+      "cached": true
+    },
+    "tweets": {
+      "cached": true
+    },
+    "abstracts": {
+      "cached": true
+    },
+    "contracts": {
+      "cached": true
+    },
+    "emails": {
+      "cached": true
+    },
+    "bash_code": {
+      "cached": true
+    },
+    "math_proofs": {
+      "cached": true
+    },
+    "dialogues_2": {
+      "cached": true
+    },
+    "product_desc": {
+      "cached": true
+    },
+    "bio_text": {
+      "cached": true
+    },
+    "travel": {
+      "cached": true
+    },
+    "tech_docs": {
+      "cached": true
+    },
+    "music_text": {
+      "cached": true
+    }
+  },
+  "individual_ppls": {
+    "code": 3.0156,
+    "math": 3.1618,
+    "legal": 19.9678,
+    "creative": 3.082,
+    "sql": 6.6989,
+    "javascript": 12.4956,
+    "physics": 21.8222,
+    "chemistry": 6.768,
+    "science": 22.6895,
+    "wikitext": 13.6667,
+    "finance": 19.1113,
+    "cooking": 5.4355,
+    "health": 8.577,
+    "dialogue": 4.9373,
+    "reasoning": 3.4568,
+    "instruction": 4.497,
+    "conciseness": 8.5958,
+    "safety": 9.4414,
+    "multilingual": 21.0326,
+    "coding_style": 2.8301,
+    "summarization": 20.1743,
+    "debate": 24.4763,
+    "translation": 17.8242,
+    "formal_writing": 13.3568,
+    "history": 18.4124,
+    "philosophy": 1.0335,
+    "sports": 12.2232,
+    "poetry": 44.2585,
+    "news": 13.5091,
+    "reviews": 19.0139,
+    "qa_pairs": 13.8662,
+    "stories": 5.1595,
+    "science_qa": 6.6874,
+    "recipes": 1.0649,
+    "trivia": 22.4001,
+    "eli5": 1.0,
+    "movie_plots": 1.0,
+    "tweets": 62.8516,
+    "abstracts": 21.6094,
+    "contracts": 9.4761,
+    "emails": 29.9644,
+    "bash_code": 1.0,
+    "math_proofs": 1.0,
+    "dialogues_2": 1.0,
+    "product_desc": 22.6644,
+    "bio_text": 1.0,
+    "travel": 1.0,
+    "tech_docs": 1.0,
+    "music_text": 1.0
+  },
+  "composed_ppls": {
+    "code": 3.7492,
+    "math": 4.51,
+    "legal": 28.2827,
+    "creative": 3.4136,
+    "sql": 15.0558,
+    "javascript": 16.3901,
+    "physics": 70.3887,
+    "chemistry": 8.5035,
+    "science": 42.6982,
+    "wikitext": 23.7761,
+    "finance": 24.1994,
+    "cooking": 8.6252,
+    "health": 10.1069,
+    "dialogue": 5.5234,
+    "reasoning": 8.9158,
+    "instruction": 11.0177,
+    "conciseness": 37.1711,
+    "safety": 22.0553,
+    "multilingual": 33.7644,
+    "coding_style": 3.3119,
+    "summarization": 41.8671,
+    "debate": 33.1842,
+    "translation": 55.2232,
+    "formal_writing": 25.3593,
+    "history": 26.7982,
+    "philosophy": 2.0831,
+    "sports": 16.3933,
+    "poetry": 47.8967,
+    "news": 15.2518,
+    "reviews": 28.117,
+    "qa_pairs": 129.7839,
+    "stories": 6.7601,
+    "science_qa": 8.6365,
+    "recipes": 2.8892,
+    "trivia": 109.0445,
+    "eli5": 2.6887,
+    "movie_plots": 3.2437,
+    "tweets": 190.6599,
+    "abstracts": 48.4704,
+    "contracts": 16.1785,
+    "emails": 50.4222,
+    "bash_code": 2.7159,
+    "math_proofs": 2.8323,
+    "dialogues_2": 2.7626,
+    "product_desc": 29.3521,
+    "bio_text": 2.6656,
+    "travel": 2.3828,
+    "tech_docs": 2.8269,
+    "music_text": 3.1139
+  },
+  "gamma_composed_base": 0.996,
+  "n_composed": 49,
+  "best_individual_ppl": 1.0,
+  "avg_composed_ppl": 26.3482,
+  "composition_ratio": 26.3482,
+  "n_below_base": 39,
+  "n_evaluated": 49,
+  "cosines": {
+    "mean_cos": 0.001896,
+    "max_cos": 0.009934,
+    "n_pairs": 1176,
+    "top_10_pairs": [
+      {
+        "pair": "bash_code-music_text",
+        "abs_cos": 0.009934
+      },
+      {
+        "pair": "physics-summarization",
+        "abs_cos": 0.009161
+      },
+      {
+        "pair": "physics-trivia",
+        "abs_cos": 0.008995
+      },
+      {
+        "pair": "science-debate",
+        "abs_cos": 0.008756
+      },
+      {
+        "pair": "tweets-contracts",
+        "abs_cos": 0.008436
+      },
+      {
+        "pair": "bash_code-math_proofs",
+        "abs_cos": 0.008138
+      },
+      {
+        "pair": "finance-debate",
+        "abs_cos": 0.008036
+      },
+      {
+        "pair": "formal_writing-product_desc",
+        "abs_cos": 0.007868
+      },
+      {
+        "pair": "science-science_qa",
+        "abs_cos": 0.007572
+      },
+      {
+        "pair": "math_proofs-tech_docs",
+        "abs_cos": 0.007471
+      }
+    ]
+  },
+  "router": {
+    "final_loss": 0.0008,
+    "first_100_avg": 0.1837,
+    "last_100_avg": 0.0229,
+    "top1_accuracy": 0.7653,
+    "topk_accuracy": 0.8633,
+    "top_k": 2,
+    "total_samples": 490,
+    "per_domain": {
+      "code": {
+        "top1": 0.7,
+        "topk": 0.9,
+        "n": 10
+      },
+      "math": {
+        "top1": 0.0,
+        "topk": 0.7,
+        "n": 10
+      },
+      "legal": {
+        "top1": 0.7,
+        "topk": 0.9,
+        "n": 10
+      },
+      "creative": {
+        "top1": 0.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "sql": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "javascript": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "physics": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "chemistry": {
+        "top1": 0.0,
+        "topk": 0.0,
+        "n": 10
+      },
+      "science": {
+        "top1": 0.2,
+        "topk": 0.8,
+        "n": 10
+      },
+      "wikitext": {
+        "top1": 0.0,
+        "topk": 0.0,
+        "n": 10
+      },
+      "finance": {
+        "top1": 0.8,
+        "topk": 0.9,
+        "n": 10
+      },
+      "cooking": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "health": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "dialogue": {
+        "top1": 0.0,
+        "topk": 0.0,
+        "n": 10
+      },
+      "reasoning": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "instruction": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "conciseness": {
+        "top1": 0.9,
+        "topk": 0.9,
+        "n": 10
+      },
+      "safety": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "multilingual": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "coding_style": {
+        "top1": 0.8,
+        "topk": 1.0,
+        "n": 10
+      },
+      "summarization": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "debate": {
+        "top1": 0.0,
+        "topk": 0.0,
+        "n": 10
+      },
+      "translation": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "formal_writing": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "history": {
+        "top1": 0.6,
+        "topk": 0.7,
+        "n": 10
+      },
+      "philosophy": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "sports": {
+        "top1": 0.9,
+        "topk": 0.9,
+        "n": 10
+      },
+      "poetry": {
+        "top1": 0.1,
+        "topk": 0.1,
+        "n": 10
+      },
+      "news": {
+        "top1": 0.0,
+        "topk": 0.8,
+        "n": 10
+      },
+      "reviews": {
+        "top1": 0.9,
+        "topk": 1.0,
+        "n": 10
+      },
+      "qa_pairs": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "stories": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "science_qa": {
+        "top1": 0.8,
+        "topk": 0.9,
+        "n": 10
+      },
+      "recipes": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "trivia": {
+        "top1": 0.9,
+        "topk": 0.9,
+        "n": 10
+      },
+      "eli5": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "movie_plots": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "tweets": {
+        "top1": 0.3,
+        "topk": 0.9,
+        "n": 10
+      },
+      "abstracts": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "contracts": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "emails": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "bash_code": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "math_proofs": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "dialogues_2": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "product_desc": {
+        "top1": 0.9,
+        "topk": 1.0,
+        "n": 10
+      },
+      "bio_text": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "travel": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "tech_docs": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      },
+      "music_text": {
+        "top1": 1.0,
+        "topk": 1.0,
+        "n": 10
+      }
+    }
+  },
+  "routed_composition": {
+    "routed_ppls": {
+      "code": 3.0617,
+      "math": 3.5702,
+      "legal": 23.3838,
+      "creative": 2.9396,
+      "sql": 8.5305,
+      "javascript": 12.8768,
+      "physics": 31.3732,
+      "chemistry": 7.1974,
+      "science": 26.6719,
+      "wikitext": 21.3185,
+      "finance": 20.8244,
+      "cooking": 6.8182,
+      "health": 8.5717,
+      "dialogue": 5.1883,
+      "reasoning": 4.1693,
+      "instruction": 4.9277,
+      "conciseness": 12.1602,
+      "safety": 11.6478,
+      "multilingual": 26.2079,
+      "coding_style": 2.9282,
+      "summarization": 25.5507,
+      "debate": 28.84,
+      "translation": 28.3315,
+      "formal_writing": 16.7038,
+      "history": 20.297,
+      "philosophy": 1.1238,
+      "sports": 13.6831,
+      "poetry": 42.626,
+      "news": 13.5387,
+      "reviews": 22.5204,
+      "qa_pairs": 23.5255,
+      "stories": 5.4394,
+      "science_qa": 7.1035,
+      "recipes": 1.3682,
+      "trivia": 32.8565,
+      "eli5": 1.0068,
+      "movie_plots": 1.0481,
+      "tweets": 98.7797,
+      "abstracts": 28.6548,
+      "contracts": 12.2799,
+      "emails": 37.9617,
+      "bash_code": 1.0092,
+      "math_proofs": 1.0491,
+      "dialogues_2": 1.0683,
+      "product_desc": 23.4928,
+      "bio_text": 1.1254,
+      "travel": 1.011,
+      "tech_docs": 1.0304,
+      "music_text": 1.0197
+    },
+    "gamma_routed": 0.6318,
+    "n_routed_below_base": 49,
+    "n_routed_evaluated": 49,
+    "top_k": 2,
+    "router_selections": {
+      "code": [
+        "coding_style",
+        "code"
+      ],
+      "math": [
+        "math",
+        "reasoning"
+      ],
+      "legal": [
+        "emails",
+        "legal"
+      ],
+      "creative": [
+        "creative",
+        "stories"
+      ],
+      "sql": [
+        "code",
+        "sql"
+      ],
+      "javascript": [
+        "legal",
+        "javascript"
+      ],
+      "physics": [
+        "trivia",
+        "physics"
+      ],
+      "chemistry": [
+        "health",
+        "science_qa"
+      ],
+      "science": [
+        "science",
+        "physics"
+      ],
+      "wikitext": [
+        "trivia",
+        "emails"
+      ],
+      "finance": [
+        "emails",
+        "finance"
+      ],
+      "cooking": [
+        "recipes",
+        "cooking"
+      ],
+      "health": [
+        "science_qa",
+        "health"
+      ],
+      "dialogue": [
+        "news",
+        "instruction"
+      ],
+      "reasoning": [
+        "math",
+        "reasoning"
+      ],
+      "instruction": [
+        "safety",
+        "instruction"
+      ],
+      "conciseness": [
+        "multilingual",
+        "conciseness"
+      ],
+      "safety": [
+        "instruction",
+        "safety"
+      ],
+      "multilingual": [
+        "dialogue",
+        "multilingual"
+      ],
+      "coding_style": [
+        "code",
+        "coding_style"
+      ],
+      "summarization": [
+        "sports",
+        "summarization"
+      ],
+      "debate": [
+        "physics",
+        "emails"
+      ],
+      "translation": [
+        "dialogue",
+        "translation"
+      ],
+      "formal_writing": [
+        "abstracts",
+        "formal_writing"
+      ],
+      "history": [
+        "emails",
+        "history"
+      ],
+      "philosophy": [
+        "travel",
+        "philosophy"
+      ],
+      "sports": [
+        "news",
+        "sports"
+      ],
+      "poetry": [
+        "conciseness",
+        "emails"
+      ],
+      "news": [
+        "news",
+        "sports"
+      ],
+      "reviews": [
+        "emails",
+        "reviews"
+      ],
+      "qa_pairs": [
+        "conciseness",
+        "qa_pairs"
+      ],
+      "stories": [
+        "creative",
+        "stories"
+      ],
+      "science_qa": [
+        "science",
+        "science_qa"
+      ],
+      "recipes": [
+        "cooking",
+        "recipes"
+      ],
+      "trivia": [
+        "conciseness",
+        "trivia"
+      ],
+      "eli5": [
+        "math_proofs",
+        "eli5"
+      ],
+      "movie_plots": [
+        "tech_docs",
+        "movie_plots"
+      ],
+      "tweets": [
+        "tweets",
+        "emails"
+      ],
+      "abstracts": [
+        "formal_writing",
+        "abstracts"
+      ],
+      "contracts": [
+        "emails",
+        "contracts"
+      ],
+      "emails": [
+        "tweets",
+        "emails"
+      ],
+      "bash_code": [
+        "math_proofs",
+        "bash_code"
+      ],
+      "math_proofs": [
+        "tech_docs",
+        "math_proofs"
+      ],
+      "dialogues_2": [
+        "math_proofs",
+        "dialogues_2"
+      ],
+      "product_desc": [
+        "reviews",
+        "product_desc"
+      ],
+      "bio_text": [
+        "tech_docs",
+        "bio_text"
+      ],
+      "travel": [
+        "eli5",
+        "travel"
+      ],
+      "tech_docs": [
+        "math_proofs",
+        "tech_docs"
+      ],
+      "music_text": [
+        "math_proofs",
+        "music_text"
+      ]
+    }
+  },
+  "k1_pass": true,
+  "k1_routing_accuracy": 0.8633,
+  "k2_pass": true,
+  "k2_gamma": 0.996,
+  "k3_pass": true,
+  "k3_max_cos": 0.009934,
+  "verdict": "SUPPORTED",
+  "n25_gamma": 0.982,
+  "gamma_degradation_pct": 1.42,
+  "within_10pct_of_n25": true,
+  "total_time_s": 625.9,
+  "total_time_min": 10.4,
+  "gamma_routed": 0.6318
+}

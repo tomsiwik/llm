@@ -1,24 +1,26 @@
-# Current Direction: exp_bitnet_adapter_inference_speed
+# Current Direction: Gumbel-Sigmoid Routing Ablation
 
-## Status: RUNNING (micro experiment cycle)
+**Experiment**: exp_gumbel_sigmoid_ablation
+**Status**: active
+**Started**: 2026-03-26
 
-## Experiment
-Measure single vs composed adapter inference latency on Apple Silicon using MLX.
-Pure MLX implementation (no mlx-lm dependency) with synthetic LoRA weights on a
-micro transformer, mirroring the methodology of exp_inference_latency_vs_N but
-targeting Metal GPU via MLX.
+## What
+Systematic ablation of the Gumbel-sigmoid router configuration used in N=50 composition.
+Testing temperature, top-k, competing vs non-competing gates, load-balancing loss,
+and straight-through estimation. Special focus on the 4 zero-accuracy domains
+(chemistry, wikitext, dialogue, debate).
 
-## Kill Criteria
-- K1: Single-adapter overhead > 15% vs base -> KILL
-- K2: N-adapter overhead grows faster than O(N) (superlinear) -> KILL
+## Baseline
+From bitnet_scale_n50:
+- Router: 2-layer MLP (d -> 128 -> N), Gumbel-sigmoid
+- Temperature: annealed 2.0 -> 0.5 over 600 steps
+- Top-k: 2, accuracy 86.33%
+- 4/49 domains at 0% accuracy
+- gamma_routed = 0.632
 
-## Platform
-- Apple M5 Pro, 48GB unified memory
-- MLX 0.31.1 with Metal GPU
-- Micro model: d=128, 4 layers, 4 heads, rank=8
+## Kill criterion
+K1: No configuration beats current default (86.33% top-2 accuracy) by >5% (i.e., >91.33%).
 
-## Context
-- Prior CPU (llama.cpp): 9.5% + 7.5%*N overhead
-- Prior CPU (PyTorch): Pre-merge 0% overhead, dynamic ~260% (impl-bound)
-- Prior GPU (RTX 4090): Pre-merge max +3.3% at N=50
-- This fills the Apple Silicon Metal GPU gap in the serving matrix
+## Approach
+Reuse N=50 trained adapters and data. Only retrain the router under different configs.
+Extract hidden states once, then sweep configs cheaply.
