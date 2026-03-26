@@ -1,0 +1,502 @@
+{
+  "experiment": "self_routing_adapters",
+  "timestamp": "2026-03-26 17:28:22",
+  "total_time_s": 2.9,
+  "n_domains": 49,
+  "hidden_dim": 2560,
+  "rank": 16,
+  "kill_criteria": {
+    "K1_implicit_routing_above_50pct": {
+      "threshold": 0.5,
+      "best_top2": 0.8714,
+      "best_method": "raw_centroid_cosine",
+      "result": "PASS"
+    }
+  },
+  "comparison_to_baseline": {
+    "gumbel_sigmoid_top2": 0.8633,
+    "best_self_routing_top2": 0.8714,
+    "gap": 0.0081,
+    "relative_performance": 1.0094
+  },
+  "methods": {
+    "quadratic_L15.self_attn.q_proj": {
+      "top1_accuracy": 0.0204,
+      "top2_accuracy": 0.0469,
+      "top5_accuracy": 0.1551,
+      "params": 0,
+      "description": "||B @ h||_2 using L15.self_attn.q_proj"
+    },
+    "quadratic_L15.self_attn.v_proj": {
+      "top1_accuracy": 0.0204,
+      "top2_accuracy": 0.0408,
+      "top5_accuracy": 0.102,
+      "params": 0,
+      "description": "||B @ h||_2 using L15.self_attn.v_proj"
+    },
+    "quadratic_multilayer_qproj": {
+      "top1_accuracy": 0.0122,
+      "top2_accuracy": 0.0327,
+      "top5_accuracy": 0.0939,
+      "params": 0,
+      "description": "||B @ h||_2 averaged across 5 layers, q_proj only"
+    },
+    "activation_norm_L15.self_attn.q_proj": {
+      "top1_accuracy": 0.1224,
+      "top2_accuracy": 0.2102,
+      "top5_accuracy": 0.3918,
+      "params": 0,
+      "description": "||B @ A^T @ h||_2 using L15.self_attn.q_proj"
+    },
+    "activation_norm_multilayer_qproj": {
+      "top1_accuracy": 0.1367,
+      "top2_accuracy": 0.2347,
+      "top5_accuracy": 0.4592,
+      "params": 0,
+      "description": "||B @ A^T @ h||_2 averaged across 5 layers, q_proj"
+    },
+    "svd_projection_L15.self_attn.q_proj": {
+      "top1_accuracy": 0.0082,
+      "top2_accuracy": 0.0265,
+      "top5_accuracy": 0.0653,
+      "params": 0,
+      "description": "||U@U^T@h||/||h|| via SVD of B^T, L15.self_attn.q_proj"
+    },
+    "centroid_cosine_L15_qproj": {
+      "top1_accuracy": 0.0327,
+      "top2_accuracy": 0.0551,
+      "top5_accuracy": 0.1143,
+      "params": 0,
+      "description": "cos(h, mean(B@A@h_train)) using L15 q_proj"
+    },
+    "activation_norm_all_layers_all_projs": {
+      "top1_accuracy": 0.1653,
+      "top2_accuracy": 0.2224,
+      "top5_accuracy": 0.4612,
+      "params": 0,
+      "description": "||B@A^T@h||_2 averaged across 5 layers x 4 projs"
+    },
+    "raw_centroid_cosine": {
+      "top1_accuracy": 0.7959,
+      "top2_accuracy": 0.8714,
+      "top5_accuracy": 0.9061,
+      "params": 0,
+      "description": "cos(h, mean(h_train)) -- no adapter weights, pure hidden state"
+    },
+    "random_baseline": {
+      "top1_accuracy": 0.0204,
+      "top2_accuracy": 0.0408,
+      "top5_accuracy": 0.102,
+      "params": 0,
+      "description": "Random chance with N=49 classes"
+    }
+  },
+  "per_domain_analysis": {
+    "code": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 6,
+        "bash_code": 2,
+        "tech_docs": 2
+      }
+    },
+    "math": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "legal": {
+      "top1_accuracy": 0.2,
+      "top2_accuracy": 0.6,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 8,
+        "legal": 2
+      }
+    },
+    "creative": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "sql": {
+      "top1_accuracy": 0.4,
+      "top2_accuracy": 0.8,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 6,
+        "sql": 4
+      }
+    },
+    "javascript": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 9,
+        "legal": 1
+      }
+    },
+    "physics": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "chemistry": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "science": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "wikitext": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "finance": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "cooking": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "recipes": 10
+      }
+    },
+    "health": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "dialogue": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "reasoning": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "instruction": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 9,
+        "recipes": 1
+      }
+    },
+    "conciseness": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.1,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "safety": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.3,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "multilingual": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "coding_style": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 4,
+        "tech_docs": 3,
+        "bash_code": 2
+      }
+    },
+    "summarization": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "debate": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "translation": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "formal_writing": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "history": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "philosophy": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "philosophy": 10
+      }
+    },
+    "sports": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "poetry": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "news": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "reviews": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "qa_pairs": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "stories": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "science_qa": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "recipes": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "recipes": 10
+      }
+    },
+    "trivia": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "eli5": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    },
+    "movie_plots": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    },
+    "tweets": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "abstracts": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.3,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "contracts": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "emails": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.4,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "bash_code": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "bash_code": 10
+      }
+    },
+    "math_proofs": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "math_proofs": 10
+      }
+    },
+    "dialogues_2": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    },
+    "product_desc": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "chemistry": 10
+      }
+    },
+    "bio_text": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    },
+    "travel": {
+      "top1_accuracy": 0.1,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 9,
+        "travel": 1
+      }
+    },
+    "tech_docs": {
+      "top1_accuracy": 1.0,
+      "top2_accuracy": 1.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    },
+    "music_text": {
+      "top1_accuracy": 0.0,
+      "top2_accuracy": 0.0,
+      "n_samples": 10,
+      "top_confusions": {
+        "tech_docs": 10
+      }
+    }
+  },
+  "timing": {
+    "per_token_ms": 4.255,
+    "n_adapters": 49,
+    "n_layers": 5
+  }
+}

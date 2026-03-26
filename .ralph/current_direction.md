@@ -1,26 +1,22 @@
-# Current Direction: Gumbel-Sigmoid Routing Ablation
+# Current Direction
 
-**Experiment**: exp_gumbel_sigmoid_ablation
-**Status**: active
-**Started**: 2026-03-26
+## Active Experiment
+**exp_cross_adapter_knowledge_transfer** -- Cross-domain constructive transfer matrix
 
 ## What
-Systematic ablation of the Gumbel-sigmoid router configuration used in N=50 composition.
-Testing temperature, top-k, competing vs non-competing gates, load-balancing loss,
-and straight-through estimation. Special focus on the 4 zero-accuracy domains
-(chemistry, wikitext, dialogue, debate).
+Build the full NxN transfer matrix for 5 domain adapters on BitNet-2B-4T.
+For each pair (A, B), measure whether adding adapter A improves domain B's PPL.
+This maps the knowledge graph of our adapter pool and reveals constructive transfer structure.
 
-## Baseline
-From bitnet_scale_n50:
-- Router: 2-layer MLP (d -> 128 -> N), Gumbel-sigmoid
-- Temperature: annealed 2.0 -> 0.5 over 600 steps
-- Top-k: 2, accuracy 86.33%
-- 4/49 domains at 0% accuracy
-- gamma_routed = 0.632
+## Why
+OSRM showed composition works via constructive transfer, not orthogonality.
+The composed 5-adapter PPL beats naive 1/N prediction on all domains.
+Per-token routing shows confused domains have complementary adapters.
+But we have never measured PAIRWISE transfer directly.
 
-## Kill criterion
-K1: No configuration beats current default (86.33% top-2 accuracy) by >5% (i.e., >91.33%).
+## Kill Criteria
+- K1 (id=243): Zero pairs show >2% cross-domain improvement
+- K2: Transfer matrix is random (no structure, MI < 0.3)
 
-## Approach
-Reuse N=50 trained adapters and data. Only retrain the router under different configs.
-Extract hidden states once, then sweep configs cheaply.
+## Status
+ACTIVE -- retraining 5 domain adapters, then building full transfer matrix

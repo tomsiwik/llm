@@ -89,7 +89,7 @@ Frozen during training. The skeleton guarantees:
 | Distill | **70%** | Instruction-format works. KR-Test eval done (rho=1.0 rank signal). |
 | Compose | **70%** | N=25 scales. Matched-param wins. Top-2 routing +13.9% over uniform (659K router). Per-adapter tiny heads +19.9% over uniform (82K/head, 2.32% overhead, near-oracle). Real HF data: correct multi-A composition -26.3% avg PPL (3.3x better than broken single-A). Per-token Gumbel-sigmoid routing works on MLX (0.58% overhead, diversity 2.42). |
 | Evolve | **10%** | Clone-compete killed. KR-Test quality gate metric available (delta>0.03). Retrain design needed. |
-| Serve | **35%** | bf16 merge (16.7 tok/s) + runtime LoRA (12.3 tok/s). llama.cpp proven (33.8 t/s). |
+| Serve | **40%** | bf16 merge (16.7 tok/s) + runtime LoRA (12.3 tok/s). llama.cpp proven (33.8 t/s). Ternary B-matrix: 15.8x adapter compression, pure-addition composition enabled. |
 | Base-free | **20%** | Random scaffold killed. Ternary-from-scratch proven on toy task (MLX+STE), KILLED at d=512 on real text (PPL 2.78x, overfitting not mechanism failure — needs more data/regularization). GaLore+STE supported (0.28x optimizer state, fixes 2.6x degradation). Scale validation with regularization next. |
 | **Overall** | **~35%** | Composition + routing validated. Serving + evolve + base-free are gaps. |
 

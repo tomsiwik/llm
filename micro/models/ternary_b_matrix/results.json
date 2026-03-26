@@ -1,0 +1,194 @@
+{
+  "experiment": "ternary_b_matrix",
+  "architecture": {
+    "d_model": 128,
+    "n_layers": 4,
+    "n_heads": 4,
+    "lora_rank": 8,
+    "block_size": 32
+  },
+  "base": {
+    "base_ppl": 1.6051,
+    "base_train_time_s": 16.2
+  },
+  "fp32_b": {
+    "per_domain": {
+      "a_e": {
+        "ppl": 1.5111,
+        "time_s": 10.8
+      },
+      "f_j": {
+        "ppl": 1.5392,
+        "time_s": 10.7
+      },
+      "k_o": {
+        "ppl": 1.5094,
+        "time_s": 10.7
+      },
+      "p_t": {
+        "ppl": 1.5515,
+        "time_s": 10.7
+      },
+      "u_z": {
+        "ppl": 1.567,
+        "time_s": 10.7
+      }
+    },
+    "composition": {
+      "composed_ppls": {
+        "a_e": 1.5813,
+        "f_j": 1.602,
+        "k_o": 1.5911,
+        "p_t": 1.6328,
+        "u_z": 1.6328
+      },
+      "mean_single_ppl": 1.5356,
+      "mean_composed_ppl": 1.608,
+      "composition_ratio": 1.0471,
+      "mean_cos_similarity": 0.0,
+      "cos_similarities": [
+        1e-06,
+        0.0,
+        1e-06,
+        0.0,
+        0.0,
+        1e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "ste_ternary_b": {
+    "per_domain": {
+      "a_e": {
+        "ppl": 1.5016,
+        "time_s": 10.9
+      },
+      "f_j": {
+        "ppl": 1.5154,
+        "time_s": 10.9
+      },
+      "k_o": {
+        "ppl": 1.5018,
+        "time_s": 10.9
+      },
+      "p_t": {
+        "ppl": 1.5331,
+        "time_s": 10.9
+      },
+      "u_z": {
+        "ppl": 1.543,
+        "time_s": 11.0
+      }
+    },
+    "composition": {
+      "composed_ppls": {
+        "a_e": 1.6131,
+        "f_j": 1.6252,
+        "k_o": 1.6085,
+        "p_t": 1.6258,
+        "u_z": 1.6409
+      },
+      "mean_single_ppl": 1.519,
+      "mean_composed_ppl": 1.6227,
+      "composition_ratio": 1.0683,
+      "mean_cos_similarity": 0.0,
+      "cos_similarities": [
+        1e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "ptq_ternary_b": {
+    "per_domain": {
+      "a_e": {
+        "ppl": 1.5215,
+        "mean_quant_error": 0.5198
+      },
+      "f_j": {
+        "ppl": 1.5128,
+        "mean_quant_error": 0.5205
+      },
+      "k_o": {
+        "ppl": 1.5187,
+        "mean_quant_error": 0.5229
+      },
+      "p_t": {
+        "ppl": 1.5346,
+        "mean_quant_error": 0.5158
+      },
+      "u_z": {
+        "ppl": 1.5078,
+        "mean_quant_error": 0.5207
+      }
+    },
+    "composition": {
+      "composed_ppls": {
+        "a_e": 1.5761,
+        "f_j": 1.5944,
+        "k_o": 1.5857,
+        "p_t": 1.6093,
+        "u_z": 1.6106
+      },
+      "mean_single_ppl": 1.5191,
+      "mean_composed_ppl": 1.5952,
+      "composition_ratio": 1.0501,
+      "mean_cos_similarity": 0.0,
+      "cos_similarities": [
+        0.0,
+        0.0,
+        1e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "size_analysis": {
+    "fp32_b": {
+      "total_params": 185400,
+      "fp32_bytes": 741600
+    },
+    "ste_ternary_b": {
+      "total_params": 185400,
+      "fp32_bytes": 741600,
+      "ternary_bytes": 46910,
+      "compression_ratio": 15.8
+    },
+    "ptq_ternary_b": {
+      "total_params": 185400,
+      "fp32_bytes": 741600,
+      "ternary_bytes": 46910,
+      "compression_ratio": 15.8
+    }
+  },
+  "kill_criteria": {
+    "k1_ste_composition_ratio": 1.0683,
+    "k1_ste_pass": true,
+    "k1_ptq_composition_ratio": 1.0501,
+    "k1_ptq_pass": true,
+    "k2_ste_max_ppl_ratio": 0.995,
+    "k2_ste_pass": true,
+    "k2_ptq_max_ppl_ratio": 1.0069,
+    "k2_ptq_pass": true
+  },
+  "success_criteria": {
+    "s1_ste_ratio_under_1_5": true,
+    "s1_ptq_ratio_under_1_5": true
+  },
+  "total_time_s": 126.3
+}

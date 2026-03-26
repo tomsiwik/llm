@@ -49,19 +49,33 @@ Linear interpolation: tau(t) = tau_start + (tau_end - tau_start) * (t / T)
 
 High initial tau (exploration) -> low final tau (exploitation).
 
-## Load-Balancing Auxiliary Loss
+## Gate Activation Penalty (L1 Regularization)
 
-Following Switch Transformers, add auxiliary loss to prevent expert collapse:
+An auxiliary L1 penalty on total gate activation prevents expert collapse:
 
-L_balance = alpha * N * sum_i (f_i * p_i)
+L_aux = alpha * sum_i mean_batch(g_i)
 
 where:
-- f_i = fraction of tokens routed to expert i (approximated by gate means)
-- p_i = 1/N (ideal uniform routing probability)
-- alpha controls the trade-off between routing accuracy and load balance
+- g_i in [0,1] is the sigmoid gate activation for expert i
+- mean_batch averages over the training batch
+- sum_i sums over all N experts
+- alpha controls regularization strength
 
-At alpha = 0: no balancing, experts can collapse (positive feedback loop).
-At alpha >> 0: forces uniform routing, sacrificing accuracy.
+This is NOT the Switch Transformer load-balancing loss (which uses f_i * p_i products).
+It is simpler: an L1 penalty on total gate mass.
+
+**Why it works**: The primary BCE loss pushes the target gate UP toward 1.
+The L1 penalty pushes ALL gates DOWN toward 0. The net effect is:
+- Target gate: BCE push-up wins (strong gradient from cross-entropy)
+- Non-target gates: L1 push-down wins (no opposing BCE gradient)
+- Result: sharper routing with suppressed off-target activations
+
+This prevents expert collapse where a few dominant experts absorb routing
+probability from similar-looking domains (e.g., chemistry vs science_qa).
+
+At alpha = 0: no regularization, collapse-prone domains get 0% accuracy.
+At alpha ~ 0.1: effective suppression without harming primary routing.
+At alpha >= 0.5: over-regularization destroys routing (52% top-2 at alpha=0.5).
 
 ## Straight-Through Gumbel Estimator
 
@@ -94,10 +108,11 @@ the inter-domain distance. Measured:
 
 ### The Asymmetry
 
-Load-balancing fixes collapse (chemistry, debate recovered with alpha=0.1 + 6000 steps).
-But high-variance domains (dialogue) remain unroutable because the centroid
-is a poor representative -- no linear classifier on mean-pooled states can
-separate dialogue from its heterogeneous overlap with many domains.
+More training (3000 -> 6000 steps) fixes most collapse cases (chemistry 0% -> 80%,
+debate 0% -> 70%). L1 gate regularization additionally recovers wikitext (0% -> 40%)
+and pushes chemistry to 100%. But high-variance domains (dialogue) remain unroutable
+because the centroid is a poor representative -- no linear classifier on mean-pooled
+states can separate dialogue from its heterogeneous overlap with many domains.
 
 ## Parameter Counts
 

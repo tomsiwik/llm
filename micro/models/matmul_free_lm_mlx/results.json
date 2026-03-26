@@ -1,0 +1,136 @@
+{
+  "experiment": "matmul_free_lm_mlx",
+  "architecture": "HGRNBit",
+  "d_model": 256,
+  "n_layers": 6,
+  "n_heads": 4,
+  "block_size": 32,
+  "lora_rank": 8,
+  "timestamp": "2026-03-26 16:30:25",
+  "vocab_size": 27,
+  "fp32_baseline": {
+    "params": 4743936,
+    "train_time_s": 49.9,
+    "first_100_loss": 0.6777,
+    "last_100_loss": 0.4343,
+    "val_ppl": 1.6
+  },
+  "hgrnbit_base": {
+    "params": 6333952,
+    "train_time_s": 132.5,
+    "first_100_loss": 0.7425,
+    "last_100_loss": 0.4369,
+    "val_ppl": 1.6,
+    "k1_kill": false
+  },
+  "k1_pass": true,
+  "ppl_ratio": 1.0,
+  "k2_pass": true,
+  "adapter_results": {
+    "a_e": {
+      "train_time_s": 48.8,
+      "first_50_loss": 0.3972,
+      "last_50_loss": 0.3379,
+      "val_ppl": 1.49,
+      "trainable_params": 159744
+    },
+    "f_j": {
+      "train_time_s": 48.9,
+      "first_50_loss": 0.3911,
+      "last_50_loss": 0.2871,
+      "val_ppl": 1.52,
+      "trainable_params": 159744
+    },
+    "k_o": {
+      "train_time_s": 48.9,
+      "first_50_loss": 0.3963,
+      "last_50_loss": 0.3217,
+      "val_ppl": 1.5,
+      "trainable_params": 159744
+    },
+    "p_t": {
+      "train_time_s": 49.0,
+      "first_50_loss": 0.3959,
+      "last_50_loss": 0.2977,
+      "val_ppl": 1.53,
+      "trainable_params": 159744
+    },
+    "u_z": {
+      "train_time_s": 48.9,
+      "first_50_loss": 0.3633,
+      "last_50_loss": 0.2531,
+      "val_ppl": 1.55,
+      "trainable_params": 159744
+    }
+  },
+  "composition": {
+    "individual_ppls": {
+      "a_e": 1.5009490623338668,
+      "f_j": 1.5094986132342034,
+      "k_o": 1.5074041638303803,
+      "p_t": 1.5138643621215688,
+      "u_z": 1.4873429488679941
+    },
+    "composed_ppls": {
+      "a_e": 1.5301967702245836,
+      "f_j": 1.5603721470187006,
+      "k_o": 1.5444656819716212,
+      "p_t": 1.5595565979910704,
+      "u_z": 1.5422726328632248
+    },
+    "avg_individual_ppl": 1.5,
+    "avg_composed_ppl": 1.55,
+    "composition_ratio": 1.029,
+    "cosine_similarities": [
+      {
+        "pair": "a_e-f_j",
+        "abs_cos": 0.0105
+      },
+      {
+        "pair": "a_e-k_o",
+        "abs_cos": 0.0164
+      },
+      {
+        "pair": "a_e-p_t",
+        "abs_cos": 0.0103
+      },
+      {
+        "pair": "a_e-u_z",
+        "abs_cos": 0.0011
+      },
+      {
+        "pair": "f_j-k_o",
+        "abs_cos": 0.002
+      },
+      {
+        "pair": "f_j-p_t",
+        "abs_cos": 0.0089
+      },
+      {
+        "pair": "f_j-u_z",
+        "abs_cos": 0.0194
+      },
+      {
+        "pair": "k_o-p_t",
+        "abs_cos": 0.0006
+      },
+      {
+        "pair": "k_o-u_z",
+        "abs_cos": 0.0063
+      },
+      {
+        "pair": "p_t-u_z",
+        "abs_cos": 0.0002
+      }
+    ],
+    "mean_abs_cos": 0.0076
+  },
+  "k3_pass": true,
+  "speed": {
+    "hgrn_ms": 3.15,
+    "transformer_ms": 0.69,
+    "speedup": 0.22
+  },
+  "total_time_s": 429.7,
+  "verdict": "SUPPORTED"
+}

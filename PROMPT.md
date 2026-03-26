@@ -14,8 +14,29 @@ CONTEXT: VISION.md, FINDINGS.md, references/BITNET_SOLE_RESEARCH.md.
 
 ## STRATEGIC PRIORITIES (March 2026)
 
-### P0: Train Our Own Ternary Base
-We depend on Microsoft's BitNet-2B-4T. This is a risk. We must explore:
+### P0: DEPLOYMENT TRACK — Ship a working system on BitNet-2B-4T (HIGHEST PRIORITY)
+Use Microsoft's BitNet-2B-4T as-is. Train real-data adapters. Route. Compose. Generate.
+Prove the architecture produces BETTER TEXT, not just lower PPL.
+
+**Critical path (in order):**
+1. exp_generation_quality_test — does routed composition produce better text? THE existential test.
+2. exp_task_accuracy_real_benchmarks — MMLU/GSM8K/HumanEval with composition.
+3. exp_real_data_25_domain_adapters — scale to 25 real instruction-tuned adapters.
+4. exp_e2e_demo_pipeline_mlx — full pipeline: query → route → compose → generate.
+5. exp_dynamic_adapter_addition — hot-add new adapters without retraining.
+
+**What we already have for this track:**
+- BitNet-2B-4T base (1.7GB, free, available)
+- 5 real-data instruction-tuned adapters (medical/code/math/legal/finance, -26.3% PPL)
+- Gumbel-sigmoid routing (44% better than softmax, 0.58% overhead)
+- Tiny routing heads (100% accuracy on 5 domains, 2.32% overhead)
+- Entropy gating pre-filter (63% tokens skip at 1.13% cost)
+- N-gram cache (20.8% free PPL reduction, 14.5MB)
+- Pre-merge serving (0% overhead on MLX)
+- Fully ternary adapters (15.8x compression, pure addition)
+
+### P1 (PARALLEL): Train Our Own Ternary Base (Research Track)
+This is a research goal, NOT a blocker for the deployment track.
 - Training ternary models from scratch on MLX using STE
 - Falcon-Edge's onebitllms toolkit (tiiuae/onebitllms) — Triton kernels for STE
 - MatMul-free LM architecture (ridgerchu/matmulfreellm) — ternary + no matmul
