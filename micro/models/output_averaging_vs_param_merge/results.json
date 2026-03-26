@@ -1,0 +1,167 @@
+{
+  "experiment": "output_averaging_vs_param_merge",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "timestamp": "2026-03-26 19:12:35",
+  "n_available_adapters": 49,
+  "k_values": [
+    5,
+    25,
+    49
+  ],
+  "eval_domains": [
+    "code",
+    "math",
+    "legal",
+    "creative",
+    "finance",
+    "cooking",
+    "eli5",
+    "stories"
+  ],
+  "base_ppls": {
+    "code": 3.0233,
+    "math": 5.1445,
+    "legal": 31.7793,
+    "creative": 3.2888,
+    "finance": 22.8527,
+    "cooking": 10.0175,
+    "eli5": 2.7716,
+    "stories": 6.5755
+  },
+  "comparisons": {
+    "k=5": {
+      "k": 5,
+      "n_adapters_used": 5,
+      "pre_merge": {
+        "ppls": {
+          "code": 2.769,
+          "math": 4.8509,
+          "legal": 29.6587,
+          "creative": 3.1385,
+          "finance": 21.8654,
+          "cooking": 9.7279,
+          "eli5": 2.1389,
+          "stories": 6.2513
+        },
+        "avg_ppl": 10.0501,
+        "ms_per_token": 0.6433
+      },
+      "output_avg": {
+        "ppls": {
+          "code": 2.7733,
+          "math": 5.0546,
+          "legal": 31.09,
+          "creative": 3.1647,
+          "finance": 23.3832,
+          "cooking": 9.9524,
+          "eli5": 1.1756,
+          "stories": 6.2305
+        },
+        "avg_ppl": 10.353,
+        "ms_per_token": 6.7352
+      },
+      "latency_benchmark": {
+        "pre_merge_ms": 73.15,
+        "pre_merge_ms_per_tok": 0.7315,
+        "output_avg_ms": 751.3,
+        "output_avg_ms_per_tok": 7.513,
+        "slowdown_factor": 10.27
+      },
+      "ppl_delta_pct": 3.01,
+      "oa_better_domains": 2,
+      "oa_wins": false
+    },
+    "k=25": {
+      "k": 25,
+      "n_adapters_used": 25,
+      "pre_merge": {
+        "ppls": {
+          "code": 2.9911,
+          "math": 5.1103,
+          "legal": 31.4969,
+          "creative": 3.2635,
+          "finance": 22.7063,
+          "cooking": 10.0054,
+          "eli5": 2.7329,
+          "stories": 6.542
+        },
+        "avg_ppl": 10.606,
+        "ms_per_token": 0.6342
+      },
+      "output_avg": {
+        "ppls": {
+          "code": 2.7603,
+          "math": 4.5997,
+          "legal": 27.733,
+          "creative": 3.0558,
+          "finance": 20.6235,
+          "cooking": 9.1504,
+          "eli5": 1.2166,
+          "stories": 5.9581
+        },
+        "avg_ppl": 9.3872,
+        "ms_per_token": 33.7708
+      },
+      "latency_benchmark": {
+        "pre_merge_ms": 73.34,
+        "pre_merge_ms_per_tok": 0.7334,
+        "output_avg_ms": 3769.29,
+        "output_avg_ms_per_tok": 37.6929,
+        "slowdown_factor": 51.4
+      },
+      "ppl_delta_pct": -11.49,
+      "oa_better_domains": 8,
+      "oa_wins": true
+    },
+    "k=49": {
+      "k": 49,
+      "n_adapters_used": 49,
+      "pre_merge": {
+        "ppls": {
+          "code": 3.005,
+          "math": 5.1206,
+          "legal": 31.9918,
+          "creative": 3.2789,
+          "finance": 22.7063,
+          "cooking": 9.9742,
+          "eli5": 2.7452,
+          "stories": 6.5527
+        },
+        "avg_ppl": 10.6718,
+        "ms_per_token": 0.6371
+      },
+      "output_avg": {
+        "ppls": {
+          "code": 2.7926,
+          "math": 4.6035,
+          "legal": 27.8801,
+          "creative": 3.0482,
+          "finance": 20.6783,
+          "cooking": 9.2045,
+          "eli5": 1.3372,
+          "stories": 5.9332
+        },
+        "avg_ppl": 9.4347,
+        "ms_per_token": 66.364
+      },
+      "latency_benchmark": {
+        "pre_merge_ms": 73.53,
+        "pre_merge_ms_per_tok": 0.7353,
+        "output_avg_ms": 7404.97,
+        "output_avg_ms_per_tok": 74.0497,
+        "slowdown_factor": 100.71
+      },
+      "ppl_delta_pct": -11.59,
+      "oa_better_domains": 8,
+      "oa_wins": true
+    }
+  },
+  "k1_oa_wins_any_k": true,
+  "k1_pass": true,
+  "k2_max_oa_ms_per_tok": 74.0497,
+  "k2_pass": true,
+  "verdict": "SUPPORTED",
+  "verdict_reason": "Both K1 and K2 pass",
+  "total_time_s": 533.1
+}

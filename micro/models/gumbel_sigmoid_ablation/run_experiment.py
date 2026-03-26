@@ -298,15 +298,16 @@ def train_and_evaluate_router(config: RouterConfig, train_hiddens, val_hiddens,
             # target_idx is an int -- use negative log of the correct gate
             loss = -mx.mean(mx.log(gates[:, target_idx] + 1e-8))
 
-        # Load-balancing auxiliary loss
+        # L1 gate activation penalty (pushes total gate mass down)
         if config.load_balance_alpha > 0:
-            # Encourage uniform usage across experts
-            # f_i = fraction of tokens routed to expert i (use gate values as proxy)
+            # gate_means[i] = average activation of gate i across the batch
             gate_means = mx.mean(gates, axis=0)  # [N]
-            # Ideal: each expert gets 1/N traffic
-            # Loss: sum of squared deviations from uniform
-            uniform = mx.ones(N) / N
-            lb_loss = N * mx.sum(gate_means * uniform)  # Switch Transformer style
+            # L1 penalty: sum of mean activations = total gate mass / N
+            # This penalizes non-target gates being active (combined with BCE
+            # which raises the target gate, the net effect is: raise target,
+            # suppress everything else). Prevents expert collapse where a few
+            # dominant experts absorb all routing probability.
+            lb_loss = mx.sum(gate_means)  # L1: penalize total activation
             loss = loss + config.load_balance_alpha * lb_loss
 
         return loss
@@ -597,6 +598,13 @@ def phase_ablation_sweep(train_hiddens, val_hiddens):
         top_k=2, load_balance_alpha=0.1, n_steps=6000,
     ))
 
+    # === Control: 6000 steps WITHOUT load-balancing (isolate training length effect) ===
+    configs.append(RouterConfig(
+        name="baseline_6000steps_no_lb",
+        gate_type="sigmoid", temperature_start=2.0, temperature_end=0.5,
+        top_k=2, load_balance_alpha=0.0, n_steps=6000,
+    ))
+
     # === Narrower hidden dim (128 vs 256 baseline) ===
     configs.append(RouterConfig(
         name="sigmoid_anneal2to0.5_k2_h128",
@@ -728,9 +736,11 @@ def main():
     # Sort ablation by topk accuracy descending
     ablation_sorted = sorted(ablation_results, key=lambda x: x["topk_accuracy"], reverse=True)
 
-    # Baseline comparison
+    # Baseline comparison: use the N=50 original result (86.33%) as the K1 reference,
+    # NOT the in-experiment baseline, which may differ due to hidden state caching/seed.
     baseline = next((r for r in ablation_results if r["config"] == "baseline_sigmoid_anneal2to0.5_k2"), None)
-    baseline_topk = baseline["topk_accuracy"] if baseline else 0.8633
+    in_experiment_baseline = baseline["topk_accuracy"] if baseline else 0.8633
+    baseline_topk = 0.8633  # N=50 original result -- canonical K1 reference
 
     # Summary
     best = ablation_sorted[0]
@@ -738,6 +748,7 @@ def main():
 
     summary = {
         "baseline_topk_accuracy": baseline_topk,
+        "in_experiment_baseline_topk": in_experiment_baseline,
         "best_config": best["config"],
         "best_topk_accuracy": best["topk_accuracy"],
         "best_top1_accuracy": best["top1_accuracy"],

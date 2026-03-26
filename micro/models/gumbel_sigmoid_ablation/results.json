@@ -1,18 +1,19 @@
 {
   "experiment": "gumbel_sigmoid_ablation",
-  "timestamp": "2026-03-26 09:22:46",
-  "total_time_s": 37.5,
-  "n_configs": 21,
+  "timestamp": "2026-03-26 09:34:24",
+  "total_time_s": 40.8,
+  "n_configs": 22,
   "n_domains": 49,
   "summary": {
-    "baseline_topk_accuracy": 0.851,
+    "baseline_topk_accuracy": 0.8633,
+    "in_experiment_baseline_topk": 0.851,
     "best_config": "sigmoid_anneal2to0.5_k4",
     "best_topk_accuracy": 0.9082,
     "best_top1_accuracy": 0.7184,
     "best_zero_acc_domains": 2,
-    "improvement_over_baseline": 0.0572,
+    "improvement_over_baseline": 0.0449,
     "k1_threshold": 0.05,
-    "k1_result": "PASS"
+    "k1_result": "FAIL"
   },
   "leaderboard": [
     {
@@ -25,6 +26,17 @@
         "dialogue"
       ],
       "final_loss": 0.0003
+    },
+    {
+      "config": "baseline_6000steps_no_lb",
+      "topk_accuracy": 0.9041,
+      "top1_accuracy": 0.8367,
+      "n_zero_acc": 2,
+      "zero_acc_domains": [
+        "wikitext",
+        "dialogue"
+      ],
+      "final_loss": 0.0001
     },
     {
       "config": "sigmoid_anneal2to0.5_k2_lb0.1_6000steps",
@@ -5539,6 +5551,268 @@
         },
         "product_desc": {
           "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "bio_text": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "travel": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "tech_docs": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "music_text": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        }
+      }
+    },
+    {
+      "config": "baseline_6000steps_no_lb",
+      "gate_type": "sigmoid",
+      "top_k": 2,
+      "final_loss": 0.0001,
+      "last_100_avg_loss": 0.016,
+      "top1_accuracy": 0.8367,
+      "topk_accuracy": 0.9041,
+      "n_zero_accuracy_domains": 2,
+      "zero_accuracy_domains": [
+        "wikitext",
+        "dialogue"
+      ],
+      "total_samples": 490,
+      "per_domain": {
+        "code": {
+          "top1": 0.7,
+          "topk": 0.9,
+          "n": 10
+        },
+        "math": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "legal": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "creative": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "sql": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "javascript": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "physics": {
+          "top1": 0.9,
+          "topk": 1.0,
+          "n": 10
+        },
+        "chemistry": {
+          "top1": 0.8,
+          "topk": 0.8,
+          "n": 10
+        },
+        "science": {
+          "top1": 0.6,
+          "topk": 0.8,
+          "n": 10
+        },
+        "wikitext": {
+          "top1": 0.0,
+          "topk": 0.0,
+          "n": 10
+        },
+        "finance": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "cooking": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "health": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "dialogue": {
+          "top1": 0.0,
+          "topk": 0.0,
+          "n": 10
+        },
+        "reasoning": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "instruction": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "conciseness": {
+          "top1": 0.9,
+          "topk": 0.9,
+          "n": 10
+        },
+        "safety": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "multilingual": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "coding_style": {
+          "top1": 0.4,
+          "topk": 0.8,
+          "n": 10
+        },
+        "summarization": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "debate": {
+          "top1": 0.4,
+          "topk": 0.7,
+          "n": 10
+        },
+        "translation": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "formal_writing": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "history": {
+          "top1": 0.7,
+          "topk": 1.0,
+          "n": 10
+        },
+        "philosophy": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "sports": {
+          "top1": 0.9,
+          "topk": 0.9,
+          "n": 10
+        },
+        "poetry": {
+          "top1": 0.1,
+          "topk": 0.1,
+          "n": 10
+        },
+        "news": {
+          "top1": 0.1,
+          "topk": 0.7,
+          "n": 10
+        },
+        "reviews": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "qa_pairs": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "stories": {
+          "top1": 0.9,
+          "topk": 1.0,
+          "n": 10
+        },
+        "science_qa": {
+          "top1": 0.1,
+          "topk": 0.8,
+          "n": 10
+        },
+        "recipes": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "trivia": {
+          "top1": 0.8,
+          "topk": 0.9,
+          "n": 10
+        },
+        "eli5": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "movie_plots": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "tweets": {
+          "top1": 0.9,
+          "topk": 1.0,
+          "n": 10
+        },
+        "abstracts": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "contracts": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "emails": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "bash_code": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "math_proofs": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "dialogues_2": {
+          "top1": 1.0,
+          "topk": 1.0,
+          "n": 10
+        },
+        "product_desc": {
+          "top1": 0.8,
           "topk": 1.0,
           "n": 10
         },
