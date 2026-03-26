@@ -11,6 +11,8 @@ export const experiments = sqliteTable("experiments", {
   experimentDir: text("experiment_dir"),
   platform: text("platform", { enum: ["local", "local-apple", "runpod-flash"] }),
   notes: text("notes"),
+  claimedBy: text("claimed_by"),
+  claimedAt: text("claimed_at"),
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });

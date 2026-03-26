@@ -1,0 +1,226 @@
+{
+  "experiment": "cross_adapter_knowledge_transfer",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "alpha_values_searched": [
+    0.1,
+    0.2,
+    0.3,
+    0.5
+  ],
+  "timestamp": "2026-03-26 20:30:32",
+  "total_time_s": 346.2,
+  "base_ppls": {
+    "python": 2.7418,
+    "math": 5.542,
+    "medical": 6.9576,
+    "legal": 21.8678,
+    "creative": 6.3528
+  },
+  "individual_ppls": {
+    "python": 2.2187,
+    "math": 3.5943,
+    "medical": 4.7572,
+    "legal": 16.5469,
+    "creative": 4.9367
+  },
+  "transfer_matrix": {
+    "python->math": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 3.5943,
+      "native_ppl": 3.5943
+    },
+    "python->medical": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.7572,
+      "native_ppl": 4.7572
+    },
+    "python->legal": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 16.5469,
+      "native_ppl": 16.5469
+    },
+    "python->creative": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.9367,
+      "native_ppl": 4.9367
+    },
+    "math->python": {
+      "transfer_pct": 0.0892,
+      "best_alpha": 0.1,
+      "best_ppl": 2.2167,
+      "native_ppl": 2.2187
+    },
+    "math->medical": {
+      "transfer_pct": 0.0333,
+      "best_alpha": 0.1,
+      "best_ppl": 4.7556,
+      "native_ppl": 4.7572
+    },
+    "math->legal": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 16.5469,
+      "native_ppl": 16.5469
+    },
+    "math->creative": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.9367,
+      "native_ppl": 4.9367
+    },
+    "medical->python": {
+      "transfer_pct": 0.2399,
+      "best_alpha": 0.1,
+      "best_ppl": 2.2134,
+      "native_ppl": 2.2187
+    },
+    "medical->math": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 3.5943,
+      "native_ppl": 3.5943
+    },
+    "medical->legal": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 16.5469,
+      "native_ppl": 16.5469
+    },
+    "medical->creative": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.9367,
+      "native_ppl": 4.9367
+    },
+    "legal->python": {
+      "transfer_pct": 0.1323,
+      "best_alpha": 0.1,
+      "best_ppl": 2.2158,
+      "native_ppl": 2.2187
+    },
+    "legal->math": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 3.5943,
+      "native_ppl": 3.5943
+    },
+    "legal->medical": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.7572,
+      "native_ppl": 4.7572
+    },
+    "legal->creative": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.9367,
+      "native_ppl": 4.9367
+    },
+    "creative->python": {
+      "transfer_pct": 0.1046,
+      "best_alpha": 0.1,
+      "best_ppl": 2.2164,
+      "native_ppl": 2.2187
+    },
+    "creative->math": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 3.5943,
+      "native_ppl": 3.5943
+    },
+    "creative->medical": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 4.7572,
+      "native_ppl": 4.7572
+    },
+    "creative->legal": {
+      "transfer_pct": 0.0,
+      "best_alpha": 0.0,
+      "best_ppl": 16.5469,
+      "native_ppl": 16.5469
+    }
+  },
+  "analysis": {
+    "n_positive_pairs": 0,
+    "n_negative_pairs": 0,
+    "positive_pairs": [],
+    "negative_pairs": [],
+    "mean_transfer_pct": 0.03,
+    "std_transfer_pct": 0.0621,
+    "max_transfer_pct": 0.2399,
+    "min_transfer_pct": 0.0,
+    "matrix_variance": 0.003855,
+    "symmetry_correlation": -0.2398,
+    "expected_high_avg": 0.0223,
+    "expected_low_avg": 0.0,
+    "structure_gap": 0.0223,
+    "row_means": {
+      "python": 0.0,
+      "math": 0.0245,
+      "medical": 0.048,
+      "legal": 0.0265,
+      "creative": 0.0209
+    },
+    "col_means": {
+      "python": 0.1132,
+      "math": 0.0,
+      "medical": 0.0067,
+      "legal": 0.0,
+      "creative": 0.0
+    },
+    "transfer_matrix_grid": [
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0892,
+        0.0,
+        0.0333,
+        0.0,
+        0.0
+      ],
+      [
+        0.2399,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.1323,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.1046,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "k1_pass": false,
+    "k2_pass": false
+  },
+  "verdict": "KILLED"
+}

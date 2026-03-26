@@ -61,11 +61,12 @@ export default class List extends Command {
       return;
     }
 
-    this.log(`\n${"ID".padEnd(45)} ${"STATUS".padEnd(10)} ${"P".padEnd(3)} ${"SCALE".padEnd(6)} TITLE`);
-    this.log("-".repeat(120));
+    this.log(`\n${"ID".padEnd(45)} ${"STATUS".padEnd(10)} ${"P".padEnd(3)} ${"SCALE".padEnd(6)} ${"WORKER".padEnd(16)} TITLE`);
+    this.log("-".repeat(136));
     for (const r of rows) {
+      const worker = r.claimedBy ? r.claimedBy.slice(0, 14) : "";
       this.log(
-        `${r.id.padEnd(45)} ${r.status.padEnd(10)} ${String(r.priority).padEnd(3)} ${r.scale.padEnd(6)} ${r.title.slice(0, 55)}`,
+        `${r.id.padEnd(45)} ${r.status.padEnd(10)} ${String(r.priority).padEnd(3)} ${r.scale.padEnd(6)} ${worker.padEnd(16)} ${r.title.slice(0, 55)}`,
       );
     }
     this.log(`\n${rows.length} experiments`);
