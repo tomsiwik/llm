@@ -1,0 +1,122 @@
+{
+  "experiment": "tiny_routing_heads",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "lora_rank": 16,
+  "head_hidden_dim": 32,
+  "head_train_steps": 500,
+  "seed": 42,
+  "d_model": 2560,
+  "timestamp": "2026-03-26 02:26:53",
+  "base_ppls": {
+    "python": 2.7418,
+    "math": 5.542,
+    "medical": 6.9576,
+    "legal": 21.8678,
+    "creative": 6.3528
+  },
+  "individual_ppls": {
+    "python": 2.2191,
+    "math": 3.602,
+    "medical": 4.7493,
+    "legal": 16.5564,
+    "creative": 4.9247
+  },
+  "uniform_ppls": {
+    "python": 2.515,
+    "math": 4.9444,
+    "medical": 6.2049,
+    "legal": 20.4417,
+    "creative": 5.961
+  },
+  "routed_ppls": {
+    "python": 2.2212,
+    "math": 3.6054,
+    "medical": 4.7549,
+    "legal": 16.5755,
+    "creative": 4.9421
+  },
+  "avg_base_ppl": 8.6924,
+  "avg_individual_ppl": 6.4103,
+  "avg_uniform_ppl": 8.0134,
+  "avg_routed_ppl": 6.4198,
+  "head_results": {
+    "python": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "n_params": 81985,
+      "final_loss": 0.506,
+      "train_time_s": 0.2
+    },
+    "math": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "n_params": 81985,
+      "final_loss": 0.507,
+      "train_time_s": 0.2
+    },
+    "medical": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "n_params": 81985,
+      "final_loss": 0.5156,
+      "train_time_s": 0.2
+    },
+    "legal": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "n_params": 81985,
+      "final_loss": 0.5122,
+      "train_time_s": 0.2
+    },
+    "creative": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "n_params": 81985,
+      "final_loss": 0.5073,
+      "train_time_s": 0.2
+    }
+  },
+  "total_head_params": 409925,
+  "total_adapter_params": 108134400,
+  "head_to_adapter_ratio": 0.003791,
+  "timing": {
+    "base_forward_ms": 37.01,
+    "all_heads_ms": 0.86,
+    "overhead_pct": 2.32
+  },
+  "K1_per_head_accuracy": {
+    "python": 1.0,
+    "math": 1.0,
+    "medical": 1.0,
+    "legal": 1.0,
+    "creative": 1.0
+  },
+  "K1_threshold": 0.75,
+  "K1_pass": true,
+  "K2_overhead_pct": 2.32,
+  "K2_threshold": 5.0,
+  "K2_pass": true,
+  "K3_avg_uniform_ppl": 8.0134,
+  "K3_avg_routed_ppl": 6.4198,
+  "K3_improvement_pct": 19.89,
+  "K3_pass": true,
+  "S1_improvement_gt_5pct": true,
+  "S2_head_ratio_lt_1pct": true,
+  "S3_independent_training": true,
+  "verdict": "SUPPORTED",
+  "kill_reasons": null,
+  "total_time_s": 263.4
+}

@@ -16,6 +16,7 @@ Kill criteria:
 Runtime: ~30-40 min on Apple Silicon (MLX)
 """
 
+import gc
 import json
 import math
 import os
@@ -30,6 +31,11 @@ import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as opt
 from mlx.utils import tree_flatten, tree_unflatten
+
+# Memory safety (CODING_GUIDELINES mandatory)
+device = mx.device_info()
+mx.set_memory_limit(device["memory_size"] - 8 * 1024**3)
+mx.set_cache_limit(2 * 1024**3)
 
 from mlx_lm import load
 from mlx_lm.models.bitlinear_layers import BitLinear
@@ -75,6 +81,23 @@ DOMAINS = {
 
 def log(msg):
     print(msg, flush=True)
+
+
+def log_memory(label=""):
+    """Print current memory usage."""
+    active = mx.get_active_memory() / 1e9
+    cache = mx.get_cache_memory() / 1e9
+    peak = mx.get_peak_memory() / 1e9
+    log(f"[MEM {label}] active={active:.2f}GB cache={cache:.2f}GB peak={peak:.2f}GB")
+
+
+def cleanup(*objects):
+    """Release MLX memory between phases."""
+    for obj in objects:
+        del obj
+    gc.collect()
+    mx.clear_cache()
+    mx.reset_peak_memory()
 
 
 # ===========================================================================
@@ -318,6 +341,7 @@ def train_adapter(model, tokenizer, train_data, n_iters, seed):
     losses = []
     t0 = time.time()
 
+    gc.disable()
     for step in range(n_iters):
         if step % len(indices) == 0:
             rng.shuffle(indices)
@@ -326,12 +350,14 @@ def train_adapter(model, tokenizer, train_data, n_iters, seed):
 
         loss, grads = loss_and_grad(model, tokens)
         optimizer.update(model, grads)
-        mx.eval(model.parameters(), optimizer.state)
+        mx.eval(model.parameters(), optimizer.state, loss)
 
         losses.append(loss.item())
         if (step + 1) % 200 == 0:
             avg = sum(losses[-200:]) / len(losses[-200:])
             log(f"    Step {step+1}/{n_iters}: loss={avg:.4f}")
+    gc.enable()
+    gc.collect()
 
     train_time = time.time() - t0
     final_loss = sum(losses[-50:]) / len(losses[-50:])
@@ -564,9 +590,8 @@ def main():
 
     # Store results per domain per cycle
     cycle_results = {name: [] for name in DOMAINS}
-    best_adapters = {name: None for name in DOMAINS}
+    best_adapter_paths = {name: None for name in DOMAINS}  # path to best adapter on disk
     best_ppls = {name: float("inf") for name in DOMAINS}
-    all_adapter_params = {name: {} for name in DOMAINS}  # cycle_idx -> params
 
     for cycle in range(N_CYCLES):
         seed = SEEDS[cycle]
@@ -583,11 +608,9 @@ def main():
                 n_iters=TRAIN_ITERS, seed=seed + hash(name) % 1000
             )
 
-            # Save adapter
+            # Save adapter to disk (never accumulate in memory)
             adapter_path = ADAPTERS_DIR / name / f"cycle_{cycle+1}"
             save_adapter(model, adapter_path)
-            params = get_lora_params(model)
-            all_adapter_params[name][cycle] = params
 
             # Evaluate PPL
             ppl = compute_ppl(model, tokenizer, domain_data[name]["val"])
@@ -599,15 +622,21 @@ def main():
                 f"{name}/cycle{cycle+1}"
             )
 
-            # Compute cross-domain cosine with OTHER domain's best adapter
+            # Compute cross-domain cosine with OTHER domain's best adapter (load from disk)
             cosines = {}
+            current_params = load_adapter(adapter_path)
             for other_name in DOMAINS:
                 if other_name == name:
                     continue
-                if best_adapters[other_name] is not None:
-                    cos = adapter_cosine(params, best_adapters[other_name])
+                if best_adapter_paths[other_name] is not None:
+                    other_params = load_adapter(best_adapter_paths[other_name])
+                    cos = adapter_cosine(current_params, other_params)
                     cosines[other_name] = cos
                     log(f"    |cos({name}, {other_name})| = {cos:.6f}")
+                    del other_params
+            del current_params
+            gc.collect()
+            mx.clear_cache()
 
             # Quality gate
             ppl_improved = ppl < best_ppls[name]
@@ -632,18 +661,21 @@ def main():
 
             if gate_pass:
                 best_ppls[name] = ppl
-                best_adapters[name] = params
+                best_adapter_paths[name] = adapter_path
                 cycle_info["accepted"] = True
                 log(f"    GATE: PASS (PPL improved, KR ok, cos ok) -> accepted")
             elif cycle == 0:
                 # First cycle always accepted as baseline
                 best_ppls[name] = ppl
-                best_adapters[name] = params
+                best_adapter_paths[name] = adapter_path
                 cycle_info["accepted"] = True
                 log(f"    GATE: first cycle -> accepted as baseline")
             else:
                 cycle_info["accepted"] = False
                 log(f"    GATE: REJECTED (ppl_improved={ppl_improved}, kr_ok={kr_ok}, cos_ok={cos_ok})")
+
+            # Cleanup between domains
+            log_memory(f"post-{name}-cycle{cycle+1}")
 
             cycle_results[name].append(cycle_info)
 
@@ -661,11 +693,16 @@ def main():
             for name_b in DOMAINS:
                 if name_a >= name_b:
                     continue
-                params_a = all_adapter_params[name_a].get(cycle)
-                params_b = all_adapter_params[name_b].get(cycle)
-                if params_a is None or params_b is None:
+                path_a = ADAPTERS_DIR / name_a / f"cycle_{cycle+1}"
+                path_b = ADAPTERS_DIR / name_b / f"cycle_{cycle+1}"
+                if not (path_a / "adapter.npz").exists() or not (path_b / "adapter.npz").exists():
                     continue
+                params_a = load_adapter(path_a)
+                params_b = load_adapter(path_b)
                 cos = adapter_cosine(params_a, params_b)
+                del params_a, params_b
+                gc.collect()
+                mx.clear_cache()
                 max_cos_any = max(max_cos_any, cos)
                 cos_details.append({
                     "pair": f"{name_a}-{name_b}",

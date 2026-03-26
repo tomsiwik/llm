@@ -1,0 +1,172 @@
+{
+  "experiment": "mixed_domain_sequences",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "n_domain_pairs": 10,
+  "sequences_per_pair": 20,
+  "lora_rank": 16,
+  "router_hidden_dim": 64,
+  "router_train_steps": 800,
+  "router_n_params": 164229,
+  "top_k": 2,
+  "seed": 42,
+  "timestamp": "2026-03-26 04:04:15",
+  "pair_results": {
+    "python+math": {
+      "uniform_ppl": 4.4666,
+      "per_seq_ppl": 3.9546,
+      "per_token_ppl": 4.2073,
+      "oracle_ppl": 3.3619,
+      "n_sequences": 20
+    },
+    "python+medical": {
+      "uniform_ppl": 4.7882,
+      "per_seq_ppl": 4.5439,
+      "per_token_ppl": 4.545,
+      "oracle_ppl": 3.9998,
+      "n_sequences": 20
+    },
+    "python+legal": {
+      "uniform_ppl": 11.5207,
+      "per_seq_ppl": 10.8965,
+      "per_token_ppl": 10.8301,
+      "oracle_ppl": 9.1079,
+      "n_sequences": 20
+    },
+    "python+creative": {
+      "uniform_ppl": 5.4991,
+      "per_seq_ppl": 5.1618,
+      "per_token_ppl": 5.1305,
+      "oracle_ppl": 4.5774,
+      "n_sequences": 20
+    },
+    "math+medical": {
+      "uniform_ppl": 7.0124,
+      "per_seq_ppl": 5.6235,
+      "per_token_ppl": 5.6369,
+      "oracle_ppl": 5.2432,
+      "n_sequences": 20
+    },
+    "math+legal": {
+      "uniform_ppl": 13.5907,
+      "per_seq_ppl": 11.5977,
+      "per_token_ppl": 11.6357,
+      "oracle_ppl": 9.713,
+      "n_sequences": 20
+    },
+    "math+creative": {
+      "uniform_ppl": 7.0225,
+      "per_seq_ppl": 6.169,
+      "per_token_ppl": 6.1693,
+      "oracle_ppl": 5.2462,
+      "n_sequences": 20
+    },
+    "medical+legal": {
+      "uniform_ppl": 16.8968,
+      "per_seq_ppl": 17.4813,
+      "per_token_ppl": 17.372,
+      "oracle_ppl": 12.9998,
+      "n_sequences": 20
+    },
+    "medical+creative": {
+      "uniform_ppl": 7.9121,
+      "per_seq_ppl": 8.2653,
+      "per_token_ppl": 8.1013,
+      "oracle_ppl": 6.2766,
+      "n_sequences": 20
+    },
+    "legal+creative": {
+      "uniform_ppl": 12.0925,
+      "per_seq_ppl": 12.4511,
+      "per_token_ppl": 12.2718,
+      "oracle_ppl": 9.729,
+      "n_sequences": 20
+    }
+  },
+  "boundary_detection": {
+    "python+math": {
+      "avg_boundary_accuracy": 0.9717,
+      "avg_frac_correct_a": 0.9598,
+      "avg_frac_correct_b": 0.9836,
+      "n_samples": 20
+    },
+    "python+medical": {
+      "avg_boundary_accuracy": 0.5,
+      "avg_frac_correct_a": 1.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "python+legal": {
+      "avg_boundary_accuracy": 0.5,
+      "avg_frac_correct_a": 1.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "python+creative": {
+      "avg_boundary_accuracy": 0.4996,
+      "avg_frac_correct_a": 0.9992,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "math+medical": {
+      "avg_boundary_accuracy": 0.5,
+      "avg_frac_correct_a": 1.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "math+legal": {
+      "avg_boundary_accuracy": 0.4994,
+      "avg_frac_correct_a": 0.9988,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "math+creative": {
+      "avg_boundary_accuracy": 0.5,
+      "avg_frac_correct_a": 1.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "medical+legal": {
+      "avg_boundary_accuracy": 0.0007,
+      "avg_frac_correct_a": 0.0015,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "medical+creative": {
+      "avg_boundary_accuracy": 0.0,
+      "avg_frac_correct_a": 0.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    },
+    "legal+creative": {
+      "avg_boundary_accuracy": 0.0,
+      "avg_frac_correct_a": 0.0,
+      "avg_frac_correct_b": 0.0,
+      "n_samples": 20
+    }
+  },
+  "summary": {
+    "avg_uniform_ppl": 9.0802,
+    "avg_per_seq_ppl": 8.6145,
+    "avg_per_token_ppl": 8.59,
+    "avg_oracle_ppl": 7.0255,
+    "per_token_vs_per_seq_pct": 0.28,
+    "avg_boundary_accuracy": 0.3971
+  },
+  "K1_improvement_pct": 0.28,
+  "K1_threshold": 5.0,
+  "K1_pass": false,
+  "K2_boundary_accuracy": 0.3971,
+  "K2_threshold": 0.4,
+  "K2_pass": false,
+  "S1_improvement_pct": 0.28,
+  "S1_threshold": 10.0,
+  "S1_pass": false
+}

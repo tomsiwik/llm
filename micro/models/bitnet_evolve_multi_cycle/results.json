@@ -1,0 +1,163 @@
+{
+  "experiment": "bitnet_evolve_multi_cycle",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "n_cycles": 3,
+  "train_iters_per_cycle": 1000,
+  "domains": [
+    "medical",
+    "code"
+  ],
+  "seeds": [
+    42,
+    137,
+    2024
+  ],
+  "timestamp": "2026-03-26 00:04:21",
+  "base_metrics": {
+    "medical": {
+      "ppl": 6.9544,
+      "kr": 0.94
+    },
+    "code": {
+      "ppl": 2.7521,
+      "kr": 0.9792
+    }
+  },
+  "cycle_results": {
+    "medical": [
+      {
+        "cycle": 1,
+        "seed": 42,
+        "ppl": 5.3851,
+        "kr_score": 0.96,
+        "kr_margin": 47.7955,
+        "cosines": {},
+        "train_loss_final": 0.6607,
+        "train_time_s": 507.6,
+        "gate_pass": true,
+        "ppl_improved": true,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": true
+      },
+      {
+        "cycle": 2,
+        "seed": 137,
+        "ppl": 5.6758,
+        "kr_score": 0.96,
+        "kr_margin": 50.0218,
+        "cosines": {
+          "code": 0.001248
+        },
+        "train_loss_final": 0.5405,
+        "train_time_s": 537.7,
+        "gate_pass": false,
+        "ppl_improved": false,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": false
+      },
+      {
+        "cycle": 3,
+        "seed": 2024,
+        "ppl": 5.4135,
+        "kr_score": 0.98,
+        "kr_margin": 49.304,
+        "cosines": {
+          "code": 0.000109
+        },
+        "train_loss_final": 0.6556,
+        "train_time_s": 556.3,
+        "gate_pass": false,
+        "ppl_improved": false,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": false
+      }
+    ],
+    "code": [
+      {
+        "cycle": 1,
+        "seed": 42,
+        "ppl": 2.2646,
+        "kr_score": 0.9792,
+        "kr_margin": 79.6389,
+        "cosines": {
+          "medical": 0.000329
+        },
+        "train_loss_final": 0.7064,
+        "train_time_s": 671.6,
+        "gate_pass": true,
+        "ppl_improved": true,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": true
+      },
+      {
+        "cycle": 2,
+        "seed": 137,
+        "ppl": 2.2683,
+        "kr_score": 0.9792,
+        "kr_margin": 80.1573,
+        "cosines": {
+          "medical": 0.000956
+        },
+        "train_loss_final": 0.806,
+        "train_time_s": 389.1,
+        "gate_pass": false,
+        "ppl_improved": false,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": false
+      },
+      {
+        "cycle": 3,
+        "seed": 2024,
+        "ppl": 2.2293,
+        "kr_score": 0.9792,
+        "kr_margin": 78.7607,
+        "cosines": {
+          "medical": 0.000277
+        },
+        "train_loss_final": 0.7741,
+        "train_time_s": 784.2,
+        "gate_pass": true,
+        "ppl_improved": true,
+        "kr_ok": true,
+        "cos_ok": true,
+        "accepted": true
+      }
+    ]
+  },
+  "composition_safety": {
+    "max_abs_cos": 0.001049,
+    "details": [
+      {
+        "pair": "code-medical",
+        "cycle": 1,
+        "abs_cos": 0.000329
+      },
+      {
+        "pair": "code-medical",
+        "cycle": 2,
+        "abs_cos": 0.00073
+      },
+      {
+        "pair": "code-medical",
+        "cycle": 3,
+        "abs_cos": 0.001049
+      }
+    ]
+  },
+  "kill_criteria": {
+    "k1_ppl_improves": false,
+    "k2_kr_non_regression": true,
+    "k3_composition_safe": true
+  },
+  "verdict": "KILLED",
+  "kill_reasons": [
+    "K1: PPL did not improve over cycles"
+  ],
+  "total_time_s": 3676.8
+}
