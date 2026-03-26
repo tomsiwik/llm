@@ -30,7 +30,14 @@ export default class Update extends Command {
       updatedAt: new Date().toISOString().slice(0, 10),
     };
 
-    if (flags.status) updates.status = flags.status;
+    if (flags.status) {
+      updates.status = flags.status;
+      // Clear claim on terminal status
+      if (["proven", "supported", "killed"].includes(flags.status)) {
+        updates.claimedBy = null;
+        updates.claimedAt = null;
+      }
+    }
     if (flags.priority !== undefined) updates.priority = flags.priority;
     if (flags.platform) updates.platform = flags.platform;
     if (flags.dir) updates.experimentDir = flags.dir;

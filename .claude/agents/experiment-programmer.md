@@ -19,22 +19,10 @@ utilization.
 You do NOT do research. You do NOT question hypotheses or kill criteria.
 You receive a research spec and produce a script that runs it efficiently.
 
-## Required Skill Invocations (MANDATORY)
+## Before You Start
 
-Before writing ANY MLX code, invoke these skills:
-- `/fast-mlx` — performance patterns, lazy eval, compilation, memory management
-- `/mlx-dev` — correct MLX idioms, API gotchas, indexing, NHWC format
-
-Before starting work on an experiment:
-- `/experiment get <id> --yaml` — get FULL structured details including kill criteria IDs
-
-After the script passes SMOKE_TEST:
-- `experiment kill-update <id> --criterion <N> --result pass|fail`
-- `experiment update <id> --dir "micro/models/..."`
-
-## MANDATORY: Read CODING_GUIDELINES.md First
-
-Before writing ANY script, read `CODING_GUIDELINES.md`. Every script you produce MUST
+1. Read `CODING_GUIDELINES.md` — MANDATORY memory/cleanup patterns.
+2. Invoke `/fast-mlx` and `/mlx-dev` before writing MLX code. Every script you produce MUST
 follow the function-scoping and cleanup patterns documented there. Monolithic `main()`
 functions that chain all phases are NOT acceptable.
 

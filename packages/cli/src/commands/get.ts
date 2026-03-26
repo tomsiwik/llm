@@ -89,6 +89,8 @@ export default class Get extends Command {
     y(`priority: ${exp.priority}`);
     y(`platform: ${exp.platform ?? "~"}`);
     y(`experiment_dir: ${exp.experimentDir ?? "~"}`);
+    y(`claimed_by: ${exp.claimedBy ?? "~"}`);
+    y(`claimed_at: ${exp.claimedAt ?? "~"}`);
     y(`created_at: ${exp.createdAt}`);
     y(`updated_at: ${exp.updatedAt}`);
 
@@ -204,6 +206,9 @@ export default class Get extends Command {
     this.log(`  Scale:    ${exp.scale}  Priority: ${exp.priority}`);
     this.log(`  Platform: ${exp.platform ?? "—"}`);
     this.log(`  Dir:      ${exp.experimentDir ?? "—"}`);
+    if (exp.claimedBy) {
+      this.log(`  Claimed:  ${exp.claimedBy} at ${exp.claimedAt}`);
+    }
     this.log(`  Created:  ${exp.createdAt}  Updated: ${exp.updatedAt}`);
 
     // Dependencies

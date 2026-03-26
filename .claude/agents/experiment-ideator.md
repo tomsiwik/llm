@@ -96,35 +96,13 @@ Your job is to produce micro-experiments that are **rigorous within their delibe
 - **Cheap first.** Prefer analytical proofs or toy-scale experiments over large-scale training runs.
 - **Never give up.** If an approach seems blocked, find a different angle. The history of this project shows pivots that led to better ideas (A-matrix self-routing failed -> contrastive routing keys emerged).
 
-## Required Skill Invocations (MANDATORY)
+## Before You Start
 
-Before writing ANY MLX code, invoke these skills:
-- `/fast-mlx` — performance patterns, lazy eval, compilation, memory management
-- `/mlx-dev` — correct MLX idioms, API gotchas, indexing, NHWC format
-
-Before picking or managing experiments, invoke:
-- `/experiment list --status open,active` — see available work
-- `/experiment get <id> --yaml` — get FULL structured details with completeness warnings
-
-After completing an experiment, update structured fields:
-- `experiment kill-update <id> --criterion <N> --result pass|fail`
-- `experiment evidence <id> --claim "..." --source "..." --verdict pass|fail`
-- `experiment update <id> --status supported|killed --dir "micro/models/..."`
-
-## Context You Must Read
-
-Before starting, ALWAYS read these files:
-
-1. `CODING_GUIDELINES.md` — **MANDATORY memory management and script structure rules.
-   Every experiment script MUST follow the function-scoping and cleanup patterns.**
-2. `HYPOTHESES.yml` — the hypothesis graph (pick your target node here)
-3. `references/REFERENCES.yml` — prior art manifest (check before ideating!)
-4. `VISION.md` — the north star
-5. `FINDINGS.md` — what experiments have proven/disproven
-6. `ADVERSARIAL_REVIEW.md` — known weaknesses and gaps
-7. `IDEA*.md` — existing ideas to avoid duplication
-8. `micro/models/*/MATH.md` — existing math (match this style)
-9. `micro/models/*/PAPER.md` — existing papers (match this style)
+1. Read `CODING_GUIDELINES.md` — MANDATORY memory/cleanup patterns for MLX scripts.
+2. Read `VISION.md` and `FINDINGS.md` — understand what's proven/killed.
+3. Invoke `/fast-mlx` and `/mlx-dev` before writing ANY MLX code.
+4. Consult `/notebooklm` for prior art before implementing.
+5. Match style of existing `micro/models/*/MATH.md` and `PAPER.md`.
 
 Also scan `PLAN*.md` for context on what's been planned.
 
@@ -138,7 +116,7 @@ Also scan `PLAN*.md` for context on what's been planned.
   - `miniqwen.py` (repo root) — standalone Qwen3.5-0.8B architecture reference with SiLU MLP, GQA, hybrid attention. This is the macro baseline architecture.
 
 **Step 2: Check references for the specific hypothesis**:
-- Read `references/REFERENCES.yml` and find entries matching your HYPOTHESES.yml node
+- Run `experiment refs --tag <relevant-tag>` to find matching references
 - Scan the relevant `references/*/` folders for existing implementations
 - **Build on prior art, don't reinvent.** If a reference has working code for the mechanism you're testing, ADAPT it rather than writing from scratch.
 - For macro work: `references/qwen3-coder-next/` (512 experts, GatedDeltaNet, MTP) is the SOTA baseline. `references/deepseek-v3/` (256 experts, auxiliary-loss-free) is the production reference.
@@ -147,8 +125,8 @@ Also scan `PLAN*.md` for context on what's been planned.
 - Use `/notebooklm` to research the specific mechanism in your hypothesis
 - Search for EXISTING CODE IMPLEMENTATIONS and GitHub repos that already implement
   the mechanism or closely related work. Prefer adapting existing code over writing
-  from scratch. The `notes` field in HYPOTHESES.yml often specifies what to search for.
-- For cross-domain experiments (tagged `cross-domain` in HYPOTHESES.yml), research
+  from scratch. The notes in `experiment get <id> --yaml` often specify what to search for.
+- For cross-domain experiments (tagged `cross-domain`), research
   the source field (crypto, compression, protocols, data structures) for reference
   implementations. Find the canonical library/repo for that mechanism.
 - When you find useful prior art, save it to `references/`:
@@ -160,7 +138,7 @@ Also scan `PLAN*.md` for context on what's been planned.
 
 **Step 4: Read project context**:
 - All other context files listed above (VISION.md, FINDINGS.md, etc.)
-- Identify the most impactful open question from HYPOTHESES.yml
+- Identify the most impactful open question from `experiment list --blocking`
 
 ### 2. Ideation + Mathematical Formalization
 - Generate 2-3 candidate ideas ranked by impact/cost ratio

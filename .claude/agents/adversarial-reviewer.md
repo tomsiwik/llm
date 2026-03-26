@@ -69,10 +69,8 @@ The question is always: **does this mechanism work in principle, and is the math
 
 ### Step 1: Read
 - The experiment's `MATH.md` and `PAPER.md` in `micro/models/[name]/`
-- `HYPOTHESES.yml` — which node is this experiment targeting? Do the kill criteria match?
-- `references/REFERENCES.yml` — is there prior art that already solves this?
-  Check relevant `references/*/` folders for existing implementations.
-- `ADVERSARIAL_REVIEW.md` — calibrate your rigor to this level
+- `experiment get <id> --yaml` — kill criteria, success criteria, dependencies
+- `experiment refs --tag <relevant-tag>` — prior art that already solves this
 - `VISION.md` — does the idea actually advance this?
 - `FINDINGS.md` — is this repeating a dead end?
 
@@ -111,7 +109,7 @@ Use `/notebooklm` to:
 - Are the controls adequate?
 
 **Hypothesis Graph Consistency**
-- Does the experiment match its HYPOTHESES.yml node's kill criteria?
+- Does the experiment match its registered kill criteria?
 - Are the stated kill criteria the ones actually being tested?
 - Is the evidence sufficient to change the node's status?
 

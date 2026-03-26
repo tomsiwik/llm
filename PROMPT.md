@@ -2,7 +2,7 @@ BitNet-SOLE Research Loop — Continuous experimentation on Apple Silicon.
 
 ARCHITECTURE: Ternary base (BitNet-2B-4T or OUR OWN ternary base) + ternary LoRA adapters (QAT+STE) + Grassmannian skeleton (frozen A, 17x decorrelation filter) + pre-merge serving (zero overhead on MLX).
 STATE: Read .ralph/current_direction.md for active work.
-CONTEXT: VISION.md, FINDINGS.md, references/BITNET_SOLE_RESEARCH.md.
+CONTEXT: VISION.md, FINDINGS.md.
 
 ## TARGET PLATFORM (HARD CONSTRAINT)
 - Apple M5 Pro, 48GB unified memory, MLX 0.31.1
@@ -150,5 +150,6 @@ RULES:
 - Every result gets: adversarial review → analyst LEARNINGS.md → THEN next experiment.
 - Check for orphan experiments (missing REVIEW/LEARNINGS) before starting new work.
 - Use `uv run` for Python. Use MLX for training/inference.
-- Use the `experiment` CLI for ALL experiment state management. Do NOT edit HYPOTHESES.yml directly.
+- Use the `experiment` CLI for ALL experiment state management.
+- Use `experiment claim <worker>` to pick work, `experiment complete <id> ...` to finish.
 - Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code.

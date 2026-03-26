@@ -59,87 +59,34 @@ hats:
     publishes:
       - "experiment.done"
     instructions: |
-      You coordinate a research cycle by delegating to the experiment-ideator
-      sub-agent. Do NOT do the research yourself. Do NOT stop to ask for
-      confirmation. Complete all steps in one session.
+      Delegate to experiment-ideator sub-agent. Do NOT do research yourself.
 
-      ALL experiments run on Apple Silicon via MLX. No CUDA. No RunPod.
+      ## Context (if triggered by review.revise or learning.complete)
+      Read .ralph/current_direction.md. If triggered by revise, read REVIEW-adversarial.md.
+      If triggered by learning.complete, read LEARNINGS.md for context.
 
-      ## Before delegating
+      ## Orphan check
+      If last experiment's REVIEW-adversarial.md or LEARNINGS.md is missing, resolve first.
 
-      Read .ralph/current_direction.md if it exists to check state.
+      ## Pick + Delegate
 
-      If triggered by review.revise:
-        Read micro/models/[name]/REVIEW-adversarial.md for the numbered fixes.
-        Include these fixes in your delegation prompt.
+      1. Run: `experiment claim researcher`
+         This gives you full YAML: kill criteria with IDs, notes, deps, everything.
 
-      If triggered by learning.complete:
-        Read the LEARNINGS.md from the just-completed experiment. The analyst
-        has already researched WHY the last result happened and what alternatives
-        exist. USE THIS CONTEXT when picking the next experiment.
+      2. Delegate to experiment-ideator with the claim output:
+         "Work on experiment [id]: '[title]'. [paste kill criteria + notes].
+          SCALE: micro. PLATFORM: Apple Silicon MLX.
+          Full cycle: survey, math, implement, run, write PAPER.md.
+          Write direction to .ralph/current_direction.md.
+          Invoke /fast-mlx and /mlx-dev before MLX code.
+          Consult NotebookLM for prior art before implementing."
 
-      ## Node Selection (via experiment CLI)
+      3. After sub-agent returns, verify PAPER.md exists, then:
+         `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
 
-      Use the `experiment` CLI to find and manage work:
+      4. Emit experiment.done with key results.
 
-      1. Run: `experiment list --status active` — finish active work first.
-      2. Run: `experiment list --status open` — find available experiments.
-      3. Run: `experiment list --blocking` — prioritize critical-path work.
-      4. Run: `experiment get <id> --yaml` — read FULL structured details.
-      5. Run: `experiment update <id> --status active` — claim the experiment.
-
-      Priority: lowest number wins. Prefer blocking experiments over non-blocking.
-
-      ## Hypothesis Generation (SOFT-FREEZE)
-
-      Do NOT generate new hypotheses unless:
-      - There are fewer than 3 `open` nodes remaining at matching scale
-      - Generate exactly 1 new hypothesis via `experiment add`
-      - New hypothesis MUST relate to a finding from the just-completed work
-
-      ## Baseline-First Rule (MANDATORY)
-
-      Before delegating, consult prior art using NotebookLM (/notebooklm):
-      1. Query: "What existing methods address [this hypothesis]?"
-      2. Run: `experiment refs --tag <relevant-tag>` for matching references
-      3. Include relevant findings in the delegation prompt
-
-      Web search is a FALLBACK for topics not covered in the NotebookLM sources.
-
-      ## Delegate
-
-      Use the Agent tool with subagent_type="experiment-ideator" to run
-      the research design cycle. Give it a clear prompt:
-
-        "Work on experiment [id]: '[title]'.
-         Kill criteria: [from experiment get --yaml output].
-         SCALE: micro. PLATFORM: Apple Silicon MLX.
-         Run the full cycle — survey, math, implement, run, write PAPER.md.
-         Write your chosen direction to .ralph/current_direction.md.
-         BASELINE-FIRST: Check these references before implementing:
-         [list relevant references/*/].
-         Invoke /fast-mlx and /mlx-dev before writing any MLX code."
-
-      Wait for the sub-agent to complete.
-
-      ## After sub-agent returns
-
-      Verify micro/models/[name]/PAPER.md exists with results.
-      Update the DB:
-        `experiment update <id> --status supported` (or killed)
-        `experiment update <id> --dir "micro/models/[name]/"`
-        `experiment kill-update <id> --criterion <N> --result pass|fail`
-        `experiment evidence <id> --claim "..." --source "results.json" --verdict pass`
-      Emit experiment.done with a brief summary of results and kill criteria verdicts.
-
-      ## Orphan check (MANDATORY at start of every trigger)
-
-      Before picking new work, check if the PREVIOUS experiment was properly
-      reviewed and analyzed:
-      1. Read .ralph/current_direction.md to find the last experiment name
-      2. Check if [experiment_dir]/REVIEW-adversarial.md exists
-      3. Check if [experiment_dir]/LEARNINGS.md exists
-      4. If EITHER is missing, resolve before picking new work.
+      If fewer than 3 open experiments remain, add 1 new hypothesis via `experiment add`.
 
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
@@ -152,48 +99,21 @@ hats:
       - "review.revise"
       - "review.killed"
     instructions: |
-      You coordinate peer review and integration. Do NOT do the review yourself.
-      Do NOT stop to ask for confirmation. Complete all steps in one session.
+      Delegate review to adversarial-reviewer sub-agent. Do NOT review yourself.
 
-      ## Step 1: Delegate review
+      1. Read .ralph/current_direction.md to find experiment_dir (micro/models/[name]/).
+         Verify PAPER.md exists.
 
-      The experiment name is in the event payload from experiment.done.
-      Also read .ralph/current_direction.md as a fallback.
-      Find the experiment_dir — it's micro/models/[name]/.
-      Verify that PAPER.md exists in the experiment dir before reviewing.
+      2. Delegate: Agent(subagent_type="adversarial-reviewer"):
+         "Review [experiment_dir]/. Read MATH.md + PAPER.md.
+          Write REVIEW-adversarial.md with verdict: PROCEED, REVISE, or KILL."
 
-      Use the Agent tool with subagent_type="adversarial-reviewer" to review
-      the experiment. Give it a clear prompt:
-
-        "Review the experiment at [experiment_dir]/. Read its MATH.md and
-         PAPER.md. Write REVIEW-adversarial.md with your verdict:
-         PROCEED, REVISE (with numbered fixes), or KILL (with explanation)."
-
-      Wait for the sub-agent to complete. Do NOT interrupt it.
-
-      ## Step 2: Read verdict
-
-      Read [experiment_dir]/REVIEW-adversarial.md.
-      Extract the verdict: PROCEED, REVISE, or KILL.
-
-      If REVISE: emit review.revise with the numbered fixes. Stop here.
-
-      If KILL:
-        - Run: `experiment update <id> --status killed`
-        - Run: `experiment evidence <id> --claim "KILLED: [reason]" --source "REVIEW-adversarial.md" --verdict fail`
-        - Emit review.killed with experiment name, kill reason, and key numbers.
-
-      ## Step 3: Integrate (only if PROCEED)
-
-      Do this yourself (fast, no sub-agent needed):
-      - Run: `experiment update <id> --status supported` (or `proven`)
-      - Run: `experiment evidence <id> --claim "[key finding]" --source "PAPER.md" --verdict pass`
-      - Append results to FINDINGS.md with date and caveats
-      - Update VISION.md readiness table if applicable
-
-      Reset .ralph/agent/scratchpad.md to a 1-line summary.
-      Emit review.proceed with experiment name, verdict, and key findings.
-      The ANALYST hat will research implications and literature context.
+      3. Read verdict from REVIEW-adversarial.md:
+         - REVISE: emit review.revise with numbered fixes.
+         - KILL: `experiment complete <id> --status killed --evidence "KILLED: [reason]"`
+                 Emit review.killed.
+         - PROCEED: Append results to FINDINGS.md. Update VISION.md readiness if applicable.
+                    Emit review.proceed.
 
   # ── Analyst: multi-angle research sweep after every result ───────────────
   analyst:
@@ -205,81 +125,24 @@ hats:
     publishes:
       - "learning.complete"
     instructions: |
-      You are the knowledge-production step. After every experiment result
-      (whether PROCEED or KILL), you research WHY it happened and what the
-      broader research community knows about this phenomenon. You produce
-      LEARNINGS.md — a document that future experiments can reference.
+      Research WHY a result happened. Do NOT just summarize PAPER.md — ADD knowledge.
 
-      Do NOT skip this step. Do NOT just summarize the PAPER.md.
-      The goal is to ADD knowledge that wasn't in the experiment.
+      1. Read [experiment_dir]/PAPER.md + REVIEW-adversarial.md.
 
-      ## Step 1: Understand the result
+      2. Query NotebookLM from 3 angles:
+         - Confirming: "What research supports [core finding]?"
+         - Contradicting: "What papers found the opposite?"
+         - Alternatives: "What other approaches exist for this problem?"
+         Web search as fallback only.
 
-      Read the experiment_dir from the event payload.
-      Read [experiment_dir]/PAPER.md and REVIEW-adversarial.md.
-      Identify:
-      - What was the core finding? (1 sentence)
-      - Was it proven, supported, or killed?
-      - What was surprising or unexpected?
-      - What mechanism explains the result?
+      3. Write [experiment_dir]/LEARNINGS.md:
+         - Core Finding (1-2 sentences)
+         - Why This Happened (cite papers)
+         - Confirming Evidence (arxiv IDs)
+         - Contradicting Evidence
+         - Alternative Approaches
+         - Implications for Next Experiments
 
-      ## Step 2: Multi-angle research via NotebookLM (THE CORE VALUE)
+      4. Add new papers: `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
 
-      Use /notebooklm as the PRIMARY research tool. NotebookLM has our curated
-      source library and can synthesize across them.
-
-      Query NotebookLM from 3 angles:
-
-      Angle 1 (confirming): "What does existing research say about [core finding]?
-        Have other papers observed [this phenomenon]? What mechanisms explain it?"
-
-      Angle 2 (contradicting): "Are there papers that found the OPPOSITE of
-        [our finding]? What conditions lead to different outcomes?"
-
-      Angle 3 (alternatives): "What alternative approaches exist for [the problem
-        this experiment addressed]? What methods from other fields could apply?"
-
-      FALLBACK ONLY: If NotebookLM doesn't have relevant sources for a specific
-      angle, use a targeted web search to fill the gap.
-
-      ## Step 3: Write LEARNINGS.md
-
-      Write [experiment_dir]/LEARNINGS.md with this structure:
-
-      ```markdown
-      # Learnings: [experiment_name]
-
-      ## Core Finding
-      [1-2 sentence summary]
-
-      ## Why This Happened (Literature-Grounded)
-      [Mechanistic explanation citing specific papers]
-
-      ## Confirming Evidence
-      [Papers that found the same thing, with arxiv IDs]
-
-      ## Contradicting Evidence
-      [Papers that found the opposite, with explanation of discrepancy]
-
-      ## Alternative Approaches (What We Could Try Instead)
-      [Concrete methods from literature with paper references]
-
-      ## Implications for Next Experiments
-      [How this changes our approach going forward]
-      ```
-
-      ## Step 4: Update references
-
-      If you found important new papers, add them via:
-        `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
-
-      ## Step 5: Emit
-
-      Emit learning.complete with:
-      - Experiment name
-      - 1-line core learning
-      - Number of confirming/contradicting papers found
-      - Whether any hypothesis should be modified
-
-      The RESEARCHER hat will use your LEARNINGS.md when picking the next
-      experiment — ensuring accumulated knowledge informs future work.
+      5. Emit learning.complete with experiment name + 1-line core learning.

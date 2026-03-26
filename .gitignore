@@ -42,3 +42,4 @@ bun.lock
 .ralph/current-loop-id
 .ralph/diagnostics/
 # uv.lock — committed for reproducible installs
+.archive/
