@@ -1,0 +1,73 @@
+{
+  "experiment": "hierarchical_routing_n24",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 24,
+  "domains": ["agriculture", "code", "cooking", "creative_writing", "cybersecurity", "economics", "education", "engineering", "environmental", "finance", "health_fitness", "history", "legal", "linguistics", "marketing", "math", "medical", "music", "philosophy", "politics", "psychology", "science", "sociology", "sports"],
+  "seed": 42,
+  "timestamp": "2026-03-29 18:45:00",
+  "cluster_info": {
+    "K": 4,
+    "clusters": {
+      "1": ["code", "education", "engineering", "music", "sports"],
+      "2": ["cooking", "cybersecurity", "linguistics", "marketing", "math", "sociology"],
+      "3": ["health_fitness", "medical"],
+      "4": ["agriculture", "creative_writing", "economics", "environmental", "finance", "history", "legal", "philosophy", "politics", "psychology", "science"]
+    },
+    "flat_accuracy": 0.396,
+    "intra_confusion_frac": 0.938
+  },
+  "router_info": {
+    "stage1_accuracy": 0.973,
+    "stage1_params": 164164,
+    "stage2_results": {
+      "1": {"n_members": 5, "accuracy": 0.27, "n_params": 164229},
+      "2": {"n_members": 6, "accuracy": 0.417, "n_params": 164294},
+      "3": {"n_members": 2, "accuracy": 1.0, "n_params": 164034},
+      "4": {"n_members": 11, "accuracy": 0.368, "n_params": 164619}
+    },
+    "total_params": 821340,
+    "train_time_s": 4.1
+  },
+  "eval_results": {
+    "hierarchical_accuracy": 0.404,
+    "cluster_accuracy": 0.973,
+    "within_cluster_accuracy": 0.415,
+    "base_forward_ms": 58.25,
+    "routing_ms": 0.50,
+    "overhead_pct": 0.85,
+    "avg_base_ppl": 10.06,
+    "avg_oracle_ppl": 10.05,
+    "avg_uniform_ppl": 10.07,
+    "avg_routed_ppl": 10.06,
+    "gamma_uniform": 1.0013,
+    "gamma_routed": 1.0003,
+    "gamma_oracle": 0.9996,
+    "routed_improvement_over_uniform_pct": 0.1,
+    "per_domain_accuracy": {
+      "agriculture": 0.40, "code": 0.60, "cooking": 0.30, "creative_writing": 0.0,
+      "cybersecurity": 0.10, "economics": 0.0, "education": 0.20, "engineering": 0.10,
+      "environmental": 0.05, "finance": 1.0, "health_fitness": 0.95, "history": 0.05,
+      "legal": 1.0, "linguistics": 0.35, "marketing": 0.10, "math": 1.0,
+      "medical": 1.0, "music": 0.35, "philosophy": 0.05, "politics": 0.35,
+      "psychology": 1.0, "science": 0.10, "sociology": 0.55, "sports": 0.10
+    },
+    "per_domain_ppls": {
+      "base": {"agriculture": 14.06, "code": 5.71, "cooking": 3.22, "creative_writing": 23.29, "cybersecurity": 3.68, "economics": 14.95, "education": 3.53, "engineering": 3.79, "environmental": 11.78, "finance": 18.34, "health_fitness": 10.94, "history": 18.84, "legal": 20.98, "linguistics": 4.34, "marketing": 3.73, "math": 3.79, "medical": 6.73, "music": 3.63, "philosophy": 15.01, "politics": 13.18, "psychology": 17.61, "science": 12.18, "sociology": 4.46, "sports": 3.63},
+      "oracle": {"agriculture": 14.14, "code": 5.69, "cooking": 3.21, "creative_writing": 23.38, "cybersecurity": 3.66, "economics": 14.78, "education": 3.60, "engineering": 3.78, "environmental": 11.67, "finance": 18.12, "health_fitness": 10.91, "history": 18.69, "legal": 21.12, "linguistics": 4.34, "marketing": 3.74, "math": 3.85, "medical": 6.84, "music": 3.63, "philosophy": 15.04, "politics": 13.43, "psychology": 17.55, "science": 12.02, "sociology": 4.41, "sports": 3.68},
+      "uniform": {"agriculture": 14.07, "code": 5.73, "cooking": 3.21, "creative_writing": 23.25, "cybersecurity": 3.68, "economics": 15.07, "education": 3.54, "engineering": 3.79, "environmental": 11.81, "finance": 18.29, "health_fitness": 10.94, "history": 18.95, "legal": 20.98, "linguistics": 4.34, "marketing": 3.72, "math": 3.79, "medical": 6.76, "music": 3.62, "philosophy": 15.05, "politics": 13.21, "psychology": 17.58, "science": 12.20, "sociology": 4.44, "sports": 3.63},
+      "routed": {"agriculture": 14.14, "code": 5.69, "cooking": 3.19, "creative_writing": 23.11, "cybersecurity": 3.69, "economics": 14.92, "education": 3.52, "engineering": 3.84, "environmental": 12.03, "finance": 18.12, "health_fitness": 10.91, "history": 18.67, "legal": 21.12, "linguistics": 4.34, "marketing": 3.71, "math": 3.85, "medical": 6.84, "music": 3.62, "philosophy": 14.86, "politics": 13.43, "psychology": 17.55, "science": 12.24, "sociology": 4.41, "sports": 3.64}
+    }
+  },
+  "K593_hierarchical_accuracy": 0.404,
+  "K593_threshold": 0.60,
+  "K593_pass": false,
+  "K594_routed_ppl": 10.06,
+  "K594_uniform_ppl": 10.07,
+  "K594_pass": true,
+  "K595_overhead_pct": 0.85,
+  "K595_threshold": 15.0,
+  "K595_pass": true,
+  "verdict": "KILLED",
+  "kill_reasons": ["K593 (accuracy 40.4% < 60%)"],
+  "total_time_s": 180
+}
