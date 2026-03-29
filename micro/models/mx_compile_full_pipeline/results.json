@@ -1,0 +1,276 @@
+{
+  "experiment": "mx_compile_full_pipeline",
+  "timestamp": "2026-03-28T01:28:48",
+  "platform": "Apple M5 Pro 48GB",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "mlx_version": "0.31.1",
+  "phase1_baseline": {
+    "base_tps": {
+      "generation_tps": 171.7,
+      "prompt_tps": 291.6,
+      "wallclock_tps": 153.5
+    },
+    "adapted_tps": {
+      "generation_tps": 88.0,
+      "prompt_tps": 189.9,
+      "wallclock_tps": 82.1
+    },
+    "n_wrapped": 210,
+    "memory": {
+      "active_mb": 1223.5,
+      "cache_mb": 52.3,
+      "peak_mb": 1266.3
+    }
+  },
+  "phase2_routing": {
+    "uncompiled": {
+      "mean_ms": 0.187,
+      "std_ms": 0.019,
+      "min_ms": 0.168,
+      "max_ms": 0.222,
+      "n_samples": 10
+    },
+    "compiled": {
+      "mean_ms": 0.17,
+      "std_ms": 0.013,
+      "min_ms": 0.156,
+      "max_ms": 0.201,
+      "n_samples": 10
+    },
+    "speedup": 1.1,
+    "dynamic_shapes": [
+      {
+        "batch_size": 1,
+        "first_call_ms": 0.211,
+        "cached_call_ms": 0.194,
+        "recompile_cost_ms": 0.018
+      },
+      {
+        "batch_size": 4,
+        "first_call_ms": 0.198,
+        "cached_call_ms": 0.182,
+        "recompile_cost_ms": 0.016
+      },
+      {
+        "batch_size": 16,
+        "first_call_ms": 0.206,
+        "cached_call_ms": 0.149,
+        "recompile_cost_ms": 0.056
+      }
+    ]
+  },
+  "phase3_lora_delta": {
+    "single_projection": {
+      "naive_uncompiled": {
+        "mean_ms": 0.173,
+        "std_ms": 0.008,
+        "min_ms": 0.16,
+        "max_ms": 0.182,
+        "n_samples": 10
+      },
+      "addmm_uncompiled": {
+        "mean_ms": 0.225,
+        "std_ms": 0.114,
+        "min_ms": 0.157,
+        "max_ms": 0.556,
+        "n_samples": 10
+      },
+      "naive_compiled": {
+        "mean_ms": 0.842,
+        "std_ms": 0.328,
+        "min_ms": 0.193,
+        "max_ms": 1.231,
+        "n_samples": 10
+      },
+      "addmm_compiled": {
+        "mean_ms": 0.181,
+        "std_ms": 0.026,
+        "min_ms": 0.153,
+        "max_ms": 0.234,
+        "n_samples": 10
+      },
+      "speedup_naive": 0.205,
+      "speedup_addmm": 1.243
+    },
+    "block_7_projections": {
+      "uncompiled": {
+        "mean_ms": 0.215,
+        "std_ms": 0.021,
+        "min_ms": 0.196,
+        "max_ms": 0.249,
+        "n_samples": 10
+      },
+      "compiled": {
+        "mean_ms": 0.222,
+        "std_ms": 0.014,
+        "min_ms": 0.202,
+        "max_ms": 0.254,
+        "n_samples": 10
+      },
+      "speedup": 0.968
+    }
+  },
+  "phase4_multi_adapter": {
+    "n_2": {
+      "uncompiled": {
+        "mean_ms": 0.209,
+        "std_ms": 0.012,
+        "min_ms": 0.188,
+        "max_ms": 0.237,
+        "n_samples": 10
+      },
+      "compiled": {
+        "mean_ms": 0.479,
+        "std_ms": 0.354,
+        "min_ms": 0.159,
+        "max_ms": 0.981,
+        "n_samples": 10
+      },
+      "speedup": 0.436
+    },
+    "n_5": {
+      "uncompiled": {
+        "mean_ms": 0.438,
+        "std_ms": 0.285,
+        "min_ms": 0.273,
+        "max_ms": 1.091,
+        "n_samples": 10
+      },
+      "compiled": {
+        "mean_ms": 0.949,
+        "std_ms": 0.151,
+        "min_ms": 0.835,
+        "max_ms": 1.377,
+        "n_samples": 10
+      },
+      "speedup": 0.462
+    }
+  },
+  "phase5_dynamic": {
+    "strategy_a_precompile": {
+      "1": {
+        "first_call_ms": 49.041,
+        "cached_call_ms": 0.849,
+        "compile_overhead_ms": 48.192
+      },
+      "2": {
+        "first_call_ms": 0.841,
+        "cached_call_ms": 0.796,
+        "compile_overhead_ms": 0.045
+      },
+      "3": {
+        "first_call_ms": 57.175,
+        "cached_call_ms": 0.83,
+        "compile_overhead_ms": 56.345
+      },
+      "4": {
+        "first_call_ms": 60.297,
+        "cached_call_ms": 0.951,
+        "compile_overhead_ms": 59.347
+      },
+      "5": {
+        "first_call_ms": 0.949,
+        "cached_call_ms": 0.974,
+        "compile_overhead_ms": -0.025
+      }
+    },
+    "strategy_b_padded": {
+      "active_1": {
+        "mean_ms": 0.791,
+        "std_ms": 0.233,
+        "min_ms": 0.201,
+        "max_ms": 0.946,
+        "n_samples": 10
+      },
+      "active_2": {
+        "mean_ms": 0.377,
+        "std_ms": 0.314,
+        "min_ms": 0.195,
+        "max_ms": 1.046,
+        "n_samples": 10
+      },
+      "active_3": {
+        "mean_ms": 0.225,
+        "std_ms": 0.032,
+        "min_ms": 0.191,
+        "max_ms": 0.313,
+        "n_samples": 10
+      },
+      "active_5": {
+        "mean_ms": 0.209,
+        "std_ms": 0.014,
+        "min_ms": 0.191,
+        "max_ms": 0.24,
+        "n_samples": 10
+      }
+    },
+    "k1_dynamic_selection": "PASS",
+    "k1_evidence": "Compilation succeeds for all N via both strategies (pre-compile per N and padding)"
+  },
+  "phase6_e2e": {
+    "A_naive_uncompiled": {
+      "tps": {
+        "generation_tps": 88.1,
+        "prompt_tps": 189.1,
+        "wallclock_tps": 82.0
+      },
+      "n_wrapped": 210,
+      "memory": {
+        "active_mb": 1223.4,
+        "cache_mb": 1178.6,
+        "peak_mb": 2402.0
+      }
+    },
+    "B_addmm_uncompiled": {
+      "tps": {
+        "generation_tps": 97.2,
+        "prompt_tps": 209.9,
+        "wallclock_tps": 90.4
+      },
+      "n_wrapped": 210,
+      "memory": {
+        "active_mb": 1223.4,
+        "cache_mb": 1178.6,
+        "peak_mb": 2402.0
+      }
+    },
+    "C_addmm_compiled": {
+      "tps": {
+        "generation_tps": 97.3,
+        "prompt_tps": 208.5,
+        "wallclock_tps": 90.2
+      },
+      "n_wrapped": 210,
+      "memory": {
+        "active_mb": 1223.4,
+        "cache_mb": 1178.6,
+        "peak_mb": 2402.0
+      }
+    },
+    "speedups": {
+      "addmm_vs_naive": 1.103,
+      "compiled_vs_naive": 1.104,
+      "compiled_vs_addmm": 1.001
+    }
+  },
+  "summary": {
+    "k1_dynamic_selection": "PASS",
+    "k2_speedup_vs_naive_pct": 10.4,
+    "k2_speedup_vs_addmm_pct": 0.1,
+    "k2_pass": true,
+    "s1_pass": false,
+    "s1_improvement_pct": 10.4,
+    "component_speedups": {
+      "routing": 1.1,
+      "lora_single_addmm": 1.243,
+      "lora_block_7proj": 0.968
+    },
+    "e2e_tps": {
+      "base": 171.7,
+      "naive_lora": 88.1,
+      "addmm_lora": 97.2,
+      "compiled_addmm_lora": 97.3
+    }
+  },
+  "total_time_s": 17.2
+}

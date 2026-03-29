@@ -1,0 +1,299 @@
+{
+  "experiment": "warmstart_scale_validation_FIXED",
+  "fix_description": "Rerun of adapter+composition phases with freeze bug fixed. Prior run had 34.6M trainable params (base_weight not frozen); fixed run has ~1M trainable params (LoRA A+B only). LR reduced from 1e-3 to 1e-4. Gradient norm logging added.",
+  "prior_base_results": {
+    "fp32_ppl": 159.39998370412764,
+    "warm_start_ppl": 165.26234321794382,
+    "ppl_ratio": 1.0367776669582205
+  },
+  "architecture_note": "FP32 baseline uses nn.Linear (no extra RMSNorm). Warm-start uses WarmStartLinear with extra RMSNorm in every projection. This makes the PPL ratio comparison not perfectly apples-to-apples. The warm-start has ~73K extra norm parameters. The actual ternary penalty may be slightly higher than reported 1.037x.",
+  "adapters": {
+    "science": {
+      "domain": "science",
+      "base_domain_ppl": 84.09926870490347,
+      "base_val_ppl": 165.14751691865607,
+      "adapted_domain_ppl": 77.8720957183851,
+      "adapted_val_ppl": 169.59314701250779,
+      "improvement_pct": 7.4,
+      "val_degradation_pct": 2.69,
+      "trainable_params": 1048576,
+      "total_params": 204991488,
+      "train_time_s": 864.1,
+      "text_sample": {
+        "prompt": "The process of cellular respiration",
+        "generated": "The process of cellular respiration, which is the most important source of the cell.\nThe researchers are working on the cell and the cell. They are able to detect the cells of the cells that are able to grow and cause the cells to grow.\nThe researchers found that the cells are able to detect the cells that are able to grow and cause the cells to grow.\nThe researchers found that the cells are able to"
+      },
+      "adapter_lr": 0.0001,
+      "final_loss": 4.3880767822265625,
+      "loss_trajectory": [
+        4.315223217010498,
+        4.532811641693115,
+        4.396920204162598,
+        4.332149505615234,
+        4.274664878845215,
+        4.331371307373047,
+        4.551621437072754,
+        4.396333694458008,
+        4.32850980758667,
+        4.3880767822265625
+      ],
+      "grad_norm_samples": [
+        {
+          "step": 10,
+          "grad_norm": 0.10625148415310016,
+          "loss": 4.465767860412598
+        },
+        {
+          "step": 110,
+          "grad_norm": 0.11837828452094774,
+          "loss": 4.410444259643555
+        },
+        {
+          "step": 210,
+          "grad_norm": 0.12557649552947273,
+          "loss": 4.551141738891602
+        },
+        {
+          "step": 310,
+          "grad_norm": 0.13841504882549086,
+          "loss": 4.426957130432129
+        },
+        {
+          "step": 410,
+          "grad_norm": 0.14450255635655232,
+          "loss": 4.415921688079834
+        },
+        {
+          "step": 510,
+          "grad_norm": 0.15890625852774146,
+          "loss": 4.694547653198242
+        },
+        {
+          "step": 610,
+          "grad_norm": 0.1585397917134307,
+          "loss": 4.421639442443848
+        },
+        {
+          "step": 710,
+          "grad_norm": 0.16330522960931135,
+          "loss": 4.456050395965576
+        },
+        {
+          "step": 810,
+          "grad_norm": 0.16874256219634576,
+          "loss": 4.540144920349121
+        },
+        {
+          "step": 910,
+          "grad_norm": 0.1756088748936854,
+          "loss": 4.280822277069092
+        }
+      ]
+    },
+    "history": {
+      "domain": "history",
+      "base_domain_ppl": 103.50445071425018,
+      "base_val_ppl": 165.14751691865607,
+      "adapted_domain_ppl": 96.11103194347609,
+      "adapted_val_ppl": 169.22761507690564,
+      "improvement_pct": 7.14,
+      "val_degradation_pct": 2.47,
+      "trainable_params": 1048576,
+      "total_params": 204991488,
+      "train_time_s": 862.4,
+      "text_sample": {
+        "prompt": "The fall of the Roman Empire",
+        "generated": "The fall of the Roman Empire, the Romans were the first to be the first to be the first to-day.\nThe Emperor was the first to-known as the Emperor of the Great. The Emperor was the first to be the first to-ever-born, and the first of the Emperor.\nThe Emperor was the first to be the first to-known as the first of the Emperor, and the first of"
+      },
+      "adapter_lr": 0.0001,
+      "final_loss": 4.768023490905762,
+      "loss_trajectory": [
+        4.677341461181641,
+        4.610279083251953,
+        4.549000263214111,
+        4.582240581512451,
+        4.542543411254883,
+        4.512451171875,
+        4.452215194702148,
+        4.5643720626831055,
+        4.574460029602051,
+        4.768023490905762
+      ],
+      "grad_norm_samples": [
+        {
+          "step": 10,
+          "grad_norm": 0.09848517506241902,
+          "loss": 4.538458824157715
+        },
+        {
+          "step": 110,
+          "grad_norm": 0.12112193500207837,
+          "loss": 4.729637622833252
+        },
+        {
+          "step": 210,
+          "grad_norm": 0.12468714415497209,
+          "loss": 4.502885818481445
+        },
+        {
+          "step": 310,
+          "grad_norm": 0.13061582954273368,
+          "loss": 4.521745681762695
+        },
+        {
+          "step": 410,
+          "grad_norm": 0.14070823203350202,
+          "loss": 4.765505790710449
+        },
+        {
+          "step": 510,
+          "grad_norm": 0.15235502887495664,
+          "loss": 4.679239273071289
+        },
+        {
+          "step": 610,
+          "grad_norm": 0.1565535559469352,
+          "loss": 4.535135269165039
+        },
+        {
+          "step": 710,
+          "grad_norm": 0.16073007848637877,
+          "loss": 4.602940559387207
+        },
+        {
+          "step": 810,
+          "grad_norm": 0.1648282225394522,
+          "loss": 4.526535987854004
+        },
+        {
+          "step": 910,
+          "grad_norm": 0.17801656251659384,
+          "loss": 4.657748699188232
+        }
+      ]
+    },
+    "technology": {
+      "domain": "technology",
+      "base_domain_ppl": 93.45234997929168,
+      "base_val_ppl": 165.14751691865607,
+      "adapted_domain_ppl": 86.43386557982541,
+      "adapted_val_ppl": 169.2649294129322,
+      "improvement_pct": 7.51,
+      "val_degradation_pct": 2.49,
+      "trainable_params": 1048576,
+      "total_params": 204991488,
+      "train_time_s": 851.6,
+      "text_sample": {
+        "prompt": "Artificial neural networks are",
+        "generated": "Artificial neural networks are used to describe the use of the term \u201caesthetic\u201d.\nThe term \u201cloud\u201d is used to describe the \u201caesthetic\u201d and \u201caesthetic attitude\u201d.\nThe term \u201cprosynthesis\u201d is \u201caesthetic attitude\u201d and \u201caesthetic attitude\u201d and \u201caesthetic attitude\u201d and"
+      },
+      "adapter_lr": 0.0001,
+      "final_loss": 4.460857391357422,
+      "loss_trajectory": [
+        4.639809608459473,
+        4.351376533508301,
+        4.728597164154053,
+        4.444421768188477,
+        4.734292030334473,
+        4.514073371887207,
+        4.386816024780273,
+        4.54930305480957,
+        4.557037353515625,
+        4.460857391357422
+      ],
+      "grad_norm_samples": [
+        {
+          "step": 10,
+          "grad_norm": 0.10822259914653669,
+          "loss": 4.632879257202148
+        },
+        {
+          "step": 110,
+          "grad_norm": 0.1206189183341373,
+          "loss": 4.465758800506592
+        },
+        {
+          "step": 210,
+          "grad_norm": 0.12404068035300038,
+          "loss": 4.567148208618164
+        },
+        {
+          "step": 310,
+          "grad_norm": 0.14542531830746996,
+          "loss": 4.658631801605225
+        },
+        {
+          "step": 410,
+          "grad_norm": 0.14476069760774946,
+          "loss": 4.738824367523193
+        },
+        {
+          "step": 510,
+          "grad_norm": 0.152482130353761,
+          "loss": 4.556458950042725
+        },
+        {
+          "step": 610,
+          "grad_norm": 0.15938416530808974,
+          "loss": 4.3860626220703125
+        },
+        {
+          "step": 710,
+          "grad_norm": 0.16269062379190724,
+          "loss": 4.358808517456055
+        },
+        {
+          "step": 810,
+          "grad_norm": 0.1688982143169662,
+          "loss": 4.461804389953613
+        },
+        {
+          "step": 910,
+          "grad_norm": 0.17467527711021238,
+          "loss": 4.511617183685303
+        }
+      ]
+    }
+  },
+  "composition": {
+    "base_val_ppl": 166.61181205070605,
+    "composed_val_ppl": 166.63183647131268,
+    "composition_ratio": 1.0001201860802074,
+    "base_domain_ppls": {
+      "science": 84.27426433369885,
+      "history": 104.40560589674291,
+      "technology": 93.90343405630317
+    },
+    "composed_domain_ppls": {
+      "science": 84.3039730559359,
+      "history": 104.43747282134882,
+      "technology": 93.93080553114702
+    },
+    "text_samples": [
+      {
+        "prompt": "The process of photosynthesis",
+        "generated": "The process of photosynthesis is the most common source of the protein in the body. The protein is the most common type of protein, which is the most common type of protein, which is the most common type of protein, which is the most common type of protein, which is the most common type of protein, which is the most common type of protein, which is the most common type of protein.\nThe protein is"
+      },
+      {
+        "prompt": "In the year 1776",
+        "generated": "In the year 1776, the first of the 19th century, the first of the first surviving of the first surviving of the first surviving of the English church.\nThe first of the 19th century was the first to be the first to be the first to be the first to be the first to be the first to be the first to be found in the early 20th century. The first of the first century,"
+      },
+      {
+        "prompt": "Machine learning algorithms",
+        "generated": "Machine learning algorithms.\n- The most common form of the term \u201caesthetic\u201d or \u201ctolerance\u201d.\n- \u201cThe \u201cart\u201d is a \u201creal\u201d of the \u201cart\u201d of the \u201creal\u201d of the \u201cartic\u201d of the \u201cartic\u201d or \u201creal\u201d of the \ufffd"
+      }
+    ]
+  },
+  "kill_criteria": {
+    "K1_coherent_text": true,
+    "K2_learning_progress": true,
+    "K2_improvement_pct": 20.06494764673835,
+    "K3_composition_ratio": true,
+    "K3_ratio_value": 1.0001201860802074
+  },
+  "success_criteria": {
+    "S1_grammatical_text": true,
+    "S2_adapter_improvement": true
+  },
+  "total_adapter_time_s": 2746.0
+}

@@ -1,0 +1,1204 @@
+{
+  "norm_analysis": {
+    "s1.0__sft__medical": {
+      "mean_rho": 0.0149,
+      "max_rho": 0.0344,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.21,
+      "n_layers": 96
+    },
+    "s1.0__sft__math": {
+      "mean_rho": 0.0135,
+      "max_rho": 0.0435,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.09,
+      "n_layers": 96
+    },
+    "s1.0__sft__code": {
+      "mean_rho": 0.0117,
+      "max_rho": 0.0296,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 0.94,
+      "n_layers": 96
+    },
+    "s1.0__ntp__medical": {
+      "mean_rho": 0.0172,
+      "max_rho": 0.0395,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.43,
+      "n_layers": 96
+    },
+    "s1.0__ntp__math": {
+      "mean_rho": 0.015,
+      "max_rho": 0.0608,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.2,
+      "n_layers": 96
+    },
+    "s1.0__ntp__code": {
+      "mean_rho": 0.0136,
+      "max_rho": 0.0354,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.12,
+      "n_layers": 96
+    },
+    "s2.0__sft__medical": {
+      "mean_rho": 0.024,
+      "max_rho": 0.0589,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.95,
+      "n_layers": 96
+    },
+    "s2.0__sft__math": {
+      "mean_rho": 0.0213,
+      "max_rho": 0.0626,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.72,
+      "n_layers": 96
+    },
+    "s2.0__sft__code": {
+      "mean_rho": 0.0195,
+      "max_rho": 0.0589,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.56,
+      "n_layers": 96
+    },
+    "s2.0__ntp__medical": {
+      "mean_rho": 0.027,
+      "max_rho": 0.0444,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 2.24,
+      "n_layers": 96
+    },
+    "s2.0__ntp__math": {
+      "mean_rho": 0.0229,
+      "max_rho": 0.089,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.83,
+      "n_layers": 96
+    },
+    "s2.0__ntp__code": {
+      "mean_rho": 0.0217,
+      "max_rho": 0.0519,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 1.78,
+      "n_layers": 96
+    },
+    "s4.0__sft__medical": {
+      "mean_rho": 0.0411,
+      "max_rho": 0.1155,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 3.34,
+      "n_layers": 96
+    },
+    "s4.0__sft__math": {
+      "mean_rho": 0.0364,
+      "max_rho": 0.1112,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 2.93,
+      "n_layers": 96
+    },
+    "s4.0__sft__code": {
+      "mean_rho": 0.036,
+      "max_rho": 0.1058,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 2.86,
+      "n_layers": 96
+    },
+    "s4.0__ntp__medical": {
+      "mean_rho": 0.0441,
+      "max_rho": 0.0878,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 3.64,
+      "n_layers": 96
+    },
+    "s4.0__ntp__math": {
+      "mean_rho": 0.0364,
+      "max_rho": 0.1351,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 2.9,
+      "n_layers": 96
+    },
+    "s4.0__ntp__code": {
+      "mean_rho": 0.0378,
+      "max_rho": 0.1013,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 3.05,
+      "n_layers": 96
+    },
+    "s8.0__sft__medical": {
+      "mean_rho": 0.0698,
+      "max_rho": 0.1746,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 5.68,
+      "n_layers": 96
+    },
+    "s8.0__sft__math": {
+      "mean_rho": 0.0625,
+      "max_rho": 0.2213,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 4.99,
+      "n_layers": 96
+    },
+    "s8.0__sft__code": {
+      "mean_rho": 0.0645,
+      "max_rho": 0.2334,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 5.11,
+      "n_layers": 96
+    },
+    "s8.0__ntp__medical": {
+      "mean_rho": 0.0733,
+      "max_rho": 0.1557,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 6.05,
+      "n_layers": 96
+    },
+    "s8.0__ntp__math": {
+      "mean_rho": 0.0622,
+      "max_rho": 0.1933,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 5.01,
+      "n_layers": 96
+    },
+    "s8.0__ntp__code": {
+      "mean_rho": 0.0658,
+      "max_rho": 0.1766,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 5.33,
+      "n_layers": 96
+    },
+    "s20.0__sft__medical": {
+      "mean_rho": 0.1517,
+      "max_rho": 0.2902,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 12.47,
+      "n_layers": 96
+    },
+    "s20.0__sft__math": {
+      "mean_rho": 0.1419,
+      "max_rho": 0.4105,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 11.45,
+      "n_layers": 96
+    },
+    "s20.0__sft__code": {
+      "mean_rho": 0.1456,
+      "max_rho": 0.4403,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 11.72,
+      "n_layers": 96
+    },
+    "s20.0__ntp__medical": {
+      "mean_rho": 0.1533,
+      "max_rho": 0.368,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 12.55,
+      "n_layers": 96
+    },
+    "s20.0__ntp__math": {
+      "mean_rho": 0.1337,
+      "max_rho": 0.3729,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 10.87,
+      "n_layers": 96
+    },
+    "s20.0__ntp__code": {
+      "mean_rho": 0.1387,
+      "max_rho": 0.3408,
+      "mean_w_norm": 83.11,
+      "mean_delta_norm": 11.38,
+      "n_layers": 96
+    }
+  },
+  "base": {
+    "gsm8k": {
+      "accuracy": 0.44,
+      "correct": 22,
+      "total": 50
+    },
+    "mmlu": {
+      "medical": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "math": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "code": {
+        "accuracy": 0.6,
+        "correct": 12,
+        "total": 20
+      }
+    }
+  },
+  "single_adapters": {
+    "s1.0__sft__medical": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s1.0__sft__math": {
+      "gsm8k": {
+        "accuracy": 0.56,
+        "correct": 28,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s1.0__sft__code": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s1.0__ntp__medical": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.7,
+          "correct": 14,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s1.0__ntp__math": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      }
+    },
+    "s1.0__ntp__code": {
+      "gsm8k": {
+        "accuracy": 0.48,
+        "correct": 24,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__sft__medical": {
+      "gsm8k": {
+        "accuracy": 0.6,
+        "correct": 30,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__sft__math": {
+      "gsm8k": {
+        "accuracy": 0.58,
+        "correct": 29,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__sft__code": {
+      "gsm8k": {
+        "accuracy": 0.62,
+        "correct": 31,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__ntp__medical": {
+      "gsm8k": {
+        "accuracy": 0.38,
+        "correct": 19,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__ntp__math": {
+      "gsm8k": {
+        "accuracy": 0.62,
+        "correct": 31,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        }
+      }
+    },
+    "s2.0__ntp__code": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__sft__medical": {
+      "gsm8k": {
+        "accuracy": 0.58,
+        "correct": 29,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__sft__math": {
+      "gsm8k": {
+        "accuracy": 0.62,
+        "correct": 31,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__sft__code": {
+      "gsm8k": {
+        "accuracy": 0.66,
+        "correct": 33,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__ntp__medical": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.7,
+          "correct": 14,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__ntp__math": {
+      "gsm8k": {
+        "accuracy": 0.66,
+        "correct": 33,
+        "total": 50
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "s4.0__ntp__code": {
+      "gsm8k": {
+        "accuracy": 0.5,
+        "correct": 25,
+        "total": 50,
+        "time_s": 261.94355392456055
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532151,
+      "time_s": 315.3012180328369
+    },
+    "s8.0__sft__medical": {
+      "gsm8k": {
+        "accuracy": 0.56,
+        "correct": 28,
+        "total": 50,
+        "time_s": 266.32147002220154
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 319.78582406044006
+    },
+    "s8.0__sft__math": {
+      "gsm8k": {
+        "accuracy": 0.64,
+        "correct": 32,
+        "total": 50,
+        "time_s": 259.1787691116333
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 311.9094047546387
+    },
+    "s8.0__sft__code": {
+      "gsm8k": {
+        "accuracy": 0.6,
+        "correct": 30,
+        "total": 50,
+        "time_s": 241.96781301498413
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 294.8262357711792
+    },
+    "s8.0__ntp__medical": {
+      "gsm8k": {
+        "accuracy": 0.6,
+        "correct": 30,
+        "total": 50,
+        "time_s": 252.15125012397766
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 304.86808800697327
+    },
+    "s8.0__ntp__math": {
+      "gsm8k": {
+        "accuracy": 0.6,
+        "correct": 30,
+        "total": 50,
+        "time_s": 235.26569175720215
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 287.8659620285034
+    },
+    "s8.0__ntp__code": {
+      "gsm8k": {
+        "accuracy": 0.56,
+        "correct": 28,
+        "total": 50,
+        "time_s": 274.8619499206543
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 327.6207187175751
+    },
+    "s20.0__sft__medical": {
+      "gsm8k": {
+        "accuracy": 0.44,
+        "correct": 22,
+        "total": 50,
+        "time_s": 257.0671501159668
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 309.98370480537415
+    },
+    "s20.0__sft__math": {
+      "gsm8k": {
+        "accuracy": 0.54,
+        "correct": 27,
+        "total": 50,
+        "time_s": 304.5063910484314
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 357.35675287246704
+    },
+    "s20.0__sft__code": {
+      "gsm8k": {
+        "accuracy": 0.54,
+        "correct": 27,
+        "total": 50,
+        "time_s": 216.59272408485413
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 269.37644124031067
+    },
+    "s20.0__ntp__medical": {
+      "gsm8k": {
+        "accuracy": 0.54,
+        "correct": 27,
+        "total": 50,
+        "time_s": 270.31933999061584
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 323.18312215805054
+    },
+    "s20.0__ntp__math": {
+      "gsm8k": {
+        "accuracy": 0.66,
+        "correct": 33,
+        "total": 50,
+        "time_s": 289.36660981178284
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 342.3344213962555
+    },
+    "s20.0__ntp__code": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50,
+        "time_s": 266.397686958313
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 319.2764370441437
+    }
+  },
+  "composed": {
+    "s1.0__sft__composed": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50,
+        "time_s": 1045.9542379379272
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 0.3333333333333333,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.308084992,
+      "time_s": 1266.8807718753815
+    },
+    "s1.0__ntp__composed": {
+      "gsm8k": {
+        "accuracy": 0.4,
+        "correct": 20,
+        "total": 50,
+        "time_s": 1029.4853241443634
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 0.3333333333333333,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.300860092,
+      "time_s": 1250.6247639656067
+    },
+    "s2.0__sft__composed": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50,
+        "time_s": 1057.4825506210327
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 0.6666666666666666,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.374178528,
+      "time_s": 1278.4577631950378
+    },
+    "s2.0__ntp__composed": {
+      "gsm8k": {
+        "accuracy": 0.44,
+        "correct": 22,
+        "total": 50,
+        "time_s": 1045.062040090561
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 0.6666666666666666,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.372900148,
+      "time_s": 1266.3282897472382
+    },
+    "s4.0__sft__composed": {
+      "gsm8k": {
+        "accuracy": 0.5,
+        "correct": 25,
+        "total": 50,
+        "time_s": 1092.8846940994263
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 1.3333333333333333,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.338592076,
+      "time_s": 1314.1245720386505
+    },
+    "s4.0__ntp__composed": {
+      "gsm8k": {
+        "accuracy": 0.5,
+        "correct": 25,
+        "total": 50,
+        "time_s": 1047.0880680084229
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 1.3333333333333333,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.335495444,
+      "time_s": 1267.7649312019348
+    },
+    "s8.0__sft__composed": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50,
+        "time_s": 1045.6413660049438
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "effective_scale_per_adapter": 2.6666666666666665,
+      "n_adapters": 3,
+      "peak_memory_gb": 8.391545172,
+      "time_s": 1266.7707719802856
+    }
+  }
+}

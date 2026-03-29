@@ -1,0 +1,221 @@
+{
+  "experiment": "task_accuracy_real_benchmarks",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "configs": {
+    "base": {
+      "gsm8k": {
+        "accuracy": 0.38,
+        "correct": 19,
+        "total": 50,
+        "time_s": 240.61891102790833
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        }
+      },
+      "time_s": 311.86601090431213
+    },
+    "individual": {
+      "gsm8k": {
+        "accuracy": 0.3,
+        "correct": 15,
+        "total": 50,
+        "time_s": 1218.411127090454
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        }
+      },
+      "time_s": 1559.161015033722
+    },
+    "uniform": {
+      "gsm8k": {
+        "accuracy": 0.54,
+        "correct": 27,
+        "total": 50,
+        "time_s": 1568.4427649974823
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "time_s": 2016.6342079639435
+    },
+    "routed": {
+      "gsm8k": {
+        "accuracy": 0.42,
+        "correct": 21,
+        "total": 50,
+        "time_s": 1236.520652770996
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        }
+      },
+      "time_s": 1579.0112888813019
+    }
+  },
+  "analysis": {
+    "benchmarks": {
+      "gsm8k": {
+        "base": 0.38,
+        "individual": 0.3,
+        "uniform": 0.54,
+        "routed": 0.42
+      },
+      "mmlu_medical": {
+        "base": 0.4,
+        "individual": 0.5,
+        "uniform": 0.4,
+        "routed": 0.5
+      },
+      "mmlu_code": {
+        "base": 0.45,
+        "individual": 0.5,
+        "uniform": 0.4,
+        "routed": 0.35
+      },
+      "mmlu_math": {
+        "base": 0.4,
+        "individual": 0.35,
+        "uniform": 0.35,
+        "routed": 0.3
+      },
+      "mmlu_legal": {
+        "base": 0.5,
+        "individual": 0.2,
+        "uniform": 0.45,
+        "routed": 0.2
+      },
+      "mmlu_finance": {
+        "base": 0.4,
+        "individual": 0.4,
+        "uniform": 0.45,
+        "routed": 0.4
+      }
+    },
+    "kill_criteria": {
+      "k1_233": {
+        "result": "pass",
+        "evidence": "Routed beats uniform on 1/6 benchmarks"
+      },
+      "k2_234": {
+        "result": "pass",
+        "evidence": "Routed worse than base on 3/6 benchmarks"
+      }
+    },
+    "success_criteria": {
+      "s1_18": {
+        "result": "fail",
+        "evidence": "Routed beats base on 2/6 benchmarks"
+      }
+    },
+    "summary": {
+      "routed_beats_uniform": 1,
+      "routed_worse_than_base": 3,
+      "total_benchmarks": 6
+    }
+  },
+  "params": {
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20,
+    "max_new_tokens": 256,
+    "temperature": 0.1,
+    "top_p": 0.95,
+    "lora_rank": 16,
+    "lora_scale": 20.0
+  },
+  "total_time_s": 5471.9
+}

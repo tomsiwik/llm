@@ -1,0 +1,49 @@
+{
+  "experiment": "adapter_specialization_emergence",
+  "n_adapters": 10,
+  "n_domains": 10,
+  "selected_domains": ["code", "math", "medical", "legal", "cooking", "psychology", "cybersecurity", "philosophy", "economics", "music"],
+  "train_iters": 200,
+  "lora_rank": 16,
+  "total_time_s": 1800,
+  "base_ppls": {
+    "code": 4.98, "math": 3.84, "medical": 6.50, "legal": 21.63,
+    "cooking": 3.21, "psychology": 17.45, "cybersecurity": 3.83,
+    "philosophy": 16.39, "economics": 16.69, "music": 3.57
+  },
+  "training_loss_range": {
+    "first_50_avg": [1.91, 1.92],
+    "last_50_avg": [1.65, 1.66],
+    "note": "All 10 adapters converge to essentially identical loss despite different A matrices"
+  },
+  "ppl_matrix_summary": {
+    "all_10_adapters_best_domain": "music",
+    "per_domain_cv_pct": {
+      "code": 0.2, "math": 0.2, "medical": 0.2, "legal": 0.1,
+      "cooking": 0.2, "psychology": 0.1, "cybersecurity": 0.1,
+      "philosophy": 0.3, "economics": 0.4, "music": 0.1
+    }
+  },
+  "analysis": {
+    "best_domains": ["music", "music", "music", "music", "music", "music", "music", "music", "music", "music"],
+    "unique_best_domains": 1,
+    "mean_silhouette": 0.0,
+    "domain_preference_entropy": 0.0,
+    "max_entropy": 3.322,
+    "comparison": {
+      "code": {"base_ppl": 4.98, "domain_trained_ppl": 3.14, "best_mixed_ppl": 3.32, "mixed_vs_domain_trained_pct": 5.5},
+      "math": {"base_ppl": 3.84, "domain_trained_ppl": 2.38, "best_mixed_ppl": 2.81, "mixed_vs_domain_trained_pct": 18.0},
+      "medical": {"base_ppl": 6.50, "domain_trained_ppl": 3.46, "best_mixed_ppl": 4.13, "mixed_vs_domain_trained_pct": 19.5},
+      "legal": {"base_ppl": 21.63, "domain_trained_ppl": 14.66, "best_mixed_ppl": 16.03, "mixed_vs_domain_trained_pct": 9.4},
+      "cooking": {"base_ppl": 3.21, "domain_trained_ppl": 2.55, "best_mixed_ppl": 2.66, "mixed_vs_domain_trained_pct": 4.5},
+      "psychology": {"base_ppl": 17.45, "domain_trained_ppl": 12.20, "best_mixed_ppl": 13.87, "mixed_vs_domain_trained_pct": 13.7},
+      "cybersecurity": {"base_ppl": 3.83, "domain_trained_ppl": 3.09, "best_mixed_ppl": 3.25, "mixed_vs_domain_trained_pct": 5.1},
+      "philosophy": {"base_ppl": 16.39, "domain_trained_ppl": 9.97, "best_mixed_ppl": 10.38, "mixed_vs_domain_trained_pct": 4.0},
+      "economics": {"base_ppl": 16.69, "domain_trained_ppl": 8.93, "best_mixed_ppl": 9.40, "mixed_vs_domain_trained_pct": 5.3},
+      "music": {"base_ppl": 3.57, "domain_trained_ppl": 2.34, "best_mixed_ppl": 2.46, "mixed_vs_domain_trained_pct": 5.1}
+    },
+    "k1_pass": false,
+    "k2_worse_count": 10,
+    "verdict": "KILLED"
+  }
+}

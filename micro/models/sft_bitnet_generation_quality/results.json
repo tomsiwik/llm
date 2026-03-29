@@ -1,0 +1,167 @@
+{
+  "experiment": "sft_bitnet_generation_quality",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "config": {
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "train_iters": 300,
+    "num_prompts_per_domain": 10,
+    "max_new_tokens": 128,
+    "seed": 42
+  },
+  "training": {
+    "medical": {
+      "base_ppl": 4.04,
+      "trained_ppl": 2.21,
+      "ppl_improvement_pct": 45.4,
+      "final_loss": 0.8593,
+      "peak_memory_gb": 16.86,
+      "time_s": 116.4
+    },
+    "code": {
+      "base_ppl": 3.59,
+      "trained_ppl": 2.57,
+      "ppl_improvement_pct": 28.3,
+      "final_loss": 0.7745,
+      "peak_memory_gb": 17.47,
+      "time_s": 116.5
+    },
+    "math": {
+      "base_ppl": 2.43,
+      "trained_ppl": 1.73,
+      "ppl_improvement_pct": 28.9,
+      "final_loss": 0.2807,
+      "peak_memory_gb": 17.47,
+      "time_s": 133.9
+    },
+    "legal": {
+      "base_ppl": 17.1,
+      "trained_ppl": 12.68,
+      "ppl_improvement_pct": 25.9,
+      "final_loss": 3.3744,
+      "peak_memory_gb": 17.48,
+      "time_s": 125.9
+    },
+    "finance": {
+      "base_ppl": 17.65,
+      "trained_ppl": 14.29,
+      "ppl_improvement_pct": 19.0,
+      "final_loss": 2.954,
+      "peak_memory_gb": 17.47,
+      "time_s": 129.1
+    }
+  },
+  "analysis": {
+    "domains": {
+      "medical": {
+        "base_judge": 4.0,
+        "sft_judge": 4.0,
+        "ntp_judge": 4.0,
+        "base_task_score": 0.0432,
+        "sft_task_score": 0.0387,
+        "ntp_task_score": 0.0553,
+        "sft_beats_base_judge": false,
+        "sft_beats_base_task": false,
+        "sft_beats_ntp_judge": false,
+        "sft_beats_ntp_task": false
+      },
+      "code": {
+        "base_judge": 4.0,
+        "sft_judge": 4.0,
+        "ntp_judge": 3.67,
+        "base_task_score": 0.3204,
+        "sft_task_score": 0.3741,
+        "ntp_task_score": 0.4392,
+        "sft_beats_base_judge": false,
+        "sft_beats_base_task": true,
+        "sft_beats_ntp_judge": true,
+        "sft_beats_ntp_task": false,
+        "base_syntax_valid": "5/10",
+        "sft_syntax_valid": "6/10",
+        "ntp_syntax_valid": "7/10"
+      },
+      "math": {
+        "base_judge": 4.0,
+        "sft_judge": 3.8,
+        "ntp_judge": 3.2,
+        "base_task_score": 0.1361,
+        "sft_task_score": 0.0836,
+        "ntp_task_score": 0.1147,
+        "sft_beats_base_judge": false,
+        "sft_beats_base_task": false,
+        "sft_beats_ntp_judge": true,
+        "sft_beats_ntp_task": false,
+        "base_math_correct": "2/10",
+        "sft_math_correct": "1/10",
+        "ntp_math_correct": "2/10"
+      },
+      "legal": {
+        "base_judge": 3.6,
+        "sft_judge": 3.87,
+        "ntp_judge": 4.0,
+        "base_task_score": 0.0338,
+        "sft_task_score": 0.0301,
+        "ntp_task_score": 0.0169,
+        "sft_beats_base_judge": true,
+        "sft_beats_base_task": false,
+        "sft_beats_ntp_judge": false,
+        "sft_beats_ntp_task": true
+      },
+      "finance": {
+        "base_judge": 4.0,
+        "sft_judge": 4.0,
+        "ntp_judge": 3.73,
+        "base_task_score": 0.0395,
+        "sft_task_score": 0.0495,
+        "ntp_task_score": 0.038,
+        "sft_beats_base_judge": false,
+        "sft_beats_base_task": true,
+        "sft_beats_ntp_judge": true,
+        "sft_beats_ntp_task": true
+      }
+    },
+    "kill_criteria": {
+      "K1_sft_worse_than_base_domains": 2,
+      "K1_threshold": ">=3/5 kills",
+      "K1_pass": true,
+      "K2_sft_better_than_ntp_domains": 4,
+      "K2_threshold": "0 improvement kills",
+      "K2_pass": true,
+      "K3_math_correctness_pct": 10.0,
+      "K3_threshold": "<40% kills",
+      "K3_pass": false
+    },
+    "routing": {
+      "sft_overall_accuracy": 0.04,
+      "ntp_overall_accuracy": 0.8
+    }
+  },
+  "judge_summary": {
+    "medical": {
+      "base": 4.0,
+      "sft_routed": 4.0,
+      "ntp_routed": 4.0
+    },
+    "code": {
+      "base": 4.0,
+      "sft_routed": 4.0,
+      "ntp_routed": 3.67
+    },
+    "math": {
+      "base": 4.0,
+      "sft_routed": 3.8,
+      "ntp_routed": 3.2
+    },
+    "legal": {
+      "base": 3.6,
+      "sft_routed": 3.87,
+      "ntp_routed": 4.0
+    },
+    "finance": {
+      "base": 4.0,
+      "sft_routed": 4.0,
+      "ntp_routed": 3.73
+    }
+  },
+  "total_time_s": 2140.8
+}

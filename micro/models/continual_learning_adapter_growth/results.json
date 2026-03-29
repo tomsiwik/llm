@@ -1,0 +1,577 @@
+{
+  "experiment": "continual_learning_adapter_growth",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "initial_domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "growth_domains": [
+    "health_fitness",
+    "psychology",
+    "science",
+    "history",
+    "philosophy",
+    "creative_writing",
+    "cooking",
+    "education",
+    "engineering",
+    "agriculture"
+  ],
+  "timestamp": "2026-03-27 21:46:58",
+  "base_ppls": {
+    "medical": 6.4952,
+    "code": 4.9764,
+    "math": 3.839,
+    "legal": 21.63,
+    "finance": 19.4296,
+    "health_fitness": 11.7071,
+    "psychology": 17.4531,
+    "science": 12.4574,
+    "history": 16.7012,
+    "philosophy": 16.3917,
+    "creative_writing": 20.7312,
+    "cooking": 3.2083,
+    "education": 3.576,
+    "engineering": 4.2065,
+    "agriculture": 14.5551
+  },
+  "cycles": [
+    {
+      "cycle": 0,
+      "N": 5,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance"
+      ],
+      "added_domain": null,
+      "individual_ppls": {
+        "medical": 6.4077,
+        "code": 5.1365,
+        "math": 3.8809,
+        "legal": 21.7417,
+        "finance": 19.0582
+      },
+      "composed_ppls": {
+        "medical": 6.5584,
+        "code": 5.0083,
+        "math": 3.8641,
+        "legal": 21.7246,
+        "finance": 19.4768
+      },
+      "mean_composition_improvement_pct": -0.59,
+      "mean_abs_cos": 0.020457,
+      "max_abs_cos": 0.044066,
+      "k1_max_degradation_pct": 0.0,
+      "k1_degraded_domain": null
+    },
+    {
+      "cycle": 1,
+      "N": 6,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness"
+      ],
+      "added_domain": "health_fitness",
+      "composed_ppls": {
+        "medical": 6.546,
+        "code": 4.9988,
+        "math": 3.858,
+        "legal": 21.7412,
+        "finance": 19.487,
+        "health_fitness": 11.7676
+      },
+      "mean_composition_improvement_pct": -0.51,
+      "mean_abs_cos": 0.020938,
+      "max_abs_cos": 0.044066,
+      "k1_max_composition_degradation_pct": 0.0764,
+      "k1_degraded_domain": "legal",
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 2,
+      "N": 7,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology"
+      ],
+      "added_domain": "psychology",
+      "composed_ppls": {
+        "medical": 6.5336,
+        "code": 4.9941,
+        "math": 3.8493,
+        "legal": 21.7034,
+        "finance": 19.4543,
+        "health_fitness": 11.7536,
+        "psychology": 17.4373
+      },
+      "mean_composition_improvement_pct": -0.28,
+      "mean_abs_cos": 0.020924,
+      "max_abs_cos": 0.044066,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 3,
+      "N": 8,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science"
+      ],
+      "added_domain": "science",
+      "composed_ppls": {
+        "medical": 6.5378,
+        "code": 4.9946,
+        "math": 3.8516,
+        "legal": 21.6955,
+        "finance": 19.4467,
+        "health_fitness": 11.7525,
+        "psychology": 17.4237,
+        "science": 12.5135
+      },
+      "mean_composition_improvement_pct": -0.3,
+      "mean_abs_cos": 0.020977,
+      "max_abs_cos": 0.050649,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 4,
+      "N": 9,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history"
+      ],
+      "added_domain": "history",
+      "composed_ppls": {
+        "medical": 6.5255,
+        "code": 4.9917,
+        "math": 3.8544,
+        "legal": 21.6636,
+        "finance": 19.4296,
+        "health_fitness": 11.7361,
+        "psychology": 17.403,
+        "science": 12.4954,
+        "history": 16.7664
+      },
+      "mean_composition_improvement_pct": -0.22,
+      "mean_abs_cos": 0.022952,
+      "max_abs_cos": 0.070373,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 5,
+      "N": 10,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy"
+      ],
+      "added_domain": "philosophy",
+      "composed_ppls": {
+        "medical": 6.5247,
+        "code": 4.9896,
+        "math": 3.8546,
+        "legal": 21.6575,
+        "finance": 19.4274,
+        "health_fitness": 11.734,
+        "psychology": 17.4064,
+        "science": 12.4926,
+        "history": 16.7659,
+        "philosophy": 16.4524
+      },
+      "mean_composition_improvement_pct": -0.22,
+      "mean_abs_cos": 0.023264,
+      "max_abs_cos": 0.070373,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 6,
+      "N": 11,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy",
+        "creative_writing"
+      ],
+      "added_domain": "creative_writing",
+      "composed_ppls": {
+        "medical": 6.5171,
+        "code": 4.9822,
+        "math": 3.8523,
+        "legal": 21.6425,
+        "finance": 19.4145,
+        "health_fitness": 11.7234,
+        "psychology": 17.3963,
+        "science": 12.4718,
+        "history": 16.7422,
+        "philosophy": 16.4302,
+        "creative_writing": 20.7618
+      },
+      "mean_composition_improvement_pct": -0.12,
+      "mean_abs_cos": 0.023052,
+      "max_abs_cos": 0.070373,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 7,
+      "N": 12,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy",
+        "creative_writing",
+        "cooking"
+      ],
+      "added_domain": "cooking",
+      "composed_ppls": {
+        "medical": 6.5008,
+        "code": 4.9725,
+        "math": 3.8472,
+        "legal": 21.6196,
+        "finance": 19.3921,
+        "health_fitness": 11.7048,
+        "psychology": 17.3851,
+        "science": 12.4435,
+        "history": 16.6965,
+        "philosophy": 16.394,
+        "creative_writing": 20.7076,
+        "cooking": 3.2129
+      },
+      "mean_composition_improvement_pct": 0.04,
+      "mean_abs_cos": 0.02251,
+      "max_abs_cos": 0.070373,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 8,
+      "N": 13,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy",
+        "creative_writing",
+        "cooking",
+        "education"
+      ],
+      "added_domain": "education",
+      "composed_ppls": {
+        "medical": 6.4946,
+        "code": 4.9643,
+        "math": 3.8483,
+        "legal": 21.6216,
+        "finance": 19.3932,
+        "health_fitness": 11.7034,
+        "psychology": 17.3926,
+        "science": 12.4308,
+        "history": 16.6792,
+        "philosophy": 16.3811,
+        "creative_writing": 20.6925,
+        "cooking": 3.2115,
+        "education": 3.5756
+      },
+      "mean_composition_improvement_pct": 0.09,
+      "mean_abs_cos": 0.022327,
+      "max_abs_cos": 0.070373,
+      "k1_max_composition_degradation_pct": 0.0,
+      "k1_degraded_domain": null,
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 9,
+      "N": 14,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy",
+        "creative_writing",
+        "cooking",
+        "education",
+        "engineering"
+      ],
+      "added_domain": "engineering",
+      "composed_ppls": {
+        "medical": 6.5074,
+        "code": 4.9711,
+        "math": 3.8524,
+        "legal": 21.6401,
+        "finance": 19.4085,
+        "health_fitness": 11.7194,
+        "psychology": 17.4054,
+        "science": 12.4513,
+        "history": 16.712,
+        "philosophy": 16.41,
+        "creative_writing": 20.7323,
+        "cooking": 3.2152,
+        "education": 3.5801,
+        "engineering": 4.2026
+      },
+      "mean_composition_improvement_pct": -0.04,
+      "mean_abs_cos": 0.023507,
+      "max_abs_cos": 0.075571,
+      "k1_max_composition_degradation_pct": 0.1259,
+      "k1_degraded_domain": "education",
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    },
+    {
+      "cycle": 10,
+      "N": 15,
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance",
+        "health_fitness",
+        "psychology",
+        "science",
+        "history",
+        "philosophy",
+        "creative_writing",
+        "cooking",
+        "education",
+        "engineering",
+        "agriculture"
+      ],
+      "added_domain": "agriculture",
+      "composed_ppls": {
+        "medical": 6.5481,
+        "code": 4.9912,
+        "math": 3.8638,
+        "legal": 21.7051,
+        "finance": 19.4649,
+        "health_fitness": 11.7693,
+        "psychology": 17.446,
+        "science": 12.5292,
+        "history": 16.8322,
+        "philosophy": 16.5114,
+        "creative_writing": 20.8715,
+        "cooking": 3.2229,
+        "education": 3.5926,
+        "engineering": 4.223,
+        "agriculture": 14.6653
+      },
+      "mean_composition_improvement_pct": -0.51,
+      "mean_abs_cos": 0.023015,
+      "max_abs_cos": 0.075571,
+      "k1_max_composition_degradation_pct": 0.5284,
+      "k1_degraded_domain": "creative_writing",
+      "train_result": {
+        "train_time_s": 0,
+        "skipped": true,
+        "converged": true
+      }
+    }
+  ],
+  "train_results": {
+    "medical": {
+      "skipped": true,
+      "reused": true
+    },
+    "code": {
+      "skipped": true,
+      "reused": true
+    },
+    "math": {
+      "skipped": true,
+      "reused": true
+    },
+    "legal": {
+      "skipped": true,
+      "reused": true
+    },
+    "finance": {
+      "skipped": true,
+      "reused": true
+    },
+    "health_fitness": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "psychology": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "science": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "history": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "philosophy": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "creative_writing": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "cooking": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "education": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "engineering": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    },
+    "agriculture": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true
+    }
+  },
+  "final_individual_ppls": {
+    "medical": 6.4077,
+    "code": 5.1365,
+    "math": 3.8809,
+    "legal": 21.7417,
+    "finance": 19.0582
+  },
+  "max_individual_drift_pct": 0.0,
+  "k1_pass": true,
+  "k1_worst_composition_degradation_pct": 0.5284,
+  "k1_worst_domain": "creative_writing",
+  "k1_worst_cycle": 10,
+  "k2_pass": true,
+  "k2_composition_trajectory": [
+    -0.59,
+    -0.51,
+    -0.28,
+    -0.3,
+    -0.22,
+    -0.22,
+    -0.12,
+    0.04,
+    0.09,
+    -0.04,
+    -0.51
+  ],
+  "total_time_s": 961.7,
+  "all_kill_criteria_pass": true,
+  "verdict": "SUPPORTED"
+}

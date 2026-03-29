@@ -1,13 +1,10 @@
-import { Command, Args, Flags } from "@oclif/core";
-import { eq } from "drizzle-orm";
-import { db, experiments, successCriteria } from "@experiment/db";
+import { Flags } from "@oclif/core";
+import { db, successCriteria } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class SuccessAdd extends Command {
+export default class SuccessAdd extends ExperimentCommand {
   static description = "Add a success criterion to an experiment";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     condition: Flags.string({ description: "Success condition", required: true }),
@@ -18,9 +15,7 @@ export default class SuccessAdd extends Command {
 
   async run() {
     const { args, flags } = await this.parse(SuccessAdd);
-
-    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
-    if (!exp) this.error(`Experiment "${args.id}" not found`);
+    await this.requireExperiment(args.id);
 
     const result = await db.insert(successCriteria).values({
       experimentId: args.id,

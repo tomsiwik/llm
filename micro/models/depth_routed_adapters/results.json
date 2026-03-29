@@ -1,0 +1,484 @@
+{
+  "seeds": {
+    "42": {
+      "base": {
+        "base_ppl": 1.7894,
+        "n_params": 1115264,
+        "train_time_s": 5.2
+      },
+      "adapters": {
+        "alpha": {
+          "individual_ppl": 1.006,
+          "train_time_s": 4.8
+        },
+        "numeric": {
+          "individual_ppl": 1.0077,
+          "train_time_s": 4.8
+        },
+        "mixed": {
+          "individual_ppl": 1.0152,
+          "train_time_s": 4.8
+        },
+        "upper": {
+          "individual_ppl": 1.0065,
+          "train_time_s": 4.8
+        },
+        "symbol": {
+          "individual_ppl": 1.0062,
+          "train_time_s": 4.8
+        }
+      },
+      "token_router": {
+        "accuracy": 1.0,
+        "train_time_s": 0.3
+      },
+      "depth_router": {
+        "baseline_ppl": 1.0069,
+        "best_ppl": 1.0063,
+        "improvement_pct": 0.05,
+        "depth_weights": [
+          [
+            0.23342213034629822,
+            0.23102284967899323,
+            0.18904444575309753,
+            0.13975541293621063,
+            0.2067551612854004
+          ],
+          [
+            0.21727463603019714,
+            0.20118987560272217,
+            0.22566500306129456,
+            0.14351047575473785,
+            0.21236000955104828
+          ],
+          [
+            0.24218584597110748,
+            0.18988920748233795,
+            0.14019905030727386,
+            0.25616392493247986,
+            0.17156195640563965
+          ],
+          [
+            0.2399948686361313,
+            0.20540466904640198,
+            0.170207217335701,
+            0.20677559077739716,
+            0.17761768400669098
+          ]
+        ],
+        "entropy_ratios": [
+          0.9904,
+          0.9928,
+          0.9852,
+          0.9953
+        ],
+        "mean_entropy_ratio": 0.9909,
+        "train_time_s": 3.7
+      },
+      "eval": {
+        "base_ppl": 1.7744,
+        "oracle_ppl": 1.0084,
+        "token_only_ppl": 1.0085,
+        "token_depth_ppl": 1.1468,
+        "random_ppl": 2.2052,
+        "uniform_1n_ppl": 1.7331,
+        "gamma_oracle": 1.0084,
+        "gamma_token_only": 1.0084,
+        "gamma_token_depth": 1.1355,
+        "domain_ppls": {
+          "alpha": {
+            "oracle": 1.006,
+            "token_only": 1.006,
+            "token_depth": 1.0061
+          },
+          "numeric": {
+            "oracle": 1.0077,
+            "token_only": 1.0077,
+            "token_depth": 1.0078
+          },
+          "mixed": {
+            "oracle": 1.0155,
+            "token_only": 1.0155,
+            "token_depth": 1.8371
+          },
+          "upper": {
+            "oracle": 1.0064,
+            "token_only": 1.0064,
+            "token_depth": 1.0068
+          },
+          "symbol": {
+            "oracle": 1.0062,
+            "token_only": 1.0062,
+            "token_depth": 1.0065
+          }
+        },
+        "eval_time_s": 1.9
+      },
+      "layer_norms": {
+        "alpha": [
+          1.327584,
+          1.445998,
+          1.599673,
+          1.738771
+        ],
+        "numeric": [
+          1.067534,
+          1.105474,
+          1.178355,
+          1.280059
+        ],
+        "mixed": [
+          1.061911,
+          1.531526,
+          2.328726,
+          2.992182
+        ],
+        "upper": [
+          1.516003,
+          1.483613,
+          1.626334,
+          1.732607
+        ],
+        "symbol": [
+          1.493801,
+          1.552439,
+          1.77791,
+          1.833122
+        ]
+      }
+    },
+    "137": {
+      "base": {
+        "base_ppl": 1.7875,
+        "n_params": 1115264,
+        "train_time_s": 5.2
+      },
+      "adapters": {
+        "alpha": {
+          "individual_ppl": 1.0069,
+          "train_time_s": 4.8
+        },
+        "numeric": {
+          "individual_ppl": 1.0127,
+          "train_time_s": 4.8
+        },
+        "mixed": {
+          "individual_ppl": 1.0289,
+          "train_time_s": 4.8
+        },
+        "upper": {
+          "individual_ppl": 1.0086,
+          "train_time_s": 4.8
+        },
+        "symbol": {
+          "individual_ppl": 1.008,
+          "train_time_s": 4.8
+        }
+      },
+      "token_router": {
+        "accuracy": 1.0,
+        "train_time_s": 0.2
+      },
+      "depth_router": {
+        "baseline_ppl": 1.0098,
+        "best_ppl": 1.0079,
+        "improvement_pct": 0.19,
+        "depth_weights": [
+          [
+            0.2572381794452667,
+            0.19138646125793457,
+            0.2250094711780548,
+            0.16809917986392975,
+            0.1582666039466858
+          ],
+          [
+            0.26220569014549255,
+            0.1743285059928894,
+            0.21751995384693146,
+            0.19772253930568695,
+            0.14822332561016083
+          ],
+          [
+            0.25882402062416077,
+            0.22809846699237823,
+            0.23153726756572723,
+            0.11704657226800919,
+            0.1644936203956604
+          ],
+          [
+            0.25830546021461487,
+            0.22854676842689514,
+            0.18580026924610138,
+            0.17244280874729156,
+            0.15490476787090302
+          ]
+        ],
+        "entropy_ratios": [
+          0.9897,
+          0.9884,
+          0.9778,
+          0.989
+        ],
+        "mean_entropy_ratio": 0.9862,
+        "train_time_s": 3.7
+      },
+      "eval": {
+        "base_ppl": 1.7877,
+        "oracle_ppl": 1.0129,
+        "token_only_ppl": 1.242,
+        "token_depth_ppl": 1.2313,
+        "random_ppl": 1.9188,
+        "uniform_1n_ppl": 1.7755,
+        "gamma_oracle": 1.0129,
+        "gamma_token_only": 1.0129,
+        "gamma_token_depth": 1.0653,
+        "domain_ppls": {
+          "alpha": {
+            "oracle": 1.0069,
+            "token_only": 1.0069,
+            "token_depth": 1.0069
+          },
+          "numeric": {
+            "oracle": 1.0127,
+            "token_only": 1.0127,
+            "token_depth": 1.0128
+          },
+          "mixed": {
+            "oracle": 1.0285,
+            "token_only": 1.0285,
+            "token_depth": 1.3222
+          },
+          "upper": {
+            "oracle": 1.0086,
+            "token_only": 1.0086,
+            "token_depth": 1.0089
+          },
+          "symbol": {
+            "oracle": 1.008,
+            "token_only": 1.008,
+            "token_depth": 1.0084
+          }
+        },
+        "eval_time_s": 1.9
+      },
+      "layer_norms": {
+        "alpha": [
+          1.222012,
+          1.233893,
+          1.350764,
+          1.586207
+        ],
+        "numeric": [
+          0.929947,
+          0.928927,
+          1.05185,
+          1.298734
+        ],
+        "mixed": [
+          1.198435,
+          1.871879,
+          2.447001,
+          3.46257
+        ],
+        "upper": [
+          1.466412,
+          1.456538,
+          1.616626,
+          1.739988
+        ],
+        "symbol": [
+          1.365973,
+          1.411388,
+          1.535792,
+          1.916755
+        ]
+      }
+    },
+    "314": {
+      "base": {
+        "base_ppl": 1.8199,
+        "n_params": 1115264,
+        "train_time_s": 5.1
+      },
+      "adapters": {
+        "alpha": {
+          "individual_ppl": 1.0095,
+          "train_time_s": 4.7
+        },
+        "numeric": {
+          "individual_ppl": 1.0135,
+          "train_time_s": 4.8
+        },
+        "mixed": {
+          "individual_ppl": 1.0284,
+          "train_time_s": 4.7
+        },
+        "upper": {
+          "individual_ppl": 1.0124,
+          "train_time_s": 4.7
+        },
+        "symbol": {
+          "individual_ppl": 1.0111,
+          "train_time_s": 4.8
+        }
+      },
+      "token_router": {
+        "accuracy": 1.0,
+        "train_time_s": 0.2
+      },
+      "depth_router": {
+        "baseline_ppl": 1.1275,
+        "best_ppl": 1.0349,
+        "improvement_pct": 8.21,
+        "depth_weights": [
+          [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+          ]
+        ],
+        "entropy_ratios": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_entropy_ratio": 1.0,
+        "train_time_s": 3.8
+      },
+      "eval": {
+        "base_ppl": 1.8275,
+        "oracle_ppl": 1.0148,
+        "token_only_ppl": 3.3844,
+        "token_depth_ppl": 2.8654,
+        "random_ppl": 2.3286,
+        "uniform_1n_ppl": 1.8262,
+        "gamma_oracle": 1.0148,
+        "gamma_token_only": 1.0148,
+        "gamma_token_depth": 1.3904,
+        "domain_ppls": {
+          "alpha": {
+            "oracle": 1.0095,
+            "token_only": 1.0095,
+            "token_depth": 1.0096
+          },
+          "numeric": {
+            "oracle": 1.0135,
+            "token_only": 1.0135,
+            "token_depth": 1.0137
+          },
+          "mixed": {
+            "oracle": 1.0276,
+            "token_only": 1.0276,
+            "token_depth": 4.9594
+          },
+          "upper": {
+            "oracle": 1.0124,
+            "token_only": 1.0124,
+            "token_depth": 1.0125
+          },
+          "symbol": {
+            "oracle": 1.0111,
+            "token_only": 1.0111,
+            "token_depth": 1.0112
+          }
+        },
+        "eval_time_s": 1.9
+      },
+      "layer_norms": {
+        "alpha": [
+          1.355825,
+          1.520009,
+          1.574756,
+          1.748719
+        ],
+        "numeric": [
+          1.189047,
+          1.195452,
+          1.245452,
+          1.382574
+        ],
+        "mixed": [
+          1.562158,
+          2.10154,
+          2.771457,
+          3.755496
+        ],
+        "upper": [
+          1.591984,
+          1.581377,
+          1.697575,
+          1.781175
+        ],
+        "symbol": [
+          1.616544,
+          1.675552,
+          1.828133,
+          1.927872
+        ]
+      }
+    }
+  },
+  "summary": {
+    "k1_mean_entropy_ratio": 0.9924,
+    "k1_per_seed": [
+      0.9909,
+      0.9862,
+      1.0
+    ],
+    "k1_pass": false,
+    "k2_depth_improvement_pct": -18.28,
+    "k2_pass": false,
+    "k2_per_seed": [
+      false,
+      false,
+      false
+    ],
+    "s1_pass": false,
+    "mean_gamma_oracle": 1.012,
+    "mean_gamma_token_only": 1.012,
+    "mean_gamma_token_depth": 1.1971,
+    "oracle_gap_token_pct": 0.0,
+    "oracle_gap_depth_pct": 18.28,
+    "gamma_oracles": [
+      1.0084,
+      1.0129,
+      1.0148
+    ],
+    "gamma_tokens": [
+      1.0084,
+      1.0129,
+      1.0148
+    ],
+    "gamma_depths": [
+      1.1355,
+      1.0653,
+      1.3904
+    ],
+    "verdict": "killed"
+  },
+  "total_time_s": 104.7
+}

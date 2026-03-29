@@ -1,0 +1,182 @@
+{
+  "fp32": {
+    "python": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 5.5882,
+      "memory_bytes": 327940,
+      "latency_us": 166.44
+    },
+    "math": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.7407,
+      "memory_bytes": 327940,
+      "latency_us": 167.08
+    },
+    "medical": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 3.6311,
+      "memory_bytes": 327940,
+      "latency_us": 166.49
+    },
+    "legal": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.1054,
+      "memory_bytes": 327940,
+      "latency_us": 166.31
+    },
+    "creative": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.476,
+      "memory_bytes": 327940,
+      "latency_us": 167.35
+    }
+  },
+  "int8": {
+    "python": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 5.592,
+      "memory_bytes": 82092,
+      "latency_us": 169.2,
+      "memory_reduction_pct": 75.0,
+      "max_logit_diff": 0.006186
+    },
+    "math": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.7423,
+      "memory_bytes": 82092,
+      "latency_us": 176.2,
+      "memory_reduction_pct": 75.0,
+      "max_logit_diff": 0.00986
+    },
+    "medical": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 3.6322,
+      "memory_bytes": 82092,
+      "latency_us": 168.08,
+      "memory_reduction_pct": 75.0,
+      "max_logit_diff": 0.001655
+    },
+    "legal": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.1016,
+      "memory_bytes": 82092,
+      "latency_us": 176.9,
+      "memory_reduction_pct": 75.0,
+      "max_logit_diff": 0.005244
+    },
+    "creative": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.4814,
+      "memory_bytes": 82092,
+      "latency_us": 177.55,
+      "memory_reduction_pct": 75.0,
+      "max_logit_diff": 0.015656
+    }
+  },
+  "int4": {
+    "python": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 5.5969,
+      "memory_bytes": 41116,
+      "latency_us": 172.3,
+      "memory_reduction_pct": 87.5,
+      "max_logit_diff": 0.024699
+    },
+    "math": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.7406,
+      "memory_bytes": 41116,
+      "latency_us": 176.51,
+      "memory_reduction_pct": 87.5,
+      "max_logit_diff": 0.044164
+    },
+    "medical": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 3.6506,
+      "memory_bytes": 41116,
+      "latency_us": 175.36,
+      "memory_reduction_pct": 87.5,
+      "max_logit_diff": 0.031169
+    },
+    "legal": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.1114,
+      "memory_bytes": 41116,
+      "latency_us": 175.44,
+      "memory_reduction_pct": 87.5,
+      "max_logit_diff": 0.021272
+    },
+    "creative": {
+      "accuracy": 1.0,
+      "own_domain_accuracy": 1.0,
+      "negative_accuracy": 1.0,
+      "mean_logit_magnitude": 4.5259,
+      "memory_bytes": 41116,
+      "latency_us": 178.58,
+      "memory_reduction_pct": 87.5,
+      "max_logit_diff": 0.045454
+    }
+  },
+  "summary": {
+    "fp32": {
+      "mean_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "mean_memory_bytes": 327940,
+      "mean_latency_us": 166.73
+    },
+    "int8": {
+      "mean_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "mean_memory_bytes": 82092,
+      "mean_latency_us": 173.59
+    },
+    "int4": {
+      "mean_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "mean_memory_bytes": 41116,
+      "mean_latency_us": 175.64
+    }
+  },
+  "projection_n100": {
+    "fp32_mb": 32.79,
+    "int8_mb": 8.21,
+    "int4_mb": 4.11
+  },
+  "kill_criteria": {
+    "K1_int4_acc_above_90pct": true,
+    "K2_latency_not_2x_worse": true
+  },
+  "success_criteria": {
+    "S1_95pct_acc_50pct_mem_reduction": true
+  },
+  "verdict": "SUPPORTED",
+  "total_time_s": 11.3
+}

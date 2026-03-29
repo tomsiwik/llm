@@ -1,0 +1,965 @@
+{
+  "experiment": "energy_gap_topk_routing",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "type": "guided_exploration",
+  "seed": 42,
+  "n_prompts_per_domain": 10,
+  "max_new_tokens": 128,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "analysis": {
+    "per_domain": {
+      "medical": {
+        "base": {
+          "mean": 0.4786
+        },
+        "uniform": {
+          "mean": 0.4458
+        },
+        "top1": {
+          "mean": 0.4408
+        },
+        "oracle": {
+          "mean": 0.4408
+        },
+        "top1_vs_uniform_pct": -1.13,
+        "top1_vs_base_pct": -7.89,
+        "oracle_vs_top1_pct": 0.0,
+        "routing_accuracy": 1.0,
+        "n_correct": 10,
+        "n_total": 10
+      },
+      "code": {
+        "base": {
+          "mean": 0.3204,
+          "syntax_valid_rate": 0.5
+        },
+        "uniform": {
+          "mean": 0.3268,
+          "syntax_valid_rate": 0.5
+        },
+        "top1": {
+          "mean": 0.3471,
+          "syntax_valid_rate": 0.5
+        },
+        "oracle": {
+          "mean": 0.3471,
+          "syntax_valid_rate": 0.5
+        },
+        "top1_vs_uniform_pct": 6.21,
+        "top1_vs_base_pct": 8.32,
+        "oracle_vs_top1_pct": 0.0,
+        "routing_accuracy": 1.0,
+        "n_correct": 10,
+        "n_total": 10
+      },
+      "math": {
+        "base": {
+          "mean": 0.1361,
+          "answer_correct_rate": 0.2
+        },
+        "uniform": {
+          "mean": 0.1839,
+          "answer_correct_rate": 0.3
+        },
+        "top1": {
+          "mean": 0.3688,
+          "answer_correct_rate": 0.7
+        },
+        "oracle": {
+          "mean": 0.3688,
+          "answer_correct_rate": 0.7
+        },
+        "top1_vs_uniform_pct": 100.57,
+        "top1_vs_base_pct": 171.01,
+        "oracle_vs_top1_pct": 0.0,
+        "routing_accuracy": 1.0,
+        "n_correct": 10,
+        "n_total": 10
+      },
+      "legal": {
+        "base": {
+          "mean": 0.4669
+        },
+        "uniform": {
+          "mean": 0.4474
+        },
+        "top1": {
+          "mean": 0.4338
+        },
+        "oracle": {
+          "mean": 0.4329
+        },
+        "top1_vs_uniform_pct": -3.03,
+        "top1_vs_base_pct": -7.1,
+        "oracle_vs_top1_pct": -0.21,
+        "routing_accuracy": 0.7,
+        "n_correct": 7,
+        "n_total": 10
+      },
+      "finance": {
+        "base": {
+          "mean": 0.4853
+        },
+        "uniform": {
+          "mean": 0.4742
+        },
+        "top1": {
+          "mean": 0.4411
+        },
+        "oracle": {
+          "mean": 0.4264
+        },
+        "top1_vs_uniform_pct": -6.98,
+        "top1_vs_base_pct": -9.09,
+        "oracle_vs_top1_pct": -3.34,
+        "routing_accuracy": 0.7,
+        "n_correct": 7,
+        "n_total": 10
+      }
+    },
+    "routing_accuracy": {
+      "medical": {
+        "accuracy": 1.0,
+        "selection_distribution": {
+          "medical": 10
+        }
+      },
+      "code": {
+        "accuracy": 1.0,
+        "selection_distribution": {
+          "code": 10
+        }
+      },
+      "math": {
+        "accuracy": 1.0,
+        "selection_distribution": {
+          "math": 10
+        }
+      },
+      "legal": {
+        "accuracy": 0.7,
+        "selection_distribution": {
+          "legal": 7,
+          "finance": 3
+        }
+      },
+      "finance": {
+        "accuracy": 0.7,
+        "selection_distribution": {
+          "finance": 7,
+          "legal": 3
+        }
+      },
+      "overall": {
+        "accuracy": 0.88,
+        "correct": 44,
+        "total": 50
+      }
+    },
+    "kill_criteria": {
+      "K575": {
+        "test": "Energy gap top-1 selects correct domain adapter >= 80%",
+        "measured": 0.88,
+        "threshold": 0.8,
+        "per_domain": {
+          "medical": 1.0,
+          "code": 1.0,
+          "math": 1.0,
+          "legal": 0.7,
+          "finance": 0.7
+        },
+        "result": "PASS"
+      },
+      "K576": {
+        "test": "Top-1 routed generation quality better than uniform on math+code",
+        "math_top1": 0.3688,
+        "math_uniform": 0.1839,
+        "code_top1": 0.3471,
+        "code_uniform": 0.3268,
+        "math_top1_better": true,
+        "code_top1_better": true,
+        "result": "PASS"
+      },
+      "K577": {
+        "test": "Energy gap overhead < 10% of base inference time",
+        "per_prompt_energy_s": 0.726,
+        "per_prompt_gen_s": 2.459,
+        "overhead_pct": 29.5,
+        "threshold_pct": 10.0,
+        "result": "FAIL",
+        "note": "Energy gap includes model loading overhead (amortized in production)"
+      }
+    },
+    "timing": {
+      "energy_computation": {
+        "base_nll_time_s": 2.7,
+        "adapter_nll_time_s": 33.5,
+        "total_energy_time_s": 36.3,
+        "n_prompts_total": 50
+      },
+      "generation": {
+        "base": 122.97260212898254,
+        "uniform": 809.7660868167877,
+        "top1": 638.2275710105896,
+        "oracle": 638.6972348690033
+      }
+    },
+    "energy_gap_matrix": {
+      "medical": {
+        "medical": -1.4533,
+        "code": -1.3418,
+        "math": -0.4882,
+        "legal": -1.6299,
+        "finance": -1.5662
+      },
+      "code": {
+        "medical": -0.787,
+        "code": -1.9262,
+        "math": -0.4946,
+        "legal": -1.6958,
+        "finance": -1.611
+      },
+      "math": {
+        "medical": -0.7852,
+        "code": -1.3569,
+        "math": -0.997,
+        "legal": -1.5115,
+        "finance": -1.47
+      },
+      "legal": {
+        "medical": -0.9675,
+        "code": -1.5345,
+        "math": -0.4985,
+        "legal": -2.176,
+        "finance": -2.021
+      },
+      "finance": {
+        "medical": -0.9703,
+        "code": -1.5439,
+        "math": -0.5394,
+        "legal": -2.1354,
+        "finance": -2.0754
+      }
+    },
+    "verdict": "KILLED"
+  },
+  "routing_decisions": {
+    "medical": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "medical",
+        "selected_gap": -1.3772631883621216,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.3772631883621216,
+          "code": -0.7835333347320557,
+          "math": -0.7353177070617676,
+          "legal": -0.969984769821167,
+          "finance": -0.9768718481063843
+        },
+        "gap_margin": -0.4003913402557373
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "medical",
+        "selected_gap": -1.8314825296401978,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.8314825296401978,
+          "code": -1.180885910987854,
+          "math": -0.9202554225921631,
+          "legal": -1.4049595594406128,
+          "finance": -1.4621291160583496
+        },
+        "gap_margin": -0.36935341358184814
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "medical",
+        "selected_gap": -1.663787841796875,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.663787841796875,
+          "code": -0.9849998950958252,
+          "math": -0.7829360961914062,
+          "legal": -1.1057521104812622,
+          "finance": -1.1259686946868896
+        },
+        "gap_margin": -0.5378191471099854
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "medical",
+        "selected_gap": -0.8357809782028198,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.8357809782028198,
+          "code": -0.35973215103149414,
+          "math": -0.39865970611572266,
+          "legal": -0.3821539878845215,
+          "finance": -0.391900897026062
+        },
+        "gap_margin": -0.43712127208709717
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "medical",
+        "selected_gap": -1.172457218170166,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.172457218170166,
+          "code": -0.5125911235809326,
+          "math": -0.5972628593444824,
+          "legal": -0.6427311897277832,
+          "finance": -0.6340005397796631
+        },
+        "gap_margin": -0.5297260284423828
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "medical",
+        "selected_gap": -1.9476611614227295,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.9476611614227295,
+          "code": -0.948293924331665,
+          "math": -1.1439440250396729,
+          "legal": -1.3491957187652588,
+          "finance": -1.3748056888580322
+        },
+        "gap_margin": -0.5728554725646973
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "medical",
+        "selected_gap": -1.700347900390625,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.700347900390625,
+          "code": -1.2051756381988525,
+          "math": -1.1626183986663818,
+          "legal": -1.4265272617340088,
+          "finance": -1.425424575805664
+        },
+        "gap_margin": -0.2738206386566162
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "medical",
+        "selected_gap": -1.6152310371398926,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6152310371398926,
+          "code": -0.6662998199462891,
+          "math": -0.8472480773925781,
+          "legal": -0.8427560329437256,
+          "finance": -0.8005049228668213
+        },
+        "gap_margin": -0.7679829597473145
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "medical",
+        "selected_gap": -0.7645320892333984,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.7645320892333984,
+          "code": -0.4381740093231201,
+          "math": -0.5097823143005371,
+          "legal": -0.5199823379516602,
+          "finance": -0.5078424215316772
+        },
+        "gap_margin": -0.24454975128173828
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "medical",
+        "selected_gap": -1.6244380474090576,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6244380474090576,
+          "code": -0.7906780242919922,
+          "math": -0.7535436153411865,
+          "legal": -1.0306761264801025,
+          "finance": -1.003974437713623
+        },
+        "gap_margin": -0.5937619209289551
+      }
+    ],
+    "code": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "selected_gap": -1.9531395435333252,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.3446059226989746,
+          "code": -1.9531395435333252,
+          "math": -1.3851478099822998,
+          "legal": -1.4635124206542969,
+          "finance": -1.5016179084777832
+        },
+        "gap_margin": -0.451521635055542
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "code",
+        "selected_gap": -2.5612188577651978,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.859483242034912,
+          "code": -2.5612188577651978,
+          "math": -1.7690978050231934,
+          "legal": -2.213327407836914,
+          "finance": -2.2710702419281006
+        },
+        "gap_margin": -0.29014861583709717
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "code",
+        "selected_gap": -0.9371848106384277,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.7193277478218079,
+          "code": -0.9371848106384277,
+          "math": -0.6945478916168213,
+          "legal": -0.7074284553527832,
+          "finance": -0.7219058871269226
+        },
+        "gap_margin": -0.21527892351150513
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "code",
+        "selected_gap": -2.518822431564331,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6806797981262207,
+          "code": -2.518822431564331,
+          "math": -1.6645843982696533,
+          "legal": -1.9435632228851318,
+          "finance": -1.9250082969665527
+        },
+        "gap_margin": -0.5752592086791992
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "code",
+        "selected_gap": -1.6692765951156616,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.1175585985183716,
+          "code": -1.6692765951156616,
+          "math": -1.1700711250305176,
+          "legal": -1.1790329217910767,
+          "finance": -1.2362613677978516
+        },
+        "gap_margin": -0.43301522731781006
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "code",
+        "selected_gap": -2.4647892713546753,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6909587383270264,
+          "code": -2.4647892713546753,
+          "math": -1.6644806861877441,
+          "legal": -2.113770842552185,
+          "finance": -2.1013652086257935
+        },
+        "gap_margin": -0.35101842880249023
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "code",
+        "selected_gap": -1.8096730709075928,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.3029487133026123,
+          "code": -1.8096730709075928,
+          "math": -1.1751067638397217,
+          "legal": -1.445839762687683,
+          "finance": -1.4744582176208496
+        },
+        "gap_margin": -0.33521485328674316
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "code",
+        "selected_gap": -1.6647189855575562,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.1923325061798096,
+          "code": -1.6647189855575562,
+          "math": -1.1875827312469482,
+          "legal": -1.2269868850708008,
+          "finance": -1.257251262664795
+        },
+        "gap_margin": -0.40746772289276123
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "code",
+        "selected_gap": -1.821967363357544,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.2388267517089844,
+          "code": -1.821967363357544,
+          "math": -1.2679412364959717,
+          "legal": -1.4023115634918213,
+          "finance": -1.410980463027954
+        },
+        "gap_margin": -0.41098690032958984
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "code",
+        "selected_gap": -1.8609237670898438,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.2713937759399414,
+          "code": -1.8609237670898438,
+          "math": -1.5900163650512695,
+          "legal": -1.6496772766113281,
+          "finance": -1.538956880569458
+        },
+        "gap_margin": -0.21124649047851562
+      }
+    ],
+    "math": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "math",
+        "selected_gap": -0.6387690305709839,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.36658763885498047,
+          "code": -0.3699345588684082,
+          "math": -0.6387690305709839,
+          "legal": -0.3820805549621582,
+          "finance": -0.38918256759643555
+        },
+        "gap_margin": -0.24958646297454834
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "math",
+        "selected_gap": -1.2520735263824463,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.521397590637207,
+          "code": -0.539199709892273,
+          "math": -1.2520735263824463,
+          "legal": -0.48871564865112305,
+          "finance": -0.5475867986679077
+        },
+        "gap_margin": -0.7044867277145386
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "math",
+        "selected_gap": -1.190578579902649,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.6106948852539062,
+          "code": -0.6310615539550781,
+          "math": -1.190578579902649,
+          "legal": -0.6940590143203735,
+          "finance": -0.7183796167373657
+        },
+        "gap_margin": -0.4721989631652832
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "math",
+        "selected_gap": -1.1389425992965698,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.5698181390762329,
+          "code": -0.5508192777633667,
+          "math": -1.1389425992965698,
+          "legal": -0.5615887641906738,
+          "finance": -0.5529724359512329
+        },
+        "gap_margin": -0.5691244602203369
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "math",
+        "selected_gap": -0.7999037504196167,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.5376476049423218,
+          "code": -0.5005480051040649,
+          "math": -0.7999037504196167,
+          "legal": -0.5055536031723022,
+          "finance": -0.5669214725494385
+        },
+        "gap_margin": -0.23298227787017822
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "math",
+        "selected_gap": -0.8616200685501099,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.3530707359313965,
+          "code": -0.35352134704589844,
+          "math": -0.8616200685501099,
+          "legal": -0.3935720920562744,
+          "finance": -0.40812742710113525
+        },
+        "gap_margin": -0.4534926414489746
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "math",
+        "selected_gap": -1.3367671966552734,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.7616715431213379,
+          "code": -0.741248607635498,
+          "math": -1.3367671966552734,
+          "legal": -0.8317484855651855,
+          "finance": -0.8660166263580322
+        },
+        "gap_margin": -0.4707505702972412
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "math",
+        "selected_gap": -0.685626745223999,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.11931383609771729,
+          "code": -0.11292994022369385,
+          "math": -0.685626745223999,
+          "legal": -0.03545224666595459,
+          "finance": -0.0851898193359375
+        },
+        "gap_margin": -0.5663129091262817
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "math",
+        "selected_gap": -0.8880468606948853,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.5406064987182617,
+          "code": -0.5665910243988037,
+          "math": -0.8880468606948853,
+          "legal": -0.5660182237625122,
+          "finance": -0.6414625644683838
+        },
+        "gap_margin": -0.24658429622650146
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "math",
+        "selected_gap": -1.1780996322631836,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -0.5012869834899902,
+          "code": -0.58030104637146,
+          "math": -1.1780996322631836,
+          "legal": -0.5267078876495361,
+          "finance": -0.6176803112030029
+        },
+        "gap_margin": -0.5604193210601807
+      }
+    ],
+    "legal": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "legal",
+        "selected_gap": -2.445324659347534,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.7173757553100586,
+          "code": -1.9239764213562012,
+          "math": -1.432279109954834,
+          "legal": -2.445324659347534,
+          "finance": -2.4329960346221924
+        },
+        "gap_margin": -0.012328624725341797
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "legal",
+        "selected_gap": -2.170262098312378,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.8501627445220947,
+          "code": -1.7873868942260742,
+          "math": -1.608799934387207,
+          "legal": -2.170262098312378,
+          "finance": -2.0936591625213623
+        },
+        "gap_margin": -0.07660293579101562
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "legal",
+        "selected_gap": -1.705289363861084,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.3708019256591797,
+          "code": -1.3039898872375488,
+          "math": -1.3589885234832764,
+          "legal": -1.705289363861084,
+          "finance": -1.627500057220459
+        },
+        "gap_margin": -0.077789306640625
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "legal",
+        "selected_gap": -2.2442586421966553,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.618351936340332,
+          "code": -1.51350736618042,
+          "math": -1.5305123329162598,
+          "legal": -2.2442586421966553,
+          "finance": -2.0782134532928467
+        },
+        "gap_margin": -0.1660451889038086
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "finance",
+        "selected_gap": -2.324126720428467,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -1.8603951930999756,
+          "code": -1.983262300491333,
+          "math": -1.4713935852050781,
+          "legal": -2.312810778617859,
+          "finance": -2.324126720428467
+        },
+        "gap_margin": -0.01131594181060791
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "legal",
+        "selected_gap": -1.667790174484253,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.1316065788269043,
+          "code": -1.1779053211212158,
+          "math": -1.4089467525482178,
+          "legal": -1.667790174484253,
+          "finance": -1.6635181903839111
+        },
+        "gap_margin": -0.004271984100341797
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "finance",
+        "selected_gap": -1.765878677368164,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -1.3376426696777344,
+          "code": -1.1008405685424805,
+          "math": -1.0940980911254883,
+          "legal": -1.6907200813293457,
+          "finance": -1.765878677368164
+        },
+        "gap_margin": -0.07515859603881836
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "legal",
+        "selected_gap": -1.8405826091766357,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.3016719818115234,
+          "code": -1.575136661529541,
+          "math": -1.4314627647399902,
+          "legal": -1.8405826091766357,
+          "finance": -1.8350274562835693
+        },
+        "gap_margin": -0.005555152893066406
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "legal",
+        "selected_gap": -2.9875359535217285,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -2.2751126289367676,
+          "code": -2.173896551132202,
+          "math": -2.070849895477295,
+          "legal": -2.9875359535217285,
+          "finance": -2.835728406906128
+        },
+        "gap_margin": -0.15180754661560059
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "finance",
+        "selected_gap": -2.6976637840270996,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -1.836174488067627,
+          "code": -2.418196439743042,
+          "math": -1.707444190979004,
+          "legal": -2.6953890323638916,
+          "finance": -2.6976637840270996
+        },
+        "gap_margin": -0.002274751663208008
+      }
+    ],
+    "finance": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "finance",
+        "selected_gap": -2.1178661584854126,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6073253154754639,
+          "code": -1.600393295288086,
+          "math": -1.1081600189208984,
+          "legal": -2.0122790336608887,
+          "finance": -2.1178661584854126
+        },
+        "gap_margin": -0.10558712482452393
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "finance",
+        "selected_gap": -1.8812167644500732,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.198622226715088,
+          "code": -1.2752106189727783,
+          "math": -1.1542322635650635,
+          "legal": -1.754927158355713,
+          "finance": -1.8812167644500732
+        },
+        "gap_margin": -0.12628960609436035
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "finance",
+        "selected_gap": -1.729140043258667,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.5547075271606445,
+          "code": -1.2311444282531738,
+          "math": -1.190751075744629,
+          "legal": -1.656421184539795,
+          "finance": -1.729140043258667
+        },
+        "gap_margin": -0.07271885871887207
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "finance",
+        "selected_gap": -1.6678649187088013,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.210634708404541,
+          "code": -1.1990761756896973,
+          "math": -1.2208294868469238,
+          "legal": -1.5184221267700195,
+          "finance": -1.6678649187088013
+        },
+        "gap_margin": -0.14944279193878174
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "finance",
+        "selected_gap": -1.8295173645019531,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.6413586139678955,
+          "code": -1.645667314529419,
+          "math": -1.440255880355835,
+          "legal": -1.7992148399353027,
+          "finance": -1.8295173645019531
+        },
+        "gap_margin": -0.03030252456665039
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "legal",
+        "selected_gap": -3.5038623809814453,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -2.274188995361328,
+          "code": -2.766841411590576,
+          "math": -2.3479034900665283,
+          "legal": -3.5038623809814453,
+          "finance": -3.469641923904419
+        },
+        "gap_margin": -0.03422045707702637
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "finance",
+        "selected_gap": -2.625369071960449,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -2.459709644317627,
+          "code": -2.22822904586792,
+          "math": -2.1083321571350098,
+          "legal": -2.5625994205474854,
+          "finance": -2.625369071960449
+        },
+        "gap_margin": -0.06276965141296387
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "legal",
+        "selected_gap": -1.3765705823898315,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -1.043360710144043,
+          "code": -1.0117480754852295,
+          "math": -1.06648850440979,
+          "legal": -1.3765705823898315,
+          "finance": -1.3409830331802368
+        },
+        "gap_margin": -0.03558754920959473
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "finance",
+        "selected_gap": -2.6165719032287598,
+        "correct_selection": true,
+        "all_gaps": {
+          "medical": -1.7042062282562256,
+          "code": -2.151435375213623,
+          "math": -1.8417506217956543,
+          "legal": -2.545491933822632,
+          "finance": -2.6165719032287598
+        },
+        "gap_margin": -0.07107996940612793
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "legal",
+        "selected_gap": -1.4806180000305176,
+        "correct_selection": false,
+        "all_gaps": {
+          "medical": -0.9679112434387207,
+          "code": -1.000072956085205,
+          "math": -1.2209150791168213,
+          "legal": -1.4806180000305176,
+          "finance": -1.4758868217468262
+        },
+        "gap_margin": -0.004731178283691406
+      }
+    ]
+  },
+  "total_time_s": 2246.1
+}

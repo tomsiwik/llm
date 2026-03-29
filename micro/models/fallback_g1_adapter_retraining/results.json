@@ -1,0 +1,293 @@
+{
+  "experiment": "fallback_g1_adapter_retraining",
+  "architecture": {
+    "d_model": 256,
+    "n_layers": 4,
+    "n_heads": 8,
+    "lora_rank": 4,
+    "lora_alpha": 8.0,
+    "adapter_lr": 0.0003,
+    "adapter_steps": 3000
+  },
+  "base": {
+    "ppl": 268.4220687495347,
+    "params": 28954368,
+    "cached": true
+  },
+  "adapters": {
+    "science": {
+      "domain": "science",
+      "base_domain_ppl": 136.35959452934773,
+      "base_val_ppl": 268.57243295204387,
+      "adapted_domain_ppl": 131.9153264334972,
+      "adapted_val_ppl": 272.47650367237486,
+      "improvement_pct": 3.26,
+      "val_degradation_pct": 1.45,
+      "trainable_params": 32768,
+      "actual_steps": 3000,
+      "train_time_s": 677.8,
+      "final_loss": 4.898170471191406,
+      "delta_ratio_mean": 0.126191,
+      "delta_ratio_min": 0.063805,
+      "delta_ratio_max": 0.218552,
+      "grad_norms": [
+        {
+          "step": 500,
+          "loss": 4.845324516296387,
+          "val_ppl": 269.74404448821576
+        },
+        {
+          "step": 1000,
+          "loss": 4.7939372062683105,
+          "val_ppl": 270.1032601340312
+        },
+        {
+          "step": 1500,
+          "loss": 4.886561870574951,
+          "val_ppl": 270.5622509995033
+        },
+        {
+          "step": 2000,
+          "loss": 4.942575454711914,
+          "val_ppl": 270.35893664456796
+        },
+        {
+          "step": 2500,
+          "loss": 4.908430099487305,
+          "val_ppl": 270.3455166984741
+        },
+        {
+          "step": 3000,
+          "loss": 4.898170471191406,
+          "val_ppl": 270.43966374522375
+        }
+      ],
+      "loss_trajectory": [
+        4.845324516296387,
+        4.7939372062683105,
+        4.886561870574951,
+        4.942575454711914,
+        4.908430099487305,
+        4.898170471191406
+      ]
+    },
+    "history": {
+      "domain": "history",
+      "base_domain_ppl": 155.7788103186758,
+      "base_val_ppl": 268.57243295204387,
+      "adapted_domain_ppl": 151.04683203653784,
+      "adapted_val_ppl": 272.42320636599686,
+      "improvement_pct": 3.04,
+      "val_degradation_pct": 1.43,
+      "trainable_params": 32768,
+      "actual_steps": 3000,
+      "train_time_s": 677.2,
+      "final_loss": 5.01268196105957,
+      "delta_ratio_mean": 0.126228,
+      "delta_ratio_min": 0.057048,
+      "delta_ratio_max": 0.218295,
+      "grad_norms": [
+        {
+          "step": 500,
+          "loss": 5.08188533782959,
+          "val_ppl": 268.66285588003603
+        },
+        {
+          "step": 1000,
+          "loss": 5.090206623077393,
+          "val_ppl": 269.32650723979845
+        },
+        {
+          "step": 1500,
+          "loss": 5.011378288269043,
+          "val_ppl": 269.61299563034345
+        },
+        {
+          "step": 2000,
+          "loss": 5.040152549743652,
+          "val_ppl": 269.75174917486635
+        },
+        {
+          "step": 2500,
+          "loss": 5.050164222717285,
+          "val_ppl": 269.6825049329574
+        },
+        {
+          "step": 3000,
+          "loss": 5.01268196105957,
+          "val_ppl": 269.7287386684234
+        }
+      ],
+      "loss_trajectory": [
+        5.08188533782959,
+        5.090206623077393,
+        5.011378288269043,
+        5.040152549743652,
+        5.050164222717285,
+        5.01268196105957
+      ]
+    },
+    "technology": {
+      "domain": "technology",
+      "base_domain_ppl": 145.78198911952188,
+      "base_val_ppl": 268.57243295204387,
+      "adapted_domain_ppl": 141.19079563381476,
+      "adapted_val_ppl": 272.8344859093734,
+      "improvement_pct": 3.15,
+      "val_degradation_pct": 1.59,
+      "trainable_params": 32768,
+      "actual_steps": 3000,
+      "train_time_s": 679.2,
+      "final_loss": 4.84251594543457,
+      "delta_ratio_mean": 0.123961,
+      "delta_ratio_min": 0.061814,
+      "delta_ratio_max": 0.202512,
+      "grad_norms": [
+        {
+          "step": 500,
+          "loss": 5.051430702209473,
+          "val_ppl": 269.4246160329158
+        },
+        {
+          "step": 1000,
+          "loss": 4.927071571350098,
+          "val_ppl": 270.22918685688467
+        },
+        {
+          "step": 1500,
+          "loss": 5.008864879608154,
+          "val_ppl": 270.4590980645695
+        },
+        {
+          "step": 2000,
+          "loss": 4.80361795425415,
+          "val_ppl": 270.5098505328333
+        },
+        {
+          "step": 2500,
+          "loss": 4.976800441741943,
+          "val_ppl": 270.5381135316096
+        },
+        {
+          "step": 3000,
+          "loss": 4.84251594543457,
+          "val_ppl": 270.541519222352
+        }
+      ],
+      "loss_trajectory": [
+        5.051430702209473,
+        4.927071571350098,
+        5.008864879608154,
+        4.80361795425415,
+        4.976800441741943,
+        4.84251594543457
+      ]
+    }
+  },
+  "composition": {
+    "base_ppls": {
+      "science": 136.36,
+      "history": 155.78,
+      "technology": 145.78
+    },
+    "base_val_ppl": 268.42,
+    "methods": {
+      "avg_1_N": {
+        "domain_ppls": {
+          "science": 142.46,
+          "history": 163.02,
+          "technology": 152.3
+        },
+        "val_ppl": 281.34,
+        "improvements": {
+          "science": -4.48,
+          "history": -4.65,
+          "technology": -4.47
+        }
+      },
+      "task_arith_lambda_0.3": {
+        "domain_ppls": {
+          "science": 141.69,
+          "history": 162.08,
+          "technology": 151.6
+        },
+        "val_ppl": 280.01,
+        "improvements": {
+          "science": -3.91,
+          "history": -4.04,
+          "technology": -3.99
+        }
+      },
+      "task_arith_lambda_0.5": {
+        "domain_ppls": {
+          "science": 144.93,
+          "history": 166.08,
+          "technology": 155.27
+        },
+        "val_ppl": 286.64,
+        "improvements": {
+          "science": -6.28,
+          "history": -6.61,
+          "technology": -6.51
+        }
+      },
+      "task_arith_lambda_0.7": {
+        "domain_ppls": {
+          "science": 148.74,
+          "history": 170.29,
+          "technology": 159.54
+        },
+        "val_ppl": 294.71,
+        "improvements": {
+          "science": -9.08,
+          "history": -9.31,
+          "technology": -9.44
+        }
+      },
+      "task_arith_lambda_1.0": {
+        "domain_ppls": {
+          "science": 155.33,
+          "history": 177.45,
+          "technology": 166.5
+        },
+        "val_ppl": 306.56,
+        "improvements": {
+          "science": -13.91,
+          "history": -13.91,
+          "technology": -14.21
+        }
+      },
+      "ties_merge": {
+        "domain_ppls": {
+          "science": 145.89,
+          "history": 166.64,
+          "technology": 156.23
+        },
+        "val_ppl": 286.41,
+        "improvements": {
+          "science": -6.99,
+          "history": -6.97,
+          "technology": -7.16
+        }
+      }
+    }
+  },
+  "kill_criteria": {
+    "K1_all_adapters_10pct_improvement": false,
+    "K1_any_adapter_10pct_improvement": false,
+    "improvements_pct": {
+      "science": 3.26,
+      "history": 3.04,
+      "technology": 3.15
+    },
+    "delta_ratio_target_met": true,
+    "delta_ratios": {
+      "science": 0.126191,
+      "history": 0.126228,
+      "technology": 0.123961
+    }
+  },
+  "best_composition_method": "task_arith_lambda_0.3",
+  "best_composition_avg_improvement": -3.98,
+  "total_time_s": 2052.9
+}

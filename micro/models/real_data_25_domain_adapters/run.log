@@ -1,0 +1,577 @@
+======================================================================
+25-Domain Real Data Adapters: BitNet-2B + Grassmannian + STE Ternary
+  Domains: 25
+======================================================================
+[MEM start] active=0.00GB cache=0.00GB peak=0.00GB
+
+[Phase 1] Preparing domain data for 25 domains...
+  medical: copied from previous experiment
+  code: copied from previous experiment
+  math: copied from previous experiment
+  legal: copied from previous experiment
+  finance: copied from previous experiment
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  science: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  history: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+'(ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 93bbfcd4-40a3-4bff-9983-a57a001b9f3c)')' thrown while requesting HEAD https://huggingface.co/datasets/databricks/databricks-dolly-15k/resolve/main/databricks-dolly-15k.jsonl
+Retrying in 1s [Retry 1/5].
+  philosophy: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  creative_writing: 400 train, 50 val
+  Downloading ehartford/wizard_vicuna_70k_unfiltered/wizard_vicuna_dataset_unfiltered.json...
+  cooking: 400 train, 50 val
+  Downloading keivalya/MedQuad-MedicalQnADataset/medDataset_processed.csv...
+  health_fitness: 400 train, 50 val
+  Downloading Amod/mental_health_counseling_conversations/combined_dataset.json...
+  psychology: 400 train, 50 val
+  Downloading TokenBender/code_instructions_122k_alpaca_style/code_instructions_120k.json...
+  education: 400 train, 50 val
+  Downloading TokenBender/code_instructions_122k_alpaca_style/code_instructions_120k.json...
+  engineering: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  agriculture: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  environmental: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+  politics: 400 train, 50 val
+  Downloading databricks/databricks-dolly-15k/databricks-dolly-15k.jsonl...
+'(ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 56a1c118-3b06-4f0e-8112-1beb2262d4ea)')' thrown while requesting HEAD https://huggingface.co/datasets/databricks/databricks-dolly-15k/resolve/main/databricks-dolly-15k.jsonl
+Retrying in 1s [Retry 1/5].
+  economics: 400 train, 50 val
+  Downloading WizardLMTeam/WizardLM_evol_instruct_V2_196k/WizardLM_evol_instruct_V2_143k.json...
+  sociology: 400 train, 50 val
+  Downloading WizardLMTeam/WizardLM_evol_instruct_V2_196k/WizardLM_evol_instruct_V2_143k.json...
+  linguistics: 400 train, 50 val
+  Downloading ehartford/wizard_vicuna_70k_unfiltered/wizard_vicuna_dataset_unfiltered.json...
+  cybersecurity: 400 train, 50 val
+  Downloading ehartford/wizard_vicuna_70k_unfiltered/wizard_vicuna_dataset_unfiltered.json...
+  marketing: 400 train, 50 val
+  Loading GAIR/lima via datasets library...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'GAIR/lima' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+    FAILED loading real_estate: Dataset 'GAIR/lima' is a gated dataset on the Hub. You must be authenticated to access it.
+    SKIPPING real_estate: insufficient data
+  Downloading TokenBender/code_instructions_122k_alpaca_style/code_instructions_120k.json...
+  sports: 400 train, 50 val
+  Downloading TokenBender/code_instructions_122k_alpaca_style/code_instructions_120k.json...
+  music: 400 train, 50 val
+
+  WARNING: 1 domains failed to download: ['real_estate']
+  Proceeding with 24 domains
+
+  Active domains: 24/25
+[MEM post-data] active=0.00GB cache=0.00GB peak=0.00GB
+
+[Phase 2] Loading model and computing base PPL for 24 domains...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 60787.01it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Loaded in 0.5s
+  Replaced 210 BitLinear -> nn.Linear
+[MEM post-unpack] active=4.83GB cache=1.23GB peak=5.35GB
+  medical: base PPL = 6.50
+  code: base PPL = 4.98
+  math: base PPL = 3.84
+  legal: base PPL = 21.63
+  finance: base PPL = 19.43
+  science: base PPL = 12.46
+  history: base PPL = 16.70
+  philosophy: base PPL = 16.39
+  creative_writing: base PPL = 20.73
+  cooking: base PPL = 3.21
+  health_fitness: base PPL = 11.71
+  psychology: base PPL = 17.45
+  education: base PPL = 3.58
+  engineering: base PPL = 4.21
+  agriculture: base PPL = 14.56
+  environmental: base PPL = 11.49
+  politics: base PPL = 12.56
+  economics: base PPL = 16.69
+  sociology: base PPL = 4.49
+  linguistics: base PPL = 4.41
+  cybersecurity: base PPL = 3.83
+  marketing: base PPL = 3.83
+  sports: base PPL = 3.59
+  music: base PPL = 3.57
+
+[Phase 3] Computing Grassmannian AP skeleton for N=24...
+  AP for d=2560 (N=24, r=16)...
+    Done in 0.0s
+  AP for d=6912 (N=24, r=16)...
+    Done in 0.1s
+  Saved skeleton: 5040 matrices
+/Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/run_experiment.py:894: RuntimeWarning: divide by zero encountered in matmul
+  cos = np.abs(np.trace(frames[i].T @ frames[j])) / LORA_RANK
+/Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/run_experiment.py:894: RuntimeWarning: overflow encountered in matmul
+  cos = np.abs(np.trace(frames[i].T @ frames[j])) / LORA_RANK
+/Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/run_experiment.py:894: RuntimeWarning: invalid value encountered in matmul
+  cos = np.abs(np.trace(frames[i].T @ frames[j])) / LORA_RANK
+  d=2560: mean |cos|=0.003966, max |cos|=0.016807
+  d=6912: mean |cos|=0.002362, max |cos|=0.007932
+[MEM post-skeleton] active=0.00GB cache=2.15GB peak=0.00GB
+
+[Phase 4.0] Training medical adapter...
+  Copied adapter from previous experiment
+
+[Phase 4.1] Training code adapter...
+  Copied adapter from previous experiment
+
+[Phase 4.2] Training math adapter...
+  Copied adapter from previous experiment
+
+[Phase 4.3] Training legal adapter...
+  Copied adapter from previous experiment
+
+[Phase 4.4] Training finance adapter...
+  Copied adapter from previous experiment
+
+[Phase 4.5] Training science adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 42871.93it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=3.8423 (avg50=3.8423)
+    Step 100/200: loss=2.2852 (avg50=2.2093)
+    Step 200/200: loss=2.5153 (avg50=2.2239)
+  Done in 64.2s. Loss: 2.3167 -> 2.2239 (NOT converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/science
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-science] active=5.03GB cache=2.15GB peak=17.09GB
+
+[Phase 4.6] Training history adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 72108.38it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.9384 (avg50=1.9384)
+    Step 100/200: loss=0.8679 (avg50=2.2219)
+    Step 200/200: loss=1.8781 (avg50=2.1729)
+  Done in 64.8s. Loss: 2.4964 -> 2.1729 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/history
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-history] active=5.03GB cache=2.12GB peak=17.09GB
+
+[Phase 4.7] Training philosophy adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 54003.91it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=3.7283 (avg50=3.7283)
+    Step 100/200: loss=2.0568 (avg50=2.1640)
+    Step 200/200: loss=2.2528 (avg50=2.0255)
+  Done in 64.6s. Loss: 2.3832 -> 2.0255 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/philosophy
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-philosophy] active=5.03GB cache=2.12GB peak=17.09GB
+
+[Phase 4.8] Training creative_writing adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 52648.17it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=2.5602 (avg50=2.5602)
+    Step 100/200: loss=1.4458 (avg50=2.2420)
+    Step 200/200: loss=2.5542 (avg50=2.1741)
+  Done in 63.3s. Loss: 2.3084 -> 2.1741 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/creative_writing
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-creative_writing] active=5.03GB cache=2.12GB peak=17.09GB
+
+[Phase 4.9] Training cooking adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 86778.70it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.2068 (avg50=1.2068)
+    Step 100/200: loss=0.9384 (avg50=1.1032)
+    Step 200/200: loss=0.8447 (avg50=1.1343)
+  Done in 73.5s. Loss: 1.3389 -> 1.1343 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/cooking
+  Peak memory: 17.08GB, Active: 5.02GB
+[MEM post-train-cooking] active=5.02GB cache=2.15GB peak=17.08GB
+
+[Phase 4.10] Training health_fitness adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 62446.21it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=3.1832 (avg50=3.1832)
+    Step 100/200: loss=2.0452 (avg50=2.1419)
+    Step 200/200: loss=2.0518 (avg50=1.9791)
+  Done in 71.7s. Loss: 2.3065 -> 1.9791 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/health_fitness
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-health_fitness] active=5.02GB cache=2.15GB peak=17.09GB
+
+[Phase 4.11] Training psychology adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 186413.51it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=2.5109 (avg50=2.5109)
+    Step 100/200: loss=2.7799 (avg50=2.6362)
+    Step 200/200: loss=2.2929 (avg50=2.5183)
+  Done in 74.8s. Loss: 2.7068 -> 2.5183 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/psychology
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-psychology] active=5.02GB cache=2.12GB peak=17.09GB
+
+[Phase 4.12] Training education adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 36631.48it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=2.2772 (avg50=2.2772)
+    Step 100/200: loss=1.9106 (avg50=1.0454)
+    Step 200/200: loss=0.9176 (avg50=0.9819)
+  Done in 65.7s. Loss: 1.2678 -> 0.9819 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/education
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-education] active=5.03GB cache=2.15GB peak=17.09GB
+
+[Phase 4.13] Training engineering adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 51675.20it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=0.7403 (avg50=0.7403)
+    Step 100/200: loss=0.4457 (avg50=1.0259)
+    Step 200/200: loss=0.7864 (avg50=0.8959)
+  Done in 67.0s. Loss: 1.1368 -> 0.8959 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/engineering
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-engineering] active=5.03GB cache=2.11GB peak=17.09GB
+
+[Phase 4.14] Training agriculture adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 43166.08it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=2.7867 (avg50=2.7867)
+    Step 100/200: loss=1.6183 (avg50=2.1200)
+    Step 200/200: loss=3.0953 (avg50=2.2261)
+  Done in 63.0s. Loss: 2.4764 -> 2.2261 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/agriculture
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-agriculture] active=5.02GB cache=2.15GB peak=17.09GB
+
+[Phase 4.15] Training environmental adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 37504.95it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=3.7905 (avg50=3.7905)
+    Step 100/200: loss=1.5257 (avg50=2.2646)
+    Step 200/200: loss=2.2041 (avg50=2.1771)
+  Done in 61.3s. Loss: 2.4115 -> 2.1771 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/environmental
+  Peak memory: 17.09GB, Active: 5.03GB
+[MEM post-train-environmental] active=5.03GB cache=2.12GB peak=17.09GB
+
+[Phase 4.16] Training politics adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 36792.14it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.9845 (avg50=1.9845)
+    Step 100/200: loss=2.3585 (avg50=2.0761)
+    Step 200/200: loss=1.9815 (avg50=2.2108)
+  Done in 62.0s. Loss: 2.4169 -> 2.2108 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/politics
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-politics] active=5.02GB cache=2.09GB peak=17.09GB
+
+[Phase 4.17] Training economics adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 23899.17it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=3.5303 (avg50=3.5303)
+    Step 100/200: loss=2.3524 (avg50=2.2218)
+    Step 200/200: loss=2.6810 (avg50=2.3420)
+  Done in 61.6s. Loss: 2.4534 -> 2.3420 (NOT converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/economics
+  Peak memory: 17.08GB, Active: 5.02GB
+[MEM post-train-economics] active=5.02GB cache=2.12GB peak=17.08GB
+
+[Phase 4.18] Training sociology adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 77195.78it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.1473 (avg50=1.1473)
+    Step 100/200: loss=1.2732 (avg50=1.3105)
+    Step 200/200: loss=1.9447 (avg50=1.3845)
+  Done in 72.6s. Loss: 1.3352 -> 1.3845 (NOT converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/sociology
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-sociology] active=5.02GB cache=2.14GB peak=17.09GB
+
+[Phase 4.19] Training linguistics adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 26546.23it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=2.0884 (avg50=2.0884)
+    Step 100/200: loss=1.0702 (avg50=1.3034)
+    Step 200/200: loss=1.1925 (avg50=1.2333)
+  Done in 71.9s. Loss: 1.4942 -> 1.2333 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/linguistics
+  Peak memory: 17.10GB, Active: 5.02GB
+[MEM post-train-linguistics] active=5.02GB cache=2.12GB peak=17.10GB
+
+[Phase 4.20] Training cybersecurity adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 51254.22it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.1800 (avg50=1.1800)
+    Step 100/200: loss=0.7233 (avg50=1.1793)
+    Step 200/200: loss=1.2587 (avg50=1.1778)
+  Done in 71.7s. Loss: 1.2719 -> 1.1778 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/cybersecurity
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-cybersecurity] active=5.02GB cache=2.12GB peak=17.09GB
+
+[Phase 4.21] Training marketing adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 37008.56it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.3274 (avg50=1.3274)
+    Step 100/200: loss=0.6495 (avg50=1.0801)
+    Step 200/200: loss=1.6552 (avg50=1.0983)
+  Done in 71.4s. Loss: 1.2678 -> 1.0983 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/marketing
+  Peak memory: 17.09GB, Active: 5.02GB
+[MEM post-train-marketing] active=5.02GB cache=2.15GB peak=17.09GB
+
+[Phase 4.22] Training sports adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 14496.44it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=0.8900 (avg50=0.8900)
+    Step 100/200: loss=0.5718 (avg50=1.0402)
+    Step 200/200: loss=1.2230 (avg50=0.9323)
+  Done in 66.7s. Loss: 1.1878 -> 0.9323 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/sports
+  Peak memory: 17.08GB, Active: 5.02GB
+[MEM post-train-sports] active=5.02GB cache=2.10GB peak=17.08GB
+
+[Phase 4.23] Training music adapter...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 38014.84it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  Trainable params: 10,936,320
+  400 training sequences
+    Step 1/200: loss=1.5147 (avg50=1.5147)
+    Step 100/200: loss=1.4272 (avg50=1.0119)
+    Step 200/200: loss=1.0670 (avg50=1.0183)
+  Done in 65.5s. Loss: 1.1829 -> 1.0183 (converged)
+  Saved adapter: 210 tensors to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/adapters/music
+  Peak memory: 17.08GB, Active: 5.02GB
+[MEM post-train-music] active=5.02GB cache=2.12GB peak=17.08GB
+
+  21/24 adapters converged
+
+  K3 (memory < 48GB): peak=17.10GB -> PASS
+
+[Phase 5] Evaluating individual adapters on 24 domains...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 16480.57it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied TernaryLoRA (r=16) to 210 layers
+  medical: PPL=3.46 (base=6.50, +46.8%)
+  code: PPL=3.14 (base=4.98, +36.8%)
+  math: PPL=2.38 (base=3.84, +37.9%)
+  legal: PPL=14.66 (base=21.63, +32.2%)
+  finance: PPL=14.01 (base=19.43, +27.9%)
+  science: PPL=7.30 (base=12.46, +41.4%)
+  history: PPL=9.29 (base=16.70, +44.4%)
+  philosophy: PPL=9.97 (base=16.39, +39.2%)
+  creative_writing: PPL=12.01 (base=20.73, +42.1%)
+  cooking: PPL=2.55 (base=3.21, +20.6%)
+  health_fitness: PPL=6.66 (base=11.71, +43.1%)
+  psychology: PPL=12.20 (base=17.45, +30.1%)
+  education: PPL=2.41 (base=3.58, +32.6%)
+  engineering: PPL=2.45 (base=4.21, +41.8%)
+  agriculture: PPL=8.35 (base=14.56, +42.6%)
+  environmental: PPL=6.62 (base=11.49, +42.4%)
+  politics: PPL=6.67 (base=12.56, +46.9%)
+  economics: PPL=8.93 (base=16.69, +46.5%)
+  sociology: PPL=3.61 (base=4.49, +19.7%)
+  linguistics: PPL=3.64 (base=4.41, +17.5%)
+  cybersecurity: PPL=3.09 (base=3.83, +19.2%)
+  marketing: PPL=2.95 (base=3.83, +23.0%)
+  sports: PPL=2.34 (base=3.59, +34.7%)
+  music: PPL=2.34 (base=3.57, +34.5%)
+  Individual evaluation done in 94.1s
+[MEM post-individual-eval] active=4.89GB cache=2.33GB peak=7.30GB
+
+[Phase 6] Evaluating correct multi-A composition (N=24)...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 16754.88it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  Applied MultiAdapterLoRA to 210 projections (24 experts each)
+  medical: composed PPL=4.26 (base=6.50, delta=-34.4%)
+  code: composed PPL=3.40 (base=4.98, delta=-31.6%)
+  math: composed PPL=3.06 (base=3.84, delta=-20.4%)
+  legal: composed PPL=16.70 (base=21.63, delta=-22.8%)
+  finance: composed PPL=15.34 (base=19.43, delta=-21.1%)
+  science: composed PPL=7.72 (base=12.46, delta=-38.0%)
+  history: composed PPL=9.80 (base=16.70, delta=-41.3%)
+  philosophy: composed PPL=10.55 (base=16.39, delta=-35.7%)
+  creative_writing: composed PPL=12.60 (base=20.73, delta=-39.2%)
+  cooking: composed PPL=2.67 (base=3.21, delta=-16.8%)
+  health_fitness: composed PPL=8.47 (base=11.71, delta=-27.6%)
+  psychology: composed PPL=14.45 (base=17.45, delta=-17.2%)
+  education: composed PPL=2.58 (base=3.58, delta=-28.0%)
+  engineering: composed PPL=2.66 (base=4.21, delta=-36.7%)
+  agriculture: composed PPL=8.83 (base=14.56, delta=-39.3%)
+  environmental: composed PPL=6.98 (base=11.49, delta=-39.3%)
+  politics: composed PPL=7.06 (base=12.56, delta=-43.8%)
+  economics: composed PPL=9.55 (base=16.69, delta=-42.8%)
+  sociology: composed PPL=3.78 (base=4.49, delta=-16.0%)
+  linguistics: composed PPL=3.80 (base=4.41, delta=-14.0%)
+  cybersecurity: composed PPL=3.27 (base=3.83, delta=-14.7%)
+  marketing: composed PPL=3.14 (base=3.83, delta=-18.0%)
+  sports: composed PPL=2.50 (base=3.59, delta=-30.2%)
+  music: composed PPL=2.51 (base=3.57, delta=-29.9%)
+  Composition evaluation done in 318.7s
+[MEM post-composition] active=6.41GB cache=2.18GB peak=8.39GB
+
+[Phase 7] Adapter orthogonality analysis (24 adapters, 276 pairs)...
+  Mean |cos|: 0.023816
+  Max |cos|: 0.089257
+  Top-10 highest cosine pairs:
+    creative_writing-sports: 0.089257
+    history-linguistics: 0.083305
+    economics-sports: 0.081699
+    education-engineering: 0.075571
+    science-history: 0.070373
+    engineering-environmental: 0.069240
+    environmental-marketing: 0.067964
+    engineering-cybersecurity: 0.062103
+    science-engineering: 0.061490
+    cybersecurity-music: 0.060464
+
+[Phase 8] Training routing heads for 24 domains...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 15373.14it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+  medical: 40 hidden state vectors
+  code: 40 hidden state vectors
+  math: 40 hidden state vectors
+  legal: 40 hidden state vectors
+  finance: 40 hidden state vectors
+  science: 40 hidden state vectors
+  history: 40 hidden state vectors
+  philosophy: 40 hidden state vectors
+  creative_writing: 40 hidden state vectors
+  cooking: 40 hidden state vectors
+  health_fitness: 40 hidden state vectors
+  psychology: 40 hidden state vectors
+  education: 40 hidden state vectors
+  engineering: 40 hidden state vectors
+  agriculture: 40 hidden state vectors
+  environmental: 40 hidden state vectors
+  politics: 40 hidden state vectors
+  economics: 40 hidden state vectors
+  sociology: 40 hidden state vectors
+  linguistics: 40 hidden state vectors
+  cybersecurity: 40 hidden state vectors
+  marketing: 40 hidden state vectors
+  sports: 40 hidden state vectors
+  music: 40 hidden state vectors
+[MEM post-feature-extraction] active=4.83GB cache=0.00GB peak=0.00GB
+  medical head: acc=0.998 (pos=1.000, neg=0.998)
+  code head: acc=0.926 (pos=1.000, neg=0.923)
+  math head: acc=1.000 (pos=1.000, neg=1.000)
+  legal head: acc=0.995 (pos=1.000, neg=0.995)
+  finance head: acc=0.989 (pos=1.000, neg=0.988)
+  science head: acc=0.972 (pos=1.000, neg=0.971)
+  history head: acc=0.962 (pos=0.975, neg=0.962)
+  philosophy head: acc=0.967 (pos=1.000, neg=0.965)
+  creative_writing head: acc=0.970 (pos=0.975, neg=0.970)
+  cooking head: acc=0.930 (pos=1.000, neg=0.927)
+  health_fitness head: acc=0.995 (pos=1.000, neg=0.995)
+  psychology head: acc=0.998 (pos=1.000, neg=0.998)
+  education head: acc=0.925 (pos=1.000, neg=0.922)
+  engineering head: acc=0.883 (pos=1.000, neg=0.878)
+  agriculture head: acc=0.946 (pos=1.000, neg=0.943)
+  environmental head: acc=0.981 (pos=1.000, neg=0.980)
+  politics head: acc=0.982 (pos=1.000, neg=0.982)
+  economics head: acc=0.973 (pos=1.000, neg=0.972)
+  sociology head: acc=0.962 (pos=1.000, neg=0.961)
+  linguistics head: acc=0.949 (pos=0.950, neg=0.949)
+  cybersecurity head: acc=0.957 (pos=1.000, neg=0.955)
+  marketing head: acc=0.932 (pos=0.975, neg=0.930)
+  sports head: acc=0.900 (pos=1.000, neg=0.896)
+  music head: acc=0.901 (pos=1.000, neg=0.897)
+  Routing heads done in 51.8s
+[MEM post-routing] active=4.84GB cache=0.01GB peak=4.85GB
+
+======================================================================
+KILL CRITERIA ASSESSMENT
+======================================================================
+
+  K1: 24/24 specialize >5%, 0 fail -> PASS
+
+  K2: 0/24 domains degraded vs base (threshold: 12) -> PASS
+
+  S1 (>=20 specialize): 24/25 -> PASS
+  S2 (routing >70%): avg=0.958, 24/24 above 70% -> PASS
+  S3 (composition beats base >=20): 24/24 -> PASS
+
+  Avg base PPL:         10.08
+  Avg individual PPL:   6.29
+  Avg composed PPL:     6.90
+  Mean |cos|:           0.023816
+  Max |cos|:            0.089257
+  Avg routing acc:      0.958
+  Max peak memory:      17.10GB
+
+  Total time: 1808.0s (30.1min)
+
+  VERDICT: SUPPORTED
+  Results saved to /Users/tom/Code/tomsiwik/llm/micro/models/real_data_25_domain_adapters/results.json

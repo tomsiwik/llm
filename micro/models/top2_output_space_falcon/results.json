@@ -1,0 +1,251 @@
+{
+  "experiment": "top2_output_space_falcon",
+  "model": "mlx-community/Falcon-E-3B-Instruct-1.58bit",
+  "methods": {
+    "base": "Falcon-E-3B-Instruct, no adapters",
+    "single_adapter": "Oracle domain-matched single adapter (full delta)",
+    "param_merge": "Uniform 1/5 parameter merge of all 5 adapters",
+    "output_space_top2": "Output-space top-2 with oracle routing (domain + complementary)",
+    "output_space_routed": "Output-space top-2 with keyword routing"
+  },
+  "results": {
+    "base": {
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532151,
+      "time_s": 81.02872800827026
+    },
+    "single_adapter": {
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        }
+      },
+      "time_s": 368.88935017585754
+    },
+    "param_merge": {
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 8.705986968,
+      "time_s": 366.31207299232483
+    },
+    "output_space_top2": {
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20,
+          "adapters_used": [
+            "medical",
+            "code"
+          ]
+        },
+        "code": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20,
+          "adapters_used": [
+            "code",
+            "math"
+          ]
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20,
+          "adapters_used": [
+            "math",
+            "code"
+          ]
+        },
+        "legal": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20,
+          "adapters_used": [
+            "legal",
+            "finance"
+          ]
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20,
+          "adapters_used": [
+            "finance",
+            "legal"
+          ]
+        }
+      },
+      "peak_memory_gb": 8.237594624,
+      "time_s": 50.29254603385925
+    },
+    "output_space_routed": {
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20,
+          "routing_accuracy": 1.0
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20,
+          "routing_accuracy": 0.9
+        },
+        "math": {
+          "accuracy": 0.65,
+          "correct": 13,
+          "total": 20,
+          "routing_accuracy": 0.3
+        },
+        "legal": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20,
+          "routing_accuracy": 0.9
+        },
+        "finance": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20,
+          "routing_accuracy": 0.2
+        }
+      },
+      "peak_memory_gb": 8.23757824,
+      "time_s": 50.25602602958679
+    }
+  },
+  "speed": {
+    "base": {
+      "tok_per_sec": 45.092231872521864,
+      "time_s": 2.217676877975464,
+      "n_tokens": 100
+    },
+    "single_adapter": {
+      "tok_per_sec": 9.376207708409899,
+      "time_s": 10.665292739868164,
+      "n_tokens": 100
+    },
+    "output_space_top2": {
+      "tok_per_sec": 2.757335377479136,
+      "time_s": 18.133448839187622,
+      "n_iterations": 50,
+      "note": "per-token cost: 2 full forward passes + logit average. Actual generation would be slower due to sequential token dependency."
+    },
+    "output_space_actual_gen": {
+      "tok_per_sec": 2.725584409955369,
+      "time_s": 3.668937921524048,
+      "n_tokens": 10,
+      "note": "Actual generation with adapter swap per token. No KV cache."
+    },
+    "peak_memory_gb": 7.95421506
+  },
+  "analysis": {
+    "averages": {
+      "base": 0.54,
+      "single_adapter": 0.39,
+      "param_merge": 0.43000000000000005,
+      "output_space_top2": 0.41,
+      "output_space_routed": 0.43
+    },
+    "domains_os_beats_single": 1,
+    "domains_os_beats_base": 0,
+    "k1_556": {
+      "result": "fail",
+      "evidence": "OS top-2 beats single on 1/5 domains"
+    },
+    "k2_557": {
+      "result": "fail",
+      "evidence": "Speed = 2.7 tok/s"
+    },
+    "s1_65": {
+      "result": "fail",
+      "evidence": "1/5 superlinear at 2.7 tok/s"
+    }
+  },
+  "params": {
+    "mmlu_n_per_domain": 20,
+    "max_new_tokens_mmlu": 32,
+    "temperature": 0.0,
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "n_adapters": 5,
+    "composition": "output-space logit average (top-2)",
+    "routing": "oracle (domain + complementary) and keyword-based"
+  },
+  "total_time_s": 956.8035371303558
+}

@@ -1,0 +1,183 @@
+{
+  "experiment": "lora_soups_cat",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "cat_lr_sweep": [
+    0.0001,
+    0.001,
+    0.01,
+    0.1
+  ],
+  "cat_iters": 200,
+  "cat_cal_fraction": 0.05,
+  "cat_reg_lambda": 0.01,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "adapter_source": "/Users/tom/Code/tomsiwik/llm/micro/models/flat_lora_training/adapters/standard",
+  "timestamp": "2026-03-28 12:06:36",
+  "base_ppls": {
+    "python": 2.741816589682629,
+    "math": 5.542013899933501,
+    "medical": 6.957591275452782,
+    "legal": 21.86778193752755,
+    "creative": 6.352819171605538
+  },
+  "individual_ppls": {
+    "python": 2.2200660458239603,
+    "math": 3.5985816176460124,
+    "medical": 4.761994850385488,
+    "legal": 16.489729823290403,
+    "creative": 4.935607526217623
+  },
+  "baseline_merges": {
+    "uniform": {
+      "ppls": {
+        "python": 2.5102,
+        "math": 4.9292,
+        "medical": 6.1595,
+        "legal": 20.3477,
+        "creative": 5.9427
+      },
+      "avg_ppl": 7.9779,
+      "improvement_pct": 8.22
+    },
+    "task_arithmetic": {
+      "ppls": {
+        "python": 2.3786,
+        "math": 4.4331,
+        "medical": 5.5446,
+        "legal": 18.7703,
+        "creative": 5.5139
+      },
+      "avg_ppl": 7.3281,
+      "improvement_pct": 15.7,
+      "best_lambda": 0.5,
+      "lambda_sweep": {
+        "0.1": 8.5018,
+        "0.2": 7.983,
+        "0.3": 7.7501,
+        "0.5": 7.3281
+      },
+      "note": "lambda=1/N=0.2 is identical to uniform merge; swept to find true optimum"
+    },
+    "ties": {
+      "ppls": {
+        "python": 2.2933,
+        "math": 4.5555,
+        "medical": 5.6529,
+        "legal": 19.2275,
+        "creative": 5.5946
+      },
+      "avg_ppl": 7.4648,
+      "improvement_pct": 14.12
+    },
+    "dare": {
+      "ppls": {
+        "python": 2.5133,
+        "math": 4.8931,
+        "medical": 6.1227,
+        "legal": 20.2775,
+        "creative": 5.9244
+      },
+      "avg_ppl": 7.9462,
+      "improvement_pct": 8.58
+    }
+  },
+  "cat_training": {
+    "train_time_s": 179.8,
+    "best_lr": 0.1,
+    "lr_sweep": {
+      "1e-04": {
+        "first_50_loss": 1.2886,
+        "last_50_loss": 2.3968,
+        "diverged": true,
+        "train_time_s": 35.9
+      },
+      "1e-03": {
+        "first_50_loss": 1.2803,
+        "last_50_loss": 2.3688,
+        "diverged": true,
+        "train_time_s": 35.9
+      },
+      "1e-02": {
+        "first_50_loss": 1.2674,
+        "last_50_loss": 2.3209,
+        "diverged": true,
+        "train_time_s": 35.9
+      },
+      "1e-01": {
+        "first_50_loss": 1.2715,
+        "last_50_loss": 2.2013,
+        "diverged": true,
+        "train_time_s": 35.9
+      }
+    },
+    "n_params": 2100,
+    "n_cal_sequences": 125,
+    "best_final_loss": 2.2013,
+    "alpha_mean": 0.2259,
+    "alpha_std": 0.1725,
+    "alpha_min": -0.4513,
+    "alpha_max": 1.5936,
+    "per_adapter_mean_alpha": {
+      "python": 0.1874,
+      "math": 0.1883,
+      "medical": 0.3776,
+      "legal": 0.1905,
+      "creative": 0.1858
+    },
+    "layer_variances": {
+      "layer_0": 0.031496,
+      "layer_1": 0.025078,
+      "layer_2": 0.009502,
+      "layer_3": 0.100643,
+      "layer_4": 0.039598,
+      "layer_5": 0.015571,
+      "layer_6": 0.004887,
+      "layer_7": 0.003867,
+      "layer_8": 0.002752,
+      "layer_9": 0.007792,
+      "layer_10": 0.003098,
+      "layer_11": 0.061363,
+      "layer_12": 0.036752,
+      "layer_13": 0.069988,
+      "layer_14": 0.045598,
+      "layer_15": 0.05511,
+      "layer_16": 0.06813,
+      "layer_17": 0.047793,
+      "layer_18": 0.003257,
+      "layer_19": 0.003093,
+      "layer_20": 0.006014,
+      "layer_21": 0.00223,
+      "layer_22": 0.00366,
+      "layer_23": 0.014252
+    }
+  },
+  "cat_merge": {
+    "ppls": {
+      "python": 2.6443,
+      "math": 5.1207,
+      "medical": 4.9895,
+      "legal": 20.9245,
+      "creative": 6.039
+    },
+    "avg_ppl": 7.9436,
+    "improvement_pct": 8.61
+  },
+  "k1_cat_vs_uniform_pct": 0.43,
+  "k1_pass": true,
+  "cat_vs_best_baseline_pct": -8.4,
+  "best_baseline_method": "task_arithmetic",
+  "k2_superlinear_domains": [],
+  "k2_n_superlinear": 0,
+  "k2_pass": false,
+  "s1_pass": false,
+  "verdict": "SUPPORTED",
+  "verdict_detail": "K1 PASS, K2 FAIL: CAT beats uniform but no superlinear (stretch goal)",
+  "total_time_s": 265.0
+}

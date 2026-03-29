@@ -57,5 +57,35 @@ export async function initFts() {
       INSERT INTO evidence_fts(evidence_fts, rowid, claim, source) VALUES ('delete', old.rowid, old.claim, old.source);
       INSERT INTO evidence_fts(rowid, claim, source) VALUES (new.rowid, new.claim, new.source);
     END;
+
+    CREATE VIRTUAL TABLE IF NOT EXISTS findings_fts
+      USING fts5(title, result, caveat, failure_mode, impossibility_structure, content=findings, content_rowid=rowid);
+
+    CREATE TRIGGER IF NOT EXISTS findings_ai AFTER INSERT ON findings BEGIN
+      INSERT INTO findings_fts(rowid, title, result, caveat, failure_mode, impossibility_structure)
+        VALUES (new.rowid, new.title, new.result, new.caveat, new.failure_mode, new.impossibility_structure);
+    END;
+
+    CREATE TRIGGER IF NOT EXISTS findings_au AFTER UPDATE ON findings BEGIN
+      INSERT INTO findings_fts(findings_fts, rowid, title, result, caveat, failure_mode, impossibility_structure)
+        VALUES ('delete', old.rowid, old.title, old.result, old.caveat, old.failure_mode, old.impossibility_structure);
+      INSERT INTO findings_fts(rowid, title, result, caveat, failure_mode, impossibility_structure)
+        VALUES (new.rowid, new.title, new.result, new.caveat, new.failure_mode, new.impossibility_structure);
+    END;
+
+    CREATE VIRTUAL TABLE IF NOT EXISTS methods_fts
+      USING fts5(name, description, solves, proven_in, use_when, not_now_because, content=methods, content_rowid=rowid);
+
+    CREATE TRIGGER IF NOT EXISTS methods_ai AFTER INSERT ON methods BEGIN
+      INSERT INTO methods_fts(rowid, name, description, solves, proven_in, use_when, not_now_because)
+        VALUES (new.rowid, new.name, new.description, new.solves, new.proven_in, new.use_when, new.not_now_because);
+    END;
+
+    CREATE TRIGGER IF NOT EXISTS methods_au AFTER UPDATE ON methods BEGIN
+      INSERT INTO methods_fts(methods_fts, rowid, name, description, solves, proven_in, use_when, not_now_because)
+        VALUES ('delete', old.rowid, old.name, old.description, old.solves, old.proven_in, old.use_when, old.not_now_because);
+      INSERT INTO methods_fts(rowid, name, description, solves, proven_in, use_when, not_now_because)
+        VALUES (new.rowid, new.name, new.description, new.solves, new.proven_in, new.use_when, new.not_now_because);
+    END;
   `);
 }

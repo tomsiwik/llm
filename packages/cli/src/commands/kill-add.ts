@@ -1,13 +1,10 @@
-import { Command, Args, Flags } from "@oclif/core";
-import { eq } from "drizzle-orm";
-import { db, experiments, killCriteria } from "@experiment/db";
+import { Flags } from "@oclif/core";
+import { db, killCriteria } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class KillAdd extends Command {
+export default class KillAdd extends ExperimentCommand {
   static description = "Add a kill criterion to an experiment";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     text: Flags.string({ description: "Kill criterion text", required: true }),
@@ -16,9 +13,7 @@ export default class KillAdd extends Command {
 
   async run() {
     const { args, flags } = await this.parse(KillAdd);
-
-    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
-    if (!exp) this.error(`Experiment "${args.id}" not found`);
+    await this.requireExperiment(args.id);
 
     const result = await db.insert(killCriteria).values({
       experimentId: args.id,

@@ -1,0 +1,171 @@
+{
+  "experiment": "memory_optimized_serving",
+  "timestamp": "2026-03-28T00:29:19",
+  "total_time_s": 18.9,
+  "phase1_loading": {
+    "n_bitlinear": 210,
+    "n_linear": 0,
+    "packed_weight_mb": 521.0,
+    "total_params": 849787090,
+    "total_param_bytes_mb": 1178.6,
+    "dtype_breakdown": {
+      "mlx.core.bfloat16": {
+        "count": 332,
+        "mb": 657.6
+      },
+      "mlx.core.uint8": {
+        "count": 210,
+        "mb": 521.0
+      }
+    },
+    "mem_before": {
+      "active_mb": 0.0,
+      "cache_mb": 0.0,
+      "peak_mb": 0.0
+    },
+    "mem_after_load": {
+      "active_mb": 1178.6,
+      "cache_mb": 0.0,
+      "peak_mb": 1178.6
+    },
+    "mem_after_forward": {
+      "active_mb": 1182.1,
+      "cache_mb": 24.6,
+      "peak_mb": 1206.3
+    },
+    "mem_after_gen_50tok": {
+      "active_mb": 1181.4,
+      "cache_mb": 27.1,
+      "peak_mb": 1211.1
+    }
+  },
+  "phase2_adapters": {
+    "all_5_fp32_mb": 218.7,
+    "all_5_fp32_active_mb": 221.2,
+    "all_5_bf16_mb": 109.4,
+    "all_5_bf16_active_mb": 341.4,
+    "one_bf16_mb": 21.9,
+    "one_bf16_active_mb": 365.7,
+    "skeleton_total_mb": 213.8,
+    "skeleton_one_domain_mb": 42.8
+  },
+  "phase3_premerge": {
+    "mem_base": {
+      "active_mb": 1178.6,
+      "cache_mb": 0.0,
+      "peak_mb": 1178.6
+    },
+    "mem_unpacked_bf16": {
+      "active_mb": 4827.3,
+      "cache_mb": 0.0,
+      "peak_mb": 5348.6
+    },
+    "mem_after_merge": {
+      "active_mb": 4825.6,
+      "cache_mb": 0.0,
+      "peak_mb": 5705.1
+    },
+    "mem_after_gen_100tok": {
+      "active_mb": 4825.6,
+      "cache_mb": 26.1,
+      "peak_mb": 5705.1
+    },
+    "merged_layers": 210,
+    "ppl_merged_bf16": 3.739
+  },
+  "phase4_native_lora": {
+    "mem_base_native": {
+      "active_mb": 1178.6,
+      "cache_mb": 0.0,
+      "peak_mb": 1178.6
+    },
+    "mem_after_base_eval": {
+      "active_mb": 1178.6,
+      "cache_mb": 2147.5,
+      "peak_mb": 1539.3
+    },
+    "mem_with_adapter_bf16": {
+      "active_mb": 1224.2,
+      "cache_mb": 2145.7,
+      "peak_mb": 1539.3
+    },
+    "mem_after_lora_wrap": {
+      "active_mb": 1224.2,
+      "cache_mb": 2145.7,
+      "peak_mb": 1539.3
+    },
+    "mem_after_adapted_eval": {
+      "active_mb": 1224.2,
+      "cache_mb": 2155.3,
+      "peak_mb": 1539.3
+    },
+    "mem_after_gen": {
+      "active_mb": 1224.2,
+      "cache_mb": 26.7,
+      "peak_mb": 1539.3
+    },
+    "adapter_b_mb": 21.9,
+    "a_matrices_one_domain_mb": 21.4,
+    "n_wrapped_layers": 210,
+    "base_ppl": 9.679,
+    "adapted_ppl": 3.747,
+    "generation_tok_per_s": 82.0
+  },
+  "phase5_quantized": {
+    "fp32_mb": 43.7,
+    "bf16_mb": 21.9,
+    "int8_mb": 10.9,
+    "int8_scale_mb": 0.001,
+    "compression_fp32_to_int8": 4.0,
+    "mean_max_error": 0.000167,
+    "worst_max_error": 0.000309,
+    "mean_mean_error": 8.2e-05
+  },
+  "phase6_budget": {
+    "configs": {
+      "base_only": {
+        "description": "BitLinear native, no adapters",
+        "model_mb": 1178.6,
+        "gen_mb": 1224.2,
+        "adapter_mb": 0,
+        "quality": "base"
+      },
+      "runtime_lora_bf16": {
+        "description": "BitLinear + runtime LoRA (1 adapter, bf16)",
+        "model_mb": 1224.2,
+        "gen_mb": 1224.2,
+        "adapter_mb": 43.3,
+        "quality": "PPL=3.75"
+      },
+      "premerge_bf16": {
+        "description": "Unpacked bf16 + pre-merged adapter",
+        "model_mb": 4825.6,
+        "gen_mb": 4825.6,
+        "adapter_mb": 0,
+        "quality": "PPL=3.74"
+      },
+      "runtime_lora_int8_estimated": {
+        "description": "BitLinear + runtime LoRA (1 adapter, int8) [estimated]",
+        "estimated_total_mb": 1210.9,
+        "adapter_mb": 32.3,
+        "quality": "~same as bf16 (int8 error negligible)"
+      }
+    },
+    "best_serving_mb": 1224.2,
+    "best_serving_gb": 1.224,
+    "k1_pass": true,
+    "k1_below_3gb": true,
+    "base_ppl": 9.679,
+    "adapted_ppl": 3.747
+  },
+  "kill_criteria": {
+    "k1_below_5gb": true,
+    "k1_below_3gb": true,
+    "k2_quality_preserved": true
+  },
+  "summary": {
+    "best_serving_gb": 1.224,
+    "base_ppl": 9.679,
+    "adapted_ppl": 3.747
+  }
+}

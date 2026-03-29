@@ -1,0 +1,708 @@
+{
+  "experiment": "text_to_lora_hypernetwork",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "timestamp": "2026-03-28 09:20:28",
+  "total_time_s": 165.6,
+  "n_domains": 24,
+  "total_adapter_params": 10936320,
+  "nn_baseline": {
+    "medical": {
+      "nn": "psychology",
+      "cos": 0.8586
+    },
+    "code": {
+      "nn": "cybersecurity",
+      "cos": 0.6369
+    },
+    "math": {
+      "nn": "science",
+      "cos": 0.7832
+    },
+    "legal": {
+      "nn": "politics",
+      "cos": 0.8348
+    },
+    "finance": {
+      "nn": "marketing",
+      "cos": 0.8218
+    },
+    "science": {
+      "nn": "psychology",
+      "cos": 0.843
+    },
+    "history": {
+      "nn": "politics",
+      "cos": 0.8117
+    },
+    "philosophy": {
+      "nn": "sociology",
+      "cos": 0.8229
+    },
+    "creative_writing": {
+      "nn": "psychology",
+      "cos": 0.7911
+    },
+    "cooking": {
+      "nn": "health_fitness",
+      "cos": 0.8083
+    },
+    "health_fitness": {
+      "nn": "psychology",
+      "cos": 0.8646
+    },
+    "psychology": {
+      "nn": "sociology",
+      "cos": 0.8672
+    },
+    "education": {
+      "nn": "psychology",
+      "cos": 0.8405
+    },
+    "engineering": {
+      "nn": "science",
+      "cos": 0.7332
+    },
+    "agriculture": {
+      "nn": "cooking",
+      "cos": 0.7996
+    },
+    "environmental": {
+      "nn": "science",
+      "cos": 0.7673
+    },
+    "politics": {
+      "nn": "sociology",
+      "cos": 0.8748
+    },
+    "economics": {
+      "nn": "politics",
+      "cos": 0.797
+    },
+    "sociology": {
+      "nn": "politics",
+      "cos": 0.8748
+    },
+    "linguistics": {
+      "nn": "psychology",
+      "cos": 0.7552
+    },
+    "cybersecurity": {
+      "nn": "marketing",
+      "cos": 0.7244
+    },
+    "marketing": {
+      "nn": "finance",
+      "cos": 0.8218
+    },
+    "sports": {
+      "nn": "health_fitness",
+      "cos": 0.8446
+    },
+    "music": {
+      "nn": "psychology",
+      "cos": 0.7862
+    }
+  },
+  "hypernetwork_quality": {
+    "medical": {
+      "cos_sim": 0.0294,
+      "loss": 1.203543,
+      "top_basis": [
+        [
+          "cooking",
+          0.06584037840366364
+        ],
+        [
+          "cybersecurity",
+          0.05894414708018303
+        ],
+        [
+          "marketing",
+          0.05877787992358208
+        ]
+      ]
+    },
+    "code": {
+      "cos_sim": 0.0477,
+      "loss": 1.100992,
+      "top_basis": [
+        [
+          "cooking",
+          0.07377676665782928
+        ],
+        [
+          "politics",
+          0.06012814864516258
+        ],
+        [
+          "science",
+          0.05866292119026184
+        ]
+      ]
+    },
+    "math": {
+      "cos_sim": 0.0426,
+      "loss": 1.221424,
+      "top_basis": [
+        [
+          "history",
+          0.06239484250545502
+        ],
+        [
+          "sports",
+          0.05741475895047188
+        ],
+        [
+          "politics",
+          0.056783124804496765
+        ]
+      ]
+    },
+    "legal": {
+      "cos_sim": 0.045,
+      "loss": 1.063847,
+      "top_basis": [
+        [
+          "agriculture",
+          0.06915650516748428
+        ],
+        [
+          "economics",
+          0.06573303788900375
+        ],
+        [
+          "finance",
+          0.0656047984957695
+        ]
+      ]
+    },
+    "finance": {
+      "cos_sim": -0.0028,
+      "loss": 1.030893,
+      "top_basis": [
+        [
+          "linguistics",
+          0.06588400155305862
+        ],
+        [
+          "cybersecurity",
+          0.06556085497140884
+        ],
+        [
+          "legal",
+          0.06357264518737793
+        ]
+      ]
+    },
+    "science": {
+      "cos_sim": 0.0371,
+      "loss": 1.015256,
+      "top_basis": [
+        [
+          "history",
+          0.0804380476474762
+        ],
+        [
+          "cybersecurity",
+          0.07112116366624832
+        ],
+        [
+          "linguistics",
+          0.06776431947946548
+        ]
+      ]
+    },
+    "history": {
+      "cos_sim": 0.0949,
+      "loss": 0.987866,
+      "top_basis": [
+        [
+          "linguistics",
+          0.08458264172077179
+        ],
+        [
+          "science",
+          0.07826793193817139
+        ],
+        [
+          "economics",
+          0.07453451305627823
+        ]
+      ]
+    },
+    "philosophy": {
+      "cos_sim": 0.0372,
+      "loss": 1.012985,
+      "top_basis": [
+        [
+          "politics",
+          0.0726599171757698
+        ],
+        [
+          "history",
+          0.059990376234054565
+        ],
+        [
+          "linguistics",
+          0.05975085124373436
+        ]
+      ]
+    },
+    "creative_writing": {
+      "cos_sim": 0.0586,
+      "loss": 0.976825,
+      "top_basis": [
+        [
+          "sports",
+          0.08045957237482071
+        ],
+        [
+          "cybersecurity",
+          0.06585966795682907
+        ],
+        [
+          "politics",
+          0.06420838832855225
+        ]
+      ]
+    },
+    "cooking": {
+      "cos_sim": 0.0303,
+      "loss": 0.921012,
+      "top_basis": [
+        [
+          "music",
+          0.06478976458311081
+        ],
+        [
+          "code",
+          0.06171639263629913
+        ],
+        [
+          "education",
+          0.056104689836502075
+        ]
+      ]
+    },
+    "health_fitness": {
+      "cos_sim": -0.0238,
+      "loss": 1.43539,
+      "top_basis": [
+        [
+          "environmental",
+          0.07833463698625565
+        ],
+        [
+          "politics",
+          0.059461575001478195
+        ],
+        [
+          "science",
+          0.05869966372847557
+        ]
+      ]
+    },
+    "psychology": {
+      "cos_sim": 0.0044,
+      "loss": 1.398689,
+      "top_basis": [
+        [
+          "cybersecurity",
+          0.0668305978178978
+        ],
+        [
+          "linguistics",
+          0.06240479275584221
+        ],
+        [
+          "code",
+          0.062377363443374634
+        ]
+      ]
+    },
+    "education": {
+      "cos_sim": 0.0547,
+      "loss": 1.074552,
+      "top_basis": [
+        [
+          "marketing",
+          0.07404258847236633
+        ],
+        [
+          "cooking",
+          0.06545771658420563
+        ],
+        [
+          "philosophy",
+          0.061895016580820084
+        ]
+      ]
+    },
+    "engineering": {
+      "cos_sim": 0.0549,
+      "loss": 1.059065,
+      "top_basis": [
+        [
+          "cybersecurity",
+          0.08138010650873184
+        ],
+        [
+          "music",
+          0.0708727017045021
+        ],
+        [
+          "science",
+          0.06855738908052444
+        ]
+      ]
+    },
+    "agriculture": {
+      "cos_sim": 0.028,
+      "loss": 0.995291,
+      "top_basis": [
+        [
+          "legal",
+          0.06469994783401489
+        ],
+        [
+          "sports",
+          0.06391769647598267
+        ],
+        [
+          "creative_writing",
+          0.06156816706061363
+        ]
+      ]
+    },
+    "environmental": {
+      "cos_sim": 0.0094,
+      "loss": 1.045251,
+      "top_basis": [
+        [
+          "marketing",
+          0.0779213011264801
+        ],
+        [
+          "health_fitness",
+          0.05704328417778015
+        ],
+        [
+          "creative_writing",
+          0.05644676461815834
+        ]
+      ]
+    },
+    "politics": {
+      "cos_sim": 0.0224,
+      "loss": 0.977667,
+      "top_basis": [
+        [
+          "philosophy",
+          0.07012664526700974
+        ],
+        [
+          "economics",
+          0.0697297751903534
+        ],
+        [
+          "music",
+          0.06589119881391525
+        ]
+      ]
+    },
+    "economics": {
+      "cos_sim": 0.0527,
+      "loss": 1.004435,
+      "top_basis": [
+        [
+          "history",
+          0.07578466832637787
+        ],
+        [
+          "politics",
+          0.07163890451192856
+        ],
+        [
+          "linguistics",
+          0.06908679753541946
+        ]
+      ]
+    },
+    "sociology": {
+      "cos_sim": 0.0338,
+      "loss": 0.931419,
+      "top_basis": [
+        [
+          "linguistics",
+          0.08366461843252182
+        ],
+        [
+          "economics",
+          0.06004896014928818
+        ],
+        [
+          "science",
+          0.05737607926130295
+        ]
+      ]
+    },
+    "linguistics": {
+      "cos_sim": 0.0652,
+      "loss": 0.859511,
+      "top_basis": [
+        [
+          "sociology",
+          0.07720549404621124
+        ],
+        [
+          "history",
+          0.07359269261360168
+        ],
+        [
+          "economics",
+          0.05911865085363388
+        ]
+      ]
+    },
+    "cybersecurity": {
+      "cos_sim": 0.0143,
+      "loss": 0.957591,
+      "top_basis": [
+        [
+          "engineering",
+          0.0735827088356018
+        ],
+        [
+          "science",
+          0.06708158552646637
+        ],
+        [
+          "creative_writing",
+          0.06456281244754791
+        ]
+      ]
+    },
+    "marketing": {
+      "cos_sim": 0.048,
+      "loss": 0.923536,
+      "top_basis": [
+        [
+          "environmental",
+          0.06884770095348358
+        ],
+        [
+          "education",
+          0.06363676488399506
+        ],
+        [
+          "agriculture",
+          0.05410877987742424
+        ]
+      ]
+    },
+    "sports": {
+      "cos_sim": 0.0545,
+      "loss": 1.023155,
+      "top_basis": [
+        [
+          "creative_writing",
+          0.08427564054727554
+        ],
+        [
+          "agriculture",
+          0.06570710986852646
+        ],
+        [
+          "cooking",
+          0.06189587712287903
+        ]
+      ]
+    },
+    "music": {
+      "cos_sim": 0.0222,
+      "loss": 1.039892,
+      "top_basis": [
+        [
+          "cooking",
+          0.07315249741077423
+        ],
+        [
+          "politics",
+          0.07008492201566696
+        ],
+        [
+          "engineering",
+          0.06958967447280884
+        ]
+      ]
+    }
+  },
+  "base_ppls": {
+    "medical": 6.4269,
+    "code": 6.1028,
+    "math": 4.1972,
+    "legal": 21.3959,
+    "cooking": 3.3651,
+    "sports": 3.4213
+  },
+  "trained_ppls": {
+    "medical": 3.4304,
+    "code": 2.8901,
+    "math": 2.3996,
+    "legal": 15.1856,
+    "cooking": 2.6017,
+    "sports": 2.3741
+  },
+  "nn_ppls": {
+    "medical": 5.5593,
+    "code": 3.6997,
+    "math": 3.3695,
+    "legal": 16.1767,
+    "cooking": 3.0698,
+    "sports": 2.7449
+  },
+  "ppl_ratios": {
+    "medical": 1.6206,
+    "code": 1.2801,
+    "math": 1.4042,
+    "legal": 1.0653,
+    "cooking": 1.1799,
+    "sports": 1.1562
+  },
+  "projection": {
+    "medical": {
+      "retention": 0.005,
+      "cos_op": 0.0625
+    },
+    "code": {
+      "retention": 0.0069,
+      "cos_op": 0.1782
+    },
+    "math": {
+      "retention": 0.0053,
+      "cos_op": 0.0592
+    },
+    "legal": {
+      "retention": 0.0051,
+      "cos_op": 0.1559
+    },
+    "finance": {
+      "retention": 0.0047,
+      "cos_op": 0.0042
+    },
+    "science": {
+      "retention": 0.0071,
+      "cos_op": 0.0046
+    },
+    "history": {
+      "retention": 0.0045,
+      "cos_op": 0.0799
+    },
+    "philosophy": {
+      "retention": 0.0058,
+      "cos_op": 0.162
+    },
+    "creative_writing": {
+      "retention": 0.0062,
+      "cos_op": 0.2486
+    },
+    "cooking": {
+      "retention": 0.0066,
+      "cos_op": 0.1226
+    },
+    "health_fitness": {
+      "retention": 0.0072,
+      "cos_op": 0.1507
+    },
+    "psychology": {
+      "retention": 0.0056,
+      "cos_op": 0.1425
+    },
+    "education": {
+      "retention": 0.0053,
+      "cos_op": 0.1071
+    },
+    "engineering": {
+      "retention": 0.0065,
+      "cos_op": 0.2135
+    },
+    "agriculture": {
+      "retention": 0.0051,
+      "cos_op": -0.0025
+    },
+    "environmental": {
+      "retention": 0.0063,
+      "cos_op": 0.0696
+    },
+    "politics": {
+      "retention": 0.0053,
+      "cos_op": 0.1099
+    },
+    "economics": {
+      "retention": 0.0056,
+      "cos_op": 0.0851
+    },
+    "sociology": {
+      "retention": 0.0058,
+      "cos_op": 0.0608
+    },
+    "linguistics": {
+      "retention": 0.0048,
+      "cos_op": 0.1199
+    },
+    "cybersecurity": {
+      "retention": 0.0068,
+      "cos_op": 0.1033
+    },
+    "marketing": {
+      "retention": 0.0056,
+      "cos_op": 0.1311
+    },
+    "sports": {
+      "retention": 0.0056,
+      "cos_op": 0.1834
+    },
+    "music": {
+      "retention": 0.0077,
+      "cos_op": 0.1059
+    }
+  },
+  "b_cosine_stats": {
+    "mean": 0.0359,
+    "min": -0.0238,
+    "max": 0.0949
+  },
+  "kill_criteria": {
+    "K1": {
+      "max_ppl_ratio": 1.6206,
+      "threshold": 3.0,
+      "pass": true
+    },
+    "K2": {
+      "min_retention": 0.0045,
+      "mean_retention": 0.0059,
+      "threshold": 0.5,
+      "pass": false
+    },
+    "K3": {
+      "peak_memory_gb": 7.5,
+      "threshold_gb": 40.0,
+      "pass": true
+    }
+  },
+  "success_criteria": {
+    "S1": {
+      "mean_ppl_ratio": 1.2844,
+      "mean_retention": 0.0059,
+      "pass": "False"
+    }
+  },
+  "verdict": "KILLED",
+  "phase_times_s": {
+    "embed": 1.6,
+    "nn": 0.3,
+    "hypernetwork": 132.3,
+    "ppl_eval": 29.4,
+    "projection": 1.9
+  }
+}

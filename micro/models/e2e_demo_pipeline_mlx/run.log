@@ -1,0 +1,249 @@
+======================================================================
+E2E Demo Pipeline: BitNet-SOLE on M5 Pro
+======================================================================
+Model: microsoft/BitNet-b1.58-2B-4T
+Domains: ['medical', 'code', 'math', 'legal', 'finance']
+Prompts per domain: 10
+Max new tokens: 128
+Entropy threshold: 2.1 nats
+[MEM start] active=0.00GB cache=0.00GB peak=0.00GB
+
+Extracting prompts from validation data...
+  medical: 10 prompts
+  code: 10 prompts
+  math: 10 prompts
+  legal: 10 prompts
+  finance: 10 prompts
+
+======================================================================
+[Phase 1] BASE MODEL generation (no adapters)
+======================================================================
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 70690.52it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+[MEM post-load-base] active=4.83GB cache=1.23GB peak=5.35GB
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+  medical: 5/10 done
+  medical: 10/10 done
+  code: 5/10 done
+  code: 10/10 done
+  math: 5/10 done
+  math: 10/10 done
+  legal: 5/10 done
+  legal: 10/10 done
+  finance: 5/10 done
+  finance: 10/10 done
+  medical PPL: 9.6751
+  code PPL: 6.7258
+  math PPL: 4.1128
+  legal PPL: 25.3763
+  finance PPL: 24.5525
+
+  Base: 52.5 tok/s, 19.0 ms/tok
+  Phase 1 done in 131.1s
+[MEM post-base-gen] active=4.83GB cache=2.15GB peak=5.35GB
+
+======================================================================
+[Phase 2] E2E PIPELINE: entropy gate + oracle top-1 + pre-merge
+======================================================================
+  Loaded adapter: medical (210 tensors)
+  Loaded adapter: code (210 tensors)
+  Loaded adapter: math (210 tensors)
+  Loaded adapter: legal (210 tensors)
+  Loaded adapter: finance (210 tensors)
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 18355.82it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+[MEM post-load-e2e] active=4.83GB cache=1.24GB peak=5.35GB
+  Saved 210 base weight matrices for restoration
+
+  --- Domain: medical ---
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  medical: 5/10 done (skip=3/5)
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  medical: 10/10 done (skip=3/10)
+
+  --- Domain: code ---
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  code: 5/10 done (skip=4/15)
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  code: 10/10 done (skip=4/20)
+
+  --- Domain: math ---
+  math: 5/10 done (skip=9/25)
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  math: 10/10 done (skip=12/30)
+
+  --- Domain: legal ---
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  legal: 5/10 done (skip=12/35)
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  legal: 10/10 done (skip=12/40)
+
+  --- Domain: finance ---
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  finance: 5/10 done (skip=12/45)
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  Pre-merged 1 adapters into 210 layers
+  finance: 10/10 done (skip=12/50)
+  Pre-merged 1 adapters into 210 layers
+  medical PPL (composed): 3.7431
+  Pre-merged 1 adapters into 210 layers
+  code PPL (composed): 3.5873
+  Pre-merged 1 adapters into 210 layers
+  math PPL (composed): 2.4327
+  Pre-merged 1 adapters into 210 layers
+  legal PPL (composed): 16.5924
+  Pre-merged 1 adapters into 210 layers
+  finance PPL (composed): 15.3873
+
+  E2E top-1: 26.1 tok/s, 38.3 ms/tok
+  Entropy skip rate: 12/50 (24.0%)
+  Phase 2 (top-1) done in 274.3s
+[MEM post-e2e-gen] active=5.05GB cache=2.41GB peak=15.10GB
+
+======================================================================
+[Phase 2] E2E PIPELINE: entropy gate + oracle top-2 + pre-merge
+======================================================================
+  Loaded adapter: medical (210 tensors)
+  Loaded adapter: code (210 tensors)
+  Loaded adapter: math (210 tensors)
+  Loaded adapter: legal (210 tensors)
+  Loaded adapter: finance (210 tensors)
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 22815.80it/s]
+The tokenizer you are loading from '/Users/tom/.cache/huggingface/hub/models--microsoft--BitNet-b1.58-2B-4T/snapshots/04c3b9ad9361b824064a1f25ea60a8be9599b127' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+  Replaced 210 BitLinear -> nn.Linear
+[MEM post-load-e2e] active=4.83GB cache=1.23GB peak=5.35GB
+  Saved 210 base weight matrices for restoration
+
+  --- Domain: medical ---
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  medical: 5/10 done (skip=3/5)
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  medical: 10/10 done (skip=3/10)
+
+  --- Domain: code ---
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  code: 5/10 done (skip=4/15)
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  code: 10/10 done (skip=4/20)
+
+  --- Domain: math ---
+  math: 5/10 done (skip=9/25)
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  math: 10/10 done (skip=12/30)
+
+  --- Domain: legal ---
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  legal: 5/10 done (skip=12/35)
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  legal: 10/10 done (skip=12/40)
+
+  --- Domain: finance ---
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  finance: 5/10 done (skip=12/45)
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  Pre-merged 2 adapters into 210 layers
+  finance: 10/10 done (skip=12/50)
+  Pre-merged 2 adapters into 210 layers
+  medical PPL (composed): 3.8231
+  Pre-merged 2 adapters into 210 layers
+  code PPL (composed): 3.5689
+  Pre-merged 2 adapters into 210 layers
+  math PPL (composed): 2.4048
+  Pre-merged 2 adapters into 210 layers
+  legal PPL (composed): 16.1727
+  Pre-merged 2 adapters into 210 layers
+  finance PPL (composed): 15.5544
+
+  E2E top-2: 26.1 tok/s, 38.4 ms/tok
+  Entropy skip rate: 12/50 (24.0%)
+  Phase 2 (top-2) done in 280.5s
+[MEM post-e2e-gen] active=5.05GB cache=2.41GB peak=15.10GB
+
+======================================================================
+[Phase 3] ANALYSIS: Base vs E2E Pipeline
+======================================================================
+
+  K1 Latency:
+    Base: 19.0 ms/tok (52.5 tok/s)
+    E2E top-1: 38.3 ms/tok (26.1 tok/s)
+    E2E top-2: 38.4 ms/tok (26.1 tok/s)
+    Ratio top-1: 2.012x, top-2: 2.015x
+    K1: FAIL (KILL)
+
+  K2 Quality (PPL, lower=better):
+    medical: base=9.68, top1=3.74 (+61.3%), top2=3.82 (+60.5%)
+    code: base=6.73, top1=3.59 (+46.7%), top2=3.57 (+46.9%)
+    math: base=4.11, top1=2.43 (+40.9%), top2=2.40 (+41.5%)
+    legal: base=25.38, top1=16.59 (+34.6%), top2=16.17 (+36.3%)
+    finance: base=24.55, top1=15.39 (+37.3%), top2=15.55 (+36.6%)
+    K2: PASS
+
+  Task-specific quality:
+    Code syntax: base=0.5, top1=0.4, top2=0.5
+    Math correct: base=0.2, top1=0.3, top2=0.2
+
+  S1: Interactive serving: 38.3ms/tok (<100ms target), quality PASS -> PASS
+
+  VERDICT: KILLED
+
+Results saved to /Users/tom/Code/tomsiwik/llm/micro/models/e2e_demo_pipeline_mlx/results.json
+Total runtime: 686.0s (11.4 min)
+[MEM final] active=0.00GB cache=2.15GB peak=0.00GB

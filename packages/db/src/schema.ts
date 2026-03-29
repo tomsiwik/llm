@@ -107,3 +107,69 @@ export const experimentReferences = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.experimentId, t.referenceId] })],
 );
+
+// ── Findings ────────────────────────────────────────────────────────────────
+
+export const findings = sqliteTable("findings", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  title: text("title").notNull(),
+  status: text("status", {
+    enum: ["conclusive", "supported", "killed", "provisional"],
+  }).notNull(),
+  result: text("result").notNull(),
+  caveat: text("caveat"),
+  experimentId: text("experiment_id").references(() => experiments.id),
+  scale: text("scale", { enum: ["micro", "macro"] }),
+  failureMode: text("failure_mode"),
+  impossibilityStructure: text("impossibility_structure"),
+  date: text("date").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const findingTags = sqliteTable(
+  "finding_tags",
+  {
+    findingId: integer("finding_id").notNull().references(() => findings.id),
+    tagId: integer("tag_id").notNull().references(() => tags.id),
+  },
+  (t) => [primaryKey({ columns: [t.findingId, t.tagId] })],
+);
+
+export const findingReferences = sqliteTable(
+  "finding_references",
+  {
+    findingId: integer("finding_id").notNull().references(() => findings.id),
+    referenceId: integer("reference_id").notNull().references(() => references.id),
+  },
+  (t) => [primaryKey({ columns: [t.findingId, t.referenceId] })],
+);
+
+// ── Method Bank ────────────────────────────────────────────────────────────
+// Reusable techniques indexed by the problem they solve.
+// "When problem X arises, reach for method Y."
+
+export const methods = sqliteTable("methods", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  solves: text("solves").notNull(),
+  provenIn: text("proven_in"),
+  useWhen: text("use_when"),
+  notNowBecause: text("not_now_because"),
+  source: text("source"),
+  status: text("status", {
+    enum: ["parked", "exploring", "applied", "rejected"],
+  }).notNull().default("parked"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const methodTags = sqliteTable(
+  "method_tags",
+  {
+    methodId: integer("method_id").notNull().references(() => methods.id),
+    tagId: integer("tag_id").notNull().references(() => tags.id),
+  },
+  (t) => [primaryKey({ columns: [t.methodId, t.tagId] })],
+);

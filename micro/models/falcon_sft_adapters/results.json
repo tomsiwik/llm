@@ -1,0 +1,427 @@
+{
+  "experiment": "falcon_sft_adapters",
+  "model": "mlx-community/Falcon-E-3B-Instruct-1.58bit",
+  "training": {
+    "medical": {
+      "base_ppl": 2.744122411425887,
+      "trained_ppl": 1.9756722576769068,
+      "ppl_improvement_pct": 28.00349396037628,
+      "final_loss": 0.7971698045730591,
+      "sft_response_ratio": "see log",
+      "peak_memory_gb": 7.610646948,
+      "time_s": 66.65143084526062
+    },
+    "code": {
+      "base_ppl": 2.1329908254955448,
+      "trained_ppl": 1.954638119660852,
+      "ppl_improvement_pct": 8.361625549573432,
+      "final_loss": 0.5652173757553101,
+      "sft_response_ratio": "see log",
+      "peak_memory_gb": 12.928688267,
+      "time_s": 81.11506795883179
+    },
+    "math": {
+      "base_ppl": 2.0519573343294892,
+      "trained_ppl": 1.4985262556636836,
+      "ppl_improvement_pct": 26.970886256104755,
+      "final_loss": 0.25,
+      "sft_response_ratio": "see log",
+      "peak_memory_gb": 12.929212555,
+      "time_s": 105.63570380210876
+    },
+    "legal": {
+      "base_ppl": 13.409389386263559,
+      "trained_ppl": 11.25811380800685,
+      "ppl_improvement_pct": 16.04305398469861,
+      "final_loss": 3.09375,
+      "sft_response_ratio": "see log",
+      "peak_memory_gb": 12.920823956,
+      "time_s": 86.33544182777405
+    },
+    "finance": {
+      "base_ppl": 13.462491776030124,
+      "trained_ppl": 12.364144727423,
+      "ppl_improvement_pct": 8.158571733077851,
+      "final_loss": 2.4375,
+      "sft_response_ratio": "see log",
+      "peak_memory_gb": 12.928737419,
+      "time_s": 87.07352089881897
+    }
+  },
+  "base": {
+    "gsm8k": {
+      "accuracy": 0.44,
+      "correct": 22,
+      "total": 50,
+      "time_s": 268.79544401168823
+    },
+    "mmlu": {
+      "medical": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "code": {
+        "accuracy": 0.6,
+        "correct": 12,
+        "total": 20
+      },
+      "math": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "legal": {
+        "accuracy": 0.4,
+        "correct": 8,
+        "total": 20
+      },
+      "finance": {
+        "accuracy": 0.6,
+        "correct": 12,
+        "total": 20
+      }
+    },
+    "peak_memory_gb": 6.735532159,
+    "time_s": 349.9579610824585
+  },
+  "single_adapters": {
+    "medical": {
+      "gsm8k": {
+        "accuracy": 0.58,
+        "correct": 29,
+        "total": 50,
+        "time_s": 217.45867919921875
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.1,
+          "correct": 2,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532159,
+      "time_s": 306.6567497253418
+    },
+    "code": {
+      "gsm8k": {
+        "accuracy": 0.62,
+        "correct": 31,
+        "total": 50,
+        "time_s": 227.20180892944336
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 7.127179728,
+      "time_s": 314.68829107284546
+    },
+    "math": {
+      "gsm8k": {
+        "accuracy": 0.5,
+        "correct": 25,
+        "total": 50,
+        "time_s": 234.61265683174133
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.15,
+          "correct": 3,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 7.127179728,
+      "time_s": 321.63141679763794
+    },
+    "legal": {
+      "gsm8k": {
+        "accuracy": 0.06,
+        "correct": 3,
+        "total": 50,
+        "time_s": 304.17471408843994
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.05,
+          "correct": 1,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 7.127179728,
+      "time_s": 391.4204113483429
+    },
+    "finance": {
+      "gsm8k": {
+        "accuracy": 0.52,
+        "correct": 26,
+        "total": 50,
+        "time_s": 309.15320801734924
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.2,
+          "correct": 4,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 7.127179728,
+      "time_s": 398.1654131412506
+    }
+  },
+  "composed": {
+    "gsm8k": {
+      "accuracy": 0.52,
+      "correct": 26,
+      "total": 50,
+      "time_s": 1006.0895721912384
+    },
+    "mmlu": {
+      "medical": {
+        "accuracy": 0.3,
+        "correct": 6,
+        "total": 20
+      },
+      "code": {
+        "accuracy": 0.45,
+        "correct": 9,
+        "total": 20
+      },
+      "math": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "legal": {
+        "accuracy": 0.4,
+        "correct": 8,
+        "total": 20
+      },
+      "finance": {
+        "accuracy": 0.6,
+        "correct": 12,
+        "total": 20
+      }
+    },
+    "peak_memory_gb": 8.803029808,
+    "time_s": 1376.3050129413605
+  },
+  "routed": {
+    "gsm8k": {
+      "accuracy": 0.5,
+      "correct": 25,
+      "total": 50,
+      "time_s": 234.61265683174133
+    },
+    "mmlu": {
+      "medical": {
+        "accuracy": 0.1,
+        "correct": 2,
+        "total": 20
+      },
+      "code": {
+        "accuracy": 0.55,
+        "correct": 11,
+        "total": 20
+      },
+      "math": {
+        "accuracy": 0.15,
+        "correct": 3,
+        "total": 20
+      },
+      "legal": {
+        "accuracy": 0.05,
+        "correct": 1,
+        "total": 20
+      },
+      "finance": {
+        "accuracy": 0.2,
+        "correct": 4,
+        "total": 20
+      }
+    }
+  },
+  "analysis": {
+    "base_scores": {
+      "gsm8k": 0.44,
+      "mmlu_medical": 0.55,
+      "mmlu_code": 0.6,
+      "mmlu_math": 0.55,
+      "mmlu_legal": 0.4,
+      "mmlu_finance": 0.6
+    },
+    "ntp_composed_scores": {
+      "gsm8k": 0.36,
+      "mmlu_medical": 0.3,
+      "mmlu_code": 0.5,
+      "mmlu_math": 0.55,
+      "mmlu_legal": 0.35,
+      "mmlu_finance": 0.45
+    },
+    "sft_composed_scores": {
+      "gsm8k": 0.52,
+      "mmlu_medical": 0.3,
+      "mmlu_code": 0.45,
+      "mmlu_math": 0.55,
+      "mmlu_legal": 0.4,
+      "mmlu_finance": 0.6
+    },
+    "sft_routed_scores": {
+      "gsm8k": 0.5,
+      "mmlu_medical": 0.1,
+      "mmlu_code": 0.55,
+      "mmlu_math": 0.15,
+      "mmlu_legal": 0.05,
+      "mmlu_finance": 0.2
+    },
+    "best_single_scores": {
+      "gsm8k": 0.62,
+      "mmlu_medical": 0.45,
+      "mmlu_code": 0.55,
+      "mmlu_math": 0.55,
+      "mmlu_legal": 0.4,
+      "mmlu_finance": 0.45
+    },
+    "k1_562": {
+      "result": "fail",
+      "degrades": 5,
+      "improves": 1,
+      "evidence": "SFT routed degrades 5/6 benchmarks (threshold >3)"
+    },
+    "k2_563": {
+      "result": "pass",
+      "composed_worse": 3,
+      "evidence": "Composed worse than best single on 3/6 (threshold >3)"
+    }
+  },
+  "params": {
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "train_iters": 300,
+    "learning_rate": 0.0001,
+    "max_seq_length": 256,
+    "loss_type": "SFT (response-only masking)",
+    "response_marker": "### Response:\n",
+    "target_keys": [
+      "self_attn.q_proj",
+      "self_attn.v_proj",
+      "self_attn.o_proj"
+    ],
+    "composition": "uniform 1/N pre-merge",
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20
+  },
+  "prior_ntp_results": {
+    "gsm8k": 0.36,
+    "mmlu_medical": 0.3,
+    "mmlu_code": 0.5,
+    "mmlu_math": 0.55,
+    "mmlu_legal": 0.35,
+    "mmlu_finance": 0.45,
+    "note": "From exp_falcon_e3b_composition (NTP loss, same model)"
+  },
+  "total_time_s": 3890.9024686813354
+}

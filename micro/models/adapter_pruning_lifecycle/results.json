@@ -1,0 +1,857 @@
+{
+  "experiment": "adapter_pruning_lifecycle",
+  "timestamp": "2026-03-28 08:12:33",
+  "config": {
+    "model": "microsoft/BitNet-b1.58-2B-4T",
+    "n_domains": 24,
+    "prune_k": 5,
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "quality_threshold_pct": 2.0
+  },
+  "base_ppls": {
+    "medical": 6.4952,
+    "code": 4.9764,
+    "math": 3.839,
+    "legal": 21.63,
+    "finance": 19.4296,
+    "science": 12.4574,
+    "history": 16.7012,
+    "philosophy": 16.3917,
+    "creative_writing": 20.7312,
+    "cooking": 3.2083,
+    "health_fitness": 11.7071,
+    "psychology": 17.4531,
+    "education": 3.576,
+    "engineering": 4.2065,
+    "agriculture": 14.5551,
+    "environmental": 11.4945,
+    "politics": 12.5562,
+    "economics": 16.6926,
+    "sociology": 4.4946,
+    "linguistics": 4.4131,
+    "cybersecurity": 3.828,
+    "marketing": 3.8323,
+    "sports": 3.5882,
+    "music": 3.5743
+  },
+  "oracle_ppls": {
+    "medical": 3.458,
+    "code": 3.1429,
+    "math": 2.3824,
+    "legal": 14.6556,
+    "finance": 14.012,
+    "science": 7.3031,
+    "history": 9.287,
+    "philosophy": 9.972,
+    "creative_writing": 12.0067,
+    "cooking": 2.5463,
+    "health_fitness": 6.6572,
+    "psychology": 12.2018,
+    "education": 2.4117,
+    "engineering": 2.4498,
+    "agriculture": 8.3484,
+    "environmental": 6.6206,
+    "politics": 6.6702,
+    "economics": 8.9299,
+    "sociology": 3.6079,
+    "linguistics": 3.6413,
+    "cybersecurity": 3.0949,
+    "marketing": 2.952,
+    "sports": 2.3439,
+    "music": 2.3409
+  },
+  "full_pool_avg_oracle_ppl": 6.2932,
+  "full_pool_composition": {
+    "per_domain": {
+      "medical": 4.2629,
+      "code": 3.4029,
+      "math": 3.0571,
+      "legal": 16.698,
+      "finance": 15.3394,
+      "science": 7.7218,
+      "history": 9.8001,
+      "philosophy": 10.5463,
+      "creative_writing": 12.5971,
+      "cooking": 2.6684,
+      "health_fitness": 8.4712,
+      "psychology": 14.4483,
+      "education": 2.5755,
+      "engineering": 2.6635,
+      "agriculture": 8.8321,
+      "environmental": 6.9776,
+      "politics": 7.0595,
+      "economics": 9.5455,
+      "sociology": 3.7773,
+      "linguistics": 3.7973,
+      "cybersecurity": 3.2651,
+      "marketing": 3.1411,
+      "sports": 2.5045,
+      "music": 2.5054
+    },
+    "avg_ppl": 6.9024
+  },
+  "metrics": {
+    "delta_magnitudes": {
+      "medical": 31.330767,
+      "code": 30.191042,
+      "math": 31.452333,
+      "legal": 29.382946,
+      "finance": 29.129647,
+      "science": 29.508577,
+      "history": 28.76652,
+      "philosophy": 29.219253,
+      "creative_writing": 28.67627,
+      "cooking": 27.315659,
+      "health_fitness": 33.967954,
+      "psychology": 33.435897,
+      "education": 29.755905,
+      "engineering": 29.626549,
+      "agriculture": 28.782041,
+      "environmental": 29.481741,
+      "politics": 28.679721,
+      "economics": 29.005573,
+      "sociology": 27.502344,
+      "linguistics": 26.217412,
+      "cybersecurity": 27.5578,
+      "marketing": 27.095813,
+      "sports": 29.085692,
+      "music": 29.512628
+    },
+    "routing_frequency": {
+      "medical": 0.0433,
+      "code": 0.05,
+      "math": 0.0417,
+      "legal": 0.0433,
+      "finance": 0.045,
+      "science": 0.0058,
+      "history": 0.0642,
+      "philosophy": 0.015,
+      "creative_writing": 0.005,
+      "cooking": 0.0375,
+      "health_fitness": 0.045,
+      "psychology": 0.045,
+      "education": 0.0175,
+      "engineering": 0.0417,
+      "agriculture": 0.1133,
+      "environmental": 0.0375,
+      "politics": 0.0433,
+      "economics": 0.0333,
+      "sociology": 0.0333,
+      "linguistics": 0.0525,
+      "cybersecurity": 0.0567,
+      "marketing": 0.0267,
+      "sports": 0.0642,
+      "music": 0.0392
+    },
+    "loo_deltas": {
+      "medical": {
+        "loo_avg_ppl": 6.4165,
+        "delta": 0.1233,
+        "delta_pct": 1.9588
+      },
+      "code": {
+        "loo_avg_ppl": 6.4302,
+        "delta": 0.137,
+        "delta_pct": 2.1765
+      },
+      "math": {
+        "loo_avg_ppl": 6.4632,
+        "delta": 0.17,
+        "delta_pct": 2.7019
+      },
+      "legal": {
+        "loo_avg_ppl": 5.9296,
+        "delta": -0.3636,
+        "delta_pct": -5.7774
+      },
+      "finance": {
+        "loo_avg_ppl": 5.9576,
+        "delta": -0.3356,
+        "delta_pct": -5.3328
+      },
+      "science": {
+        "loo_avg_ppl": 6.2493,
+        "delta": -0.0439,
+        "delta_pct": -0.6977
+      },
+      "history": {
+        "loo_avg_ppl": 6.163,
+        "delta": -0.1302,
+        "delta_pct": -2.0684
+      },
+      "philosophy": {
+        "loo_avg_ppl": 6.1332,
+        "delta": -0.1599,
+        "delta_pct": -2.5416
+      },
+      "creative_writing": {
+        "loo_avg_ppl": 6.0448,
+        "delta": -0.2484,
+        "delta_pct": -3.9473
+      },
+      "cooking": {
+        "loo_avg_ppl": 6.4561,
+        "delta": 0.1629,
+        "delta_pct": 2.5886
+      },
+      "health_fitness": {
+        "loo_avg_ppl": 6.2774,
+        "delta": -0.0158,
+        "delta_pct": -0.2515
+      },
+      "psychology": {
+        "loo_avg_ppl": 6.0363,
+        "delta": -0.2569,
+        "delta_pct": -4.0821
+      },
+      "education": {
+        "loo_avg_ppl": 6.4619,
+        "delta": 0.1688,
+        "delta_pct": 2.6816
+      },
+      "engineering": {
+        "loo_avg_ppl": 6.4603,
+        "delta": 0.1671,
+        "delta_pct": 2.6553
+      },
+      "agriculture": {
+        "loo_avg_ppl": 6.2038,
+        "delta": -0.0894,
+        "delta_pct": -1.4199
+      },
+      "environmental": {
+        "loo_avg_ppl": 6.279,
+        "delta": -0.0142,
+        "delta_pct": -0.2262
+      },
+      "politics": {
+        "loo_avg_ppl": 6.2768,
+        "delta": -0.0164,
+        "delta_pct": -0.2605
+      },
+      "economics": {
+        "loo_avg_ppl": 6.1785,
+        "delta": -0.1146,
+        "delta_pct": -1.8216
+      },
+      "sociology": {
+        "loo_avg_ppl": 6.4099,
+        "delta": 0.1168,
+        "delta_pct": 1.8552
+      },
+      "linguistics": {
+        "loo_avg_ppl": 6.4085,
+        "delta": 0.1153,
+        "delta_pct": 1.8321
+      },
+      "cybersecurity": {
+        "loo_avg_ppl": 6.4322,
+        "delta": 0.1391,
+        "delta_pct": 2.2096
+      },
+      "marketing": {
+        "loo_avg_ppl": 6.4385,
+        "delta": 0.1453,
+        "delta_pct": 2.3084
+      },
+      "sports": {
+        "loo_avg_ppl": 6.4649,
+        "delta": 0.1717,
+        "delta_pct": 2.7285
+      },
+      "music": {
+        "loo_avg_ppl": 6.465,
+        "delta": 0.1718,
+        "delta_pct": 2.7305
+      }
+    },
+    "cross_similarity_top_pairs": {
+      "medical__code": 0.017206,
+      "medical__math": -0.021749,
+      "medical__legal": 0.019969,
+      "medical__finance": 0.034403,
+      "medical__science": -0.015298,
+      "medical__history": 0.01022,
+      "medical__philosophy": 0.007958,
+      "medical__creative_writing": -0.054148,
+      "medical__cooking": 0.024301,
+      "medical__health_fitness": -0.043593,
+      "medical__psychology": -0.015975,
+      "medical__education": 0.031895,
+      "medical__engineering": 0.020763,
+      "medical__agriculture": -0.013304,
+      "medical__environmental": 0.012852,
+      "medical__politics": -0.02248,
+      "medical__economics": 0.015201,
+      "medical__sociology": 0.000642,
+      "medical__linguistics": 0.002095,
+      "medical__cybersecurity": 0.015194,
+      "medical__marketing": 0.031737,
+      "medical__sports": -0.02043,
+      "medical__music": 0.001451,
+      "code__math": -0.013622,
+      "code__legal": 0.0086,
+      "code__finance": -0.044066,
+      "code__science": 0.02421,
+      "code__history": -0.0298,
+      "code__philosophy": -0.04981,
+      "code__creative_writing": 0.024276,
+      "code__cooking": 0.038965,
+      "code__health_fitness": -0.016998,
+      "code__psychology": 0.030277,
+      "code__education": 0.024882,
+      "code__engineering": 0.02985,
+      "code__agriculture": -0.032857,
+      "code__environmental": -0.023744,
+      "code__politics": 0.039633,
+      "code__economics": 0.021661,
+      "code__sociology": -0.016603,
+      "code__linguistics": 0.005486,
+      "code__cybersecurity": -0.036752,
+      "code__marketing": -0.013721,
+      "code__sports": 0.027617,
+      "code__music": 0.02576,
+      "math__legal": 0.011094,
+      "math__finance": -0.002494,
+      "math__science": -0.035286,
+      "math__history": 0.03096,
+      "math__philosophy": 0.017101,
+      "math__creative_writing": 0.021995,
+      "math__cooking": 0.005263,
+      "math__health_fitness": -0.008593,
+      "math__psychology": -0.02284,
+      "math__education": 0.008852,
+      "math__engineering": -0.017717,
+      "math__agriculture": 0.039941,
+      "math__environmental": -0.005552,
+      "math__politics": 0.029483,
+      "math__economics": -3.6e-05,
+      "math__sociology": 0.035801,
+      "math__linguistics": 0.001187,
+      "math__cybersecurity": -0.034927,
+      "math__marketing": 0.023279,
+      "math__sports": 0.019537,
+      "math__music": 0.021955,
+      "legal__finance": 0.031368,
+      "legal__science": 0.011186,
+      "legal__history": 0.031859,
+      "legal__philosophy": -0.009914,
+      "legal__creative_writing": -0.017411,
+      "legal__cooking": 0.028031,
+      "legal__health_fitness": -0.023107,
+      "legal__psychology": -0.036891,
+      "legal__education": 0.008983,
+      "legal__engineering": 0.018197,
+      "legal__agriculture": 0.038238,
+      "legal__environmental": 0.00086,
+      "legal__politics": -0.025322,
+      "legal__economics": 0.038388,
+      "legal__sociology": -0.02568,
+      "legal__linguistics": -0.006274,
+      "legal__cybersecurity": -0.005206,
+      "legal__marketing": 0.022756,
+      "legal__sports": -0.033022,
+      "legal__music": -0.005807,
+      "finance__science": -0.050649,
+      "finance__history": 0.008653,
+      "finance__philosophy": 0.037445,
+      "finance__creative_writing": -0.04354,
+      "finance__cooking": 0.014879,
+      "finance__health_fitness": -0.017203,
+      "finance__psychology": -0.010571,
+      "finance__education": 0.021161,
+      "finance__engineering": -0.025005,
+      "finance__agriculture": -0.042404,
+      "finance__environmental": -0.024813,
+      "finance__politics": -0.034385,
+      "finance__economics": 0.004825,
+      "finance__sociology": -0.010727,
+      "finance__linguistics": 0.015612,
+      "finance__cybersecurity": 0.026338,
+      "finance__marketing": -0.01184,
+      "finance__sports": -0.037391,
+      "finance__music": -0.01043,
+      "science__history": 0.070373,
+      "science__philosophy": -0.03244,
+      "science__creative_writing": 0.017769,
+      "science__cooking": -0.01127,
+      "science__health_fitness": 0.007915,
+      "science__psychology": -0.003422,
+      "science__education": -0.026786,
+      "science__engineering": 0.06149,
+      "science__agriculture": -0.003183,
+      "science__environmental": -0.037586,
+      "science__politics": -0.048982,
+      "science__economics": -0.050637,
+      "science__sociology": 0.021764,
+      "science__linguistics": 0.031832,
+      "science__cybersecurity": 0.044283,
+      "science__marketing": -0.042329,
+      "science__sports": -0.000241,
+      "science__music": -0.048444,
+      "history__philosophy": 0.033749,
+      "history__creative_writing": 0.009977,
+      "history__cooking": -0.007085,
+      "history__health_fitness": -0.041918,
+      "history__psychology": -0.015142,
+      "history__education": 0.021048,
+      "history__engineering": 0.011708,
+      "history__agriculture": 0.042231,
+      "history__environmental": -0.041932,
+      "history__politics": -0.060081,
+      "history__economics": 0.043235,
+      "history__sociology": 0.018057,
+      "history__linguistics": 0.083305,
+      "history__cybersecurity": 0.019417,
+      "history__marketing": 0.000834,
+      "history__sports": -0.032539,
+      "history__music": -0.03096,
+      "philosophy__creative_writing": -0.005039,
+      "philosophy__cooking": 0.016503,
+      "philosophy__health_fitness": -0.026524,
+      "philosophy__psychology": -0.005644,
+      "philosophy__education": 0.046487,
+      "philosophy__engineering": -0.041324,
+      "philosophy__agriculture": 0.009115,
+      "philosophy__environmental": -0.016464,
+      "philosophy__politics": 0.049427,
+      "philosophy__economics": -0.008077,
+      "philosophy__sociology": -0.012636,
+      "philosophy__linguistics": 0.019624,
+      "philosophy__cybersecurity": 0.011939,
+      "philosophy__marketing": 0.011665,
+      "philosophy__sports": -0.000977,
+      "philosophy__music": -0.01734,
+      "creative_writing__cooking": -0.008496,
+      "creative_writing__health_fitness": -0.002982,
+      "creative_writing__psychology": 0.023841,
+      "creative_writing__education": -0.015755,
+      "creative_writing__engineering": 0.018262,
+      "creative_writing__agriculture": 0.008766,
+      "creative_writing__environmental": 0.001743,
+      "creative_writing__politics": 0.023559,
+      "creative_writing__economics": -0.012556,
+      "creative_writing__sociology": 0.02013,
+      "creative_writing__linguistics": 0.009966,
+      "creative_writing__cybersecurity": 0.035391,
+      "creative_writing__marketing": -0.021974,
+      "creative_writing__sports": 0.089257,
+      "creative_writing__music": -0.012855,
+      "cooking__health_fitness": -0.021317,
+      "cooking__psychology": -0.041697,
+      "cooking__education": 0.043123,
+      "cooking__engineering": -0.037058,
+      "cooking__agriculture": -0.005134,
+      "cooking__environmental": 0.000917,
+      "cooking__politics": -0.007699,
+      "cooking__economics": -0.032612,
+      "cooking__sociology": -0.046471,
+      "cooking__linguistics": -0.053939,
+      "cooking__cybersecurity": -0.020065,
+      "cooking__marketing": 0.010794,
+      "cooking__sports": 0.023849,
+      "cooking__music": 0.060155,
+      "health_fitness__psychology": 0.008776,
+      "health_fitness__education": -0.005907,
+      "health_fitness__engineering": -0.022457,
+      "health_fitness__agriculture": -0.002866,
+      "health_fitness__environmental": 0.039815,
+      "health_fitness__politics": -0.009157,
+      "health_fitness__economics": -0.024577,
+      "health_fitness__sociology": -0.009282,
+      "health_fitness__linguistics": -0.002243,
+      "health_fitness__cybersecurity": -0.01,
+      "health_fitness__marketing": 0.00377,
+      "health_fitness__sports": 0.021714,
+      "health_fitness__music": -0.018381,
+      "psychology__education": -0.000957,
+      "psychology__engineering": 0.01829,
+      "psychology__agriculture": -0.036576,
+      "psychology__environmental": 0.013644,
+      "psychology__politics": -0.00168,
+      "psychology__economics": 0.018264,
+      "psychology__sociology": -0.012242,
+      "psychology__linguistics": 0.019025,
+      "psychology__cybersecurity": 0.02582,
+      "psychology__marketing": -0.017858,
+      "psychology__sports": -0.00682,
+      "psychology__music": -0.030857,
+      "education__engineering": -0.075571,
+      "education__agriculture": -0.001056,
+      "education__environmental": 0.03333,
+      "education__politics": -0.020951,
+      "education__economics": 0.01062,
+      "education__sociology": 0.00095,
+      "education__linguistics": 0.033364,
+      "education__cybersecurity": -0.051453,
+      "education__marketing": 0.052813,
+      "education__sports": -0.042197,
+      "education__music": -0.03026,
+      "engineering__agriculture": 0.001708,
+      "engineering__environmental": -0.06924,
+      "engineering__politics": -0.019355,
+      "engineering__economics": -0.0249,
+      "engineering__sociology": 0.008682,
+      "engineering__linguistics": 0.007513,
+      "engineering__cybersecurity": 0.062103,
+      "engineering__marketing": 0.018091,
+      "engineering__sports": 0.030876,
+      "engineering__music": 0.023755,
+      "agriculture__environmental": 0.000753,
+      "agriculture__politics": -0.046946,
+      "agriculture__economics": 0.015534,
+      "agriculture__sociology": 0.01099,
+      "agriculture__linguistics": -0.029211,
+      "agriculture__cybersecurity": -0.04469,
+      "agriculture__marketing": 0.049157,
+      "agriculture__sports": 0.019399,
+      "agriculture__music": 0.01323,
+      "environmental__politics": -0.017679,
+      "environmental__economics": 0.005639,
+      "environmental__sociology": -0.018815,
+      "environmental__linguistics": -0.004485,
+      "environmental__cybersecurity": -0.044135,
+      "environmental__marketing": 0.067964,
+      "environmental__sports": 0.005344,
+      "environmental__music": -0.00562,
+      "politics__economics": 0.03385,
+      "politics__sociology": 0.024143,
+      "politics__linguistics": -0.008175,
+      "politics__cybersecurity": -0.018376,
+      "politics__marketing": -0.041486,
+      "politics__sports": 0.020307,
+      "politics__music": 0.043248,
+      "economics__sociology": 0.044765,
+      "economics__linguistics": 0.039022,
+      "economics__cybersecurity": -0.028962,
+      "economics__marketing": -0.006564,
+      "economics__sports": -0.081699,
+      "economics__music": 0.013686,
+      "sociology__linguistics": 0.047755,
+      "sociology__cybersecurity": -0.042576,
+      "sociology__marketing": -0.00402,
+      "sociology__sports": -0.009586,
+      "sociology__music": 0.021223,
+      "linguistics__cybersecurity": 0.004455,
+      "linguistics__marketing": -0.013685,
+      "linguistics__sports": -0.057338,
+      "linguistics__music": -0.020098,
+      "cybersecurity__marketing": -0.034155,
+      "cybersecurity__sports": 0.01374,
+      "cybersecurity__music": -0.060464,
+      "marketing__sports": 0.028147,
+      "marketing__music": -0.024671,
+      "sports__music": 0.012115
+    },
+    "max_similarity_per_adapter": {
+      "medical": {
+        "max_cos": 0.0541,
+        "most_similar_to": "creative_writing"
+      },
+      "code": {
+        "max_cos": 0.0498,
+        "most_similar_to": "philosophy"
+      },
+      "math": {
+        "max_cos": 0.0399,
+        "most_similar_to": "agriculture"
+      },
+      "legal": {
+        "max_cos": 0.0384,
+        "most_similar_to": "economics"
+      },
+      "finance": {
+        "max_cos": 0.0506,
+        "most_similar_to": "science"
+      },
+      "science": {
+        "max_cos": 0.0704,
+        "most_similar_to": "history"
+      },
+      "history": {
+        "max_cos": 0.0833,
+        "most_similar_to": "linguistics"
+      },
+      "philosophy": {
+        "max_cos": 0.0498,
+        "most_similar_to": "code"
+      },
+      "creative_writing": {
+        "max_cos": 0.0893,
+        "most_similar_to": "sports"
+      },
+      "cooking": {
+        "max_cos": 0.0602,
+        "most_similar_to": "music"
+      },
+      "health_fitness": {
+        "max_cos": 0.0436,
+        "most_similar_to": "medical"
+      },
+      "psychology": {
+        "max_cos": 0.0417,
+        "most_similar_to": "cooking"
+      },
+      "education": {
+        "max_cos": 0.0756,
+        "most_similar_to": "engineering"
+      },
+      "engineering": {
+        "max_cos": 0.0756,
+        "most_similar_to": "education"
+      },
+      "agriculture": {
+        "max_cos": 0.0492,
+        "most_similar_to": "marketing"
+      },
+      "environmental": {
+        "max_cos": 0.0692,
+        "most_similar_to": "engineering"
+      },
+      "politics": {
+        "max_cos": 0.0601,
+        "most_similar_to": "history"
+      },
+      "economics": {
+        "max_cos": 0.0817,
+        "most_similar_to": "sports"
+      },
+      "sociology": {
+        "max_cos": 0.0478,
+        "most_similar_to": "linguistics"
+      },
+      "linguistics": {
+        "max_cos": 0.0833,
+        "most_similar_to": "history"
+      },
+      "cybersecurity": {
+        "max_cos": 0.0621,
+        "most_similar_to": "engineering"
+      },
+      "marketing": {
+        "max_cos": 0.068,
+        "most_similar_to": "environmental"
+      },
+      "sports": {
+        "max_cos": 0.0893,
+        "most_similar_to": "creative_writing"
+      },
+      "music": {
+        "max_cos": 0.0605,
+        "most_similar_to": "cybersecurity"
+      }
+    }
+  },
+  "pruning_strategies": {
+    "loo_delta": {
+      "pruned_adapters": [
+        {
+          "domain": "legal",
+          "score": -0.3636
+        },
+        {
+          "domain": "finance",
+          "score": -0.3356
+        },
+        {
+          "domain": "psychology",
+          "score": -0.2569
+        },
+        {
+          "domain": "creative_writing",
+          "score": -0.2484
+        },
+        {
+          "domain": "philosophy",
+          "score": -0.1599
+        }
+      ],
+      "evaluation": {
+        "removed": [
+          "creative_writing",
+          "finance",
+          "legal",
+          "philosophy",
+          "psychology"
+        ],
+        "n_remaining": 19,
+        "pruned_avg_oracle_ppl": 4.6415,
+        "full_avg_oracle_ppl": 6.2932,
+        "oracle_delta_pct": -26.2457,
+        "validated_ppls": {
+          "medical": 4.2777,
+          "code": 3.363,
+          "math": 3.0615,
+          "science": 7.8006,
+          "history": 9.9331,
+          "cooking": 2.6559,
+          "health_fitness": 8.5489,
+          "education": 2.5497,
+          "engineering": 2.6239,
+          "agriculture": 8.9349,
+          "environmental": 7.0352,
+          "politics": 7.1185,
+          "economics": 9.6647,
+          "sociology": 3.7632,
+          "linguistics": 3.7835,
+          "cybersecurity": 3.2486,
+          "marketing": 3.1248,
+          "sports": 2.4753,
+          "music": 2.4753
+        },
+        "validated_avg_ppl": 5.0757,
+        "same_domain_full_avg": 5.0541,
+        "same_domain_pruned_avg": 5.0757,
+        "same_domain_delta_pct": 0.4264
+      }
+    },
+    "routing_freq": {
+      "pruned_adapters": [
+        {
+          "domain": "creative_writing",
+          "score": 0.005
+        },
+        {
+          "domain": "science",
+          "score": 0.0058
+        },
+        {
+          "domain": "philosophy",
+          "score": 0.015
+        },
+        {
+          "domain": "education",
+          "score": 0.0175
+        },
+        {
+          "domain": "marketing",
+          "score": 0.0267
+        }
+      ],
+      "evaluation": {
+        "removed": [
+          "creative_writing",
+          "education",
+          "marketing",
+          "philosophy",
+          "science"
+        ],
+        "n_remaining": 19,
+        "pruned_avg_oracle_ppl": 6.1258,
+        "full_avg_oracle_ppl": 6.2932,
+        "oracle_delta_pct": -2.6592
+      }
+    },
+    "delta_magnitude": {
+      "pruned_adapters": [
+        {
+          "domain": "linguistics",
+          "score": 26.217412
+        },
+        {
+          "domain": "marketing",
+          "score": 27.095813
+        },
+        {
+          "domain": "cooking",
+          "score": 27.315659
+        },
+        {
+          "domain": "sociology",
+          "score": 27.502344
+        },
+        {
+          "domain": "cybersecurity",
+          "score": 27.5578
+        }
+      ],
+      "evaluation": {
+        "removed": [
+          "cooking",
+          "cybersecurity",
+          "linguistics",
+          "marketing",
+          "sociology"
+        ],
+        "n_remaining": 19,
+        "pruned_avg_oracle_ppl": 7.1155,
+        "full_avg_oracle_ppl": 6.2932,
+        "oracle_delta_pct": 13.0664
+      }
+    },
+    "cross_similarity": {
+      "pruned_adapters": [
+        {
+          "domain": "creative_writing",
+          "score": 0.0893
+        },
+        {
+          "domain": "linguistics",
+          "score": 0.0833
+        },
+        {
+          "domain": "economics",
+          "score": 0.0817
+        },
+        {
+          "domain": "engineering",
+          "score": 0.0756
+        },
+        {
+          "domain": "history",
+          "score": 0.0704
+        }
+      ],
+      "evaluation": {
+        "removed": [
+          "creative_writing",
+          "economics",
+          "engineering",
+          "history",
+          "linguistics"
+        ],
+        "n_remaining": 19,
+        "pruned_avg_oracle_ppl": 6.038,
+        "full_avg_oracle_ppl": 6.2932,
+        "oracle_delta_pct": -4.0551
+      }
+    }
+  },
+  "strategy_overlap": {
+    "loo_delta_vs_routing_freq": 0.25,
+    "loo_delta_vs_delta_magnitude": 0.0,
+    "loo_delta_vs_cross_similarity": 0.1111,
+    "routing_freq_vs_delta_magnitude": 0.1111,
+    "routing_freq_vs_cross_similarity": 0.1111,
+    "delta_magnitude_vs_cross_similarity": 0.1111
+  },
+  "kill_criteria": {
+    "K1": {
+      "description": "LOO pruning of any single adapter degrades composed PPL by >5%",
+      "pass": true,
+      "max_loo_delta_pct": 2.7305
+    },
+    "K2": {
+      "description": "All pruning strategies select identical adapters",
+      "pass": true,
+      "all_identical": false,
+      "pairwise_jaccard": {
+        "loo_delta_vs_routing_freq": 0.25,
+        "loo_delta_vs_delta_magnitude": 0.0,
+        "loo_delta_vs_cross_similarity": 0.1111,
+        "routing_freq_vs_delta_magnitude": 0.1111,
+        "routing_freq_vs_cross_similarity": 0.1111,
+        "delta_magnitude_vs_cross_similarity": 0.1111
+      }
+    }
+  },
+  "success_criteria": {
+    "S1": {
+      "description": "Remove 5/24 adapters with <2% quality loss (same-domain comparison)",
+      "pass": true,
+      "same_domain_delta_pct": 0.4264
+    }
+  },
+  "total_time_s": 809.4
+}

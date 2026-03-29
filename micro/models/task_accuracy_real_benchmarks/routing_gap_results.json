@@ -1,0 +1,29 @@
+{
+  "test": "routing_gap_investigation",
+  "condition_a_individual": {
+    "accuracy": 0.4,
+    "correct": 20,
+    "total": 50,
+    "time_s": 1215.2992577552795
+  },
+  "condition_b_routed_all": {
+    "accuracy": 0.26,
+    "correct": 13,
+    "total": 50,
+    "time_s": 1231.7685780525208
+  },
+  "condition_c_routed_math_only": {
+    "accuracy": 0.32,
+    "correct": 16,
+    "total": 50,
+    "time_s": 1247.2457280158997
+  },
+  "interpretation": {
+    "a_acc": 0.4,
+    "b_acc": 0.26,
+    "c_acc": 0.32,
+    "a_vs_c_gap": 0.08000000000000002,
+    "b_vs_c_gap": 0.06
+  },
+  "total_time_s": 3703.2
+}

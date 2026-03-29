@@ -1,13 +1,11 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Flags } from "@oclif/core";
 import { eq, and } from "drizzle-orm";
 import { db, killCriteria } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class KillUpdate extends Command {
+export default class KillUpdate extends ExperimentCommand {
   static description = "Update a kill criterion result (pass/fail/inconclusive)";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     criterion: Flags.integer({ description: "Kill criterion ID (from get output)", required: true }),

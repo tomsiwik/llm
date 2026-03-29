@@ -1,0 +1,183 @@
+{
+  "experiment": "inference_speed_10x",
+  "timestamp": "2026-03-28T01:05:44",
+  "platform": "Apple M5 Pro 48GB",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "mlx_version": "0.31.1",
+  "phase1_baseline": {
+    "avg_internal_tps": 171.8,
+    "avg_wallclock_tps": 153.6,
+    "avg_prompt_tps": 288.8,
+    "python_overhead_pct": 10.6,
+    "model_bytes_mb": 1178.6,
+    "theoretical_max_tps": 231.6,
+    "bandwidth_utilization_pct": 74.2,
+    "per_prompt": [
+      {
+        "generation_tps": 171.8,
+        "prompt_tps": 287.1,
+        "wallclock_tps": 153.4,
+        "wallclock_s": 0.652
+      },
+      {
+        "generation_tps": 171.9,
+        "prompt_tps": 304.7,
+        "wallclock_tps": 153.0,
+        "wallclock_s": 0.6535
+      },
+      {
+        "generation_tps": 171.8,
+        "prompt_tps": 258.6,
+        "wallclock_tps": 154.7,
+        "wallclock_s": 0.6465
+      },
+      {
+        "generation_tps": 171.8,
+        "prompt_tps": 304.7,
+        "wallclock_tps": 153.3,
+        "wallclock_s": 0.6524
+      }
+    ],
+    "memory": {
+      "active_mb": 1178.6,
+      "cache_mb": 0.0,
+      "peak_mb": 1178.6
+    }
+  },
+  "phase2_length_scaling": {
+    "length_scaling": [
+      {
+        "n_tokens": 20,
+        "generation_tps": 179.5,
+        "prompt_tps": 286.1,
+        "wallclock_tps": 111.6,
+        "wallclock_s": 0.1792
+      },
+      {
+        "n_tokens": 50,
+        "generation_tps": 173.7,
+        "prompt_tps": 290.3,
+        "wallclock_tps": 141.3,
+        "wallclock_s": 0.3538
+      },
+      {
+        "n_tokens": 100,
+        "generation_tps": 171.7,
+        "prompt_tps": 290.7,
+        "wallclock_tps": 153.8,
+        "wallclock_s": 0.6503
+      },
+      {
+        "n_tokens": 200,
+        "generation_tps": 170.3,
+        "prompt_tps": 289.8,
+        "wallclock_tps": 160.9,
+        "wallclock_s": 1.2432
+      },
+      {
+        "n_tokens": 500,
+        "generation_tps": 167.9,
+        "prompt_tps": 279.9,
+        "wallclock_tps": 164.2,
+        "wallclock_s": 3.0458
+      }
+    ]
+  },
+  "phase3_kv_quant": {
+    "baseline_tps": 171.7,
+    "kv_quant_results": [
+      {
+        "kv_bits": 8,
+        "generation_tps": 160.0,
+        "prompt_tps": 263.0,
+        "wallclock_tps": 153.5,
+        "wallclock_s": 0.6513
+      },
+      {
+        "kv_bits": 4,
+        "generation_tps": 159.4,
+        "prompt_tps": 263.5,
+        "wallclock_tps": 153.8,
+        "wallclock_s": 0.6501
+      }
+    ]
+  },
+  "phase4_adapter": {
+    "base_internal_tps": 171.7,
+    "base_wallclock_tps": 153.6,
+    "adapter_avg_internal_tps": 88.2,
+    "adapter_avg_wallclock_tps": 82.3,
+    "adapter_overhead_pct": 48.6,
+    "n_wrapped_layers": 210,
+    "per_prompt": [
+      {
+        "generation_tps": 88.2,
+        "prompt_tps": 189.8,
+        "wallclock_tps": 82.3,
+        "wallclock_s": 1.2146
+      },
+      {
+        "generation_tps": 88.2,
+        "prompt_tps": 200.3,
+        "wallclock_tps": 82.1,
+        "wallclock_s": 1.2178
+      },
+      {
+        "generation_tps": 88.2,
+        "prompt_tps": 157.3,
+        "wallclock_tps": 82.5,
+        "wallclock_s": 1.2119
+      },
+      {
+        "generation_tps": 88.2,
+        "prompt_tps": 202.6,
+        "wallclock_tps": 82.2,
+        "wallclock_s": 1.2171
+      }
+    ],
+    "memory": {
+      "active_mb": 1223.6,
+      "cache_mb": 53.6,
+      "peak_mb": 1266.3
+    }
+  },
+  "phase5_multi_adapter": {
+    "n_2": {
+      "generation_tps": 87.6,
+      "prompt_tps": 184.2,
+      "wallclock_tps": 81.6,
+      "wallclock_s": 1.225,
+      "n_wrapped": 210,
+      "memory": {
+        "active_mb": 1404.5,
+        "cache_mb": 1178.6,
+        "peak_mb": 2583.1
+      }
+    },
+    "n_5": {
+      "generation_tps": 39.6,
+      "prompt_tps": 104.4,
+      "wallclock_tps": 37.8,
+      "wallclock_s": 2.6472,
+      "n_wrapped": 210,
+      "memory": {
+        "active_mb": 1404.5,
+        "cache_mb": 1178.6,
+        "peak_mb": 2583.1
+      }
+    }
+  },
+  "summary": {
+    "baseline_internal_tps": 171.8,
+    "baseline_wallclock_tps": 153.6,
+    "adapter_internal_tps": 88.2,
+    "adapter_wallclock_tps": 82.3,
+    "k1_pass": "True",
+    "s1_full_adapter_pass": "False",
+    "s1_full_adapter_verdict": "FAIL (full adapter: 88.2 tok/s < 100)",
+    "s1_attn_only_verdict": "PASS (attn-only addmm, quality not validated)",
+    "bandwidth_utilization_pct": 74.2,
+    "theoretical_max_tps": 231.6
+  },
+  "total_time_s": 51.9
+}
