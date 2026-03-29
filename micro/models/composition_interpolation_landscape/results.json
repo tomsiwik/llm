@@ -1,0 +1,1295 @@
+{
+  "phase1_2adapter_sweep": {
+    "medical__health_fitness": {
+      "pair_type": "same_cluster",
+      "alphas": {
+        "0.00": {
+          "medical": 4.427,
+          "health_fitness": 5.916,
+          "mixed_geo": 5.117
+        },
+        "0.05": {
+          "medical": 4.348,
+          "health_fitness": 5.966,
+          "mixed_geo": 5.093
+        },
+        "0.10": {
+          "medical": 4.275,
+          "health_fitness": 6.029,
+          "mixed_geo": 5.077
+        },
+        "0.15": {
+          "medical": 4.209,
+          "health_fitness": 6.103,
+          "mixed_geo": 5.068
+        },
+        "0.20": {
+          "medical": 4.147,
+          "health_fitness": 6.187,
+          "mixed_geo": 5.065
+        },
+        "0.25": {
+          "medical": 4.088,
+          "health_fitness": 6.28,
+          "mixed_geo": 5.067
+        },
+        "0.30": {
+          "medical": 4.034,
+          "health_fitness": 6.38,
+          "mixed_geo": 5.073
+        },
+        "0.35": {
+          "medical": 3.982,
+          "health_fitness": 6.489,
+          "mixed_geo": 5.083
+        },
+        "0.40": {
+          "medical": 3.935,
+          "health_fitness": 6.604,
+          "mixed_geo": 5.097
+        },
+        "0.45": {
+          "medical": 3.889,
+          "health_fitness": 6.724,
+          "mixed_geo": 5.114
+        },
+        "0.50": {
+          "medical": 3.847,
+          "health_fitness": 6.849,
+          "mixed_geo": 5.134
+        },
+        "0.55": {
+          "medical": 3.809,
+          "health_fitness": 6.977,
+          "mixed_geo": 5.155
+        },
+        "0.60": {
+          "medical": 3.773,
+          "health_fitness": 7.106,
+          "mixed_geo": 5.178
+        },
+        "0.65": {
+          "medical": 3.74,
+          "health_fitness": 7.237,
+          "mixed_geo": 5.202
+        },
+        "0.70": {
+          "medical": 3.709,
+          "health_fitness": 7.367,
+          "mixed_geo": 5.227
+        },
+        "0.75": {
+          "medical": 3.68,
+          "health_fitness": 7.497,
+          "mixed_geo": 5.252
+        },
+        "0.80": {
+          "medical": 3.653,
+          "health_fitness": 7.627,
+          "mixed_geo": 5.279
+        },
+        "0.85": {
+          "medical": 3.629,
+          "health_fitness": 7.757,
+          "mixed_geo": 5.305
+        },
+        "0.90": {
+          "medical": 3.606,
+          "health_fitness": 7.886,
+          "mixed_geo": 5.333
+        },
+        "0.95": {
+          "medical": 3.586,
+          "health_fitness": 8.015,
+          "mixed_geo": 5.361
+        },
+        "1.00": {
+          "medical": 3.566,
+          "health_fitness": 8.143,
+          "mixed_geo": 5.389
+        }
+      }
+    },
+    "math__creative_writing": {
+      "pair_type": "different_cluster",
+      "alphas": {
+        "0.00": {
+          "math": 3.247,
+          "creative_writing": 12.115,
+          "mixed_geo": 6.272
+        },
+        "0.05": {
+          "math": 3.199,
+          "creative_writing": 12.156,
+          "mixed_geo": 6.235
+        },
+        "0.10": {
+          "math": 3.149,
+          "creative_writing": 12.206,
+          "mixed_geo": 6.2
+        },
+        "0.15": {
+          "math": 3.097,
+          "creative_writing": 12.27,
+          "mixed_geo": 6.165
+        },
+        "0.20": {
+          "math": 3.043,
+          "creative_writing": 12.347,
+          "mixed_geo": 6.129
+        },
+        "0.25": {
+          "math": 2.985,
+          "creative_writing": 12.438,
+          "mixed_geo": 6.094
+        },
+        "0.30": {
+          "math": 2.925,
+          "creative_writing": 12.545,
+          "mixed_geo": 6.058
+        },
+        "0.35": {
+          "math": 2.863,
+          "creative_writing": 12.666,
+          "mixed_geo": 6.021
+        },
+        "0.40": {
+          "math": 2.799,
+          "creative_writing": 12.802,
+          "mixed_geo": 5.986
+        },
+        "0.45": {
+          "math": 2.737,
+          "creative_writing": 12.953,
+          "mixed_geo": 5.954
+        },
+        "0.50": {
+          "math": 2.678,
+          "creative_writing": 13.118,
+          "mixed_geo": 5.928
+        },
+        "0.55": {
+          "math": 2.626,
+          "creative_writing": 13.298,
+          "mixed_geo": 5.909
+        },
+        "0.60": {
+          "math": 2.58,
+          "creative_writing": 13.489,
+          "mixed_geo": 5.9
+        },
+        "0.65": {
+          "math": 2.543,
+          "creative_writing": 13.689,
+          "mixed_geo": 5.9
+        },
+        "0.70": {
+          "math": 2.511,
+          "creative_writing": 13.897,
+          "mixed_geo": 5.908
+        },
+        "0.75": {
+          "math": 2.486,
+          "creative_writing": 14.108,
+          "mixed_geo": 5.922
+        },
+        "0.80": {
+          "math": 2.466,
+          "creative_writing": 14.324,
+          "mixed_geo": 5.943
+        },
+        "0.85": {
+          "math": 2.45,
+          "creative_writing": 14.537,
+          "mixed_geo": 5.968
+        },
+        "0.90": {
+          "math": 2.438,
+          "creative_writing": 14.749,
+          "mixed_geo": 5.996
+        },
+        "0.95": {
+          "math": 2.429,
+          "creative_writing": 14.963,
+          "mixed_geo": 6.028
+        },
+        "1.00": {
+          "math": 2.422,
+          "creative_writing": 15.176,
+          "mixed_geo": 6.063
+        }
+      }
+    },
+    "code__engineering": {
+      "pair_type": "overlapping",
+      "alphas": {
+        "0.00": {
+          "code": 2.986,
+          "engineering": 2.117,
+          "mixed_geo": 2.514
+        },
+        "0.05": {
+          "code": 2.984,
+          "engineering": 2.118,
+          "mixed_geo": 2.514
+        },
+        "0.10": {
+          "code": 2.981,
+          "engineering": 2.119,
+          "mixed_geo": 2.513
+        },
+        "0.15": {
+          "code": 2.979,
+          "engineering": 2.12,
+          "mixed_geo": 2.513
+        },
+        "0.20": {
+          "code": 2.976,
+          "engineering": 2.121,
+          "mixed_geo": 2.513
+        },
+        "0.25": {
+          "code": 2.974,
+          "engineering": 2.122,
+          "mixed_geo": 2.512
+        },
+        "0.30": {
+          "code": 2.971,
+          "engineering": 2.123,
+          "mixed_geo": 2.512
+        },
+        "0.35": {
+          "code": 2.969,
+          "engineering": 2.124,
+          "mixed_geo": 2.512
+        },
+        "0.40": {
+          "code": 2.967,
+          "engineering": 2.126,
+          "mixed_geo": 2.511
+        },
+        "0.45": {
+          "code": 2.965,
+          "engineering": 2.127,
+          "mixed_geo": 2.511
+        },
+        "0.50": {
+          "code": 2.962,
+          "engineering": 2.129,
+          "mixed_geo": 2.511
+        },
+        "0.55": {
+          "code": 2.96,
+          "engineering": 2.13,
+          "mixed_geo": 2.511
+        },
+        "0.60": {
+          "code": 2.958,
+          "engineering": 2.132,
+          "mixed_geo": 2.511
+        },
+        "0.65": {
+          "code": 2.956,
+          "engineering": 2.133,
+          "mixed_geo": 2.511
+        },
+        "0.70": {
+          "code": 2.954,
+          "engineering": 2.135,
+          "mixed_geo": 2.511
+        },
+        "0.75": {
+          "code": 2.952,
+          "engineering": 2.137,
+          "mixed_geo": 2.511
+        },
+        "0.80": {
+          "code": 2.95,
+          "engineering": 2.139,
+          "mixed_geo": 2.512
+        },
+        "0.85": {
+          "code": 2.948,
+          "engineering": 2.14,
+          "mixed_geo": 2.512
+        },
+        "0.90": {
+          "code": 2.946,
+          "engineering": 2.142,
+          "mixed_geo": 2.512
+        },
+        "0.95": {
+          "code": 2.944,
+          "engineering": 2.144,
+          "mixed_geo": 2.513
+        },
+        "1.00": {
+          "code": 2.943,
+          "engineering": 2.147,
+          "mixed_geo": 2.513
+        }
+      }
+    }
+  },
+  "phase2_3adapter_simplex": {
+    "domains": [
+      "medical",
+      "math",
+      "code"
+    ],
+    "points": [
+      {
+        "w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "medical": 4.752,
+        "math": 3.411,
+        "code": 2.943,
+        "geo_mean": 3.627
+      },
+      {
+        "w": [
+          0.0,
+          0.1,
+          0.9
+        ],
+        "medical": 4.719,
+        "math": 3.299,
+        "code": 2.964,
+        "geo_mean": 3.587
+      },
+      {
+        "w": [
+          0.0,
+          0.2,
+          0.8
+        ],
+        "medical": 4.686,
+        "math": 3.177,
+        "code": 2.994,
+        "geo_mean": 3.546
+      },
+      {
+        "w": [
+          0.0,
+          0.3,
+          0.7
+        ],
+        "medical": 4.658,
+        "math": 3.042,
+        "code": 3.041,
+        "geo_mean": 3.505
+      },
+      {
+        "w": [
+          0.0,
+          0.4,
+          0.6
+        ],
+        "medical": 4.646,
+        "math": 2.898,
+        "code": 3.113,
+        "geo_mean": 3.473
+      },
+      {
+        "w": [
+          0.0,
+          0.5,
+          0.5
+        ],
+        "medical": 4.659,
+        "math": 2.751,
+        "code": 3.221,
+        "geo_mean": 3.456
+      },
+      {
+        "w": [
+          0.0,
+          0.6,
+          0.4
+        ],
+        "medical": 4.7,
+        "math": 2.622,
+        "code": 3.368,
+        "geo_mean": 3.462
+      },
+      {
+        "w": [
+          0.0,
+          0.7,
+          0.3
+        ],
+        "medical": 4.762,
+        "math": 2.529,
+        "code": 3.538,
+        "geo_mean": 3.493
+      },
+      {
+        "w": [
+          0.0,
+          0.8,
+          0.2
+        ],
+        "medical": 4.838,
+        "math": 2.47,
+        "code": 3.718,
+        "geo_mean": 3.542
+      },
+      {
+        "w": [
+          0.0,
+          0.9,
+          0.1
+        ],
+        "medical": 4.917,
+        "math": 2.438,
+        "code": 3.897,
+        "geo_mean": 3.602
+      },
+      {
+        "w": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "medical": 4.985,
+        "math": 2.422,
+        "code": 4.068,
+        "geo_mean": 3.662
+      },
+      {
+        "w": [
+          0.1,
+          0.0,
+          0.9
+        ],
+        "medical": 4.627,
+        "math": 3.398,
+        "code": 2.966,
+        "geo_mean": 3.599
+      },
+      {
+        "w": [
+          0.1,
+          0.1,
+          0.8
+        ],
+        "medical": 4.592,
+        "math": 3.283,
+        "code": 2.992,
+        "geo_mean": 3.56
+      },
+      {
+        "w": [
+          0.1,
+          0.2,
+          0.7
+        ],
+        "medical": 4.557,
+        "math": 3.156,
+        "code": 3.032,
+        "geo_mean": 3.519
+      },
+      {
+        "w": [
+          0.1,
+          0.3,
+          0.6
+        ],
+        "medical": 4.532,
+        "math": 3.018,
+        "code": 3.093,
+        "geo_mean": 3.484
+      },
+      {
+        "w": [
+          0.1,
+          0.4,
+          0.5
+        ],
+        "medical": 4.527,
+        "math": 2.873,
+        "code": 3.189,
+        "geo_mean": 3.462
+      },
+      {
+        "w": [
+          0.1,
+          0.5,
+          0.4
+        ],
+        "medical": 4.548,
+        "math": 2.728,
+        "code": 3.325,
+        "geo_mean": 3.455
+      },
+      {
+        "w": [
+          0.1,
+          0.6,
+          0.3
+        ],
+        "medical": 4.591,
+        "math": 2.604,
+        "code": 3.493,
+        "geo_mean": 3.469
+      },
+      {
+        "w": [
+          0.1,
+          0.7,
+          0.2
+        ],
+        "medical": 4.651,
+        "math": 2.518,
+        "code": 3.678,
+        "geo_mean": 3.505
+      },
+      {
+        "w": [
+          0.1,
+          0.8,
+          0.1
+        ],
+        "medical": 4.721,
+        "math": 2.466,
+        "code": 3.867,
+        "geo_mean": 3.557
+      },
+      {
+        "w": [
+          0.1,
+          0.9,
+          0.0
+        ],
+        "medical": 4.792,
+        "math": 2.438,
+        "code": 4.048,
+        "geo_mean": 3.616
+      },
+      {
+        "w": [
+          0.2,
+          0.0,
+          0.8
+        ],
+        "medical": 4.495,
+        "math": 3.386,
+        "code": 2.996,
+        "geo_mean": 3.573
+      },
+      {
+        "w": [
+          0.2,
+          0.1,
+          0.7
+        ],
+        "medical": 4.458,
+        "math": 3.267,
+        "code": 3.03,
+        "geo_mean": 3.534
+      },
+      {
+        "w": [
+          0.2,
+          0.2,
+          0.6
+        ],
+        "medical": 4.423,
+        "math": 3.137,
+        "code": 3.082,
+        "geo_mean": 3.497
+      },
+      {
+        "w": [
+          0.2,
+          0.3,
+          0.5
+        ],
+        "medical": 4.404,
+        "math": 2.998,
+        "code": 3.165,
+        "geo_mean": 3.47
+      },
+      {
+        "w": [
+          0.2,
+          0.4,
+          0.4
+        ],
+        "medical": 4.407,
+        "math": 2.853,
+        "code": 3.289,
+        "geo_mean": 3.458
+      },
+      {
+        "w": [
+          0.2,
+          0.5,
+          0.3
+        ],
+        "medical": 4.431,
+        "math": 2.71,
+        "code": 3.449,
+        "geo_mean": 3.46
+      },
+      {
+        "w": [
+          0.2,
+          0.6,
+          0.2
+        ],
+        "medical": 4.475,
+        "math": 2.591,
+        "code": 3.632,
+        "geo_mean": 3.479
+      },
+      {
+        "w": [
+          0.2,
+          0.7,
+          0.1
+        ],
+        "medical": 4.532,
+        "math": 2.512,
+        "code": 3.83,
+        "geo_mean": 3.52
+      },
+      {
+        "w": [
+          0.2,
+          0.8,
+          0.0
+        ],
+        "medical": 4.596,
+        "math": 2.465,
+        "code": 4.022,
+        "geo_mean": 3.572
+      },
+      {
+        "w": [
+          0.3,
+          0.0,
+          0.7
+        ],
+        "medical": 4.355,
+        "math": 3.376,
+        "code": 3.036,
+        "geo_mean": 3.547
+      },
+      {
+        "w": [
+          0.3,
+          0.1,
+          0.6
+        ],
+        "medical": 4.317,
+        "math": 3.253,
+        "code": 3.081,
+        "geo_mean": 3.511
+      },
+      {
+        "w": [
+          0.3,
+          0.2,
+          0.5
+        ],
+        "medical": 4.286,
+        "math": 3.121,
+        "code": 3.153,
+        "geo_mean": 3.481
+      },
+      {
+        "w": [
+          0.3,
+          0.3,
+          0.4
+        ],
+        "medical": 4.273,
+        "math": 2.982,
+        "code": 3.265,
+        "geo_mean": 3.465
+      },
+      {
+        "w": [
+          0.3,
+          0.4,
+          0.3
+        ],
+        "medical": 4.282,
+        "math": 2.837,
+        "code": 3.414,
+        "geo_mean": 3.461
+      },
+      {
+        "w": [
+          0.3,
+          0.5,
+          0.2
+        ],
+        "medical": 4.31,
+        "math": 2.697,
+        "code": 3.586,
+        "geo_mean": 3.467
+      },
+      {
+        "w": [
+          0.3,
+          0.6,
+          0.1
+        ],
+        "medical": 4.355,
+        "math": 2.585,
+        "code": 3.785,
+        "geo_mean": 3.492
+      },
+      {
+        "w": [
+          0.3,
+          0.7,
+          0.0
+        ],
+        "medical": 4.41,
+        "math": 2.511,
+        "code": 3.989,
+        "geo_mean": 3.535
+      },
+      {
+        "w": [
+          0.4,
+          0.0,
+          0.6
+        ],
+        "medical": 4.207,
+        "math": 3.366,
+        "code": 3.091,
+        "geo_mean": 3.525
+      },
+      {
+        "w": [
+          0.4,
+          0.1,
+          0.5
+        ],
+        "medical": 4.173,
+        "math": 3.242,
+        "code": 3.157,
+        "geo_mean": 3.495
+      },
+      {
+        "w": [
+          0.4,
+          0.2,
+          0.4
+        ],
+        "medical": 4.149,
+        "math": 3.11,
+        "code": 3.258,
+        "geo_mean": 3.477
+      },
+      {
+        "w": [
+          0.4,
+          0.3,
+          0.3
+        ],
+        "medical": 4.142,
+        "math": 2.97,
+        "code": 3.392,
+        "geo_mean": 3.469
+      },
+      {
+        "w": [
+          0.4,
+          0.4,
+          0.2
+        ],
+        "medical": 4.155,
+        "math": 2.827,
+        "code": 3.55,
+        "geo_mean": 3.468
+      },
+      {
+        "w": [
+          0.4,
+          0.5,
+          0.1
+        ],
+        "medical": 4.186,
+        "math": 2.692,
+        "code": 3.738,
+        "geo_mean": 3.48
+      },
+      {
+        "w": [
+          0.4,
+          0.6,
+          0.0
+        ],
+        "medical": 4.233,
+        "math": 2.585,
+        "code": 3.95,
+        "geo_mean": 3.51
+      },
+      {
+        "w": [
+          0.5,
+          0.0,
+          0.5
+        ],
+        "medical": 4.059,
+        "math": 3.358,
+        "code": 3.177,
+        "geo_mean": 3.511
+      },
+      {
+        "w": [
+          0.5,
+          0.1,
+          0.4
+        ],
+        "medical": 4.031,
+        "math": 3.233,
+        "code": 3.27,
+        "geo_mean": 3.493
+      },
+      {
+        "w": [
+          0.5,
+          0.2,
+          0.3
+        ],
+        "medical": 4.015,
+        "math": 3.102,
+        "code": 3.391,
+        "geo_mean": 3.482
+      },
+      {
+        "w": [
+          0.5,
+          0.3,
+          0.2
+        ],
+        "medical": 4.014,
+        "math": 2.964,
+        "code": 3.532,
+        "geo_mean": 3.477
+      },
+      {
+        "w": [
+          0.5,
+          0.4,
+          0.1
+        ],
+        "medical": 4.03,
+        "math": 2.825,
+        "code": 3.704,
+        "geo_mean": 3.481
+      },
+      {
+        "w": [
+          0.5,
+          0.5,
+          0.0
+        ],
+        "medical": 4.064,
+        "math": 2.695,
+        "code": 3.91,
+        "geo_mean": 3.498
+      },
+      {
+        "w": [
+          0.6,
+          0.0,
+          0.4
+        ],
+        "medical": 3.918,
+        "math": 3.352,
+        "code": 3.302,
+        "geo_mean": 3.513
+      },
+      {
+        "w": [
+          0.6,
+          0.1,
+          0.3
+        ],
+        "medical": 3.899,
+        "math": 3.229,
+        "code": 3.411,
+        "geo_mean": 3.502
+      },
+      {
+        "w": [
+          0.6,
+          0.2,
+          0.2
+        ],
+        "medical": 3.889,
+        "math": 3.101,
+        "code": 3.538,
+        "geo_mean": 3.494
+      },
+      {
+        "w": [
+          0.6,
+          0.3,
+          0.1
+        ],
+        "medical": 3.892,
+        "math": 2.967,
+        "code": 3.692,
+        "geo_mean": 3.493
+      },
+      {
+        "w": [
+          0.6,
+          0.4,
+          0.0
+        ],
+        "medical": 3.912,
+        "math": 2.832,
+        "code": 3.881,
+        "geo_mean": 3.503
+      },
+      {
+        "w": [
+          0.7,
+          0.0,
+          0.3
+        ],
+        "medical": 3.795,
+        "math": 3.35,
+        "code": 3.449,
+        "geo_mean": 3.526
+      },
+      {
+        "w": [
+          0.7,
+          0.1,
+          0.2
+        ],
+        "medical": 3.782,
+        "math": 3.231,
+        "code": 3.568,
+        "geo_mean": 3.519
+      },
+      {
+        "w": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "medical": 3.777,
+        "math": 3.107,
+        "code": 3.709,
+        "geo_mean": 3.518
+      },
+      {
+        "w": [
+          0.7,
+          0.3,
+          0.0
+        ],
+        "medical": 3.783,
+        "math": 2.978,
+        "code": 3.882,
+        "geo_mean": 3.523
+      },
+      {
+        "w": [
+          0.8,
+          0.0,
+          0.2
+        ],
+        "medical": 3.696,
+        "math": 3.353,
+        "code": 3.616,
+        "geo_mean": 3.552
+      },
+      {
+        "w": [
+          0.8,
+          0.1,
+          0.1
+        ],
+        "medical": 3.687,
+        "math": 3.24,
+        "code": 3.754,
+        "geo_mean": 3.553
+      },
+      {
+        "w": [
+          0.8,
+          0.2,
+          0.0
+        ],
+        "medical": 3.684,
+        "math": 3.122,
+        "code": 3.915,
+        "geo_mean": 3.558
+      },
+      {
+        "w": [
+          0.9,
+          0.0,
+          0.1
+        ],
+        "medical": 3.621,
+        "math": 3.365,
+        "code": 3.818,
+        "geo_mean": 3.597
+      },
+      {
+        "w": [
+          0.9,
+          0.1,
+          0.0
+        ],
+        "medical": 3.615,
+        "math": 3.256,
+        "code": 3.97,
+        "geo_mean": 3.602
+      },
+      {
+        "w": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "medical": 3.566,
+        "math": 3.384,
+        "code": 4.036,
+        "geo_mean": 3.652
+      }
+    ]
+  },
+  "smoothness_analysis": {
+    "medical__health_fitness": {
+      "medical": {
+        "ppl_range": 0.861,
+        "ppl_mean": 3.902,
+        "range_pct": 22.07,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 1.0,
+        "lipschitz_constant": 2.6,
+        "optimal_alpha": 1.0,
+        "optimal_ppl": 3.566,
+        "endpoint_ppls": [
+          4.427,
+          3.566
+        ]
+      },
+      "health_fitness": {
+        "ppl_range": 2.227,
+        "ppl_mean": 6.911,
+        "range_pct": 32.22,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 0.842,
+        "lipschitz_constant": 4.8,
+        "optimal_alpha": 0.0,
+        "optimal_ppl": 5.916,
+        "endpoint_ppls": [
+          5.916,
+          8.143
+        ]
+      },
+      "mixed_geo": {
+        "ppl_range": 0.324,
+        "ppl_mean": 5.175,
+        "range_pct": 6.26,
+        "monotonic_ratio": 0.8,
+        "convexity_ratio": 0.947,
+        "lipschitz_constant": 3.0,
+        "optimal_alpha": 0.2,
+        "optimal_ppl": 5.065,
+        "endpoint_ppls": [
+          5.117,
+          5.389
+        ]
+      }
+    },
+    "math__creative_writing": {
+      "math": {
+        "ppl_range": 0.825,
+        "ppl_mean": 2.746,
+        "range_pct": 30.04,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 0.632,
+        "lipschitz_constant": 3.0,
+        "optimal_alpha": 1.0,
+        "optimal_ppl": 2.422,
+        "endpoint_ppls": [
+          3.247,
+          2.422
+        ]
+      },
+      "creative_writing": {
+        "ppl_range": 3.061,
+        "ppl_mean": 13.326,
+        "range_pct": 22.97,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 0.842,
+        "lipschitz_constant": 6.0,
+        "optimal_alpha": 0.0,
+        "optimal_ppl": 12.115,
+        "endpoint_ppls": [
+          12.115,
+          15.176
+        ]
+      },
+      "mixed_geo": {
+        "ppl_range": 0.372,
+        "ppl_mean": 6.028,
+        "range_pct": 6.17,
+        "monotonic_ratio": 0.6,
+        "convexity_ratio": 0.842,
+        "lipschitz_constant": 3.8,
+        "optimal_alpha": 0.6,
+        "optimal_ppl": 5.9,
+        "endpoint_ppls": [
+          6.272,
+          6.063
+        ]
+      }
+    },
+    "code__engineering": {
+      "code": {
+        "ppl_range": 0.043,
+        "ppl_mean": 2.963,
+        "range_pct": 1.45,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 0.632,
+        "lipschitz_constant": 0.2,
+        "optimal_alpha": 1.0,
+        "optimal_ppl": 2.943,
+        "endpoint_ppls": [
+          2.986,
+          2.943
+        ]
+      },
+      "engineering": {
+        "ppl_range": 0.03,
+        "ppl_mean": 2.13,
+        "range_pct": 1.41,
+        "monotonic_ratio": 1.0,
+        "convexity_ratio": 0.684,
+        "lipschitz_constant": 0.2,
+        "optimal_alpha": 0.0,
+        "optimal_ppl": 2.117,
+        "endpoint_ppls": [
+          2.117,
+          2.147
+        ]
+      },
+      "mixed_geo": {
+        "ppl_range": 0.003,
+        "ppl_mean": 2.512,
+        "range_pct": 0.12,
+        "monotonic_ratio": 0.15,
+        "convexity_ratio": 0.737,
+        "lipschitz_constant": 0.2,
+        "optimal_alpha": 0.4,
+        "optimal_ppl": 2.511,
+        "endpoint_ppls": [
+          2.514,
+          2.513
+        ]
+      }
+    },
+    "simplex_medical": {
+      "ppl_range": 1.419,
+      "ppl_mean": 4.292,
+      "range_pct": 33.06,
+      "optimal_w": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "optimal_ppl": 3.566,
+      "gap_to_2nd_pct": 1.3741,
+      "n_points": 66
+    },
+    "simplex_math": {
+      "ppl_range": 0.989,
+      "ppl_mean": 2.965,
+      "range_pct": 33.36,
+      "optimal_w": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "optimal_ppl": 2.422,
+      "gap_to_2nd_pct": 0.6606,
+      "n_points": 66
+    },
+    "simplex_code": {
+      "ppl_range": 1.125,
+      "ppl_mean": 3.47,
+      "range_pct": 32.42,
+      "optimal_w": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "optimal_ppl": 2.943,
+      "gap_to_2nd_pct": 0.7136,
+      "n_points": 66
+    },
+    "simplex_geo_mean": {
+      "ppl_range": 0.207,
+      "ppl_mean": 3.518,
+      "range_pct": 5.88,
+      "optimal_w": [
+        0.1,
+        0.5,
+        0.4
+      ],
+      "optimal_ppl": 3.455,
+      "gap_to_2nd_pct": 0.0289,
+      "n_points": 66
+    },
+    "simplex_convexity_m23": {
+      "midpoint_ppl": 3.456,
+      "chord_ppl": 3.644,
+      "is_convex": true,
+      "gap_pct": -5.172
+    },
+    "simplex_convexity_m13": {
+      "midpoint_ppl": 3.511,
+      "chord_ppl": 3.639,
+      "is_convex": true,
+      "gap_pct": -3.531
+    },
+    "simplex_convexity_m12": {
+      "midpoint_ppl": 3.498,
+      "chord_ppl": 3.657,
+      "is_convex": true,
+      "gap_pct": -4.348
+    }
+  },
+  "kill_criteria": {
+    "K1_flat": {
+      "pass": true,
+      "flat_count": 3,
+      "total": 9
+    },
+    "K2_chaotic": {
+      "pass": true,
+      "chaotic_found": false
+    }
+  },
+  "success_criteria": {
+    "S1_convex_minimum": {
+      "pass": true,
+      "convex_count": 3,
+      "total": 3
+    },
+    "S2_single_basin": {
+      "pass": true
+    }
+  },
+  "total_time_s": 610.0
+}

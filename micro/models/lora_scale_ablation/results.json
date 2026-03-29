@@ -1,0 +1,207 @@
+{
+  "_meta": {
+    "experiment": "lora_scale_ablation",
+    "scales": [1.0, 2.0, 4.0, 8.0, 20.0],
+    "loss_types": ["sft", "ntp"],
+    "domains": ["medical", "math", "code"],
+    "total_conditions": 30,
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20,
+    "base_weight_norm": 83.11,
+    "status": "INCOMPLETE - log truncated during s4.0__ntp__code GSM8K eval. Missing: s4.0__ntp__code, all s8.0 conditions, all s20.0 conditions (18 evals for GSM8K/MMLU, 0 norm measurements missing)"
+  },
+  "base_model": {
+    "name": "falcon-base",
+    "gsm8k": { "correct": 22, "total": 50, "accuracy": 0.440 },
+    "mmlu": {
+      "medical": { "correct": 11, "total": 20, "accuracy": 0.550 },
+      "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+      "code":    { "correct": 12, "total": 20, "accuracy": 0.600 }
+    }
+  },
+  "norm_measurements": {
+    "s1.0__sft__medical":  { "mean_rho": 0.0149, "max_rho": 0.0344, "w_norm": 83.11, "delta_norm": 1.21 },
+    "s1.0__sft__math":     { "mean_rho": 0.0135, "max_rho": 0.0435, "w_norm": 83.11, "delta_norm": 1.09 },
+    "s1.0__sft__code":     { "mean_rho": 0.0117, "max_rho": 0.0296, "w_norm": 83.11, "delta_norm": 0.94 },
+    "s1.0__ntp__medical":  { "mean_rho": 0.0172, "max_rho": 0.0395, "w_norm": 83.11, "delta_norm": 1.43 },
+    "s1.0__ntp__math":     { "mean_rho": 0.0150, "max_rho": 0.0608, "w_norm": 83.11, "delta_norm": 1.20 },
+    "s1.0__ntp__code":     { "mean_rho": 0.0136, "max_rho": 0.0354, "w_norm": 83.11, "delta_norm": 1.12 },
+    "s2.0__sft__medical":  { "mean_rho": 0.0240, "max_rho": 0.0589, "w_norm": 83.11, "delta_norm": 1.95 },
+    "s2.0__sft__math":     { "mean_rho": 0.0213, "max_rho": 0.0626, "w_norm": 83.11, "delta_norm": 1.72 },
+    "s2.0__sft__code":     { "mean_rho": 0.0195, "max_rho": 0.0589, "w_norm": 83.11, "delta_norm": 1.56 },
+    "s2.0__ntp__medical":  { "mean_rho": 0.0270, "max_rho": 0.0444, "w_norm": 83.11, "delta_norm": 2.24 },
+    "s2.0__ntp__math":     { "mean_rho": 0.0229, "max_rho": 0.0890, "w_norm": 83.11, "delta_norm": 1.83 },
+    "s2.0__ntp__code":     { "mean_rho": 0.0217, "max_rho": 0.0519, "w_norm": 83.11, "delta_norm": 1.78 },
+    "s4.0__sft__medical":  { "mean_rho": 0.0411, "max_rho": 0.1155, "w_norm": 83.11, "delta_norm": 3.34 },
+    "s4.0__sft__math":     { "mean_rho": 0.0364, "max_rho": 0.1112, "w_norm": 83.11, "delta_norm": 2.93 },
+    "s4.0__sft__code":     { "mean_rho": 0.0360, "max_rho": 0.1058, "w_norm": 83.11, "delta_norm": 2.86 },
+    "s4.0__ntp__medical":  { "mean_rho": 0.0441, "max_rho": 0.0878, "w_norm": 83.11, "delta_norm": 3.64 },
+    "s4.0__ntp__math":     { "mean_rho": 0.0364, "max_rho": 0.1351, "w_norm": 83.11, "delta_norm": 2.90 },
+    "s4.0__ntp__code":     { "mean_rho": 0.0378, "max_rho": 0.1013, "w_norm": 83.11, "delta_norm": 3.05 },
+    "s8.0__sft__medical":  { "mean_rho": 0.0698, "max_rho": 0.1746, "w_norm": 83.11, "delta_norm": 5.68 },
+    "s8.0__sft__math":     { "mean_rho": 0.0625, "max_rho": 0.2213, "w_norm": 83.11, "delta_norm": 4.99 },
+    "s8.0__sft__code":     { "mean_rho": 0.0645, "max_rho": 0.2334, "w_norm": 83.11, "delta_norm": 5.11 },
+    "s8.0__ntp__medical":  { "mean_rho": 0.0733, "max_rho": 0.1557, "w_norm": 83.11, "delta_norm": 6.05 },
+    "s8.0__ntp__math":     { "mean_rho": 0.0622, "max_rho": 0.1933, "w_norm": 83.11, "delta_norm": 5.01 },
+    "s8.0__ntp__code":     { "mean_rho": 0.0658, "max_rho": 0.1766, "w_norm": 83.11, "delta_norm": 5.33 },
+    "s20.0__sft__medical": { "mean_rho": 0.1517, "max_rho": 0.2902, "w_norm": 83.11, "delta_norm": 12.47 },
+    "s20.0__sft__math":    { "mean_rho": 0.1419, "max_rho": 0.4105, "w_norm": 83.11, "delta_norm": 11.45 },
+    "s20.0__sft__code":    { "mean_rho": 0.1456, "max_rho": 0.4403, "w_norm": 83.11, "delta_norm": 11.72 },
+    "s20.0__ntp__medical": { "mean_rho": 0.1533, "max_rho": 0.3680, "w_norm": 83.11, "delta_norm": 12.55 },
+    "s20.0__ntp__math":    { "mean_rho": 0.1337, "max_rho": 0.3729, "w_norm": 83.11, "delta_norm": 10.87 },
+    "s20.0__ntp__code":    { "mean_rho": 0.1387, "max_rho": 0.3408, "w_norm": 83.11, "delta_norm": 11.38 }
+  },
+  "adapter_evaluations": {
+    "s1.0__sft__medical": {
+      "gsm8k": { "correct": 21, "total": 50, "accuracy": 0.420 },
+      "mmlu": {
+        "medical": { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s1.0__sft__math": {
+      "gsm8k": { "correct": 28, "total": 50, "accuracy": 0.560 },
+      "mmlu": {
+        "medical": { "correct": 9,  "total": 20, "accuracy": 0.450 },
+        "math":    { "correct": 6,  "total": 20, "accuracy": 0.300 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s1.0__sft__code": {
+      "gsm8k": { "correct": 26, "total": 50, "accuracy": 0.520 },
+      "mmlu": {
+        "medical": { "correct": 7,  "total": 20, "accuracy": 0.350 },
+        "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s1.0__ntp__medical": {
+      "gsm8k": { "correct": 21, "total": 50, "accuracy": 0.420 },
+      "mmlu": {
+        "medical": { "correct": 6,  "total": 20, "accuracy": 0.300 },
+        "math":    { "correct": 14, "total": 20, "accuracy": 0.700 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s1.0__ntp__math": {
+      "gsm8k": { "correct": 26, "total": 50, "accuracy": 0.520 },
+      "mmlu": {
+        "medical": { "correct": 8, "total": 20, "accuracy": 0.400 },
+        "math":    { "correct": 5, "total": 20, "accuracy": 0.250 },
+        "code":    { "correct": 9, "total": 20, "accuracy": 0.450 }
+      }
+    },
+    "s1.0__ntp__code": {
+      "gsm8k": { "correct": 24, "total": 50, "accuracy": 0.480 },
+      "mmlu": {
+        "medical": { "correct": 7,  "total": 20, "accuracy": 0.350 },
+        "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "code":    { "correct": 12, "total": 20, "accuracy": 0.600 }
+      }
+    },
+    "s2.0__sft__medical": {
+      "gsm8k": { "correct": 30, "total": 50, "accuracy": 0.600 },
+      "mmlu": {
+        "medical": { "correct": 7,  "total": 20, "accuracy": 0.350 },
+        "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s2.0__sft__math": {
+      "gsm8k": { "correct": 29, "total": 50, "accuracy": 0.580 },
+      "mmlu": {
+        "medical": { "correct": 9, "total": 20, "accuracy": 0.450 },
+        "math":    { "correct": 6, "total": 20, "accuracy": 0.300 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s2.0__sft__code": {
+      "gsm8k": { "correct": 31, "total": 50, "accuracy": 0.620 },
+      "mmlu": {
+        "medical": { "correct": 8,  "total": 20, "accuracy": 0.400 },
+        "math":    { "correct": 12, "total": 20, "accuracy": 0.600 },
+        "code":    { "correct": 9,  "total": 20, "accuracy": 0.450 }
+      }
+    },
+    "s2.0__ntp__medical": {
+      "gsm8k": { "correct": 19, "total": 50, "accuracy": 0.380 },
+      "mmlu": {
+        "medical": { "correct": 8,  "total": 20, "accuracy": 0.400 },
+        "math":    { "correct": 12, "total": 20, "accuracy": 0.600 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s2.0__ntp__math": {
+      "gsm8k": { "correct": 31, "total": 50, "accuracy": 0.620 },
+      "mmlu": {
+        "medical": { "correct": 8, "total": 20, "accuracy": 0.400 },
+        "math":    { "correct": 4, "total": 20, "accuracy": 0.200 },
+        "code":    { "correct": 8, "total": 20, "accuracy": 0.400 }
+      }
+    },
+    "s2.0__ntp__code": {
+      "gsm8k": { "correct": 26, "total": 50, "accuracy": 0.520 },
+      "mmlu": {
+        "medical": { "correct": 7,  "total": 20, "accuracy": 0.350 },
+        "math":    { "correct": 10, "total": 20, "accuracy": 0.500 },
+        "code":    { "correct": 11, "total": 20, "accuracy": 0.550 }
+      }
+    },
+    "s4.0__sft__medical": {
+      "gsm8k": { "correct": 29, "total": 50, "accuracy": 0.580 },
+      "mmlu": {
+        "medical": { "correct": 7,  "total": 20, "accuracy": 0.350 },
+        "math":    { "correct": 12, "total": 20, "accuracy": 0.600 },
+        "code":    { "correct": 9,  "total": 20, "accuracy": 0.450 }
+      }
+    },
+    "s4.0__sft__math": {
+      "gsm8k": { "correct": 31, "total": 50, "accuracy": 0.620 },
+      "mmlu": {
+        "medical": { "correct": 12, "total": 20, "accuracy": 0.600 },
+        "math":    { "correct": 4,  "total": 20, "accuracy": 0.200 },
+        "code":    { "correct": 12, "total": 20, "accuracy": 0.600 }
+      }
+    },
+    "s4.0__sft__code": {
+      "gsm8k": { "correct": 33, "total": 50, "accuracy": 0.660 },
+      "mmlu": {
+        "medical": { "correct": 9,  "total": 20, "accuracy": 0.450 },
+        "math":    { "correct": 11, "total": 20, "accuracy": 0.550 },
+        "code":    { "correct": 10, "total": 20, "accuracy": 0.500 }
+      }
+    },
+    "s4.0__ntp__medical": {
+      "gsm8k": { "correct": 21, "total": 50, "accuracy": 0.420 },
+      "mmlu": {
+        "medical": { "correct": 9,  "total": 20, "accuracy": 0.450 },
+        "math":    { "correct": 14, "total": 20, "accuracy": 0.700 },
+        "code":    { "correct": 11, "total": 20, "accuracy": 0.550 }
+      }
+    },
+    "s4.0__ntp__math": {
+      "gsm8k": { "correct": 33, "total": 50, "accuracy": 0.660 },
+      "mmlu": {
+        "medical": { "correct": 10, "total": 20, "accuracy": 0.500 },
+        "math":    { "correct": 4,  "total": 20, "accuracy": 0.200 },
+        "code":    { "correct": 7,  "total": 20, "accuracy": 0.350 }
+      }
+    }
+  },
+  "missing_evaluations": [
+    "s4.0__ntp__code",
+    "s8.0__sft__medical",
+    "s8.0__sft__math",
+    "s8.0__sft__code",
+    "s8.0__ntp__medical",
+    "s8.0__ntp__math",
+    "s8.0__ntp__code",
+    "s20.0__sft__medical",
+    "s20.0__sft__math",
+    "s20.0__sft__code",
+    "s20.0__ntp__medical",
+    "s20.0__ntp__math",
+    "s20.0__ntp__code"
+  ]
+}

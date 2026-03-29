@@ -1,13 +1,11 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Flags } from "@oclif/core";
 import { eq } from "drizzle-orm";
 import { db, experiments } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class Update extends Command {
+export default class Update extends ExperimentCommand {
   static description = "Update an experiment's fields";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     status: Flags.string({ description: "New status: open, active, proven, supported, killed" }),
@@ -20,19 +18,12 @@ export default class Update extends Command {
 
   async run() {
     const { args, flags } = await this.parse(Update);
+    await this.requireExperiment(args.id);
 
-    const existing = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
-    if (!existing) {
-      this.error(`Experiment "${args.id}" not found`);
-    }
-
-    const updates: Record<string, unknown> = {
-      updatedAt: new Date().toISOString().slice(0, 10),
-    };
+    const updates: Record<string, unknown> = { updatedAt: this.today };
 
     if (flags.status) {
       updates.status = flags.status;
-      // Clear claim on terminal status
       if (["proven", "supported", "killed"].includes(flags.status)) {
         updates.claimedBy = null;
         updates.claimedAt = null;

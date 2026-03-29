@@ -1,0 +1,697 @@
+{
+  "experiment": "real_data_25_domain_adapters",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "n_domains_target": 25,
+  "timestamp": "2026-03-27 12:13:15",
+  "active_domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance",
+    "science",
+    "history",
+    "philosophy",
+    "creative_writing",
+    "cooking",
+    "health_fitness",
+    "psychology",
+    "education",
+    "engineering",
+    "agriculture",
+    "environmental",
+    "politics",
+    "economics",
+    "sociology",
+    "linguistics",
+    "cybersecurity",
+    "marketing",
+    "sports",
+    "music"
+  ],
+  "failed_domains": [
+    "real_estate"
+  ],
+  "n_domains_active": 24,
+  "base_ppls": {
+    "medical": 6.4952,
+    "code": 4.9764,
+    "math": 3.839,
+    "legal": 21.63,
+    "finance": 19.4296,
+    "science": 12.4574,
+    "history": 16.7012,
+    "philosophy": 16.3917,
+    "creative_writing": 20.7312,
+    "cooking": 3.2083,
+    "health_fitness": 11.7071,
+    "psychology": 17.4531,
+    "education": 3.576,
+    "engineering": 4.2065,
+    "agriculture": 14.5551,
+    "environmental": 11.4945,
+    "politics": 12.5562,
+    "economics": 16.6926,
+    "sociology": 4.4946,
+    "linguistics": 4.4131,
+    "cybersecurity": 3.828,
+    "marketing": 3.8323,
+    "sports": 3.5882,
+    "music": 3.5743
+  },
+  "train_results": {
+    "medical": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true,
+      "first_50_avg_loss": 0,
+      "last_50_avg_loss": 0,
+      "trainable_params": 0
+    },
+    "code": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true,
+      "first_50_avg_loss": 0,
+      "last_50_avg_loss": 0,
+      "trainable_params": 0
+    },
+    "math": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true,
+      "first_50_avg_loss": 0,
+      "last_50_avg_loss": 0,
+      "trainable_params": 0
+    },
+    "legal": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true,
+      "first_50_avg_loss": 0,
+      "last_50_avg_loss": 0,
+      "trainable_params": 0
+    },
+    "finance": {
+      "train_time_s": 0,
+      "skipped": true,
+      "converged": true,
+      "first_50_avg_loss": 0,
+      "last_50_avg_loss": 0,
+      "trainable_params": 0
+    },
+    "science": {
+      "train_time_s": 64.2,
+      "first_50_avg_loss": 2.3167,
+      "last_50_avg_loss": 2.2239,
+      "converged": false,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "history": {
+      "train_time_s": 64.8,
+      "first_50_avg_loss": 2.4964,
+      "last_50_avg_loss": 2.1729,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "philosophy": {
+      "train_time_s": 64.6,
+      "first_50_avg_loss": 2.3832,
+      "last_50_avg_loss": 2.0255,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "creative_writing": {
+      "train_time_s": 63.3,
+      "first_50_avg_loss": 2.3084,
+      "last_50_avg_loss": 2.1741,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "cooking": {
+      "train_time_s": 73.5,
+      "first_50_avg_loss": 1.3389,
+      "last_50_avg_loss": 1.1343,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.08
+    },
+    "health_fitness": {
+      "train_time_s": 71.7,
+      "first_50_avg_loss": 2.3065,
+      "last_50_avg_loss": 1.9791,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "psychology": {
+      "train_time_s": 74.8,
+      "first_50_avg_loss": 2.7068,
+      "last_50_avg_loss": 2.5183,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "education": {
+      "train_time_s": 65.7,
+      "first_50_avg_loss": 1.2678,
+      "last_50_avg_loss": 0.9819,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "engineering": {
+      "train_time_s": 67.0,
+      "first_50_avg_loss": 1.1368,
+      "last_50_avg_loss": 0.8959,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "agriculture": {
+      "train_time_s": 63.0,
+      "first_50_avg_loss": 2.4764,
+      "last_50_avg_loss": 2.2261,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "environmental": {
+      "train_time_s": 61.3,
+      "first_50_avg_loss": 2.4115,
+      "last_50_avg_loss": 2.1771,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "politics": {
+      "train_time_s": 62.0,
+      "first_50_avg_loss": 2.4169,
+      "last_50_avg_loss": 2.2108,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "economics": {
+      "train_time_s": 61.6,
+      "first_50_avg_loss": 2.4534,
+      "last_50_avg_loss": 2.342,
+      "converged": false,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.08
+    },
+    "sociology": {
+      "train_time_s": 72.6,
+      "first_50_avg_loss": 1.3352,
+      "last_50_avg_loss": 1.3845,
+      "converged": false,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "linguistics": {
+      "train_time_s": 71.9,
+      "first_50_avg_loss": 1.4942,
+      "last_50_avg_loss": 1.2333,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.1
+    },
+    "cybersecurity": {
+      "train_time_s": 71.7,
+      "first_50_avg_loss": 1.2719,
+      "last_50_avg_loss": 1.1778,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "marketing": {
+      "train_time_s": 71.4,
+      "first_50_avg_loss": 1.2678,
+      "last_50_avg_loss": 1.0983,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.09
+    },
+    "sports": {
+      "train_time_s": 66.7,
+      "first_50_avg_loss": 1.1878,
+      "last_50_avg_loss": 0.9323,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.08
+    },
+    "music": {
+      "train_time_s": 65.5,
+      "first_50_avg_loss": 1.1829,
+      "last_50_avg_loss": 1.0183,
+      "converged": true,
+      "trainable_params": 10936320,
+      "peak_memory_gb": 17.08
+    }
+  },
+  "max_peak_memory_gb": 17.1,
+  "k3_pass": true,
+  "k3_max_peak_gb": 17.1,
+  "individual_ppls": {
+    "medical": 3.458,
+    "code": 3.1429,
+    "math": 2.3824,
+    "legal": 14.6556,
+    "finance": 14.012,
+    "science": 7.3031,
+    "history": 9.287,
+    "philosophy": 9.972,
+    "creative_writing": 12.0067,
+    "cooking": 2.5463,
+    "health_fitness": 6.6572,
+    "psychology": 12.2018,
+    "education": 2.4117,
+    "engineering": 2.4498,
+    "agriculture": 8.3484,
+    "environmental": 6.6206,
+    "politics": 6.6702,
+    "economics": 8.9299,
+    "sociology": 3.6079,
+    "linguistics": 3.6413,
+    "cybersecurity": 3.0949,
+    "marketing": 2.952,
+    "sports": 2.3439,
+    "music": 2.3409
+  },
+  "composed_ppls": {
+    "medical": 4.2629,
+    "code": 3.4029,
+    "math": 3.0571,
+    "legal": 16.698,
+    "finance": 15.3394,
+    "science": 7.7218,
+    "history": 9.8001,
+    "philosophy": 10.5463,
+    "creative_writing": 12.5971,
+    "cooking": 2.6684,
+    "health_fitness": 8.4712,
+    "psychology": 14.4483,
+    "education": 2.5755,
+    "engineering": 2.6635,
+    "agriculture": 8.8321,
+    "environmental": 6.9776,
+    "politics": 7.0595,
+    "economics": 9.5455,
+    "sociology": 3.7773,
+    "linguistics": 3.7973,
+    "cybersecurity": 3.2651,
+    "marketing": 3.1411,
+    "sports": 2.5045,
+    "music": 2.5054
+  },
+  "mean_abs_cos": 0.023816,
+  "max_abs_cos": 0.089257,
+  "n_cosine_pairs": 276,
+  "top_10_cosine_pairs": [
+    {
+      "pair": "creative_writing-sports",
+      "abs_cos": 0.089257
+    },
+    {
+      "pair": "history-linguistics",
+      "abs_cos": 0.083305
+    },
+    {
+      "pair": "economics-sports",
+      "abs_cos": 0.081699
+    },
+    {
+      "pair": "education-engineering",
+      "abs_cos": 0.075571
+    },
+    {
+      "pair": "science-history",
+      "abs_cos": 0.070373
+    },
+    {
+      "pair": "engineering-environmental",
+      "abs_cos": 0.06924
+    },
+    {
+      "pair": "environmental-marketing",
+      "abs_cos": 0.067964
+    },
+    {
+      "pair": "engineering-cybersecurity",
+      "abs_cos": 0.062103
+    },
+    {
+      "pair": "science-engineering",
+      "abs_cos": 0.06149
+    },
+    {
+      "pair": "cybersecurity-music",
+      "abs_cos": 0.060464
+    }
+  ],
+  "routing_heads": {
+    "medical": {
+      "train_accuracy": 0.9958,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9957,
+      "accuracy": 0.9942,
+      "pos_accuracy": 0.98,
+      "neg_accuracy": 0.9948,
+      "val_accuracy": 0.9942,
+      "val_pos_accuracy": 0.98,
+      "val_neg_accuracy": 0.9948
+    },
+    "code": {
+      "train_accuracy": 0.9271,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9239,
+      "accuracy": 0.9225,
+      "pos_accuracy": 0.98,
+      "neg_accuracy": 0.92,
+      "val_accuracy": 0.9225,
+      "val_pos_accuracy": 0.98,
+      "val_neg_accuracy": 0.92
+    },
+    "math": {
+      "train_accuracy": 1.0,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 1.0,
+      "accuracy": 1.0,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 1.0,
+      "val_accuracy": 1.0,
+      "val_pos_accuracy": 1.0,
+      "val_neg_accuracy": 1.0
+    },
+    "legal": {
+      "train_accuracy": 0.9958,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9957,
+      "accuracy": 0.9967,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 0.9965,
+      "val_accuracy": 0.9967,
+      "val_pos_accuracy": 1.0,
+      "val_neg_accuracy": 0.9965
+    },
+    "finance": {
+      "train_accuracy": 0.9896,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9891,
+      "accuracy": 0.9917,
+      "pos_accuracy": 0.96,
+      "neg_accuracy": 0.993,
+      "val_accuracy": 0.9917,
+      "val_pos_accuracy": 0.96,
+      "val_neg_accuracy": 0.993
+    },
+    "science": {
+      "train_accuracy": 0.9667,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.9663,
+      "accuracy": 0.915,
+      "pos_accuracy": 0.1,
+      "neg_accuracy": 0.9504,
+      "val_accuracy": 0.915,
+      "val_pos_accuracy": 0.1,
+      "val_neg_accuracy": 0.9504
+    },
+    "history": {
+      "train_accuracy": 0.9562,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.9554,
+      "accuracy": 0.8942,
+      "pos_accuracy": 0.16,
+      "neg_accuracy": 0.9261,
+      "val_accuracy": 0.8942,
+      "val_pos_accuracy": 0.16,
+      "val_neg_accuracy": 0.9261
+    },
+    "philosophy": {
+      "train_accuracy": 0.9823,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9815,
+      "accuracy": 0.9108,
+      "pos_accuracy": 0.12,
+      "neg_accuracy": 0.9452,
+      "val_accuracy": 0.9108,
+      "val_pos_accuracy": 0.12,
+      "val_neg_accuracy": 0.9452
+    },
+    "creative_writing": {
+      "train_accuracy": 0.9729,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.9728,
+      "accuracy": 0.9225,
+      "pos_accuracy": 0.14,
+      "neg_accuracy": 0.9565,
+      "val_accuracy": 0.9225,
+      "val_pos_accuracy": 0.14,
+      "val_neg_accuracy": 0.9565
+    },
+    "cooking": {
+      "train_accuracy": 0.9146,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9109,
+      "accuracy": 0.9,
+      "pos_accuracy": 0.56,
+      "neg_accuracy": 0.9148,
+      "val_accuracy": 0.9,
+      "val_pos_accuracy": 0.56,
+      "val_neg_accuracy": 0.9148
+    },
+    "health_fitness": {
+      "train_accuracy": 0.9937,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9935,
+      "accuracy": 0.99,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 0.9896,
+      "val_accuracy": 0.99,
+      "val_pos_accuracy": 1.0,
+      "val_neg_accuracy": 0.9896
+    },
+    "psychology": {
+      "train_accuracy": 0.9979,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9978,
+      "accuracy": 0.9983,
+      "pos_accuracy": 1.0,
+      "neg_accuracy": 0.9983,
+      "val_accuracy": 0.9983,
+      "val_pos_accuracy": 1.0,
+      "val_neg_accuracy": 0.9983
+    },
+    "education": {
+      "train_accuracy": 0.9219,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9185,
+      "accuracy": 0.8742,
+      "pos_accuracy": 0.58,
+      "neg_accuracy": 0.887,
+      "val_accuracy": 0.8742,
+      "val_pos_accuracy": 0.58,
+      "val_neg_accuracy": 0.887
+    },
+    "engineering": {
+      "train_accuracy": 0.8958,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.8913,
+      "accuracy": 0.8692,
+      "pos_accuracy": 0.68,
+      "neg_accuracy": 0.8774,
+      "val_accuracy": 0.8692,
+      "val_pos_accuracy": 0.68,
+      "val_neg_accuracy": 0.8774
+    },
+    "agriculture": {
+      "train_accuracy": 0.9458,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9435,
+      "accuracy": 0.8842,
+      "pos_accuracy": 0.28,
+      "neg_accuracy": 0.9104,
+      "val_accuracy": 0.8842,
+      "val_pos_accuracy": 0.28,
+      "val_neg_accuracy": 0.9104
+    },
+    "environmental": {
+      "train_accuracy": 0.9802,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9793,
+      "accuracy": 0.9283,
+      "pos_accuracy": 0.08,
+      "neg_accuracy": 0.9652,
+      "val_accuracy": 0.9283,
+      "val_pos_accuracy": 0.08,
+      "val_neg_accuracy": 0.9652
+    },
+    "politics": {
+      "train_accuracy": 0.9812,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9804,
+      "accuracy": 0.9092,
+      "pos_accuracy": 0.1,
+      "neg_accuracy": 0.9443,
+      "val_accuracy": 0.9092,
+      "val_pos_accuracy": 0.1,
+      "val_neg_accuracy": 0.9443
+    },
+    "economics": {
+      "train_accuracy": 0.9771,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.9761,
+      "accuracy": 0.9333,
+      "pos_accuracy": 0.06,
+      "neg_accuracy": 0.9713,
+      "val_accuracy": 0.9333,
+      "val_pos_accuracy": 0.06,
+      "val_neg_accuracy": 0.9713
+    },
+    "sociology": {
+      "train_accuracy": 0.9552,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.9543,
+      "accuracy": 0.9217,
+      "pos_accuracy": 0.62,
+      "neg_accuracy": 0.9348,
+      "val_accuracy": 0.9217,
+      "val_pos_accuracy": 0.62,
+      "val_neg_accuracy": 0.9348
+    },
+    "linguistics": {
+      "train_accuracy": 0.949,
+      "train_pos_accuracy": 0.925,
+      "train_neg_accuracy": 0.95,
+      "accuracy": 0.93,
+      "pos_accuracy": 0.66,
+      "neg_accuracy": 0.9417,
+      "val_accuracy": 0.93,
+      "val_pos_accuracy": 0.66,
+      "val_neg_accuracy": 0.9417
+    },
+    "cybersecurity": {
+      "train_accuracy": 0.9594,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.9587,
+      "accuracy": 0.9233,
+      "pos_accuracy": 0.24,
+      "neg_accuracy": 0.953,
+      "val_accuracy": 0.9233,
+      "val_pos_accuracy": 0.24,
+      "val_neg_accuracy": 0.953
+    },
+    "marketing": {
+      "train_accuracy": 0.951,
+      "train_pos_accuracy": 0.975,
+      "train_neg_accuracy": 0.95,
+      "accuracy": 0.9225,
+      "pos_accuracy": 0.36,
+      "neg_accuracy": 0.947,
+      "val_accuracy": 0.9225,
+      "val_pos_accuracy": 0.36,
+      "val_neg_accuracy": 0.947
+    },
+    "sports": {
+      "train_accuracy": 0.8687,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.863,
+      "accuracy": 0.8525,
+      "pos_accuracy": 0.86,
+      "neg_accuracy": 0.8522,
+      "val_accuracy": 0.8525,
+      "val_pos_accuracy": 0.86,
+      "val_neg_accuracy": 0.8522
+    },
+    "music": {
+      "train_accuracy": 0.8917,
+      "train_pos_accuracy": 1.0,
+      "train_neg_accuracy": 0.887,
+      "accuracy": 0.8717,
+      "pos_accuracy": 0.82,
+      "neg_accuracy": 0.8739,
+      "val_accuracy": 0.8717,
+      "val_pos_accuracy": 0.82,
+      "val_neg_accuracy": 0.8739
+    }
+  },
+  "specialization_improvements": {
+    "medical": 46.76,
+    "code": 36.84,
+    "math": 37.94,
+    "legal": 32.24,
+    "finance": 27.88,
+    "science": 41.38,
+    "history": 44.39,
+    "philosophy": 39.16,
+    "creative_writing": 42.08,
+    "cooking": 20.63,
+    "health_fitness": 43.14,
+    "psychology": 30.09,
+    "education": 32.56,
+    "engineering": 41.76,
+    "agriculture": 42.64,
+    "environmental": 42.4,
+    "politics": 46.88,
+    "economics": 46.5,
+    "sociology": 19.73,
+    "linguistics": 17.49,
+    "cybersecurity": 19.15,
+    "marketing": 22.97,
+    "sports": 34.68,
+    "music": 34.51
+  },
+  "k1_pass": true,
+  "k1_specialized_count": 24,
+  "k1_fail_count": 0,
+  "composition_vs_base": {
+    "medical": -34.37,
+    "code": -31.62,
+    "math": -20.37,
+    "legal": -22.8,
+    "finance": -21.05,
+    "science": -38.01,
+    "history": -41.32,
+    "philosophy": -35.66,
+    "creative_writing": -39.24,
+    "cooking": -16.83,
+    "health_fitness": -27.64,
+    "psychology": -17.22,
+    "education": -27.98,
+    "engineering": -36.68,
+    "agriculture": -39.32,
+    "environmental": -39.3,
+    "politics": -43.78,
+    "economics": -42.82,
+    "sociology": -15.96,
+    "linguistics": -13.96,
+    "cybersecurity": -14.7,
+    "marketing": -18.04,
+    "sports": -30.2,
+    "music": -29.91
+  },
+  "k2_pass": true,
+  "k2_degraded_count": 0,
+  "k2_threshold": 12.0,
+  "s1_pass": true,
+  "s2_pass": true,
+  "avg_routing_accuracy": 0.9273,
+  "n_routing_above_70": 24,
+  "s3_pass": true,
+  "n_composition_better": 24,
+  "all_kill_criteria_pass": true,
+  "verdict": "SUPPORTED",
+  "avg_base_ppl": 10.0763,
+  "avg_individual_ppl": 6.2932,
+  "avg_composed_ppl": 6.9024,
+  "total_time_s": 1808.0,
+  "total_time_min": 30.1,
+  "avg_routing_train_accuracy": 0.9571,
+  "avg_routing_val_accuracy": 0.9273
+}

@@ -1,0 +1,267 @@
+{
+  "experiment": "flat_lora_training",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "sam_rho": 0.05,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-28 11:27:41",
+  "base_ppls": {
+    "python": 2.741816589682629,
+    "math": 5.542013899933501,
+    "medical": 6.957591275452782,
+    "legal": 21.86778193752755,
+    "creative": 6.352819171605538
+  },
+  "standard_train": {
+    "python": {
+      "train_time_s": 35.6,
+      "first_50_loss": 1.0277,
+      "last_50_loss": 1.1199,
+      "converged": false
+    },
+    "math": {
+      "train_time_s": 38.8,
+      "first_50_loss": 1.2957,
+      "last_50_loss": 1.1588,
+      "converged": true
+    },
+    "medical": {
+      "train_time_s": 27.4,
+      "first_50_loss": 2.8044,
+      "last_50_loss": 1.6267,
+      "converged": true
+    },
+    "legal": {
+      "train_time_s": 41.0,
+      "first_50_loss": 3.0372,
+      "last_50_loss": 2.7612,
+      "converged": true
+    },
+    "creative": {
+      "train_time_s": 48.7,
+      "first_50_loss": 1.1691,
+      "last_50_loss": 1.5844,
+      "converged": false
+    }
+  },
+  "sam_train": {
+    "python": {
+      "train_time_s": 66.8,
+      "first_50_loss": 1.0288,
+      "last_50_loss": 1.1205,
+      "converged": false
+    },
+    "math": {
+      "train_time_s": 77.2,
+      "first_50_loss": 1.3034,
+      "last_50_loss": 1.156,
+      "converged": true
+    },
+    "medical": {
+      "train_time_s": 54.5,
+      "first_50_loss": 2.8302,
+      "last_50_loss": 1.6362,
+      "converged": true
+    },
+    "legal": {
+      "train_time_s": 80.0,
+      "first_50_loss": 3.0488,
+      "last_50_loss": 2.7533,
+      "converged": true
+    },
+    "creative": {
+      "train_time_s": 94.7,
+      "first_50_loss": 1.1741,
+      "last_50_loss": 1.5808,
+      "converged": false
+    }
+  },
+  "k1_pass": true,
+  "standard_individual_ppls": {
+    "python": 2.2200660458239603,
+    "math": 3.5985816176460124,
+    "medical": 4.761994850385488,
+    "legal": 16.489729823290403,
+    "creative": 4.935607526217623
+  },
+  "sam_individual_ppls": {
+    "python": 2.2232809052799465,
+    "math": 3.591772572153134,
+    "medical": 4.745357001628929,
+    "legal": 16.592216794016103,
+    "creative": 4.9301748272329
+  },
+  "avg_std_individual_ppl": 6.4012,
+  "avg_sam_individual_ppl": 6.4166,
+  "individual_delta_pct": -0.24,
+  "merge_results": {
+    "task_arithmetic": {
+      "standard_ppls": {
+        "python": 2.513,
+        "math": 4.9315,
+        "medical": 6.1677,
+        "legal": 20.3653,
+        "creative": 5.9374
+      },
+      "sam_ppls": {
+        "python": 2.5039,
+        "math": 4.9198,
+        "medical": 6.1657,
+        "legal": 20.377,
+        "creative": 5.9453
+      },
+      "standard_avg_ppl": 7.983,
+      "sam_avg_ppl": 7.9824,
+      "standard_improvement_pct": 8.16,
+      "sam_improvement_pct": 8.17,
+      "delta_pp": 0.01
+    },
+    "ties": {
+      "standard_ppls": {
+        "python": 2.2933,
+        "math": 4.5555,
+        "medical": 5.6529,
+        "legal": 19.2275,
+        "creative": 5.5946
+      },
+      "sam_ppls": {
+        "python": 2.2704,
+        "math": 4.5544,
+        "medical": 5.7921,
+        "legal": 19.1501,
+        "creative": 5.5273
+      },
+      "standard_avg_ppl": 7.4648,
+      "sam_avg_ppl": 7.4588,
+      "standard_improvement_pct": 14.12,
+      "sam_improvement_pct": 14.19,
+      "delta_pp": 0.07
+    },
+    "dare": {
+      "standard_ppls": {
+        "python": 2.5146,
+        "math": 4.9409,
+        "medical": 6.1472,
+        "legal": 20.3594,
+        "creative": 5.9335
+      },
+      "sam_ppls": {
+        "python": 2.5022,
+        "math": 4.9105,
+        "medical": 6.1667,
+        "legal": 20.3594,
+        "creative": 5.9244
+      },
+      "standard_avg_ppl": 7.9791,
+      "sam_avg_ppl": 7.9727,
+      "standard_improvement_pct": 8.21,
+      "sam_improvement_pct": 8.28,
+      "delta_pp": 0.07
+    },
+    "direct_sum": {
+      "standard_ppls": {
+        "python": 2.5597,
+        "math": 4.7046,
+        "medical": 6.1186,
+        "legal": 18.8843,
+        "creative": 5.7129
+      },
+      "sam_ppls": {
+        "python": 2.5519,
+        "math": 4.7662,
+        "medical": 6.51,
+        "legal": 19.4588,
+        "creative": 5.5651
+      },
+      "standard_avg_ppl": 7.596,
+      "sam_avg_ppl": 7.7704,
+      "standard_improvement_pct": 12.61,
+      "sam_improvement_pct": 10.61,
+      "delta_pp": -2.01
+    }
+  },
+  "standard_sharpness": {
+    "python": {
+      "base_ppl": 2.2201,
+      "avg_perturbed_ppl": 2.2187,
+      "sharpness": -0.0014,
+      "sharpness_pct": -0.06
+    },
+    "math": {
+      "base_ppl": 3.5986,
+      "avg_perturbed_ppl": 3.6,
+      "sharpness": 0.0014,
+      "sharpness_pct": 0.04
+    },
+    "medical": {
+      "base_ppl": 4.762,
+      "avg_perturbed_ppl": 4.7696,
+      "sharpness": 0.0076,
+      "sharpness_pct": 0.16
+    },
+    "legal": {
+      "base_ppl": 16.4897,
+      "avg_perturbed_ppl": 16.4869,
+      "sharpness": -0.0028,
+      "sharpness_pct": -0.02
+    },
+    "creative": {
+      "base_ppl": 4.9356,
+      "avg_perturbed_ppl": 4.9347,
+      "sharpness": -0.0009,
+      "sharpness_pct": -0.02
+    }
+  },
+  "sam_sharpness": {
+    "python": {
+      "base_ppl": 2.2233,
+      "avg_perturbed_ppl": 2.2233,
+      "sharpness": 0.0,
+      "sharpness_pct": 0.0
+    },
+    "math": {
+      "base_ppl": 3.5918,
+      "avg_perturbed_ppl": 3.5919,
+      "sharpness": 0.0002,
+      "sharpness_pct": 0.0
+    },
+    "medical": {
+      "base_ppl": 4.7454,
+      "avg_perturbed_ppl": 4.7576,
+      "sharpness": 0.0122,
+      "sharpness_pct": 0.26
+    },
+    "legal": {
+      "base_ppl": 16.5922,
+      "avg_perturbed_ppl": 16.5884,
+      "sharpness": -0.0038,
+      "sharpness_pct": -0.02
+    },
+    "creative": {
+      "base_ppl": 4.9302,
+      "avg_perturbed_ppl": 4.935,
+      "sharpness": 0.0048,
+      "sharpness_pct": 0.1
+    }
+  },
+  "avg_std_sharpness_pct": 0.02,
+  "avg_sam_sharpness_pct": 0.07,
+  "standard_mean_cos": 0.001,
+  "sam_mean_cos": 0.0013,
+  "k2_best_delta_pp": 0.07,
+  "k2_best_method": "ties",
+  "k2_pass": true,
+  "s1_pass": false,
+  "std_total_train_s": 191.5,
+  "sam_total_train_s": 373.2,
+  "sam_overhead_x": 1.95,
+  "verdict": "SUPPORTED",
+  "total_time_s": 764.4
+}

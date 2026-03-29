@@ -1,13 +1,10 @@
-import { Command, Args, Flags } from "@oclif/core";
-import { eq } from "drizzle-orm";
-import { db, experiments, evidence } from "@experiment/db";
+import { Flags } from "@oclif/core";
+import { db, evidence } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class Evidence extends Command {
+export default class Evidence extends ExperimentCommand {
   static description = "Add evidence to an experiment";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     claim: Flags.string({ description: "Evidence claim", required: true }),
@@ -18,18 +15,12 @@ export default class Evidence extends Command {
 
   async run() {
     const { args, flags } = await this.parse(Evidence);
-
-    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
-    if (!exp) {
-      this.error(`Experiment "${args.id}" not found`);
-    }
-
-    const date = flags.date ?? new Date().toISOString().slice(0, 10);
+    await this.requireExperiment(args.id);
 
     await db.insert(evidence)
       .values({
         experimentId: args.id,
-        date,
+        date: flags.date ?? this.today,
         claim: flags.claim,
         source: flags.source,
         verdict: (flags.verdict as any) ?? null,

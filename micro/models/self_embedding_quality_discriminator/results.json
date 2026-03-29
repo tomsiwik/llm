@@ -1,0 +1,759 @@
+{
+  "experiment": "self_embedding_quality_discriminator",
+  "model": "mlx-community/Falcon-E-3B-Instruct-1.58bit",
+  "n_adapters_tested": 17,
+  "n_eval_samples_per_domain": 30,
+  "domains": [
+    "medical",
+    "math",
+    "code"
+  ],
+  "base_gsm8k": 0.44,
+  "base_mmlu": {
+    "medical": 0.55,
+    "math": 0.55,
+    "code": 0.6
+  },
+  "kill_criteria": {
+    "K566": {
+      "criterion": "AUC > 0.75 for discriminating helps vs hurts",
+      "measured": 0.8513513513513513,
+      "threshold": 0.75,
+      "result": "PASS"
+    },
+    "K567": {
+      "criterion": "Self-embeddings outperform random baseline",
+      "measured_auc": 0.8513513513513513,
+      "random_p95_auc": 0.6526061776061776,
+      "result": "PASS"
+    },
+    "K568": {
+      "criterion": "Ranks adapters better than random on >= 1/3 domains",
+      "domains_correct": 3,
+      "threshold": 1,
+      "result": "PASS"
+    }
+  },
+  "auc_results": {
+    "medical": {
+      "auc": 0.9375,
+      "n_samples": 17,
+      "n_positive": 1,
+      "n_negative": 16
+    },
+    "math": {
+      "auc": 0.9423076923076923,
+      "n_samples": 17,
+      "n_positive": 13,
+      "n_negative": 4
+    },
+    "code": {
+      "auc": 0.5,
+      "n_samples": 17,
+      "n_positive": 0,
+      "n_negative": 17
+    },
+    "overall": {
+      "auc": 0.8513513513513513,
+      "n_samples": 51,
+      "n_positive": 14,
+      "n_negative": 37
+    }
+  },
+  "random_baseline": {
+    "mean_auc": 0.5025945945945945,
+    "std_auc": 0.09097859109923244,
+    "p95_auc": 0.6526061776061776
+  },
+  "ranking_results": {
+    "medical": {
+      "spearman_rho": 0.1740196078431373,
+      "n_adapters": 17,
+      "better_than_random": true
+    },
+    "math": {
+      "spearman_rho": 0.7009803921568627,
+      "n_adapters": 17,
+      "better_than_random": true
+    },
+    "code": {
+      "spearman_rho": 0.2365196078431373,
+      "n_adapters": 17,
+      "better_than_random": true
+    },
+    "domains_correct": 3,
+    "total_domains": 3
+  },
+  "embedding_auc": {
+    "auc": 0.5675675675675675,
+    "n_samples": 51
+  },
+  "per_adapter_summary": {
+    "s1.0__ntp__code": {
+      "adapter": "s1.0__ntp__code",
+      "energy_gap_medical": -0.007389830691473824,
+      "frac_neg_medical": 0.5714285714285714,
+      "energy_gap_math": 0.0012597362200419107,
+      "frac_neg_math": 0.43333333333333335,
+      "energy_gap_code": -0.009246379137039185,
+      "frac_neg_code": 0.7333333333333333,
+      "gsm8k_delta": 0.03999999999999998,
+      "mmlu_medical_delta": -0.20000000000000007,
+      "mmlu_math_delta": 0.0,
+      "mmlu_code_delta": 0.0
+    },
+    "s1.0__ntp__math": {
+      "adapter": "s1.0__ntp__math",
+      "energy_gap_medical": -0.006341010332107544,
+      "frac_neg_medical": 0.5714285714285714,
+      "energy_gap_math": -0.1453236699104309,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": -0.004438634713490804,
+      "frac_neg_code": 0.5666666666666667,
+      "gsm8k_delta": 0.08000000000000002,
+      "mmlu_medical_delta": -0.15000000000000002,
+      "mmlu_math_delta": -0.30000000000000004,
+      "mmlu_code_delta": -0.14999999999999997
+    },
+    "s1.0__ntp__medical": {
+      "adapter": "s1.0__ntp__medical",
+      "energy_gap_medical": 0.012815117835998535,
+      "frac_neg_medical": 0.32142857142857145,
+      "energy_gap_math": 0.02825119098027547,
+      "frac_neg_math": 0.13333333333333333,
+      "energy_gap_code": 0.06520832379659017,
+      "frac_neg_code": 0.03333333333333333,
+      "gsm8k_delta": -0.020000000000000018,
+      "mmlu_medical_delta": -0.25000000000000006,
+      "mmlu_math_delta": 0.1499999999999999,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s1.0__sft__code": {
+      "adapter": "s1.0__sft__code",
+      "energy_gap_medical": -0.0066304973193577355,
+      "frac_neg_medical": 0.5357142857142857,
+      "energy_gap_math": -0.01946765383084615,
+      "frac_neg_math": 0.9666666666666667,
+      "energy_gap_code": -0.023035130898157754,
+      "frac_neg_code": 0.8666666666666667,
+      "gsm8k_delta": 0.08000000000000002,
+      "mmlu_medical_delta": -0.20000000000000007,
+      "mmlu_math_delta": 0.0,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s1.0__sft__math": {
+      "adapter": "s1.0__sft__math",
+      "energy_gap_medical": -0.0244480414049966,
+      "frac_neg_medical": 0.8571428571428571,
+      "energy_gap_math": -0.26277670860290525,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": -0.03141434987386068,
+      "frac_neg_code": 0.9666666666666667,
+      "gsm8k_delta": 0.12000000000000005,
+      "mmlu_medical_delta": -0.10000000000000003,
+      "mmlu_math_delta": -0.25000000000000006,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s1.0__sft__medical": {
+      "adapter": "s1.0__sft__medical",
+      "energy_gap_medical": -0.0023612422602517264,
+      "frac_neg_medical": 0.6071428571428571,
+      "energy_gap_math": -0.012544790903727213,
+      "frac_neg_math": 0.8,
+      "energy_gap_code": 0.0019946694374084473,
+      "frac_neg_code": 0.5,
+      "gsm8k_delta": -0.020000000000000018,
+      "mmlu_medical_delta": 0.0,
+      "mmlu_math_delta": 0.0,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s2.0__ntp__code": {
+      "adapter": "s2.0__ntp__code",
+      "energy_gap_medical": -0.003363153764179775,
+      "frac_neg_medical": 0.4642857142857143,
+      "energy_gap_math": -0.0028325756390889484,
+      "frac_neg_math": 0.6,
+      "energy_gap_code": -0.005136080582936605,
+      "frac_neg_code": 0.6666666666666666,
+      "gsm8k_delta": 0.08000000000000002,
+      "mmlu_medical_delta": -0.20000000000000007,
+      "mmlu_math_delta": -0.050000000000000044,
+      "mmlu_code_delta": -0.04999999999999993
+    },
+    "s2.0__ntp__math": {
+      "adapter": "s2.0__ntp__math",
+      "energy_gap_medical": 0.0035794079303741455,
+      "frac_neg_medical": 0.4642857142857143,
+      "energy_gap_math": -0.1508060137430827,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": -0.002260923385620117,
+      "frac_neg_code": 0.5666666666666667,
+      "gsm8k_delta": 0.18,
+      "mmlu_medical_delta": -0.15000000000000002,
+      "mmlu_math_delta": -0.35000000000000003,
+      "mmlu_code_delta": -0.19999999999999996
+    },
+    "s2.0__ntp__medical": {
+      "adapter": "s2.0__ntp__medical",
+      "energy_gap_medical": -0.006045111588069371,
+      "frac_neg_medical": 0.39285714285714285,
+      "energy_gap_math": 0.013298400243123372,
+      "frac_neg_math": 0.26666666666666666,
+      "energy_gap_code": 0.050747619072596235,
+      "frac_neg_code": 0.13333333333333333,
+      "gsm8k_delta": -0.06,
+      "mmlu_medical_delta": -0.15000000000000002,
+      "mmlu_math_delta": 0.04999999999999993,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s2.0__sft__code": {
+      "adapter": "s2.0__sft__code",
+      "energy_gap_medical": -0.006341597863606044,
+      "frac_neg_medical": 0.6071428571428571,
+      "energy_gap_math": -0.016179853677749635,
+      "frac_neg_math": 0.9,
+      "energy_gap_code": -0.018585240840911864,
+      "frac_neg_code": 0.8,
+      "gsm8k_delta": 0.18,
+      "mmlu_medical_delta": -0.15000000000000002,
+      "mmlu_math_delta": 0.04999999999999993,
+      "mmlu_code_delta": -0.14999999999999997
+    },
+    "s2.0__sft__math": {
+      "adapter": "s2.0__sft__math",
+      "energy_gap_medical": -0.019709361451012746,
+      "frac_neg_medical": 0.75,
+      "energy_gap_math": -0.26370288332303365,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": -0.026828728119532266,
+      "frac_neg_code": 0.8666666666666667,
+      "gsm8k_delta": 0.13999999999999996,
+      "mmlu_medical_delta": -0.10000000000000003,
+      "mmlu_math_delta": -0.25000000000000006,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s2.0__sft__medical": {
+      "adapter": "s2.0__sft__medical",
+      "energy_gap_medical": -0.002589042697634016,
+      "frac_neg_medical": 0.5357142857142857,
+      "energy_gap_math": -0.010881634553273518,
+      "frac_neg_math": 0.8333333333333334,
+      "energy_gap_code": 0.0015051662921905518,
+      "frac_neg_code": 0.4666666666666667,
+      "gsm8k_delta": 0.15999999999999998,
+      "mmlu_medical_delta": -0.20000000000000007,
+      "mmlu_math_delta": 0.0,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s4.0__ntp__math": {
+      "adapter": "s4.0__ntp__math",
+      "energy_gap_medical": 0.00998571515083313,
+      "frac_neg_medical": 0.4642857142857143,
+      "energy_gap_math": -0.16670608917872112,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": 0.008168351650238038,
+      "frac_neg_code": 0.4666666666666667,
+      "gsm8k_delta": 0.22000000000000003,
+      "mmlu_medical_delta": -0.050000000000000044,
+      "mmlu_math_delta": -0.35000000000000003,
+      "mmlu_code_delta": -0.25
+    },
+    "s4.0__ntp__medical": {
+      "adapter": "s4.0__ntp__medical",
+      "energy_gap_medical": 0.03602854268891471,
+      "frac_neg_medical": 0.25,
+      "energy_gap_math": 0.02732056975364685,
+      "frac_neg_math": 0.03333333333333333,
+      "energy_gap_code": 0.0926904559135437,
+      "frac_neg_code": 0.03333333333333333,
+      "gsm8k_delta": -0.020000000000000018,
+      "mmlu_medical_delta": -0.10000000000000003,
+      "mmlu_math_delta": 0.1499999999999999,
+      "mmlu_code_delta": -0.04999999999999993
+    },
+    "s4.0__sft__code": {
+      "adapter": "s4.0__sft__code",
+      "energy_gap_medical": -0.002560125929968698,
+      "frac_neg_medical": 0.5357142857142857,
+      "energy_gap_math": -0.02844217816988627,
+      "frac_neg_math": 0.9,
+      "energy_gap_code": -0.016989352305730183,
+      "frac_neg_code": 0.8,
+      "gsm8k_delta": 0.22000000000000003,
+      "mmlu_medical_delta": -0.10000000000000003,
+      "mmlu_math_delta": 0.0,
+      "mmlu_code_delta": -0.09999999999999998
+    },
+    "s4.0__sft__math": {
+      "adapter": "s4.0__sft__math",
+      "energy_gap_medical": -0.02418091893196106,
+      "frac_neg_medical": 0.8571428571428571,
+      "energy_gap_math": -0.2735147853692373,
+      "frac_neg_math": 1.0,
+      "energy_gap_code": -0.03235300183296204,
+      "frac_neg_code": 0.8333333333333334,
+      "gsm8k_delta": 0.18,
+      "mmlu_medical_delta": 0.04999999999999993,
+      "mmlu_math_delta": -0.35000000000000003,
+      "mmlu_code_delta": 0.0
+    },
+    "s4.0__sft__medical": {
+      "adapter": "s4.0__sft__medical",
+      "energy_gap_medical": 0.017004523958478655,
+      "frac_neg_medical": 0.2857142857142857,
+      "energy_gap_math": -0.013515383005142212,
+      "frac_neg_math": 0.8,
+      "energy_gap_code": 0.001365220546722412,
+      "frac_neg_code": 0.43333333333333335,
+      "gsm8k_delta": 0.13999999999999996,
+      "mmlu_medical_delta": -0.20000000000000007,
+      "mmlu_math_delta": 0.04999999999999993,
+      "mmlu_code_delta": -0.14999999999999997
+    }
+  },
+  "energy_gap_statistics": {
+    "s1.0__ntp__code": {
+      "medical": {
+        "mean_gap": -0.007389830691473824,
+        "std_gap": 0.030566544983020673,
+        "median_gap": -0.0024784207344055176,
+        "min_gap": -0.07874572277069092,
+        "max_gap": 0.05689883232116699,
+        "frac_negative": 0.5714285714285714
+      },
+      "math": {
+        "mean_gap": 0.0012597362200419107,
+        "std_gap": 0.011184480833067336,
+        "median_gap": 0.00040465593338012695,
+        "min_gap": -0.02159416675567627,
+        "max_gap": 0.023511171340942383,
+        "frac_negative": 0.43333333333333335
+      },
+      "code": {
+        "mean_gap": -0.009246379137039185,
+        "std_gap": 0.0403946343449488,
+        "median_gap": -0.012099981307983398,
+        "min_gap": -0.09960031509399414,
+        "max_gap": 0.12779474258422852,
+        "frac_negative": 0.7333333333333333
+      }
+    },
+    "s1.0__ntp__math": {
+      "medical": {
+        "mean_gap": -0.006341010332107544,
+        "std_gap": 0.025831314789416398,
+        "median_gap": -0.007438719272613525,
+        "min_gap": -0.05582606792449951,
+        "max_gap": 0.053479552268981934,
+        "frac_negative": 0.5714285714285714
+      },
+      "math": {
+        "mean_gap": -0.1453236699104309,
+        "std_gap": 0.10119742621154948,
+        "median_gap": -0.11206004023551941,
+        "min_gap": -0.5399050712585449,
+        "max_gap": -0.021926522254943848,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": -0.004438634713490804,
+        "std_gap": 0.03078369476760486,
+        "median_gap": -0.003008544445037842,
+        "min_gap": -0.07595717906951904,
+        "max_gap": 0.049167633056640625,
+        "frac_negative": 0.5666666666666667
+      }
+    },
+    "s1.0__ntp__medical": {
+      "medical": {
+        "mean_gap": 0.012815117835998535,
+        "std_gap": 0.05438481202787438,
+        "median_gap": 0.01030820608139038,
+        "min_gap": -0.11050760746002197,
+        "max_gap": 0.11213278770446777,
+        "frac_negative": 0.32142857142857145
+      },
+      "math": {
+        "mean_gap": 0.02825119098027547,
+        "std_gap": 0.026137881872561882,
+        "median_gap": 0.02300703525543213,
+        "min_gap": -0.017612814903259277,
+        "max_gap": 0.09152770042419434,
+        "frac_negative": 0.13333333333333333
+      },
+      "code": {
+        "mean_gap": 0.06520832379659017,
+        "std_gap": 0.0539618397341213,
+        "median_gap": 0.05990952253341675,
+        "min_gap": -0.022519588470458984,
+        "max_gap": 0.21312308311462402,
+        "frac_negative": 0.03333333333333333
+      }
+    },
+    "s1.0__sft__code": {
+      "medical": {
+        "mean_gap": -0.0066304973193577355,
+        "std_gap": 0.015496527678289398,
+        "median_gap": -0.0059975385665893555,
+        "min_gap": -0.045595526695251465,
+        "max_gap": 0.018596887588500977,
+        "frac_negative": 0.5357142857142857
+      },
+      "math": {
+        "mean_gap": -0.01946765383084615,
+        "std_gap": 0.012100040248218953,
+        "median_gap": -0.017043888568878174,
+        "min_gap": -0.05131101608276367,
+        "max_gap": 0.0067386627197265625,
+        "frac_negative": 0.9666666666666667
+      },
+      "code": {
+        "mean_gap": -0.023035130898157754,
+        "std_gap": 0.0195492113952883,
+        "median_gap": -0.021921157836914062,
+        "min_gap": -0.061627864837646484,
+        "max_gap": 0.014492273330688477,
+        "frac_negative": 0.8666666666666667
+      }
+    },
+    "s1.0__sft__math": {
+      "medical": {
+        "mean_gap": -0.0244480414049966,
+        "std_gap": 0.02144250739372362,
+        "median_gap": -0.021490752696990967,
+        "min_gap": -0.06000864505767822,
+        "max_gap": 0.014664888381958008,
+        "frac_negative": 0.8571428571428571
+      },
+      "math": {
+        "mean_gap": -0.26277670860290525,
+        "std_gap": 0.11820871706129833,
+        "median_gap": -0.2228194773197174,
+        "min_gap": -0.6811273097991943,
+        "max_gap": -0.09503120183944702,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": -0.03141434987386068,
+        "std_gap": 0.0266496318431765,
+        "median_gap": -0.026183217763900757,
+        "min_gap": -0.10293769836425781,
+        "max_gap": 0.02387106418609619,
+        "frac_negative": 0.9666666666666667
+      }
+    },
+    "s1.0__sft__medical": {
+      "medical": {
+        "mean_gap": -0.0023612422602517264,
+        "std_gap": 0.0339999683044825,
+        "median_gap": -0.004939258098602295,
+        "min_gap": -0.06971895694732666,
+        "max_gap": 0.07068848609924316,
+        "frac_negative": 0.6071428571428571
+      },
+      "math": {
+        "mean_gap": -0.012544790903727213,
+        "std_gap": 0.012672293443689355,
+        "median_gap": -0.011296778917312622,
+        "min_gap": -0.03497958183288574,
+        "max_gap": 0.01120615005493164,
+        "frac_negative": 0.8
+      },
+      "code": {
+        "mean_gap": 0.0019946694374084473,
+        "std_gap": 0.03346216048345098,
+        "median_gap": 0.0015118122100830078,
+        "min_gap": -0.06859493255615234,
+        "max_gap": 0.07937812805175781,
+        "frac_negative": 0.5
+      }
+    },
+    "s2.0__ntp__code": {
+      "medical": {
+        "mean_gap": -0.003363153764179775,
+        "std_gap": 0.029398756772484776,
+        "median_gap": 0.000962376594543457,
+        "min_gap": -0.07915925979614258,
+        "max_gap": 0.054731130599975586,
+        "frac_negative": 0.4642857142857143
+      },
+      "math": {
+        "mean_gap": -0.0028325756390889484,
+        "std_gap": 0.011870035500369797,
+        "median_gap": -0.0022666454315185547,
+        "min_gap": -0.0307236909866333,
+        "max_gap": 0.03738594055175781,
+        "frac_negative": 0.6
+      },
+      "code": {
+        "mean_gap": -0.005136080582936605,
+        "std_gap": 0.040354276277239996,
+        "median_gap": -0.0062898993492126465,
+        "min_gap": -0.09490597248077393,
+        "max_gap": 0.12754106521606445,
+        "frac_negative": 0.6666666666666666
+      }
+    },
+    "s2.0__ntp__math": {
+      "medical": {
+        "mean_gap": 0.0035794079303741455,
+        "std_gap": 0.028851015169821897,
+        "median_gap": 0.0015582442283630371,
+        "min_gap": -0.043038249015808105,
+        "max_gap": 0.06818318367004395,
+        "frac_negative": 0.4642857142857143
+      },
+      "math": {
+        "mean_gap": -0.1508060137430827,
+        "std_gap": 0.10291652980796309,
+        "median_gap": -0.12227001786231995,
+        "min_gap": -0.5568324327468872,
+        "max_gap": -0.02274298667907715,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": -0.002260923385620117,
+        "std_gap": 0.028688621853586855,
+        "median_gap": -0.002147078514099121,
+        "min_gap": -0.07417821884155273,
+        "max_gap": 0.05031740665435791,
+        "frac_negative": 0.5666666666666667
+      }
+    },
+    "s2.0__ntp__medical": {
+      "medical": {
+        "mean_gap": -0.006045111588069371,
+        "std_gap": 0.061221642121878854,
+        "median_gap": 0.004990756511688232,
+        "min_gap": -0.13621747493743896,
+        "max_gap": 0.10076522827148438,
+        "frac_negative": 0.39285714285714285
+      },
+      "math": {
+        "mean_gap": 0.013298400243123372,
+        "std_gap": 0.02121955518110065,
+        "median_gap": 0.011758863925933838,
+        "min_gap": -0.03625345230102539,
+        "max_gap": 0.05441474914550781,
+        "frac_negative": 0.26666666666666666
+      },
+      "code": {
+        "mean_gap": 0.050747619072596235,
+        "std_gap": 0.04781795631246101,
+        "median_gap": 0.04929766058921814,
+        "min_gap": -0.03711998462677002,
+        "max_gap": 0.17478537559509277,
+        "frac_negative": 0.13333333333333333
+      }
+    },
+    "s2.0__sft__code": {
+      "medical": {
+        "mean_gap": -0.006341597863606044,
+        "std_gap": 0.01983770858091903,
+        "median_gap": -0.007894039154052734,
+        "min_gap": -0.052124977111816406,
+        "max_gap": 0.02881479263305664,
+        "frac_negative": 0.6071428571428571
+      },
+      "math": {
+        "mean_gap": -0.016179853677749635,
+        "std_gap": 0.013520558536922423,
+        "median_gap": -0.017393529415130615,
+        "min_gap": -0.0443272590637207,
+        "max_gap": 0.01775538921356201,
+        "frac_negative": 0.9
+      },
+      "code": {
+        "mean_gap": -0.018585240840911864,
+        "std_gap": 0.020768686678532305,
+        "median_gap": -0.018165498971939087,
+        "min_gap": -0.056349754333496094,
+        "max_gap": 0.03210484981536865,
+        "frac_negative": 0.8
+      }
+    },
+    "s2.0__sft__math": {
+      "medical": {
+        "mean_gap": -0.019709361451012746,
+        "std_gap": 0.023051704401277743,
+        "median_gap": -0.019204318523406982,
+        "min_gap": -0.059201717376708984,
+        "max_gap": 0.034766197204589844,
+        "frac_negative": 0.75
+      },
+      "math": {
+        "mean_gap": -0.26370288332303365,
+        "std_gap": 0.11638106212727142,
+        "median_gap": -0.22618311643600464,
+        "min_gap": -0.6650431156158447,
+        "max_gap": -0.09696441888809204,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": -0.026828728119532266,
+        "std_gap": 0.025465772943637624,
+        "median_gap": -0.024280637502670288,
+        "min_gap": -0.09578490257263184,
+        "max_gap": 0.014608979225158691,
+        "frac_negative": 0.8666666666666667
+      }
+    },
+    "s2.0__sft__medical": {
+      "medical": {
+        "mean_gap": -0.002589042697634016,
+        "std_gap": 0.030790259470834132,
+        "median_gap": -0.005564630031585693,
+        "min_gap": -0.07368385791778564,
+        "max_gap": 0.06258916854858398,
+        "frac_negative": 0.5357142857142857
+      },
+      "math": {
+        "mean_gap": -0.010881634553273518,
+        "std_gap": 0.016120426330658355,
+        "median_gap": -0.014795869588851929,
+        "min_gap": -0.04176962375640869,
+        "max_gap": 0.030785560607910156,
+        "frac_negative": 0.8333333333333334
+      },
+      "code": {
+        "mean_gap": 0.0015051662921905518,
+        "std_gap": 0.029124138140264866,
+        "median_gap": 0.008223176002502441,
+        "min_gap": -0.07025063037872314,
+        "max_gap": 0.04576528072357178,
+        "frac_negative": 0.4666666666666667
+      }
+    },
+    "s4.0__ntp__math": {
+      "medical": {
+        "mean_gap": 0.00998571515083313,
+        "std_gap": 0.030168082266679733,
+        "median_gap": 0.006718754768371582,
+        "min_gap": -0.03321182727813721,
+        "max_gap": 0.06860685348510742,
+        "frac_negative": 0.4642857142857143
+      },
+      "math": {
+        "mean_gap": -0.16670608917872112,
+        "std_gap": 0.10233110245579251,
+        "median_gap": -0.13095158338546753,
+        "min_gap": -0.5454668998718262,
+        "max_gap": -0.05275154113769531,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": 0.008168351650238038,
+        "std_gap": 0.026327887752181704,
+        "median_gap": 0.008293330669403076,
+        "min_gap": -0.0631328821182251,
+        "max_gap": 0.04783475399017334,
+        "frac_negative": 0.4666666666666667
+      }
+    },
+    "s4.0__ntp__medical": {
+      "medical": {
+        "mean_gap": 0.03602854268891471,
+        "std_gap": 0.059580863289488306,
+        "median_gap": 0.025406062602996826,
+        "min_gap": -0.06282484531402588,
+        "max_gap": 0.16747689247131348,
+        "frac_negative": 0.25
+      },
+      "math": {
+        "mean_gap": 0.02732056975364685,
+        "std_gap": 0.0215636646907123,
+        "median_gap": 0.023993372917175293,
+        "min_gap": -0.008182525634765625,
+        "max_gap": 0.07432079315185547,
+        "frac_negative": 0.03333333333333333
+      },
+      "code": {
+        "mean_gap": 0.0926904559135437,
+        "std_gap": 0.06794263160847305,
+        "median_gap": 0.07626813650131226,
+        "min_gap": -0.0069751739501953125,
+        "max_gap": 0.29452943801879883,
+        "frac_negative": 0.03333333333333333
+      }
+    },
+    "s4.0__sft__code": {
+      "medical": {
+        "mean_gap": -0.002560125929968698,
+        "std_gap": 0.026718476940889913,
+        "median_gap": -0.0022258758544921875,
+        "min_gap": -0.0611574649810791,
+        "max_gap": 0.05946207046508789,
+        "frac_negative": 0.5357142857142857
+      },
+      "math": {
+        "mean_gap": -0.02844217816988627,
+        "std_gap": 0.019681494748911104,
+        "median_gap": -0.031047075986862183,
+        "min_gap": -0.059710144996643066,
+        "max_gap": 0.014591336250305176,
+        "frac_negative": 0.9
+      },
+      "code": {
+        "mean_gap": -0.016989352305730183,
+        "std_gap": 0.022918600674128327,
+        "median_gap": -0.01597931981086731,
+        "min_gap": -0.058837056159973145,
+        "max_gap": 0.050496459007263184,
+        "frac_negative": 0.8
+      }
+    },
+    "s4.0__sft__math": {
+      "medical": {
+        "mean_gap": -0.02418091893196106,
+        "std_gap": 0.028546152861405192,
+        "median_gap": -0.01578521728515625,
+        "min_gap": -0.07587528228759766,
+        "max_gap": 0.05862545967102051,
+        "frac_negative": 0.8571428571428571
+      },
+      "math": {
+        "mean_gap": -0.2735147853692373,
+        "std_gap": 0.12209567214996507,
+        "median_gap": -0.23730093240737915,
+        "min_gap": -0.6932286024093628,
+        "max_gap": -0.09767818450927734,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean_gap": -0.03235300183296204,
+        "std_gap": 0.031083267511990233,
+        "median_gap": -0.028046220541000366,
+        "min_gap": -0.1153639554977417,
+        "max_gap": 0.011940598487854004,
+        "frac_negative": 0.8333333333333334
+      }
+    },
+    "s4.0__sft__medical": {
+      "medical": {
+        "mean_gap": 0.017004523958478655,
+        "std_gap": 0.03380084988362955,
+        "median_gap": 0.023603498935699463,
+        "min_gap": -0.05047190189361572,
+        "max_gap": 0.08624005317687988,
+        "frac_negative": 0.2857142857142857
+      },
+      "math": {
+        "mean_gap": -0.013515383005142212,
+        "std_gap": 0.016882692693292168,
+        "median_gap": -0.016338586807250977,
+        "min_gap": -0.04686027765274048,
+        "max_gap": 0.03267025947570801,
+        "frac_negative": 0.8
+      },
+      "code": {
+        "mean_gap": 0.001365220546722412,
+        "std_gap": 0.03846482720189572,
+        "median_gap": 0.008487939834594727,
+        "min_gap": -0.09400427341461182,
+        "max_gap": 0.08532166481018066,
+        "frac_negative": 0.43333333333333335
+      }
+    }
+  },
+  "total_time_s": 598.1
+}

@@ -1,0 +1,16 @@
+{
+  "precomputed_ab": {
+    "tps": 44.4,
+    "precomputed_mb": 4168.1,
+    "n_wrapped": 210
+  },
+  "premerge": {
+    "tps": 55.2,
+    "memory_mb": 4825.6,
+    "n_merged": 210
+  },
+  "addmm": {
+    "tps": 97.3,
+    "n_wrapped": 210
+  }
+}

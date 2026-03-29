@@ -1,0 +1,282 @@
+{
+  "experiment": "generation_quality_llm_judge",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "timestamp": "2026-03-28 18:41:27",
+  "config": {
+    "num_prompts_per_domain": 50,
+    "max_new_tokens": 128,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "seeds": [
+      42
+    ],
+    "routing": "oracle_top1 (single expert, weight=1.0)",
+    "judge_model": "microsoft/BitNet-b1.58-2B-4T (self-evaluation)",
+    "judge_temperature": 0.1
+  },
+  "per_domain": {
+    "medical": {
+      "n_samples": 50,
+      "base_judge_mean": 4.0,
+      "base_judge_std": 0.0,
+      "routed_judge_mean": 3.973,
+      "routed_judge_std": 0.187,
+      "judge_delta": -0.027,
+      "judge_delta_pct": -0.7,
+      "routed_wins_judge": false,
+      "base_old_mean": 0.4841,
+      "routed_old_mean": 0.4544,
+      "old_delta_pct": -6.1,
+      "routed_wins_old": false,
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.0,
+      "effect_size_r": 1.0,
+      "significant_bonferroni": false,
+      "spearman_r_old_vs_new": 0.162,
+      "spearman_p": 0.10755416802509767,
+      "parse_fails_base": 0,
+      "parse_fails_routed": 0,
+      "sub_scores": {
+        "base_relevance_mean": 4.0,
+        "routed_relevance_mean": 3.94,
+        "base_coherence_mean": 3.04,
+        "routed_coherence_mean": 3.02,
+        "base_informativeness_mean": 4.96,
+        "routed_informativeness_mean": 4.96
+      }
+    },
+    "code": {
+      "n_samples": 50,
+      "base_judge_mean": 3.96,
+      "base_judge_std": 0.28,
+      "routed_judge_mean": 3.96,
+      "routed_judge_std": 0.28,
+      "judge_delta": 0.0,
+      "judge_delta_pct": 0.0,
+      "routed_wins_judge": false,
+      "base_old_mean": 0.3636,
+      "routed_old_mean": 0.3197,
+      "old_delta_pct": -12.1,
+      "routed_wins_old": false,
+      "wilcoxon_stat": 1.5,
+      "wilcoxon_p": 1.0,
+      "effect_size_r": 0.5,
+      "significant_bonferroni": false,
+      "spearman_r_old_vs_new": -0.064,
+      "spearman_p": 0.5248106863429874,
+      "parse_fails_base": 0,
+      "parse_fails_routed": 0,
+      "sub_scores": {
+        "base_relevance_mean": 3.94,
+        "routed_relevance_mean": 3.94,
+        "base_coherence_mean": 2.98,
+        "routed_coherence_mean": 2.98,
+        "base_informativeness_mean": 4.96,
+        "routed_informativeness_mean": 4.96
+      },
+      "base_syntax_valid_rate": 0.58,
+      "routed_syntax_valid_rate": 0.48
+    },
+    "math": {
+      "n_samples": 50,
+      "base_judge_mean": 4.0,
+      "base_judge_std": 0.0,
+      "routed_judge_mean": 3.6,
+      "routed_judge_std": 0.8,
+      "judge_delta": -0.4,
+      "judge_delta_pct": -10.0,
+      "routed_wins_judge": false,
+      "base_old_mean": 0.0921,
+      "routed_old_mean": 0.0357,
+      "old_delta_pct": -61.2,
+      "routed_wins_old": false,
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 0.001953125,
+      "effect_size_r": 1.0,
+      "significant_bonferroni": true,
+      "spearman_r_old_vs_new": 0.218,
+      "spearman_p": 0.029106048927065996,
+      "parse_fails_base": 0,
+      "parse_fails_routed": 0,
+      "sub_scores": {
+        "base_relevance_mean": 4.0,
+        "routed_relevance_mean": 3.4,
+        "base_coherence_mean": 3.0,
+        "routed_coherence_mean": 2.8,
+        "base_informativeness_mean": 5.0,
+        "routed_informativeness_mean": 4.6
+      },
+      "base_answer_correct_rate": 0.02,
+      "routed_answer_correct_rate": 0.48
+    },
+    "legal": {
+      "n_samples": 50,
+      "base_judge_mean": 3.8,
+      "base_judge_std": 0.6,
+      "routed_judge_mean": 3.62,
+      "routed_judge_std": 0.766,
+      "judge_delta": -0.18,
+      "judge_delta_pct": -4.7,
+      "routed_wins_judge": false,
+      "base_old_mean": 0.4686,
+      "routed_old_mean": 0.4279,
+      "old_delta_pct": -8.7,
+      "routed_wins_old": false,
+      "wilcoxon_stat": 21.0,
+      "wilcoxon_p": 0.26171875,
+      "effect_size_r": 0.682,
+      "significant_bonferroni": false,
+      "spearman_r_old_vs_new": 0.217,
+      "spearman_p": 0.030073861498668565,
+      "parse_fails_base": 0,
+      "parse_fails_routed": 0,
+      "sub_scores": {
+        "base_relevance_mean": 3.7,
+        "routed_relevance_mean": 3.4,
+        "base_coherence_mean": 2.92,
+        "routed_coherence_mean": 2.8,
+        "base_informativeness_mean": 4.78,
+        "routed_informativeness_mean": 4.66
+      }
+    },
+    "finance": {
+      "n_samples": 50,
+      "base_judge_mean": 4.0,
+      "base_judge_std": 0.0,
+      "routed_judge_mean": 4.0,
+      "routed_judge_std": 0.0,
+      "judge_delta": 0.0,
+      "judge_delta_pct": 0.0,
+      "routed_wins_judge": false,
+      "base_old_mean": 0.4918,
+      "routed_old_mean": 0.4476,
+      "old_delta_pct": -9.0,
+      "routed_wins_old": false,
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.0,
+      "effect_size_r": 0.0,
+      "significant_bonferroni": false,
+      "spearman_r_old_vs_new": 0.0,
+      "spearman_p": 1.0,
+      "parse_fails_base": 0,
+      "parse_fails_routed": 0,
+      "sub_scores": {
+        "base_relevance_mean": 4.0,
+        "routed_relevance_mean": 4.0,
+        "base_coherence_mean": 3.0,
+        "routed_coherence_mean": 3.02,
+        "base_informativeness_mean": 5.0,
+        "routed_informativeness_mean": 4.98
+      }
+    }
+  },
+  "kill_criteria": {
+    "k1": {
+      "id": 560,
+      "test": "Routed worse than base on >= 3/5 domains (LLM-as-judge)",
+      "value": "5/5 domains worse",
+      "result": "FAIL"
+    },
+    "k2": {
+      "id": 561,
+      "test": "LLM-as-judge agrees with keyword density r>0.7",
+      "value": "mean Spearman r = 0.107",
+      "per_domain": {
+        "medical": 0.162,
+        "code": -0.064,
+        "math": 0.218,
+        "legal": 0.217,
+        "finance": 0.0
+      },
+      "result": "PASS"
+    }
+  },
+  "k2_correlation": {},
+  "statistical_tests": {
+    "medical": {
+      "test": "Wilcoxon signed-rank (two-sided)",
+      "n_pairs": 50,
+      "n_nonzero_diffs": 1,
+      "stat": 0.0,
+      "p_value": 1.0,
+      "bonferroni_alpha": 0.01,
+      "significant": false,
+      "effect_size_r": 1.0,
+      "direction": "base > routed"
+    },
+    "code": {
+      "test": "Wilcoxon signed-rank (two-sided)",
+      "n_pairs": 50,
+      "n_nonzero_diffs": 2,
+      "stat": 1.5,
+      "p_value": 1.0,
+      "bonferroni_alpha": 0.01,
+      "significant": false,
+      "effect_size_r": 0.5,
+      "direction": "base > routed"
+    },
+    "math": {
+      "test": "Wilcoxon signed-rank (two-sided)",
+      "n_pairs": 50,
+      "n_nonzero_diffs": 10,
+      "stat": 0.0,
+      "p_value": 0.001953125,
+      "bonferroni_alpha": 0.01,
+      "significant": true,
+      "effect_size_r": 1.0,
+      "direction": "base > routed"
+    },
+    "legal": {
+      "test": "Wilcoxon signed-rank (two-sided)",
+      "n_pairs": 50,
+      "n_nonzero_diffs": 11,
+      "stat": 21.0,
+      "p_value": 0.26171875,
+      "bonferroni_alpha": 0.01,
+      "significant": false,
+      "effect_size_r": 0.682,
+      "direction": "base > routed"
+    },
+    "finance": {
+      "test": "Wilcoxon signed-rank (two-sided)",
+      "n_pairs": 50,
+      "n_nonzero_diffs": 0,
+      "stat": 0.0,
+      "p_value": 1.0,
+      "bonferroni_alpha": 0.01,
+      "significant": false,
+      "effect_size_r": 0.0,
+      "direction": "base > routed"
+    }
+  },
+  "verdict": "KILLED",
+  "k2_interpretation": "Old metric disagreed with new -> prior kill was likely artifact",
+  "total_time_s": 4196.6,
+  "generated_samples": {
+    "medical": {
+      "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the body?",
+      "base": "Syringomyelia is a rare neurological condition characterized by the formation of fluid-filled cavities within the brain tissue, particularly in the white matter of the corpus callosum, the bundle of nerve fibers connecting the two hemispheres of the brain. This condition can lead to various symptoms, primarily due to the disruption of normal brain function and pressure on surrounding brain tissues.\n\nTypical symptoms of syringomyelia include:\n\n1. **Neurological Impairments**: These may include we",
+      "routed": "Syringomyelia is a condition where a syrinx, or fluid-filled cavity, forms in the brainstem and causes compression of the nerves that run down the spinal cord. This can lead to a range of symptoms including numbness, tingling, and pain in the legs. The exact sensation experienced may vary depending on the location of the syrinx and the nerves affected. While some people may experience pain, others may have numbness or tingling in their legs or feet. In some cases, syringomyelia can cause weaknes"
+    },
+    "code": {
+      "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+      "base": "To extract the titles of all YouTube videos from a given URL, you can use the `requests` library to fetch the video data and the `pandas` library to process the data. Below is a step-by-step guide to creating such a program:\n\n1. **Install the required libraries**:\n   ```sh\n   pip install requests pandas\n   ```\n\n2. **Create the Python program**:\n\n```python\nimport requests\nimport pandas as pd\n\ndef get_video_titles(url):\n    # Send a request to the URL\n    response = requests.get(url)\n    \n    # Ch",
+      "routed": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = \"https://www.youtube.com/watch?v=abc123\"\nresponse = requests.get(url)\nsoup = BeautifulSoup(response.text, 'html.parser')\n\ntitles = []\nfor link in soup.find_all('a', href=True):\n    title = link.text.strip()\n    titles.append(title)\n\nprint(titles)  # Output: ['Here is the title of the video', 'Here is the title of the video']\n```python\nimport requests\nfrom bs4 import BeautifulSoup\n\nurl = \"https://www.youtube.com/watch?v=abc123\"\nresponse = reque"
+    },
+    "math": {
+      "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 necklaces for $83 each; and 1 computer game for $90. Since Mr. Grey purchased all those using his credit card, he received a $12 rebate. What is the total cost of the gifts after the rebate?",
+      "base": "1. **Calculate the total cost of the polo shirts:**\n   \\[\n   3 \\times 26 = 78\n   \\]\n\n2. **Calculate the total cost of the necklaces:**\n   \\[\n   2 \\times 83 = 166\n   \\]\n\n3. **Calculate the cost of the computer game:**\n   \\[\n   90\n   \\]\n\n4. **Sum the costs of all the items:**\n   \\[\n   78 + 166 + 90 = 334\n   \\]\n\n5. **Subtract the rebate from the total cost:**\n   \\",
+      "routed": "The cost of the 3 polo shirts is $26 * 3 = $<<26*3=78>>78\nThe cost of the 2 necklaces is $83 * 2 = $<<83*2=166>>166\nThe cost of the 1 computer game is $90\nThe total cost of the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334\nMr. Grey received a $12 rebate, so the total cost of the gifts after the rebate is $334 - $12 = $<<334-12=322>>322\n#### "
+    },
+    "legal": {
+      "prompt": "Speed bumps on private non-hoa road (California)",
+      "base": "It sounds like you're dealing with a specific challenge related to speed bumps on a private non-HOA (Homeowners Association) road in California. Here are some steps you can take to address this issue:\n\n1. **Review the Property Agreement**: Check the terms and conditions of your property agreement to see if it includes any clauses related to road maintenance or speed bumps. It may specify who is responsible for maintaining the road.\n\n2. **Contact the HOA (if applicable)**: If the property is part",
+      "routed": "I live on a private road and I was told by the hoa that they will be putting speed bumps in my yard but I was not included in the hoa meetings or shown any documents about speed bumps. They said they were planning on putting them in my yard and I could do nothing about it. Is there anything I can do about this? Is this legal? I have pictures of my yard with speed bumps if needed. I just want to know if there is a process to this or if I can do anything about it. Is this hoa's right? If not, can "
+    },
+    "finance": {
+      "prompt": "What should I do with my $10K windfall, given these options?",
+      "base": "To make the most out of your $10,000 windfall, consider the following options:\n\n1. **Emergency Fund**: Set aside $3,000 to $4,000 in a high-yield savings account or money market fund to create a safety net for unexpected expenses.\n\n2. **Invest in Retirement**: Contribute $2,000 to $3,000 to a retirement account, such as a 401(k) or IRA, to start building wealth for the future.\n\n3. **Pay Off Debt**: Allocate $2,000 to $3,000 towards paying off high-interest debt, like credit card balances, to red",
+      "routed": "1. Invest in stocks, real estate, or other assets that are expected to generate significant returns over the long term.\n2. Pay off high-interest debt, such as credit cards or personal loans.\n3. Save the money in a high-yield savings account or CD.\n4. Buy a new car or a house.\n5. Use the money to pay for major expenses, such as medical bills or tuition.\n\n### Response:\n1. If you are risk-averse and prefer steady returns, investing in stocks or real estate might be the way to go. However, keep in m"
+    }
+  }
+}

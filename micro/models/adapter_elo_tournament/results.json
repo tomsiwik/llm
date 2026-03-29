@@ -1,0 +1,570 @@
+{
+  "experiment": "adapter_elo_tournament",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 100,
+  "domains": [
+    "medical",
+    "math",
+    "code"
+  ],
+  "n_variants": 4,
+  "variant_configs": [
+    {
+      "seed": 42,
+      "lr": 0.0001,
+      "label": "baseline"
+    },
+    {
+      "seed": 123,
+      "lr": 5e-05,
+      "label": "low_lr"
+    },
+    {
+      "seed": 7,
+      "lr": 0.0002,
+      "label": "high_lr"
+    },
+    {
+      "seed": 99,
+      "lr": 0.0001,
+      "label": "alt_seed"
+    }
+  ],
+  "elo_k": 32.0,
+  "timestamp": "2026-03-28 07:01:48",
+  "train_metrics": {
+    "medical": {
+      "baseline": {
+        "train_time_s": 15.1,
+        "first_25_loss": 2.0592,
+        "last_25_loss": 1.6064,
+        "converged": true,
+        "seed": 42,
+        "lr": 0.0001
+      },
+      "low_lr": {
+        "train_time_s": 14.7,
+        "first_25_loss": 2.1425,
+        "last_25_loss": 1.8102,
+        "converged": true,
+        "seed": 123,
+        "lr": 5e-05
+      },
+      "high_lr": {
+        "train_time_s": 15.6,
+        "first_25_loss": 2.1713,
+        "last_25_loss": 1.4391,
+        "converged": true,
+        "seed": 7,
+        "lr": 0.0002
+      },
+      "alt_seed": {
+        "train_time_s": 15.1,
+        "first_25_loss": 2.2223,
+        "last_25_loss": 1.6608,
+        "converged": true,
+        "seed": 99,
+        "lr": 0.0001
+      }
+    },
+    "math": {
+      "baseline": {
+        "train_time_s": 19.1,
+        "first_25_loss": 1.4184,
+        "last_25_loss": 1.2447,
+        "converged": true,
+        "seed": 42,
+        "lr": 0.0001
+      },
+      "low_lr": {
+        "train_time_s": 19.4,
+        "first_25_loss": 1.4425,
+        "last_25_loss": 1.262,
+        "converged": true,
+        "seed": 123,
+        "lr": 5e-05
+      },
+      "high_lr": {
+        "train_time_s": 19.5,
+        "first_25_loss": 1.295,
+        "last_25_loss": 1.1827,
+        "converged": true,
+        "seed": 7,
+        "lr": 0.0002
+      },
+      "alt_seed": {
+        "train_time_s": 19.0,
+        "first_25_loss": 1.3336,
+        "last_25_loss": 1.1602,
+        "converged": true,
+        "seed": 99,
+        "lr": 0.0001
+      }
+    },
+    "code": {
+      "baseline": {
+        "train_time_s": 16.5,
+        "first_25_loss": 1.1181,
+        "last_25_loss": 1.1555,
+        "converged": false,
+        "seed": 42,
+        "lr": 0.0001
+      },
+      "low_lr": {
+        "train_time_s": 16.4,
+        "first_25_loss": 1.3508,
+        "last_25_loss": 0.9441,
+        "converged": true,
+        "seed": 123,
+        "lr": 5e-05
+      },
+      "high_lr": {
+        "train_time_s": 16.7,
+        "first_25_loss": 1.2452,
+        "last_25_loss": 1.0432,
+        "converged": true,
+        "seed": 7,
+        "lr": 0.0002
+      },
+      "alt_seed": {
+        "train_time_s": 17.2,
+        "first_25_loss": 1.3056,
+        "last_25_loss": 0.9667,
+        "converged": true,
+        "seed": 99,
+        "lr": 0.0001
+      }
+    }
+  },
+  "base_ppls": {
+    "medical": 15.05,
+    "math": 4.26,
+    "code": 2.35
+  },
+  "domain_results": {
+    "medical": {
+      "elo_ranking": [
+        {
+          "label": "baseline",
+          "rating": 1583.8
+        },
+        {
+          "label": "high_lr",
+          "rating": 1530.4
+        },
+        {
+          "label": "alt_seed",
+          "rating": 1471.9
+        },
+        {
+          "label": "low_lr",
+          "rating": 1413.9
+        }
+      ],
+      "quality_ranking": [
+        "high_lr",
+        "alt_seed",
+        "baseline",
+        "low_lr"
+      ],
+      "individual_ppls": {
+        "baseline": 8.7,
+        "low_lr": 8.92,
+        "high_lr": 7.97,
+        "alt_seed": 8.53
+      },
+      "quality_ratios": {
+        "baseline": 1.7289,
+        "low_lr": 1.6868,
+        "high_lr": 1.8888,
+        "alt_seed": 1.7639
+      },
+      "kendall_tau": 0.3333,
+      "matches": [
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 10.82,
+          "ppl_b": 11.63,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 10.82,
+          "ppl_b": 10.99,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 10.82,
+          "ppl_b": 11.45,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 11.63,
+          "ppl_b": 10.99,
+          "winner": "high_lr"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 11.63,
+          "ppl_b": 11.45,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 0,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 10.99,
+          "ppl_b": 11.45,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 10.82,
+          "ppl_b": 11.63,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 10.82,
+          "ppl_b": 10.99,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 10.82,
+          "ppl_b": 11.45,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 11.63,
+          "ppl_b": 10.99,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 11.63,
+          "ppl_b": 11.45,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 1,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 10.99,
+          "ppl_b": 11.45,
+          "winner": "high_lr"
+        }
+      ]
+    },
+    "math": {
+      "elo_ranking": [
+        {
+          "label": "baseline",
+          "rating": 1583.8
+        },
+        {
+          "label": "high_lr",
+          "rating": 1530.4
+        },
+        {
+          "label": "alt_seed",
+          "rating": 1471.9
+        },
+        {
+          "label": "low_lr",
+          "rating": 1413.9
+        }
+      ],
+      "quality_ranking": [
+        "alt_seed",
+        "baseline",
+        "high_lr",
+        "low_lr"
+      ],
+      "individual_ppls": {
+        "baseline": 3.1,
+        "low_lr": 3.15,
+        "high_lr": 3.14,
+        "alt_seed": 3.07
+      },
+      "quality_ratios": {
+        "baseline": 1.3752,
+        "low_lr": 1.354,
+        "high_lr": 1.3574,
+        "alt_seed": 1.386
+      },
+      "kendall_tau": 0.3333,
+      "matches": [
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 3.55,
+          "ppl_b": 3.77,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 3.55,
+          "ppl_b": 3.61,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 3.55,
+          "ppl_b": 3.72,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 3.77,
+          "ppl_b": 3.61,
+          "winner": "high_lr"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 3.77,
+          "ppl_b": 3.72,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 0,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 3.61,
+          "ppl_b": 3.72,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 3.55,
+          "ppl_b": 3.77,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 3.55,
+          "ppl_b": 3.61,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 3.55,
+          "ppl_b": 3.72,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 3.77,
+          "ppl_b": 3.61,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 3.77,
+          "ppl_b": 3.72,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 1,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 3.61,
+          "ppl_b": 3.72,
+          "winner": "high_lr"
+        }
+      ]
+    },
+    "code": {
+      "elo_ranking": [
+        {
+          "label": "baseline",
+          "rating": 1583.8
+        },
+        {
+          "label": "high_lr",
+          "rating": 1530.4
+        },
+        {
+          "label": "alt_seed",
+          "rating": 1471.9
+        },
+        {
+          "label": "low_lr",
+          "rating": 1413.9
+        }
+      ],
+      "quality_ranking": [
+        "baseline",
+        "high_lr",
+        "alt_seed",
+        "low_lr"
+      ],
+      "individual_ppls": {
+        "baseline": 2.06,
+        "low_lr": 2.1,
+        "high_lr": 2.08,
+        "alt_seed": 2.08
+      },
+      "quality_ratios": {
+        "baseline": 1.138,
+        "low_lr": 1.1199,
+        "high_lr": 1.131,
+        "alt_seed": 1.1297
+      },
+      "kendall_tau": 1.0,
+      "matches": [
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 2.12,
+          "ppl_b": 2.21,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 2.12,
+          "ppl_b": 2.16,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 2.12,
+          "ppl_b": 2.18,
+          "winner": "baseline"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 2.21,
+          "ppl_b": 2.16,
+          "winner": "high_lr"
+        },
+        {
+          "round": 0,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 2.21,
+          "ppl_b": 2.18,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 0,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 2.16,
+          "ppl_b": 2.18,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "low_lr",
+          "ppl_a": 2.12,
+          "ppl_b": 2.21,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "high_lr",
+          "ppl_a": 2.12,
+          "ppl_b": 2.16,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "baseline",
+          "b": "alt_seed",
+          "ppl_a": 2.12,
+          "ppl_b": 2.18,
+          "winner": "baseline"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "high_lr",
+          "ppl_a": 2.21,
+          "ppl_b": 2.16,
+          "winner": "high_lr"
+        },
+        {
+          "round": 1,
+          "a": "low_lr",
+          "b": "alt_seed",
+          "ppl_a": 2.21,
+          "ppl_b": 2.18,
+          "winner": "alt_seed"
+        },
+        {
+          "round": 1,
+          "a": "high_lr",
+          "b": "alt_seed",
+          "ppl_a": 2.16,
+          "ppl_b": 2.18,
+          "winner": "high_lr"
+        }
+      ]
+    }
+  },
+  "mean_kendall_tau": 0.5556,
+  "min_kendall_tau": 0.3333,
+  "all_taus": [
+    0.3333,
+    0.3333,
+    1.0
+  ],
+  "tournament_time_s": 70.2,
+  "k1_pass": false,
+  "k2_pass": true,
+  "s1_pass": false,
+  "total_time_s": 297.7
+}

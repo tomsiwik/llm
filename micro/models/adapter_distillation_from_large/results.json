@@ -1,0 +1,84 @@
+{
+  "experiment": "adapter_distillation_from_large",
+  "teacher": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "student": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "teacher_temperature": 0.7,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "timestamp": "2026-03-28 06:17:49",
+  "teacher_peak_memory_gb": 4.71,
+  "distilled_ppls": {
+    "python": 2.953541403466908,
+    "math": 6.422763551709546,
+    "medical": 6.6237830647948615,
+    "legal": 26.548215590264334,
+    "creative": 7.834917204561206
+  },
+  "self_supervised_ppls": {
+    "python": 2.35149021467821,
+    "math": 4.062791362773895,
+    "medical": 6.08199844348357,
+    "legal": 19.523401692831964,
+    "creative": 5.460700577980011
+  },
+  "train_results": {
+    "python": {
+      "train_time_s": 38.7,
+      "first_50_avg_loss": 0.6875,
+      "last_50_avg_loss": 0.355,
+      "converged": true
+    },
+    "math": {
+      "train_time_s": 40.0,
+      "first_50_avg_loss": 0.8348,
+      "last_50_avg_loss": 0.5476,
+      "converged": true
+    },
+    "medical": {
+      "train_time_s": 39.1,
+      "first_50_avg_loss": 1.2474,
+      "last_50_avg_loss": 0.6761,
+      "converged": true
+    },
+    "legal": {
+      "train_time_s": 38.2,
+      "first_50_avg_loss": 1.5119,
+      "last_50_avg_loss": 0.9166,
+      "converged": true
+    },
+    "creative": {
+      "train_time_s": 38.6,
+      "first_50_avg_loss": 1.3179,
+      "last_50_avg_loss": 0.8933,
+      "converged": true
+    }
+  },
+  "peak_memory_gb": 6.16,
+  "avg_distilled_ppl": 10.0766,
+  "avg_self_supervised_ppl": 7.4961,
+  "avg_baseline_ppl": 6.4035,
+  "avg_improvement_vs_self_supervised_pct": -34.41,
+  "avg_improvement_vs_baseline_pct": -54.16,
+  "per_domain_improvement_vs_ss": {
+    "python": -25.6,
+    "math": -58.09,
+    "medical": -8.91,
+    "legal": -35.98,
+    "creative": -43.48
+  },
+  "k1_threshold": 5.0,
+  "k1_actual": -34.41,
+  "k1_pass": false,
+  "k2_peak_memory_gb": 6.16,
+  "k2_pass": true,
+  "verdict": "KILLED",
+  "domains_improved_vs_ss": 0,
+  "total_time_s": 1417.0
+}

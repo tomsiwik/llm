@@ -1,0 +1,22 @@
+{
+  "addmm_baseline": 97.2,
+  "addmm_baseline_std": 0.0,
+  "addmm_baseline_per_prompt": [
+    97.2,
+    97.2,
+    97.2,
+    97.2
+  ],
+  "addmm_prescaled": 97.3,
+  "addmm_attn_only": 126.7,
+  "addmm_attn_only_std": 0.2,
+  "addmm_attn_only_per_prompt": [
+    126.7,
+    126.8,
+    126.8,
+    126.4
+  ],
+  "addmm_prescaled_200tok": 96.5,
+  "addmm_prescaled_200tok_wallclock": 93.0,
+  "addmm_prescaled_500tok": 95.6
+}

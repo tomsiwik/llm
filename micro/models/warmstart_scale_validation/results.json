@@ -1,0 +1,293 @@
+{
+  "experiment": "warmstart_scale_validation",
+  "architecture": {
+    "d_model": 1024,
+    "n_layers": 8,
+    "n_heads": 16,
+    "head_dim": 64,
+    "block_size": 256,
+    "mlp_dim": 4096,
+    "vocab_size": 50257,
+    "extra_rmsnorm": true,
+    "lm_head_fp32": true
+  },
+  "training": {
+    "total_steps": 8000,
+    "batch_size": 16,
+    "block_size": 256,
+    "fp16_lr": 0.0003,
+    "post_switch_lr": 0.0005,
+    "warmup_steps": 300,
+    "switch_fraction": 0.1,
+    "optimizer": "AdamW"
+  },
+  "data": {
+    "source": "HuggingFaceFW/fineweb-edu (sample-10BT)",
+    "tokenizer": "GPT-2 BPE",
+    "train_tokens": 11000000,
+    "val_tokens": 1000000
+  },
+  "fp32_baseline": {
+    "ppl": 159.1762810273075,
+    "final_loss": 4.534408092498779,
+    "train_time_s": 3495.0,
+    "params": 203869184,
+    "val_trajectory": [
+      {
+        "step": 1000,
+        "ppl": 440.8846129778504
+      },
+      {
+        "step": 2000,
+        "ppl": 291.5524350198739
+      },
+      {
+        "step": 3000,
+        "ppl": 234.7288246322963
+      },
+      {
+        "step": 4000,
+        "ppl": 203.26036014171402
+      },
+      {
+        "step": 5000,
+        "ppl": 181.3994487814293
+      },
+      {
+        "step": 6000,
+        "ppl": 166.57544531958246
+      },
+      {
+        "step": 7000,
+        "ppl": 160.4716550496563
+      },
+      {
+        "step": 8000,
+        "ppl": 159.22657501134591
+      }
+    ],
+    "text_samples": [
+      {
+        "prompt": "The process of photosynthesis",
+        "generated": "The process of photosynthesis is a key step toward the development of the development of the environment.\nThe study is the first step in the field of the study, which is based on the development of the study. The results are based on the research, and the results are presented in the journal Science.\nThe study is the first to review the results of the study, and the results are presented to the results of the"
+      },
+      {
+        "prompt": "In the year 1776",
+        "generated": "In the year 1776, the first of the first major city of the city was built in the city of the city.\nThe city was built in the city of the city, and was built in the city of the city. The city was built in the city of the city, and was built in the city of the city. The city was built in the city of the city, and was built in the city"
+      },
+      {
+        "prompt": "Machine learning algorithms",
+        "generated": "Machine learning algorithms.\n- The study is the first to study the study of the journal Pediatrics.\n- The study was published in the journal Pediatrics.\n- The study was published in the journal Pediatrics.\n- The study was published in the journal Pediatrics.\n- The study was published in the journal Pediatrics.\n- The study was published in the journal Pediatrics.\n- The study was published in the"
+      },
+      {
+        "prompt": "The human brain consists of",
+        "generated": "The human brain consists of a small number of neurons that are not identical to the brain.\nThe brain is called the brain, which is called the brain. The brain is called the brain, which is called the brain. The brain is called the brain, and is the brain, and is the brain. The brain is called the brain, which is called the brain. The brain is called the brain, and is the"
+      }
+    ],
+    "loss_curve": [
+      6.333724021911621,
+      6.078518867492676,
+      5.790083408355713,
+      5.454751491546631,
+      5.242048263549805,
+      5.048389434814453,
+      5.083211421966553,
+      4.977481842041016,
+      4.838331699371338,
+      4.78225040435791,
+      4.510284423828125,
+      4.560929298400879,
+      4.710042953491211,
+      4.251189231872559,
+      4.565244674682617,
+      4.534408092498779
+    ]
+  },
+  "warm_start": {
+    "ppl": 166.6020832915097,
+    "final_loss": 4.601536750793457,
+    "pre_switch_loss": 6.236553192138672,
+    "pre_switch_ppl": 537.1210601125155,
+    "max_loss_spike": 0.629359245300293,
+    "spike_recovered": true,
+    "k2_non_recoverable": false,
+    "train_time_s": 5683.2,
+    "params": 203942912,
+    "zero_fraction": 0.3161048690478007,
+    "val_trajectory": [
+      {
+        "step": 800,
+        "ppl": 537.1210601125155,
+        "phase": "pre_switch"
+      },
+      {
+        "step": 1000,
+        "ppl": 573.5323354917939,
+        "phase": "ternary"
+      },
+      {
+        "step": 2000,
+        "ppl": 324.9219733689365,
+        "phase": "ternary"
+      },
+      {
+        "step": 3000,
+        "ppl": 247.87583645796042,
+        "phase": "ternary"
+      },
+      {
+        "step": 4000,
+        "ppl": 207.7624944358709,
+        "phase": "ternary"
+      },
+      {
+        "step": 5000,
+        "ppl": 183.36339708467426,
+        "phase": "ternary"
+      },
+      {
+        "step": 6000,
+        "ppl": 170.11206391869797,
+        "phase": "ternary"
+      },
+      {
+        "step": 7000,
+        "ppl": 166.64926346273577,
+        "phase": "ternary"
+      },
+      {
+        "step": 8000,
+        "ppl": 166.62446044590004,
+        "phase": "ternary"
+      }
+    ],
+    "ppl_still_decreasing": true,
+    "text_samples": [
+      {
+        "prompt": "The process of photosynthesis",
+        "generated": "The process of photosynthesis is a major problem.\nThe study, published in the journal Nature, published in the journal Nature, published in the journal Nature, published in the journal Nature, and the journal Nature.\nThe study, published in the journal Nature, published in the journal Nature, published in the journal Nature, and the journal Nature.\nThe paper, published in the journal Nature, published in the journal Nature"
+      },
+      {
+        "prompt": "In the year 1776",
+        "generated": "In the year 1776, the first of the first-ever-known \"The Great\" was the first to be the first to be the first to be the first to be the first to be used.\nThe first to be a large-scale, and the first-ever-known heliograph was the first to be used to describe the original meaning of the original style.\nThe first version of the first"
+      },
+      {
+        "prompt": "Machine learning algorithms",
+        "generated": "Machine learning algorithms.\n- The most common form of the term \u201caesthetic\u201d is a \u201creal\u201d of \u201creal\u201d of the \u201cartic\u201d and \u201caesthetic\u201d.\n- \u201cThe \u2018sesthetic\u2019 and \u2018sesthetic\u2019.\u201d\n- \u201cThe \u2018sesthetic\u2019 is a \ufffd"
+      },
+      {
+        "prompt": "The human brain consists of",
+        "generated": "The human brain consists of a brain that is a complex and complex.\nThe brain is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a complex, and it is a very complex. It is a"
+      }
+    ],
+    "loss_curve": [
+      6.2902607917785645,
+      6.313859462738037,
+      5.998452663421631,
+      5.611448287963867,
+      5.3241729736328125,
+      5.127127647399902,
+      5.139330863952637,
+      4.991518020629883,
+      4.846209526062012,
+      4.789332866668701,
+      4.536865234375,
+      4.562548637390137,
+      4.726326942443848,
+      4.304140090942383,
+      4.641420364379883,
+      4.601536750793457
+    ]
+  },
+  "ppl_ratio": 1.0466514371128464,
+  "adapters": {
+    "adapters": {
+      "science": {
+        "domain": "science",
+        "base_domain_ppl": 84.27426433369885,
+        "base_val_ppl": 166.61181205070605,
+        "adapted_domain_ppl": 1415.4327293163185,
+        "adapted_val_ppl": 1726.2195249668093,
+        "improvement_pct": -1579.56,
+        "val_degradation_pct": 936.07,
+        "trainable_params": 34635776,
+        "train_time_s": 518.3,
+        "text_sample": {
+          "prompt": "The process of cellular respiration",
+          "generated": "The process of cellular respiration,,,,,,,,,,,,,,,,,,,,, the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the"
+        }
+      },
+      "history": {
+        "domain": "history",
+        "base_domain_ppl": 104.40560589674291,
+        "base_val_ppl": 166.61181205070605,
+        "adapted_domain_ppl": 1895.3031861629674,
+        "adapted_val_ppl": 2377.2229761507656,
+        "improvement_pct": -1715.33,
+        "val_degradation_pct": 1326.8,
+        "trainable_params": 34635776,
+        "train_time_s": 444.3,
+        "text_sample": {
+          "prompt": "The fall of the Roman Empire",
+          "generated": "The fall of the Roman Empire..... the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the the"
+        }
+      },
+      "technology": {
+        "domain": "technology",
+        "base_domain_ppl": 93.90343405630317,
+        "base_val_ppl": 166.61181205070605,
+        "adapted_domain_ppl": 1783.6075267929573,
+        "adapted_val_ppl": 1952.2171712852655,
+        "improvement_pct": -1799.41,
+        "val_degradation_pct": 1071.72,
+        "trainable_params": 34635776,
+        "train_time_s": 444.1,
+        "text_sample": {
+          "prompt": "Artificial neural networks are",
+          "generated": "Artificial neural networks are, the,,,,,,\n,\n,\n\n,\n,\n,,\n\n\n\n\n\n\n\n\n,,\n\n\n\n\n\n, the,, the, the the the\n,\n,\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n,"
+        }
+      }
+    },
+    "composition": {
+      "base_val_ppl": 166.61181205070605,
+      "composed_val_ppl": 4611.821278936258,
+      "composition_ratio": 27.68003794072363,
+      "base_domain_ppls": {
+        "science": 84.27426433369885,
+        "history": 104.40560589674291,
+        "technology": 93.90343405630317
+      },
+      "composed_domain_ppls": {
+        "science": 4858.548608141752,
+        "history": 4021.9644755597583,
+        "technology": 4885.656249224276
+      },
+      "text_samples": [
+        {
+          "prompt": "The process of photosynthesis",
+          "generated": "The process of photosynthesis... is., of the, the, the, the, the of, the. the of the of the of the of the of the, the, the and the the and the of. the, the, the. the, the, the and the and the of the and the and the and the and the and the and the and the and the and the and the and"
+        },
+        {
+          "prompt": "In the year 1776",
+          "generated": "In the year 1776 and, of the the the of the of the of the of the of the of the of the of the of the of the the of the, of the the the of the, the the the the the the of the the the of the the the the the of the the the the the of the the the of the and the and the, the, the, the the of the of the"
+        },
+        {
+          "prompt": "Machine learning algorithms",
+          "generated": "Machine learning algorithms............. of, the of the of\n the, the of the of the, the of the of the of the of the, the the, the of the, The the of the. the, the of the the of the the the the the and the the and the, the, the, the and the and the, the and"
+        }
+      ]
+    }
+  },
+  "kill_criteria": {
+    "K1_coherent_text": true,
+    "K2_convergence": false,
+    "K3_composition_ratio": false,
+    "K3_ratio_value": 27.68003794072363
+  },
+  "success_criteria": {
+    "S1_grammatical_text": true,
+    "S2_adapter_improvement": false,
+    "S3_under_4_hours": true
+  },
+  "total_time_s": 10711.5
+}

@@ -1,0 +1,206 @@
+{
+  "experiment": "falcon_e3b_composition",
+  "models": {
+    "falcon_base": {
+      "id": "mlx-community/Falcon-E-3B-Instruct-1.58bit",
+      "description": "Falcon-E-3B-Instruct 1.58-bit, no adapters"
+    },
+    "falcon_composed": {
+      "id": "mlx-community/Falcon-E-3B-Instruct-1.58bit",
+      "description": "Falcon-E-3B + 5 domain LoRA adapters, uniform 1/5 pre-merge"
+    },
+    "qwen_3b": {
+      "id": "mlx-community/Qwen2.5-3B-Instruct-4bit",
+      "description": "Qwen2.5-3B-Instruct 4-bit quantized"
+    }
+  },
+  "training": {
+    "note": "skipped - adapters pre-trained"
+  },
+  "results": {
+    "falcon_base": {
+      "gsm8k": {
+        "accuracy": 0.44,
+        "correct": 22,
+        "total": 50,
+        "time_s": 269.53545212745667
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.6,
+          "correct": 12,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 6.735532151,
+      "time_s": 350.4976739883423
+    },
+    "falcon_composed": {
+      "gsm8k": {
+        "accuracy": 0.36,
+        "correct": 18,
+        "total": 50,
+        "time_s": 1165.9225599765778
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 8.8030298,
+      "time_s": 1533.2248587608337
+    },
+    "qwen_3b": {
+      "gsm8k": {
+        "accuracy": 0.36,
+        "correct": 18,
+        "total": 50,
+        "time_s": 99.54282307624817
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.7,
+          "correct": 14,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 2.431559756,
+      "time_s": 112.36482620239258
+    }
+  },
+  "analysis": {
+    "model_scores": {
+      "falcon_base": {
+        "gsm8k": 0.44,
+        "mmlu_medical": 0.55,
+        "mmlu_code": 0.6,
+        "mmlu_math": 0.55,
+        "mmlu_legal": 0.4,
+        "mmlu_finance": 0.6
+      },
+      "falcon_composed": {
+        "gsm8k": 0.36,
+        "mmlu_medical": 0.3,
+        "mmlu_code": 0.5,
+        "mmlu_math": 0.55,
+        "mmlu_legal": 0.35,
+        "mmlu_finance": 0.45
+      },
+      "qwen_3b": {
+        "gsm8k": 0.36,
+        "mmlu_medical": 0.7,
+        "mmlu_code": 0.4,
+        "mmlu_math": 0.45,
+        "mmlu_legal": 0.4,
+        "mmlu_finance": 0.55
+      }
+    },
+    "kill_criteria": {
+      "k2_533": {
+        "result": "pass",
+        "evidence": "Falcon loses 3/6 vs Qwen (threshold >4)",
+        "worse_benchmarks": [
+          "mmlu_medical",
+          "mmlu_legal",
+          "mmlu_finance"
+        ],
+        "better_benchmarks": [
+          "gsm8k",
+          "mmlu_code",
+          "mmlu_math"
+        ]
+      },
+      "k3_534": {
+        "result": "fail",
+        "evidence": "Falcon composed peak memory: 8.80 GB (threshold 6.0 GB)"
+      }
+    },
+    "success_criteria": {
+      "s1_54": {
+        "result": "fail",
+        "evidence": "Beats Qwen on 2/6, memory=8.80GB"
+      }
+    }
+  },
+  "params": {
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20,
+    "max_new_tokens_gsm8k": 256,
+    "max_new_tokens_mmlu": 32,
+    "temperature": 0.0,
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "train_iters": 200,
+    "composition": "uniform 1/N pre-merge",
+    "n_adapters": 5,
+    "target_keys": [
+      "self_attn.q_proj",
+      "self_attn.v_proj",
+      "self_attn.o_proj"
+    ]
+  },
+  "total_time_s": 2000.477313041687,
+  "k1_lora_supported": true
+}

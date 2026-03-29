@@ -1,0 +1,316 @@
+{
+  "experiment": "generation_quality_test_v2",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "timestamp": "2026-03-26 23:24:33",
+  "version": "v2 (revised per adversarial review)",
+  "fixes_applied": [
+    "Fix 1: Top-1 routing only (single expert, weight=1.0)",
+    "Fix 2: Cross-PPL diagnostic only, not in primary scoring",
+    "Fix 3: Domain-appropriate metrics (code: syntax, math: correctness, others: reweighted)",
+    "Fix 4: 3 seeds (42, 137, 2024) with mean+std",
+    "Fix 5: Same K1 criterion (>= 3/5 domains worse -> KILL)",
+    "Fix 6: XPPL normalization asymmetry documented in MATH.md"
+  ],
+  "config": {
+    "num_prompts_per_domain": 10,
+    "max_new_tokens": 128,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "seeds": [
+      42,
+      137,
+      2024
+    ],
+    "routing": "oracle_top1 (single expert, weight=1.0)"
+  },
+  "per_domain": {
+    "medical": {
+      "base": {
+        "domain_score_mean": 0.4783,
+        "domain_score_std": 0.0056,
+        "keyword_density_mean": 0.0438,
+        "cross_ppl": 2.59
+      },
+      "uniform": {
+        "domain_score_mean": 0.448,
+        "domain_score_std": 0.0062,
+        "keyword_density_mean": 0.0415,
+        "cross_ppl": 2.35
+      },
+      "routed": {
+        "domain_score_mean": 0.4455,
+        "domain_score_std": 0.006,
+        "keyword_density_mean": 0.0447,
+        "cross_ppl": 2.41
+      },
+      "routed_wins": false,
+      "relative_improvement_pct": -6.85
+    },
+    "code": {
+      "base": {
+        "domain_score_mean": 0.3359,
+        "domain_score_std": 0.0255,
+        "keyword_density_mean": 0.1385,
+        "cross_ppl": 1.78,
+        "syntax_valid_rate": 0.533
+      },
+      "uniform": {
+        "domain_score_mean": 0.2906,
+        "domain_score_std": 0.0469,
+        "keyword_density_mean": 0.1479,
+        "cross_ppl": 1.83,
+        "syntax_valid_rate": 0.433
+      },
+      "routed": {
+        "domain_score_mean": 0.3842,
+        "domain_score_std": 0.0299,
+        "keyword_density_mean": 0.1684,
+        "cross_ppl": 1.8,
+        "syntax_valid_rate": 0.6
+      },
+      "routed_wins": true,
+      "relative_improvement_pct": 14.37
+    },
+    "math": {
+      "base": {
+        "domain_score_mean": 0.1254,
+        "domain_score_std": 0.0221,
+        "keyword_density_mean": 0.0841,
+        "cross_ppl": 1.85,
+        "answer_correct_rate": 0.167
+      },
+      "uniform": {
+        "domain_score_mean": 0.1878,
+        "domain_score_std": 0.0037,
+        "keyword_density_mean": 0.0756,
+        "cross_ppl": 1.96,
+        "answer_correct_rate": 0.3
+      },
+      "routed": {
+        "domain_score_mean": 0.3036,
+        "domain_score_std": 0.098,
+        "keyword_density_mean": 0.0405,
+        "cross_ppl": 1.88,
+        "answer_correct_rate": 0.567
+      },
+      "routed_wins": true,
+      "relative_improvement_pct": 142.09
+    },
+    "legal": {
+      "base": {
+        "domain_score_mean": 0.4646,
+        "domain_score_std": 0.0065,
+        "keyword_density_mean": 0.0313,
+        "cross_ppl": 2.7
+      },
+      "uniform": {
+        "domain_score_mean": 0.4403,
+        "domain_score_std": 0.0072,
+        "keyword_density_mean": 0.0236,
+        "cross_ppl": 3.19
+      },
+      "routed": {
+        "domain_score_mean": 0.4248,
+        "domain_score_std": 0.0104,
+        "keyword_density_mean": 0.0258,
+        "cross_ppl": 4.38
+      },
+      "routed_wins": false,
+      "relative_improvement_pct": -8.57
+    },
+    "finance": {
+      "base": {
+        "domain_score_mean": 0.4876,
+        "domain_score_std": 0.0025,
+        "keyword_density_mean": 0.0519,
+        "cross_ppl": 2.36
+      },
+      "uniform": {
+        "domain_score_mean": 0.4546,
+        "domain_score_std": 0.0144,
+        "keyword_density_mean": 0.0533,
+        "cross_ppl": 2.64
+      },
+      "routed": {
+        "domain_score_mean": 0.4298,
+        "domain_score_std": 0.0026,
+        "keyword_density_mean": 0.0427,
+        "cross_ppl": 3.3
+      },
+      "routed_wins": false,
+      "relative_improvement_pct": -11.86
+    }
+  },
+  "aggregates": {
+    "routed_better_count": 2,
+    "routed_worse_count": 3,
+    "measurable_diff_count": 5,
+    "incoherent_domains": 0,
+    "n_seeds": 3,
+    "seeds": [
+      42,
+      137,
+      2024
+    ]
+  },
+  "kill_criteria": {
+    "k1": {
+      "id": 272,
+      "test": "Routed worse than base on >= 3/5 domains (domain-appropriate score, mean across seeds)",
+      "value": "3/5 domains worse",
+      "result": "FAIL"
+    },
+    "k2": {
+      "id": 273,
+      "test": "No measurable difference (0/5 domains with >5% improvement)",
+      "value": "5/5 domains with measurable diff",
+      "result": "PASS"
+    },
+    "k3": {
+      "id": 274,
+      "test": "All generated text incoherent",
+      "value": "0/5 domains incoherent",
+      "result": "PASS"
+    }
+  },
+  "cross_ppls_diagnostic": {
+    "base": {
+      "medical": 2.5929580529340615,
+      "code": 1.784550673349008,
+      "math": 1.8499682399137172,
+      "legal": 2.6992775175054238,
+      "finance": 2.359954349485227
+    },
+    "uniform": {
+      "medical": 2.35000865372553,
+      "code": 1.8336909836394466,
+      "math": 1.96080136549306,
+      "legal": 3.187915083972078,
+      "finance": 2.6433115972309214
+    },
+    "routed": {
+      "medical": 2.412331422980531,
+      "code": 1.7977709625248857,
+      "math": 1.8817366400618873,
+      "legal": 4.381124394665259,
+      "finance": 3.29771711221597
+    }
+  },
+  "verdict": "KILLED",
+  "generated_samples": {
+    "medical": {
+      "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the body?",
+      "base": "Syringomyelia is a rare neurological condition characterized by the formation of fluid-filled cavities within the brain tissue, particularly in the white matter of the corpus callosum, the bundle of nerve fibers connecting the two hemispheres of the brain. This condition can lead to various symptoms, primarily due to the disruption of normal brain function and pressure on surrounding brain tissues.\n\nTypical symptoms of syringomyelia include:\n\n1. **Neurological Impairments**: These may include we",
+      "uniform": "Syringomyelia is a condition where a fluid-filled cavity called a syrinx develops within the spinal cord. The typical symptoms of syringomyelia include numbness, tingling, and pain in the limbs. This condition can also cause muscle weakness and difficulty walking. Sensation is often affected in the body, with some areas such as the face, lips, and the tongue being less affected, while other areas such as the trunk and legs may be more severely affected. Additionally, some people may experience c",
+      "routed": "Syringomyelia is a condition where a syrinx, or fluid-filled cavity, forms in the brainstem and causes compression of the nerves that run down the spinal cord. This can lead to a range of symptoms including numbness, tingling, and pain in the legs. The exact sensation experienced may vary depending on the location of the syrinx and the nerves affected. While some people may experience pain, others may have numbness or tingling in their legs or feet. In some cases, syringomyelia can cause weaknes"
+    },
+    "code": {
+      "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+      "base": "To extract titles from YouTube videos, you can use the YouTube Data API. Below is a Python program that uses the `ytd` library to achieve this:\n\n1. **Install the required libraries**:\n   ```sh\n   pip install ytd[google]\n   ```\n\n2. **Write the Python script**:\n\n```python\nimport ytd\nfrom ytdumo import YT\n\ndef extract_video_titles(url):\n    try:\n        # Initialize YouTube Data API\n        ytd_opts = {\n            'api_key': 'YOUR_API_KEY',\n            'videoDetailsFormat': 'v1',\n            'vide",
+      "uniform": "Here is a Python script that uses the `requests` library to extract the titles of all YouTube videos from a given URL:\n\n```python\nimport requests\nfrom bs4 import BeautifulSoup\n\ndef get_titles_from_url(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.content, 'html.parser')\n    \n    # Find all video elements\n    videos = soup.find_all('video')\n    \n    # Extract titles\n    titles = []\n    for video in videos:\n        video_title = video.find('h3')\n        if video_title:\n ",
+      "routed": "import requests\nfrom bs4 import BeautifulSoup\n\ndef extract_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.content, 'html.parser')\n    titles = soup.find_all('h3')\n    for title in titles:\n        print(title.text.strip())\n\nextract_titles('https://www.youtube.com/watch?v=12345&list=1') # Replace the URL with the desired YouTube URL\n```\n\nThis program uses the `requests` library to fetch the content of the YouTube URL and `BeautifulSoup` from the `bs4` library to pa"
+    },
+    "math": {
+      "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 necklaces for $83 each; and 1 computer game for $90. Since Mr. Grey purchased all those using his credit card, he received a $12 rebate. What is the total cost of the gifts after the rebate?",
+      "base": "To solve the problem, we need to calculate the total cost of the items Mr. Grey purchased and then apply the rebate.\n\n1. **Calculate the cost of the polo shirts:**\n   \\[\n   \\text{Cost of one polo shirt} = \\$26\n   \\]\n   \\[\n   \\text{Number of polo shirts} = 3\n   \\]\n   \\[\n   \\text{Total cost for polo shirts} = 3 \\times 26 = 78\n   \\]\n\n2. **Calculate the cost of the necklaces:**\n   \\[\n   \\text{Cost of one necklace} =",
+      "uniform": "Mr. Grey has a total of 3 polo shirts, 2 necklaces, and 1 computer game. The cost of each item is as follows:\n\n- Polo shirts: $26 each\n- Necklaces: $83 each\n- Computer game: $90\n\nFirst, let's calculate the cost of each type of gift:\n\n- Cost of 3 polo shirts: 3 * $26 = $78\n- Cost of 2 necklaces: 2 * $83 = $166\n- Cost of 1 computer game: 1 * $90 = $90\n\nNow, let's add up the costs of",
+      "routed": "Mr Grey spent $<<3*26+2*83+1*90=243>>243 on the gifts.\nHe received a $12 rebate.\nTherefore, the total cost of the gifts is $243 - $12 = $<<243-12=231>>231.\n#### 231\nThe answer is: 231<|im_end|>"
+    },
+    "legal": {
+      "prompt": "Speed bumps on private non-hoa road (California)",
+      "base": "It sounds like you're dealing with a specific issue regarding speed bumps on a private non-HOA road in California. Here are some steps and considerations you might find helpful:\n\n1. **Review the Property Agreement**: Check the terms of your property agreement to see if there are any clauses related to road maintenance or speed bumps. Some private property agreements might specify who is responsible for maintenance.\n\n2. **Contact the Property Owner**: Reach out to the owner of the property to dis",
+      "uniform": "You can get a speed bump for private property in California by following these steps:\n\n1. **Contact Your hoa (if applicable):** If your property is part of a Homeowners Association (hoa), review the hoa rules to determine if speed bumps are allowed. If not, you can usually still request them.\n\n2. **Contact your city or county government:** If the property is not part of an hoa, you can contact your city or county government to request speed bump installation. Provide the necessary details, such ",
+      "routed": "When we get a speed bump on a private non-hoa road with a hoa that owns the hoa road. We have never had any issues with hoa. I live in a hoa community and just want to know the hoa's policy on this. Any hoa rules on speed bumps on hoa owned hoa road? Thank you. -jl\n\n### Response:\nYou can't have a speed bump on a hoa owned hoa road. However, hoa can have a speed bump on the street (not hoa owned) that is shared with the hoa community. I'm not sure what the hoa's policy is on this. I would recomme"
+    },
+    "finance": {
+      "prompt": "What should I do with my $10K windfall, given these options?",
+      "base": "1. **Investing in Stocks**: Consider investing in stocks, particularly in companies that show potential for growth. You can research and select a mix of domestic and international stocks to diversify your portfolio.\n\n2. **Real Estate Investment**: Allocate part of the funds to real estate, such as buying a rental property or investing in real estate investment trusts (REITs).\n\n3. **Starting a Business**: Use part of the money to start a business or a side venture. This could be a passion project",
+      "uniform": "1. **Investing**: Allocate $5,000 to stocks, $3,000 to bonds, $3,000 to real estate investments, $1,000 to cryptocurrencies, and $1,000 to savings. This approach balances risk and potential return with a moderate investment strategy.\n\n2. **Paying Off Debt**: Use $2,000 to pay off high-interest credit card debt, $3,000 to pay off student loans, and $3,000 to save for a down payment on a house. This strategy helps minimize interest costs and build equity.\n\n3. **Retirement Savings**: Put $3,000 int",
+      "routed": "1. **Invest in a business**\n   - Consider investing in a business. With $10,000, you can either buy into an existing venture or invest in a new one. This could be a risky move, but it could also yield high returns if the business succeeds.\n\n2. **Start a business**\n   - If you have a skill or product to sell, starting your own business could be a good idea. You can use your $10,000 to get started, whether it's a small venture or a larger one.\n\n3. **Build a new home**\n   - With $10,000, you could "
+    }
+  },
+  "per_seed_details": {
+    "seed_42": {
+      "medical": {
+        "base_mean": 0.4786,
+        "uniform_mean": 0.4435,
+        "routed_mean": 0.4408
+      },
+      "code": {
+        "base_mean": 0.3204,
+        "uniform_mean": 0.3268,
+        "routed_mean": 0.3471
+      },
+      "math": {
+        "base_mean": 0.1361,
+        "uniform_mean": 0.1839,
+        "routed_mean": 0.3688
+      },
+      "legal": {
+        "base_mean": 0.4669,
+        "uniform_mean": 0.4474,
+        "routed_mean": 0.4329
+      },
+      "finance": {
+        "base_mean": 0.4853,
+        "uniform_mean": 0.4742,
+        "routed_mean": 0.4264
+      }
+    },
+    "seed_137": {
+      "medical": {
+        "base_mean": 0.4714,
+        "uniform_mean": 0.4567,
+        "routed_mean": 0.454
+      },
+      "code": {
+        "base_mean": 0.3719,
+        "uniform_mean": 0.2244,
+        "routed_mean": 0.4204
+      },
+      "math": {
+        "base_mean": 0.0946,
+        "uniform_mean": 0.1868,
+        "routed_mean": 0.3768
+      },
+      "legal": {
+        "base_mean": 0.4711,
+        "uniform_mean": 0.443,
+        "routed_mean": 0.4315
+      },
+      "finance": {
+        "base_mean": 0.4865,
+        "uniform_mean": 0.4401,
+        "routed_mean": 0.4303
+      }
+    },
+    "seed_2024": {
+      "medical": {
+        "base_mean": 0.485,
+        "uniform_mean": 0.4437,
+        "routed_mean": 0.4418
+      },
+      "code": {
+        "base_mean": 0.3155,
+        "uniform_mean": 0.3207,
+        "routed_mean": 0.3852
+      },
+      "math": {
+        "base_mean": 0.1455,
+        "uniform_mean": 0.1927,
+        "routed_mean": 0.1651
+      },
+      "legal": {
+        "base_mean": 0.4558,
+        "uniform_mean": 0.4304,
+        "routed_mean": 0.4101
+      },
+      "finance": {
+        "base_mean": 0.4912,
+        "uniform_mean": 0.4495,
+        "routed_mean": 0.4326
+      }
+    }
+  },
+  "total_time_s": 4733.3
+}

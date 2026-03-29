@@ -1,0 +1,458 @@
+{
+  "experiment": "adapter_hot_cache_mlx",
+  "config": {
+    "d_in": 64,
+    "d_out": 64,
+    "rank": 4,
+    "n_layers": 4,
+    "n_targets": 4,
+    "n_adapters": 50,
+    "top_k": 2,
+    "n_queries": 5000
+  },
+  "phase1_access_patterns": {
+    "alpha_0.0": {
+      "alpha": 0.0,
+      "n_unique_pairs": 1070,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0068,
+      "top5_cumulative": 0.0276,
+      "top10_cumulative": 0.0518,
+      "top20_cumulative": 0.0938,
+      "top50_cumulative": 0.1982,
+      "k_for_50pct": 192,
+      "k_for_80pct": 501,
+      "k_for_90pct": 700,
+      "k_for_95pct": 825
+    },
+    "alpha_0.5": {
+      "alpha": 0.5,
+      "n_unique_pairs": 1044,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0186,
+      "top5_cumulative": 0.0608,
+      "top10_cumulative": 0.0944,
+      "top20_cumulative": 0.1442,
+      "top50_cumulative": 0.2538,
+      "k_for_50pct": 164,
+      "k_for_80pct": 469,
+      "k_for_90pct": 660,
+      "k_for_95pct": 794
+    },
+    "alpha_0.8": {
+      "alpha": 0.8,
+      "n_unique_pairs": 986,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0352,
+      "top5_cumulative": 0.0998,
+      "top10_cumulative": 0.1482,
+      "top20_cumulative": 0.2172,
+      "top50_cumulative": 0.3382,
+      "k_for_50pct": 121,
+      "k_for_80pct": 408,
+      "k_for_90pct": 604,
+      "k_for_95pct": 736
+    },
+    "alpha_1.0": {
+      "alpha": 1.0,
+      "n_unique_pairs": 936,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0476,
+      "top5_cumulative": 0.1338,
+      "top10_cumulative": 0.1964,
+      "top20_cumulative": 0.2716,
+      "top50_cumulative": 0.405,
+      "k_for_50pct": 86,
+      "k_for_80pct": 341,
+      "k_for_90pct": 539,
+      "k_for_95pct": 686
+    },
+    "alpha_1.2": {
+      "alpha": 1.2,
+      "n_unique_pairs": 865,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0642,
+      "top5_cumulative": 0.171,
+      "top10_cumulative": 0.2392,
+      "top20_cumulative": 0.3284,
+      "top50_cumulative": 0.4754,
+      "k_for_50pct": 58,
+      "k_for_80pct": 259,
+      "k_for_90pct": 450,
+      "k_for_95pct": 615
+    },
+    "alpha_1.5": {
+      "alpha": 1.5,
+      "n_unique_pairs": 701,
+      "max_possible_pairs": 1225,
+      "top1_frequency": 0.0844,
+      "top5_cumulative": 0.2202,
+      "top10_cumulative": 0.3028,
+      "top20_cumulative": 0.414,
+      "top50_cumulative": 0.5836,
+      "k_for_50pct": 33,
+      "k_for_80pct": 154,
+      "k_for_90pct": 303,
+      "k_for_95pct": 451
+    },
+    "domain_balanced": {
+      "alpha": "balanced",
+      "n_unique_pairs": 1079,
+      "top1_frequency": 0.0062,
+      "top20_cumulative": 0.1006,
+      "k_for_50pct": 186,
+      "k_for_80pct": 510,
+      "k_for_90pct": 708
+    }
+  },
+  "phase2_cache_hit_rates": {
+    "zipf_0.0": {
+      "K=5": {
+        "cache_size": 5,
+        "hit_rate": 0.01,
+        "hits": 50,
+        "misses": 4950
+      },
+      "K=10": {
+        "cache_size": 10,
+        "hit_rate": 0.0172,
+        "hits": 86,
+        "misses": 4914
+      },
+      "K=20": {
+        "cache_size": 20,
+        "hit_rate": 0.0302,
+        "hits": 151,
+        "misses": 4849
+      },
+      "K=50": {
+        "cache_size": 50,
+        "hit_rate": 0.0756,
+        "hits": 378,
+        "misses": 4622
+      },
+      "K=100": {
+        "cache_size": 100,
+        "hit_rate": 0.1516,
+        "hits": 758,
+        "misses": 4242
+      },
+      "K=200": {
+        "cache_size": 200,
+        "hit_rate": 0.2888,
+        "hits": 1444,
+        "misses": 3556
+      }
+    },
+    "zipf_0.8": {
+      "K=5": {
+        "cache_size": 5,
+        "hit_rate": 0.0182,
+        "hits": 91,
+        "misses": 4909
+      },
+      "K=10": {
+        "cache_size": 10,
+        "hit_rate": 0.0398,
+        "hits": 199,
+        "misses": 4801
+      },
+      "K=20": {
+        "cache_size": 20,
+        "hit_rate": 0.0738,
+        "hits": 369,
+        "misses": 4631
+      },
+      "K=50": {
+        "cache_size": 50,
+        "hit_rate": 0.1622,
+        "hits": 811,
+        "misses": 4189
+      },
+      "K=100": {
+        "cache_size": 100,
+        "hit_rate": 0.2756,
+        "hits": 1378,
+        "misses": 3622
+      },
+      "K=200": {
+        "cache_size": 200,
+        "hit_rate": 0.4278,
+        "hits": 2139,
+        "misses": 2861
+      }
+    },
+    "zipf_1.0": {
+      "K=5": {
+        "cache_size": 5,
+        "hit_rate": 0.0298,
+        "hits": 149,
+        "misses": 4851
+      },
+      "K=10": {
+        "cache_size": 10,
+        "hit_rate": 0.0578,
+        "hits": 289,
+        "misses": 4711
+      },
+      "K=20": {
+        "cache_size": 20,
+        "hit_rate": 0.1078,
+        "hits": 539,
+        "misses": 4461
+      },
+      "K=50": {
+        "cache_size": 50,
+        "hit_rate": 0.218,
+        "hits": 1090,
+        "misses": 3910
+      },
+      "K=100": {
+        "cache_size": 100,
+        "hit_rate": 0.3478,
+        "hits": 1739,
+        "misses": 3261
+      },
+      "K=200": {
+        "cache_size": 200,
+        "hit_rate": 0.5114,
+        "hits": 2557,
+        "misses": 2443
+      }
+    },
+    "zipf_1.5": {
+      "K=5": {
+        "cache_size": 5,
+        "hit_rate": 0.0722,
+        "hits": 361,
+        "misses": 4639
+      },
+      "K=10": {
+        "cache_size": 10,
+        "hit_rate": 0.1336,
+        "hits": 668,
+        "misses": 4332
+      },
+      "K=20": {
+        "cache_size": 20,
+        "hit_rate": 0.2232,
+        "hits": 1116,
+        "misses": 3884
+      },
+      "K=50": {
+        "cache_size": 50,
+        "hit_rate": 0.4004,
+        "hits": 2002,
+        "misses": 2998
+      },
+      "K=100": {
+        "cache_size": 100,
+        "hit_rate": 0.5646,
+        "hits": 2823,
+        "misses": 2177
+      },
+      "K=200": {
+        "cache_size": 200,
+        "hit_rate": 0.7204,
+        "hits": 3602,
+        "misses": 1398
+      }
+    },
+    "domain_balanced": {
+      "K=5": {
+        "cache_size": 5,
+        "hit_rate": 0.0104,
+        "hits": 52,
+        "misses": 4948
+      },
+      "K=10": {
+        "cache_size": 10,
+        "hit_rate": 0.02,
+        "hits": 100,
+        "misses": 4900
+      },
+      "K=20": {
+        "cache_size": 20,
+        "hit_rate": 0.0394,
+        "hits": 197,
+        "misses": 4803
+      },
+      "K=50": {
+        "cache_size": 50,
+        "hit_rate": 0.0884,
+        "hits": 442,
+        "misses": 4558
+      },
+      "K=100": {
+        "cache_size": 100,
+        "hit_rate": 0.1668,
+        "hits": 834,
+        "misses": 4166
+      },
+      "K=200": {
+        "cache_size": 200,
+        "hit_rate": 0.3052,
+        "hits": 1526,
+        "misses": 3474
+      }
+    }
+  },
+  "phase3_latency": {
+    "merge_latency": {
+      "mean_ms": 0.4054,
+      "std_ms": 0.1277,
+      "p50_ms": 0.3568,
+      "p95_ms": 0.7387
+    },
+    "cache_lookup_latency": {
+      "mean_ms": 0.000138,
+      "std_ms": 0.000265,
+      "p50_ms": 8.4e-05,
+      "p95_ms": 0.000169
+    },
+    "cache_miss_latency": {
+      "mean_ms": 0.2204,
+      "std_ms": 0.2245
+    },
+    "speedup_hit_vs_merge": 2938.36,
+    "cache_overhead_ms": -0.185
+  },
+  "phase4_e2e_simulation": {
+    "zipf_1.0": {
+      "n_queries": 1000,
+      "no_cache_total_ms": 587.47,
+      "no_cache_per_query_ms": 0.587,
+      "cache_K20": {
+        "total_ms": 549.97,
+        "per_query_ms": 0.55,
+        "hit_rate": 0.099,
+        "speedup": 1.07
+      },
+      "cache_K50": {
+        "total_ms": 511.0,
+        "per_query_ms": 0.511,
+        "hit_rate": 0.205,
+        "speedup": 1.15
+      },
+      "cache_K100": {
+        "total_ms": 470.44,
+        "per_query_ms": 0.47,
+        "hit_rate": 0.321,
+        "speedup": 1.25
+      }
+    },
+    "domain_balanced": {
+      "n_queries": 1000,
+      "no_cache_total_ms": 579.35,
+      "no_cache_per_query_ms": 0.579,
+      "cache_K20": {
+        "total_ms": 572.83,
+        "per_query_ms": 0.573,
+        "hit_rate": 0.032,
+        "speedup": 1.01
+      },
+      "cache_K50": {
+        "total_ms": 554.52,
+        "per_query_ms": 0.555,
+        "hit_rate": 0.072,
+        "speedup": 1.04
+      },
+      "cache_K100": {
+        "total_ms": 530.1,
+        "per_query_ms": 0.53,
+        "hit_rate": 0.138,
+        "speedup": 1.09
+      }
+    }
+  },
+  "phase5_memory": {
+    "micro_scale": {
+      "n_cached_pairs": 50,
+      "measured_cache_mb": 13.37,
+      "theoretical_per_pair_kb": 262.14,
+      "theoretical_total_mb": 13.11
+    },
+    "production_scale_estimate": {
+      "per_pair_all_targets_mb": 2569.0,
+      "per_pair_attn_only_mb": 1468.0,
+      "k20_all_targets_gb": 51.38,
+      "k20_attn_only_gb": 29.36,
+      "k100_all_targets_gb": 256.9,
+      "k100_attn_only_gb": 146.8,
+      "fits_in_48gb_budget": true
+    }
+  },
+  "phase6_weight_sensitivity": {
+    "weight_variations": [
+      {
+        "weights": [
+          0.7,
+          0.3
+        ],
+        "relative_l2_distance": 0.0
+      },
+      {
+        "weights": [
+          0.75,
+          0.25
+        ],
+        "relative_l2_distance": 0.092953
+      },
+      {
+        "weights": [
+          0.8,
+          0.2
+        ],
+        "relative_l2_distance": 0.185906
+      },
+      {
+        "weights": [
+          0.85,
+          0.15
+        ],
+        "relative_l2_distance": 0.278858
+      },
+      {
+        "weights": [
+          0.9,
+          0.1
+        ],
+        "relative_l2_distance": 0.371811
+      }
+    ],
+    "max_relative_l2": 0.371811,
+    "can_cache_unweighted": false,
+    "recommendation": "Cache individual adapter deltas (B@A), apply routing weights at lookup"
+  },
+  "kill_criteria": {
+    "K1_balanced_hit_rate_50pct": {
+      "value": 0.0394,
+      "threshold": 0.5,
+      "pass": false
+    },
+    "K2_overhead_less_than_merge": {
+      "overhead_ms": -0.185,
+      "merge_ms": 0.4054,
+      "pass": true
+    }
+  },
+  "success_criteria": {
+    "S1_balanced_hit_rate_80pct_k20": {
+      "value": 0.0394,
+      "threshold": 0.8,
+      "pass": false
+    },
+    "S1_zipf1_hit_rate_80pct_k20": {
+      "value": 0.1078,
+      "threshold": 0.8,
+      "pass": false
+    },
+    "S2_speedup_2x": {
+      "value": 2938.36,
+      "threshold": 2.0,
+      "pass": true
+    }
+  },
+  "verdict": "KILLED",
+  "total_time_s": 5.7
+}

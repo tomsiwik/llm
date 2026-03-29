@@ -1,11 +1,12 @@
 import { Command } from "@oclif/core";
 import { sql } from "drizzle-orm";
-import { db, experiments, evidence, killCriteria, tags, experimentTags, references } from "@experiment/db";
+import { db, experiments, evidence, killCriteria, tags, experimentTags, references, findings, methods } from "@experiment/db";
 
 export default class Stats extends Command {
   static description = "Show experiment tracking dashboard";
 
   async run() {
+    await this.parse(Stats);
     // Status distribution
     const statusDist = await db
       .select({ status: experiments.status, count: sql<number>`count(*)` })
@@ -52,6 +53,41 @@ export default class Stats extends Command {
     for (const t of topTags) {
       this.log(`    ${t.name.padEnd(25)} ${t.count}`);
     }
+
+    // Findings
+    const findingsDist = await db
+      .select({ status: findings.status, count: sql<number>`count(*)` })
+      .from(findings)
+      .groupBy(findings.status);
+    const findingsTotal = findingsDist.reduce((sum, r) => sum + r.count, 0);
+    this.log(`\n  Findings: ${findingsTotal}`);
+    for (const f of findingsDist.sort((a, b) => b.count - a.count)) {
+      this.log(`    ${f.status.padEnd(14)} ${f.count}`);
+    }
+
+    // Findings with impossibility structures
+    const [withStructure] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(findings)
+      .where(sql`${findings.impossibilityStructure} IS NOT NULL`);
+    if (findingsTotal > 0) {
+      this.log(`  With impossibility structure: ${withStructure?.count}/${findingsTotal}`);
+    }
+
+    // Method bank
+    try {
+      const methodsDist = await db
+        .select({ status: methods.status, count: sql<number>`count(*)` })
+        .from(methods)
+        .groupBy(methods.status);
+      const methodsTotal = methodsDist.reduce((sum, r) => sum + r.count, 0);
+      if (methodsTotal > 0) {
+        this.log(`\n  Method Bank: ${methodsTotal}`);
+        for (const m of methodsDist.sort((a, b) => b.count - a.count)) {
+          this.log(`    ${m.status.padEnd(14)} ${m.count}`);
+        }
+      }
+    } catch { /* methods table may not exist yet */ }
 
     // Scale distribution
     const scaleDist = await db

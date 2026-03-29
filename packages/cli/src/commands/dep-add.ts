@@ -1,13 +1,11 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Flags } from "@oclif/core";
 import { eq } from "drizzle-orm";
 import { db, experiments, experimentDependencies } from "@experiment/db";
+import { ExperimentCommand, experimentIdArg } from "../lib/base-command.js";
 
-export default class DepAdd extends Command {
+export default class DepAdd extends ExperimentCommand {
   static description = "Add a dependency between experiments";
-
-  static args = {
-    id: Args.string({ description: "Experiment ID (the one that depends)", required: true }),
-  };
+  static args = experimentIdArg;
 
   static flags = {
     on: Flags.string({ description: "Experiment ID it depends on", required: true }),
@@ -15,9 +13,7 @@ export default class DepAdd extends Command {
 
   async run() {
     const { args, flags } = await this.parse(DepAdd);
-
-    const exp = await db.select().from(experiments).where(eq(experiments.id, args.id)).get();
-    if (!exp) this.error(`Experiment "${args.id}" not found`);
+    await this.requireExperiment(args.id);
 
     const dep = await db.select().from(experiments).where(eq(experiments.id, flags.on)).get();
     if (!dep) this.error(`Dependency target "${flags.on}" not found`);

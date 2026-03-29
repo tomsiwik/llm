@@ -37,7 +37,39 @@ export default class Query extends Command {
       args: [args.text],
     });
 
-    if (expResults.rows.length === 0 && evResults.rows.length === 0) {
+    // Search findings
+    let findingResults: any = { rows: [] };
+    try {
+      findingResults = await client.execute({
+        sql: `SELECT f.id, f.title, f.status, snippet(findings_fts, 1, '>>>', '<<<', '...', 30) as snippet, findings_fts.rank
+              FROM findings_fts
+              JOIN findings f ON f.rowid = findings_fts.rowid
+              WHERE findings_fts MATCH ?
+              ORDER BY findings_fts.rank
+              LIMIT 15`,
+        args: [args.text],
+      });
+    } catch {
+      // findings_fts may not exist yet
+    }
+
+    // Search methods
+    let methodResults: any = { rows: [] };
+    try {
+      methodResults = await client.execute({
+        sql: `SELECT m.id, m.name, m.status, snippet(methods_fts, 2, '>>>', '<<<', '...', 30) as snippet, methods_fts.rank
+              FROM methods_fts
+              JOIN methods m ON m.rowid = methods_fts.rowid
+              WHERE methods_fts MATCH ?
+              ORDER BY methods_fts.rank
+              LIMIT 15`,
+        args: [args.text],
+      });
+    } catch {
+      // methods_fts may not exist yet
+    }
+
+    if (expResults.rows.length === 0 && evResults.rows.length === 0 && findingResults.rows.length === 0 && methodResults.rows.length === 0) {
       this.log(`No results for "${args.text}"`);
       return;
     }
@@ -58,6 +90,22 @@ export default class Query extends Command {
       }
     }
 
-    this.log(`\n  ${expResults.rows.length} experiments, ${evResults.rows.length} evidence entries found`);
+    if (findingResults.rows.length > 0) {
+      this.log(`\n  Findings matching "${args.text}":`);
+      for (const r of findingResults.rows) {
+        this.log(`    #${r.id} [${r.status}] ${r.title}`);
+        this.log(`      ${r.snippet}`);
+      }
+    }
+
+    if (methodResults.rows.length > 0) {
+      this.log(`\n  Methods matching "${args.text}":`);
+      for (const r of methodResults.rows) {
+        this.log(`    #${r.id} [${r.status}] ${r.name}`);
+        this.log(`      ${r.snippet}`);
+      }
+    }
+
+    this.log(`\n  ${expResults.rows.length} experiments, ${evResults.rows.length} evidence, ${findingResults.rows.length} findings, ${methodResults.rows.length} methods found`);
   }
 }

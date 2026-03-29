@@ -1,0 +1,1173 @@
+[MEM start] active=0.00GB cache=0.00GB peak=0.00GB
+
+======================================================================
+LORA SCALE ABLATION EXPERIMENT
+Scales: [1.0, 2.0, 4.0, 8.0, 20.0]
+Loss types: ['sft', 'ntp']
+Domains: ['medical', 'math', 'code']
+Total training conditions: 30
+======================================================================
+
+======================================================================
+PHASE 1: TRAIN ALL ADAPTERS
+  5 scales x 2 losses x 3 domains = 30 conditions
+======================================================================
+
+  [s1.0__sft__medical] Adapter exists, skipping training
+
+  [s1.0__sft__math] Adapter exists, skipping training
+
+  [s1.0__sft__code] Adapter exists, skipping training
+
+  [s1.0__ntp__medical] Adapter exists, skipping training
+
+  [s1.0__ntp__math] Adapter exists, skipping training
+
+  [s1.0__ntp__code] Adapter exists, skipping training
+
+  [s2.0__sft__medical] Adapter exists, skipping training
+
+  [s2.0__sft__math] Adapter exists, skipping training
+
+  [s2.0__sft__code] Adapter exists, skipping training
+
+  [s2.0__ntp__medical] Adapter exists, skipping training
+
+  [s2.0__ntp__math] Adapter exists, skipping training
+
+  [s2.0__ntp__code] Adapter exists, skipping training
+
+  [s4.0__sft__medical] Adapter exists, skipping training
+
+  [s4.0__sft__math] Adapter exists, skipping training
+
+  [s4.0__sft__code] Adapter exists, skipping training
+
+  [s4.0__ntp__medical] Adapter exists, skipping training
+
+  [s4.0__ntp__math] Adapter exists, skipping training
+
+  [s4.0__ntp__code] Adapter exists, skipping training
+
+  [s8.0__sft__medical] Adapter exists, skipping training
+
+  [s8.0__sft__math] Adapter exists, skipping training
+
+  [s8.0__sft__code] Adapter exists, skipping training
+
+  [s8.0__ntp__medical] Adapter exists, skipping training
+
+  [s8.0__ntp__math] Adapter exists, skipping training
+
+  [s8.0__ntp__code] Adapter exists, skipping training
+
+  [s20.0__sft__medical] Adapter exists, skipping training
+
+  [s20.0__sft__math] Adapter exists, skipping training
+
+  [s20.0__sft__code] Adapter exists, skipping training
+
+  [s20.0__ntp__medical] Adapter exists, skipping training
+
+  [s20.0__ntp__math] Adapter exists, skipping training
+
+  [s20.0__ntp__code] Adapter exists, skipping training
+
+======================================================================
+PHASE 2: MEASURE PERTURBATION-TO-BASE RATIOS (rho)
+======================================================================
+
+  Measuring [s1.0__sft__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 59705.40it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0149, max=0.0344, ||W||=83.11, ||Delta||=1.21
+
+  Measuring [s1.0__sft__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 76087.15it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0135, max=0.0435, ||W||=83.11, ||Delta||=1.09
+
+  Measuring [s1.0__sft__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 31625.29it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0117, max=0.0296, ||W||=83.11, ||Delta||=0.94
+
+  Measuring [s1.0__ntp__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 115704.94it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0172, max=0.0395, ||W||=83.11, ||Delta||=1.43
+
+  Measuring [s1.0__ntp__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 86703.96it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0150, max=0.0608, ||W||=83.11, ||Delta||=1.20
+
+  Measuring [s1.0__ntp__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 109655.01it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+    rho: mean=0.0136, max=0.0354, ||W||=83.11, ||Delta||=1.12
+
+  Measuring [s2.0__sft__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 60677.09it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0240, max=0.0589, ||W||=83.11, ||Delta||=1.95
+
+  Measuring [s2.0__sft__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 56775.69it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0213, max=0.0626, ||W||=83.11, ||Delta||=1.72
+
+  Measuring [s2.0__sft__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 131072.00it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0195, max=0.0589, ||W||=83.11, ||Delta||=1.56
+
+  Measuring [s2.0__ntp__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 41425.22it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0270, max=0.0444, ||W||=83.11, ||Delta||=2.24
+
+  Measuring [s2.0__ntp__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 78398.21it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0229, max=0.0890, ||W||=83.11, ||Delta||=1.83
+
+  Measuring [s2.0__ntp__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 60133.39it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+    rho: mean=0.0217, max=0.0519, ||W||=83.11, ||Delta||=1.78
+
+  Measuring [s4.0__sft__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 44918.92it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0411, max=0.1155, ||W||=83.11, ||Delta||=3.34
+
+  Measuring [s4.0__sft__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 25890.77it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0364, max=0.1112, ||W||=83.11, ||Delta||=2.93
+
+  Measuring [s4.0__sft__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 87154.37it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0360, max=0.1058, ||W||=83.11, ||Delta||=2.86
+
+  Measuring [s4.0__ntp__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 121135.13it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0441, max=0.0878, ||W||=83.11, ||Delta||=3.64
+
+  Measuring [s4.0__ntp__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 23464.64it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0364, max=0.1351, ||W||=83.11, ||Delta||=2.90
+
+  Measuring [s4.0__ntp__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 186413.51it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+    rho: mean=0.0378, max=0.1013, ||W||=83.11, ||Delta||=3.05
+
+  Measuring [s8.0__sft__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 23448.24it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0698, max=0.1746, ||W||=83.11, ||Delta||=5.68
+
+  Measuring [s8.0__sft__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 69470.87it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0625, max=0.2213, ||W||=83.11, ||Delta||=4.99
+
+  Measuring [s8.0__sft__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 72160.07it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0645, max=0.2334, ||W||=83.11, ||Delta||=5.11
+
+  Measuring [s8.0__ntp__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 39615.62it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0733, max=0.1557, ||W||=83.11, ||Delta||=6.05
+
+  Measuring [s8.0__ntp__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 29826.16it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0622, max=0.1933, ||W||=83.11, ||Delta||=5.01
+
+  Measuring [s8.0__ntp__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 92182.51it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+    rho: mean=0.0658, max=0.1766, ||W||=83.11, ||Delta||=5.33
+
+  Measuring [s20.0__sft__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 30531.79it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1517, max=0.2902, ||W||=83.11, ||Delta||=12.47
+
+  Measuring [s20.0__sft__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 83261.62it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1419, max=0.4105, ||W||=83.11, ||Delta||=11.45
+
+  Measuring [s20.0__sft__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 139810.13it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1456, max=0.4403, ||W||=83.11, ||Delta||=11.72
+
+  Measuring [s20.0__ntp__medical]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 26951.35it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1533, max=0.3680, ||W||=83.11, ||Delta||=12.55
+
+  Measuring [s20.0__ntp__math]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 33288.13it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1337, max=0.3729, ||W||=83.11, ||Delta||=10.87
+
+  Measuring [s20.0__ntp__code]...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 34807.50it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+    rho: mean=0.1387, max=0.3408, ||W||=83.11, ||Delta||=11.38
+
+  PERTURBATION-TO-BASE RATIO SUMMARY:
+  Scale    Loss   Domain     mean_rho     max_rho      ||W||      ||Delta|| 
+  --------------------------------------------------------------------
+  1.0      sft    medical    0.0149       0.0344       83.11      1.21      
+  1.0      sft    math       0.0135       0.0435       83.11      1.09      
+  1.0      sft    code       0.0117       0.0296       83.11      0.94      
+  1.0      ntp    medical    0.0172       0.0395       83.11      1.43      
+  1.0      ntp    math       0.0150       0.0608       83.11      1.20      
+  1.0      ntp    code       0.0136       0.0354       83.11      1.12      
+  2.0      sft    medical    0.0240       0.0589       83.11      1.95      
+  2.0      sft    math       0.0213       0.0626       83.11      1.72      
+  2.0      sft    code       0.0195       0.0589       83.11      1.56      
+  2.0      ntp    medical    0.0270       0.0444       83.11      2.24      
+  2.0      ntp    math       0.0229       0.0890       83.11      1.83      
+  2.0      ntp    code       0.0217       0.0519       83.11      1.78      
+  4.0      sft    medical    0.0411       0.1155       83.11      3.34      
+  4.0      sft    math       0.0364       0.1112       83.11      2.93      
+  4.0      sft    code       0.0360       0.1058       83.11      2.86      
+  4.0      ntp    medical    0.0441       0.0878       83.11      3.64      
+  4.0      ntp    math       0.0364       0.1351       83.11      2.90      
+  4.0      ntp    code       0.0378       0.1013       83.11      3.05      
+  8.0      sft    medical    0.0698       0.1746       83.11      5.68      
+  8.0      sft    math       0.0625       0.2213       83.11      4.99      
+  8.0      sft    code       0.0645       0.2334       83.11      5.11      
+  8.0      ntp    medical    0.0733       0.1557       83.11      6.05      
+  8.0      ntp    math       0.0622       0.1933       83.11      5.01      
+  8.0      ntp    code       0.0658       0.1766       83.11      5.33      
+  20.0     sft    medical    0.1517       0.2902       83.11      12.47     
+  20.0     sft    math       0.1419       0.4105       83.11      11.45     
+  20.0     sft    code       0.1456       0.4403       83.11      11.72     
+  20.0     ntp    medical    0.1533       0.3680       83.11      12.55     
+  20.0     ntp    math       0.1337       0.3729       83.11      10.87     
+  20.0     ntp    code       0.1387       0.3408       83.11      11.38     
+
+======================================================================
+LOADING BENCHMARK DATA
+======================================================================
+  Loaded 50 GSM8K problems
+  MMLU medical: 20 questions
+  MMLU code: 20 questions
+  MMLU math: 20 questions
+
+======================================================================
+PHASE 3: EVALUATE BASE MODEL
+======================================================================
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 84096.32it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM base-loaded] active=6.11GB cache=1.47GB peak=6.74GB
+
+  [GSM8K] Evaluating falcon-base...
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+    10/50: 4/10 correct (40.0%)
+    20/50: 6/20 correct (30.0%)
+    30/50: 12/30 correct (40.0%)
+    40/50: 17/40 correct (42.5%)
+    50/50: 22/50 correct (44.0%)
+  [GSM8K] falcon-base: 22/50 = 0.440 (268.7s)
+
+  [MMLU] Evaluating falcon-base...
+    MMLU medical: 11/20 = 0.550
+    MMLU math: 11/20 = 0.550
+    MMLU code: 12/20 = 0.600
+
+Base eval total: 317.7s, peak: 6.74GB
+
+======================================================================
+PHASE 4: EVALUATE ALL INDIVIDUAL ADAPTERS
+======================================================================
+
+--- Evaluating [s1.0__sft__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 81840.08it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__sft__medical...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 11/30 correct (36.7%)
+    40/50: 16/40 correct (40.0%)
+    50/50: 21/50 correct (42.0%)
+  [GSM8K] s1.0__sft__medical: 21/50 = 0.420 (253.5s)
+
+  [MMLU] Evaluating s1.0__sft__medical...
+    MMLU medical: 11/20 = 0.550
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s1.0__sft__medical] eval done in 306.4s
+
+--- Evaluating [s1.0__sft__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 48279.76it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__sft__math...
+    10/50: 6/10 correct (60.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 28/50 correct (56.0%)
+  [GSM8K] s1.0__sft__math: 28/50 = 0.560 (219.6s)
+
+  [MMLU] Evaluating s1.0__sft__math...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 6/20 = 0.300
+    MMLU code: 10/20 = 0.500
+  [s1.0__sft__math] eval done in 272.3s
+
+--- Evaluating [s1.0__sft__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 72160.07it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__sft__code...
+    10/50: 4/10 correct (40.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 15/30 correct (50.0%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s1.0__sft__code: 26/50 = 0.520 (261.0s)
+
+  [MMLU] Evaluating s1.0__sft__code...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s1.0__sft__code] eval done in 316.0s
+
+--- Evaluating [s1.0__ntp__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 58764.33it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__ntp__medical...
+    10/50: 3/10 correct (30.0%)
+    20/50: 7/20 correct (35.0%)
+    30/50: 12/30 correct (40.0%)
+    40/50: 17/40 correct (42.5%)
+    50/50: 21/50 correct (42.0%)
+  [GSM8K] s1.0__ntp__medical: 21/50 = 0.420 (255.9s)
+
+  [MMLU] Evaluating s1.0__ntp__medical...
+    MMLU medical: 6/20 = 0.300
+    MMLU math: 14/20 = 0.700
+    MMLU code: 10/20 = 0.500
+  [s1.0__ntp__medical] eval done in 309.5s
+
+--- Evaluating [s1.0__ntp__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 44208.74it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__ntp__math...
+    10/50: 4/10 correct (40.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 14/30 correct (46.7%)
+    40/50: 20/40 correct (50.0%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s1.0__ntp__math: 26/50 = 0.520 (270.1s)
+
+  [MMLU] Evaluating s1.0__ntp__math...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 5/20 = 0.250
+    MMLU code: 9/20 = 0.450
+  [s1.0__ntp__math] eval done in 324.3s
+
+--- Evaluating [s1.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 33156.55it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=1.0) to 96 layers
+
+  [GSM8K] Evaluating s1.0__ntp__code...
+    10/50: 4/10 correct (40.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 19/40 correct (47.5%)
+    50/50: 24/50 correct (48.0%)
+  [GSM8K] s1.0__ntp__code: 24/50 = 0.480 (265.9s)
+
+  [MMLU] Evaluating s1.0__ntp__code...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 11/20 = 0.550
+    MMLU code: 12/20 = 0.600
+  [s1.0__ntp__code] eval done in 322.0s
+
+--- Evaluating [s2.0__sft__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 15155.57it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__sft__medical...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 18/30 correct (60.0%)
+    40/50: 24/40 correct (60.0%)
+    50/50: 30/50 correct (60.0%)
+  [GSM8K] s2.0__sft__medical: 30/50 = 0.600 (255.8s)
+
+  [MMLU] Evaluating s2.0__sft__medical...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s2.0__sft__medical] eval done in 310.8s
+
+--- Evaluating [s2.0__sft__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 16668.87it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__sft__math...
+    10/50: 5/10 correct (50.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 15/30 correct (50.0%)
+    40/50: 23/40 correct (57.5%)
+    50/50: 29/50 correct (58.0%)
+  [GSM8K] s2.0__sft__math: 29/50 = 0.580 (218.9s)
+
+  [MMLU] Evaluating s2.0__sft__math...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 6/20 = 0.300
+    MMLU code: 10/20 = 0.500
+  [s2.0__sft__math] eval done in 271.5s
+
+--- Evaluating [s2.0__sft__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 20610.83it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__sft__code...
+    10/50: 6/10 correct (60.0%)
+    20/50: 12/20 correct (60.0%)
+    30/50: 18/30 correct (60.0%)
+    40/50: 25/40 correct (62.5%)
+    50/50: 31/50 correct (62.0%)
+  [GSM8K] s2.0__sft__code: 31/50 = 0.620 (243.3s)
+
+  [MMLU] Evaluating s2.0__sft__code...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 12/20 = 0.600
+    MMLU code: 9/20 = 0.450
+  [s2.0__sft__code] eval done in 296.8s
+
+--- Evaluating [s2.0__ntp__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 76260.07it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__ntp__medical...
+    10/50: 3/10 correct (30.0%)
+    20/50: 8/20 correct (40.0%)
+    30/50: 10/30 correct (33.3%)
+    40/50: 15/40 correct (37.5%)
+    50/50: 19/50 correct (38.0%)
+  [GSM8K] s2.0__ntp__medical: 19/50 = 0.380 (261.3s)
+
+  [MMLU] Evaluating s2.0__ntp__medical...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 12/20 = 0.600
+    MMLU code: 10/20 = 0.500
+  [s2.0__ntp__medical] eval done in 314.7s
+
+--- Evaluating [s2.0__ntp__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 150468.30it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__ntp__math...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 15/30 correct (50.0%)
+    40/50: 23/40 correct (57.5%)
+    50/50: 31/50 correct (62.0%)
+  [GSM8K] s2.0__ntp__math: 31/50 = 0.620 (248.7s)
+
+  [MMLU] Evaluating s2.0__ntp__math...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 4/20 = 0.200
+    MMLU code: 8/20 = 0.400
+  [s2.0__ntp__math] eval done in 302.4s
+
+--- Evaluating [s2.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 92948.57it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=2.0) to 96 layers
+
+  [GSM8K] Evaluating s2.0__ntp__code...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s2.0__ntp__code: 26/50 = 0.520 (264.6s)
+
+  [MMLU] Evaluating s2.0__ntp__code...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 10/20 = 0.500
+    MMLU code: 11/20 = 0.550
+  [s2.0__ntp__code] eval done in 319.3s
+
+--- Evaluating [s4.0__sft__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 15470.00it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__sft__medical...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 23/40 correct (57.5%)
+    50/50: 29/50 correct (58.0%)
+  [GSM8K] s4.0__sft__medical: 29/50 = 0.580 (298.1s)
+
+  [MMLU] Evaluating s4.0__sft__medical...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 12/20 = 0.600
+    MMLU code: 9/20 = 0.450
+  [s4.0__sft__medical] eval done in 354.2s
+
+--- Evaluating [s4.0__sft__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 117734.85it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__sft__math...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 17/30 correct (56.7%)
+    40/50: 25/40 correct (62.5%)
+    50/50: 31/50 correct (62.0%)
+  [GSM8K] s4.0__sft__math: 31/50 = 0.620 (265.9s)
+
+  [MMLU] Evaluating s4.0__sft__math...
+    MMLU medical: 12/20 = 0.600
+    MMLU math: 4/20 = 0.200
+    MMLU code: 12/20 = 0.600
+  [s4.0__sft__math] eval done in 329.8s
+
+--- Evaluating [s4.0__sft__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 145257.28it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__sft__code...
+    10/50: 5/10 correct (50.0%)
+    20/50: 13/20 correct (65.0%)
+    30/50: 19/30 correct (63.3%)
+    40/50: 26/40 correct (65.0%)
+    50/50: 33/50 correct (66.0%)
+  [GSM8K] s4.0__sft__code: 33/50 = 0.660 (264.6s)
+
+  [MMLU] Evaluating s4.0__sft__code...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s4.0__sft__code] eval done in 318.6s
+
+--- Evaluating [s4.0__ntp__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 17467.17it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__ntp__medical...
+    10/50: 3/10 correct (30.0%)
+    20/50: 8/20 correct (40.0%)
+    30/50: 11/30 correct (36.7%)
+    40/50: 18/40 correct (45.0%)
+    50/50: 21/50 correct (42.0%)
+  [GSM8K] s4.0__ntp__medical: 21/50 = 0.420 (247.1s)
+
+  [MMLU] Evaluating s4.0__ntp__medical...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 14/20 = 0.700
+    MMLU code: 11/20 = 0.550
+  [s4.0__ntp__medical] eval done in 299.8s
+
+--- Evaluating [s4.0__ntp__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 23530.46it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__ntp__math...
+    10/50: 4/10 correct (40.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 17/30 correct (56.7%)
+    40/50: 25/40 correct (62.5%)
+    50/50: 33/50 correct (66.0%)
+  [GSM8K] s4.0__ntp__math: 33/50 = 0.660 (299.6s)
+
+  [MMLU] Evaluating s4.0__ntp__math...
+    MMLU medical: 10/20 = 0.500
+    MMLU math: 4/20 = 0.200
+    MMLU code: 7/20 = 0.350
+  [s4.0__ntp__math] eval done in 355.2s
+
+--- Evaluating [s4.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 50006.61it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__ntp__code...
+[MEM start] active=0.00GB cache=0.00GB peak=0.00GB
+
+======================================================================
+LORA SCALE ABLATION EXPERIMENT (with checkpointing)
+Scales: [1.0, 2.0, 4.0, 8.0, 20.0]
+Loss types: ['sft', 'ntp']
+Domains: ['medical', 'math', 'code']
+Total training conditions: 30
+======================================================================
+  Loaded checkpoint with 17 single evals, 0 composed evals
+
+======================================================================
+PHASE 1: TRAIN ALL ADAPTERS
+  5 scales x 2 losses x 3 domains = 30 conditions
+======================================================================
+
+  [s1.0__sft__medical] Adapter exists, skipping training
+
+  [s1.0__sft__math] Adapter exists, skipping training
+
+  [s1.0__sft__code] Adapter exists, skipping training
+
+  [s1.0__ntp__medical] Adapter exists, skipping training
+
+  [s1.0__ntp__math] Adapter exists, skipping training
+
+  [s1.0__ntp__code] Adapter exists, skipping training
+
+  [s2.0__sft__medical] Adapter exists, skipping training
+
+  [s2.0__sft__math] Adapter exists, skipping training
+
+  [s2.0__sft__code] Adapter exists, skipping training
+
+  [s2.0__ntp__medical] Adapter exists, skipping training
+
+  [s2.0__ntp__math] Adapter exists, skipping training
+
+  [s2.0__ntp__code] Adapter exists, skipping training
+
+  [s4.0__sft__medical] Adapter exists, skipping training
+
+  [s4.0__sft__math] Adapter exists, skipping training
+
+  [s4.0__sft__code] Adapter exists, skipping training
+
+  [s4.0__ntp__medical] Adapter exists, skipping training
+
+  [s4.0__ntp__math] Adapter exists, skipping training
+
+  [s4.0__ntp__code] Adapter exists, skipping training
+
+  [s8.0__sft__medical] Adapter exists, skipping training
+
+  [s8.0__sft__math] Adapter exists, skipping training
+
+  [s8.0__sft__code] Adapter exists, skipping training
+
+  [s8.0__ntp__medical] Adapter exists, skipping training
+
+  [s8.0__ntp__math] Adapter exists, skipping training
+
+  [s8.0__ntp__code] Adapter exists, skipping training
+
+  [s20.0__sft__medical] Adapter exists, skipping training
+
+  [s20.0__sft__math] Adapter exists, skipping training
+
+  [s20.0__sft__code] Adapter exists, skipping training
+
+  [s20.0__ntp__medical] Adapter exists, skipping training
+
+  [s20.0__ntp__math] Adapter exists, skipping training
+
+  [s20.0__ntp__code] Adapter exists, skipping training
+
+  Phase 2: Norms loaded from checkpoint
+
+======================================================================
+LOADING BENCHMARK DATA
+======================================================================
+  Loaded 50 GSM8K problems
+  MMLU medical: 20 questions
+  MMLU code: 20 questions
+  MMLU math: 20 questions
+
+  Phase 3: Base results loaded from checkpoint
+
+======================================================================
+PHASE 4: EVALUATE ALL INDIVIDUAL ADAPTERS
+======================================================================
+  [s1.0__sft__medical] loaded from checkpoint
+  [s1.0__sft__math] loaded from checkpoint
+  [s1.0__sft__code] loaded from checkpoint
+  [s1.0__ntp__medical] loaded from checkpoint
+  [s1.0__ntp__math] loaded from checkpoint
+  [s1.0__ntp__code] loaded from checkpoint
+  [s2.0__sft__medical] loaded from checkpoint
+  [s2.0__sft__math] loaded from checkpoint
+  [s2.0__sft__code] loaded from checkpoint
+  [s2.0__ntp__medical] loaded from checkpoint
+  [s2.0__ntp__math] loaded from checkpoint
+  [s2.0__ntp__code] loaded from checkpoint
+  [s4.0__sft__medical] loaded from checkpoint
+  [s4.0__sft__math] loaded from checkpoint
+  [s4.0__sft__code] loaded from checkpoint
+  [s4.0__ntp__medical] loaded from checkpoint
+  [s4.0__ntp__math] loaded from checkpoint
+
+--- Evaluating [s4.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 148470.94it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=4.0) to 96 layers
+
+  [GSM8K] Evaluating s4.0__ntp__code...
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+    10/50: 5/10 correct (50.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 15/30 correct (50.0%)
+    40/50: 20/40 correct (50.0%)
+    50/50: 25/50 correct (50.0%)
+  [GSM8K] s4.0__ntp__code: 25/50 = 0.500 (261.9s)
+
+  [MMLU] Evaluating s4.0__ntp__code...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 10/20 = 0.500
+    MMLU code: 10/20 = 0.500
+  [s4.0__ntp__code] eval done in 315.3s
+
+--- Evaluating [s8.0__sft__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 97826.33it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__sft__medical...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 22/40 correct (55.0%)
+    50/50: 28/50 correct (56.0%)
+  [GSM8K] s8.0__sft__medical: 28/50 = 0.560 (266.3s)
+
+  [MMLU] Evaluating s8.0__sft__medical...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 12/20 = 0.600
+    MMLU code: 10/20 = 0.500
+  [s8.0__sft__medical] eval done in 319.8s
+
+--- Evaluating [s8.0__sft__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 181375.31it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__sft__math...
+    10/50: 6/10 correct (60.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 17/30 correct (56.7%)
+    40/50: 24/40 correct (60.0%)
+    50/50: 32/50 correct (64.0%)
+  [GSM8K] s8.0__sft__math: 32/50 = 0.640 (259.2s)
+
+  [MMLU] Evaluating s8.0__sft__math...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 5/20 = 0.250
+    MMLU code: 12/20 = 0.600
+  [s8.0__sft__math] eval done in 311.9s
+
+--- Evaluating [s8.0__sft__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 35246.25it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__sft__code...
+    10/50: 4/10 correct (40.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 24/40 correct (60.0%)
+    50/50: 30/50 correct (60.0%)
+  [GSM8K] s8.0__sft__code: 30/50 = 0.600 (242.0s)
+
+  [MMLU] Evaluating s8.0__sft__code...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s8.0__sft__code] eval done in 294.8s
+
+--- Evaluating [s8.0__ntp__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 148470.94it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__ntp__medical...
+    10/50: 5/10 correct (50.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 17/30 correct (56.7%)
+    40/50: 24/40 correct (60.0%)
+    50/50: 30/50 correct (60.0%)
+  [GSM8K] s8.0__ntp__medical: 30/50 = 0.600 (252.2s)
+
+  [MMLU] Evaluating s8.0__ntp__medical...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 10/20 = 0.500
+    MMLU code: 10/20 = 0.500
+  [s8.0__ntp__medical] eval done in 304.9s
+
+--- Evaluating [s8.0__ntp__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 69327.34it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__ntp__math...
+    10/50: 7/10 correct (70.0%)
+    20/50: 12/20 correct (60.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 22/40 correct (55.0%)
+    50/50: 30/50 correct (60.0%)
+  [GSM8K] s8.0__ntp__math: 30/50 = 0.600 (235.3s)
+
+  [MMLU] Evaluating s8.0__ntp__math...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 5/20 = 0.250
+    MMLU code: 10/20 = 0.500
+  [s8.0__ntp__math] eval done in 287.9s
+
+--- Evaluating [s8.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 145257.28it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=8.0) to 96 layers
+
+  [GSM8K] Evaluating s8.0__ntp__code...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 23/40 correct (57.5%)
+    50/50: 28/50 correct (56.0%)
+  [GSM8K] s8.0__ntp__code: 28/50 = 0.560 (274.9s)
+
+  [MMLU] Evaluating s8.0__ntp__code...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 12/20 = 0.600
+    MMLU code: 12/20 = 0.600
+  [s8.0__ntp__code] eval done in 327.6s
+
+--- Evaluating [s20.0__sft__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 136400.13it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__sft__medical...
+    10/50: 3/10 correct (30.0%)
+    20/50: 7/20 correct (35.0%)
+    30/50: 12/30 correct (40.0%)
+    40/50: 17/40 correct (42.5%)
+    50/50: 22/50 correct (44.0%)
+  [GSM8K] s20.0__sft__medical: 22/50 = 0.440 (257.1s)
+
+  [MMLU] Evaluating s20.0__sft__medical...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 12/20 = 0.600
+    MMLU code: 10/20 = 0.500
+  [s20.0__sft__medical] eval done in 310.0s
+
+--- Evaluating [s20.0__sft__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 86928.58it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__sft__math...
+    10/50: 6/10 correct (60.0%)
+    20/50: 12/20 correct (60.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 22/40 correct (55.0%)
+    50/50: 27/50 correct (54.0%)
+  [GSM8K] s20.0__sft__math: 27/50 = 0.540 (304.5s)
+
+  [MMLU] Evaluating s20.0__sft__math...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 4/20 = 0.200
+    MMLU code: 7/20 = 0.350
+  [s20.0__sft__math] eval done in 357.4s
+
+--- Evaluating [s20.0__sft__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 66576.25it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__sft__code...
+    10/50: 4/10 correct (40.0%)
+    20/50: 8/20 correct (40.0%)
+    30/50: 13/30 correct (43.3%)
+    40/50: 20/40 correct (50.0%)
+    50/50: 27/50 correct (54.0%)
+  [GSM8K] s20.0__sft__code: 27/50 = 0.540 (216.6s)
+
+  [MMLU] Evaluating s20.0__sft__code...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s20.0__sft__code] eval done in 269.4s
+
+--- Evaluating [s20.0__ntp__medical] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 37365.74it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__ntp__medical...
+    10/50: 5/10 correct (50.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 22/40 correct (55.0%)
+    50/50: 27/50 correct (54.0%)
+  [GSM8K] s20.0__ntp__medical: 27/50 = 0.540 (270.3s)
+
+  [MMLU] Evaluating s20.0__ntp__medical...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 11/20 = 0.550
+    MMLU code: 9/20 = 0.450
+  [s20.0__ntp__medical] eval done in 323.2s
+
+--- Evaluating [s20.0__ntp__math] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 38435.78it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__ntp__math...
+    10/50: 5/10 correct (50.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 24/40 correct (60.0%)
+    50/50: 33/50 correct (66.0%)
+  [GSM8K] s20.0__ntp__math: 33/50 = 0.660 (289.4s)
+
+  [MMLU] Evaluating s20.0__ntp__math...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 7/20 = 0.350
+    MMLU code: 9/20 = 0.450
+  [s20.0__ntp__math] eval done in 342.3s
+
+--- Evaluating [s20.0__ntp__code] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 69615.00it/s]
+  Replaced 224 BitLinear -> nn.Linear
+  Applied LoRA (scale=20.0) to 96 layers
+
+  [GSM8K] Evaluating s20.0__ntp__code...
+    10/50: 3/10 correct (30.0%)
+    20/50: 7/20 correct (35.0%)
+    30/50: 13/30 correct (43.3%)
+    40/50: 17/40 correct (42.5%)
+    50/50: 21/50 correct (42.0%)
+  [GSM8K] s20.0__ntp__code: 21/50 = 0.420 (266.4s)
+
+  [MMLU] Evaluating s20.0__ntp__code...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 9/20 = 0.450
+    MMLU code: 10/20 = 0.500
+  [s20.0__ntp__code] eval done in 319.3s
+
+======================================================================
+PHASE 5: EVALUATE COMPOSED MODELS (1/N pre-merge)
+======================================================================
+
+--- Evaluating composed [s1.0__sft__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 28976.19it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s1.0__sft__composed-loaded] active=6.11GB cache=1.47GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s1.0__sft__composed...
+    10/50: 4/10 correct (40.0%)
+    20/50: 11/20 correct (55.0%)
+    30/50: 17/30 correct (56.7%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s1.0__sft__composed: 26/50 = 0.520 (1046.0s)
+
+  [MMLU] Evaluating s1.0__sft__composed...
+    MMLU medical: 9/20 = 0.450
+    MMLU math: 10/20 = 0.500
+    MMLU code: 9/20 = 0.450
+  [s1.0__sft__composed] composed eval done in 1266.9s
+
+--- Evaluating composed [s1.0__ntp__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 40378.38it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s1.0__ntp__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s1.0__ntp__composed...
+    10/50: 2/10 correct (20.0%)
+    20/50: 8/20 correct (40.0%)
+    30/50: 11/30 correct (36.7%)
+    40/50: 15/40 correct (37.5%)
+    50/50: 20/50 correct (40.0%)
+  [GSM8K] s1.0__ntp__composed: 20/50 = 0.400 (1029.5s)
+
+  [MMLU] Evaluating s1.0__ntp__composed...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s1.0__ntp__composed] composed eval done in 1250.6s
+
+--- Evaluating composed [s2.0__sft__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 45528.40it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s2.0__sft__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s2.0__sft__composed...
+    10/50: 3/10 correct (30.0%)
+    20/50: 8/20 correct (40.0%)
+    30/50: 12/30 correct (40.0%)
+    40/50: 16/40 correct (40.0%)
+    50/50: 21/50 correct (42.0%)
+  [GSM8K] s2.0__sft__composed: 21/50 = 0.420 (1057.5s)
+
+  [MMLU] Evaluating s2.0__sft__composed...
+    MMLU medical: 8/20 = 0.400
+    MMLU math: 11/20 = 0.550
+    MMLU code: 10/20 = 0.500
+  [s2.0__sft__composed] composed eval done in 1278.5s
+
+--- Evaluating composed [s2.0__ntp__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 76087.15it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s2.0__ntp__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s2.0__ntp__composed...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 13/30 correct (43.3%)
+    40/50: 17/40 correct (42.5%)
+    50/50: 22/50 correct (44.0%)
+  [GSM8K] s2.0__ntp__composed: 22/50 = 0.440 (1045.1s)
+
+  [MMLU] Evaluating s2.0__ntp__composed...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 10/20 = 0.500
+    MMLU code: 9/20 = 0.450
+  [s2.0__ntp__composed] composed eval done in 1266.3s
+
+--- Evaluating composed [s4.0__sft__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 133152.51it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s4.0__sft__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s4.0__sft__composed...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 15/30 correct (50.0%)
+    40/50: 19/40 correct (47.5%)
+    50/50: 25/50 correct (50.0%)
+  [GSM8K] s4.0__sft__composed: 25/50 = 0.500 (1092.9s)
+
+  [MMLU] Evaluating s4.0__sft__composed...
+    MMLU medical: 6/20 = 0.300
+    MMLU math: 12/20 = 0.600
+    MMLU code: 9/20 = 0.450
+  [s4.0__sft__composed] composed eval done in 1314.1s
+
+--- Evaluating composed [s4.0__ntp__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 74731.47it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s4.0__ntp__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s4.0__ntp__composed...
+    10/50: 5/10 correct (50.0%)
+    20/50: 10/20 correct (50.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 20/40 correct (50.0%)
+    50/50: 25/50 correct (50.0%)
+  [GSM8K] s4.0__ntp__composed: 25/50 = 0.500 (1047.1s)
+
+  [MMLU] Evaluating s4.0__ntp__composed...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 12/20 = 0.600
+    MMLU code: 9/20 = 0.450
+  [s4.0__ntp__composed] composed eval done in 1267.8s
+
+--- Evaluating composed [s8.0__sft__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 135847.90it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s8.0__sft__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s8.0__sft__composed...
+    10/50: 4/10 correct (40.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s8.0__sft__composed: 26/50 = 0.520 (1045.6s)
+
+  [MMLU] Evaluating s8.0__sft__composed...
+    MMLU medical: 7/20 = 0.350
+    MMLU math: 10/20 = 0.500
+    MMLU code: 9/20 = 0.450
+  [s8.0__sft__composed] composed eval done in 1266.8s
+
+--- Evaluating composed [s8.0__ntp__composed] ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 37407.39it/s]
+  Replaced 224 BitLinear -> nn.Linear
+[MEM composed-s8.0__ntp__composed-loaded] active=6.11GB cache=1.82GB peak=6.74GB
+  Pre-merged 3 adapters into 288 weight matrices
+
+  [GSM8K] Evaluating s8.0__ntp__composed...
+    10/50: 3/10 correct (30.0%)
+    20/50: 9/20 correct (45.0%)
+    30/50: 16/30 correct (53.3%)
+    40/50: 21/40 correct (52.5%)
+    50/50: 26/50 correct (52.0%)
+  [GSM8K] s8.0__ntp__composed: 26/50 = 0.520 (1021.4s)
+
+  [MMLU] Evaluating s8.0__ntp__composed...

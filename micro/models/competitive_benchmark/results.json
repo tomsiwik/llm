@@ -1,0 +1,109 @@
+{
+  "experiment": "competitive_benchmark",
+  "models": {
+    "bitnet_base": {"id": "microsoft/BitNet-b1.58-2B-4T", "description": "BitNet-2B-4T base, no adapters"},
+    "bitnet_sole": {"id": "microsoft/BitNet-b1.58-2B-4T", "description": "BitNet-2B-4T + 5 domain adapters, uniform 1/N pre-merge"},
+    "qwen25_3b": {"id": "mlx-community/Qwen2.5-3B-Instruct-4bit", "description": "Qwen2.5-3B-Instruct 4-bit quantized"},
+    "gemma2_2b": {"id": "mlx-community/gemma-2-2b-it-4bit", "description": "Gemma-2-2B-IT 4-bit quantized"}
+  },
+  "results": {
+    "bitnet_base": {
+      "gsm8k": {"accuracy": 0.38, "correct": 19, "total": 50, "time_s": 241.5},
+      "mmlu": {
+        "medical": {"accuracy": 0.40, "correct": 8, "total": 20},
+        "code": {"accuracy": 0.40, "correct": 8, "total": 20},
+        "math": {"accuracy": 0.50, "correct": 10, "total": 20},
+        "legal": {"accuracy": 0.55, "correct": 11, "total": 20},
+        "finance": {"accuracy": 0.35, "correct": 7, "total": 20}
+      },
+      "peak_memory_gb": 5.35,
+      "time_s": 312.6
+    },
+    "bitnet_sole": {
+      "gsm8k": {"accuracy": 0.48, "correct": 24, "total": 50, "time_s": 556.5},
+      "mmlu": {
+        "medical": {"accuracy": 0.45, "correct": 9, "total": 20},
+        "code": {"accuracy": 0.45, "correct": 9, "total": 20},
+        "math": {"accuracy": 0.25, "correct": 5, "total": 20},
+        "legal": {"accuracy": 0.45, "correct": 9, "total": 20},
+        "finance": {"accuracy": 0.45, "correct": 9, "total": 20}
+      },
+      "peak_memory_gb": 10.98,
+      "time_s": 715.5
+    },
+    "qwen25_3b": {
+      "gsm8k": {"accuracy": 0.36, "correct": 18, "total": 50, "time_s": 99.9},
+      "mmlu": {
+        "medical": {"accuracy": 0.70, "correct": 14, "total": 20},
+        "code": {"accuracy": 0.70, "correct": 14, "total": 20},
+        "math": {"accuracy": 0.35, "correct": 7, "total": 20},
+        "legal": {"accuracy": 0.50, "correct": 10, "total": 20},
+        "finance": {"accuracy": 0.30, "correct": 6, "total": 20}
+      },
+      "peak_memory_gb": 2.45,
+      "time_s": 149.3
+    },
+    "gemma2_2b": {
+      "gsm8k": {"accuracy": 0.30, "correct": 15, "total": 50, "time_s": 81.0},
+      "mmlu": {
+        "medical": {"accuracy": 0.45, "correct": 9, "total": 20},
+        "code": {"accuracy": 0.45, "correct": 9, "total": 20},
+        "math": {"accuracy": 0.05, "correct": 1, "total": 20},
+        "legal": {"accuracy": 0.30, "correct": 6, "total": 20},
+        "finance": {"accuracy": 0.45, "correct": 9, "total": 20}
+      },
+      "peak_memory_gb": 2.21,
+      "time_s": 130.2
+    }
+  },
+  "analysis": {
+    "model_scores": {
+      "bitnet_base":  {"gsm8k": 0.38, "mmlu_medical": 0.40, "mmlu_code": 0.40, "mmlu_math": 0.50, "mmlu_legal": 0.55, "mmlu_finance": 0.35},
+      "bitnet_sole":  {"gsm8k": 0.48, "mmlu_medical": 0.45, "mmlu_code": 0.45, "mmlu_math": 0.25, "mmlu_legal": 0.45, "mmlu_finance": 0.45},
+      "qwen25_3b":    {"gsm8k": 0.36, "mmlu_medical": 0.70, "mmlu_code": 0.70, "mmlu_math": 0.35, "mmlu_legal": 0.50, "mmlu_finance": 0.30},
+      "gemma2_2b":    {"gsm8k": 0.30, "mmlu_medical": 0.45, "mmlu_code": 0.45, "mmlu_math": 0.05, "mmlu_legal": 0.30, "mmlu_finance": 0.45}
+    },
+    "kill_criteria": {
+      "k1_512": {
+        "result": "fail",
+        "evidence": "SOLE worse on 4/6 benchmarks vs Qwen2.5-3B (threshold >60% = >3.6). Worse on: mmlu_medical (-25pp), mmlu_code (-25pp), mmlu_math (+10pp Qwen wins but both low), mmlu_legal (-5pp)",
+        "worse_benchmarks": ["mmlu_medical", "mmlu_code", "mmlu_math", "mmlu_legal"],
+        "better_benchmarks": ["gsm8k", "mmlu_finance"],
+        "note": "SOLE BEATS Qwen on GSM8K (+12pp) and finance (+15pp). Qwen dominates factual MMLU."
+      },
+      "k2_513": {
+        "result": "fail",
+        "evidence": "SOLE worse than base on 2/6 benchmarks: mmlu_math (25% vs 50%, -25pp), mmlu_legal (45% vs 55%, -10pp). Composition hurts math and legal MMLU.",
+        "worse_benchmarks": ["mmlu_math", "mmlu_legal"]
+      },
+      "k3_514": {
+        "result": "fail",
+        "evidence": "SOLE 10.98GB vs Qwen 2.45GB (4.5x more memory). The bf16 unpacking of ternary weights inflates memory from ~700MB packed to ~5GB unpacked, plus adapter merge overhead."
+      }
+    },
+    "success_criteria": {
+      "s1_40": {
+        "result": "fail",
+        "evidence": "Beats Qwen on 1/5 MMLU domains (finance only), memory 10.98GB > 3GB threshold"
+      }
+    },
+    "sole_vs_gemma": {
+      "sole_beats": ["gsm8k", "mmlu_math", "mmlu_legal"],
+      "sole_ties": ["mmlu_medical", "mmlu_code", "mmlu_finance"],
+      "sole_loses": [],
+      "note": "SOLE beats or ties Gemma-2-2B on ALL 6 benchmarks. Gemma is the size-matched competitor."
+    }
+  },
+  "params": {
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20,
+    "max_new_tokens_gsm8k": 256,
+    "max_new_tokens_mmlu": 32,
+    "temperature": 0.0,
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "composition": "uniform 1/N pre-merge",
+    "n_adapters": 5
+  },
+  "total_time_s": 1307.6
+}

@@ -1,0 +1,419 @@
+{
+  "experiment": "energy_gated_composition",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "timestamp": "2026-03-29 09:54:40",
+  "type": "guided_exploration",
+  "threshold_used": 0.0,
+  "config": {
+    "num_prompts_per_domain": 10,
+    "max_new_tokens": 128,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "seeds": [
+      42,
+      137,
+      2024
+    ],
+    "energy_thresholds_tested": [
+      -0.1,
+      0.0,
+      0.1
+    ]
+  },
+  "energy_gap_matrix": {
+    "medical": {
+      "medical": {
+        "mean": -1.4533,
+        "std": 0.3858,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean": -1.3418,
+        "std": 0.3134,
+        "frac_negative": 1.0
+      },
+      "math": {
+        "mean": -0.4882,
+        "std": 0.1649,
+        "frac_negative": 1.0
+      },
+      "legal": {
+        "mean": -1.6299,
+        "std": 0.3282,
+        "frac_negative": 1.0
+      },
+      "finance": {
+        "mean": -1.5662,
+        "std": 0.4711,
+        "frac_negative": 1.0
+      }
+    },
+    "code": {
+      "medical": {
+        "mean": -0.787,
+        "std": 0.281,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean": -1.9262,
+        "std": 0.4676,
+        "frac_negative": 1.0
+      },
+      "math": {
+        "mean": -0.4946,
+        "std": 0.1668,
+        "frac_negative": 1.0
+      },
+      "legal": {
+        "mean": -1.6958,
+        "std": 0.4144,
+        "frac_negative": 1.0
+      },
+      "finance": {
+        "mean": -1.611,
+        "std": 0.563,
+        "frac_negative": 1.0
+      }
+    },
+    "math": {
+      "medical": {
+        "mean": -0.7852,
+        "std": 0.2361,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean": -1.3569,
+        "std": 0.3094,
+        "frac_negative": 1.0
+      },
+      "math": {
+        "mean": -0.997,
+        "std": 0.2377,
+        "frac_negative": 1.0
+      },
+      "legal": {
+        "mean": -1.5115,
+        "std": 0.2415,
+        "frac_negative": 1.0
+      },
+      "finance": {
+        "mean": -1.47,
+        "std": 0.4374,
+        "frac_negative": 1.0
+      }
+    },
+    "legal": {
+      "medical": {
+        "mean": -0.9675,
+        "std": 0.3514,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean": -1.5345,
+        "std": 0.4373,
+        "frac_negative": 1.0
+      },
+      "math": {
+        "mean": -0.4985,
+        "std": 0.1994,
+        "frac_negative": 1.0
+      },
+      "legal": {
+        "mean": -2.176,
+        "std": 0.4304,
+        "frac_negative": 1.0
+      },
+      "finance": {
+        "mean": -2.021,
+        "std": 0.6309,
+        "frac_negative": 1.0
+      }
+    },
+    "finance": {
+      "medical": {
+        "mean": -0.9703,
+        "std": 0.3645,
+        "frac_negative": 1.0
+      },
+      "code": {
+        "mean": -1.5439,
+        "std": 0.4315,
+        "frac_negative": 1.0
+      },
+      "math": {
+        "mean": -0.5394,
+        "std": 0.2006,
+        "frac_negative": 1.0
+      },
+      "legal": {
+        "mean": -2.1354,
+        "std": 0.4054,
+        "frac_negative": 1.0
+      },
+      "finance": {
+        "mean": -2.0754,
+        "std": 0.6184,
+        "frac_negative": 1.0
+      }
+    }
+  },
+  "per_domain": {
+    "medical": {
+      "base": {
+        "mean": 0.4783,
+        "std": 0.0056
+      },
+      "uniform": {
+        "mean": 0.4486,
+        "std": 0.0058
+      },
+      "gated": {
+        "mean": 0.4486,
+        "std": 0.0058
+      },
+      "gated_beats_base": false,
+      "gated_beats_uniform": false,
+      "rel_vs_base_pct": -6.21,
+      "rel_vs_uniform_pct": 0.0
+    },
+    "code": {
+      "base": {
+        "mean": 0.3359,
+        "std": 0.0255,
+        "syntax_valid_rate": 0.533
+      },
+      "uniform": {
+        "mean": 0.2906,
+        "std": 0.0469,
+        "syntax_valid_rate": 0.433
+      },
+      "gated": {
+        "mean": 0.2906,
+        "std": 0.0469,
+        "syntax_valid_rate": 0.433
+      },
+      "gated_beats_base": false,
+      "gated_beats_uniform": false,
+      "rel_vs_base_pct": -13.49,
+      "rel_vs_uniform_pct": 0.0
+    },
+    "math": {
+      "base": {
+        "mean": 0.1254,
+        "std": 0.0221,
+        "answer_correct_rate": 0.167
+      },
+      "uniform": {
+        "mean": 0.1878,
+        "std": 0.0037,
+        "answer_correct_rate": 0.3
+      },
+      "gated": {
+        "mean": 0.1878,
+        "std": 0.0037,
+        "answer_correct_rate": 0.3
+      },
+      "gated_beats_base": true,
+      "gated_beats_uniform": false,
+      "rel_vs_base_pct": 49.75,
+      "rel_vs_uniform_pct": 0.0
+    },
+    "legal": {
+      "base": {
+        "mean": 0.4646,
+        "std": 0.0065
+      },
+      "uniform": {
+        "mean": 0.4403,
+        "std": 0.0072
+      },
+      "gated": {
+        "mean": 0.4403,
+        "std": 0.0072
+      },
+      "gated_beats_base": false,
+      "gated_beats_uniform": false,
+      "rel_vs_base_pct": -5.25,
+      "rel_vs_uniform_pct": 0.0
+    },
+    "finance": {
+      "base": {
+        "mean": 0.4876,
+        "std": 0.0025
+      },
+      "uniform": {
+        "mean": 0.4546,
+        "std": 0.0144
+      },
+      "gated": {
+        "mean": 0.4546,
+        "std": 0.0144
+      },
+      "gated_beats_base": false,
+      "gated_beats_uniform": false,
+      "rel_vs_base_pct": -6.77,
+      "rel_vs_uniform_pct": 0.0
+    }
+  },
+  "gating_analysis": {
+    "medical": {
+      "avg_active_adapters": 5.0,
+      "base_fallback_rate": NaN,
+      "adapter_selection_counts": {
+        "medical": 10,
+        "code": 10,
+        "math": 10,
+        "legal": 10,
+        "finance": 10
+      },
+      "adapter_selection_rates": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 1.0,
+        "legal": 1.0,
+        "finance": 1.0
+      }
+    },
+    "code": {
+      "avg_active_adapters": 5.0,
+      "base_fallback_rate": NaN,
+      "adapter_selection_counts": {
+        "medical": 10,
+        "code": 10,
+        "math": 10,
+        "legal": 10,
+        "finance": 10
+      },
+      "adapter_selection_rates": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 1.0,
+        "legal": 1.0,
+        "finance": 1.0
+      }
+    },
+    "math": {
+      "avg_active_adapters": 5.0,
+      "base_fallback_rate": NaN,
+      "adapter_selection_counts": {
+        "medical": 10,
+        "code": 10,
+        "math": 10,
+        "legal": 10,
+        "finance": 10
+      },
+      "adapter_selection_rates": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 1.0,
+        "legal": 1.0,
+        "finance": 1.0
+      }
+    },
+    "legal": {
+      "avg_active_adapters": 5.0,
+      "base_fallback_rate": NaN,
+      "adapter_selection_counts": {
+        "medical": 10,
+        "code": 10,
+        "math": 10,
+        "legal": 10,
+        "finance": 10
+      },
+      "adapter_selection_rates": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 1.0,
+        "legal": 1.0,
+        "finance": 1.0
+      }
+    },
+    "finance": {
+      "avg_active_adapters": 5.0,
+      "base_fallback_rate": NaN,
+      "adapter_selection_counts": {
+        "medical": 10,
+        "code": 10,
+        "math": 10,
+        "legal": 10,
+        "finance": 10
+      },
+      "adapter_selection_rates": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 1.0,
+        "legal": 1.0,
+        "finance": 1.0
+      }
+    }
+  },
+  "aggregates": {
+    "gated_beats_base_count": 1,
+    "gated_beats_uniform_count": 0,
+    "n_seeds": 3,
+    "seeds": [
+      42,
+      137,
+      2024
+    ]
+  },
+  "kill_criteria": {
+    "K572": {
+      "test": "Gated worse than base on >= 3/5 domains",
+      "gated_beats_base_count": 1,
+      "gated_worse_count": 4,
+      "result": "FAIL"
+    },
+    "K573": {
+      "test": "Energy gating no better than random/uniform adapter selection",
+      "gated_beats_uniform_count": 0,
+      "avg_improvement_vs_uniform_pct": 0.0,
+      "result": "FAIL"
+    },
+    "K574": {
+      "test": "Energy gap overhead > 20% of generation time per prompt",
+      "total_energy_time_s": 38.5,
+      "per_prompt_energy_time_s": 0.77,
+      "per_prompt_gen_time_s": 9.336,
+      "overhead_pct": 8.2,
+      "result": "PASS"
+    }
+  },
+  "threshold_sweep": {
+    "-0.1": {
+      "medical": 0.44584977114217744,
+      "code": 0.32675800865069116,
+      "math": 0.1827987541598584,
+      "legal": 0.44735174758816604,
+      "finance": 0.47424440544121615
+    },
+    "0.0": {
+      "medical": 0.4486,
+      "code": 0.2906,
+      "math": 0.1878,
+      "legal": 0.4403,
+      "finance": 0.4546
+    },
+    "0.1": {
+      "medical": 0.44584977114217744,
+      "code": 0.32675800865069116,
+      "math": 0.18387718553240742,
+      "legal": 0.44735174758816604,
+      "finance": 0.47424440544121615
+    }
+  },
+  "timing": {
+    "energy_computation": {
+      "base_nll_time_s": 4.7,
+      "adapter_nll_time_s": 33.7,
+      "total_energy_time_s": 38.5
+    },
+    "generation": {
+      "base": 123.2,
+      "uniform": 810.4,
+      "gated": 811.3
+    }
+  },
+  "verdict": "KILLED",
+  "total_time_s": 6895.2
+}

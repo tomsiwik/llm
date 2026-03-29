@@ -1,0 +1,98 @@
+{
+  "experiment": "dynamic_adapter_addition_k3",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "train_iters": 200,
+  "original_domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "new_domain": "science",
+  "seed": 42,
+  "timestamp": "2026-03-27 11:08:17",
+  "total_time_s": 81.1,
+  "head_results": null,
+  "base_ppls": {
+    "python": 2.7418,
+    "math": 5.542,
+    "medical": 6.9576,
+    "legal": 21.8678,
+    "creative": 6.3528
+  },
+  "individual_ppls": {
+    "python": 2.2184,
+    "math": 3.5999,
+    "medical": 4.758,
+    "legal": 16.4826,
+    "creative": 4.9291,
+    "science": 7.0923
+  },
+  "n5_routed_ppls": {
+    "python": 2.219,
+    "math": 3.599,
+    "medical": 4.762,
+    "legal": 16.4826,
+    "creative": 4.9596
+  },
+  "n6_routed_ppls": {
+    "python": 2.219,
+    "math": 3.6007,
+    "medical": 4.9267,
+    "legal": 16.5397,
+    "creative": 4.9596
+  },
+  "n6_science_ppl": {
+    "science": 7.0572
+  },
+  "uniform_n5_ppls": {
+    "python": 2.5185,
+    "math": 4.9187,
+    "medical": 6.1329,
+    "legal": 20.257,
+    "creative": 5.9179
+  },
+  "uniform_n6_ppls": {
+    "python": 2.5406,
+    "math": 4.995,
+    "medical": 6.1822,
+    "legal": 20.5244,
+    "creative": 5.9808
+  },
+  "avg_n5_routed": 6.4044,
+  "avg_n6_routed": 6.4491,
+  "avg_uniform_n5": 7.949,
+  "avg_uniform_n6": 8.0446,
+  "delta_ppl": 0.0447,
+  "delta_pct": 0.7,
+  "k3_pass": true,
+  "cosines": {
+    "python-math": 0.001967,
+    "python-medical": 0.000762,
+    "python-legal": 0.000299,
+    "python-creative": 0.000377,
+    "python-science": 0.000255,
+    "math-medical": 0.000274,
+    "math-legal": 0.002076,
+    "math-creative": 0.001139,
+    "math-science": 0.001523,
+    "medical-legal": 0.000219,
+    "medical-creative": 0.000607,
+    "medical-science": 0.0005,
+    "legal-creative": 0.000188,
+    "legal-science": 0.00039,
+    "creative-science": 0.000714
+  },
+  "mean_cos": 0.000753,
+  "science_scores_by_domain": {
+    "python": 0.0107,
+    "math": 0.0061,
+    "medical": 0.4104,
+    "legal": 0.045,
+    "creative": 0.0251,
+    "science": 0.9135
+  },
+  "verdict": "K3 PASS"
+}

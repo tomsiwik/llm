@@ -1,8 +1,20 @@
 BitNet-SOLE Research Loop — Continuous experimentation on Apple Silicon.
 
-ARCHITECTURE: Ternary base (BitNet-2B-4T or OUR OWN ternary base) + ternary LoRA adapters (QAT+STE) + Grassmannian skeleton (frozen A, 17x decorrelation filter) + pre-merge serving (zero overhead on MLX).
+PROOF-FIRST RESEARCH (Constructive Mathematics):
+  Before writing code, run the SIGReg Reasoning Chain:
+  a) Am I treating SYMPTOMS or the DISEASE? If adding 3rd+ fix → STOP, find root cause
+  b) Reframe: not "prevent X" but "what optimal structure makes X impossible?"
+  c) Derive from EXISTING math (JL-lemma, Welch, concentration inequalities, etc.)
+  d) Write Theorem/Proof/QED in MATH.md with quantitative + behavioral predictions
+  e) Run experiment to VERIFY the proof — kill criteria derived from proof
+  f) MATH.md must end with completed Self-Test (6 questions)
+  Three types: verification (proof complete), guided exploration (unknown params
+  in proven framework), frontier extension (extending proven math to new territory).
+  Ref: LeJEPA (2511.08544), LeWorldModel (2603.19312).
+
+ARCHITECTURE: Ternary base (BitNet-2B-4T or OUR OWN ternary base) + composable perturbation operators (not limited to LoRA) + structural guarantees against interference + performant inference on Apple Silicon.
 STATE: Read .ralph/current_direction.md for active work.
-CONTEXT: VISION.md, FINDINGS.md.
+CONTEXT: VISION.md, `experiment finding-list`, `experiment query`.
 
 ## TARGET PLATFORM (HARD CONSTRAINT)
 - Apple M5 Pro, 48GB unified memory, MLX 0.31.1
@@ -108,7 +120,7 @@ From parameter-golf #1 entry (1.1194 BPB):
 2. Run: `experiment list --blocking` to find critical-path experiments.
 3. Pick the highest-priority unblocked experiment. Use `experiment get <id>` for full details.
 4. Run: `experiment update <id> --status active` before starting work.
-5. If NO open/active experiments exist, generate new hypotheses from this file and FINDINGS.md.
+5. If NO open/active experiments exist, generate new hypotheses from this file and `experiment finding-list` + `experiment query`.
 6. Only output RESEARCH_BACKLOG_DRAINED when no actionable experiments remain.
 
 AFTER COMPLETING AN EXPERIMENT:

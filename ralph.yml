@@ -9,6 +9,8 @@
 #                  → learning.complete → Researcher picks next experiment
 #
 # Start:     ralph run -a -v
+#   Ralph spawns Claude with --dangerously-skip-permissions.
+#   Effort level is set to "high" in .claude/settings.local.json.
 # Continue:  ralph emit "experiment.done"
 
 cli:
@@ -30,10 +32,16 @@ event_loop:
 
 core:
   guardrails:
+    - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies — the real question is always behavioral: 'does this produce useful output?' and 'does this advance the vision?' A metric improving without behavioral progress is not a finding. A metric degrading with behavioral progress IS a finding."
     - "ALL experiments MUST run on Apple Silicon via MLX. No CUDA. No RunPod. Target: M5 Pro 48GB."
     - "Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code."
-    - "Use `experiment get <id> --yaml` for full structured experiment details."
-    - "After completing an experiment, update structured kill criteria via `experiment kill-update`."
+    - "Use `experiment claim <worker>` to pick work. Use `experiment complete <id> ...` to finish."
+    - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior LEARNINGS.md finding."
+    - "Before implementing, consult NotebookLM for foundational understanding. Check `experiment query` for prior results on the same topic."
+    - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions), and how it connects to our architecture. No buzzword recitation."
+    - "Architecture reference: https://sebastianraschka.com/llm-architecture-gallery/ — compare our design against production models."
+    - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, the experiment is resurrected with a structural fix, not a hyperparameter tweak."
+    - "BEHAVIORAL OUTCOMES OVER METRICS: PPL, cosine, accuracy are proxies. The real questions: Does routed composition produce USEFUL text? Does the system advance toward the VISION? A finding that 'PPL improved by 4%' without showing behavioral improvement is provisional at best. The project proved PPL doesn't predict task quality (r=0.08). Design experiments that test behavioral claims, not metric claims."
 
 features:
   parallel: true
@@ -86,7 +94,64 @@ hats:
 
       4. Emit experiment.done with key results.
 
-      If fewer than 3 open experiments remain, add 1 new hypothesis via `experiment add`.
+      ## Hypothesis generation (STRICT RULES)
+
+      Only generate new experiments if fewer than 3 open P0-P2 experiments remain.
+      Every new hypothesis MUST meet ALL of these criteria:
+
+      0. SIGREG REASONING CHAIN (apply to every hypothesis):
+         a) Am I treating SYMPTOMS or the DISEASE? If adding a 3rd+ fix, stop.
+            Find the single constraint that makes all failure modes impossible.
+         b) Ask the RIGHT QUESTION — not "how do we prevent X?" but "what is
+            the OPTIMAL structure such that X is geometrically impossible?"
+            (LeCun didn't ask "how to prevent collapse" — he asked "what is the
+            optimal embedding distribution?" Collapse prevention was a consequence.)
+         c) Derive the answer from EXISTING MATH — JL-lemma, Welch bound,
+            contraction mappings, Cramer-Wold, concentration inequalities.
+            The hard part is asking the right question, not inventing technique.
+         d) Each hyperparameter you eliminate = one more understood degree of freedom.
+         Reference: LeJEPA (arxiv 2511.08544), LeWorldModel (arxiv 2603.19312).
+      1. GROUNDED: Must cite a specific paper (arxiv ID), prior experiment result,
+         or LEARNINGS.md finding. No inventing from thin air.
+      2. RELEVANT: Must directly address a weakness found in a killed/supported
+         experiment, OR extend a proven result to close a gate.
+      3. RESEARCHED: Before adding, consult NotebookLM: "What methods exist for
+         [this problem]? What implementations? What failure modes?"
+         Include the NotebookLM finding in the experiment notes.
+      4. SCOPED: Must run on MLX Apple Silicon in < 2 hours.
+      5. FALSIFIABLE: Must have concrete kill criteria with numbers.
+
+      DO NOT generate experiments about: information theory analogies (Shannon,
+      Huffman, etc.), data structure routing (splay trees, bloom filters, etc.),
+      or any mechanism without a paper reference showing it works for LLM/LoRA.
+
+      Format for new experiment notes:
+      ```
+      TYPE: [verification | guided-exploration | frontier-extension]
+      FAILURE MODE: [what specific degenerate behavior are we preventing?]
+      PRIOR MATH: [which existing theorems/bounds apply? cite theorem + paper]
+
+      # For TYPE=verification:
+      PROOF SKETCH: [1-3 sentence outline of the formal proof to be written in MATH.md]
+      PREDICTIONS: [what specific outcomes will the proof predict?]
+
+      # For TYPE=guided-exploration:
+      PROVEN FRAMEWORK: [which theorem/result is the exploration operating within?]
+      UNKNOWN: [what parameter/function/constant is unknown? what does the math predict about it?]
+
+      # For TYPE=frontier-extension:
+      PROVEN RESULT: [which theorem is being extended?]
+      GAP: [what new math would be needed to formalize the extension?]
+
+      MOTIVATION: [which killed/supported experiment motivates this]
+      LITERATURE: [arxiv ID or NotebookLM source supporting the approach]
+      HYPOTHESIS: [one falsifiable sentence]
+      KILL CRITERIA: K1: ... K2: ...
+      ```
+
+      ## Fallback handling
+      If a gate experiment is KILLED, check for a matching exp_fallback_g*_ experiment.
+      These are pre-designed Plan B experiments. Claim and run the fallback next.
 
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
@@ -106,13 +171,27 @@ hats:
 
       2. Delegate: Agent(subagent_type="adversarial-reviewer"):
          "Review [experiment_dir]/. Read MATH.md + PAPER.md.
+          Check experiment TYPE (verification / guided-exploration / frontier-extension):
+          - TYPE=verification: MATH.md must have Theorem/Proof/QED. PAPER.md must have
+            prediction-vs-measurement table. No proof → REVISE.
+          - TYPE=guided-exploration: MATH.md must state the proven framework and identify
+            the unknown precisely. Exploration must narrow the unknown, not just 'try and see.'
+          - TYPE=frontier-extension: MATH.md must state the proven result being extended and
+            the mathematical gap. Finding status capped at provisional.
+          - NO TYPE or no mathematical framework at all → REVISE.
           Write REVIEW-adversarial.md with verdict: PROCEED, REVISE, or KILL."
 
       3. Read verdict from REVIEW-adversarial.md:
          - REVISE: emit review.revise with numbered fixes.
          - KILL: `experiment complete <id> --status killed --evidence "KILLED: [reason]"`
+                 Record finding: `experiment finding-add --title "[what was tested]" --status killed --result "[why it failed]" --caveat "[limitations]" --failure-mode "[what degenerate behavior]" --impossibility-structure "[OPEN: what structure could fix it]"`
                  Emit review.killed.
-         - PROCEED: Append results to FINDINGS.md. Update VISION.md readiness if applicable.
+         - PROCEED: Determine status based on proof quality:
+                    * `conclusive` = formal proof verified, all predictions match measurements
+                    * `supported` = proof exists, predictions mostly match, minor gaps noted
+                    * `provisional` = no formal proof, but empirical result is directionally useful
+                    Add finding: `experiment finding-add --title "..." --status <status> --result "..." --caveat "..." --failure-mode "..." --impossibility-structure "..."`
+                    Update VISION.md readiness if applicable.
                     Emit review.proceed.
 
   # ── Analyst: multi-angle research sweep after every result ───────────────
@@ -132,17 +211,30 @@ hats:
       2. Query NotebookLM from 3 angles:
          - Confirming: "What research supports [core finding]?"
          - Contradicting: "What papers found the opposite?"
-         - Alternatives: "What other approaches exist for this problem?"
+         - Alternatives: "What PROVEN methods exist for this problem? Include arxiv IDs."
          Web search as fallback only.
 
-      3. Write [experiment_dir]/LEARNINGS.md:
+      3. For KILLED experiments, additionally research:
+         - "What causes [failure mode] in the literature? How did others fix it?"
+         - "Are there papers that succeeded where we failed? What did they do differently?"
+         - Check if our kill matches known failure patterns from prior LEARNINGS.md files
+
+      4. Write [experiment_dir]/LEARNINGS.md:
          - Core Finding (1-2 sentences)
-         - Why This Happened (cite papers)
+         - Why This Happened (cite specific papers with arxiv IDs)
          - Confirming Evidence (arxiv IDs)
          - Contradicting Evidence
-         - Alternative Approaches
+         - Alternative Approaches (ONLY methods with paper references or proven in our own experiments)
          - Implications for Next Experiments
+         - Recommended Follow-Up (if any — must cite motivation from literature or prior experiment)
 
-      4. Add new papers: `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
+      5. Add new papers: `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
 
-      5. Emit learning.complete with experiment name + 1-line core learning.
+      6. If recommending a new experiment, it MUST include:
+         - MOTIVATION: which specific result/paper motivates it
+         - LITERATURE: arxiv ID proving the approach works elsewhere
+         - Why it would fix the specific failure mode observed
+         Do NOT recommend experiments based on analogies (e.g., "TCP for routing").
+         Only recommend approaches with published evidence for LLM/LoRA/composition.
+
+      7. Emit learning.complete with experiment name + 1-line core learning.

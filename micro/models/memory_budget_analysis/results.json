@@ -1,0 +1,233 @@
+{
+  "experiment": "memory_budget_analysis",
+  "platform": {
+    "device": "unknown",
+    "total_memory_gb": 51.5,
+    "usable_memory_gb": 42.9
+  },
+  "theoretical": {
+    "packed_ternary_mb": 521.0,
+    "per_adapter_a_bf16_mb": 21.38,
+    "per_adapter_b_bf16_mb": 21.87,
+    "per_adapter_total_bf16_mb": 43.25,
+    "per_adapter_b_int8_mb": 10.94,
+    "per_head_kb": 82.0,
+    "router_mb": 1.32,
+    "kv_per_token_kb": 76.8,
+    "scenarios": {
+      "bf16_A_B_seq256": {
+        "format": "bf16_A_B",
+        "seq_len": 256,
+        "per_adapter_mb": 43.25,
+        "kv_cache_mb": 19.7,
+        "n_max_theoretical": 895
+      },
+      "bf16_A_B_seq2048": {
+        "format": "bf16_A_B",
+        "seq_len": 2048,
+        "per_adapter_mb": 43.25,
+        "kv_cache_mb": 157.3,
+        "n_max_theoretical": 891
+      },
+      "bf16_A_B_seq8192": {
+        "format": "bf16_A_B",
+        "seq_len": 8192,
+        "per_adapter_mb": 43.25,
+        "kv_cache_mb": 629.1,
+        "n_max_theoretical": 881
+      },
+      "int8_B_bf16_A_seq256": {
+        "format": "int8_B_bf16_A",
+        "seq_len": 256,
+        "per_adapter_mb": 32.32,
+        "kv_cache_mb": 19.7,
+        "n_max_theoretical": 1197
+      },
+      "int8_B_bf16_A_seq2048": {
+        "format": "int8_B_bf16_A",
+        "seq_len": 2048,
+        "per_adapter_mb": 32.32,
+        "kv_cache_mb": 157.3,
+        "n_max_theoretical": 1193
+      },
+      "int8_B_bf16_A_seq8192": {
+        "format": "int8_B_bf16_A",
+        "seq_len": 8192,
+        "per_adapter_mb": 32.32,
+        "kv_cache_mb": 629.1,
+        "n_max_theoretical": 1178
+      },
+      "bf16_B_only_shared_A_seq256": {
+        "format": "bf16_B_only_shared_A",
+        "seq_len": 256,
+        "per_adapter_mb": 21.87,
+        "kv_cache_mb": 19.7,
+        "n_max_theoretical": 1766
+      },
+      "bf16_B_only_shared_A_seq2048": {
+        "format": "bf16_B_only_shared_A",
+        "seq_len": 2048,
+        "per_adapter_mb": 21.87,
+        "kv_cache_mb": 157.3,
+        "n_max_theoretical": 1760
+      },
+      "bf16_B_only_shared_A_seq8192": {
+        "format": "bf16_B_only_shared_A",
+        "seq_len": 8192,
+        "per_adapter_mb": 21.87,
+        "kv_cache_mb": 629.1,
+        "n_max_theoretical": 1739
+      }
+    }
+  },
+  "base_model": {
+    "base_active_mb": 1178.6,
+    "base_peak_mb": 1178.6,
+    "after_fwd_active_mb": 1179.3,
+    "after_fwd_peak_mb": 1185.8
+  },
+  "adapter_scaling": {
+    "10": {
+      "n_adapters": 10,
+      "mem_before_mb": 0.0,
+      "mem_adapters_mb": 451.9,
+      "mem_with_heads_mb": 452.7,
+      "total_adapter_delta_mb": 451.9,
+      "per_adapter_mb": 45.19,
+      "total_head_delta_mb": 0.8,
+      "per_head_mb": 0.08,
+      "alloc_time_s": 0.1,
+      "peak_mb": 460.0
+    },
+    "50": {
+      "n_adapters": 50,
+      "mem_before_mb": 45.1,
+      "mem_adapters_mb": 2264.1,
+      "mem_with_heads_mb": 2268.2,
+      "total_adapter_delta_mb": 2219.0,
+      "per_adapter_mb": 44.38,
+      "total_head_delta_mb": 4.1,
+      "per_head_mb": 0.082,
+      "alloc_time_s": 0.6,
+      "peak_mb": 2270.3
+    },
+    "100": {
+      "n_adapters": 100,
+      "mem_before_mb": 45.3,
+      "mem_adapters_mb": 4532.7,
+      "mem_with_heads_mb": 4540.8,
+      "total_adapter_delta_mb": 4487.4,
+      "per_adapter_mb": 44.87,
+      "total_head_delta_mb": 8.1,
+      "per_head_mb": 0.081,
+      "alloc_time_s": 1.3,
+      "peak_mb": 4540.8
+    },
+    "500": {
+      "n_adapters": 500,
+      "mem_before_mb": 45.4,
+      "mem_adapters_mb": 22667.8,
+      "mem_with_heads_mb": 22708.7,
+      "total_adapter_delta_mb": 22622.4,
+      "per_adapter_mb": 45.24,
+      "total_head_delta_mb": 40.9,
+      "per_head_mb": 0.082,
+      "alloc_time_s": 7.2,
+      "peak_mb": 22708.7
+    }
+  },
+  "forward_pass_peak": {
+    "k=1": {
+      "k_active": 1,
+      "mem_base_mb": 1178.6,
+      "mem_adapters_loaded_mb": 1223.7,
+      "mem_after_base_fwd_mb": 1226.8,
+      "mem_after_lora_mb": 1226.5,
+      "peak_mb": 1253.24667,
+      "lora_overhead_mb": -0.3
+    },
+    "k=2": {
+      "k_active": 2,
+      "mem_base_mb": 1178.6,
+      "mem_adapters_loaded_mb": 1269.2,
+      "mem_after_base_fwd_mb": 1273.2,
+      "mem_after_lora_mb": 1272.0,
+      "peak_mb": 1298.532046,
+      "lora_overhead_mb": -1.2
+    },
+    "k=5": {
+      "k_active": 5,
+      "mem_base_mb": 1178.6,
+      "mem_adapters_loaded_mb": 1404.9,
+      "mem_after_base_fwd_mb": 1408.4,
+      "mem_after_lora_mb": 1408.0,
+      "peak_mb": 1434.28987,
+      "lora_overhead_mb": -0.4
+    }
+  },
+  "practical_maximum": {
+    "seq_256": {
+      "seq_len": 256,
+      "kv_cache_mb": 19.7,
+      "available_for_adapters_mb": 38702.0,
+      "per_adapter_mb": 45.24,
+      "per_head_mb": 0.082,
+      "n_max_practical": 853,
+      "milestones_gb": {
+        "N=100": 5.73,
+        "N=500": 23.86,
+        "N=1000": 46.52,
+        "N=853": 39.86
+      }
+    },
+    "seq_2048": {
+      "seq_len": 2048,
+      "kv_cache_mb": 157.3,
+      "available_for_adapters_mb": 38564.0,
+      "per_adapter_mb": 45.24,
+      "per_head_mb": 0.082,
+      "n_max_practical": 850,
+      "milestones_gb": {
+        "N=100": 5.87,
+        "N=500": 24.0,
+        "N=1000": 46.66,
+        "N=850": 39.86
+      }
+    },
+    "seq_8192": {
+      "seq_len": 8192,
+      "kv_cache_mb": 629.1,
+      "available_for_adapters_mb": 38092.0,
+      "per_adapter_mb": 45.24,
+      "per_head_mb": 0.082,
+      "n_max_practical": 840,
+      "milestones_gb": {
+        "N=100": 6.34,
+        "N=500": 24.47,
+        "N=1000": 47.13,
+        "N=840": 39.88
+      }
+    },
+    "kill_criteria": {
+      "K1_261": {
+        "criterion": "< 100 adapters fit in 48GB",
+        "n_max": 853,
+        "result": "PASS",
+        "margin": "8.5x above threshold"
+      }
+    },
+    "success_criteria": {
+      "S1_27": {
+        "criterion": ">500 adapters fit in 48GB",
+        "n_max": 853,
+        "result": "PASS",
+        "margin": "1.7x above threshold"
+      }
+    }
+  },
+  "total_time_s": 12.6,
+  "verdict": {
+    "K1_261": "PASS",
+    "S1_27": "PASS"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "sparsity": {
+    "overall_zero_fraction": 0.4221,
+    "total_zeros": 879693294,
+    "total_elements": 2084044800
+  },
+  "benchmark_q_proj": {
+    "layer": "layers.0.self_attn.q_proj",
+    "logical_shape": [
+      2560,
+      2560
+    ],
+    "timings_us": {
+      "native_bitlinear": 241.4,
+      "sparse_masked_matmul": 261.9,
+      "unpacked_bf16_matmul": 186.1,
+      "compiled_sparse_masked": 258.3,
+      "compiled_unpacked_bf16": 186.2
+    },
+    "speedups": {
+      "sparse_masked_vs_native": 0.922,
+      "unpacked_bf16_vs_native": 1.297,
+      "compiled_sparse_vs_native": 0.934,
+      "compiled_unpacked_vs_native": 1.297
+    },
+    "memory_bytes": {
+      "packed_uint8": 1638400,
+      "unpacked_bf16": 13107200,
+      "sparse_masks_bf16": 26214400
+    },
+    "quality": {
+      "max_abs_diff_sparse_masked": 1.0,
+      "max_abs_diff_unpacked_bf16": 1.0
+    },
+    "k2_pass": false,
+    "n_warmup": 100,
+    "n_iters": 500
+  },
+  "benchmark_mlp": {
+    "gate_proj": {
+      "logical_shape": [
+        6912,
+        2560
+      ],
+      "native_us": 272.7,
+      "unpacked_bf16_us": 291.5,
+      "speedup": 0.936
+    },
+    "up_proj": {
+      "logical_shape": [
+        6912,
+        2560
+      ],
+      "native_us": 176.3,
+      "unpacked_bf16_us": 289.7,
+      "speedup": 0.609
+    },
+    "down_proj": {
+      "logical_shape": [
+        2560,
+        6912
+      ],
+      "native_us": 180.9,
+      "unpacked_bf16_us": 289.2,
+      "speedup": 0.626
+    }
+  },
+  "k1_pass": false,
+  "k2_pass": false,
+  "k3_pass": true,
+  "s1_pass": false,
+  "best_speedup": 1.297,
+  "max_quality_diff": 1.0,
+  "killed": true,
+  "kill_reason": "K2 FAIL: sparse ops slower than native packed kernel",
+  "total_time_s": 4.2
+}
