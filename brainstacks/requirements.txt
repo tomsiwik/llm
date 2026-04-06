@@ -1,0 +1,5 @@
+# Brainstacks MLX implementation
+mlx>=0.20.0            # Apple Silicon ML framework
+mlx-lm>=0.20.0         # LLM loading/generation utilities
+pyyaml>=6.0            # Config loading
+numpy>=1.24.0          # Array utilities

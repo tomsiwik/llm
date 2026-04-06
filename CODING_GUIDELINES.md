@@ -343,7 +343,51 @@ if __name__ == "__main__":
 
 ---
 
-## 7. RunPod Compatibility
+## 7. Running Experiments via Pueue (MANDATORY for local)
+
+All local experiments MUST be submitted through `experiment run`, never via bare
+`uv run python`. Pueue manages the process lifecycle: serial execution, process
+group isolation, and guaranteed resource recycling on exit/crash/timeout.
+
+```bash
+# Run by experiment ID (looks up experiment_dir from DB)
+experiment run <id>
+
+# Run by script path
+experiment run micro/models/<name>/run_experiment.py
+
+# Submit and return immediately (ralph/async use)
+experiment run --no-wait <id>
+
+# Queue management
+experiment run --status                  # check queue
+experiment run --clean                   # remove finished tasks
+experiment run --kill <id>               # kill a running experiment
+```
+
+**Why:** On macOS + Metal, memory is only fully recycled when the process exits.
+Pueue kills the entire process group (parent + all children) on completion, crash,
+or cancellation. This guarantees Metal buffers are returned to the OS between
+experiments. Without this, orphan python processes accumulate and consume 10-50 GB
+of compressed memory + swap over days (see: 2026-04-04 incident, 50 GB memory
+accumulation from orphan experiment processes).
+
+**Direct pueue commands** (for debugging):
+```bash
+pueue status --group experiments     # queue state
+pueue log <task-id>                  # full output of a task
+pueue follow <task-id>              # stream live output
+pueue kill <task-id>                # kill a running experiment
+pueue clean --group experiments     # remove finished tasks from list
+```
+
+**Configuration:** Pueue daemon starts on login via launchd. The `experiments`
+group is set to `parallel 1` (serial execution). Experiments get full system
+resources — no memory caps.
+
+---
+
+## 8. RunPod Compatibility
 
 - Always support `SMOKE_TEST=1` environment variable for quick validation (<60s)
 - Handle `MAX_RUNTIME` timeout via `signal.SIGALRM`
@@ -351,7 +395,7 @@ if __name__ == "__main__":
 
 ---
 
-## 8. What NOT To Do
+## 9. What NOT To Do
 
 - **Don't chain phases in one function scope** — the #1 cause of OOM
 - **Don't accumulate tensors/params in dicts** across training cycles — save to disk
@@ -361,3 +405,4 @@ if __name__ == "__main__":
 - **Don't hardcode model paths** — use env vars with sensible defaults
 - **Don't install packages that conflict with the base image** (vLLM version wars)
 - **Don't re-evaluate base model benchmarks** — use published numbers
+- **Don't run experiments with bare `uv run python`** — use `bin/run-experiment` for process lifecycle management

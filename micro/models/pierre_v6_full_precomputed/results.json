@@ -1,0 +1,59 @@
+{
+  "experiment": "pierre_v6_full_precomputed",
+  "total_time_s": 247.3,
+  "routing": {
+    "accuracy": 0.996
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.45,
+        "routed_to": "medical",
+        "dispatches": 120
+      },
+      "code": {
+        "score": 0.844,
+        "routed_to": "code",
+        "dispatches": 120
+      },
+      "math": {
+        "score": 0.662,
+        "routed_to": "math",
+        "dispatches": 120
+      },
+      "legal": {
+        "score": 0.054,
+        "routed_to": "legal",
+        "dispatches": 120
+      },
+      "finance": {
+        "score": 0.086,
+        "routed_to": "finance",
+        "dispatches": 120
+      }
+    },
+    "overall": 0.419
+  },
+  "latency": {
+    "base_tps": 142.5,
+    "v61_tps": 42.1,
+    "overhead_pct": 70.46,
+    "peak_gb": 5.47,
+    "dispatch_count": 120
+  },
+  "kill_criteria": {
+    "K756": {
+      "pass": false,
+      "value": 42.1
+    },
+    "K757": {
+      "pass": true,
+      "value": 0.419
+    },
+    "K758": {
+      "pass": true,
+      "value": 5.47
+    }
+  },
+  "all_pass": false
+}

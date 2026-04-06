@@ -1,0 +1,294 @@
+{
+  "experiment": "fisher_weighted_composition",
+  "phases": {
+    "fisher_estimation": {
+      "fisher_importances": {
+        "medical": 9.116287033690551e-06,
+        "code": 7.024171457360728e-06,
+        "math": 1.0399916940243003e-05,
+        "legal": 7.784064323539813e-07,
+        "finance": 4.0508699673293125e-08
+      },
+      "fisher_weights": {
+        "medical": 0.3332062654399394,
+        "code": 0.25673807005717764,
+        "math": 0.38012377975126854,
+        "legal": 0.028451265231179988,
+        "finance": 0.0014806195204344935
+      },
+      "frob_weights": {
+        "medical": 0.3362829573100541,
+        "code": 0.3122619045971669,
+        "math": 0.33889762577060784,
+        "legal": 0.01183078202840643,
+        "finance": 0.000726730293764724
+      },
+      "fisher_eq_scales": {
+        "medical": 1.666031327199697,
+        "code": 1.283690350285888,
+        "math": 1.9006188987563426,
+        "legal": 0.14225632615589992,
+        "finance": 0.007403097602172467
+      },
+      "domain_norms": {
+        "medical": 626.6153408207368,
+        "code": 603.8208375696022,
+        "math": 629.0466549081918,
+        "legal": 117.53178190575031,
+        "finance": 29.12964729431552
+      },
+      "spearman_rho": 0.9999999999999999,
+      "spearman_pval": 1.4042654220543602e-24,
+      "fisher_stats": {
+        "medical": {
+          "fisher_importance": 9.116287033690551e-06,
+          "frobenius_sq": 392646.78562326607,
+          "fisher_to_frob_ratio": 2.3217526202894685e-11,
+          "n_samples_used": 10,
+          "n_keys_with_fisher": 210,
+          "fisher_per_key_mean": 1.9568603245748557e-11,
+          "fisher_per_key_std": 2.9371703371936514e-11,
+          "fisher_per_key_cv": 1.5009606461471778,
+          "fisher_importance_cv": 2.150894199894458,
+          "elapsed_s": 15.452494859695435
+        },
+        "code": {
+          "fisher_importance": 7.024171457360728e-06,
+          "frobenius_sq": 364599.60408989317,
+          "fisher_to_frob_ratio": 1.9265439069508416e-11,
+          "n_samples_used": 10,
+          "n_keys_with_fisher": 210,
+          "fisher_per_key_mean": 1.4545683599397393e-11,
+          "fisher_per_key_std": 1.9966874425876596e-11,
+          "fisher_per_key_cv": 1.372701000226885,
+          "fisher_importance_cv": 2.1437890064754117,
+          "elapsed_s": 12.180714130401611
+        },
+        "math": {
+          "fisher_importance": 1.0399916940243003e-05,
+          "frobenius_sq": 395699.6941317864,
+          "fisher_to_frob_ratio": 2.628234768556416e-11,
+          "n_samples_used": 10,
+          "n_keys_with_fisher": 210,
+          "fisher_per_key_mean": 2.1385705481623607e-11,
+          "fisher_per_key_std": 2.2799450617427362e-11,
+          "fisher_per_key_cv": 1.0661070141931284,
+          "fisher_importance_cv": 1.685642577586418,
+          "elapsed_s": 12.5157470703125
+        },
+        "legal": {
+          "fisher_importance": 7.784064323539813e-07,
+          "frobenius_sq": 13813.719763517445,
+          "fisher_to_frob_ratio": 5.635024060715217e-11,
+          "n_samples_used": 10,
+          "n_keys_with_fisher": 210,
+          "fisher_per_key_mean": 2.862166292332057e-11,
+          "fisher_per_key_std": 4.145999995608438e-11,
+          "fisher_per_key_cv": 1.4485531489612817,
+          "fisher_importance_cv": 2.631260508670376,
+          "elapsed_s": 12.20247197151184
+        },
+        "finance": {
+          "fisher_importance": 4.0508699673293125e-08,
+          "frobenius_sq": 848.5363510985991,
+          "fisher_to_frob_ratio": 4.773949827941556e-11,
+          "n_samples_used": 10,
+          "n_keys_with_fisher": 210,
+          "fisher_per_key_mean": 2.7479455324975705e-11,
+          "fisher_per_key_std": 3.7694715789186516e-11,
+          "fisher_per_key_cv": 1.3717417373599214,
+          "fisher_importance_cv": 2.6247727557862643,
+          "elapsed_s": 12.375099897384644
+        }
+      },
+      "k707_pass": true,
+      "k707_value_s": 67.03296685218811,
+      "k708_pass": false,
+      "k708_value_rho": 0.9999999999999999,
+      "elapsed_s": 67.03296685218811
+    },
+    "ppl_comparison": {
+      "base_ppl": {
+        "medical": 6.7342995321179195,
+        "code": 5.692651453631472,
+        "math": 3.7908809214903334,
+        "legal": 20.979179034293118,
+        "finance": 18.358044545856114
+      },
+      "strategies": {
+        "raw_sum": {
+          "per_domain_ppl": {
+            "medical": 3.851280327381063,
+            "code": 3.764281312981685,
+            "math": 2.4158404623446286,
+            "legal": 15.501218644340227,
+            "finance": 14.080577705248624
+          },
+          "mixed_ppl": 6.584475388936963
+        },
+        "full_equalization": {
+          "per_domain_ppl": {
+            "medical": 4.5638437019815505,
+            "code": 3.9711106551296744,
+            "math": 2.8079114334778152,
+            "legal": 14.106739428728769,
+            "finance": 13.23870579859286
+          },
+          "mixed_ppl": 6.769626616519517
+        },
+        "partial_equalization": {
+          "per_domain_ppl": {
+            "medical": 3.940373372972238,
+            "code": 3.7151579176127743,
+            "math": 2.527533925787766,
+            "legal": 14.632985991778368,
+            "finance": 13.568472035250393
+          },
+          "mixed_ppl": 6.508207310279679
+        },
+        "fisher_weighted": {
+          "per_domain_ppl": {
+            "medical": 4.071768253383189,
+            "code": 4.090982674324038,
+            "math": 2.4422344680131007,
+            "legal": 17.244499882987377,
+            "finance": 15.124956892741315
+          },
+          "mixed_ppl": 7.03418165507744
+        }
+      },
+      "gini_results": {
+        "raw_sum": {
+          "mean_gini": 0.48951229226164494,
+          "std_gini": 0.02181360320313708,
+          "n_samples": 14
+        },
+        "full_equalization": {
+          "mean_gini": 0.2665085128347556,
+          "std_gini": 0.037414646850645196,
+          "n_samples": 14
+        },
+        "partial_equalization": {
+          "mean_gini": 0.39332856675517053,
+          "std_gini": 0.02574639817656487,
+          "n_samples": 14
+        },
+        "fisher_weighted": {
+          "mean_gini": 0.5625586286233715,
+          "std_gini": 0.020187890746440233,
+          "n_samples": 14
+        }
+      },
+      "ppl_changes_vs_raw": {
+        "raw_sum": {
+          "medical": 0.0,
+          "code": 0.0,
+          "math": 0.0,
+          "legal": 0.0,
+          "finance": 0.0
+        },
+        "full_equalization": {
+          "medical": 0.1850198671684444,
+          "code": 0.05494524052565031,
+          "math": 0.16229174783862707,
+          "legal": -0.08995932820550256,
+          "finance": -0.059789585646187665
+        },
+        "partial_equalization": {
+          "medical": 0.02313335774541235,
+          "code": -0.01304987361053527,
+          "math": 0.046233791172922235,
+          "legal": -0.05601060616475253,
+          "finance": -0.03636964908104165
+        },
+        "fisher_weighted": {
+          "medical": 0.05725055235126473,
+          "code": 0.08678983693797658,
+          "math": 0.01092539266556376,
+          "legal": 0.11246091540574799,
+          "finance": 0.07417161492623928
+        }
+      },
+      "generation_fisher": {
+        "medical": {
+          "prompt": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes",
+          "output": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes myocardial infarction, pulmonary embolism, and tension pneumothorax. Which of the### Instruction\n\nThe patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes myocardial infarction, pulmonary embolism, and tension pneumothorax. Which of the following is the most likely diagnosis? \n\nA) Myocardial infarction\n"
+        },
+        "code": {
+          "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n",
+          "output": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n    if n < 0:\n        raise ValueError(\"n must be a non-negative integer\")\n    elif n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n### Instruction:\nWrite a Python function to return the nth Fibonacci number efficiently.\n\n### Response:\ndef fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n    if n"
+        },
+        "math": {
+          "prompt": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then",
+          "output": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then du = 2x dx and v = e^x. Using the formula for integration by parts, we have:\n\n\u222b x^2 * e^x dx = x^2 * e^x - \u222b 2x * e^x dx\n\nNow, we apply integration by parts again to the remaining integral. Let u = 2x and dv = e^x dx"
+        },
+        "legal": {
+          "prompt": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of",
+          "output": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause.### Question: What was the reason for the Fourth Amendment rights being violated?\n\nAnswer: The Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause.  Response: The Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause. Response: The"
+        },
+        "finance": {
+          "prompt": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by",
+          "output": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by a 10% increase in sales of its premium products. The company also announced a 5% increase in its dividend. What is the current price of the stock?\n\nOptions:\nA) $20.00\nB) $21.00\nC) $22.00\nD) $23.00\nE) $24.00\n\n---\n\n**Solution**\n\nThe company reported Q3"
+        }
+      },
+      "k706_pass": false,
+      "k706_fisher_mixed": 7.03418165507744,
+      "k706_partial_mixed": 6.508207310279679,
+      "elapsed_s": 228.34195017814636
+    },
+    "fisher_analysis": {
+      "fisher_frob_ratios": {
+        "medical": 0.9908508837476472,
+        "code": 0.8221882537621177,
+        "math": 1.1216478099748204,
+        "legal": 2.404850766658262,
+        "finance": 2.0373714060609096
+      },
+      "ratio_cv": 0.4250460356821534
+    }
+  },
+  "summary": {
+    "k706_pass": false,
+    "k706_fisher_mixed": 7.03418165507744,
+    "k706_partial_mixed": 6.508207310279679,
+    "k707_pass": true,
+    "k707_value_s": 67.03296685218811,
+    "k708_pass": false,
+    "k708_value_rho": 0.9999999999999999,
+    "fisher_weights": {
+      "medical": 0.3332062654399394,
+      "code": 0.25673807005717764,
+      "math": 0.38012377975126854,
+      "legal": 0.028451265231179988,
+      "finance": 0.0014806195204344935
+    },
+    "frob_weights": {
+      "medical": 0.3362829573100541,
+      "code": 0.3122619045971669,
+      "math": 0.33889762577060784,
+      "legal": 0.01183078202840643,
+      "finance": 0.000726730293764724
+    },
+    "fisher_eq_scales": {
+      "medical": 1.666031327199697,
+      "code": 1.283690350285888,
+      "math": 1.9006188987563426,
+      "legal": 0.14225632615589992,
+      "finance": 0.007403097602172467
+    },
+    "fisher_frob_ratio_cv": 0.4250460356821534,
+    "mixed_ppls": {
+      "raw_sum": 6.584475388936963,
+      "full_equalization": 6.769626616519517,
+      "partial_equalization": 6.508207310279679,
+      "fisher_weighted": 7.03418165507744
+    },
+    "gini_values": {
+      "raw_sum": 0.48951229226164494,
+      "full_equalization": 0.2665085128347556,
+      "partial_equalization": 0.39332856675517053,
+      "fisher_weighted": 0.5625586286233715
+    },
+    "elapsed_seconds": 295.95528292655945
+  }
+}

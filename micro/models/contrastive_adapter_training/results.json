@@ -1,0 +1,542 @@
+{
+  "experiment": "contrastive_adapter_training",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "lora_rank": 16,
+  "lora_scale": 2.0,
+  "contrastive_lambda": 1.0,
+  "train_iters": 200,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "timestamp": "2026-03-29 22:25:05",
+  "baseline": {
+    "train_results": {
+      "medical": {
+        "first_50_avg_loss": 1.161,
+        "last_50_avg_loss": 1.0294,
+        "converged": true,
+        "n_steps": 200
+      },
+      "code": {
+        "first_50_avg_loss": 0.9222,
+        "last_50_avg_loss": 0.8243,
+        "converged": true,
+        "n_steps": 200
+      },
+      "math": {
+        "first_50_avg_loss": 0.8514,
+        "last_50_avg_loss": 0.7342,
+        "converged": true,
+        "n_steps": 200
+      },
+      "legal": {
+        "first_50_avg_loss": 2.8395,
+        "last_50_avg_loss": 2.785,
+        "converged": false,
+        "n_steps": 200
+      },
+      "finance": {
+        "first_50_avg_loss": 3.0857,
+        "last_50_avg_loss": 2.9218,
+        "converged": true,
+        "n_steps": 200
+      }
+    },
+    "train_time_s": 215.2,
+    "cosine_matrix": [
+      [
+        1.0,
+        0.9767208695411682,
+        0.9656208753585815,
+        0.9717423915863037,
+        0.9760617017745972
+      ],
+      [
+        0.9767208695411682,
+        1.0,
+        0.9717550277709961,
+        0.9653623104095459,
+        0.9630336761474609
+      ],
+      [
+        0.9656208753585815,
+        0.9717550277709961,
+        1.0,
+        0.9797822833061218,
+        0.9685385227203369
+      ],
+      [
+        0.9717423915863037,
+        0.9653623104095459,
+        0.9797822833061218,
+        1.0,
+        0.9877189993858337
+      ],
+      [
+        0.9760617017745972,
+        0.9630336761474609,
+        0.9685385227203369,
+        0.9877189993858337,
+        1.0
+      ]
+    ],
+    "base_ppls": {
+      "medical": 6.5,
+      "code": 4.98,
+      "math": 3.84,
+      "legal": 21.63,
+      "finance": 19.43
+    },
+    "adapter_ppls": {
+      "medical": {
+        "own_domain": 6.83588150040423
+      },
+      "code": {
+        "own_domain": 4.505614555901224
+      },
+      "math": {
+        "own_domain": 3.6505626472206316
+      },
+      "legal": {
+        "own_domain": 19.24297604784463
+      },
+      "finance": {
+        "own_domain": 19.143133366493704
+      }
+    },
+    "domain_vs_code": {
+      "medical": {
+        "domain_adapter_ppl": 6.83588150040423,
+        "code_adapter_ppl": 6.249956497419825,
+        "domain_wins": false,
+        "improvement_pct": -9.4
+      },
+      "math": {
+        "domain_adapter_ppl": 3.6505626472206316,
+        "code_adapter_ppl": 3.751687492989897,
+        "domain_wins": true,
+        "improvement_pct": 2.7
+      },
+      "legal": {
+        "domain_adapter_ppl": 19.24297604784463,
+        "code_adapter_ppl": 19.80818589917769,
+        "domain_wins": true,
+        "improvement_pct": 2.9
+      },
+      "finance": {
+        "domain_adapter_ppl": 19.143133366493704,
+        "code_adapter_ppl": 18.070431376555508,
+        "domain_wins": false,
+        "improvement_pct": -5.9
+      }
+    }
+  },
+  "contrastive": {
+    "train_results": {
+      "medical": {
+        "first_50_avg_loss": 1.2073,
+        "last_50_avg_loss": 1.0933,
+        "converged": true,
+        "n_steps": 200
+      },
+      "code": {
+        "first_50_avg_loss": 1.0054,
+        "last_50_avg_loss": 0.9342,
+        "converged": true,
+        "n_steps": 200
+      },
+      "math": {
+        "first_50_avg_loss": 0.9024,
+        "last_50_avg_loss": 0.8931,
+        "converged": false,
+        "n_steps": 200
+      },
+      "legal": {
+        "first_50_avg_loss": 2.9101,
+        "last_50_avg_loss": 2.9548,
+        "converged": false,
+        "n_steps": 200
+      },
+      "finance": {
+        "first_50_avg_loss": 3.121,
+        "last_50_avg_loss": 3.0501,
+        "converged": false,
+        "n_steps": 200
+      }
+    },
+    "train_time_s": 224.7,
+    "cosine_matrix": [
+      [
+        1.0,
+        8.281652844743803e-05,
+        0.0074180252850055695,
+        0.0026524157728999853,
+        0.00019317289115861058
+      ],
+      [
+        8.281652844743803e-05,
+        1.0,
+        0.007461278233677149,
+        0.0003319044772069901,
+        0.001888461410999298
+      ],
+      [
+        0.0074180252850055695,
+        0.007461278233677149,
+        1.0,
+        0.006820618640631437,
+        0.0005209768423810601
+      ],
+      [
+        0.0026524157728999853,
+        0.0003319044772069901,
+        0.006820618640631437,
+        1.0,
+        0.008721360936760902
+      ],
+      [
+        0.00019317289115861058,
+        0.001888461410999298,
+        0.0005209768423810601,
+        0.008721360936760902,
+        1.0
+      ]
+    ],
+    "base_ppls": {
+      "medical": 6.5,
+      "code": 4.98,
+      "math": 3.84,
+      "legal": 21.63,
+      "finance": 19.43
+    },
+    "adapter_ppls": {
+      "medical": {
+        "own_domain": 5.913973146742124
+      },
+      "code": {
+        "own_domain": 4.531129658111996
+      },
+      "math": {
+        "own_domain": 3.6285130910732404
+      },
+      "legal": {
+        "own_domain": 20.408597013939676
+      },
+      "finance": {
+        "own_domain": 18.550361869187586
+      }
+    },
+    "domain_vs_code": {
+      "medical": {
+        "domain_adapter_ppl": 5.913973146742124,
+        "code_adapter_ppl": 6.017681105885934,
+        "domain_wins": true,
+        "improvement_pct": 1.7
+      },
+      "math": {
+        "domain_adapter_ppl": 3.6285130910732404,
+        "code_adapter_ppl": 3.846091235028981,
+        "domain_wins": true,
+        "improvement_pct": 5.7
+      },
+      "legal": {
+        "domain_adapter_ppl": 20.408597013939676,
+        "code_adapter_ppl": 20.47849738075224,
+        "domain_wins": true,
+        "improvement_pct": 0.3
+      },
+      "finance": {
+        "domain_adapter_ppl": 18.550361869187586,
+        "code_adapter_ppl": 18.766369368725584,
+        "domain_wins": true,
+        "improvement_pct": 1.2
+      }
+    }
+  },
+  "baseline_cross_eval": {
+    "ppl_matrix": {
+      "medical": {
+        "medical": 6.84,
+        "code": 4.85,
+        "math": 3.97,
+        "legal": 20.6,
+        "finance": 18.68
+      },
+      "code": {
+        "medical": 6.25,
+        "code": 4.51,
+        "math": 3.75,
+        "legal": 19.81,
+        "finance": 18.07
+      },
+      "math": {
+        "medical": 6.46,
+        "code": 4.59,
+        "math": 3.65,
+        "legal": 20.16,
+        "finance": 18.47
+      },
+      "legal": {
+        "medical": 6.75,
+        "code": 4.7,
+        "math": 3.75,
+        "legal": 19.24,
+        "finance": 18.36
+      },
+      "finance": {
+        "medical": 7.63,
+        "code": 5.09,
+        "math": 3.97,
+        "legal": 21.05,
+        "finance": 19.14
+      }
+    },
+    "base_ppls": {
+      "medical": 6.5,
+      "code": 4.98,
+      "math": 3.84,
+      "legal": 21.63,
+      "finance": 19.43
+    },
+    "best_per_domain": {
+      "medical": {
+        "best_adapter": "code",
+        "best_ppl": 6.25,
+        "code_ppl": 6.25,
+        "alpha": 1.0,
+        "code_is_best": true
+      },
+      "code": {
+        "best_adapter": "code",
+        "best_ppl": 4.51,
+        "code_ppl": 4.51,
+        "alpha": 1.0,
+        "code_is_best": true
+      },
+      "math": {
+        "best_adapter": "math",
+        "best_ppl": 3.65,
+        "code_ppl": 3.75,
+        "alpha": 0.973,
+        "code_is_best": false
+      },
+      "legal": {
+        "best_adapter": "legal",
+        "best_ppl": 19.24,
+        "code_ppl": 19.81,
+        "alpha": 0.971,
+        "code_is_best": false
+      },
+      "finance": {
+        "best_adapter": "code",
+        "best_ppl": 18.07,
+        "code_ppl": 18.07,
+        "alpha": 1.0,
+        "code_is_best": true
+      }
+    },
+    "adapter_vs_base": {
+      "medical": {
+        "adapter_ppl": 6.84,
+        "base_ppl": 6.5,
+        "improvement_pct": -5.2,
+        "adapter_better": false
+      },
+      "code": {
+        "adapter_ppl": 4.51,
+        "base_ppl": 4.98,
+        "improvement_pct": 9.5,
+        "adapter_better": true
+      },
+      "math": {
+        "adapter_ppl": 3.65,
+        "base_ppl": 3.84,
+        "improvement_pct": 4.9,
+        "adapter_better": true
+      },
+      "legal": {
+        "adapter_ppl": 19.24,
+        "base_ppl": 21.63,
+        "improvement_pct": 11.0,
+        "adapter_better": true
+      },
+      "finance": {
+        "adapter_ppl": 19.14,
+        "base_ppl": 19.43,
+        "improvement_pct": 1.5,
+        "adapter_better": true
+      }
+    },
+    "code_is_best_count": 3
+  },
+  "contrastive_cross_eval": {
+    "ppl_matrix": {
+      "medical": {
+        "medical": 5.91,
+        "code": 4.94,
+        "math": 3.83,
+        "legal": 20.34,
+        "finance": 18.54
+      },
+      "code": {
+        "medical": 6.02,
+        "code": 4.53,
+        "math": 3.85,
+        "legal": 20.48,
+        "finance": 18.77
+      },
+      "math": {
+        "medical": 5.8,
+        "code": 4.5,
+        "math": 3.63,
+        "legal": 20.6,
+        "finance": 18.64
+      },
+      "legal": {
+        "medical": 6.11,
+        "code": 4.68,
+        "math": 3.77,
+        "legal": 20.41,
+        "finance": 18.75
+      },
+      "finance": {
+        "medical": 6.3,
+        "code": 4.79,
+        "math": 3.72,
+        "legal": 20.25,
+        "finance": 18.55
+      }
+    },
+    "base_ppls": {
+      "medical": 6.5,
+      "code": 4.98,
+      "math": 3.84,
+      "legal": 21.63,
+      "finance": 19.43
+    },
+    "best_per_domain": {
+      "medical": {
+        "best_adapter": "math",
+        "best_ppl": 5.8,
+        "code_ppl": 6.02,
+        "alpha": 0.964,
+        "code_is_best": false
+      },
+      "code": {
+        "best_adapter": "math",
+        "best_ppl": 4.5,
+        "code_ppl": 4.53,
+        "alpha": 0.992,
+        "code_is_best": false
+      },
+      "math": {
+        "best_adapter": "math",
+        "best_ppl": 3.63,
+        "code_ppl": 3.85,
+        "alpha": 0.943,
+        "code_is_best": false
+      },
+      "legal": {
+        "best_adapter": "finance",
+        "best_ppl": 20.25,
+        "code_ppl": 20.48,
+        "alpha": 0.989,
+        "code_is_best": false
+      },
+      "finance": {
+        "best_adapter": "medical",
+        "best_ppl": 18.54,
+        "code_ppl": 18.77,
+        "alpha": 0.988,
+        "code_is_best": false
+      }
+    },
+    "adapter_vs_base": {
+      "medical": {
+        "adapter_ppl": 5.91,
+        "base_ppl": 6.5,
+        "improvement_pct": 8.9,
+        "adapter_better": true
+      },
+      "code": {
+        "adapter_ppl": 4.53,
+        "base_ppl": 4.98,
+        "improvement_pct": 8.9,
+        "adapter_better": true
+      },
+      "math": {
+        "adapter_ppl": 3.63,
+        "base_ppl": 3.84,
+        "improvement_pct": 5.5,
+        "adapter_better": true
+      },
+      "legal": {
+        "adapter_ppl": 20.41,
+        "base_ppl": 21.63,
+        "improvement_pct": 5.6,
+        "adapter_better": true
+      },
+      "finance": {
+        "adapter_ppl": 18.55,
+        "base_ppl": 19.43,
+        "improvement_pct": 4.5,
+        "adapter_better": true
+      }
+    },
+    "code_is_best_count": 0
+  },
+  "k617_pass": false,
+  "k617_detail": {
+    "code_is_best_on_n_domains": 0,
+    "high_alpha_count": 5
+  },
+  "k618_pass": true,
+  "k619_pass": true,
+  "k619_detail": {
+    "domains_better_than_base": 5,
+    "per_domain": {
+      "medical": {
+        "adapter_ppl": 5.91,
+        "base_ppl": 6.5,
+        "improvement_pct": 8.9,
+        "adapter_better": true
+      },
+      "code": {
+        "adapter_ppl": 4.53,
+        "base_ppl": 4.98,
+        "improvement_pct": 8.9,
+        "adapter_better": true
+      },
+      "math": {
+        "adapter_ppl": 3.63,
+        "base_ppl": 3.84,
+        "improvement_pct": 5.5,
+        "adapter_better": true
+      },
+      "legal": {
+        "adapter_ppl": 20.41,
+        "base_ppl": 21.63,
+        "improvement_pct": 5.6,
+        "adapter_better": true
+      },
+      "finance": {
+        "adapter_ppl": 18.55,
+        "base_ppl": 19.43,
+        "improvement_pct": 4.5,
+        "adapter_better": true
+      }
+    }
+  },
+  "hypothesis_domain_beats_code_15pct": 0,
+  "cosine_comparison": {
+    "baseline_avg_cos": 0.9726,
+    "contrastive_avg_cos": 0.0036,
+    "reduction_pct": 99.6
+  },
+  "total_time_s": 610.5,
+  "overall_verdict": "KILL"
+}

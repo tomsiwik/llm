@@ -1,0 +1,183 @@
+{
+  "experiment": "brainstacks_null_space_validation",
+  "phases": {
+    "svd": {
+      "medical": {
+        "n_directions": 64,
+        "top5_singular_values": [
+          0.918666660785675,
+          0.71319180727005,
+          0.576188862323761,
+          0.49081194400787354,
+          0.4377387464046478
+        ],
+        "energy_captured": 1.0
+      },
+      "code": {
+        "n_directions": 64,
+        "top5_singular_values": [
+          0.884903073310852,
+          0.7861390113830566,
+          0.43037378787994385,
+          0.3971940875053406,
+          0.34064212441444397
+        ],
+        "energy_captured": 1.0
+      },
+      "math": {
+        "n_directions": 64,
+        "top5_singular_values": [
+          0.8064897060394287,
+          0.6077932119369507,
+          0.5297448039054871,
+          0.4565986096858978,
+          0.4120689034461975
+        ],
+        "energy_captured": 1.0
+      },
+      "legal": {
+        "n_directions": 64,
+        "top5_singular_values": [
+          0.2545381486415863,
+          0.16271667182445526,
+          0.14181169867515564,
+          0.1163375973701477,
+          0.1123882308602333
+        ],
+        "energy_captured": 1.0
+      },
+      "finance": {
+        "n_directions": 64,
+        "top5_singular_values": [
+          0.03158967196941376,
+          0.018754398450255394,
+          0.01638793759047985,
+          0.014469080604612827,
+          0.013910314999520779
+        ],
+        "energy_captured": 1.0
+      }
+    },
+    "k687_cross_domain_cosine": {
+      "pairwise": {
+        "medical_vs_code": {
+          "mean_abs_cosine": 0.024228118360042572,
+          "max_abs_cosine": 0.9725185632705688
+        },
+        "medical_vs_math": {
+          "mean_abs_cosine": 0.023808714002370834,
+          "max_abs_cosine": 0.9759009480476379
+        },
+        "medical_vs_legal": {
+          "mean_abs_cosine": 0.024688761681318283,
+          "max_abs_cosine": 0.9771798253059387
+        },
+        "medical_vs_finance": {
+          "mean_abs_cosine": 0.025009136646986008,
+          "max_abs_cosine": 0.9770609140396118
+        },
+        "code_vs_math": {
+          "mean_abs_cosine": 0.02548087388277054,
+          "max_abs_cosine": 0.9769940376281738
+        },
+        "code_vs_legal": {
+          "mean_abs_cosine": 0.025881104171276093,
+          "max_abs_cosine": 0.9712688326835632
+        },
+        "code_vs_finance": {
+          "mean_abs_cosine": 0.025195792317390442,
+          "max_abs_cosine": 0.9753144383430481
+        },
+        "math_vs_legal": {
+          "mean_abs_cosine": 0.02710706740617752,
+          "max_abs_cosine": 0.9752199649810791
+        },
+        "math_vs_finance": {
+          "mean_abs_cosine": 0.02574717253446579,
+          "max_abs_cosine": 0.976570725440979
+        },
+        "legal_vs_finance": {
+          "mean_abs_cosine": 0.029740385711193085,
+          "max_abs_cosine": 0.9777815937995911
+        }
+      },
+      "overall_mean_cosine": 0.025688712671399116,
+      "overall_max_cosine": 0.9777815937995911,
+      "pass": true
+    },
+    "k688_forgetting": {
+      "per_domain": {
+        "medical": {
+          "baseline_loss": 1.1902498932080308,
+          "projected_loss": 1.1935070482699701,
+          "forgetting": 0.003257155061939354
+        },
+        "code": {
+          "baseline_loss": 1.030491169977925,
+          "projected_loss": 1.0304451802796173,
+          "forgetting": -4.598969830760247e-05
+        },
+        "math": {
+          "baseline_loss": 0.849719800747198,
+          "projected_loss": 0.8492528019925281,
+          "forgetting": -0.0004669987546699339
+        },
+        "legal": {
+          "baseline_loss": 2.924119569163742,
+          "projected_loss": 2.9486869175844124,
+          "forgetting": 0.02456734842067032
+        },
+        "finance": {
+          "baseline_loss": 2.9687973997833152,
+          "projected_loss": 2.9721560130010833,
+          "forgetting": 0.0033586132177680916
+        }
+      },
+      "max_forgetting": 0.02456734842067032,
+      "pass": false
+    },
+    "k689_gradient_preservation": {
+      "per_domain": {
+        "medical": {
+          "preservation_ratio": 1.0,
+          "note": "first domain, no projection"
+        },
+        "code": {
+          "original_norm": 603.394528986702,
+          "projected_norm": 594.4714744403972,
+          "preservation_ratio": 0.9852119067746777,
+          "n_prior_domains": 1
+        },
+        "math": {
+          "original_norm": 628.6022083264313,
+          "projected_norm": 612.0646529734875,
+          "preservation_ratio": 0.9736915411147332,
+          "n_prior_domains": 2
+        },
+        "legal": {
+          "original_norm": 117.4487509583518,
+          "projected_norm": 113.21152879101056,
+          "preservation_ratio": 0.9639227992399529,
+          "n_prior_domains": 3
+        },
+        "finance": {
+          "original_norm": 29.109189382545892,
+          "projected_norm": 27.719149044781368,
+          "preservation_ratio": 0.9522473704266734,
+          "n_prior_domains": 4
+        }
+      },
+      "min_preservation": 0.9522473704266734,
+      "pass": true
+    }
+  },
+  "summary": {
+    "k687_pass": true,
+    "k688_pass": false,
+    "k689_pass": true,
+    "overall_mean_cosine": 0.025688712671399116,
+    "max_forgetting": 0.02456734842067032,
+    "min_gradient_preservation": 0.9522473704266734,
+    "elapsed_seconds": 101.91771292686462
+  }
+}

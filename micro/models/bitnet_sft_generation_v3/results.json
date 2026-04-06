@@ -1,0 +1,1521 @@
+{
+  "experiment": "bitnet_sft_generation_v3",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "n_prompts_per_domain": 10,
+  "train_iters": 300,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "temperature": 0.0,
+  "max_new_tokens": 128,
+  "training": {
+    "medical": {
+      "base_sft_val_loss": 1.3968,
+      "trained_sft_val_loss": 1.0687,
+      "base_ntp_val_loss": 2.0804,
+      "trained_ntp_val_loss": 1.8509,
+      "final_sft_loss": 1.0624,
+      "converged": true,
+      "ntp_comparison": "better",
+      "peak_memory_gb": 16.6,
+      "time_s": 119.3
+    },
+    "code": {
+      "base_sft_val_loss": 1.2768,
+      "trained_sft_val_loss": 0.9742,
+      "base_ntp_val_loss": 1.6994,
+      "trained_ntp_val_loss": 1.4596,
+      "final_sft_loss": 0.8126,
+      "converged": true,
+      "ntp_comparison": "better",
+      "peak_memory_gb": 17.12,
+      "time_s": 121.1
+    },
+    "math": {
+      "base_sft_val_loss": 0.8869,
+      "trained_sft_val_loss": 0.6012,
+      "base_ntp_val_loss": 1.3819,
+      "trained_ntp_val_loss": 1.2882,
+      "final_sft_loss": 0.3112,
+      "converged": true,
+      "ntp_comparison": "better",
+      "peak_memory_gb": 17.12,
+      "time_s": 135.9
+    },
+    "legal": {
+      "base_sft_val_loss": 2.8392,
+      "trained_sft_val_loss": 2.5916,
+      "base_ntp_val_loss": 3.1309,
+      "trained_ntp_val_loss": 3.0788,
+      "final_sft_loss": 3.5375,
+      "converged": true,
+      "ntp_comparison": "better",
+      "peak_memory_gb": 17.12,
+      "time_s": 131.6
+    },
+    "finance": {
+      "base_sft_val_loss": 2.8705,
+      "trained_sft_val_loss": 2.7019,
+      "base_ntp_val_loss": 3.0578,
+      "trained_ntp_val_loss": 3.0462,
+      "final_sft_loss": 3.0382,
+      "converged": true,
+      "ntp_comparison": "better",
+      "peak_memory_gb": 17.12,
+      "time_s": 130.8
+    }
+  },
+  "energy_gap_time_s": 36.4,
+  "base_gen_time_s": 120.2,
+  "routed_gen_time_s": 628.1,
+  "analysis": {
+    "domains": {
+      "medical": {
+        "base_mean_score": 0.4746,
+        "routed_mean_score": 0.4086,
+        "improvement": -0.0659,
+        "improvement_pct": -13.9,
+        "routed_better": false,
+        "routing_accuracy": 0.8
+      },
+      "code": {
+        "base_mean_score": 0.3569,
+        "routed_mean_score": 0.488,
+        "improvement": 0.1311,
+        "improvement_pct": 36.7,
+        "routed_better": true,
+        "base_code_syntax": "5/10",
+        "routed_code_syntax": "7/10",
+        "syntax_pass_base": 0.5,
+        "syntax_pass_routed": 0.7,
+        "routing_accuracy": 1.0
+      },
+      "math": {
+        "base_mean_score": 0.1002,
+        "routed_mean_score": 0.5102,
+        "improvement": 0.4101,
+        "improvement_pct": 409.4,
+        "routed_better": true,
+        "base_math_correct": "1/10",
+        "routed_math_correct": "7/10",
+        "math_correctness_base": 0.1,
+        "math_correctness_routed": 0.7,
+        "routing_accuracy": 0.0
+      },
+      "legal": {
+        "base_mean_score": 0.4644,
+        "routed_mean_score": 0.4321,
+        "improvement": -0.0322,
+        "improvement_pct": -6.9,
+        "routed_better": false,
+        "routing_accuracy": 0.0
+      },
+      "finance": {
+        "base_mean_score": 0.4715,
+        "routed_mean_score": 0.4414,
+        "improvement": -0.0301,
+        "improvement_pct": -6.4,
+        "routed_better": false,
+        "routing_accuracy": 0.0
+      }
+    },
+    "kill_criteria": {
+      "K602": {
+        "description": "SFT routed worse than base on >=3/5 domains",
+        "domains_worse": 3,
+        "domains_better": 2,
+        "result": "FAIL"
+      },
+      "K603": {
+        "description": "SFT adapters fail to converge",
+        "domains_failed": 0,
+        "per_domain": {
+          "medical": true,
+          "code": true,
+          "math": true,
+          "legal": true,
+          "finance": true
+        },
+        "result": "PASS"
+      },
+      "K604": {
+        "description": "Energy gap routing <50% accuracy",
+        "total_correct": 18,
+        "total_queries": 50,
+        "accuracy": 0.36,
+        "result": "FAIL"
+      }
+    },
+    "overall": "KILLED",
+    "domains_routed_better": 2,
+    "domains_routed_worse": 3,
+    "routing_accuracy_total": 0.36
+  },
+  "base_results": {
+    "medical": [
+      {
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "domain_score": 0.524787784679089,
+        "keyword_density": 0.09782608695652174
+      },
+      {
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "domain_score": 0.45109205677849334,
+        "keyword_density": 0.019417475728155338
+      },
+      {
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "domain_score": 0.4997058823529412,
+        "keyword_density": 0.0784313725490196
+      },
+      {
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "domain_score": 0.4087323146576118,
+        "keyword_density": 0.0
+      },
+      {
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "domain_score": 0.4996434108527132,
+        "keyword_density": 0.023255813953488372
+      },
+      {
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "domain_score": 0.4880401606425703,
+        "keyword_density": 0.024096385542168676
+      },
+      {
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "domain_score": 0.4859349593495935,
+        "keyword_density": 0.012195121951219513
+      },
+      {
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "domain_score": 0.5096943694369437,
+        "keyword_density": 0.13861386138613863
+      },
+      {
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "domain_score": 0.4564141414141414,
+        "keyword_density": 0.0
+      },
+      {
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "domain_score": 0.4216568627450981,
+        "keyword_density": 0.029411764705882353
+      }
+    ],
+    "code": [
+      {
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "domain_score": 0.047058823529411764,
+        "keyword_density": 0.11764705882352941,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Write a python function to calculate an exponential series",
+        "domain_score": 0.014814814814814815,
+        "keyword_density": 0.037037037037037035,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "domain_score": 0.6597701149425287,
+        "keyword_density": 0.14942528735632185,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Generate an api response in Python for the provided data.",
+        "domain_score": 0.043478260869565216,
+        "keyword_density": 0.10869565217391304,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "domain_score": 0.6682926829268292,
+        "keyword_density": 0.17073170731707318,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "domain_score": 0.06857142857142857,
+        "keyword_density": 0.17142857142857143,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "domain_score": 0.04395604395604396,
+        "keyword_density": 0.10989010989010989,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "domain_score": 0.6894736842105262,
+        "keyword_density": 0.2236842105263158,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "domain_score": 0.6371134020618556,
+        "keyword_density": 0.09278350515463918,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "domain_score": 0.6962962962962963,
+        "keyword_density": 0.24074074074074073,
+        "syntax_valid": true
+      }
+    ],
+    "math": [
+      {
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "domain_score": 0.06705882352941177,
+        "keyword_density": 0.2235294117647059,
+        "answer_correct": false,
+        "gen_answer": 3.0,
+        "gt_answer": 322.0
+      },
+      {
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "domain_score": 0.03698630136986301,
+        "keyword_density": 0.1232876712328767,
+        "answer_correct": false,
+        "gen_answer": 8.0,
+        "gt_answer": 22.0
+      },
+      {
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "domain_score": 0.016129032258064516,
+        "keyword_density": 0.053763440860215055,
+        "answer_correct": false,
+        "gen_answer": 8.0,
+        "gt_answer": 19.0
+      },
+      {
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "domain_score": 0.014814814814814814,
+        "keyword_density": 0.04938271604938271,
+        "answer_correct": false,
+        "gen_answer": 5.0,
+        "gt_answer": 75.0
+      },
+      {
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "domain_score": 0.03614457831325301,
+        "keyword_density": 0.12048192771084337,
+        "answer_correct": false,
+        "gen_answer": 18.0,
+        "gt_answer": 27.0
+      },
+      {
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "domain_score": 0.028571428571428567,
+        "keyword_density": 0.09523809523809523,
+        "answer_correct": false,
+        "gen_answer": 105.0,
+        "gt_answer": 140.0
+      },
+      {
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "domain_score": 0.7102272727272727,
+        "keyword_density": 0.03409090909090909,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0
+      },
+      {
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "domain_score": 0.007894736842105262,
+        "keyword_density": 0.02631578947368421,
+        "answer_correct": false,
+        "gen_answer": 24.0,
+        "gt_answer": 48.0
+      },
+      {
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "domain_score": 0.049999999999999996,
+        "keyword_density": 0.16666666666666666,
+        "answer_correct": false,
+        "gen_answer": 10.0,
+        "gt_answer": 35.0
+      },
+      {
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "domain_score": 0.033707865168539325,
+        "keyword_density": 0.11235955056179775,
+        "answer_correct": false,
+        "gen_answer": 10.0,
+        "gt_answer": 80.0
+      }
+    ],
+    "legal": [
+      {
+        "prompt": "Speed bumps on private non-hoa road (California)",
+        "domain_score": 0.4637181790955376,
+        "keyword_density": 0.0
+      },
+      {
+        "prompt": "Can an employer dictate when an employee can take annual leave?",
+        "domain_score": 0.4896846846846847,
+        "keyword_density": 0.036036036036036036
+      },
+      {
+        "prompt": "Is a list of the most common English words copyrightable under US law?",
+        "domain_score": 0.4658319357092942,
+        "keyword_density": 0.046296296296296294
+      },
+      {
+        "prompt": "Is it illegal to misinform someone about the terms of a contract",
+        "domain_score": 0.49669375999088583,
+        "keyword_density": 0.06796116504854369
+      },
+      {
+        "prompt": "How to get a copyright on a video game?",
+        "domain_score": 0.4313314802354022,
+        "keyword_density": 0.0
+      },
+      {
+        "prompt": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "domain_score": 0.4433726885592615,
+        "keyword_density": 0.009174311926605505
+      },
+      {
+        "prompt": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "domain_score": 0.37047008547008553,
+        "keyword_density": 0.0
+      },
+      {
+        "prompt": "Startup making me pay legal costs of my vested options, is that legal?",
+        "domain_score": 0.48650741738275405,
+        "keyword_density": 0.06086956521739131
+      },
+      {
+        "prompt": "Can I amend a contract after end date",
+        "domain_score": 0.5104856743535989,
+        "keyword_density": 0.10377358490566038
+      },
+      {
+        "prompt": "Liability for neighbor injured on my property",
+        "domain_score": 0.4854761904761905,
+        "keyword_density": 0.01904761904761905
+      }
+    ],
+    "finance": [
+      {
+        "prompt": "What should I do with my $10K windfall, given these options?",
+        "domain_score": 0.5344444444444445,
+        "keyword_density": 0.14444444444444443
+      },
+      {
+        "prompt": "What's the average rate of return for some of the most mainstream index funds?",
+        "domain_score": 0.5005890433096316,
+        "keyword_density": 0.10576923076923077
+      },
+      {
+        "prompt": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "domain_score": 0.5322222222222223,
+        "keyword_density": 0.06666666666666667
+      },
+      {
+        "prompt": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "domain_score": 0.47151948690014633,
+        "keyword_density": 0.05825242718446602
+      },
+      {
+        "prompt": "How can I find hotel properties to buy other than using Google?",
+        "domain_score": 0.4499369440083726,
+        "keyword_density": 0.01
+      },
+      {
+        "prompt": "Rate of change of beta",
+        "domain_score": 0.3867781385281386,
+        "keyword_density": 0.017857142857142856
+      },
+      {
+        "prompt": "How does giving to charity work?",
+        "domain_score": 0.4866918374685365,
+        "keyword_density": 0.019417475728155338
+      },
+      {
+        "prompt": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "domain_score": 0.4104932502596054,
+        "keyword_density": 0.009345794392523364
+      },
+      {
+        "prompt": "Simple and safe way to manage a lot of cash",
+        "domain_score": 0.45458362873685454,
+        "keyword_density": 0.010752688172043012
+      },
+      {
+        "prompt": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "domain_score": 0.48749560080442433,
+        "keyword_density": 0.0673076923076923
+      }
+    ]
+  },
+  "routed_results": {
+    "medical": [
+      {
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "domain_score": 0.4868671248568156,
+        "keyword_density": 0.06060606060606061,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "domain_score": 0.44599326599326594,
+        "keyword_density": 0.0,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "domain_score": 0.38604522312069484,
+        "keyword_density": 0.1111111111111111,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "domain_score": 0.3772671985645166,
+        "keyword_density": 0.04854368932038835,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "domain_score": 0.28633943089430897,
+        "keyword_density": 0.036585365853658534,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "domain_score": 0.3048112568988858,
+        "keyword_density": 0.030303030303030304,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "domain_score": 0.39409280928092805,
+        "keyword_density": 0.009900990099009901,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "domain_score": 0.4991078431372549,
+        "keyword_density": 0.09803921568627451,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "domain_score": 0.4739323671497585,
+        "keyword_density": 0.021739130434782608,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      },
+      {
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "domain_score": 0.4318460328979197,
+        "keyword_density": 0.04716981132075472,
+        "selected_adapter": "medical",
+        "correct_selection": true
+      }
+    ],
+    "code": [
+      {
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "domain_score": 0.05142857142857143,
+        "keyword_density": 0.12857142857142856,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Write a python function to calculate an exponential series",
+        "domain_score": 0.6799999999999999,
+        "keyword_density": 0.2,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "domain_score": 0.07346938775510205,
+        "keyword_density": 0.1836734693877551,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Generate an api response in Python for the provided data.",
+        "domain_score": 0.625531914893617,
+        "keyword_density": 0.06382978723404255,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "domain_score": 0.6982456140350877,
+        "keyword_density": 0.24561403508771928,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "domain_score": 0.047058823529411764,
+        "keyword_density": 0.11764705882352941,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": false
+      },
+      {
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "domain_score": 0.6857142857142857,
+        "keyword_density": 0.21428571428571427,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "domain_score": 0.6895522388059702,
+        "keyword_density": 0.22388059701492538,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "domain_score": 0.632,
+        "keyword_density": 0.08,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      },
+      {
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "domain_score": 0.6967741935483871,
+        "keyword_density": 0.24193548387096775,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "syntax_valid": true
+      }
+    ],
+    "math": [
+      {
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "domain_score": 0.7487499999999999,
+        "keyword_density": 0.1625,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 322.0,
+        "gt_answer": 322.0
+      },
+      {
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "domain_score": 0.006818181818181818,
+        "keyword_density": 0.022727272727272728,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": false,
+        "gen_answer": 18.0,
+        "gt_answer": 22.0
+      },
+      {
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "domain_score": 0.01744186046511628,
+        "keyword_density": 0.05813953488372093,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": false,
+        "gen_answer": 1.0,
+        "gt_answer": 19.0
+      },
+      {
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "domain_score": 0.020792079207920793,
+        "keyword_density": 0.06930693069306931,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": false,
+        "gen_answer": 5.0,
+        "gt_answer": 75.0
+      },
+      {
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "domain_score": 0.7258064516129031,
+        "keyword_density": 0.08602150537634409,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 27.0,
+        "gt_answer": 27.0
+      },
+      {
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "domain_score": 0.7152542372881355,
+        "keyword_density": 0.05084745762711865,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 140.0,
+        "gt_answer": 140.0
+      },
+      {
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "domain_score": 0.7,
+        "keyword_density": 0.0,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0
+      },
+      {
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "domain_score": 0.7101123595505617,
+        "keyword_density": 0.033707865168539325,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 48.0,
+        "gt_answer": 48.0
+      },
+      {
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "domain_score": 0.7303370786516854,
+        "keyword_density": 0.10112359550561797,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 35.0,
+        "gt_answer": 35.0
+      },
+      {
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "domain_score": 0.7269662921348314,
+        "keyword_density": 0.0898876404494382,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "answer_correct": true,
+        "gen_answer": 80.0,
+        "gt_answer": 80.0
+      }
+    ],
+    "legal": [
+      {
+        "prompt": "Speed bumps on private non-hoa road (California)",
+        "domain_score": 0.4369385026737968,
+        "keyword_density": 0.0,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Can an employer dictate when an employee can take annual leave?",
+        "domain_score": 0.40715151515151515,
+        "keyword_density": 0.03571428571428571,
+        "selected_adapter": "medical",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Is a list of the most common English words copyrightable under US law?",
+        "domain_score": 0.4712570861678005,
+        "keyword_density": 0.05102040816326531,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Is it illegal to misinform someone about the terms of a contract",
+        "domain_score": 0.49858008658008657,
+        "keyword_density": 0.05194805194805195,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "How to get a copyright on a video game?",
+        "domain_score": 0.43939719400096755,
+        "keyword_density": 0.009433962264150943,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "domain_score": 0.38307521677757617,
+        "keyword_density": 0.0,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "domain_score": 0.37081775833988223,
+        "keyword_density": 0.0,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Startup making me pay legal costs of my vested options, is that legal?",
+        "domain_score": 0.4399750712935371,
+        "keyword_density": 0.019417475728155338,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Can I amend a contract after end date",
+        "domain_score": 0.48574404761904766,
+        "keyword_density": 0.11403508771929824,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Liability for neighbor injured on my property",
+        "domain_score": 0.3883250681874535,
+        "keyword_density": 0.02702702702702703,
+        "selected_adapter": "code",
+        "correct_selection": false
+      }
+    ],
+    "finance": [
+      {
+        "prompt": "What should I do with my $10K windfall, given these options?",
+        "domain_score": 0.4760698543245713,
+        "keyword_density": 0.12264150943396226,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "What's the average rate of return for some of the most mainstream index funds?",
+        "domain_score": 0.4760894660894661,
+        "keyword_density": 0.10714285714285714,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "domain_score": 0.4510280850171959,
+        "keyword_density": 0.03669724770642202,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "domain_score": 0.5236367822606355,
+        "keyword_density": 0.09009009009009009,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "How can I find hotel properties to buy other than using Google?",
+        "domain_score": 0.42302890191931813,
+        "keyword_density": 0.009708737864077669,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Rate of change of beta",
+        "domain_score": 0.38548093971631203,
+        "keyword_density": 0.03125,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "How does giving to charity work?",
+        "domain_score": 0.4721980676328502,
+        "keyword_density": 0.008695652173913044,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "domain_score": 0.41559903381642516,
+        "keyword_density": 0.043478260869565216,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "Simple and safe way to manage a lot of cash",
+        "domain_score": 0.28735209235209236,
+        "keyword_density": 0.02727272727272727,
+        "selected_adapter": "code",
+        "correct_selection": false
+      },
+      {
+        "prompt": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "domain_score": 0.5031280480358762,
+        "keyword_density": 0.08256880733944955,
+        "selected_adapter": "code",
+        "correct_selection": false
+      }
+    ]
+  },
+  "routing_decisions": {
+    "medical": [
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.026058435440063477,
+        "all_gaps": {
+          "medical": -0.026058435440063477,
+          "code": -0.005808591842651367,
+          "math": 0.22100329399108887,
+          "legal": 1.1986589431762695,
+          "finance": 1.0960361957550049
+        }
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.06144261360168457,
+        "all_gaps": {
+          "medical": -0.06144261360168457,
+          "code": -0.009155988693237305,
+          "math": 0.0651254653930664,
+          "legal": 0.6814084053039551,
+          "finance": 0.7025792598724365
+        }
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.004389286041259766,
+        "all_gaps": {
+          "medical": -0.004389286041259766,
+          "code": 0.04560542106628418,
+          "math": 0.1287553310394287,
+          "legal": 0.8254125118255615,
+          "finance": 0.7697534561157227
+        }
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.3075132369995117,
+        "all_gaps": {
+          "medical": -0.3075132369995117,
+          "code": -0.14696645736694336,
+          "math": 0.11109304428100586,
+          "legal": 0.994056224822998,
+          "finance": 0.9593825340270996
+        }
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.2671804428100586,
+        "all_gaps": {
+          "medical": -0.2671804428100586,
+          "code": -0.15604925155639648,
+          "math": -0.026037216186523438,
+          "legal": 0.7303223609924316,
+          "finance": 0.6936302185058594
+        }
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": 0.023105621337890625,
+        "all_gaps": {
+          "medical": 0.023105621337890625,
+          "code": 0.023965835571289062,
+          "math": 0.1579122543334961,
+          "legal": 0.9699258804321289,
+          "finance": 0.9872784614562988
+        }
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.04980111122131348,
+        "all_gaps": {
+          "medical": -0.04980111122131348,
+          "code": -0.017477035522460938,
+          "math": 0.06422924995422363,
+          "legal": 0.6773960590362549,
+          "finance": 0.7098097801208496
+        }
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "medical",
+        "correct_selection": true,
+        "energy_gap": -0.12379765510559082,
+        "all_gaps": {
+          "medical": -0.12379765510559082,
+          "code": 0.009625673294067383,
+          "math": 0.12351036071777344,
+          "legal": 0.8699731826782227,
+          "finance": 0.8470063209533691
+        }
+      },
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": 0.10261392593383789,
+        "all_gaps": {
+          "medical": 0.11974239349365234,
+          "code": 0.10261392593383789,
+          "math": 0.21465754508972168,
+          "legal": 1.1164867877960205,
+          "finance": 1.0747356414794922
+        }
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.04412531852722168,
+        "all_gaps": {
+          "medical": -0.02928781509399414,
+          "code": -0.04412531852722168,
+          "math": 0.1782057285308838,
+          "legal": 1.0845017433166504,
+          "finance": 0.9515318870544434
+        }
+      }
+    ],
+    "code": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.22331929206848145,
+        "all_gaps": {
+          "medical": 0.06479144096374512,
+          "code": -0.22331929206848145,
+          "math": 0.14400553703308105,
+          "legal": 0.8871712684631348,
+          "finance": 0.8442044258117676
+        }
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.46310997009277344,
+        "all_gaps": {
+          "medical": 0.16862869262695312,
+          "code": -0.46310997009277344,
+          "math": 0.051790714263916016,
+          "legal": 1.0080862045288086,
+          "finance": 0.811957836151123
+        }
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.04436492919921875,
+        "all_gaps": {
+          "medical": 0.0185469388961792,
+          "code": -0.04436492919921875,
+          "math": 0.16265523433685303,
+          "legal": 0.5861384868621826,
+          "finance": 0.5309672355651855
+        }
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.21766996383666992,
+        "all_gaps": {
+          "medical": 0.026237010955810547,
+          "code": -0.21766996383666992,
+          "math": 0.4324831962585449,
+          "legal": 1.1129522323608398,
+          "finance": 1.1321940422058105
+        }
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.1861710548400879,
+        "all_gaps": {
+          "medical": -0.056354522705078125,
+          "code": -0.1861710548400879,
+          "math": 0.2139294147491455,
+          "legal": 0.8644216060638428,
+          "finance": 0.7314443588256836
+        }
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.28893399238586426,
+        "all_gaps": {
+          "medical": 0.1929306983947754,
+          "code": -0.28893399238586426,
+          "math": 0.24059295654296875,
+          "legal": 0.9519438743591309,
+          "finance": 0.8531556129455566
+        }
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.314192533493042,
+        "all_gaps": {
+          "medical": 0.007119894027709961,
+          "code": -0.314192533493042,
+          "math": 0.13702082633972168,
+          "legal": 0.7349410057067871,
+          "finance": 0.6433572769165039
+        }
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.16977596282958984,
+        "all_gaps": {
+          "medical": -0.028029918670654297,
+          "code": -0.16977596282958984,
+          "math": 0.18269729614257812,
+          "legal": 0.9617056846618652,
+          "finance": 0.8245697021484375
+        }
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.11966204643249512,
+        "all_gaps": {
+          "medical": 0.06681966781616211,
+          "code": -0.11966204643249512,
+          "math": 0.20108652114868164,
+          "legal": 1.0724081993103027,
+          "finance": 1.0183725357055664
+        }
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "code",
+        "correct_selection": true,
+        "energy_gap": -0.3868076801300049,
+        "all_gaps": {
+          "medical": 0.0618739128112793,
+          "code": -0.3868076801300049,
+          "math": 0.20081067085266113,
+          "legal": 0.6877841949462891,
+          "finance": 0.8281373977661133
+        }
+      }
+    ],
+    "math": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.029386281967163086,
+        "all_gaps": {
+          "medical": 0.0911104679107666,
+          "code": -0.029386281967163086,
+          "math": 0.14928364753723145,
+          "legal": 0.29312992095947266,
+          "finance": 0.22082972526550293
+        }
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.0391695499420166,
+        "all_gaps": {
+          "medical": 0.15881991386413574,
+          "code": -0.0391695499420166,
+          "math": 0.3167843818664551,
+          "legal": 0.8869423866271973,
+          "finance": 0.7680079936981201
+        }
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.05668449401855469,
+        "all_gaps": {
+          "medical": 0.15150046348571777,
+          "code": -0.05668449401855469,
+          "math": 0.26891469955444336,
+          "legal": 0.6045815944671631,
+          "finance": 0.4072911739349365
+        }
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.06482195854187012,
+        "all_gaps": {
+          "medical": 0.06929135322570801,
+          "code": -0.06482195854187012,
+          "math": 0.319415807723999,
+          "legal": 0.5928778648376465,
+          "finance": 0.530336856842041
+        }
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.004437446594238281,
+        "all_gaps": {
+          "medical": 0.141448974609375,
+          "code": -0.004437446594238281,
+          "math": 0.11273646354675293,
+          "legal": 0.5035874843597412,
+          "finance": 0.38398313522338867
+        }
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.010652303695678711,
+        "all_gaps": {
+          "medical": 0.144744873046875,
+          "code": -0.010652303695678711,
+          "math": 0.13834166526794434,
+          "legal": 0.3834700584411621,
+          "finance": 0.2526841163635254
+        }
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.06528234481811523,
+        "all_gaps": {
+          "medical": 0.19510173797607422,
+          "code": -0.06528234481811523,
+          "math": 0.33730411529541016,
+          "legal": 0.8181047439575195,
+          "finance": 0.6160769462585449
+        }
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": 0.027504324913024902,
+        "all_gaps": {
+          "medical": 0.17790985107421875,
+          "code": 0.027504324913024902,
+          "math": 0.1792619228363037,
+          "legal": 0.4879038333892822,
+          "finance": 0.4299314022064209
+        }
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.06774568557739258,
+        "all_gaps": {
+          "medical": 0.0637509822845459,
+          "code": -0.06774568557739258,
+          "math": 0.14466381072998047,
+          "legal": 0.495227575302124,
+          "finance": 0.4365499019622803
+        }
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.07510781288146973,
+        "all_gaps": {
+          "medical": 0.04979443550109863,
+          "code": -0.07510781288146973,
+          "math": 0.08054041862487793,
+          "legal": 0.4894223213195801,
+          "finance": 0.36846160888671875
+        }
+      }
+    ],
+    "legal": [
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "medical",
+        "correct_selection": false,
+        "energy_gap": -0.07683467864990234,
+        "all_gaps": {
+          "medical": -0.07683467864990234,
+          "code": -0.016077041625976562,
+          "math": 0.3795456886291504,
+          "legal": 1.4613313674926758,
+          "finance": 1.4421448707580566
+        }
+      },
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.18127155303955078,
+        "all_gaps": {
+          "medical": 0.15918684005737305,
+          "code": -0.18127155303955078,
+          "math": 0.25850725173950195,
+          "legal": 1.19083833694458,
+          "finance": 1.2565693855285645
+        }
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.0626685619354248,
+        "all_gaps": {
+          "medical": 0.13811039924621582,
+          "code": -0.0626685619354248,
+          "math": 0.21033573150634766,
+          "legal": 1.4312324523925781,
+          "finance": 1.382314682006836
+        }
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.3425712585449219,
+        "all_gaps": {
+          "medical": -0.04498147964477539,
+          "code": -0.3425712585449219,
+          "math": 0.16969728469848633,
+          "legal": 1.0896148681640625,
+          "finance": 1.1222710609436035
+        }
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.1356959342956543,
+        "all_gaps": {
+          "medical": 0.2662239074707031,
+          "code": -0.1356959342956543,
+          "math": 0.2896909713745117,
+          "legal": 1.732666015625,
+          "finance": 1.6229519844055176
+        }
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.12465977668762207,
+        "all_gaps": {
+          "medical": 0.05815315246582031,
+          "code": -0.12465977668762207,
+          "math": 0.1188960075378418,
+          "legal": 0.745875358581543,
+          "finance": 0.7110214233398438
+        }
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": 0.057611942291259766,
+        "all_gaps": {
+          "medical": 0.0894021987915039,
+          "code": 0.057611942291259766,
+          "math": 0.38281822204589844,
+          "legal": 0.9654321670532227,
+          "finance": 1.011652946472168
+        }
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.19521522521972656,
+        "all_gaps": {
+          "medical": 0.08709859848022461,
+          "code": -0.19521522521972656,
+          "math": 0.24840688705444336,
+          "legal": 1.1891584396362305,
+          "finance": 1.1351041793823242
+        }
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.3160519599914551,
+        "all_gaps": {
+          "medical": -0.047437191009521484,
+          "code": -0.3160519599914551,
+          "math": 0.3572998046875,
+          "legal": 1.5364999771118164,
+          "finance": 1.473970890045166
+        }
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.23017024993896484,
+        "all_gaps": {
+          "medical": 0.15092706680297852,
+          "code": -0.23017024993896484,
+          "math": 0.4554252624511719,
+          "legal": 1.1645164489746094,
+          "finance": 1.5480079650878906
+        }
+      }
+    ],
+    "finance": [
+      {
+        "prompt_idx": 0,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.16495609283447266,
+        "all_gaps": {
+          "medical": -0.09008336067199707,
+          "code": -0.16495609283447266,
+          "math": 0.3512544631958008,
+          "legal": 0.5996289253234863,
+          "finance": 0.6930265426635742
+        }
+      },
+      {
+        "prompt_idx": 1,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.021969318389892578,
+        "all_gaps": {
+          "medical": 0.1406540870666504,
+          "code": -0.021969318389892578,
+          "math": 0.33173465728759766,
+          "legal": 0.79559326171875,
+          "finance": 0.9667282104492188
+        }
+      },
+      {
+        "prompt_idx": 2,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.07459020614624023,
+        "all_gaps": {
+          "medical": 0.06118154525756836,
+          "code": -0.07459020614624023,
+          "math": 0.20023775100708008,
+          "legal": 0.9087705612182617,
+          "finance": 0.9959201812744141
+        }
+      },
+      {
+        "prompt_idx": 3,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.01612997055053711,
+        "all_gaps": {
+          "medical": 0.06640434265136719,
+          "code": -0.01612997055053711,
+          "math": 0.17563533782958984,
+          "legal": 0.9588150978088379,
+          "finance": 0.8741927146911621
+        }
+      },
+      {
+        "prompt_idx": 4,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.06736612319946289,
+        "all_gaps": {
+          "medical": 0.05125713348388672,
+          "code": -0.06736612319946289,
+          "math": 0.1951284408569336,
+          "legal": 1.2200002670288086,
+          "finance": 1.3370423316955566
+        }
+      },
+      {
+        "prompt_idx": 5,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.47916412353515625,
+        "all_gaps": {
+          "medical": 0.07698965072631836,
+          "code": -0.47916412353515625,
+          "math": 0.49744415283203125,
+          "legal": 1.0998315811157227,
+          "finance": 0.7614479064941406
+        }
+      },
+      {
+        "prompt_idx": 6,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.15815353393554688,
+        "all_gaps": {
+          "medical": 0.047849178314208984,
+          "code": -0.15815353393554688,
+          "math": 0.32720947265625,
+          "legal": 1.9936089515686035,
+          "finance": 1.9107880592346191
+        }
+      },
+      {
+        "prompt_idx": 7,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.1582014560699463,
+        "all_gaps": {
+          "medical": 0.006436824798583984,
+          "code": -0.1582014560699463,
+          "math": 0.09375357627868652,
+          "legal": 0.7859230041503906,
+          "finance": 0.6469841003417969
+        }
+      },
+      {
+        "prompt_idx": 8,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.3446006774902344,
+        "all_gaps": {
+          "medical": -0.011626720428466797,
+          "code": -0.3446006774902344,
+          "math": 0.2724580764770508,
+          "legal": 1.1192736625671387,
+          "finance": 1.0790762901306152
+        }
+      },
+      {
+        "prompt_idx": 9,
+        "selected_adapter": "code",
+        "correct_selection": false,
+        "energy_gap": -0.05476570129394531,
+        "all_gaps": {
+          "medical": 0.28534579277038574,
+          "code": -0.05476570129394531,
+          "math": 0.21432185173034668,
+          "legal": 0.8723697662353516,
+          "finance": 0.8451299667358398
+        }
+      }
+    ]
+  },
+  "total_time_s": 1423.6
+}

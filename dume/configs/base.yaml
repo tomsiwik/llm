@@ -1,0 +1,25 @@
+# DUME: Dynamic Upcycling MoE — Base Configuration
+# Paper: arxiv.org/abs/2603.29765
+
+# Ridge regression
+ridge:
+  lambda: 0.1            # Tikhonov regularization (lambda in Eq. 2)
+  column_normalize: true  # Normalize W* columns for domain imbalance (Sec 2.3)
+
+# MoE routing
+routing:
+  top_k: 1               # Top-k routing; k=1 matches dense expert forward cost
+  softmax_temperature: 1.0
+
+# Router extraction (forward pass over domain data)
+extraction:
+  batch_size: 4           # Texts per batch during statistics extraction
+  max_tokens: 512         # Token window per text (Appendix A: smaller windows sufficient)
+  dtype: "float32"        # Accumulation dtype for A_l, b_l matrices
+
+# MoErging (Section 2.2)
+moerging:
+  average_attention: true  # Average attention parameters across experts
+  average_embedding: true  # Average embedding layers
+  average_head: true       # Average output head (lm_head)
+  keep_mlp_separate: true  # Keep MLP blocks as separate MoE experts

@@ -1,0 +1,182 @@
+{
+  "experiment": "single_pass_mlp_mixed_adapter",
+  "type": "verification",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "n_domain_pairs": 10,
+  "sequences_per_pair": 20,
+  "segment_length": 128,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "seed": 42,
+  "timestamp": "2026-04-06 10:52:35",
+  "pair_results": {
+    "python+math": {
+      "multi_pass_mlp_ppl": 2.8582,
+      "single_pass_mlp_ppl": 2.847,
+      "per_seq_best_ppl": 2.9586,
+      "base_only_ppl": 3.37,
+      "n_sequences": 20
+    },
+    "python+medical": {
+      "multi_pass_mlp_ppl": 2.714,
+      "single_pass_mlp_ppl": 2.7258,
+      "per_seq_best_ppl": 2.7737,
+      "base_only_ppl": 3.0272,
+      "n_sequences": 20
+    },
+    "python+legal": {
+      "multi_pass_mlp_ppl": 5.8033,
+      "single_pass_mlp_ppl": 5.8193,
+      "per_seq_best_ppl": 5.8559,
+      "base_only_ppl": 6.8263,
+      "n_sequences": 20
+    },
+    "python+creative": {
+      "multi_pass_mlp_ppl": 3.985,
+      "single_pass_mlp_ppl": 3.9858,
+      "per_seq_best_ppl": 4.0679,
+      "base_only_ppl": 4.6995,
+      "n_sequences": 20
+    },
+    "math+medical": {
+      "multi_pass_mlp_ppl": 3.3029,
+      "single_pass_mlp_ppl": 3.3191,
+      "per_seq_best_ppl": 3.3555,
+      "base_only_ppl": 3.8794,
+      "n_sequences": 20
+    },
+    "math+legal": {
+      "multi_pass_mlp_ppl": 7.2045,
+      "single_pass_mlp_ppl": 7.2869,
+      "per_seq_best_ppl": 7.4736,
+      "base_only_ppl": 8.8741,
+      "n_sequences": 20
+    },
+    "math+creative": {
+      "multi_pass_mlp_ppl": 4.8865,
+      "single_pass_mlp_ppl": 4.9086,
+      "per_seq_best_ppl": 5.2223,
+      "base_only_ppl": 6.1961,
+      "n_sequences": 20
+    },
+    "medical+legal": {
+      "multi_pass_mlp_ppl": 5.4296,
+      "single_pass_mlp_ppl": 5.4992,
+      "per_seq_best_ppl": 5.4718,
+      "base_only_ppl": 6.1815,
+      "n_sequences": 20
+    },
+    "medical+creative": {
+      "multi_pass_mlp_ppl": 4.6422,
+      "single_pass_mlp_ppl": 4.7036,
+      "per_seq_best_ppl": 4.8817,
+      "base_only_ppl": 5.4632,
+      "n_sequences": 20
+    },
+    "legal+creative": {
+      "multi_pass_mlp_ppl": 9.1086,
+      "single_pass_mlp_ppl": 9.2037,
+      "per_seq_best_ppl": 9.7882,
+      "base_only_ppl": 11.1668,
+      "n_sequences": 20
+    }
+  },
+  "summary": {
+    "multi_pass_mlp": 4.6561,
+    "single_pass_mlp": 4.6843,
+    "per_seq_best": 4.8147,
+    "base_only": 5.5213
+  },
+  "K793_ratio_pct": 0.6057,
+  "K793_pass": true,
+  "K794_single_ppl": 4.6843,
+  "K794_ref": 4.815,
+  "K794_pass": true,
+  "K795_pass": true,
+  "same_segment_exact_match": true,
+  "per_token_comparison": {
+    "max_per_token_abs_diff": 4.125,
+    "mean_per_token_abs_diff": 0.03363817608449608,
+    "total_tokens_compared": 51000,
+    "n_sequences": 200,
+    "same_segment_mean_diff": 0.0,
+    "same_segment_max_diff": 0.0,
+    "cross_segment_mean_diff": 0.06754121527075768,
+    "cross_segment_max_diff": 0.16966043412685394
+  },
+  "pair_analysis": {
+    "python+math": {
+      "multi_pass_ppl": 2.8582,
+      "single_pass_ppl": 2.847,
+      "per_seq_best_ppl": 2.9586,
+      "single_vs_multi_pct": 0.3919
+    },
+    "python+medical": {
+      "multi_pass_ppl": 2.714,
+      "single_pass_ppl": 2.7258,
+      "per_seq_best_ppl": 2.7737,
+      "single_vs_multi_pct": 0.4348
+    },
+    "python+legal": {
+      "multi_pass_ppl": 5.8033,
+      "single_pass_ppl": 5.8193,
+      "per_seq_best_ppl": 5.8559,
+      "single_vs_multi_pct": 0.2757
+    },
+    "python+creative": {
+      "multi_pass_ppl": 3.985,
+      "single_pass_ppl": 3.9858,
+      "per_seq_best_ppl": 4.0679,
+      "single_vs_multi_pct": 0.0201
+    },
+    "math+medical": {
+      "multi_pass_ppl": 3.3029,
+      "single_pass_ppl": 3.3191,
+      "per_seq_best_ppl": 3.3555,
+      "single_vs_multi_pct": 0.4905
+    },
+    "math+legal": {
+      "multi_pass_ppl": 7.2045,
+      "single_pass_ppl": 7.2869,
+      "per_seq_best_ppl": 7.4736,
+      "single_vs_multi_pct": 1.1437
+    },
+    "math+creative": {
+      "multi_pass_ppl": 4.8865,
+      "single_pass_ppl": 4.9086,
+      "per_seq_best_ppl": 5.2223,
+      "single_vs_multi_pct": 0.4523
+    },
+    "medical+legal": {
+      "multi_pass_ppl": 5.4296,
+      "single_pass_ppl": 5.4992,
+      "per_seq_best_ppl": 5.4718,
+      "single_vs_multi_pct": 1.2819
+    },
+    "medical+creative": {
+      "multi_pass_ppl": 4.6422,
+      "single_pass_ppl": 4.7036,
+      "per_seq_best_ppl": 4.8817,
+      "single_vs_multi_pct": 1.3226
+    },
+    "legal+creative": {
+      "multi_pass_ppl": 9.1086,
+      "single_pass_ppl": 9.2037,
+      "per_seq_best_ppl": 9.7882,
+      "single_vs_multi_pct": 1.0441
+    }
+  },
+  "finding_312_reference": {
+    "multi_pass_mlp_only_ppl": 4.656,
+    "per_seq_best_ppl": 4.815
+  },
+  "total_time_s": 229.7
+}

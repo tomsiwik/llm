@@ -1,0 +1,102 @@
+{
+  "experiment": "pierre_v4_ternary_premerge",
+  "total_time_s": 443.1,
+  "routing": {
+    "accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.412,
+      "code": 4.752,
+      "math": 3.734,
+      "legal": 22.813,
+      "finance": 19.99
+    },
+    "ternary_single": {
+      "medical": 32.964,
+      "code": 29.508,
+      "math": 53.896,
+      "legal": 154.423,
+      "finance": 133.55
+    },
+    "ternary_pierre": {
+      "medical": 32.964,
+      "code": 29.508,
+      "math": 53.896,
+      "legal": 154.423,
+      "finance": 133.55
+    },
+    "degradation": {
+      "medical": 0.0,
+      "code": 0.0,
+      "math": 0.0,
+      "legal": 0.0,
+      "finance": 0.0
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.059,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.021,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.114,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.062,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.031,
+        "routed_to": "finance"
+      }
+    },
+    "overall": 0.057
+  },
+  "latency": {
+    "base_tps": 141.0,
+    "pierre_tps": 141.2,
+    "overhead_pct": -0.14
+  },
+  "ppl_vs_bf16": {
+    "medical": 475.19,
+    "code": 649.5,
+    "math": 1347.65,
+    "legal": 592.42,
+    "finance": 556.39
+  },
+  "kill_criteria": {
+    "K724": {
+      "pass": false,
+      "value": 1347.65,
+      "threshold": 20.0,
+      "detail": "Worst PPL vs bf16: +1347.7% (limit 20%)"
+    },
+    "K725": {
+      "pass": true,
+      "value": 141.2,
+      "threshold": 120.0,
+      "detail": "Speed 141.2 tok/s (target >= 120)"
+    },
+    "K726": {
+      "pass": false,
+      "value": 0.057,
+      "threshold": 0.3,
+      "detail": "Behavioral 0.057 (target >= 0.30)"
+    }
+  },
+  "all_pass": false
+}

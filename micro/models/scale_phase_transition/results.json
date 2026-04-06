@@ -1,0 +1,1035 @@
+{
+  "experiment": "scale_phase_transition",
+  "description": "Scale sweep on math domain to map FORMAT-to-CAPABILITY transition",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "domain": "math",
+  "n_prompts": 10,
+  "scales": [
+    1.0,
+    2.0,
+    4.0,
+    6.0,
+    8.0,
+    10.0,
+    12.0,
+    16.0,
+    20.0
+  ],
+  "max_new_tokens": 128,
+  "temperature": 0.0,
+  "base": {
+    "accuracy": 0.1,
+    "cot_rate": 0.9,
+    "details": [
+      {
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "gt_answer": 322.0,
+        "gen_answer": 3.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the total cost of the polo shirts.\n2. Calculate the total cost of the necklaces.\n3. Add the cost of the computer game.\n4. Sum up all the costs.\n5. Subtract the rebate from the total cost.\n\nLet's go thr",
+        "generated_len": 457
+      },
+      {
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "gt_answer": 22.0,
+        "gen_answer": 8.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To solve this problem, we need to calculate the total number of legs contributed by each type of animal and then sum them up.\n\n1. **Humans:**\n   - Javier and his wife have 2 legs each.\n   - Total legs from humans = 2 (Javier) + 2 (wife) = 4 legs.\n\n2. **Dogs:**\n   - Each dog has 4 legs.\n   - Total le",
+        "generated_len": 412
+      },
+      {
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "gt_answer": 19.0,
+        "gen_answer": 8.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To solve this problem, we need to determine the current age of Cori's aunt. Let's break down the information given:\n\n1. Cori is 3 years old today.\n2. In 5 years, Cori will be \\(3 + 5 = 8\\) years old.\n3. At that time, Cori's age will be one-third of her aunt's age.\n\nLet's denote the current age of Co",
+        "generated_len": 427
+      },
+      {
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "gt_answer": 75.0,
+        "gen_answer": 5.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To determine how many origami stars Kyle must make to fill all the glass bottles he bought, we need to follow these steps:\n\n1. **Calculate the total number of glass bottles Kyle bought:**\n   Kyle initially bought 2 glass bottles and then bought another 3 identical glass bottles.\n   \\[\n   2 + 3 = 5 \\",
+        "generated_len": 504
+      },
+      {
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "gt_answer": 27.0,
+        "gen_answer": 18.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To determine how many weeks Oscar should start training, we need to calculate the total distance he needs to cover and then figure out how many weeks it will take to reach that distance.\n\n1. **Calculate the remaining distance Oscar needs to run:**\n   Oscar has already run 2 miles. He wants to reach ",
+        "generated_len": 500
+      },
+      {
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "gt_answer": 140.0,
+        "gen_answer": 105.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To determine how much more money Tina made compared to Marvin, we need to calculate the total amount of money each of them made and then find the difference.\n\n1. **Calculate the number of candy bars Tina sold:**\n   - Marvin sold 35 candy bars.\n   - Tina sold three times the number of candy bars as M",
+        "generated_len": 503
+      },
+      {
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "gt_answer": 70.0,
+        "gen_answer": 70.0,
+        "correct": true,
+        "has_cot": false,
+        "generated_preview": "To find the combined experience of James and his partner, we need to add their individual teaching years together.\n\nJames's experience: 40 years\nPartner's experience: 40 years - 10 years = 30 years\n\nCombined experience: 40 years + 30 years = 70 years\n\nThe answer is: 70 years.  James and his partner ",
+        "generated_len": 515
+      },
+      {
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "gt_answer": 48.0,
+        "gen_answer": 24.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To find the dog's full adult weight, we need to calculate the weight at each stage and add the final weight.\n\n1. **Weeks 1-9:**\n   - At 7 weeks old, the puppy weighed 6 pounds.\n   - By week 9, it doubled in weight: \\(6 \\times 2 = 12\\) pounds.\n\n2. **Months 3-5:**\n   - At 3 months old, the puppy doubl",
+        "generated_len": 405
+      },
+      {
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "gt_answer": 35.0,
+        "gen_answer": 10.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To solve this problem, we need to calculate the cost of movie tickets for both Wednesday and Saturday, and then sum these costs.\n\n1. **Cost on Monday:**\n   - The cost of a movie ticket on Monday is $5.\n\n2. **Cost on Wednesday:**\n   - The cost of a movie ticket on Wednesday is twice the cost on Monda",
+        "generated_len": 513
+      },
+      {
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "gt_answer": 80.0,
+        "gen_answer": 10.0,
+        "correct": false,
+        "has_cot": true,
+        "generated_preview": "To determine what percentage Calvin is towards his goal, we need to calculate the total number of haircuts he needs to reach his goal and then find the percentage of those haircuts he has already completed.\n\n1. **Calculate the total number of haircuts needed:**\n   Calvin needs 2 more haircuts to rea",
+        "generated_len": 541
+      }
+    ]
+  },
+  "transition_curve": {
+    "1.0": {
+      "accuracy": 0.1,
+      "cot_rate": 0.7,
+      "n_correct": 1,
+      "n_cot": 7,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 78.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the cost of the polo shirts.\n2. Calculate the cost of the necklaces.\n3. Calculate the cost of the computer game.\n4. Sum the costs of all the items.\n5. Subtract the rebate from the total cost.\n\nLet's go",
+          "generated_len": 481
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 6.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To solve this problem, we need to calculate the total number of legs contributed by each family member and the pets.\n\n1. **Javier and his wife:**\n   - Each person has 2 legs.\n   - Total legs from Javier and his wife: \\(2 \\times 2 = 4\\) legs.\n\n2. **Javier's children:**\n   - Each child has 2 legs.\n   ",
+          "generated_len": 433
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 5.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To solve this problem, we need to determine the current age of Cori's aunt. Let's denote Cori's current age as \\( C \\) and her aunt's current age as \\( A \\).\n\nGiven:\n- Cori is 3 years old today.\n- In 5 years, Cori will be \\( C + 5 \\) years old.\n- In 5 years, Cori's age will be one-third of her aunt'",
+          "generated_len": 422
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 5.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how many origami stars Kyle must make to fill all the glass bottles he bought, we need to follow these steps:\n\n1. **Calculate the total number of glass bottles Kyle bought:**\n   Kyle initially bought 2 glass bottles and then bought another 3 identical glass bottles.\n   \\[\n   2 + 3 = 5 \\",
+          "generated_len": 504
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 18.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how many weeks Oscar should start training, we need to calculate the total distance he needs to cover and then figure out how many weeks it will take him to reach that distance.\n\n1. **Calculate the remaining distance Oscar needs to run:**\n   Oscar has already run 2 miles. He wants to re",
+          "generated_len": 503
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 105.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how much more money Tina made compared to Marvin, we need to calculate the total amount of money each of them made and then find the difference.\n\n1. **Calculate the number of candy bars Tina sold:**\n   - Marvin sold 35 candy bars.\n   - Tina sold three times the number of candy bars as M",
+          "generated_len": 503
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "To find the combined experience of James and his partner, we need to add their individual teaching years together.\n\nJames's experience: 40 years\nPartner's experience: 40 years - 10 years = 30 years\n\nCombined experience: 40 years + 30 years = 70 years\n\nThe answer is 70 years.  James and his partner h",
+          "generated_len": 558
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 24.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To find the dog's full adult weight, we need to calculate the weight at each stage and add the final weight gained by the end of the year.\n\n1. **Weeks 1-9:**\n   - At 7 weeks old, the puppy weighed 6 pounds.\n   - By week 9, it doubled in weight: \\(6 \\times 2 = 12\\) pounds.\n\n2. **Months 3-5:**\n   - At",
+          "generated_len": 411
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to calculate the cost of movie tickets on Wednesday and Saturday and then sum these costs.\n\n1. **Cost on Monday:**\n   - The cost of a movie ticket on Monday is $5.\n\n2. **Cost on Wednesday:**\n   - The cost of a movie ticket on Wednesday is twice the cost on Monday.\n   -",
+          "generated_len": 512
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine what percentage Calvin is towards his goal, we need to calculate the total number of haircuts he needs to reach his goal and then find the percentage of haircuts he has already completed.\n\n1. **Calculate the total number of haircuts needed:**\n   Calvin needs 2 more haircuts to reach his",
+          "generated_len": 545
+        }
+      ]
+    },
+    "2.0": {
+      "accuracy": 0.1,
+      "cot_rate": 0.8,
+      "n_correct": 1,
+      "n_cot": 8,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 78.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the cost of the polo shirts.\n2. Calculate the cost of the necklaces.\n3. Calculate the cost of the computer game.\n4. Sum the costs of all the items.\n5. Subtract the rebate from the total cost.\n\nLet's go",
+          "generated_len": 481
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 12.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to calculate the total number of legs for each type of animal and then sum them up.\n\n1. **Humans**: Javier and his wife have 2 legs each.\n   \\[\n   2 \\text{ humans} \\times 2 \\text{ legs/human} = 4 \\text{ legs}\n   \\]\n\n2. **Dogs**: Javier has 3 dogs, and each dog has 4 le",
+          "generated_len": 381
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 5.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To solve this problem, we need to determine the current age of Cori's aunt. Let's denote Cori's current age as \\( C \\) and her aunt's current age as \\( A \\).\n\nGiven:\n- Cori is 3 years old today.\n- In 5 years, Cori will be \\( C + 5 \\) years old.\n- In 5 years, Cori's age will be one-third of her aunt'",
+          "generated_len": 422
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 5.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how many origami stars Kyle must make to fill all the glass bottles he bought, we need to follow these steps:\n\n1. **Calculate the total number of glass bottles Kyle bought:**\n   Kyle initially bought 2 glass bottles and then bought another 3 identical glass bottles.\n   \\[\n   2 + 3 = 5 \\",
+          "generated_len": 504
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 18.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how many weeks Oscar should start training, we need to calculate the total distance he needs to cover and then figure out how many weeks it will take him to reach that distance.\n\n1. **Calculate the remaining distance Oscar needs to run:**\n   Oscar has already run 2 miles. He wants to re",
+          "generated_len": 503
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 105.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how much more money Tina made compared to Marvin, we need to calculate the total amount of money each of them made and then find the difference.\n\n1. **Calculate the number of candy bars Tina sold:**\n   - Marvin sold 35 candy bars.\n   - Tina sold three times the number of candy bars as M",
+          "generated_len": 503
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "To find the combined experience of James and his partner, we need to add their individual teaching years together.\n\nJames' experience: 40 years\nPartner's experience: 40 years - 10 years = 30 years\n\nCombined experience: 40 years + 30 years = 70 years\n\nThe answer is 70 years.  James and his partner ha",
+          "generated_len": 557
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 24.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To find the dog's full adult weight, we need to calculate the weight at each stage and add the final weight gained by the end of the year.\n\n1. **Weeks 1-9:**\n   - At 7 weeks old, the puppy weighed 6 pounds.\n   - By week 9, it doubled in weight: \\(6 \\times 2 = 12\\) pounds.\n\n2. **Months 3-5:**\n   - At",
+          "generated_len": 411
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to calculate the cost of movie tickets on Wednesday and Saturday and then sum these costs.\n\n1. **Cost on Monday:**\n   - The cost of a movie ticket on Monday is $5.\n\n2. **Cost on Wednesday:**\n   - The cost of a movie ticket on Wednesday is twice the cost on Monday.\n   -",
+          "generated_len": 512
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine the percentage of Calvin's goal that he has achieved, we need to follow these steps:\n\n1. **Calculate the total number of haircuts needed:**\n   - Calvin has already had 8 haircuts.\n   - He needs 2 more haircuts to reach his goal.\n   - Therefore, the total number of haircuts needed is \\(8",
+          "generated_len": 524
+        }
+      ]
+    },
+    "4.0": {
+      "accuracy": 0.1,
+      "cot_rate": 0.6,
+      "n_correct": 1,
+      "n_cot": 6,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 3.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To calculate the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the cost of the polo shirts.\n2. Calculate the cost of the necklaces.\n3. Calculate the cost of the computer game.\n4. Sum the costs of all the items.\n5. Subtract the rebate from the total cost.\n\nLet",
+          "generated_len": 463
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 16.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to calculate the total number of legs for each type of animal and then add them together.\n\n1. **Humans**: Javier and his wife have 2 legs each, so they have \\(2 \\times 2 = 4\\) legs.\n2. **Dogs**: Each dog has 4 legs, and there are 2 dogs, so they have \\(2 \\times 4 = 8\\)",
+          "generated_len": 413
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 3.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To solve this problem, we need to determine the current age of Cori's aunt. Let's denote Cori's current age as \\( C \\) and her aunt's current age as \\( A \\).\n\nGiven:\n1. Cori is 3 years old today.\n2. In 5 years, Cori will be \\( C + 5 \\) years old.\n3. In 5 years, Cori's age will be one-third of her au",
+          "generated_len": 416
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 5.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To determine how many origami stars Kyle must make to fill all the glass bottles he bought, we need to follow these steps:\n\n1. **Calculate the total number of glass bottles Kyle bought:**\n   Kyle initially bought 2 glass bottles and then bought another 3 identical glass bottles.\n   \\[\n   2 + 3 = 5 \\",
+          "generated_len": 504
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 18.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To find out how many weeks Oscar should start training, we need to determine how much more he needs to run to reach his goal of 20 miles.\n\n1. Calculate the remaining distance Oscar needs to run:\n\\[ \\text{Remaining distance} = 20 \\text{ miles} - 2 \\text{ miles} = 18 \\text{ miles} \\]\n\n2. Determine how",
+          "generated_len": 476
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 210.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To find out how much more money Tina made compared to Marvin, we need to calculate the total amount of money each of them made and then find the difference.\n\nMarvin sold 35 candy bars at $2 each, so he made:\n35 candy bars * $2/candy bar = $70\n\nTina sold three times the number of candy bars as Marvin",
+          "generated_len": 501
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "To find the combined experience of James and his partner, we need to add their individual teaching years together.\n\nJames' experience: 40 years\nPartner's experience: 40 years - 10 years = 30 years\n\nCombined experience: 40 years + 30 years = 70 years\n\n### Conclusion:\nThe combined experience of James ",
+          "generated_len": 581
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 24.0,
+          "correct": false,
+          "has_cot": false,
+          "generated_preview": "To find the dog's full adult weight, we need to calculate the weight at each stage and add the final weight gained by the end of the year.\n\n1. At 7 weeks old, the puppy weighed 6 pounds.\n2. By week 9, the puppy doubled in weight, so it weighed 6 pounds * 2 = 12 pounds.\n3. At 3 months old, the puppy ",
+          "generated_len": 451
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to calculate the cost of movie tickets on Wednesday and Saturday and then add these amounts together.\n\n1. **Cost of movie tickets on Monday:**\n   - The cost of movie tickets on Monday is $5.\n\n2. **Cost of movie tickets on Wednesday:**\n   - The cost of movie tickets on ",
+          "generated_len": 543
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To calculate the percentage of his goal that Calvin has achieved, we need to determine the total number of haircuts he needs to reach his goal and then find the percentage of haircuts he has already completed.\n\n1. **Determine the total number of haircuts needed:**\n   Calvin needs 2 more haircuts to ",
+          "generated_len": 534
+        }
+      ]
+    },
+    "6.0": {
+      "accuracy": 0.7,
+      "cot_rate": 1.0,
+      "n_correct": 7,
+      "n_cot": 10,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the $12 rebate, the total cost of the gif",
+          "generated_len": 351
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 22.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "#### Solution:\n1. **Javier**: 2 legs\n2. **Javier's wife**: 2 legs\n3. **Javier's 3 children**: 3 children * 2 legs each = 6 legs\n4. **2 dogs**: 2 dogs * 4 legs each = 8 legs\n5. **1 cat**: 1 cat * 4 legs = 4 legs\n\nAdding them all together:\n\\[ 2 + 2 + 6 + 8 + 4 = 22 \\]\n\nSo, there are 22 legs in Javier'",
+          "generated_len": 339
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 8.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To solve this problem, we need to find the current age of Cori's aunt. Let's denote Cori's current age as C and her aunt's current age as A.\n\nGiven that Cori is 3 years old today, we can write the equation:\nC = 3\n\nIn 5 years, Cori will be:\nC + 5 = 3 + 5 = 8\n\nIn 5 years, Cori will be one-third the ag",
+          "generated_len": 397
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 75.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each, so he needs 2 * 15 = <<2*15=30>>30 stars for the first 2 bottles.\nHe then bought another 3 identical glass bottles, so he needs 3 * 15 = <<3*15=45>>45 stars for the additional bottles.\nIn total, Kyle needs 30 + 45 = <<30+45=75>>75 star",
+          "generated_len": 402
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 27.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to add 20 - 2 = <<20-2=18>>18 miles to his training.\nHe plans to add 2/3 of a mile each week, so he needs to train for 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\nThe answer is: 27 #### 27\n#### 27\nThe answer is: 27 #### 27\n#### 27\nThe answer is: 27\n#### 27\nThe answer is: 27\n#### 27\nThe",
+          "generated_len": 320
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $70.\nTina sold three times the number of candy bars as Marvin, so she sold 35 * 3 = 105 candy bars.\nTina made 105 * $2 = $210.\nTina made $210 - $70 = $140 more than Marvin.\n#### 140\nThe answer is: 140#### 140\n#### 140\nThe answer is: 140\nThe answer is: ",
+          "generated_len": 360
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James has been teaching for 40 years.\nHis partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n#### 70\nThe answer is: 70 #### 70\n#### 70\nThe answer is: 70 #### 70\n#### 70\nThe answer is: 70 #### 70\n#### 70\nThe answer is: ",
+          "generated_len": 356
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 120.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "The dog's full adult weight is 120 pounds.\n#### 120\nThe answer is: 120<|im_sep|>### Explanation:\nThe dog's weight at 7 weeks old is 6 pounds. By week 9, it doubles in weight, so it weighs 6 * 2 = 12 pounds. At 3 months old, it doubles again, so it weighs 12 * 2 = 24 pounds. At 5 months old, it doubl",
+          "generated_len": 400
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 10.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "To calculate the total amount Glenn spends, we need to find the cost of the movie tickets on Wednesday and Saturday and then add them together.\n\n1. **Cost on Wednesday:**\n   - The cost of a movie ticket on Monday is $5.\n   - The cost on Wednesday is twice as much as Monday.\n   - Therefore, the cost ",
+          "generated_len": 515
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 80.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "To calculate the percentage towards his goal, we need to divide the number of haircuts he has already done by the total number of haircuts he needs to do, and then multiply by 100.\n\nCalvin has done 8 haircuts and needs 10 more to reach his goal (8 + 2 = 10).\n\nPercentage towards his goal = (8 / 10) *",
+          "generated_len": 469
+        }
+      ]
+    },
+    "8.0": {
+      "accuracy": 0.8,
+      "cot_rate": 0.9,
+      "n_correct": 8,
+      "n_cot": 9,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the $12 rebate, the total cost of the gif",
+          "generated_len": 351
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 2.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of their 3 children has 2 legs, so that's 2*3 = <<2*3=6>>6 legs for the children.\nThe 2 dogs have 4 legs each, so that's 2*4 = <<2*4=8>>8 legs for the dogs.\nThe 1 cat has 4 legs.\nIncluding Javier, there are 1*2 = <<1*2=2>>2 legs for Javier.\nSo, the to",
+          "generated_len": 352
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 19.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Cori is 3 years old today. In 5 years, she will be 3 + 5 = 8 years old. In 5 years, she will be one-third the age of her aunt. So, her aunt will be 8 * 3 = 24 years old in 5 years. Therefore, her aunt is currently 24 - 5 = 19 years old.\n#### 19\nThe answer is: 19<|im_sep|>",
+          "generated_len": 272
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 75.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each, so he needs 2 * 15 = <<2*15=30>>30 stars for the first 2 bottles.\nHe bought another 3 identical glass bottles, so he needs 3 * 15 = <<3*15=45>>45 stars for the 3 bottles.\nIn total, Kyle needs 30 + 45 = <<30+45=75>>75 stars to fill all ",
+          "generated_len": 388
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 27.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to add 20 - 2 = <<20-2=18>>18 miles to his training.\nHe plans to add 2/3 of a mile each week, so he needs to train for 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\n#### 27\n#### 27<|im_end>### Response:\nOscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he",
+          "generated_len": 393
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $70.\nTina sold three times as many candy bars as Marvin, so she sold 35 * 3 = 105 candy bars.\nTina made 105 * $2 = $210.\nTina made $210 - $70 = $140 more than Marvin.\n#### 140\nThe answer is: 140#### 140\n#### 140\nThe answer is: 140\nThe answer is: 140\n##",
+          "generated_len": 358
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James' partner has been teaching for 40 - 10 = <<40-10=30>>30 years.\nCombined experience = 40 + 30 = <<40+30=70>>70 years.\n#### 70\nThe answer is: 70#### 70\n#### 70\n\nQuestion: A library has 120 books. One-fourth of the books are fiction, and the rest are non-fiction. How many non-fiction books are th",
+          "generated_len": 413
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 48.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The dog's weight at 7 weeks old was 6 pounds.\nAt 9 weeks old, it doubled in weight, so it weighed 6 * 2 = <<6*2=12>>12 pounds.\nAt 3 months old, it doubled in weight again, so it weighed 12 * 2 = <<12*2=24>>24 pounds.\nAt 5 months old, it doubled in weight again, so it weighed 24 * 2 = <<24*2=48>>48 p",
+          "generated_len": 395
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 35.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "The cost of a movie ticket on Monday is $5.\nThe cost of a movie ticket on Wednesday is twice as much as Monday, so it is 2 * $5 = $10.\nThe cost of a movie ticket on Saturday is five times as much as Monday, so it is 5 * $5 = $25.\nGlenn goes to the movie theater on Wednesday and Saturday, so he spend",
+          "generated_len": 354
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 1.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Calvin has gotten 8 haircuts and needs 2 more, so he has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 10 haircuts to reach his goal, so he is 10/10 = <<10/10=1>>1% towards his goal.\n#### 1\nThe answer is: 1#### 1\nThe answer is: 1<|im_sep|>",
+          "generated_len": 242
+        }
+      ]
+    },
+    "10.0": {
+      "accuracy": 0.8,
+      "cot_rate": 0.9,
+      "n_correct": 8,
+      "n_cot": 9,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the $12 rebate, the total cost of the gif",
+          "generated_len": 351
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 16.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of their 3 children has 2 legs, so that's 2*3 = <<2*3=6>>6 legs.\nThe 2 dogs have 4 legs each, so that's 2*4 = <<2*4=8>>8 legs.\nThe 1 cat has 4 legs.\nIncluding Javier, there are 1*2 = <<1*2=2>>2 legs.\nSo, there are 6+8+2 = <<6+8+2=16>>16 legs in total ",
+          "generated_len": 311
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 19.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = 8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = 24 years old in 5 years.\nHer aunt is currently 24 - 5 = 19 years old.\n#### 19\nThe answer is: 19<|im_sep|>",
+          "generated_len": 261
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 1125.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each, so he has 2 * 15 = <<2*15=30>>30 stars.\nHe bought another 3 identical glass bottles, so he has 3 * 15 = <<3*15=45>>45 stars.\nIn total, Kyle has 30 + 45 = <<30+45=75>>75 stars.\nTherefore, Kyle must make 75 * 15 = <<75*15=1125>>1125 star",
+          "generated_len": 373
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 27.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to add 20 - 2 = <<20-2=18>>18 miles to his training.\nHe plans to add 2/3 of a mile each week, so he needs to train for 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\n#### 27\n#### 27<|im_end|>",
+          "generated_len": 202
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $70.\nTina sold three times the number of candy bars as Marvin, so she sold 35 * 3 = 105 candy bars.\nTina made 105 * $2 = $210.\nTina made $210 - $70 = $140 more than Marvin.\n#### 140\nThe answer is: 140#### 140\n#### 140\nThe answer is: 140<|end|>",
+          "generated_len": 291
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nCombined experience = 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n#### 70\n\nQuestion: A library has 120 books. One-fourth of the books are fiction, and the rest are non-fiction. How many non-fiction books are there?\nAnswer:\nOne-fourth",
+          "generated_len": 426
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 48.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The dog's weight at 7 weeks old was 6 pounds.\nAt 9 weeks old, it doubled in weight, so it weighed 6 * 2 = <<6*2=12>>12 pounds.\nAt 3 months old, it doubled in weight again, so it weighed 12 * 2 = <<12*2=24>>24 pounds.\nAt 5 months old, it doubled in weight again, so it weighed 24 * 2 = <<24*2=48>>48 p",
+          "generated_len": 386
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 35.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "Movie tickets cost $5 each on a Monday.\nOn Wednesday, movie tickets cost twice as much as Monday, so $5 x 2 = $10.\nOn Saturday, movie tickets cost five times as much as Monday, so $5 x 5 = $25.\nGlenn goes to the movie theater on Wednesday and Saturday, so he spends $10 + $25 = $35.\n#### 35\nThe answe",
+          "generated_len": 318
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 80.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "He has 8 haircuts so far and needs 2 more, so he has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 2 more haircuts to reach his goal, so he has 10 - 2 = <<10-2=8>>8 haircuts towards his goal.\nTo find the percentage, we divide the number of haircuts he has towards his goal by the total number of h",
+          "generated_len": 393
+        }
+      ]
+    },
+    "12.0": {
+      "accuracy": 0.8,
+      "cot_rate": 0.9,
+      "n_correct": 8,
+      "n_cot": 9,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the $12 rebate, the total cost of the gif",
+          "generated_len": 351
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 4.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of their 3 children has 2 legs, so that's 2*3= <<2*3=6>>6 legs.\nThe 2 dogs have 4 legs each, so that's 2*4= <<2*4=8>>8 legs.\nThe 1 cat has 4 legs.\nIncluding Javier, there are 2 people, so that's 2*2= <<2*2=4>>4 legs.\nSo in total, there are 6+8+4+4+4+4",
+          "generated_len": 302
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 19.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = 8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = <<8*3=24>>24 years old in 5 years.\nHer aunt is 24 - 5 = <<24-5=19>>19 years old today.\n#### 19\nThe answer is: 19\n#### 19\n\nQuestion: A factory pr",
+          "generated_len": 369
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 75.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Each bottle can hold 15 stars, so 2 bottles can hold 2*15= <<2*15=30>>30 stars.\nHe bought another 3 bottles, so he has a total of 2+3= <<2+3=5>>5 bottles.\nEach bottle can hold 15 stars, so 5 bottles can hold 5*15= <<5*15=75>>75 stars.\nKyle must make 75 stars to fill all the glass bottles he bought.\n",
+          "generated_len": 388
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 20.25,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe needs to run 18 * (3/2) = <<18*3/2=27>>27/2 = <<27/2=13.5>>13.5 miles.\nHe needs to run 13.5 / (2/3) = <<13.5*(3/2)=20.25>>20.25 weeks.\n#### 20.25\n#### 20.25<|im_end|>",
+          "generated_len": 223
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $70.\nTina sold 3 * 35 = 105 candy bars, so she made 105 * $2 = $210.\nTina made $210 - $70 = $140 more than Marvin.\n#### 140\nThe answer is: 140.#### 140\n#### 140\nThe answer is: 140.#### 140\nThe answer is: 140.#### 140\n#### 140\nThe answer is: 140.#### 14",
+          "generated_len": 330
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nCombined experience = 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n#### 70\n\nQuestion: A library has 120 books. One-fourth of the books are fiction, and the rest are non-fiction. How many non-fiction books are there?\nAnswer:\nOne-fourth",
+          "generated_len": 426
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 48.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The dog's weight at 7 weeks old was 6 pounds.\nAt 9 weeks old, it doubled in weight, so it weighed 6 * 2 = <<6*2=12>>12 pounds.\nAt 3 months old, it doubled in weight again, so it weighed 12 * 2 = <<12*2=24>>24 pounds.\nAt 5 months old, it doubled in weight again, so it weighed 24 * 2 = <<24*2=48>>48 p",
+          "generated_len": 386
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 35.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "On Wednesday, Glenn pays $5 x 2 = $<<5*2=10>>10\nOn Saturday, Glenn pays $5 x 5 = $<<5*5=25>>25\nIn total, Glenn pays $10 + $25 = $<<10+25=35>>35\n#### 35\nThe answer is: 35<|end|>",
+          "generated_len": 176
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 80.0,
+          "correct": true,
+          "has_cot": false,
+          "generated_preview": "He has 8 haircuts so far and needs 2 more.\nHe needs 2 more haircuts to reach his goal.\nHe has 8 haircuts so far and needs 2 more.\nHe has 8/10 of his goal.\n#### 80\n#### 80<|im_end|>",
+          "generated_len": 180
+        }
+      ]
+    },
+    "16.0": {
+      "accuracy": 0.7,
+      "cot_rate": 1.0,
+      "n_correct": 7,
+      "n_cot": 10,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the rebate, the total cost is $334 - $12 ",
+          "generated_len": 349
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 26.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of his 3 children has 2 legs, so 2*3= <<2*3=6>>6 legs.\nEach dog has 4 legs, so 2 dogs have 2*4= <<2*4=8>>8 legs.\nThe cat has 4 legs.\nIncluding Javier, there are 2 legs.\nSo, 2+6+8+4+2= <<2+6+8+4+2=26>>26 legs.\n#### 26\nThe answer is: 26<|im_sep",
+          "generated_len": 291
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 19.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = <<8*3=24>>24 years old in 5 years.\nHer aunt is 24 - 5 = <<24-5=19>>19 years old today.\n#### 19\nThe answer is: 19\n#### 19\n\nQuestion: A f",
+          "generated_len": 350
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 75.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Each bottle can hold 15 stars, so 2 bottles can hold 2*15= <<2*15=30>>30 stars.\nHe bought another 3 bottles, so he has a total of 2+3= <<2+3=5>>5 bottles.\nEach bottle can hold 15 stars, so 5 bottles can hold 5*15= <<5*15=75>>75 stars.\nKyle must make 75 stars to fill all the glass bottles he bought.\n",
+          "generated_len": 388
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 40.5,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe needs to run 18 * (3/2) = <<18*3/2=27>>27 miles.\nHe needs to run 27 / (2/3) = <<27/(2/3)=40.5>>40.5 weeks.\n#### 40.5\nOscar should start training 40.5 weeks before the marathon.\n#### 40.5\nThe answer is: 40.5weeks#### 40.5\n\nQuestion: A rectangul",
+          "generated_len": 328
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $<<35*2=70>>70\nTina sold 3 * 35 = <<3*35=105>>105 candy bars, so she made 105 * $2 = $<<105*2=210>>210\nTina made $210 - $70 = $<<210-70=140>>140 more than Marvin\n#### 140\nThe answer is: 140#### 140\n\nQuestion: A rectangular garden has a length of 15 met",
+          "generated_len": 356
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n#### 70\n\nQuestion: A library has 120 books. One-fourth of the books are fiction, and the rest are non-fiction. How many non-fiction books are there?\nAnswer:\nOne",
+          "generated_len": 432
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 48.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The dog doubled in weight at 7 weeks old, so it weighed 6 pounds * 2 = <<6*2=12>>12 pounds at 7 weeks old.\nIt doubled in weight again at 3 months old, so it weighed 12 pounds * 2 = <<12*2=24>>24 pounds at 3 months old.\nIt doubled in weight again at 5 months old, so it weighed 24 pounds * 2 = <<24*2=",
+          "generated_len": 408
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 35.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "On Wednesday, Glenn pays $5 * 2 = $<<5*2=10>>10\nOn Saturday, Glenn pays $5 * 5 = $<<5*5=25>>25\nTotal: $10 + $25 = $<<10+25=35>>35\n#### 35\n#### 10\n#### 5\n#### 2\n#### 25\n#### 25\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n#### 35\n",
+          "generated_len": 264
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 0.8,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "He has 8 haircuts so far.\nHe needs 2 more haircuts.\nHe has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 10 - 8 = <<10-8=2>>2 more haircuts.\nHe has 8/10 = <<8/10=0.8>>0.8 of his goal.\n#### 0.8\nThe answer is: 0.8<|im_sep|>",
+          "generated_len": 224
+        }
+      ]
+    },
+    "20.0": {
+      "accuracy": 0.8,
+      "cot_rate": 1.0,
+      "n_correct": 8,
+      "n_cot": 10,
+      "details": [
+        {
+          "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+          "gt_answer": 322.0,
+          "gen_answer": 322.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334.\nAfter the rebate, the total cost is $334 - $12 ",
+          "generated_len": 354
+        },
+        {
+          "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+          "gt_answer": 22.0,
+          "gen_answer": 26.0,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of his 3 children has 2 legs, so 2*3= <<2*3=6>>6 legs.\nEach dog has 4 legs, so 2 dogs have 2*4= <<2*4=8>>8 legs.\nThe cat has 4 legs.\nIncluding Javier, there are 2 legs.\nSo, 2+6+8+4+2= <<2+6+8+4+2=26>>26 legs.\n#### 26\nThe answer is: 26<|improve",
+          "generated_len": 292
+        },
+        {
+          "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+          "gt_answer": 19.0,
+          "gen_answer": 19.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = <<8*3=24>>24 years old in 5 years.\nHer aunt is 24 - 5 = <<24-5=19>>19 years old today.\n#### 19\nThe answer is: 19\n#### 19\n\nQuestion: A f",
+          "generated_len": 350
+        },
+        {
+          "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+          "gt_answer": 75.0,
+          "gen_answer": 75.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each.\nSo, 2 * 15 = <<2*15=30>>30 stars.\nHe bought another 3 identical glass bottles.\nSo, 3 * 15 = <<3*15=45>>45 stars.\nTherefore, Kyle must make 30 + 45 = <<30+45=75>>75 stars.\n#### 75\nThe answer is: 75<|end|>",
+          "generated_len": 268
+        },
+        {
+          "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+          "gt_answer": 27.0,
+          "gen_answer": 27.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe runs 2/3 of a mile each week.\nHe needs 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27",
+          "generated_len": 277
+        },
+        {
+          "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+          "gt_answer": 140.0,
+          "gen_answer": 140.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $<<35*2=70>>70\nTina sold 3 * 35 = <<3*35=105>>105 candy bars, so she made 105 * $2 = $<<105*2=210>>210\nTina made $210 - $70 = $<<210-70=140>>140 more than Marvin\n#### 140\nThe answer is: 140 #### 140\n\nQuestion: A rectangular garden has a length of 15 me",
+          "generated_len": 353
+        },
+        {
+          "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+          "gt_answer": 70.0,
+          "gen_answer": 70.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n\nQuestion: James spends 40 years teaching. His partner has been teaching for 10 years less. How long is their combined experience?\n<|endofquestion|>\nJames' part",
+          "generated_len": 428
+        },
+        {
+          "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+          "gt_answer": 48.0,
+          "gen_answer": 48.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "The dog doubled in weight at 7 weeks old, so it weighed 6 pounds * 2 = <<6*2=12>>12 pounds at 7 weeks old.\nIt doubled in weight again at 3 months old, so it weighed 12 pounds * 2 = <<12*2=24>>24 pounds at 3 months old.\nIt doubled in weight again at 5 months old, so it weighed 24 pounds * 2 = <<24*2=",
+          "generated_len": 422
+        },
+        {
+          "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+          "gt_answer": 35.0,
+          "gen_answer": 35.0,
+          "correct": true,
+          "has_cot": true,
+          "generated_preview": "Movie tickets cost $5 each on a Monday.\nMovie tickets cost $5 x 2 = $<<5*2=10>>10 on a Wednesday.\nMovie tickets cost $5 x 5 = $<<5*5=25>>25 on a Saturday.\nGlenn goes to the movie theater on Wednesday and Saturday.\nSo he spends $10 + $25 = $<<10+25=35>>35.\n#### 35\nThe answer is: 35<|end|>",
+          "generated_len": 288
+        },
+        {
+          "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+          "gt_answer": 80.0,
+          "gen_answer": 0.8,
+          "correct": false,
+          "has_cot": true,
+          "generated_preview": "He has 8 haircuts so far.\nHe needs 2 more haircuts.\nHe has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 10 - 8 = <<10-8=2>>2 more haircuts.\nHe has 8/10 = <<8/10=0.8>>0.8 of his goal.\n#### 0.8\nThe answer is: 0.8<|im_sep|>",
+          "generated_len": 224
+        }
+      ]
+    }
+  },
+  "kill_criteria": {
+    "K1": {
+      "description": "No scale in [4,16] achieves accuracy > 0.20",
+      "max_intermediate_accuracy": 0.8,
+      "result": "PASS"
+    },
+    "K2": {
+      "description": "All scores <= 0.20 or >= 0.60 (no intermediates)",
+      "intermediate_values": [],
+      "result": "FAIL"
+    },
+    "K3": {
+      "description": "Non-monotonic accuracy",
+      "monotonic": false,
+      "result": "FAIL"
+    }
+  },
+  "analysis": {
+    "largest_jump": 0.6,
+    "largest_jump_between": [
+      4.0,
+      6.0
+    ],
+    "sigmoid_fit": {
+      "s_mid": 5.75,
+      "tau": 0.14,
+      "r_squared": 0.9889
+    }
+  },
+  "timing": {
+    "base_gen_s": 25.1,
+    "sweep_gen_s": 496.3,
+    "eval_s": 0.0,
+    "total_s": 521.9
+  }
+}

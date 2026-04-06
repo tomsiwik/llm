@@ -1,0 +1,208 @@
+{
+  "experiment": "exp_room_model_geometric_routing",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "n_domains": 5,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "d_model": 2560,
+  "n_layers": 30,
+  "routing_modules": [
+    "self_attn.q_proj",
+    "self_attn.k_proj",
+    "self_attn.v_proj",
+    "self_attn.o_proj",
+    "mlp.gate_proj",
+    "mlp.up_proj"
+  ],
+  "routing": {
+    "a_only": {
+      "accuracy": 0.15977511788175552,
+      "layer": 14,
+      "n_modules": 6,
+      "per_domain": {
+        "medical": 0.11144130757800892,
+        "code": 0.30888575458392104,
+        "math": 0.2019047619047619,
+        "legal": 0.16413793103448276,
+        "finance": 0.08394607843137254
+      }
+    },
+    "dw_single_module": {
+      "per_module_accuracy": {
+        "self_attn.q_proj": 0.1949582879941966,
+        "self_attn.k_proj": 0.1953210010881393,
+        "self_attn.v_proj": 0.17881755531374682,
+        "self_attn.o_proj": 0.12658686978599928,
+        "mlp.gate_proj": 0.15796155241204207,
+        "mlp.up_proj": 0.16612259702575263
+      },
+      "best_module": "self_attn.k_proj",
+      "best_accuracy": 0.1953210010881393
+    },
+    "dw_per_layer": {
+      "per_layer_accuracy": {
+        "0": 0.24410591222343125,
+        "7": 0.17101922379397896,
+        "14": 0.15669205658324264,
+        "21": 0.1632208922742111,
+        "29": 0.31247733043162856
+      },
+      "best_layer": 29,
+      "best_accuracy": 0.31247733043162856
+    },
+    "dw_multi_layer": {
+      "accuracy": 0.1802684076895176,
+      "per_domain": {
+        "medical": 0.22436849925705796,
+        "code": 0.19322990126939352,
+        "math": 0.3352380952380952,
+        "legal": 0.12344827586206897,
+        "finance": 0.10723039215686274
+      }
+    },
+    "ridge": {
+      "accuracy": 0.9834965542256076,
+      "per_domain": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 0.9990476190476191,
+        "legal": 0.9903448275862069,
+        "finance": 0.9534313725490197
+      }
+    },
+    "sequence_level": {
+      "a_only_accuracy": 0.12,
+      "dw_multi_layer_accuracy": 0.22,
+      "ridge_accuracy": 1.0
+    },
+    "routing_time_s": 6.733532905578613
+  },
+  "agreement": {
+    "overall_agreement": 0.17881755531374682,
+    "per_domain_agreement": {
+      "medical": 0.22436849925705796,
+      "code": 0.19322990126939352,
+      "math": 0.3361904761904762,
+      "legal": 0.12344827586206897,
+      "finance": 0.1017156862745098
+    },
+    "n_disagreements": 4528,
+    "disagree_geo_right_pct": 0.0030918727915194345,
+    "disagree_ridge_right_pct": 0.9812279151943463,
+    "disagree_neither_right_pct": 0.015680212014134276,
+    "confusion_matrix": [
+      [
+        151,
+        77,
+        301,
+        68,
+        76
+      ],
+      [
+        79,
+        137,
+        209,
+        186,
+        98
+      ],
+      [
+        235,
+        149,
+        352,
+        161,
+        153
+      ],
+      [
+        326,
+        146,
+        584,
+        179,
+        215
+      ],
+      [
+        572,
+        92,
+        725,
+        68,
+        175
+      ]
+    ]
+  },
+  "score_analysis": {
+    "mean_correct_weight": 0.2013275319196465,
+    "mean_other_weight": 0.1996681170200884,
+    "mean_margin_ratio": 0.8484845116178281,
+    "pct_margin_gt1": 0.1802684076895176,
+    "per_domain": {
+      "medical": {
+        "mean_weight_correct": 0.20619760264919085,
+        "mean_weight_others": 0.19845059933770232,
+        "top_confuser": "math"
+      },
+      "code": {
+        "mean_weight_correct": 0.20135544266444444,
+        "mean_weight_others": 0.19966113933388885,
+        "top_confuser": "math"
+      },
+      "math": {
+        "mean_weight_correct": 0.21460526723062706,
+        "mean_weight_others": 0.19634868319234322,
+        "top_confuser": "medical"
+      },
+      "legal": {
+        "mean_weight_correct": 0.19238118288838846,
+        "mean_weight_others": 0.20190470427790289,
+        "top_confuser": "math"
+      },
+      "finance": {
+        "mean_weight_correct": 0.19871309423566946,
+        "mean_weight_others": 0.20032172644108265,
+        "top_confuser": "math"
+      }
+    },
+    "b_norms": {
+      "medical": 1.683013677597046,
+      "code": 1.588137149810791,
+      "math": 1.8279139995574951,
+      "legal": 1.6689379215240479,
+      "finance": 1.6242570877075195
+    }
+  },
+  "latency": {
+    "single_token_ms": 4.315600395202637,
+    "batch_128_total_ms": 8.920936584472656,
+    "batch_128_per_token_ms": 0.06969481706619263,
+    "n_modules_used": 6,
+    "layer_used": 14
+  },
+  "kill_criteria": {
+    "K804": {
+      "pass": false,
+      "value": 0.31247733043162856,
+      "threshold": 0.6,
+      "detail": "Best geometric routing accuracy = 31.2% (threshold 60%)"
+    },
+    "K805": {
+      "pass": false,
+      "value": 0.17881755531374682,
+      "threshold": 0.5,
+      "detail": "Agreement with ridge router = 17.9% (threshold 50%)"
+    }
+  },
+  "comparisons": {
+    "a_only_accuracy": 0.15977511788175552,
+    "best_dw_accuracy": 0.31247733043162856,
+    "improvement_over_a_only": 1.9557321225879682,
+    "ridge_accuracy": 0.9834965542256076
+  },
+  "verdict": "KILLED",
+  "total_time_s": 13.5,
+  "timestamp": "2026-04-06 12:30:55"
+}

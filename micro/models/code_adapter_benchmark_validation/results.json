@@ -1,0 +1,1695 @@
+{
+  "experiment": "code_adapter_benchmark_validation",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "adapter": "code_sft_adapter",
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "base_results": {
+    "mmlu_accuracy": 0.38,
+    "gsm8k_accuracy": 0.58,
+    "humaneval_pass1": 0.6,
+    "eval_time_s": 513.2
+  },
+  "adapter_results": {
+    "mmlu_accuracy": 0.46,
+    "gsm8k_accuracy": 0.4,
+    "humaneval_pass1": 0.45,
+    "eval_time_s": 2658.8
+  },
+  "deltas": {
+    "mmlu": 0.08000000000000002,
+    "gsm8k": -0.17999999999999994,
+    "humaneval": -0.14999999999999997
+  },
+  "kill_criteria": {
+    "k614_mmlu_nondegradation": {
+      "result": "PASS",
+      "mmlu_delta": 0.08000000000000002
+    },
+    "k615_structured_improvement": {
+      "result": "FAIL",
+      "gsm8k_delta": -0.17999999999999994,
+      "humaneval_delta": -0.14999999999999997
+    },
+    "k616_above_random": {
+      "result": "PASS",
+      "mmlu_above_random": true
+    }
+  },
+  "overall": "KILLED",
+  "total_time_s": 3299.3,
+  "details": {
+    "base_mmlu": [
+      {
+        "subject": "abstract_algebra",
+        "predicted": "C",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "C) 2\n\n### Explanation:\nThe degree of the field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q is 2"
+      },
+      {
+        "subject": "anatomy",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "Answer: C) paralysis of the facial muscles, loss of taste and lacrimation.  Response: C) paralysis o"
+      },
+      {
+        "subject": "astronomy",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) This type occurs in binary systems. (Incorrect, type-Ia supernovae occur in binary systems, but n"
+      },
+      {
+        "subject": "business_ethics",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "Answer: C) Cryptocurrencies, Cheap, Secure, Financial crime Response: C) Cryptocurrencies, Cheap, Se"
+      },
+      {
+        "subject": "clinical_knowledge",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) 18 gauge. (18 gauge cannula is commonly used for rapid blood transfusions.)<|im_sep|>### Instruct"
+      },
+      {
+        "subject": "college_biology",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "Answer: C) reduce the carrying capacity if the environment to lower the K value. This approach would"
+      },
+      {
+        "subject": "college_chemistry",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) r = k ln[A] Response: A) r = k ln[A] Response: A) r = k ln[A] Response: A)"
+      },
+      {
+        "subject": "college_computer_science",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) the matrix, if stored directly, is large and can be clumsy to manage. (Correct)  \nB) it is not ca"
+      },
+      {
+        "subject": "college_mathematics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) k = 0 and n = 1\n\n### Explanation:\n1. The equation e^x + x - 2 = 0 has no"
+      },
+      {
+        "subject": "college_physics",
+        "predicted": "C",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "C) an average of 10 times, with an rms deviation of about 1\n\n### Explanation:\nQuantum efficiency (QE"
+      },
+      {
+        "subject": "computer_security",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) Mutation-based\n\n### Explanation:\nMutation-based fuzzing involves making small changes to the code"
+      },
+      {
+        "subject": "conceptual_physics",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) 7 N\n\n### Explanation:\nThe horizontal component of a force can be found using the cosine of the an"
+      },
+      {
+        "subject": "econometrics",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) 99% of the time in repeated samples, the interval would contain the true value of the parameter\n\n"
+      },
+      {
+        "subject": "electrical_engineering",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) Both A and C\n\n### Explanation:\nThe Barkhausen criterion for an oscillator states that for sustain"
+      },
+      {
+        "subject": "elementary_mathematics",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "A) p = 4\n\n### Explanation:\nTo solve for p, we need to isolate p on one side of the equation. We can "
+      },
+      {
+        "subject": "formal_logic",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "Answer: D) It is difficult to convince people of the unconscious, and in turn to teach them what the"
+      },
+      {
+        "subject": "global_facts",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "A) 10%<|im_sep|>### Instruction:\nAnswer the following multiple choice question. Reply with ONLY the "
+      },
+      {
+        "subject": "high_school_biology",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) directional selection. ### Response:\nA) directional selection. ### Response:\nA) directional selec"
+      },
+      {
+        "subject": "high_school_chemistry",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) temporary dipoles created by the position of electrons around the nuclei in a molecule.  Response"
+      },
+      {
+        "subject": "high_school_computer_science",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "A) 1\n\n### Explanation:\nIn Python, the left shift operator (<<) shifts the bits of the number to the "
+      },
+      {
+        "subject": "high_school_european_history",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) merely a property of a certain kind of matter\nAnswer: C) merely a property of a certain kind of m"
+      },
+      {
+        "subject": "high_school_geography",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) a currency. (The lack of a currency is a significant barrier to economic advancement in subsisten"
+      },
+      {
+        "subject": "high_school_government_and_politics",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) Freedom of speech is protected except in certain situations, such as yelling \"fire\" in a crowded "
+      },
+      {
+        "subject": "high_school_macroeconomics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) inflation had already impacted the economy before the fiscal stimulus. Response: **A**. Response:"
+      },
+      {
+        "subject": "high_school_mathematics",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) (0, \u2013 3) ### Response: A) (0, \u2013 3) ### Response: A) (0, \u2013 3"
+      },
+      {
+        "subject": "high_school_microeconomics",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) total product is at its highest point. Marginal revenue equals marginal cost at the point where t"
+      },
+      {
+        "subject": "high_school_physics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) 0.005 C\n\n### Explanation:\nThe charge on a capacitor can be calculated using the formula Q = CV, w"
+      },
+      {
+        "subject": "high_school_psychology",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) too much curvature of the cornea and lens\n\n### Explanation:\nNearsightedness, also known as myopia"
+      },
+      {
+        "subject": "high_school_statistics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) P(t > 1.54) with df = 6\n\n### Explanation:\nTo find the P-value, we need to calculate the probabili"
+      },
+      {
+        "subject": "high_school_us_history",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "Answer: C) U.S. settlers were the first to arrive in the region; they claimed it for their country. "
+      },
+      {
+        "subject": "high_school_world_history",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "Answer: D) Mobilization of pan-Asian ideology. The passage above is most associated with the mobiliz"
+      },
+      {
+        "subject": "human_aging",
+        "predicted": "C",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "C) Geriatrics\n\n### Explanation:\nGeriatrics is the branch of medicine that deals with the health care"
+      },
+      {
+        "subject": "human_sexuality",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) Needle aspiration\n\n### Explanation:\nThe question asks which method of detecting breast cancer inv"
+      },
+      {
+        "subject": "international_law",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) The coastal State\n\n### Explanation:\nThe coastal State has jurisdiction over crimes committed on b"
+      },
+      {
+        "subject": "jurisprudence",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) It demonstrates the difference between the internal and the external aspect of a rule. Response: "
+      },
+      {
+        "subject": "logical_fallacies",
+        "predicted": "C",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "C) affirms the antecedent or denies the consequent\n\n### Explanation:\nA valid disjunctive syllogism i"
+      },
+      {
+        "subject": "machine_learning",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) True, True\n\n### Explanation:\n1. **Statement 1**: Linear regression is known to have the smallest "
+      },
+      {
+        "subject": "management",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) Satisficing\n\n### Explanation:\nSatisficing is a term used in decision theory and behavioral econom"
+      },
+      {
+        "subject": "marketing",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) ADD. (Attention, Desire, Intent, and Liking) is a model used to explain how advertising works. Th"
+      },
+      {
+        "subject": "medical_genetics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) telomeres. (Telomeres are the ends of chromosomes and are involved in DNA replication and protect"
+      },
+      {
+        "subject": "miscellaneous",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) Dun & Bradstreet, Inc. (D) the United States Retail Credit Association (D) the United States Reta"
+      },
+      {
+        "subject": "moral_disputes",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) jus in bello. (Just war theory's principle of military necessity belongs to jus in bello.)<|im_se"
+      },
+      {
+        "subject": "moral_scenarios",
+        "predicted": "C",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "C) Not wrong, Wrong\n\n### Explanation:\nIn Scenario 1, slamming on the brakes to avoid hitting a ball "
+      },
+      {
+        "subject": "nutrition",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "A) Meat\nB) Confectionary\nC) Fruits and vegetables\nD) Potatoes\n\n### Answer:\nC) Fruits and vegetables\n"
+      },
+      {
+        "subject": "philosophy",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) not essential to our existence\n\n### Explanation:\nAesthetics is the branch of philosophy that deal"
+      },
+      {
+        "subject": "prehistory",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) conspicuous consumption by elites. (Minoan culture is known for its elaborate palaces and artifac"
+      },
+      {
+        "subject": "professional_accounting",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) 164%<|im_sep|>### Instruction:\n\nYou are given a problem to solve. The problem is as follows:\n\nA c"
+      },
+      {
+        "subject": "professional_law",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) inadmissible, because the attorney-client privilege prevents such a breach of confidential commun"
+      },
+      {
+        "subject": "professional_medicine",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) Hematoma of the left thigh\n\n### Solution:\nThe most likely cause of the patient's decreased sensat"
+      },
+      {
+        "subject": "professional_psychology",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "Answer: D) Aging is related to some loss of erectile rigidity in the male. (This statement accuratel"
+      }
+    ],
+    "base_gsm8k": [
+      {
+        "question_preview": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for ",
+        "predicted": 18.0,
+        "expected": 18.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Calculate the total number of eggs laid by Janet's ducks each day.\n2. Determine how many eggs are eaten by Janet for breakfast.\n3. Determine h"
+      },
+      {
+        "question_preview": "A robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it ",
+        "predicted": 3.0,
+        "expected": 3.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the total number of bolts of fiber required to make one robe.\n\n1. **Determine the amount of white fiber needed:**\n   - The problem states that a robe takes "
+      },
+      {
+        "question_preview": "Josh decides to try flipping a house.  He buys a house for $80,000 and then puts in $50,000 in repai",
+        "predicted": 195000.0,
+        "expected": 70000.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Calculate the total cost of the house including repairs.\n2. Determine the increased value of the house.\n3. Calculate the profit by subtracting"
+      },
+      {
+        "question_preview": "James decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meter",
+        "predicted": 180.0,
+        "expected": 540.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the total distance James runs in a week by considering the number of sprints, the distance per sprint, and the number of times he runs per week.\n\n1. **Deter"
+      },
+      {
+        "question_preview": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, meal",
+        "predicted": 800.0,
+        "expected": 20.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine how much feed each chicken receives in the final meal of the day and then calculate the total amount of feed needed for the entire flock.\n\n1. **Determine th"
+      },
+      {
+        "question_preview": "Kylar went to the store to buy glasses for his new apartment. One glass costs $5, but every second g",
+        "predicted": 64.0,
+        "expected": 64.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the cost of the glasses Kylar wants to buy, considering that every second glass is 60% of the price of a single glass.\n\n1. **Determine the cost of a single "
+      },
+      {
+        "question_preview": "Toulouse has twice as many sheep as Charleston. Charleston has 4 times as many sheep as Seattle. How",
+        "predicted": 260.0,
+        "expected": 260.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the number of sheep each city has and then sum them up.\n\n1. **Determine the number of sheep in Seattle:**\n   - Seattle has 20 sheep.\n\n2. **Determine the num"
+      },
+      {
+        "question_preview": "Carla is downloading a 200 GB file. Normally she can download 2 GB/minute, but 40% of the way throug",
+        "predicted": 120.0,
+        "expected": 160.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to break it down into steps and calculate the time taken for each part.\n\n1. **Calculate the time taken to download 40% of the file:**\n   - The total file size is 200 GB."
+      },
+      {
+        "question_preview": "John drives for 3 hours at a speed of 60 mph and then turns around because he realizes he forgot som",
+        "predicted": 120.0,
+        "expected": 45.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the total distance John travels and then determine how far he is from home.\n\n1. **Calculate the distance John drives before standstill traffic:**\n   - John "
+      },
+      {
+        "question_preview": "Eliza's rate per hour for the first 40 hours she works each week is $10. She also receives an overti",
+        "predicted": 460.0,
+        "expected": 460.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate Eliza's earnings for both her regular hours and her overtime hours.\n\n1. **Calculate earnings for regular hours:**\n   Eliza's regular hourly rate is $10 per "
+      },
+      {
+        "question_preview": "A new program had 60 downloads in the first month. The number of downloads in the second month was t",
+        "predicted": 88.2,
+        "expected": 366.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the number of downloads for each month and then sum them up.\n\n1. **First Month:**\n   The program had 60 downloads.\n\n2. **Second Month:**\n   The number of do"
+      },
+      {
+        "question_preview": "Toula went to the bakery and bought various types of pastries. She bought 3 dozen donuts which cost ",
+        "predicted": 694.0,
+        "expected": 694.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the cost of each type of pastry and then sum these costs to find the total cost.\n\n1. **Calculate the cost of the donuts:**\n   - Toula bought 3 dozen donuts."
+      },
+      {
+        "question_preview": "Carlos is planting a lemon tree. The tree will cost $90 to plant. Each year it will grow 7 lemons, w",
+        "predicted": 7.0,
+        "expected": 13.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine how many years it will take for Carlos to break even on the cost of planting and maintaining the lemon tree. Here are the steps:\n\n1. **Calculate the initial"
+      },
+      {
+        "question_preview": "Melanie is a door-to-door saleswoman. She sold a third of her vacuum cleaners at the green house, 2 ",
+        "predicted": 5.0,
+        "expected": 18.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, let's denote the total number of vacuum cleaners Melanie started with as \\( x \\).\n\n1. **Vacuum Cleaners Sold at the Green House:**\n   Melanie sold a third of her vacuum cleaners"
+      },
+      {
+        "question_preview": "In a dance class of 20 students, 20% enrolled in contemporary dance, 25% of the remaining enrolled i",
+        "predicted": 12.0,
+        "expected": 60.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Calculate the number of students enrolled in contemporary dance.\n2. Determine the number of students remaining after accounting for those enro"
+      },
+      {
+        "question_preview": "A merchant wants to make a choice of purchase between 2 purchase plans: jewelry worth $5,000 or elec",
+        "predicted": 96.0,
+        "expected": 125.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the potential profit for each purchase plan and then compare them to determine which one maximizes the profit.\n\n1. **Calculate the potential profit for the "
+      },
+      {
+        "question_preview": "Two trains leave San Rafael at the same time. They begin traveling westward, both traveling for 80 m",
+        "predicted": 230.0,
+        "expected": 230.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total distance covered by each train over the two days.\n\n1. **Distance covered on the first day:**\n   - Both trains travel westward for 80 miles.\n   - T"
+      },
+      {
+        "question_preview": "Jill gets paid $20 per hour to teach and $30 to be a cheerleading coach. If she works 50 weeks a yea",
+        "predicted": 57500.0,
+        "expected": 57500.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate Jill's total annual salary from both teaching and coaching.\n\n1. **Calculate the total hours Jill works as a teacher:**\n   \\[\n   \\text{Total hours as a teach"
+      },
+      {
+        "question_preview": "Claire makes a 3 egg omelet every morning for breakfast.  How many dozens of eggs will she eat in 4 ",
+        "predicted": 7.0,
+        "expected": 7.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the total number of eggs Claire uses in 4 weeks and then convert that number into dozens.\n\n1. **Calculate the number of eggs used per day:**\n   Claire makes"
+      },
+      {
+        "question_preview": "Marissa is hiking a 12-mile trail. She took 1 hour to walk the first 4 miles, then another hour to w",
+        "predicted": 1.0,
+        "expected": 6.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine the speed Marissa needs to walk the remaining distance to achieve an average speed of 4 miles per hour over the entire 12-mile trail.\n\n1. **Calculate the to"
+      },
+      {
+        "question_preview": "I have 10 liters of orange drink that are two-thirds water and I wish to add it to 15 liters of pine",
+        "predicted": 9.0,
+        "expected": 15.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Calculate the amount of water in the 10 liters of orange drink.\n2. Calculate the amount of water in the 15 liters of pineapple drink.\n3. Deter"
+      },
+      {
+        "question_preview": "Raymond and Samantha are cousins. Raymond was born 6 years before Samantha. Raymond had a son at the",
+        "predicted": 14.0,
+        "expected": 14.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the age of Raymond's son and then find out how many years ago he was born.\n\n1. **Determine Samantha's age when Raymond's son was born:**\n   - Samantha is cu"
+      },
+      {
+        "question_preview": "Billy sells DVDs. He has 8 customers on Tuesday. His first 3 customers buy one DVD each.  His next 2",
+        "predicted": 7.0,
+        "expected": 7.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total number of DVDs Billy sold to his customers on Tuesday.\n\n1. Billy's first 3 customers each buy 1 DVD:\n   \\[\n   3 \\text{ customers} \\times 1 \\text{ "
+      },
+      {
+        "question_preview": "A candle melts by 2 centimeters every hour that it burns. How many centimeters shorter will a candle",
+        "predicted": 8.0,
+        "expected": 8.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the total time the candle is burning and then calculate how much it will melt during that time.\n\n1. **Determine the total time the candle is burning:**\n   -"
+      },
+      {
+        "question_preview": "Kyle bought last year's best-selling book for $19.50. This is with a 25% discount from the original ",
+        "predicted": 26.0,
+        "expected": 26.0,
+        "is_correct": true,
+        "output_preview": "To find the original price of the book, we need to understand that the $19.50 Kyle paid is 75% of the original price (since 100% - 25% = 75%).\n\nLet's denote the original price as \\( P \\).\n\nGiven that "
+      },
+      {
+        "question_preview": "Marie ordered one chicken meal that costs $12, 5 packs of milk that costs $3 each, 4 apples that cos",
+        "predicted": 4.0,
+        "expected": 2.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the total cost of the items Marie ordered and then determine how many boxes of pizza she bought.\n\n1. **Calculate the cost of the chicken meal:**\n   \\[\n   \\t"
+      },
+      {
+        "question_preview": "Mishka bought 3 pairs of shorts, 3 pairs of pants, and 3 pairs of shoes. One pair of shorts costs $1",
+        "predicted": 243.0,
+        "expected": 243.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total cost of each type of clothing item and then sum these costs to find the total amount Mishka spent.\n\n1. **Calculate the cost of the shorts:**\n   - "
+      },
+      {
+        "question_preview": "Cynthia eats one serving of ice cream every night.  She buys cartons of ice cream with 15 servings o",
+        "predicted": 16.0,
+        "expected": 16.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine how many cartons of ice cream Cynthia will need to buy over 60 days and then calculate the total cost.\n\n1. **Determine the number of servings Cynthia eats i"
+      },
+      {
+        "question_preview": "Henry made two stops during his 60-mile bike trip. He first stopped after 20 miles. His second stop ",
+        "predicted": 5.0,
+        "expected": 25.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine the distance between Henry's first and second stops.\n\n1. **Identify the total distance of the trip:**\n   - The total distance of the trip is 60 miles.\n\n2. *"
+      },
+      {
+        "question_preview": "Gloria is shoe shopping when she comes across a pair of boots that fit her shoe budget. However, she",
+        "predicted": 104.0,
+        "expected": 104.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the cost of the boots. Let's break it down step by step:\n\n1. **Identify the cost of one pair of heels:**\n   One pair of heels costs $33.\n\n2. **Determine the"
+      },
+      {
+        "question_preview": "Darrell and Allen's ages are in the ratio of 7:11. If their total age now is 162, calculate Allen's ",
+        "predicted": 109.0,
+        "expected": 109.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. **Understand the ratio and total age:**\n   - The ratio of Darrell's age to Allen's age is 7:11.\n   - The total age of Darrell and Allen is 162"
+      },
+      {
+        "question_preview": "Gunter is trying to count the jelly beans in a jar. He asks his friends how many they think are in t",
+        "predicted": 80.0,
+        "expected": 80.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the average of the guesses made by Gunter's friends.\n\n1. **First Friend's Guess:**\n   The first friend guesses 80 jelly beans.\n\n2. **Second Friend's Guess:*"
+      },
+      {
+        "question_preview": "John takes care of 10 dogs.  Each dog takes .5 hours a day to walk and take care of their business. ",
+        "predicted": 35.0,
+        "expected": 35.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total number of hours John spends taking care of the dogs in a week.\n\n1. **Determine the daily time spent on each dog:**\n   Each dog takes 0.5 hours a d"
+      },
+      {
+        "question_preview": "Gretchen has 110 coins. There are 30 more gold coins than silver coins. How many gold coins does Gre",
+        "predicted": 40.0,
+        "expected": 70.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine the number of gold coins Gretchen has. Let's break it down step by step:\n\n1. **Define Variables:**\n   - Let \\( S \\) represent the number of silver coins.\n  "
+      },
+      {
+        "question_preview": "Siobhan has 2 fewer jewels than Aaron. Aaron has 5 more jewels than half of Raymond's jewels. If Ray",
+        "predicted": 23.0,
+        "expected": 23.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to follow the relationships given in the problem step by step.\n\n1. **Determine the number of jewels Aaron has:**\n   - Raymond has 40 jewels.\n   - Aaron has 5 more jewels"
+      },
+      {
+        "question_preview": "Mike plays ping pong for 40 minutes.  In the first 20 minutes, he scores 4 points.  In the second 20",
+        "predicted": 9.0,
+        "expected": 9.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total points Mike scored during the 40 minutes of ping pong.\n\n1. **Calculate the points scored in the first 20 minutes:**\n   Mike scores 4 points in the"
+      },
+      {
+        "question_preview": "Terry eats 2 yogurts a day.  They are currently on sale at 4 yogurts for $5.00.  How much does he sp",
+        "predicted": 75.0,
+        "expected": 75.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine how many yogurts Terry eats in 30 days and then calculate the cost based on the sale price.\n\n1. **Calculate the number of yogurts Terry eats in 30 days:**\n "
+      },
+      {
+        "question_preview": "John plans to sell all his toys and use the money to buy video games. He has 13 lego sets and he sel",
+        "predicted": 5.0,
+        "expected": 2.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Calculate the total amount of money John gets from selling his lego sets.\n2. Calculate the total cost of the video games John buys.\n3. Determi"
+      },
+      {
+        "question_preview": "John runs 60 miles a week. He runs 3 days a week.  He runs 3 hours the first day and half as much th",
+        "predicted": 10.0,
+        "expected": 10.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine John's running speed in miles per hour. Here are the steps:\n\n1. **Calculate the total number of days John runs in a week:**\n   John runs 3 days a week.\n\n2. "
+      },
+      {
+        "question_preview": "Dana can run at a rate of speed four times faster than she can walk, but she can skip at a rate of s",
+        "predicted": 2.0,
+        "expected": 18.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine how many miles Dana can travel in six hours, given her running, walking, and skipping speeds.\n\n1. **Determine Dana's skipping speed:**\n   Dana can skip at a"
+      },
+      {
+        "question_preview": "Brandon's iPhone is four times as old as Ben's iPhone. Ben's iPhone is two times older than Suzy's i",
+        "predicted": 8.0,
+        "expected": 8.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine the ages of each person's iPhone and then find the age of Brandon's iPhone.\n\n1. **Determine the age of Suzy's iPhone:**\n   Suzy\u2019s iPhone is 1 year old.\n\n2. "
+      },
+      {
+        "question_preview": "The great dragon, Perg, sat high atop mount Farbo, breathing fire upon anything within a distance of",
+        "predicted": 1000.0,
+        "expected": 200.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine how far Polly can throw the gold javelin when she holds the sapphire gemstone. The problem states that holding the gemstone allows Polly to throw the javeli"
+      },
+      {
+        "question_preview": "Grandma Jones baked 5 apple pies for the fireman's luncheon.  She cut each pie into 8 pieces and set",
+        "predicted": 26.0,
+        "expected": 26.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to determine how many pieces of pie were taken by the guests. Let's break it down step by step:\n\n1. **Determine the total number of pie pieces:**\n   - Grandma Jones bake"
+      },
+      {
+        "question_preview": "According to its nutritional info, a bag of chips has 250 calories per serving. If a 300g bag has 5 ",
+        "predicted": 200.0,
+        "expected": 48.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. **Determine the total calories in the 300g bag of chips:**\n   - Each serving has 250 calories.\n   - There are 5 servings in the 300g bag.\n   -"
+      },
+      {
+        "question_preview": "Charlie wants to sell beeswax candles.  For every pound of beeswax, he can make 10 tapered candles. ",
+        "predicted": 20.0,
+        "expected": 20.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the total cost of making the candles, the total revenue from selling the candles, and then find the net profit.\n\n1. **Calculate the total cost of making the"
+      },
+      {
+        "question_preview": "Meredith is a freelance blogger who writes about health topics and submits to clients each day as he",
+        "predicted": 104.0,
+        "expected": 104.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to calculate the number of articles Meredith wrote each day and then determine the total number of hours she spent writing those articles.\n\n1. **Calculate the number of "
+      },
+      {
+        "question_preview": "Candice put 80 post-it notes in her purse before she headed out to her job at the coffee shop.  On h",
+        "predicted": 23.0,
+        "expected": 163.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to determine how many Post-it notes Candice bought from the store. Let's break it down step by step:\n\n1. **Initial Post-it notes in the purse:**\n   Candice started with "
+      },
+      {
+        "question_preview": "John buys twice as many red ties as blue ties.  The red ties cost 50% more than blue ties.  He spent",
+        "predicted": 600.0,
+        "expected": 800.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Determine the number of blue ties John bought.\n2. Calculate the cost of the red ties.\n3. Calculate the total amount spent on ties.\n\n#### Step "
+      },
+      {
+        "question_preview": "Tracy used a piece of wire 4 feet long to support tomato plants in the garden. The wire was cut into",
+        "predicted": 8.0,
+        "expected": 8.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to convert the total length of the wire from feet to inches and then determine how many 6-inch pieces can be obtained from that length.\n\n1. **Convert the total length of"
+      },
+      {
+        "question_preview": "Richard lives in an apartment building with 15 floors. Each floor contains 8 units, and 3/4 of the b",
+        "predicted": 30.0,
+        "expected": 30.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. **Calculate the total number of units in the building:**\n   - Each floor has 8 units.\n   - There are 15 floors.\n   - Total units = 8 units/flo"
+      }
+    ],
+    "base_humaneval": [
+      {
+        "task_id": "HumanEval/0",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5"
+      },
+      {
+        "task_id": "HumanEval/1",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpyms99ice.py\", line 44, in <module>\n    check(separate_paren_groups)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmpyms99ice.py\", line 32, i",
+        "output_preview": "```python\nfrom typing import List\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \"\"\" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups "
+      },
+      {
+        "task_id": "HumanEval/2",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef truncate_number(number: float) -> float:\n    \"\"\" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>"
+      },
+      {
+        "task_id": "HumanEval/3",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpgkcqvn9q.py\", line 27, in <module>\n    check(below_zero)\n    ~~~~~^^^^^^^^^^^^\n  File \"/var/tmp/tmpgkcqvn9q.py\", line 21, in check\n    assert can",
+        "output_preview": "```python\ndef below_zero(operations: List[int]) -> bool:\n    balance = 0\n    for operation in operations:\n        if operation < 0:\n            balance -= operation\n        else:\n            balance += operation\n    return balance < 0\n```python\ndef below_zero(operations: List[int]) -> bool:\n    bala"
+      },
+      {
+        "task_id": "HumanEval/4",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in t"
+      },
+      {
+        "task_id": "HumanEval/5",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp5jjhy6h9.py\", line 28, in <module>\n    check(intersperse)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/var/tmp/tmp5jjhy6h9.py\", line 24, in check\n    assert c",
+        "output_preview": "```python\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \"\"\"\n    result = []\n    for i in "
+      },
+      {
+        "task_id": "HumanEval/6",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpy5_auiyz.py\", line 39, in <module>\n    check(parse_nested_parens)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmpy5_auiyz.py\", line 34, in ch",
+        "output_preview": "```python\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \"\"\" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels "
+      },
+      {
+        "task_id": "HumanEval/7",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \"\"\" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'ar"
+      },
+      {
+        "task_id": "HumanEval/8",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \"\"\" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>"
+      },
+      {
+        "task_id": "HumanEval/9",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpn6yrqz4j.py\", line 37, in <module>\n    check(rolling_max)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/var/tmp/tmpn6yrqz4j.py\", line 32, in check\n    assert c",
+        "output_preview": "```python\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \"\"\" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \"\"\"\n  "
+      },
+      {
+        "task_id": "HumanEval/10",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp9wy2ncla.py\", line 35, in <module>\n    check(make_palindrome)\n    ~~~~~^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmp9wy2ncla.py\", line 28, in check\n    ",
+        "output_preview": "```python\ndef is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    return string == string[::-1]\n\n\ndef make_palindrome(string: str) -> str:\n    \"\"\" Find the shortest palindrome that begins with a supplied string.\n    Algorithm idea is simple:\n    - Find the longes"
+      },
+      {
+        "task_id": "HumanEval/11",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n    return ''.join('1' if x!= y else '0' for x, y in zip("
+      },
+      {
+        "task_id": "HumanEval/12",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef longest(strings: List[str]) -> Optional[str]:\n    \"\"\" Out of list of strings, return the longest one. Return the first one in case of multiple\n    strings of the same length. Return None in case the input list is empty.\n    >>> longest([])\n\n    >>> longest(['a', 'b', 'c'])\n    'a'\n    "
+      },
+      {
+        "task_id": "HumanEval/13",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef greatest_common_divisor(a: int, b: int) -> int:\n    \"\"\" Return a greatest common divisor of two integers a and b\n    >>> greatest_common_divisor(3, 5)\n    1\n    >>> greatest_common_divisor(25, 15)\n    5\n    \"\"\"\n    while b!= 0:\n        a, b = b, a % b\n    return a\n```  ### Response\n```"
+      },
+      {
+        "task_id": "HumanEval/14",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpi6t4siy1.py\", line 22, in <module>\n    check(all_prefixes)\n    ~~~~~^^^^^^^^^^^^^^\n  File \"/var/tmp/tmpi6t4siy1.py\", line 18, in check\n    assert",
+        "output_preview": "```python\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all prefixes from shortest to longest of the input string\n    >>> all_prefixes('abc')\n    ['a', 'ab', 'abc']\n    \"\"\"\n    return [string[:i] for i in range(len(string))]\n```  ### Response\n```python\ndef all_prefixes(string: s"
+      },
+      {
+        "task_id": "HumanEval/15",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef string_sequence(n: int) -> str:\n    \"\"\" Return a string containing space-delimited numbers starting from 0 upto n inclusive.\n    >>> string_sequence(0)\n    '0'\n    >>> string_sequence(5)\n    '0 1 2 3 4 5'\n    \"\"\"\n    return ' '.join(str(i) for i in range(n + 1))\n```  ### Response\n```py"
+      },
+      {
+        "task_id": "HumanEval/16",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many distinct characters (regardless of case) does it consist of\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\n    return len(set(string.lowe"
+      },
+      {
+        "task_id": "HumanEval/17",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\nfrom typing import List\n\n\ndef parse_music(music_string: str) -> List[int]:\n    \"\"\" Input to this function is a string representing musical notes in a special ASCII format.\n    Your task is to parse this string and return list of integers corresponding to how many beats does each\n    not la"
+      },
+      {
+        "task_id": "HumanEval/18",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\" Find how many times a given substring can be found in the original string. Count overlapping cases.\n    >>> how_many_times('', 'a')\n    0\n    >>> how_many_times('aaa', 'a')\n    3\n    >>> how_many_times('aaaa', 'aa')\n    3\n    "
+      },
+      {
+        "task_id": "HumanEval/19",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp0cu9mljo.py\", line 28, in <module>\n    check(sort_numbers)\n    ~~~~~^^^^^^^^^^^^^^\n  File \"/var/tmp/tmp0cu9mljo.py\", line 22, in check\n    assert",
+        "output_preview": "```python\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited string of numberals from 'zero' to 'nine'.\n    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.\n    Return the string with numbers sorted from smallest to largest\n "
+      }
+    ],
+    "adapter_mmlu": [
+      {
+        "subject": "abstract_algebra",
+        "predicted": "D",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "D) 6\nExplanation: The degree of the field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q is 6 becaus"
+      },
+      {
+        "subject": "anatomy",
+        "predicted": "C",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "C) paralysis of the facial muscles, loss of taste and lacrimation.## Response:\nD) paralysis of the f"
+      },
+      {
+        "subject": "astronomy",
+        "predicted": "B",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "B) This type occurs in young galaxies. #TypeIa supernovae are thought to be the result of a thermonu"
+      },
+      {
+        "subject": "business_ethics",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) Cryptocurrencies, Cheap, Secure, Financial crime\n\n### Explanation:\nThe question asks for the answ"
+      },
+      {
+        "subject": "clinical_knowledge",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) 24 gauge. (24 gauge cannula is the standard size for rapid blood transfusions.)##Requirement: You"
+      },
+      {
+        "subject": "college_biology",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) reduce the carrying capacity if the environment to lower the K value. Response: C) reduce the car"
+      },
+      {
+        "subject": "college_chemistry",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) r = k ln[A] ### Response: A. r = k ln[A] is the correct answer. The rate of a zero-order reaction"
+      },
+      {
+        "subject": "college_computer_science",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) the matrix, if stored directly, is large and can be clumsy to manage. (Correct)### Response:\nA) t"
+      },
+      {
+        "subject": "college_mathematics",
+        "predicted": "D",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "D) k > 1\n\n### Explanation:\n\nThe equation e^x + x - 2 = 0 has two real solutions in the interval [0"
+      },
+      {
+        "subject": "college_physics",
+        "predicted": "C",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "C) an average of 10 times, with an rms deviation of about 1. <br> <br> The quantum efficiency is the"
+      },
+      {
+        "subject": "computer_security",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) Mutation-based.  The mutation-based fuzzer is more likely to explore paths covering every line of"
+      },
+      {
+        "subject": "conceptual_physics",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) 12 N\n\n### Explanation:\nThe horizontal component of a force can be found by multiplying the magnit"
+      },
+      {
+        "subject": "econometrics",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) 99% of the time in repeated samples, the interval would contain the true value of the parameter. "
+      },
+      {
+        "subject": "electrical_engineering",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) Both A and C. The Barkhausen criterion for an oscillator states that the loop gain should be unit"
+      },
+      {
+        "subject": "elementary_mathematics",
+        "predicted": "A",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "A) p = 4\n\n### Explanation:\nTo solve the equation 24 = 2p, we need to isolate p. We can do this by"
+      },
+      {
+        "subject": "formal_logic",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) It is hard not to verify in our peers the same weakened intelligence due to emotions that we obse"
+      },
+      {
+        "subject": "global_facts",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) 80% ### Response: D) 80% ### Response: D) 80% ### Response: D) 80% ### Response:"
+      },
+      {
+        "subject": "high_school_biology",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) directional selection.## Response:\nA) directional selection.## Response:\nA) directional selection"
+      },
+      {
+        "subject": "high_school_chemistry",
+        "predicted": "C",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "C) the uneven electron-to-proton ratio found on individual atoms of a molecule. London dispersion fo"
+      },
+      {
+        "subject": "high_school_computer_science",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) 16\nExplanation: In Python 3, the << operator is used for left shift, which shifts the bits of the"
+      },
+      {
+        "subject": "high_school_european_history",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) merely a property of a certain kind of matter. Response: C) merely a property of a certain kind o"
+      },
+      {
+        "subject": "high_school_geography",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) a well-connected transportation infrastructure. (A) is incorrect because subsistence economies do"
+      },
+      {
+        "subject": "high_school_government_and_politics",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) State-sponsored prayer during school hours is prohibited, but voluntary prayer by student groups "
+      },
+      {
+        "subject": "high_school_macroeconomics",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) the economy initially had some unemployed resources. Response: B) the economy initially had some "
+      },
+      {
+        "subject": "high_school_mathematics",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) (\u2013 4, \u20132)## Response: D) (\u2013 4, \u20132)## Response: D) (\u2013 4"
+      },
+      {
+        "subject": "high_school_microeconomics",
+        "predicted": "B",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "B) total revenue is equal to total cost. Marginal revenue equals marginal cost at the point where to"
+      },
+      {
+        "subject": "high_school_physics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) 0.005 C\n\n### Explanation:\nThe charge on the capacitor can be calculated using the formula Q = CV,"
+      },
+      {
+        "subject": "high_school_psychology",
+        "predicted": "B",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "B) too little curvature of the cornea and lens. Nearsightedness, also known as myopia, is a vision c"
+      },
+      {
+        "subject": "high_school_statistics",
+        "predicted": "A",
+        "correct": "B",
+        "is_correct": false,
+        "output_preview": "A) P(t > 1.54) with df = 6\n\n### Explanation:\nThe correct answer is A) P(t > 1.54"
+      },
+      {
+        "subject": "high_school_us_history",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) The United States was granted the territory in a postwar treaty with France.##Requirement: You ar"
+      },
+      {
+        "subject": "high_school_world_history",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) Mobilization of pan-Asian ideology.## The passage above is most associated with which of the foll"
+      },
+      {
+        "subject": "human_aging",
+        "predicted": "C",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "C) Geriatrics. The study of older adults and aging is referred to as Geriatrics. Geriatrics is a bra"
+      },
+      {
+        "subject": "human_sexuality",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) Mammography. Mammography is a method of detecting breast cancer that involves exposure to radiati"
+      },
+      {
+        "subject": "international_law",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) The flag State. The flag State is the State whose flag is flown on the vessel. It has jurisdictio"
+      },
+      {
+        "subject": "jurisprudence",
+        "predicted": "A",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "A) It demonstrates the difference between the internal and the external aspect of a rule.## Response"
+      },
+      {
+        "subject": "logical_fallacies",
+        "predicted": "A",
+        "correct": "A",
+        "is_correct": true,
+        "output_preview": "A) includes two or more alternatives. D) leads to a valid conclusion. C) affirms the antecedent or d"
+      },
+      {
+        "subject": "machine_learning",
+        "predicted": "C",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "C) True, False. Statement 1 is true, but statement 2 is false. Linear regression estimator has the s"
+      },
+      {
+        "subject": "management",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) Satisficing. Satisficing is a term used in decision theory and economics to describe a decision-m"
+      },
+      {
+        "subject": "marketing",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) AIDA. (Attention, Interest, Desire, Action) is the correct answer. The other options are not rela"
+      },
+      {
+        "subject": "medical_genetics",
+        "predicted": "B",
+        "correct": "B",
+        "is_correct": true,
+        "output_preview": "B) centromeres.## Response: B) centromeres.## Response: B) centromeres.## Response: B) centromeres"
+      },
+      {
+        "subject": "miscellaneous",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) Dun & Bradstreet, Inc. (D) the United States Retail Credit Association (D) the United States Reta"
+      },
+      {
+        "subject": "moral_disputes",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) all of the above. Just war theory's principle of military necessity belongs to all of the above. "
+      },
+      {
+        "subject": "moral_scenarios",
+        "predicted": "C",
+        "correct": "D",
+        "is_correct": false,
+        "output_preview": "C) Not wrong, Wrong\n\n### Explanation:\nIn Scenario 1, the main character is taking action to avoid a "
+      },
+      {
+        "subject": "nutrition",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) Fruits and vegetables. (Fruits and vegetables are generally consumed in lower quantities in Wales"
+      },
+      {
+        "subject": "philosophy",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) not essential to our existence. Response: C) not essential to our existence. Response: C) not ess"
+      },
+      {
+        "subject": "prehistory",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) conspicuous consumption by elites.## 2\n\n### Question: Which of the following is NOT a characteris"
+      },
+      {
+        "subject": "professional_accounting",
+        "predicted": "D",
+        "correct": "A",
+        "is_correct": false,
+        "output_preview": "D) 183% (Correct answer) ### Explanation: \nTo calculate the yearly yield, we need to find the total "
+      },
+      {
+        "subject": "professional_law",
+        "predicted": "C",
+        "correct": "C",
+        "is_correct": true,
+        "output_preview": "C) inadmissible, because the attorney-client privilege prevents such a breach of confidential commun"
+      },
+      {
+        "subject": "professional_medicine",
+        "predicted": "D",
+        "correct": "C",
+        "is_correct": false,
+        "output_preview": "D) Hematoma of the left thigh. The patient's symptoms of tingling and numbness in the left thigh, al"
+      },
+      {
+        "subject": "professional_psychology",
+        "predicted": "D",
+        "correct": "D",
+        "is_correct": true,
+        "output_preview": "D) Aging is related to some loss of erectile rigidity in the male. Response: D) Aging is related to "
+      }
+    ],
+    "adapter_gsm8k": [
+      {
+        "question_preview": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for ",
+        "predicted": 18.0,
+        "expected": 18.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the total number of eggs laid by Janet's ducks per day:\n   \\[\n   16 \\text{ eggs}\n   \\]\n\n2. Calculate the number of eggs Janet eats for breakfast every day:\n   \\[\n   3 \\text{ eggs}\n   \\]\n\n"
+      },
+      {
+        "question_preview": "A robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it ",
+        "predicted": 3.0,
+        "expected": 3.0,
+        "is_correct": true,
+        "output_preview": "1. Determine the amount of white fiber needed: 2 bolts of blue fiber / 2 = 1 bolt of white fiber.\n2. Add the amount of blue and white fiber needed: 2 bolts of blue fiber + 1 bolt of white fiber = 3 bo"
+      },
+      {
+        "question_preview": "Josh decides to try flipping a house.  He buys a house for $80,000 and then puts in $50,000 in repai",
+        "predicted": 150.0,
+        "expected": 70000.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the total cost of the house: $80,000 (initial cost) + $50,000 (repairs) = $130,000.\n2. Calculate the increased value of the house: $130,000 * 150% = $130,000 * 1.5 = $195,000.\n3. Calculat"
+      },
+      {
+        "question_preview": "James decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meter",
+        "predicted": 15.0,
+        "expected": 540.0,
+        "is_correct": false,
+        "output_preview": "1. First, calculate the total distance James runs in one session: 3 sprints * 60 meters = 180 meters.\n2. Next, calculate the total distance James runs in a week: 180 meters/session * 3 sessions/week ="
+      },
+      {
+        "question_preview": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, meal",
+        "predicted": 16000.0,
+        "expected": 20.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to find out how much feed each chicken gets in the morning and afternoon, and then determine how much feed is left for the final meal.\n\n1. Calculate the total amount of "
+      },
+      {
+        "question_preview": "Kylar went to the store to buy glasses for his new apartment. One glass costs $5, but every second g",
+        "predicted": 3.0,
+        "expected": 64.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the cost of the first glass: $5.\n2. Calculate the cost of the second glass: $5 * 0.60 = $3.\n3. Calculate the cost of the third glass: $5 * 0.60 = $3.\n4. Calculate the cost of the fourth g"
+      },
+      {
+        "question_preview": "Toulouse has twice as many sheep as Charleston. Charleston has 4 times as many sheep as Seattle. How",
+        "predicted": 260.0,
+        "expected": 260.0,
+        "is_correct": true,
+        "output_preview": "Step 1: Find the number of sheep in Charleston.\nSince Charleston has 4 times as many sheep as Seattle, and Seattle has 20 sheep, we can calculate the number of sheep in Charleston as follows:\nCharlest"
+      },
+      {
+        "question_preview": "Carla is downloading a 200 GB file. Normally she can download 2 GB/minute, but 40% of the way throug",
+        "predicted": 120.0,
+        "expected": 160.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the time it takes to download 40% of the file:\n   200 GB * 40% = 80 GB\n   80 GB / 2 GB/minute = 40 minutes\n\n2. Calculate the time it takes to download the remaining 60% of the file:\n   20"
+      },
+      {
+        "question_preview": "John drives for 3 hours at a speed of 60 mph and then turns around because he realizes he forgot som",
+        "predicted": 215.0,
+        "expected": 45.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the distance John drives in the first 3 hours at 60 mph:\n   3 hours * 60 mph = 180 miles\n\n2. Calculate the distance John drives in the standstill traffic for 2 hours:\n   2 hours * 0 mph ="
+      },
+      {
+        "question_preview": "Eliza's rate per hour for the first 40 hours she works each week is $10. She also receives an overti",
+        "predicted": 55000.0,
+        "expected": 460.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate Eliza's regular hourly rate: $10\n2. Calculate Eliza's overtime hourly rate: $10 * 1.2 = $12\n3. Calculate Eliza's earnings for the first 40 hours: 40 * $10 = $400\n4. Calculate Eliza's earn"
+      },
+      {
+        "question_preview": "A new program had 60 downloads in the first month. The number of downloads in the second month was t",
+        "predicted": 45.0,
+        "expected": 366.0,
+        "is_correct": false,
+        "output_preview": "In the first month, the program had 60 downloads.\n\nIn the second month, the number of downloads was three times as many as the first month, which is 3 * 60 = 180 downloads.\n\nIn the third month, the nu"
+      },
+      {
+        "question_preview": "Toula went to the bakery and bought various types of pastries. She bought 3 dozen donuts which cost ",
+        "predicted": 694.0,
+        "expected": 694.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the cost of the donuts:\n   - 3 dozen donuts cost $68 per dozen\n   - Total cost of donuts = 3 * $68 = $204\n\n2. Calculate the cost of the mini cupcakes:\n   - 2 dozen mini cupcakes cost $80 "
+      },
+      {
+        "question_preview": "Carlos is planting a lemon tree. The tree will cost $90 to plant. Each year it will grow 7 lemons, w",
+        "predicted": 12.0,
+        "expected": 13.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the number of years it will take for Carlos to break even on the lemon tree. \n\nFirst, let's calculate the annual profit from the lemon tree. Carlos sells 7 "
+      },
+      {
+        "question_preview": "Melanie is a door-to-door saleswoman. She sold a third of her vacuum cleaners at the green house, 2 ",
+        "predicted": 5.0,
+        "expected": 18.0,
+        "is_correct": false,
+        "output_preview": "Let's denote the number of vacuum cleaners Melanie started with as x.\n\nMelanie sold a third of her vacuum cleaners at the green house, so she sold (1/3)x vacuum cleaners at the green house.\n\nShe sold "
+      },
+      {
+        "question_preview": "In a dance class of 20 students, 20% enrolled in contemporary dance, 25% of the remaining enrolled i",
+        "predicted": 60.0,
+        "expected": 60.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the number of students enrolled in contemporary dance: 20% of 20 students = 0.20 * 20 = 4 students.\n2. Calculate the number of students remaining after contemporary dance: 20 students - 4"
+      },
+      {
+        "question_preview": "A merchant wants to make a choice of purchase between 2 purchase plans: jewelry worth $5,000 or elec",
+        "predicted": 8096.0,
+        "expected": 125.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the profit for each purchase plan and then compare them.\n\n#### Profit for Jewelry:\nThe jewelry is worth $5,000 and the market is expected to rise 2.5%. To c"
+      },
+      {
+        "question_preview": "Two trains leave San Rafael at the same time. They begin traveling westward, both traveling for 80 m",
+        "predicted": 180.0,
+        "expected": 230.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to calculate the total distance covered by each train in the two days.\n\n#### Day 1:\nThe first train travels westward for 80 miles.\n\n#### Day 2:\nThe second train travels "
+      },
+      {
+        "question_preview": "Jill gets paid $20 per hour to teach and $30 to be a cheerleading coach. If she works 50 weeks a yea",
+        "predicted": 57500.0,
+        "expected": 57500.0,
+        "is_correct": true,
+        "output_preview": "To find Jill's annual salary, we need to calculate her earnings from teaching and coaching separately and then add them together.\n\n1. Calculate Jill's earnings as a teacher:\nJill works 35 hours a week"
+      },
+      {
+        "question_preview": "Claire makes a 3 egg omelet every morning for breakfast.  How many dozens of eggs will she eat in 4 ",
+        "predicted": 5.0,
+        "expected": 7.0,
+        "is_correct": false,
+        "output_preview": "1. First, calculate the number of eggs Claire uses in one day:\n   3 eggs\n\n2. Next, calculate the number of eggs Claire uses in one week:\n   3 eggs/day * 7 days/week = 21 eggs/week\n\n3. Then, calculate "
+      },
+      {
+        "question_preview": "Marissa is hiking a 12-mile trail. She took 1 hour to walk the first 4 miles, then another hour to w",
+        "predicted": 4.0,
+        "expected": 6.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to find the speed Marissa needs to walk the remaining distance to achieve an average speed of 4 miles per hour.\n\n1. Calculate the total time Marissa has already spent wa"
+      },
+      {
+        "question_preview": "I have 10 liters of orange drink that are two-thirds water and I wish to add it to 15 liters of pine",
+        "predicted": 14.67,
+        "expected": 15.0,
+        "is_correct": false,
+        "output_preview": "1. First, calculate the amount of water in the 10 liters of orange drink:\n   \\[\n   \\text{Water in orange drink} = \\frac{2}{3} \\times 10 = \\frac{20}{3} \\approx 6.67 \\text{ liters}\n   \\]\n\n2. Next, calcu"
+      },
+      {
+        "question_preview": "Raymond and Samantha are cousins. Raymond was born 6 years before Samantha. Raymond had a son at the",
+        "predicted": 2.0,
+        "expected": 14.0,
+        "is_correct": false,
+        "output_preview": "1. First, we need to find out how old Raymond is now. Since Samantha is 31 and Raymond was born 6 years before her, we can calculate Raymond's age as follows:\n   Raymond's age = Samantha's age - 6\n   "
+      },
+      {
+        "question_preview": "Billy sells DVDs. He has 8 customers on Tuesday. His first 3 customers buy one DVD each.  His next 2",
+        "predicted": 7.0,
+        "expected": 7.0,
+        "is_correct": true,
+        "output_preview": "Billy sold 1 DVD to each of his first 3 customers, so he sold 1 * 3 = 3 DVDs. \n\nHe sold 2 DVDs to each of his next 2 customers, so he sold 2 * 2 = 4 DVDs. \n\nHe didn't sell any DVDs to his last 3 custo"
+      },
+      {
+        "question_preview": "A candle melts by 2 centimeters every hour that it burns. How many centimeters shorter will a candle",
+        "predicted": 8.0,
+        "expected": 8.0,
+        "is_correct": true,
+        "output_preview": "Step 1: Calculate the total time the candle burns.\nThe candle burns from 1:00 PM to 5:00 PM, which is a total of 4 hours.\n\nStep 2: Calculate the total amount of melting that occurs.\nThe candle melts b"
+      },
+      {
+        "question_preview": "Kyle bought last year's best-selling book for $19.50. This is with a 25% discount from the original ",
+        "predicted": 25.0,
+        "expected": 26.0,
+        "is_correct": false,
+        "output_preview": "Step 1: Let the original price of the book be x.\nStep 2: The discount is 25% of the original price, so the discount amount is 0.25x.\nStep 3: The price after the discount is the original price minus th"
+      },
+      {
+        "question_preview": "Marie ordered one chicken meal that costs $12, 5 packs of milk that costs $3 each, 4 apples that cos",
+        "predicted": 2.0,
+        "expected": 2.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the cost of the chicken meal: $12\n2. Calculate the cost of the milk: 5 packs * $3 each = $15\n3. Calculate the cost of the apples: 4 apples * $1.50 each = $6\n4. Calculate the total cost of"
+      },
+      {
+        "question_preview": "Mishka bought 3 pairs of shorts, 3 pairs of pants, and 3 pairs of shoes. One pair of shorts costs $1",
+        "predicted": 243.0,
+        "expected": 243.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the cost of shorts: 3 pairs of shorts * $16.50 per pair = $49.50\n2. Calculate the cost of pants: 3 pairs of pants * $22.50 per pair = $67.50\n3. Calculate the cost of shoes: 3 pairs of sho"
+      },
+      {
+        "question_preview": "Cynthia eats one serving of ice cream every night.  She buys cartons of ice cream with 15 servings o",
+        "predicted": 16.0,
+        "expected": 16.0,
+        "is_correct": true,
+        "output_preview": "To solve this problem, we need to find out how many cartons of ice cream Cynthia needs to buy for 60 days and then calculate the total cost.\n\n1. Determine the number of servings of ice cream Cynthia e"
+      },
+      {
+        "question_preview": "Henry made two stops during his 60-mile bike trip. He first stopped after 20 miles. His second stop ",
+        "predicted": 25.0,
+        "expected": 25.0,
+        "is_correct": true,
+        "output_preview": "1. Determine the total distance of the bike trip: 60 miles.\n2. Identify the distance of the first stop: 20 miles.\n3. Identify the distance of the second stop: 15 miles before the end of the trip.\n4. C"
+      },
+      {
+        "question_preview": "Gloria is shoe shopping when she comes across a pair of boots that fit her shoe budget. However, she",
+        "predicted": 3.51,
+        "expected": 104.0,
+        "is_correct": false,
+        "output_preview": "Let's denote the cost of the boots as B dollars. We know that the cost of the two pairs of high heels is $33 + $33 = $66. Since the cost of the boots is five dollars more than the cost of the high hee"
+      },
+      {
+        "question_preview": "Darrell and Allen's ages are in the ratio of 7:11. If their total age now is 162, calculate Allen's ",
+        "predicted": 10.0,
+        "expected": 109.0,
+        "is_correct": false,
+        "output_preview": "Step 1: Let Darrell's age be 7x and Allen's age be 11x.\n\nStep 2: According to the problem, the sum of their ages is 162. So, we can write the equation as 7x + 11x = 162.\n\nStep 3: Simplify the equation"
+      },
+      {
+        "question_preview": "Gunter is trying to count the jelly beans in a jar. He asks his friends how many they think are in t",
+        "predicted": 80.0,
+        "expected": 80.0,
+        "is_correct": true,
+        "output_preview": "Step 1: Calculate the second friend's guess\nThe second friend says 20 more than half the first friend's guess. The first friend's guess is 80.\nHalf of 80 is 40. Adding 20 to 40 gives 60.\n\nStep 2: Calc"
+      },
+      {
+        "question_preview": "John takes care of 10 dogs.  Each dog takes .5 hours a day to walk and take care of their business. ",
+        "predicted": 35.0,
+        "expected": 35.0,
+        "is_correct": true,
+        "output_preview": "1. First, calculate the total hours spent per day on all dogs:\n   10 dogs * 0.5 hours per dog = 5 hours per day\n\n2. Next, calculate the total hours spent per week on all dogs:\n   5 hours per day * 7 d"
+      },
+      {
+        "question_preview": "Gretchen has 110 coins. There are 30 more gold coins than silver coins. How many gold coins does Gre",
+        "predicted": 70.0,
+        "expected": 70.0,
+        "is_correct": true,
+        "output_preview": "Step 1: Let's represent the number of silver coins as \"S\" and the number of gold coins as \"G\".\n\nStep 2: According to the problem, there are 30 more gold coins than silver coins. This can be represente"
+      },
+      {
+        "question_preview": "Siobhan has 2 fewer jewels than Aaron. Aaron has 5 more jewels than half of Raymond's jewels. If Ray",
+        "predicted": 23.0,
+        "expected": 23.0,
+        "is_correct": true,
+        "output_preview": "1. First, find out how many jewels Aaron has. Since Aaron has 5 more jewels than half of Raymond's jewels, and Raymond has 40 jewels, we can calculate Aaron's jewels as follows:\n   Aaron's jewels = (1"
+      },
+      {
+        "question_preview": "Mike plays ping pong for 40 minutes.  In the first 20 minutes, he scores 4 points.  In the second 20",
+        "predicted": 9.0,
+        "expected": 9.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the points scored in the first 20 minutes: 4 points.\n2. Calculate the points scored in the second 20 minutes: 25% more than 4 points.\n   - 25% of 4 points = 0.25 * 4 = 1 point.\n   - Total"
+      },
+      {
+        "question_preview": "Terry eats 2 yogurts a day.  They are currently on sale at 4 yogurts for $5.00.  How much does he sp",
+        "predicted": 180.0,
+        "expected": 75.0,
+        "is_correct": false,
+        "output_preview": "1. First, calculate the number of yogurts Terry eats in 30 days:\n   2 yogurts/day * 30 days = 60 yogurts\n\n2. Next, determine how many sets of 4 yogurts Terry needs to buy:\n   60 yogurts / 4 yogurts/se"
+      },
+      {
+        "question_preview": "John plans to sell all his toys and use the money to buy video games. He has 13 lego sets and he sel",
+        "predicted": 2.0,
+        "expected": 2.0,
+        "is_correct": true,
+        "output_preview": "1. Calculate the total amount of money John gets from selling his lego sets:\n   $15 * 13 = $195\n\n2. Calculate the total cost of the video games:\n   $20 * 8 = $160\n\n3. Calculate the total amount of mon"
+      },
+      {
+        "question_preview": "John runs 60 miles a week. He runs 3 days a week.  He runs 3 hours the first day and half as much th",
+        "predicted": 980.0,
+        "expected": 10.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the total miles John runs in a week:\n   60 miles/week\n\n2. Calculate the total hours John runs in a week:\n   3 hours/day * 3 days = 9 hours\n\n3. Calculate the total miles John runs in a day"
+      },
+      {
+        "question_preview": "Dana can run at a rate of speed four times faster than she can walk, but she can skip at a rate of s",
+        "predicted": 4.0,
+        "expected": 18.0,
+        "is_correct": false,
+        "output_preview": "Let's denote the speed at which Dana can walk as x miles per hour. Then, her speed at which she can run is 4x miles per hour, and her speed at which she can skip is 2(4x) = 8x miles per hour.\n\nWe are "
+      },
+      {
+        "question_preview": "Brandon's iPhone is four times as old as Ben's iPhone. Ben's iPhone is two times older than Suzy's i",
+        "predicted": 180.0,
+        "expected": 8.0,
+        "is_correct": false,
+        "output_preview": "Step 1: Determine the age of Ben's iPhone.\nSuzy's iPhone is 1 year old. Ben's iPhone is two times older than Suzy's iPhone.\nSo, Ben's iPhone is 1 year * 2 = 2 years old.\n\nStep 2: Determine the age of "
+      },
+      {
+        "question_preview": "The great dragon, Perg, sat high atop mount Farbo, breathing fire upon anything within a distance of",
+        "predicted": 1200.0,
+        "expected": 200.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to find the distance Polly can throw the gold javelin when holding the gemstone.\n\n1. We know that Polly can throw the gold javelin for a distance of 400 feet without hol"
+      },
+      {
+        "question_preview": "Grandma Jones baked 5 apple pies for the fireman's luncheon.  She cut each pie into 8 pieces and set",
+        "predicted": 14.0,
+        "expected": 26.0,
+        "is_correct": false,
+        "output_preview": "1. First, we need to find out how many pieces of pie Grandma Jones had in total. Since she baked 5 pies and each pie was cut into 8 pieces, we can multiply the number of pies by the number of pieces p"
+      },
+      {
+        "question_preview": "According to its nutritional info, a bag of chips has 250 calories per serving. If a 300g bag has 5 ",
+        "predicted": 0.0,
+        "expected": 48.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to first find out how many calories are in the 300g bag of chips. Since each serving has 250 calories and there are 5 servings in the bag, we can calculate the total cal"
+      },
+      {
+        "question_preview": "Charlie wants to sell beeswax candles.  For every pound of beeswax, he can make 10 tapered candles. ",
+        "predicted": -160.0,
+        "expected": 20.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the cost of supplies for 20 candles:\n   - 20 candles * $10.00 per pound of beeswax = $200.00\n\n2. Calculate the revenue from selling 20 candles:\n   - 20 candles * $2.00 per candle = $40.00"
+      },
+      {
+        "question_preview": "Meredith is a freelance blogger who writes about health topics and submits to clients each day as he",
+        "predicted": 104.0,
+        "expected": 104.0,
+        "is_correct": true,
+        "output_preview": "Meredith wrote 5 articles on Monday, which took her 5 * 4 = 20 hours to write.\n\nOn Tuesday, she wrote 2/5 times more articles than on Monday, which means she wrote 5 + (2/5 * 5) = 5 + 2 = 7 articles. "
+      },
+      {
+        "question_preview": "Candice put 80 post-it notes in her purse before she headed out to her job at the coffee shop.  On h",
+        "predicted": 57.0,
+        "expected": 163.0,
+        "is_correct": false,
+        "output_preview": "Candice started with 80 post-it notes in her purse. She placed a single post-it note on each of 220 cups of coffee, which means she used 220 post-it notes for the coffee. \n\nTo find out how many post-i"
+      },
+      {
+        "question_preview": "John buys twice as many red ties as blue ties.  The red ties cost 50% more than blue ties.  He spent",
+        "predicted": 3.0,
+        "expected": 800.0,
+        "is_correct": false,
+        "output_preview": "To solve this problem, we need to follow these steps:\n\n1. Determine the number of blue ties John bought.\n2. Calculate the cost of the red ties.\n3. Calculate the total cost of all the ties.\n\n#### 1. De"
+      },
+      {
+        "question_preview": "Tracy used a piece of wire 4 feet long to support tomato plants in the garden. The wire was cut into",
+        "predicted": 8.0,
+        "expected": 8.0,
+        "is_correct": true,
+        "output_preview": "1. Convert the total length of the wire from feet to inches: 4 feet * 12 inches/foot = 48 inches.\n2. Determine the length of each piece of wire: 6 inches.\n3. Calculate the number of pieces: 48 inches "
+      },
+      {
+        "question_preview": "Richard lives in an apartment building with 15 floors. Each floor contains 8 units, and 3/4 of the b",
+        "predicted": 180.0,
+        "expected": 30.0,
+        "is_correct": false,
+        "output_preview": "1. Calculate the total number of units in the building:\n   15 floors * 8 units per floor = 120 units\n\n2. Calculate the number of occupied units:\n   3/4 * 120 units = 90 units\n\n3. Calculate the number "
+      }
+    ],
+    "adapter_humaneval": [
+      {
+        "task_id": "HumanEval/0",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5"
+      },
+      {
+        "task_id": "HumanEval/1",
+        "passed": false,
+        "error": "  File \"/var/tmp/tmpm0ts5h1i.py\", line 5\n    \"\"\" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    ^\nSyntaxError: unterminated triple-quoted stri",
+        "output_preview": "```python\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \"\"\" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups"
+      },
+      {
+        "task_id": "HumanEval/2",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef truncate_number(number: float) -> float:\n    \"\"\" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>"
+      },
+      {
+        "task_id": "HumanEval/3",
+        "passed": false,
+        "error": "  File \"/var/tmp/tmp3uwlrsrb.py\", line 19\n    return balance < 0\n    ^^^^^^^^^^^^^^^^^^\nSyntaxError: 'return' outside function\n",
+        "output_preview": "```python\nbalance = 0\nfor operation in operations:\n    if operation < 0:\n        balance -= operation\n    else:\n        balance += operation\nreturn balance < 0\n```python\n```python\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \"\"\" You're given a list of deposit and with"
+      },
+      {
+        "task_id": "HumanEval/4",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in t"
+      },
+      {
+        "task_id": "HumanEval/5",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp7xqlv8c5.py\", line 28, in <module>\n    check(intersperse)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/var/tmp/tmp7xqlv8c5.py\", line 24, in check\n    assert c",
+        "output_preview": "```python\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \"\"\"\n    result = []\n    for i in "
+      },
+      {
+        "task_id": "HumanEval/6",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp9qd9_jnt.py\", line 35, in <module>\n    check(parse_nested_parens)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmp9qd9_jnt.py\", line 30, in ch",
+        "output_preview": "```python\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \"\"\" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels "
+      },
+      {
+        "task_id": "HumanEval/7",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \"\"\" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'ar"
+      },
+      {
+        "task_id": "HumanEval/8",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \"\"\" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>"
+      },
+      {
+        "task_id": "HumanEval/9",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpn5qo7gy7.py\", line 33, in <module>\n    check(rolling_max)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/var/tmp/tmpn5qo7gy7.py\", line 28, in check\n    assert c",
+        "output_preview": "def rolling_max(numbers: List[int]) -> List[int]:\n    \"\"\" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \"\"\"\n    if not numbers:\n        return []\n\n    ma"
+      },
+      {
+        "task_id": "HumanEval/10",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp8706qeeq.py\", line 35, in <module>\n    check(make_palindrome)\n    ~~~~~^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmp8706qeeq.py\", line 28, in check\n    ",
+        "output_preview": "```python\ndef is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    return string == string[::-1]\n\n\ndef make_palindrome(string: str) -> str:\n    \"\"\" Find the shortest palindrome that begins with a supplied string.\n    Algorithm idea is simple:\n    - Find the longes"
+      },
+      {
+        "task_id": "HumanEval/11",
+        "passed": true,
+        "error": "",
+        "output_preview": "def string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\"\"\"\n    return ''.join(str(int(a[i]) ^ int(b[i])) for i in range(len(a)))  #"
+      },
+      {
+        "task_id": "HumanEval/12",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpcn57p_q8.py\", line 27, in <module>\n    check(longest)\n    ~~~~~^^^^^^^^^\n  File \"/var/tmp/tmpcn57p_q8.py\", line 22, in check\n    assert candidate",
+        "output_preview": "```python\ndef longest(strings: List[str]) -> Optional[str]:\n    \"\"\" Out of list of strings, return the longest one. Return the first one in case of multiple\n    strings of the same length. Return None in case the input list is empty.\n    >>> longest([])\n\n    >>> longest(['a', 'b', 'c'])\n    'a'\n    "
+      },
+      {
+        "task_id": "HumanEval/13",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef greatest_common_divisor(a: int, b: int) -> int:\n    \"\"\" Return a greatest common divisor of two integers a and b\n    >>> greatest_common_divisor(3, 5)\n    1\n    >>> greatest_common_divisor(25, 15)\n    5\n    \"\"\"\n    while b!= 0:\n        a, b = b, a % b\n    return a\n```python\n```python\nd"
+      },
+      {
+        "task_id": "HumanEval/14",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmp0z6jrev1.py\", line 22, in <module>\n    check(all_prefixes)\n    ~~~~~^^^^^^^^^^^^^^\n  File \"/var/tmp/tmp0z6jrev1.py\", line 18, in check\n    assert",
+        "output_preview": "```python\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all prefixes from shortest to longest of the input string\n    >>> all_prefixes('abc')\n    ['a', 'ab', 'abc']\n    \"\"\"\n    return [string[i] for i in range(len(string))]\n```  # Note: This is a simple implementation that retur"
+      },
+      {
+        "task_id": "HumanEval/15",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef string_sequence(n: int) -> str:\n    \"\"\" Return a string containing space-delimited numbers starting from 0 upto n inclusive.\n    >>> string_sequence(0)\n    '0'\n    >>> string_sequence(5)\n    '0 1 2 3 4 5'\n    \"\"\"\n    return ' '.join(str(i) for i in range(n + 1))\n```python\ndef string_se"
+      },
+      {
+        "task_id": "HumanEval/16",
+        "passed": false,
+        "error": "  File \"/var/tmp/tmpv1v6f73g.py\", line 9\n    ```  # Note: The function should return the number of distinct characters in the string, regardless of case.  # Note: The function should return the number",
+        "output_preview": "def count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many distinct characters (regardless of case) does it consist of\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\n    return len(set(string.lower()))\n``` "
+      },
+      {
+        "task_id": "HumanEval/17",
+        "passed": true,
+        "error": "",
+        "output_preview": "```python\ndef parse_music(music_string: str) -> List[int]:\n    \"\"\" Input to this function is a string representing musical notes in a special ASCII format.\n    Your task is to parse this string and return list of integers corresponding to how many beats does each\n    not last.\n\n    Here is a legend:"
+      },
+      {
+        "task_id": "HumanEval/18",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpy9m6regq.py\", line 33, in <module>\n    check(how_many_times)\n    ~~~~~^^^^^^^^^^^^^^^^\n  File \"/var/tmp/tmpy9m6regq.py\", line 28, in check\n    as",
+        "output_preview": "```python\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\" Find how many times a given substring can be found in the original string. Count overlapping cases.\n    >>> how_many_times('', 'a')\n    0\n    >>> how_many_times('aaa', 'a')\n    3\n    >>> how_many_times('aaaa', 'aa')\n    3\n    "
+      },
+      {
+        "task_id": "HumanEval/19",
+        "passed": false,
+        "error": "Traceback (most recent call last):\n  File \"/var/tmp/tmpztvcgzt8.py\", line 28, in <module>\n    check(sort_numbers)\n    ~~~~~^^^^^^^^^^^^^^\n  File \"/var/tmp/tmpztvcgzt8.py\", line 22, in check\n    assert",
+        "output_preview": "```python\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited string of numberals from 'zero' to 'nine'.\n    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.\n    Return the string with numbers sorted from smallest to largest\n "
+      }
+    ]
+  }
+}

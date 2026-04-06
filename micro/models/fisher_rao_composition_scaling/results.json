@@ -1,0 +1,277 @@
+{
+  "experiment": "fisher_rao_composition_scaling",
+  "paper": "arXiv:2603.04972",
+  "kill_criteria": {
+    "K690": "Activation variance preserved within 10% at N=10 vs N=1",
+    "K691": "Effective rank degradation < 5% at N=10",
+    "K692": "Fisher-Rao outperforms linear averaging on perplexity at N>5"
+  },
+  "baseline": {
+    "activation_variance": 0.0003185272216796875,
+    "effective_rank": 5.828973293304443
+  },
+  "scaling": {
+    "1": {
+      "N": 1,
+      "euclidean": {
+        "activation_variance": 0.0002574920654296875,
+        "effective_rank": 4.545042991638184,
+        "per_domain_ppl": {
+          "medical": 3.356372384521461,
+          "code": 3.4941975600050963,
+          "math": 3.049207417239355,
+          "legal": 18.380517985700557,
+          "finance": 16.602181922577337
+        },
+        "mean_ppl": 8.976495454008761,
+        "norm_shrinkage": 1.0,
+        "time_s": 0.039263010025024414
+      },
+      "norm_rescaled_euclidean": {
+        "activation_variance": 0.0002574920654296875,
+        "effective_rank": 4.545042991638184,
+        "per_domain_ppl": {
+          "medical": 3.356372384521461,
+          "code": 3.4941975600050963,
+          "math": 3.049207417239355,
+          "legal": 18.380517985700557,
+          "finance": 16.602181922577337
+        },
+        "mean_ppl": 8.976495454008761,
+        "norm_shrinkage": 1.0,
+        "time_s": 0.2364809513092041
+      },
+      "fisher_rao": {
+        "activation_variance": 0.0002574920654296875,
+        "effective_rank": 4.545328140258789,
+        "per_domain_ppl": {
+          "medical": 3.3610352575095326,
+          "code": 3.499182722625607,
+          "math": 3.049017559674756,
+          "legal": 18.367176211799,
+          "finance": 16.58779840004436
+        },
+        "mean_ppl": 8.97284203033065,
+        "norm_shrinkage": 1.000000000133959,
+        "time_s": 0.11668801307678223
+      }
+    },
+    "3": {
+      "N": 3,
+      "euclidean": {
+        "activation_variance": 0.0002841949462890625,
+        "effective_rank": 5.228658199310303,
+        "per_domain_ppl": {
+          "medical": 4.254791275828588,
+          "code": 3.7943658374453864,
+          "math": 3.186836215211982,
+          "legal": 19.40927292928599,
+          "finance": 17.331853400084068
+        },
+        "mean_ppl": 9.595423931571203,
+        "norm_shrinkage": 0.5749741296549595,
+        "time_s": 0.08654999732971191
+      },
+      "norm_rescaled_euclidean": {
+        "activation_variance": 0.0002727508544921875,
+        "effective_rank": 4.914583206176758,
+        "per_domain_ppl": {
+          "medical": 3.5930233959615694,
+          "code": 3.464276051878672,
+          "math": 3.013345907380434,
+          "legal": 18.35606546492855,
+          "finance": 16.550100914377424
+        },
+        "mean_ppl": 8.99536234690533,
+        "norm_shrinkage": 1.000000027361091,
+        "time_s": 0.09223699569702148
+      },
+      "fisher_rao": {
+        "activation_variance": 0.0002727508544921875,
+        "effective_rank": 4.914567947387695,
+        "per_domain_ppl": {
+          "medical": 3.5880386783210434,
+          "code": 3.458704301969079,
+          "math": 3.020296239282121,
+          "legal": 18.344961439216252,
+          "finance": 16.580611312461834
+        },
+        "mean_ppl": 8.998522394250065,
+        "norm_shrinkage": 1.0000000369467847,
+        "time_s": 1.1375517845153809
+      }
+    },
+    "5": {
+      "N": 5,
+      "euclidean": {
+        "activation_variance": 0.0002956390380859375,
+        "effective_rank": 5.478769779205322,
+        "per_domain_ppl": {
+          "medical": 5.0917236267317865,
+          "code": 4.22159657666722,
+          "math": 3.4289498472701574,
+          "legal": 20.972344625478893,
+          "finance": 18.46590995711354
+        },
+        "mean_ppl": 10.43610492665232,
+        "norm_shrinkage": 0.44815966143679575,
+        "time_s": 0.08461594581604004
+      },
+      "norm_rescaled_euclidean": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.110517501831055,
+        "per_domain_ppl": {
+          "medical": 3.8166950510360245,
+          "code": 3.57449055439107,
+          "math": 3.0585249344581857,
+          "legal": 18.669721899134096,
+          "finance": 16.719511343547936
+        },
+        "mean_ppl": 9.167788756513463,
+        "norm_shrinkage": 1.0000000166939014,
+        "time_s": 0.12765884399414062
+      },
+      "fisher_rao": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.122598171234131,
+        "per_domain_ppl": {
+          "medical": 3.845949451936916,
+          "code": 3.5878309556840935,
+          "math": 3.06748889599422,
+          "legal": 18.694592248578992,
+          "finance": 16.803045168457547
+        },
+        "mean_ppl": 9.199781344130354,
+        "norm_shrinkage": 1.0000000256467858,
+        "time_s": 2.0120127201080322
+      }
+    },
+    "10": {
+      "N": 10,
+      "euclidean": {
+        "activation_variance": 0.0002956390380859375,
+        "effective_rank": 5.473326206207275,
+        "per_domain_ppl": {
+          "medical": 5.0900926224341445,
+          "code": 4.224704119093508,
+          "math": 3.4261753571458917,
+          "legal": 20.987578773447645,
+          "finance": 18.483924501196764
+        },
+        "mean_ppl": 10.442495074663592,
+        "norm_shrinkage": 0.4476114044768871,
+        "time_s": 0.020595073699951172
+      },
+      "norm_rescaled_euclidean": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.104608535766602,
+        "per_domain_ppl": {
+          "medical": 3.8156762060963887,
+          "code": 3.562674067469511,
+          "math": 3.0560501688292203,
+          "legal": 18.67198147212972,
+          "finance": 16.744890625115612
+        },
+        "mean_ppl": 9.170254507928089,
+        "norm_shrinkage": 1.0000000156414788,
+        "time_s": 0.1696617603302002
+      },
+      "fisher_rao": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.11323356628418,
+        "per_domain_ppl": {
+          "medical": 3.8402037169774648,
+          "code": 3.5846972629991254,
+          "math": 3.068252998343238,
+          "legal": 18.685544654200964,
+          "finance": 16.786668819490096
+        },
+        "mean_ppl": 9.193073490402178,
+        "norm_shrinkage": 1.0000000283549464,
+        "time_s": 2.0435352325439453
+      }
+    },
+    "15": {
+      "N": 15,
+      "euclidean": {
+        "activation_variance": 0.0002956390380859375,
+        "effective_rank": 5.476559162139893,
+        "per_domain_ppl": {
+          "medical": 5.103700304610674,
+          "code": 4.2231500620504905,
+          "math": 3.432153973977414,
+          "legal": 20.972344625478893,
+          "finance": 18.513987803603577
+        },
+        "mean_ppl": 10.44906735394421,
+        "norm_shrinkage": 0.4471690666352682,
+        "time_s": 0.018180131912231445
+      },
+      "norm_rescaled_euclidean": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.1110076904296875,
+        "per_domain_ppl": {
+          "medical": 3.8144539511692206,
+          "code": 3.569562262666592,
+          "math": 3.0550988691734537,
+          "legal": 18.65842813509705,
+          "finance": 16.743076542388923
+        },
+        "mean_ppl": 9.168123952099048,
+        "norm_shrinkage": 1.0000000586604143,
+        "time_s": 0.2378389835357666
+      },
+      "fisher_rao": {
+        "activation_variance": 0.0002765655517578125,
+        "effective_rank": 5.11367130279541,
+        "per_domain_ppl": {
+          "medical": 3.841229111144287,
+          "code": 3.5875009643340676,
+          "math": 3.067106916180755,
+          "legal": 18.712700582069804,
+          "finance": 16.768491594608285
+        },
+        "mean_ppl": 9.19540583366744,
+        "norm_shrinkage": 1.0000000639696578,
+        "time_s": 2.6776928901672363
+      }
+    }
+  },
+  "kill_results": {
+    "K690": {
+      "pass": true,
+      "fr_ratio": 1.0740740740740742,
+      "euc_ratio": 1.1481481481481481
+    },
+    "K691": {
+      "pass": true,
+      "fr_degradation": -0.12494266827412304,
+      "euc_degradation": -0.20416525216937376
+    },
+    "K692": {
+      "pass_vs_euclidean": true,
+      "pass_vs_norm_rescaled": false,
+      "comparisons": {
+        "10": {
+          "fr_ppl": 9.193073490402178,
+          "euc_ppl": 10.442495074663592,
+          "nre_ppl": 9.170254507928089,
+          "fr_better_vs_euc": true,
+          "fr_better_vs_nre": false,
+          "ratio_vs_euc": 0.8803521978868001,
+          "ratio_vs_nre": 1.0024883695926172
+        },
+        "15": {
+          "fr_ppl": 9.19540583366744,
+          "euc_ppl": 10.44906735394421,
+          "nre_ppl": 9.168123952099048,
+          "fr_better_vs_euc": true,
+          "fr_better_vs_nre": false,
+          "ratio_vs_euc": 0.8800216825281014,
+          "ratio_vs_nre": 1.0029757321902422
+        }
+      }
+    }
+  },
+  "total_time_s": 590.1
+}

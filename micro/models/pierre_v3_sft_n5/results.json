@@ -1,0 +1,95 @@
+{
+  "experiment": "pierre_v3_sft_n5",
+  "total_time_s": 456.7,
+  "routing": {
+    "accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.412,
+      "code": 4.752,
+      "math": 3.734,
+      "legal": 22.813,
+      "finance": 19.99
+    },
+    "ntp_single": {},
+    "sft_single": {
+      "medical": 5.731,
+      "code": 3.937,
+      "math": 3.723,
+      "legal": 22.302,
+      "finance": 20.346
+    },
+    "sft_pierre": {
+      "medical": 5.731,
+      "code": 3.937,
+      "math": 3.723,
+      "legal": 22.302,
+      "finance": 20.346
+    },
+    "degradation": {
+      "medical": 0.0,
+      "code": 0.0,
+      "math": 0.0,
+      "legal": 0.0,
+      "finance": 0.0
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.404,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.844,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.662,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.054,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.086,
+        "routed_to": "finance"
+      }
+    },
+    "overall": 0.41
+  },
+  "latency": {
+    "base_tps": 140.4,
+    "pierre_tps": 73.0,
+    "overhead_pct": 48.01
+  },
+  "kill_criteria": {
+    "K718": {
+      "pass": true,
+      "value": 0.41,
+      "threshold": 0.4,
+      "detail": "Behavioral 0.41 (target >= 0.4, NTP was 0.332)"
+    },
+    "K719": {
+      "pass": true,
+      "value": 0.996,
+      "threshold": 0.8
+    },
+    "K720": {
+      "pass": false,
+      "value": 48.01,
+      "threshold": 20.0,
+      "detail": "Side-path overhead 48.01% (limit 20%)"
+    }
+  },
+  "all_pass": false
+}

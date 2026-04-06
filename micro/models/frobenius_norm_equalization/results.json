@@ -1,0 +1,254 @@
+{
+  "experiment": "frobenius_norm_equalization",
+  "phases": {
+    "frobenius_analysis": {
+      "domain_norms": {
+        "medical": 626.6153408207368,
+        "code": 603.8208375696022,
+        "math": 629.0466549081918,
+        "legal": 117.53178190575031,
+        "finance": 29.12964729431552
+      },
+      "domain_b_norms": {
+        "medical": 31.330767041036847,
+        "code": 30.19104187848011,
+        "math": 31.45233274540959,
+        "legal": 29.382945476437577,
+        "finance": 29.12964729431552
+      },
+      "energy_fractions": {
+        "medical": 0.3362829573100541,
+        "code": 0.3122619045971669,
+        "math": 0.33889762577060784,
+        "legal": 0.01183078202840643,
+        "finance": 0.000726730293764724
+      },
+      "norm_ratio": 21.594722673863153,
+      "top3_energy_share": 0.9874424876778288,
+      "equalization_scales": {
+        "full": {
+          "medical": 0.3847826502393777,
+          "code": 0.3993083651967564,
+          "math": 0.38329543546629885,
+          "legal": 2.0514511701609583,
+          "finance": 8.277158631052336
+        },
+        "partial": {
+          "medical": 0.6203085121448662,
+          "code": 0.6319085101474392,
+          "math": 0.6191085813218057,
+          "legal": 1.4322887872775378,
+          "finance": 2.877005149639525
+        }
+      },
+      "elapsed_s": 0.028378963470458984
+    },
+    "gini_analysis": {
+      "strategies": {
+        "raw_sum": {
+          "mean_gini": 0.48951229226164494,
+          "std_gini": 0.02181360320313708,
+          "mean_ratio": 146.3977768928917,
+          "mean_top1_frac": 0.23293994600524542,
+          "n_samples": 14,
+          "per_sample_ginis": [
+            0.49843408454648314,
+            0.4744756536046051,
+            0.4895780830589486,
+            0.4973853500883302,
+            0.47325642933633766,
+            0.47310769627641147,
+            0.48566486904433415,
+            0.4792985094223144,
+            0.45321633828378227,
+            0.48642625053130534,
+            0.4852801087141823,
+            0.4867912807999741,
+            0.5271431732357821,
+            0.5431142647202389
+          ]
+        },
+        "full_equalization": {
+          "mean_gini": 0.2665085128347556,
+          "std_gini": 0.037414646850645196,
+          "mean_ratio": 10.49752323767623,
+          "mean_top1_frac": 0.2245169819766369,
+          "n_samples": 14,
+          "per_sample_ginis": [
+            0.29298366056225483,
+            0.24920371893188165,
+            0.2641048574437555,
+            0.2668368292290891,
+            0.24658174297604854,
+            0.22820400716287284,
+            0.2581062413464748,
+            0.23982829549942522,
+            0.22747648228306544,
+            0.24331931499727577,
+            0.27214065674468385,
+            0.24882078771886557,
+            0.3649185582417894,
+            0.32859402654909514
+          ]
+        },
+        "partial_equalization": {
+          "mean_gini": 0.39332856675517053,
+          "std_gini": 0.02574639817656487,
+          "mean_ratio": 32.506233399762365,
+          "mean_top1_frac": 0.2284875443864033,
+          "n_samples": 14,
+          "per_sample_ginis": [
+            0.39963333935245343,
+            0.37366431082212265,
+            0.3923727421749163,
+            0.39701440600772797,
+            0.37577138835847756,
+            0.37189296647139575,
+            0.39166789005426056,
+            0.3836580959362072,
+            0.3548322752424639,
+            0.3889550270130984,
+            0.3887884212888597,
+            0.38832429080943587,
+            0.44890084910477707,
+            0.4511239319361903
+          ]
+        }
+      },
+      "gini_reduction_full": 0.4555631859550803,
+      "gini_reduction_partial": 0.1964888870554942,
+      "k703_pass": true,
+      "k703_value": 0.2665085128347556,
+      "elapsed_s": 107.14537286758423
+    },
+    "perplexity": {
+      "base_ppl": {
+        "medical": 6.7342995321179195,
+        "code": 5.692651453631472,
+        "math": 3.7908809214903334,
+        "legal": 20.979179034293118,
+        "finance": 18.358044545856114
+      },
+      "strategies": {
+        "raw_sum": {
+          "per_domain_ppl": {
+            "medical": 3.851280327381063,
+            "code": 3.764281312981685,
+            "math": 2.4158404623446286,
+            "legal": 15.501218644340227,
+            "finance": 14.080577705248624
+          },
+          "mixed_ppl": 6.584475388936963
+        },
+        "full_equalization": {
+          "per_domain_ppl": {
+            "medical": 4.5638437019815505,
+            "code": 3.9711106551296744,
+            "math": 2.8079114334778152,
+            "legal": 14.106739428728769,
+            "finance": 13.23870579859286
+          },
+          "mixed_ppl": 6.769626616519517
+        },
+        "partial_equalization": {
+          "per_domain_ppl": {
+            "medical": 3.940373372972238,
+            "code": 3.7151579176127743,
+            "math": 2.527533925787766,
+            "legal": 14.632985991778368,
+            "finance": 13.568472035250393
+          },
+          "mixed_ppl": 6.508207310279679
+        }
+      },
+      "full_eq_ppl_changes": {
+        "medical": 0.1850198671684444,
+        "code": 0.05494524052565031,
+        "math": 0.16229174783862707,
+        "legal": -0.08995932820550256,
+        "finance": -0.059789585646187665
+      },
+      "full_eq_within_5pct": 0,
+      "partial_eq_ppl_changes": {
+        "medical": 0.02313335774541235,
+        "code": -0.01304987361053527,
+        "math": 0.046233791172922235,
+        "legal": -0.05601060616475253,
+        "finance": -0.03636964908104165
+      },
+      "partial_eq_within_5pct": 4,
+      "k704_pass": false,
+      "elapsed_s": 68.34510779380798,
+      "generation_full_eq": {
+        "medical": {
+          "prompt": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes",
+          "output": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes myocardial infarction, pulmonary embolism, and tension pneumothorax. Which of the following is the most likely diagnosis?\nA. Myocardial infarction\nB. Pulmonary embolism\nC. Tension pneumothorax\nD. All of the above\nE. None of the above\n\n**Answer:**\nA. Myocardial infarction"
+        },
+        "code": {
+          "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n",
+          "output": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n    if n < 0:\n        raise ValueError(\"Input should be a non-negative integer.\")\n    elif n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a, b = b, a + b"
+        },
+        "math": {
+          "prompt": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then",
+          "output": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then du = 2x dx and v = e^x. Using the formula for integration by parts, we have:\n\n\u222b x^2 * e^x dx = x^2 * e^x - \u222b 2x * e^x dx\n\nNow, we apply integration by parts again to the remaining integral. Let u = 2x and dv = e^x dx"
+        },
+        "legal": {
+          "prompt": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of",
+          "output": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause.The court also held that the defendant's rights were violated because the search was not supported by a valid search warrant.\n\nThe court held that the defendant's Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause.The court also held that the defendant's rights were violated because the search was not supported by"
+        },
+        "finance": {
+          "prompt": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by",
+          "output": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by a 10% increase in sales of its cloud computing platform. The company also announced a new partnership with a leading cloud computing provider. What are the implications of this news for the company's future growth prospects?\n\nAnswer: The company's Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%, indicate a strong financial performance. The 10% increase in sales of its"
+        }
+      },
+      "generation_raw_sum": {
+        "medical": {
+          "prompt": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes",
+          "output": "The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes myocardial infarction, pulmonary embolism, and tension pneumothorax. Which of the###The patient presents with acute chest pain and elevated troponin levels. The differential diagnosis includes myocardial infarction, pulmonary embolism, and tension pneumothorax. Which of the following is the most likely diagnosis?\nA. Myocardial infarction\nB. Pul"
+        },
+        "code": {
+          "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n",
+          "output": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci number efficiently.\"\"\"\n    if n < 0:\n        raise ValueError(\"n must be a non-negative integer\")\n    elif n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        return fibonacci(n-1) + fibonacci(n-2)\n\ndef fibonacci_sequence(n):\n    \"\"\"Return the first n Fibonacci numbers.\"\"\"\n    return [fibonacci(i)"
+        },
+        "math": {
+          "prompt": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then",
+          "output": "To solve the integral of x^2 * e^x dx, we apply integration by parts. Let u = x^2 and dv = e^x dx. Then du = 2x dx and v = e^x. Using the formula for integration by parts, we have:\n\n\u222b x^2 * e^x dx = x^2 * e^x - \u222b 2x * e^x dx\n\nNow, we apply integration by parts again to the remaining integral. Let u = 2x and dv = e^x dx"
+        },
+        "legal": {
+          "prompt": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of",
+          "output": "The court held that the defendant's Fourth Amendment rights were violated because the warrantless search of the defendant's home was not supported by probable cause.### Question: What was the reason for the Fourth Amendment rights being violated in this case? \nAnswer: The warrantless search of the defendant's home was not supported by probable cause.  #Explanation: The Fourth Amendment protects citizens from unreasonable searches and seizures. In this case, the court found that the warrantless search of the defendant's home"
+        },
+        "finance": {
+          "prompt": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by",
+          "output": "The company reported Q3 earnings of $2.50 per share, exceeding analyst estimates by 15%. The revenue growth was driven by a 10% increase in sales of its new product line. The company also announced a 5% increase in its dividend. What is the impact of this news on the stock price?\n\nAnswer: The stock price is likely to increase as investors are likely to view the company's strong earnings and revenue growth as a positive sign for future performance. The 5% dividend increase is also likely to be"
+        }
+      }
+    }
+  },
+  "summary": {
+    "k703_pass": true,
+    "k703_value": 0.2665085128347556,
+    "k704_pass": false,
+    "k704_count": 0,
+    "k705_note": "Requires manual assessment of generation samples",
+    "norm_ratio": 21.594722673863153,
+    "top3_energy_share": 0.9874424876778288,
+    "gini_reduction_full": 0.4555631859550803,
+    "gini_reduction_partial": 0.1964888870554942,
+    "full_eq_ppl_changes": {
+      "medical": 0.1850198671684444,
+      "code": 0.05494524052565031,
+      "math": 0.16229174783862707,
+      "legal": -0.08995932820550256,
+      "finance": -0.059789585646187665
+    },
+    "partial_eq_ppl_changes": {
+      "medical": 0.02313335774541235,
+      "code": -0.01304987361053527,
+      "math": 0.046233791172922235,
+      "legal": -0.05601060616475253,
+      "finance": -0.03636964908104165
+    },
+    "elapsed_seconds": 241.0556788444519
+  }
+}

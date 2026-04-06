@@ -1,0 +1,66 @@
+# Spectral Surgery: default configuration
+# Paper: arxiv 2603.03995 (Tian et al., 2026)
+
+# --- LoRA adapter settings ---
+lora:
+  rank: 16
+  alpha: 32
+  # Modules to edit (residual-writing projections only)
+  edit_modules:
+    - "o_proj"
+    - "down_proj"
+
+# --- Calibration ---
+calibration:
+  num_samples: 128        # N_cal in paper; Table 4 shows 128 is robust default
+  batch_size: 4
+  max_seq_len: 512
+  seed: 42
+  start_offset: 0         # contiguous range selection offset
+
+# --- Sensitivity estimation ---
+sensitivity:
+  aggregation: "mean_abs"  # mean absolute value of g_k over calibration examples
+
+# --- Editing policy ---
+# Supported: smooth_abs, abs_select, grad_direction, random_index
+policy: "smooth_abs"
+
+# smooth_abs settings (continuous reweighting, Sec 3.4 item 2)
+smooth_abs:
+  center_quantile: 0.5      # smooth_center_q: median
+  temperature: 1.0           # smooth_temperature T
+  noise_frac: 0.25           # q_lo for temperature range
+  core_frac: 0.25            # q_hi = 1 - core_frac
+  align_mid: true            # smooth_align_mid
+  mid_factor: 1.0            # gamma_mid
+
+# abs_select settings (hard selection, Sec 3.4 item 1)
+abs_select:
+  core_frac: 0.25
+  noise_frac: 0.25
+  min_core_k: 1
+  amp_factor: 1.2            # gamma_amp
+  sup_factor: 0.8            # gamma_sup
+  mid_factor: 1.0            # gamma_mid
+
+# grad_direction settings (signed update, Sec 3.4 item 4)
+grad_direction:
+  eta_suppress: 0.1          # eta_sup (positive g_k => suppress)
+  eta_enhance: 0.1           # eta_amp (negative g_k => enhance)
+  asymmetric_update: true
+  power_transform: 1.0       # exponent on g_k^+
+
+# random_index settings (control baseline, Sec 3.4 item 3)
+random_index:
+  core_frac: 0.25
+  noise_frac: 0.25
+  amp_factor: 1.2
+  sup_factor: 0.8
+  mid_factor: 1.0
+  seed: 0
+
+# --- Energy preservation ---
+energy:
+  preserve: "L1"             # L1 nuclear-norm preservation (default); "none" to disable
+  sigma_clip_min: 0.0        # clamp sigma' >= this value

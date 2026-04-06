@@ -1,0 +1,445 @@
+{
+  "experiment": "dare_sparsified_composition",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "drop_rates": [
+    0.5,
+    0.7,
+    0.9,
+    0.95
+  ],
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "timestamp": "2026-03-31 12:18:58",
+  "base": {
+    "gsm8k": {
+      "accuracy": 0.38,
+      "correct": 19,
+      "total": 50,
+      "time_s": 240.4
+    },
+    "code_gen": {
+      "syntax_rate": 0.9,
+      "correct": 9,
+      "total": 10,
+      "time_s": 47.9
+    },
+    "mmlu": {
+      "overall_accuracy": 0.44,
+      "overall_correct": 44,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "peak_memory_gb": 5.35,
+    "time_s": 359.0
+  },
+  "ntp_no_dare": {
+    "gsm8k": {
+      "accuracy": 0.48,
+      "correct": 24,
+      "total": 50,
+      "time_s": 545.9
+    },
+    "code_gen": {
+      "syntax_rate": 0.8,
+      "correct": 8,
+      "total": 10,
+      "time_s": 113.4
+    },
+    "mmlu": {
+      "overall_accuracy": 0.38,
+      "overall_correct": 38,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.8,
+        "correct": 16,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.75,
+        "passed": 15,
+        "total": 20
+      }
+    },
+    "time_s": 1149.6
+  },
+  "dare_p0.5": {
+    "drop_rate": 0.5,
+    "gsm8k": {
+      "accuracy": 0.44,
+      "correct": 22,
+      "total": 50,
+      "time_s": 554.8
+    },
+    "code_gen": {
+      "syntax_rate": 0.9,
+      "correct": 9,
+      "total": 10,
+      "time_s": 113.2
+    },
+    "mmlu": {
+      "overall_accuracy": 0.36,
+      "overall_correct": 36,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.8,
+        "correct": 16,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.8,
+        "passed": 16,
+        "total": 20
+      }
+    },
+    "degenerate_output": false,
+    "time_s": 1163.8
+  },
+  "dare_p0.7": {
+    "drop_rate": 0.7,
+    "gsm8k": {
+      "accuracy": 0.48,
+      "correct": 24,
+      "total": 50,
+      "time_s": 555.1
+    },
+    "code_gen": {
+      "syntax_rate": 0.8,
+      "correct": 8,
+      "total": 10,
+      "time_s": 113.1
+    },
+    "mmlu": {
+      "overall_accuracy": 0.35,
+      "overall_correct": 35,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.15,
+          "correct": 3,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.75,
+        "correct": 15,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.75,
+        "passed": 15,
+        "total": 20
+      }
+    },
+    "degenerate_output": false,
+    "time_s": 1163.7
+  },
+  "dare_p0.9": {
+    "drop_rate": 0.9,
+    "gsm8k": {
+      "accuracy": 0.42,
+      "correct": 21,
+      "total": 50,
+      "time_s": 547.6
+    },
+    "code_gen": {
+      "syntax_rate": 0.7,
+      "correct": 7,
+      "total": 10,
+      "time_s": 112.6
+    },
+    "mmlu": {
+      "overall_accuracy": 0.38,
+      "overall_correct": 38,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.8,
+        "correct": 16,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.8,
+        "passed": 16,
+        "total": 20
+      }
+    },
+    "degenerate_output": false,
+    "time_s": 1159.6
+  },
+  "dare_p0.95": {
+    "drop_rate": 0.95,
+    "gsm8k": {
+      "accuracy": 0.24,
+      "correct": 12,
+      "total": 50,
+      "time_s": 538.1
+    },
+    "code_gen": {
+      "syntax_rate": 0.9,
+      "correct": 9,
+      "total": 10,
+      "time_s": 114.6
+    },
+    "mmlu": {
+      "overall_accuracy": 0.35,
+      "overall_correct": 35,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.25,
+          "correct": 5,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.75,
+        "correct": 15,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.85,
+        "passed": 17,
+        "total": 20
+      }
+    },
+    "degenerate_output": false,
+    "time_s": 1179.5
+  },
+  "kill_criteria_assessment": {
+    "0.5": {
+      "ood_degradations": {
+        "gsm8k": 6.0,
+        "code_gen": 0.0,
+        "mmlu_medical": 0.0,
+        "mmlu_code": 0.0,
+        "mmlu_math": -25.0
+      },
+      "n_degraded_5pp": 1,
+      "k681_fail": false,
+      "math_indist_ratio": 1.0,
+      "code_indist_ratio": 1.067,
+      "k682_fail": false,
+      "k683_fail": false,
+      "any_kill": false
+    },
+    "0.7": {
+      "ood_degradations": {
+        "gsm8k": 9.999999999999998,
+        "code_gen": -9.999999999999998,
+        "mmlu_medical": 0.0,
+        "mmlu_code": 0.0,
+        "mmlu_math": -35.0
+      },
+      "n_degraded_5pp": 2,
+      "k681_fail": false,
+      "math_indist_ratio": 0.938,
+      "code_indist_ratio": 1.0,
+      "k682_fail": false,
+      "k683_fail": false,
+      "any_kill": false
+    },
+    "0.9": {
+      "ood_degradations": {
+        "gsm8k": 3.9999999999999982,
+        "code_gen": -20.000000000000007,
+        "mmlu_medical": 0.0,
+        "mmlu_code": 0.0,
+        "mmlu_math": -15.000000000000002
+      },
+      "n_degraded_5pp": 2,
+      "k681_fail": false,
+      "math_indist_ratio": 1.0,
+      "code_indist_ratio": 1.067,
+      "k682_fail": false,
+      "k683_fail": false,
+      "any_kill": false
+    },
+    "0.95": {
+      "ood_degradations": {
+        "gsm8k": -14.000000000000002,
+        "code_gen": 0.0,
+        "mmlu_medical": 0.0,
+        "mmlu_code": -5.000000000000004,
+        "mmlu_math": -25.0
+      },
+      "n_degraded_5pp": 3,
+      "k681_fail": true,
+      "math_indist_ratio": 0.938,
+      "code_indist_ratio": 1.133,
+      "k682_fail": false,
+      "k683_fail": false,
+      "any_kill": true
+    }
+  },
+  "best_drop_rate": 0.5,
+  "verdict": "SUPPORTED",
+  "total_time_s": 6179.7
+}

@@ -1,0 +1,100 @@
+{
+  "experiment": "exp_hidden_state_probe_router",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "n_domains": 5,
+  "probe_config": {
+    "hidden_dim": 128,
+    "epochs": 30,
+    "lr": 0.001,
+    "batch_size": 64
+  },
+  "data_config": {
+    "n_cal_per_domain": 30,
+    "n_test_per_domain": 10,
+    "n_sequences_per_pair": 10,
+    "segment_length": 128,
+    "max_seq_length": 256
+  },
+  "extraction_time_s": 61.95595860481262,
+  "probe_results": {
+    "ridge": {
+      "token_accuracy": 0.9834965542256076,
+      "seq_accuracy": 1.0,
+      "best_lambda": 10.0,
+      "per_domain": {
+        "medical": 1.0,
+        "code": 1.0,
+        "math": 0.9990476190476191,
+        "legal": 0.9903448275862069,
+        "finance": 0.9534313725490197
+      },
+      "time_s": 1.6463501453399658
+    },
+    "mlp_probe": {
+      "token_accuracy": 0.9851287603378296,
+      "seq_accuracy": 1.0,
+      "best_test_accuracy": 0.9878491163253784,
+      "per_domain": {
+        "medical": 1.0,
+        "code": 0.9943582510578279,
+        "math": 0.9952380952380953,
+        "legal": 0.9855172413793103,
+        "finance": 0.9681372549019608
+      },
+      "n_params": 328453,
+      "hidden_dim": 128,
+      "epochs": 30,
+      "lr": 0.001,
+      "final_loss": 5.1683232811467275e-06,
+      "time_s": 3.2099459171295166
+    },
+    "latency": {
+      "single_token_ms": 0.16994190216064453,
+      "batch_128_total_ms": 0.17830109596252441,
+      "batch_128_per_token_ms": 0.001392977312207222
+    }
+  },
+  "mixed_domain_ppl": {
+    "ppl": {
+      "oracle": 7.635700215041859,
+      "probe_seg": 7.635700215041859,
+      "per_seq_best": 7.366488812544108,
+      "base_only": 7.465366382328044
+    },
+    "routing_accuracy": {
+      "seg_a": 1.0,
+      "seg_b": 1.0,
+      "overall": 1.0
+    },
+    "ppl_ratio_probe_oracle": 1.0,
+    "ppl_gap_pct": 0.0,
+    "n_sequences": 100,
+    "n_pairs": 10,
+    "time_s": 88.77495884895325
+  },
+  "kill_criteria": {
+    "K784": {
+      "pass": true,
+      "detail": "MLP token acc = 0.985 (threshold 0.85)"
+    },
+    "K785": {
+      "pass": true,
+      "detail": "PPL gap = +0.00% (threshold 5%)",
+      "note": "Tautological at 100% routing accuracy: probe selects the same adapter as oracle for every segment, so matching oracle PPL is guaranteed by construction. K785 would only be a meaningful test if routing accuracy were <100%. Moreover, oracle segment-isolated PPL (7.636) is worse than per-sequence best (7.366) and base-only (7.465)."
+    },
+    "K786": {
+      "pass": true,
+      "detail": "Latency = 0.1699ms (threshold 1ms)"
+    }
+  },
+  "verdict": "SUPPORTED",
+  "total_time_s": 156.2,
+  "timestamp": "2026-04-06 08:35:42"
+}

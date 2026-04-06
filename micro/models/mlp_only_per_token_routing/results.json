@@ -1,0 +1,577 @@
+{
+  "experiment": "mlp_only_per_token_routing",
+  "type": "guided-exploration",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "n_domain_pairs": 10,
+  "sequences_per_pair": 20,
+  "segment_length": 128,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "seed": 42,
+  "timestamp": "2026-04-06 10:02:58",
+  "pair_results": {
+    "python+math": {
+      "base_only_ppl": 3.37,
+      "per_seq_best_ppl": 2.9586,
+      "per_token_full_ppl": 2.7642,
+      "per_token_mlp_only_ppl": 2.8582,
+      "per_token_attn_only_ppl": 2.9551,
+      "seg_oracle_ppl": 2.4414,
+      "seg_router_ppl": 2.4414,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 6196.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 5532.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 5185.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 5356.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 5526.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 4534.25,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 4534.25,
+          "n": 5080
+        }
+      }
+    },
+    "python+medical": {
+      "base_only_ppl": 3.0272,
+      "per_seq_best_ppl": 2.7737,
+      "per_token_full_ppl": 2.6984,
+      "per_token_mlp_only_ppl": 2.714,
+      "per_token_attn_only_ppl": 2.7669,
+      "seg_oracle_ppl": 2.4569,
+      "seg_router_ppl": 2.4485,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 5649.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 5203.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 5062.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 5092.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 5190.5,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 4566.5,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 4549.0,
+          "n": 5080
+        }
+      }
+    },
+    "python+legal": {
+      "base_only_ppl": 6.8263,
+      "per_seq_best_ppl": 5.8559,
+      "per_token_full_ppl": 5.5084,
+      "per_token_mlp_only_ppl": 5.8033,
+      "per_token_attn_only_ppl": 5.8278,
+      "seg_oracle_ppl": 5.0176,
+      "seg_router_ppl": 5.0176,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 9796.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 9014.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 8702.0,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 8968.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 8989.5,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 8193.75,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 8193.75,
+          "n": 5080
+        }
+      }
+    },
+    "python+creative": {
+      "base_only_ppl": 4.6995,
+      "per_seq_best_ppl": 4.0679,
+      "per_token_full_ppl": 3.9042,
+      "per_token_mlp_only_ppl": 3.985,
+      "per_token_attn_only_ppl": 4.1242,
+      "seg_oracle_ppl": 3.5159,
+      "seg_router_ppl": 3.5131,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 7892.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 7156.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 6946.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 7051.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 7226.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 6387.0,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 6383.0,
+          "n": 5080
+        }
+      }
+    },
+    "math+medical": {
+      "base_only_ppl": 3.8794,
+      "per_seq_best_ppl": 3.3555,
+      "per_token_full_ppl": 3.2585,
+      "per_token_mlp_only_ppl": 3.3029,
+      "per_token_attn_only_ppl": 3.4068,
+      "seg_oracle_ppl": 3.0199,
+      "seg_router_ppl": 2.9909,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 6914.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 6174.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 6024.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 6093.5,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 6251.5,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 5614.5,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 5565.5,
+          "n": 5080
+        }
+      }
+    },
+    "math+legal": {
+      "base_only_ppl": 8.8741,
+      "per_seq_best_ppl": 7.4736,
+      "per_token_full_ppl": 6.7491,
+      "per_token_mlp_only_ppl": 7.2045,
+      "per_token_attn_only_ppl": 7.2726,
+      "seg_oracle_ppl": 6.2303,
+      "seg_router_ppl": 6.2303,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 11134.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 10258.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 9738.0,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 10071.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 10119.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 9293.5,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 9293.5,
+          "n": 5080
+        }
+      }
+    },
+    "math+creative": {
+      "base_only_ppl": 6.1961,
+      "per_seq_best_ppl": 5.2223,
+      "per_token_full_ppl": 4.6363,
+      "per_token_mlp_only_ppl": 4.8865,
+      "per_token_attn_only_ppl": 5.138,
+      "seg_oracle_ppl": 4.1058,
+      "seg_router_ppl": 4.1058,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 9302.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 8430.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 7823.0,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 8091.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 8347.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 7175.0,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 7175.0,
+          "n": 5080
+        }
+      }
+    },
+    "medical+legal": {
+      "base_only_ppl": 6.1815,
+      "per_seq_best_ppl": 5.4718,
+      "per_token_full_ppl": 5.2413,
+      "per_token_mlp_only_ppl": 5.4296,
+      "per_token_attn_only_ppl": 5.482,
+      "seg_oracle_ppl": 4.6962,
+      "seg_router_ppl": 4.658,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 9290.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 8668.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 8448.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 8628.5,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 8677.5,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 7857.5,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 7816.0,
+          "n": 5080
+        }
+      }
+    },
+    "medical+creative": {
+      "base_only_ppl": 5.4632,
+      "per_seq_best_ppl": 4.8817,
+      "per_token_full_ppl": 4.5808,
+      "per_token_mlp_only_ppl": 4.6422,
+      "per_token_attn_only_ppl": 4.9009,
+      "seg_oracle_ppl": 4.0119,
+      "seg_router_ppl": 3.9801,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 8660.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 8086.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 7761.5,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 7829.5,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 8106.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 7057.5,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 7017.0,
+          "n": 5080
+        }
+      }
+    },
+    "legal+creative": {
+      "base_only_ppl": 11.1668,
+      "per_seq_best_ppl": 9.7882,
+      "per_token_full_ppl": 8.6643,
+      "per_token_mlp_only_ppl": 9.1086,
+      "per_token_attn_only_ppl": 9.4487,
+      "seg_oracle_ppl": 7.7893,
+      "seg_router_ppl": 7.7893,
+      "n_sequences": 20,
+      "_raw_stats": {
+        "base_only": {
+          "nll": 12306.0,
+          "n": 5100
+        },
+        "per_seq_best": {
+          "nll": 11634.0,
+          "n": 5100
+        },
+        "per_token_full": {
+          "nll": 11012.0,
+          "n": 5100
+        },
+        "per_token_mlp_only": {
+          "nll": 11267.0,
+          "n": 5100
+        },
+        "per_token_attn_only": {
+          "nll": 11454.0,
+          "n": 5100
+        },
+        "seg_oracle": {
+          "nll": 10428.0,
+          "n": 5080
+        },
+        "seg_router": {
+          "nll": 10428.0,
+          "n": 5080
+        }
+      }
+    }
+  },
+  "summary": {
+    "base_only": 5.5213,
+    "per_seq_best": 4.8147,
+    "per_token_full": 4.4997,
+    "per_token_mlp_only": 4.6561,
+    "per_token_attn_only": 4.7894,
+    "seg_oracle": 4.0542,
+    "seg_router": 4.042
+  },
+  "K790_mlp_only_ppl": 4.6561,
+  "K790_per_seq_ppl": 4.8147,
+  "K790_delta_pct": 3.29,
+  "K790_pass": true,
+  "K791_mlp_only_ppl": 4.6561,
+  "K791_seg_iso_ppl": 4.042,
+  "K791_delta_pct": -15.19,
+  "K791_pass": false,
+  "K792_diff": 0.1586,
+  "K792_pass": "RETIRED",
+  "K792_note": "Vacuous: any multi-pass oracle per-token scheme passes this. Even attn-only (diff=0.026) passes. Tests oracle selection, not contamination elimination.",
+  "verdict": "PROVISIONAL",
+  "verdict_note": "Core prediction (single-pass MLP-only contamination elimination) untested. Multi-pass oracle methodology circumvents contamination for all strategies. Genuine finding: MLP 6x signal over attention (empirical observation).",
+  "finding_305_null_reclassified": "methodological_artifact",
+  "full_module_null_confirmed": false,
+  "full_vs_seq_diff": 0.315,
+  "statistics": {
+    "mlp_vs_seq_paired_t": 4.69,
+    "mlp_vs_seq_df": 9,
+    "mlp_vs_seq_p": "< 0.001",
+    "mlp_vs_seq_mean_pct": 3.27,
+    "mlp_vs_seq_se_pct": 0.70,
+    "full_vs_seq_paired_t": 3.65,
+    "full_vs_seq_df": 9,
+    "full_vs_seq_p": "< 0.005"
+  },
+  "pair_improvements": {
+    "python+math": {
+      "per_seq_best_ppl": 2.9586,
+      "per_token_mlp_only_ppl": 2.8582,
+      "per_token_full_ppl": 2.7642,
+      "per_token_attn_only_ppl": 2.9551,
+      "seg_oracle_ppl": 2.4414,
+      "seg_router_ppl": 2.4414,
+      "mlp_vs_seq_pct": 3.39,
+      "mlp_vs_seg_pct": -17.07,
+      "full_vs_seq_diff": 0.1944
+    },
+    "python+medical": {
+      "per_seq_best_ppl": 2.7737,
+      "per_token_mlp_only_ppl": 2.714,
+      "per_token_full_ppl": 2.6984,
+      "per_token_attn_only_ppl": 2.7669,
+      "seg_oracle_ppl": 2.4569,
+      "seg_router_ppl": 2.4485,
+      "mlp_vs_seq_pct": 2.15,
+      "mlp_vs_seg_pct": -10.84,
+      "full_vs_seq_diff": 0.0753
+    },
+    "python+legal": {
+      "per_seq_best_ppl": 5.8559,
+      "per_token_mlp_only_ppl": 5.8033,
+      "per_token_full_ppl": 5.5084,
+      "per_token_attn_only_ppl": 5.8278,
+      "seg_oracle_ppl": 5.0176,
+      "seg_router_ppl": 5.0176,
+      "mlp_vs_seq_pct": 0.9,
+      "mlp_vs_seg_pct": -15.66,
+      "full_vs_seq_diff": 0.3475
+    },
+    "python+creative": {
+      "per_seq_best_ppl": 4.0679,
+      "per_token_mlp_only_ppl": 3.985,
+      "per_token_full_ppl": 3.9042,
+      "per_token_attn_only_ppl": 4.1242,
+      "seg_oracle_ppl": 3.5159,
+      "seg_router_ppl": 3.5131,
+      "mlp_vs_seq_pct": 2.04,
+      "mlp_vs_seg_pct": -13.43,
+      "full_vs_seq_diff": 0.1637
+    },
+    "math+medical": {
+      "per_seq_best_ppl": 3.3555,
+      "per_token_mlp_only_ppl": 3.3029,
+      "per_token_full_ppl": 3.2585,
+      "per_token_attn_only_ppl": 3.4068,
+      "seg_oracle_ppl": 3.0199,
+      "seg_router_ppl": 2.9909,
+      "mlp_vs_seq_pct": 1.57,
+      "mlp_vs_seg_pct": -10.43,
+      "full_vs_seq_diff": 0.097
+    },
+    "math+legal": {
+      "per_seq_best_ppl": 7.4736,
+      "per_token_mlp_only_ppl": 7.2045,
+      "per_token_full_ppl": 6.7491,
+      "per_token_attn_only_ppl": 7.2726,
+      "seg_oracle_ppl": 6.2303,
+      "seg_router_ppl": 6.2303,
+      "mlp_vs_seq_pct": 3.6,
+      "mlp_vs_seg_pct": -15.64,
+      "full_vs_seq_diff": 0.7245
+    },
+    "math+creative": {
+      "per_seq_best_ppl": 5.2223,
+      "per_token_mlp_only_ppl": 4.8865,
+      "per_token_full_ppl": 4.6363,
+      "per_token_attn_only_ppl": 5.138,
+      "seg_oracle_ppl": 4.1058,
+      "seg_router_ppl": 4.1058,
+      "mlp_vs_seq_pct": 6.43,
+      "mlp_vs_seg_pct": -19.01,
+      "full_vs_seq_diff": 0.586
+    },
+    "medical+legal": {
+      "per_seq_best_ppl": 5.4718,
+      "per_token_mlp_only_ppl": 5.4296,
+      "per_token_full_ppl": 5.2413,
+      "per_token_attn_only_ppl": 5.482,
+      "seg_oracle_ppl": 4.6962,
+      "seg_router_ppl": 4.658,
+      "mlp_vs_seq_pct": 0.77,
+      "mlp_vs_seg_pct": -16.57,
+      "full_vs_seq_diff": 0.2305
+    },
+    "medical+creative": {
+      "per_seq_best_ppl": 4.8817,
+      "per_token_mlp_only_ppl": 4.6422,
+      "per_token_full_ppl": 4.5808,
+      "per_token_attn_only_ppl": 4.9009,
+      "seg_oracle_ppl": 4.0119,
+      "seg_router_ppl": 3.9801,
+      "mlp_vs_seq_pct": 4.91,
+      "mlp_vs_seg_pct": -16.64,
+      "full_vs_seq_diff": 0.3009
+    },
+    "legal+creative": {
+      "per_seq_best_ppl": 9.7882,
+      "per_token_mlp_only_ppl": 9.1086,
+      "per_token_full_ppl": 8.6643,
+      "per_token_attn_only_ppl": 9.4487,
+      "seg_oracle_ppl": 7.7893,
+      "seg_router_ppl": 7.7893,
+      "mlp_vs_seq_pct": 6.94,
+      "mlp_vs_seg_pct": -16.94,
+      "full_vs_seq_diff": 1.1239
+    }
+  },
+  "finding_305_baselines": {
+    "per_seq_best": 4.8147,
+    "per_token_full": 4.8147,
+    "seg_oracle": 4.0542,
+    "seg_router": 4.042,
+    "base_only": 5.5213
+  },
+  "total_time_s": 524.5
+}

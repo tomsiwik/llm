@@ -21,6 +21,10 @@ cli:
 adapters:
   claude:
     timeout: 14400
+    args:
+      - "--bare"
+      - "--append-system-prompt-file"
+      - "EXPERIMENT.md"
 
 event_loop:
   prompt_file: "PROMPT.md"
@@ -60,6 +64,11 @@ hats:
   researcher:
     name: "🔬 Researcher"
     description: "Designs and runs micro experiments via experiment-ideator on Apple Silicon MLX."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "sonnet"
     triggers:
       - "research.start"
       - "learning.complete"
@@ -81,13 +90,24 @@ hats:
       1. Run: `experiment claim researcher`
          This gives you full YAML: kill criteria with IDs, notes, deps, everything.
 
-      2. Delegate to experiment-ideator with the claim output:
-         "Work on experiment [id]: '[title]'. [paste kill criteria + notes].
-          SCALE: micro. PLATFORM: Apple Silicon MLX.
-          Full cycle: survey, math, implement, run, write PAPER.md.
-          Write direction to .ralph/current_direction.md.
-          Invoke /fast-mlx and /mlx-dev before MLX code.
-          Consult NotebookLM for prior art before implementing."
+      2. Check if run_experiment.py already exists in the experiment dir.
+         If YES: skip design, go straight to step 3 (run).
+         If NO: Delegate DESIGN to experiment-ideator (Sonnet):
+           Agent(subagent_type="experiment-ideator", model="sonnet", prompt=
+           "Design experiment [id]: '[title]'. [paste kill criteria + notes].
+            SCALE: micro. PLATFORM: Apple Silicon MLX.
+            Write MATH.md, implement run_experiment.py.
+            Write direction to .ralph/current_direction.md.
+            Invoke /fast-mlx and /mlx-dev before MLX code.
+            Do NOT run the experiment — just design and implement.")
+
+      3. Delegate RUN to experiment-programmer (Haiku):
+         Agent(subagent_type="experiment-programmer", model="haiku", prompt=
+         "Run experiment [id] in micro/models/[name]/.
+          Use: experiment run <id>
+          Monitor output. When done, parse results.json.
+          Write PAPER.md with prediction-vs-measurement table.
+          Report kill criteria results.")
 
       3. After sub-agent returns, verify PAPER.md exists, then:
          `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
@@ -157,6 +177,11 @@ hats:
   reviewer:
     name: "🔴 Reviewer"
     description: "Spawns adversarial-reviewer sub-agent, then integrates results and routes to analyst"
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "opus"
     triggers:
       - "experiment.done"
     publishes:
@@ -169,7 +194,7 @@ hats:
       1. Read .ralph/current_direction.md to find experiment_dir (micro/models/[name]/).
          Verify PAPER.md exists.
 
-      2. Delegate: Agent(subagent_type="adversarial-reviewer"):
+      2. Delegate: Agent(subagent_type="adversarial-reviewer", model="opus"):
          "Review [experiment_dir]/. Read MATH.md + PAPER.md.
           Check experiment TYPE (verification / guided-exploration / frontier-extension):
           - TYPE=verification: MATH.md must have Theorem/Proof/QED. PAPER.md must have
@@ -198,6 +223,11 @@ hats:
   analyst:
     name: "🧠 Analyst"
     description: "Researches WHY a result happened, finds confirming/contradicting literature, writes LEARNINGS.md."
+    backend_args:
+      - "--effort"
+      - "medium"
+      - "--model"
+      - "haiku"
     triggers:
       - "review.proceed"
       - "review.killed"

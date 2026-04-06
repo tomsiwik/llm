@@ -6,10 +6,15 @@ Apple M5 Pro, 48GB. MLX only. No CUDA.
 ## Before Writing MLX Code
 Invoke `/fast-mlx` and `/mlx-dev` skills first.
 
-## Before/After Experiments
+## Running Experiments
 ```bash
 experiment claim <worker-id>                    # get next experiment + full details
-# ... run experiment ...
+# Run via pueue (MANDATORY — never bare `uv run python`):
+experiment run <id>                             # run by experiment ID (looks up experiment_dir)
+experiment run micro/models/<name>/run_experiment.py  # run by path
+experiment run --no-wait <id>                   # submit and return immediately
+experiment run --status                         # check queue
+experiment run --kill <id>                      # kill running experiment
 experiment complete <id> --status supported \   # finish in one shot
   --dir micro/models/<name>/ \
   --k 183:pass --k 184:fail \

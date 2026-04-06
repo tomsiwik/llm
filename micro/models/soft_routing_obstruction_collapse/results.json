@@ -1,0 +1,198 @@
+{
+  "experiment": "soft_routing_obstruction_collapse",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "n_samples": 250,
+  "temperature": 1.0,
+  "gate_threshold": 0.5,
+  "router_train_steps": 300,
+  "activation_analysis": {
+    "overall": {
+      "hard_mean_k": 0.932,
+      "hard_std_k": 0.251745903640953,
+      "hard_frac_ge3": 0.0,
+      "hard_frac_ge2": 0.0,
+      "hard_distribution": {
+        "0": 0.068,
+        "1": 0.932,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "stochastic_mean_k": 0.9520000219345093,
+      "stochastic_std_k": 0.17848250269889832,
+      "stochastic_frac_ge3": 0.0,
+      "stochastic_frac_ge2": 0.0
+    },
+    "per_domain": {
+      "medical": {
+        "hard_mean_k": 1.0,
+        "hard_frac_ge3": 0.0,
+        "stochastic_mean_k": 0.9700000286102295,
+        "stochastic_frac_ge3": 0.0
+      },
+      "code": {
+        "hard_mean_k": 0.98,
+        "hard_frac_ge3": 0.0,
+        "stochastic_mean_k": 0.9860000610351562,
+        "stochastic_frac_ge3": 0.0
+      },
+      "math": {
+        "hard_mean_k": 1.0,
+        "hard_frac_ge3": 0.0,
+        "stochastic_mean_k": 1.0159999132156372,
+        "stochastic_frac_ge3": 0.0
+      },
+      "legal": {
+        "hard_mean_k": 0.92,
+        "hard_frac_ge3": 0.0,
+        "stochastic_mean_k": 0.8960000872612,
+        "stochastic_frac_ge3": 0.0
+      },
+      "finance": {
+        "hard_mean_k": 0.76,
+        "hard_frac_ge3": 0.0,
+        "stochastic_mean_k": 0.8919999599456787,
+        "stochastic_frac_ge3": 0.0
+      }
+    },
+    "logit_stats": {
+      "mean_per_adapter": [
+        -3.248561382293701,
+        -3.2068982124328613,
+        -3.2070164680480957,
+        -3.1485180854797363,
+        -3.187079668045044
+      ],
+      "std_per_adapter": [
+        2.231560230255127,
+        2.2739338874816895,
+        2.19474720954895,
+        2.0641465187072754,
+        2.1294660568237305
+      ],
+      "mean_overall": -3.199615001678467,
+      "frac_positive": 0.1864
+    },
+    "gate_stats": {
+      "mean_per_adapter": [
+        0.16124609112739563,
+        0.1645272970199585,
+        0.1609245240688324,
+        0.1507934033870697,
+        0.149612694978714
+      ],
+      "std_per_adapter": [
+        0.29618221521377563,
+        0.30288663506507874,
+        0.2951258718967438,
+        0.26480022072792053,
+        0.27035555243492126
+      ]
+    },
+    "router_final_loss": 0.33247917890548706
+  },
+  "ppl_comparison": {
+    "natural": {
+      "mean": 10.501574570355508,
+      "median": 3.902144002291363,
+      "std": 11.210693672714246,
+      "name": "natural"
+    },
+    "forced_k2": {
+      "mean": 10.501574570355508,
+      "median": 3.902144002291363,
+      "std": 11.210693672714246,
+      "name": "forced-k2"
+    },
+    "forced_k3": {
+      "mean": 10.501574570355508,
+      "median": 3.902144002291363,
+      "std": 11.210693672714246,
+      "name": "forced-k3"
+    },
+    "equal_all": {
+      "mean": 9.985451505137574,
+      "median": 4.896276672608156,
+      "std": 9.933467370236679,
+      "name": "equal-all"
+    },
+    "ppl_ratio_k3_over_k2": 1.0,
+    "per_domain_ppl": {
+      "medical": {
+        "natural": 3.5879420576365866,
+        "forced_k2": 3.5879420576365866,
+        "forced_k3": 3.5879420576365866,
+        "equal_all": 4.770078269599
+      },
+      "code": {
+        "natural": 2.77672456803793,
+        "forced_k2": 2.77672456803793,
+        "forced_k3": 2.77672456803793,
+        "equal_all": 3.120951068127053
+      },
+      "math": {
+        "natural": 2.414801611396192,
+        "forced_k2": 2.414801611396192,
+        "forced_k3": 2.414801611396192,
+        "equal_all": 2.645179533690339
+      },
+      "legal": {
+        "natural": 21.255047948009874,
+        "forced_k2": 21.255047948009874,
+        "forced_k3": 21.255047948009874,
+        "equal_all": 21.224730945030977
+      },
+      "finance": {
+        "natural": 22.47335666669695,
+        "forced_k2": 22.47335666669695,
+        "forced_k3": 22.47335666669695,
+        "equal_all": 18.166317709240495
+      }
+    },
+    "n_samples": 50
+  },
+  "nerve_analysis": {
+    "gate_0.5": {
+      "cover_sizes": {
+        "medical": 50,
+        "code": 49,
+        "math": 50,
+        "legal": 46,
+        "finance": 44
+      },
+      "n_vertices": 5,
+      "n_edges": 0,
+      "n_triangles": 0,
+      "edges": [],
+      "edge_sizes": {},
+      "triangles": [],
+      "triangle_sizes": {},
+      "beta_0": 5,
+      "beta_1": 0,
+      "rank_delta_0": 0,
+      "rank_delta_1": 0
+    }
+  },
+  "kill_criteria": {
+    "k1_mean_activation_ge_2.5": {
+      "value": 0.932,
+      "threshold": 2.5,
+      "pass": false
+    },
+    "k2_ppl_ratio_k3_k2_le_1.05": {
+      "value": 1.0,
+      "threshold": 1.05,
+      "pass": true
+    }
+  },
+  "routing_cover_H1": 0,
+  "total_time_s": 128.8
+}

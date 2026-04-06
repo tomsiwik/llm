@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "paper2code": {
+      "source": "PrathamLearnsToCode/paper2code",
+      "sourceType": "github",
+      "computedHash": "a0144723a49edee0933e32cffdcd09abd014429af1a1c3e2adca4294d3eff37a"
+    }
+  }
+}

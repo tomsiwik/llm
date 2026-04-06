@@ -1,0 +1,4 @@
+# Spectral Surgery – MLX implementation
+# Paper: arxiv 2603.03995
+mlx>=0.22.0
+pyyaml>=6.0

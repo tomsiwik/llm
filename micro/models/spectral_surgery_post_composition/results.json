@@ -1,0 +1,104 @@
+{
+  "experiment": "spectral_surgery_post_composition",
+  "type": "guided_exploration_type2",
+  "paper": "arXiv:2603.03995",
+  "svd_analysis": {
+    "spectral_deviations": [
+      0.07812507791799152,
+      0.06221233692491177,
+      0.06080578001991086,
+      0.09391461827699166,
+      0.12231260140073301
+    ],
+    "mean_spectral_deviation": 0.08347408290810777,
+    "b_matrix_cosines": {
+      "mean": 0.0277777761220932,
+      "max": 0.08169318735599518,
+      "min": 0.00045541347935795784
+    },
+    "gram_relative_error": 0.07515131682157516,
+    "elapsed_s": 57.8
+  },
+  "surgery_results": {
+    "ppl_base": {
+      "medical": 6.402478476003641,
+      "code": 4.74033321583373,
+      "math": 3.726398032485472,
+      "legal": 22.81539565463699,
+      "finance": 19.98351950267079
+    },
+    "ppl_raw_composition": {
+      "medical": 3.6908330814984085,
+      "code": 3.0265759627647544,
+      "math": 2.3922375484789407,
+      "legal": 16.90799383719034,
+      "finance": 15.570770170022714
+    },
+    "ppl_post_surgery": {
+      "medical": 3.906175395558175,
+      "code": 3.169309094747737,
+      "math": 2.4256864836300003,
+      "legal": 18.232083346382534,
+      "finance": 16.382407036182727
+    },
+    "ppl_improvement_pct": {
+      "medical": -5.8345178257788195,
+      "code": -4.715993708368611,
+      "math": -1.398227996727478,
+      "legal": -7.831144971674673,
+      "finance": -5.2125672481031105
+    },
+    "calibration_time_s": 195.7,
+    "surgery_time_s": 404.5,
+    "total_surgery_time_s": 600.2,
+    "surgery_stats": {
+      "n_components_total": 16800,
+      "n_components_suppressed": 8400,
+      "n_components_amplified": 8400
+    }
+  },
+  "interference_correlation": {
+    "correlations": [
+      -0.46567772011808434,
+      -0.6136473787156925,
+      -0.6277449306877255,
+      -0.7315721647189075,
+      -0.4938568602005052
+    ],
+    "mean_correlation": -0.586499810888183,
+    "domain_purity_scores": [
+      0.7108891838795698,
+      0.7047161443999866,
+      0.6993090126108861,
+      0.6921106630037264,
+      0.674854340754515
+    ],
+    "mean_domain_purity": 0.6963758689297368,
+    "elapsed_s": 17.4
+  },
+  "kill_criteria": {
+    "K696": {
+      "text": "Surgery improves quality by >1%",
+      "result": "FAIL",
+      "max_improvement_pct": -1.398227996727478,
+      "min_improvement_pct": -7.831144971674673
+    },
+    "K697": {
+      "text": "Calibration + surgery in <30s",
+      "result": "FAIL",
+      "total_time_s": 600.2
+    },
+    "K698": {
+      "text": "Harmful components correlate with interference",
+      "result": "PASS",
+      "mean_correlation": -0.586499810888183,
+      "mean_domain_purity": 0.6963758689297368
+    }
+  },
+  "theorem_verification": {
+    "theorem_1a_gram_error": 0.07515131682157516,
+    "mean_spectral_deviation_from_union": 0.08347408290810777,
+    "prediction_deviation_lt_5pct": false
+  },
+  "total_time_s": 765.7
+}

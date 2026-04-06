@@ -1,0 +1,306 @@
+{
+  "experiment": "capability_benchmark_full_system",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "optimal_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "benchmark_sizes": {
+    "gsm8k": 20,
+    "code_gen": 10,
+    "clinical_ner": 20,
+    "mmlu_per_domain": 20
+  },
+  "base_results": {
+    "gsm8k": {
+      "accuracy": 0.3,
+      "correct": 6,
+      "total": 20
+    },
+    "code_gen": {
+      "syntax_rate": 0.9,
+      "correct": 9,
+      "total": 10
+    },
+    "clinical_ner": {
+      "mean_f1": 0.31811216561216565,
+      "std_f1": 0.33121843771081666,
+      "scores": [
+        0.25,
+        0.0,
+        0.16666666666666666,
+        0.0,
+        0.0,
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        0.5714285714285715,
+        0.4444444444444444,
+        0.8,
+        0.33333333333333337,
+        0.5454545454545454,
+        0.14285714285714285,
+        0.0,
+        0.0,
+        0.761904761904762,
+        0.923076923076923,
+        0.923076923076923
+      ]
+    },
+    "mmlu": {
+      "accuracy": 0.44,
+      "correct": 44,
+      "total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "incoherence": {
+      "medical": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "code": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "math": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "legal": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "finance": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      }
+    },
+    "peak_memory_gb": 5.34861844,
+    "time_s": 384.95877599716187
+  },
+  "composed_results": {
+    "gsm8k": {
+      "accuracy": 0.15,
+      "correct": 3,
+      "total": 20
+    },
+    "code_gen": {
+      "syntax_rate": 0.8,
+      "correct": 8,
+      "total": 10
+    },
+    "clinical_ner": {
+      "mean_f1": 0.24395212630506746,
+      "std_f1": 0.33867314620263417,
+      "scores": [
+        0.36363636363636365,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.6666666666666666,
+        0.14285714285714288,
+        0.0,
+        0.6666666666666666,
+        0.0,
+        0.0,
+        0.7058823529411764,
+        0.8333333333333333,
+        1.0
+      ]
+    },
+    "mmlu": {
+      "accuracy": 0.39,
+      "correct": 39,
+      "total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      }
+    },
+    "incoherence": {
+      "medical": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "code": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "math": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "legal": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      },
+      "finance": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 10
+      }
+    },
+    "peak_memory_gb": 14.812541618,
+    "time_s": 900.5107531547546
+  },
+  "analysis": {
+    "benchmarks": {
+      "gsm8k": {
+        "base": 0.3,
+        "composed": 0.15,
+        "delta": -0.15,
+        "delta_pp": -15.0
+      },
+      "code_gen": {
+        "base": 0.9,
+        "composed": 0.8,
+        "delta": -0.09999999999999998,
+        "delta_pp": -9.999999999999998
+      },
+      "clinical_ner": {
+        "base": 0.31811216561216565,
+        "composed": 0.24395212630506746,
+        "delta": -0.07416003930709819,
+        "delta_pp": -7.416003930709819
+      },
+      "mmlu": {
+        "base": 0.44,
+        "composed": 0.39,
+        "delta": -0.04999999999999999,
+        "delta_pp": -4.999999999999999
+      }
+    },
+    "kill_criteria": {
+      "K1_gsm8k": {
+        "pass": false,
+        "base": 0.3,
+        "composed": 0.15,
+        "delta_pp": -15.0
+      },
+      "K2_code": {
+        "pass": false,
+        "base": 0.9,
+        "composed": 0.8,
+        "delta_pp": -9.999999999999998
+      },
+      "K3_incoherence": {
+        "pass": true,
+        "max_rate": 0,
+        "worst_domain": "",
+        "by_domain": {
+          "medical": 0.0,
+          "code": 0.0,
+          "math": 0.0,
+          "legal": 0.0,
+          "finance": 0.0
+        }
+      }
+    },
+    "predictions": {
+      "gsm8k_plus10pp": {
+        "predicted": "+10pp",
+        "measured": "-15.0pp",
+        "match": false
+      },
+      "code_plus15pp": {
+        "predicted": "+15pp",
+        "measured": "-10.0pp",
+        "match": false
+      },
+      "ner_plus5pp": {
+        "predicted": "+5pp",
+        "measured": "-7.4pp",
+        "match": false
+      },
+      "mmlu_neutral": {
+        "predicted": "-5pp to 0pp",
+        "measured": "-5.0pp",
+        "match": true
+      },
+      "incoherence_lt5pct": {
+        "predicted": "<5%",
+        "measured": "0.0%",
+        "match": true
+      }
+    },
+    "overall": {
+      "all_kill_pass": false,
+      "predictions_matched": 2,
+      "predictions_total": 5
+    }
+  },
+  "timing": {
+    "base_s": 384.95877599716187,
+    "composed_s": 900.5107531547546,
+    "total_s": 1289.4509861469269
+  }
+}
