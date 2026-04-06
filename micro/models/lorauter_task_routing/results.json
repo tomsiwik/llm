@@ -1,0 +1,274 @@
+{
+  "experiment": "lorauter_task_routing",
+  "description": "LoRAuter task-representation routing: sentence-embedding centroids for adapter selection",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "sentence_model": "all-MiniLM-L6-v2",
+  "n_domains": 5,
+  "n_prompts_per_domain": 10,
+  "n_val_for_centroids": 20,
+  "domain_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "centroid_stats": {
+    "inter_similarity_matrix": [
+      [
+        0.9999999403953552,
+        0.6016732454299927,
+        0.5381893515586853,
+        0.6490927338600159,
+        0.6821384429931641
+      ],
+      [
+        0.6016732454299927,
+        1.0000001192092896,
+        0.5749768614768982,
+        0.6944031119346619,
+        0.7377632856369019
+      ],
+      [
+        0.5381893515586853,
+        0.5749768614768982,
+        1.0000001192092896,
+        0.5552841424942017,
+        0.700306236743927
+      ],
+      [
+        0.6490927338600159,
+        0.6944031119346619,
+        0.5552841424942017,
+        0.9999998807907104,
+        0.8245221972465515
+      ],
+      [
+        0.6821384429931641,
+        0.7377632856369019,
+        0.700306236743927,
+        0.8245221972465515,
+        0.9999999403953552
+      ]
+    ],
+    "domain_order": [
+      "medical",
+      "code",
+      "math",
+      "legal",
+      "finance"
+    ],
+    "mean_inter_similarity": 0.6558349132537842,
+    "fisher_ratio": 5.612816701276544,
+    "elapsed_s": 4.7
+  },
+  "centroid_details": {
+    "medical": {
+      "n_samples": 20,
+      "mean_self_similarity": 0.7334398031234741,
+      "std_self_similarity": 0.047525860369205475,
+      "min_self_similarity": 0.6160942316055298
+    },
+    "code": {
+      "n_samples": 20,
+      "mean_self_similarity": 0.7859105467796326,
+      "std_self_similarity": 0.08917370438575745,
+      "min_self_similarity": 0.5135362148284912
+    },
+    "math": {
+      "n_samples": 20,
+      "mean_self_similarity": 0.6842011213302612,
+      "std_self_similarity": 0.03438839316368103,
+      "min_self_similarity": 0.6168994903564453
+    },
+    "legal": {
+      "n_samples": 20,
+      "mean_self_similarity": 0.6801800727844238,
+      "std_self_similarity": 0.07227108627557755,
+      "min_self_similarity": 0.5226367115974426
+    },
+    "finance": {
+      "n_samples": 20,
+      "mean_self_similarity": 0.7038702964782715,
+      "std_self_similarity": 0.0632295235991478,
+      "min_self_similarity": 0.5389286875724792
+    }
+  },
+  "routing_stats": {
+    "accuracy": 0.96,
+    "correct": 48,
+    "total": 50,
+    "per_domain_accuracy": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.9,
+      "finance": 0.9
+    },
+    "elapsed_s": 3.8
+  },
+  "comparison": {
+    "medical": {
+      "base_mean": 0.321,
+      "emb_routed_mean": 0.3062,
+      "oracle_mean": 0.3062,
+      "emb_vs_base": -0.0148,
+      "emb_vs_oracle": 0.0,
+      "oracle_pct": 100.0,
+      "routing_accuracy": 1.0,
+      "scale_used": 20.0,
+      "n_samples": 10
+    },
+    "code": {
+      "base_mean": 0.5499,
+      "emb_routed_mean": 0.6116,
+      "oracle_mean": 0.6116,
+      "emb_vs_base": 0.0617,
+      "emb_vs_oracle": 0.0,
+      "oracle_pct": 100.0,
+      "routing_accuracy": 1.0,
+      "scale_used": 20.0,
+      "n_samples": 10
+    },
+    "math": {
+      "base_mean": 0.0,
+      "emb_routed_mean": 0.4,
+      "oracle_mean": 0.4,
+      "emb_vs_base": 0.4,
+      "emb_vs_oracle": 0.0,
+      "oracle_pct": 100.0,
+      "routing_accuracy": 1.0,
+      "scale_used": 20.0,
+      "n_samples": 10
+    },
+    "legal": {
+      "base_mean": 0.1012,
+      "emb_routed_mean": 0.1129,
+      "oracle_mean": 0.1146,
+      "emb_vs_base": 0.0117,
+      "emb_vs_oracle": -0.0018,
+      "oracle_pct": 98.5,
+      "routing_accuracy": 0.9,
+      "scale_used": 4.0,
+      "n_samples": 10
+    },
+    "finance": {
+      "base_mean": 0.0583,
+      "emb_routed_mean": 0.0573,
+      "oracle_mean": 0.0573,
+      "emb_vs_base": -0.001,
+      "emb_vs_oracle": 0.0,
+      "oracle_pct": 100.0,
+      "routing_accuracy": 0.9,
+      "scale_used": 1.0,
+      "n_samples": 10
+    }
+  },
+  "correlations": {
+    "medical": {
+      "pearson_r": 0.19134740245726434,
+      "p_value": 0.5964193557252628,
+      "n_samples": 10,
+      "mean_similarity": 0.6906257629394531,
+      "std_similarity": 0.055736770711215425,
+      "mean_score": 0.3061942953667948,
+      "std_score": 0.19002764544738468
+    },
+    "code": {
+      "pearson_r": 0.0700593587395875,
+      "p_value": 0.8474951629320338,
+      "n_samples": 10,
+      "mean_similarity": 0.7584790349006653,
+      "std_similarity": 0.03883931878798262,
+      "mean_score": 0.6116020793502781,
+      "std_score": 0.2770407225732196
+    },
+    "math": {
+      "pearson_r": 0.015062116423516791,
+      "p_value": 0.9670590942177462,
+      "n_samples": 10,
+      "mean_similarity": 0.6489733815193176,
+      "std_similarity": 0.04880603383919496,
+      "mean_score": 0.4,
+      "std_score": 0.48989794855663565
+    },
+    "legal": {
+      "pearson_r": -0.024339995791125113,
+      "p_value": 0.9467877914726266,
+      "n_samples": 10,
+      "mean_similarity": 0.6665605783462525,
+      "std_similarity": 0.05603497828323665,
+      "mean_score": 0.11288807769387059,
+      "std_score": 0.08056235350486696
+    },
+    "finance": {
+      "pearson_r": 0.2119923553142275,
+      "p_value": 0.5565513076607251,
+      "n_samples": 10,
+      "mean_similarity": 0.6929961860179901,
+      "std_similarity": 0.0477810036320518,
+      "mean_score": 0.05727909247620565,
+      "std_score": 0.03913969284384767
+    },
+    "overall": {
+      "pearson_r": 0.233520131494885,
+      "p_value": 0.10265298148124477,
+      "n_samples": 50
+    }
+  },
+  "coherence": {
+    "total": 50,
+    "incoherent": 0,
+    "rate": 0.0
+  },
+  "kill_criteria": {
+    "K1_666": {
+      "description": "Embedding-effectiveness correlation > 0.3 on any domain",
+      "max_per_domain_abs_r": 0.212,
+      "overall_abs_r": 0.2335,
+      "result": "FAIL"
+    },
+    "K2_667": {
+      "description": "Emb-routed improves behavioral quality on >=1 domain vs base",
+      "domains_better": 2,
+      "result": "PASS"
+    },
+    "K3_668": {
+      "description": "Incoherent output <= 20%",
+      "incoherent_rate": 0.0,
+      "result": "PASS"
+    }
+  },
+  "predictions_vs_measured": {
+    "P1_routing_accuracy": {
+      "predicted": ">= 80%",
+      "measured": 0.96,
+      "match": true
+    },
+    "P2_effectiveness_correlation": {
+      "predicted": "r > 0.3 on at least 1 domain",
+      "measured_max": 0.212,
+      "measured_overall": 0.2335,
+      "match": false
+    },
+    "P3_behavioral_improvement": {
+      "predicted": "emb-routed >= base on >=1 domain",
+      "domains_better": 2,
+      "match": true
+    },
+    "P4_coherence": {
+      "predicted": "<= 20% incoherent",
+      "measured": 0.0,
+      "match": true
+    }
+  },
+  "timing": {
+    "centroid_time_s": 4.7,
+    "routing_time_s": 3.8,
+    "base_gen_time_s": 122.1,
+    "emb_routed_gen_time_s": 285.8,
+    "oracle_gen_time_s": 285.8,
+    "eval_time_s": 0.0,
+    "total_time_s": 702.7
+  }
+}

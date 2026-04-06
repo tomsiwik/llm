@@ -1,0 +1,105 @@
+{
+  "experiment": "pierre_v5_ternary_lora",
+  "total_time_s": 468.0,
+  "routing": {
+    "accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.412,
+      "code": 4.752,
+      "math": 3.734,
+      "legal": 22.813,
+      "finance": 19.99
+    },
+    "ternary_single": {
+      "medical": 5.512,
+      "code": 4.029,
+      "math": 3.412,
+      "legal": 20.498,
+      "finance": 18.647
+    },
+    "ternary_pierre": {
+      "medical": 5.512,
+      "code": 4.029,
+      "math": 3.412,
+      "legal": 20.498,
+      "finance": 18.647
+    },
+    "degradation": {
+      "medical": 0.0,
+      "code": 0.0,
+      "math": 0.0,
+      "legal": 0.0,
+      "finance": 0.0
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.43,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.278,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.616,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.118,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.144,
+        "routed_to": "finance"
+      }
+    },
+    "overall": 0.317
+  },
+  "latency": {
+    "base_tps": 140.7,
+    "pierre_tps": 77.2,
+    "overhead_pct": 45.13
+  },
+  "ppl_vs_v3_bf16": {
+    "medical": -3.82,
+    "code": 2.34,
+    "math": -8.35,
+    "legal": -8.09,
+    "finance": -8.35
+  },
+  "kill_criteria": {
+    "K727": {
+      "pass": true,
+      "value": 0.317,
+      "threshold": 0.3
+    },
+    "K728": {
+      "pass": true,
+      "value": 77.2,
+      "threshold": 50.0
+    },
+    "K729": {
+      "pass": true,
+      "value": 0.996,
+      "threshold": 0.8
+    }
+  },
+  "all_pass": true,
+  "summary": {
+    "v2_bf16_premerge": "47 tok/s, 0% overhead, behavioral 0.332 (NTP)",
+    "v3_bf16_sidepath": "73 tok/s, 48% overhead, behavioral 0.410 (SFT)",
+    "v4_ternary_premerge": "141 tok/s, 0% overhead, KILLED (signal destroyed)",
+    "v5_ternary_lora": "77.2 tok/s, 45.13% overhead, behavioral 0.317"
+  }
+}

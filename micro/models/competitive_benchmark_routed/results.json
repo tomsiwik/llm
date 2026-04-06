@@ -1,0 +1,307 @@
+{
+  "experiment": "competitive_benchmark_routed",
+  "description": "Routed composition with per-domain optimal scales (Finding #217, #220)",
+  "models": {
+    "bitnet_base": {
+      "id": "microsoft/BitNet-b1.58-2B-4T",
+      "description": "BitNet-2B-4T base, no adapters"
+    },
+    "bitnet_routed": {
+      "id": "microsoft/BitNet-b1.58-2B-4T",
+      "description": "BitNet-2B-4T + oracle top-1 routing + per-domain scales"
+    },
+    "gemma2_2b": {
+      "id": "mlx-community/gemma-2-2b-it-4bit",
+      "description": "Gemma-2-2B-IT 4-bit quantized"
+    },
+    "qwen25_3b": {
+      "id": "mlx-community/Qwen2.5-3B-Instruct-4bit",
+      "description": "Qwen2.5-3B-Instruct 4-bit quantized"
+    }
+  },
+  "results": {
+    "bitnet_base": {
+      "gsm8k": {
+        "accuracy": 0.38,
+        "correct": 19,
+        "total": 50,
+        "time_s": 237.51809167861938
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.55,
+          "correct": 11,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 5.34861844,
+      "time_s": 308.3895878791809
+    },
+    "bitnet_routed": {
+      "gsm8k": {
+        "accuracy": 0.48,
+        "correct": 24,
+        "total": 50,
+        "time_s": 545.7430188655853
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 14.812541618,
+      "time_s": 705.5952351093292,
+      "routing": "oracle_top1",
+      "scales": {
+        "medical": 20.0,
+        "code": 20.0,
+        "math": 20.0,
+        "legal": 4.0,
+        "finance": 1.0
+      }
+    },
+    "gemma2_2b": {
+      "gsm8k": {
+        "accuracy": 0.3,
+        "correct": 15,
+        "total": 50,
+        "time_s": 80.47739768028259
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.05,
+          "correct": 1,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 2.213793744,
+      "time_s": 97.8159749507904
+    },
+    "qwen25_3b": {
+      "gsm8k": {
+        "accuracy": 0.36,
+        "correct": 18,
+        "total": 50,
+        "time_s": 98.55948209762573
+      },
+      "mmlu": {
+        "medical": {
+          "accuracy": 0.7,
+          "correct": 14,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.7,
+          "correct": 14,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.35,
+          "correct": 7,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.5,
+          "correct": 10,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        }
+      },
+      "peak_memory_gb": 2.448535784,
+      "time_s": 111.56569123268127
+    }
+  },
+  "analysis": {
+    "model_scores": {
+      "bitnet_base": {
+        "gsm8k": 0.38,
+        "mmlu_medical": 0.4,
+        "mmlu_code": 0.4,
+        "mmlu_math": 0.5,
+        "mmlu_legal": 0.55,
+        "mmlu_finance": 0.35
+      },
+      "bitnet_routed": {
+        "gsm8k": 0.48,
+        "mmlu_medical": 0.4,
+        "mmlu_code": 0.4,
+        "mmlu_math": 0.3,
+        "mmlu_legal": 0.45,
+        "mmlu_finance": 0.35
+      },
+      "gemma2_2b": {
+        "gsm8k": 0.3,
+        "mmlu_medical": 0.45,
+        "mmlu_code": 0.45,
+        "mmlu_math": 0.05,
+        "mmlu_legal": 0.3,
+        "mmlu_finance": 0.45
+      },
+      "qwen25_3b": {
+        "gsm8k": 0.36,
+        "mmlu_medical": 0.7,
+        "mmlu_code": 0.7,
+        "mmlu_math": 0.35,
+        "mmlu_legal": 0.5,
+        "mmlu_finance": 0.3
+      }
+    },
+    "kill_criteria": {
+      "k1_640": {
+        "result": "fail",
+        "worse_benchmarks": [
+          "mmlu_math",
+          "mmlu_legal"
+        ],
+        "evidence": "Routed SOLE worse than base on 2/6: ['mmlu_math', 'mmlu_legal']",
+        "details": {
+          "gsm8k": {
+            "routed": 0.48,
+            "base": 0.38,
+            "delta": 0.09999999999999998
+          },
+          "mmlu_medical": {
+            "routed": 0.4,
+            "base": 0.4,
+            "delta": 0.0
+          },
+          "mmlu_code": {
+            "routed": 0.4,
+            "base": 0.4,
+            "delta": 0.0
+          },
+          "mmlu_math": {
+            "routed": 0.3,
+            "base": 0.5,
+            "delta": -0.2
+          },
+          "mmlu_legal": {
+            "routed": 0.45,
+            "base": 0.55,
+            "delta": -0.10000000000000003
+          },
+          "mmlu_finance": {
+            "routed": 0.35,
+            "base": 0.35,
+            "delta": 0.0
+          }
+        }
+      },
+      "k2_641": {
+        "result": "pass",
+        "worse_count": 3,
+        "evidence": "Routed SOLE worse on 3/6 vs Gemma-2-2B",
+        "worse_benchmarks": [
+          "mmlu_medical",
+          "mmlu_code",
+          "mmlu_finance"
+        ],
+        "better_benchmarks": [
+          "gsm8k",
+          "mmlu_math",
+          "mmlu_legal"
+        ]
+      }
+    },
+    "qwen_comparison": {
+      "worse_count": 4,
+      "worse_benchmarks": [
+        "mmlu_medical",
+        "mmlu_code",
+        "mmlu_math",
+        "mmlu_legal"
+      ],
+      "better_benchmarks": [
+        "gsm8k",
+        "mmlu_finance"
+      ]
+    }
+  },
+  "params": {
+    "gsm8k_n": 50,
+    "mmlu_n_per_domain": 20,
+    "max_new_tokens_gsm8k": 256,
+    "max_new_tokens_mmlu": 32,
+    "temperature": 0.0,
+    "lora_rank": 16,
+    "domain_scales": {
+      "medical": 20.0,
+      "code": 20.0,
+      "math": 20.0,
+      "legal": 4.0,
+      "finance": 1.0
+    },
+    "routing": "oracle_top1",
+    "composition": "pre-merge single adapter"
+  },
+  "timing": {
+    "total_s": 1227.9221131801605,
+    "total_min": 20.465368553002676
+  }
+}

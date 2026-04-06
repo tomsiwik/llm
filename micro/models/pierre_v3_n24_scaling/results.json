@@ -1,0 +1,614 @@
+{
+  "experiment": "pierre_v3_n24_scaling",
+  "total_time_s": 180.6,
+  "routing": {
+    "overall_accuracy": 0.3758,
+    "genuine_accuracy": 0.8257,
+    "slice_accuracy": 0.1906,
+    "per_domain": {
+      "agriculture": {
+        "accuracy": 0.2,
+        "correct": 10,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "philosophy": 10,
+          "politics": 6,
+          "economics": 4
+        }
+      },
+      "code": {
+        "accuracy": 0.82,
+        "correct": 41,
+        "total": 50,
+        "type": "genuine",
+        "top_confusions": {
+          "engineering": 3,
+          "sports": 3,
+          "music": 2
+        }
+      },
+      "cooking": {
+        "accuracy": 0.06,
+        "correct": 3,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "sociology": 10,
+          "cybersecurity": 9,
+          "marketing": 9
+        }
+      },
+      "creative_writing": {
+        "accuracy": 0.08,
+        "correct": 4,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "politics": 13,
+          "science": 7,
+          "agriculture": 6
+        }
+      },
+      "cybersecurity": {
+        "accuracy": 0.14,
+        "correct": 7,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "linguistics": 8,
+          "marketing": 7,
+          "cooking": 7
+        }
+      },
+      "economics": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "philosophy": 8,
+          "creative_writing": 7,
+          "politics": 7
+        }
+      },
+      "education": {
+        "accuracy": 0.2,
+        "correct": 10,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "code": 15,
+          "engineering": 11,
+          "sports": 7
+        }
+      },
+      "engineering": {
+        "accuracy": 0.18,
+        "correct": 9,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "code": 17,
+          "sports": 10,
+          "music": 6
+        }
+      },
+      "environmental": {
+        "accuracy": 0.14,
+        "correct": 7,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "philosophy": 10,
+          "politics": 8,
+          "agriculture": 7
+        }
+      },
+      "finance": {
+        "accuracy": 0.94,
+        "correct": 47,
+        "total": 50,
+        "type": "genuine",
+        "top_confusions": {
+          "legal": 3
+        }
+      },
+      "health_fitness": {
+        "accuracy": 1.0,
+        "correct": 50,
+        "total": 50,
+        "type": "genuine"
+      },
+      "history": {
+        "accuracy": 0.04,
+        "correct": 2,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "science": 8,
+          "politics": 8,
+          "environmental": 6
+        }
+      },
+      "legal": {
+        "accuracy": 1.0,
+        "correct": 50,
+        "total": 50,
+        "type": "genuine"
+      },
+      "linguistics": {
+        "accuracy": 0.22,
+        "correct": 11,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "sociology": 21,
+          "cybersecurity": 7,
+          "marketing": 3
+        }
+      },
+      "marketing": {
+        "accuracy": 0.16,
+        "correct": 8,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "cybersecurity": 9,
+          "sociology": 8,
+          "linguistics": 6
+        }
+      },
+      "math": {
+        "accuracy": 1.0,
+        "correct": 50,
+        "total": 50,
+        "type": "genuine"
+      },
+      "medical": {
+        "accuracy": 0.92,
+        "correct": 46,
+        "total": 50,
+        "type": "genuine",
+        "top_confusions": {
+          "health_fitness": 4
+        }
+      },
+      "music": {
+        "accuracy": 0.12,
+        "correct": 6,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "code": 16,
+          "education": 15,
+          "sports": 7
+        }
+      },
+      "philosophy": {
+        "accuracy": 0.08,
+        "correct": 4,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "science": 9,
+          "environmental": 8,
+          "politics": 7
+        }
+      },
+      "politics": {
+        "accuracy": 0.12,
+        "correct": 6,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "agriculture": 8,
+          "science": 7,
+          "economics": 7
+        }
+      },
+      "psychology": {
+        "accuracy": 1.0,
+        "correct": 50,
+        "total": 50,
+        "type": "slice"
+      },
+      "science": {
+        "accuracy": 0.1,
+        "correct": 5,
+        "total": 50,
+        "type": "genuine",
+        "top_confusions": {
+          "philosophy": 8,
+          "history": 8,
+          "creative_writing": 5
+        }
+      },
+      "sociology": {
+        "accuracy": 0.4,
+        "correct": 20,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "cybersecurity": 6,
+          "linguistics": 5,
+          "marketing": 5
+        }
+      },
+      "sports": {
+        "accuracy": 0.1,
+        "correct": 5,
+        "total": 50,
+        "type": "slice",
+        "top_confusions": {
+          "code": 20,
+          "music": 9,
+          "education": 8
+        }
+      }
+    },
+    "n_cal": 30,
+    "n_test": 50,
+    "n_domains": 24,
+    "elapsed_s": 103.8
+  },
+  "null_space": {
+    "per_test_adapter": {
+      "agriculture": {
+        "mean_preservation": 0.3371,
+        "modules": {
+          "layer_0.self_attn.q_proj": {
+            "preservation": 0.3541,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_0.mlp.gate_proj": {
+            "preservation": 0.5896,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.self_attn.q_proj": {
+            "preservation": 0.314,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.mlp.gate_proj": {
+            "preservation": 0.4481,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.self_attn.q_proj": {
+            "preservation": 0.2158,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.mlp.gate_proj": {
+            "preservation": 0.2341,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_7.self_attn.v_proj": {
+            "preservation": 0.1581,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_22.mlp.down_proj": {
+            "preservation": 0.3828,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          }
+        }
+      },
+      "legal": {
+        "mean_preservation": 0.4032,
+        "modules": {
+          "layer_0.self_attn.q_proj": {
+            "preservation": 0.4007,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_0.mlp.gate_proj": {
+            "preservation": 0.6233,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.self_attn.q_proj": {
+            "preservation": 0.3652,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.mlp.gate_proj": {
+            "preservation": 0.5999,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.self_attn.q_proj": {
+            "preservation": 0.2781,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.mlp.gate_proj": {
+            "preservation": 0.2928,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_7.self_attn.v_proj": {
+            "preservation": 0.2418,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_22.mlp.down_proj": {
+            "preservation": 0.4239,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          }
+        }
+      },
+      "sports": {
+        "mean_preservation": 0.3419,
+        "modules": {
+          "layer_0.self_attn.q_proj": {
+            "preservation": 0.3485,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_0.mlp.gate_proj": {
+            "preservation": 0.51,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.self_attn.q_proj": {
+            "preservation": 0.3672,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_15.mlp.gate_proj": {
+            "preservation": 0.4572,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.self_attn.q_proj": {
+            "preservation": 0.3045,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_29.mlp.gate_proj": {
+            "preservation": 0.2603,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_7.self_attn.v_proj": {
+            "preservation": 0.1521,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          },
+          "layer_22.mlp.down_proj": {
+            "preservation": 0.3351,
+            "effective_rank": 368,
+            "max_possible_rank": 368
+          }
+        }
+      }
+    },
+    "cumulative_curve": [
+      {
+        "n_priors": 1,
+        "preservation": 0.8446,
+        "effective_rank": 16
+      },
+      {
+        "n_priors": 2,
+        "preservation": 0.6559,
+        "effective_rank": 32
+      },
+      {
+        "n_priors": 4,
+        "preservation": 0.6119,
+        "effective_rank": 64
+      },
+      {
+        "n_priors": 8,
+        "preservation": 0.4837,
+        "effective_rank": 128
+      },
+      {
+        "n_priors": 12,
+        "preservation": 0.4468,
+        "effective_rank": 192
+      },
+      {
+        "n_priors": 16,
+        "preservation": 0.4159,
+        "effective_rank": 256
+      },
+      {
+        "n_priors": 20,
+        "preservation": 0.3827,
+        "effective_rank": 320
+      },
+      {
+        "n_priors": 23,
+        "preservation": 0.3672,
+        "effective_rank": 368
+      }
+    ],
+    "mean_preservation": 0.3607,
+    "theoretical_bound": 0.8562,
+    "elapsed_s": 7.3
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.741,
+      "code": 5.702,
+      "math": 3.794,
+      "legal": 21.023,
+      "finance": 18.337,
+      "science": 12.224,
+      "cooking": 3.236,
+      "creative_writing": 23.274
+    },
+    "single": {
+      "medical": 7.09,
+      "code": 3.523,
+      "math": 3.596,
+      "legal": 19.941,
+      "finance": 17.806,
+      "science": 12.31,
+      "cooking": 3.299,
+      "creative_writing": 26.301
+    },
+    "routed_single": {
+      "medical": {
+        "ppl": 5.291,
+        "routed_to": "health_fitness",
+        "correct": false
+      },
+      "code": {
+        "ppl": 3.523,
+        "routed_to": "code",
+        "correct": true
+      },
+      "math": {
+        "ppl": 3.596,
+        "routed_to": "math",
+        "correct": true
+      },
+      "legal": {
+        "ppl": 19.941,
+        "routed_to": "legal",
+        "correct": true
+      },
+      "finance": {
+        "ppl": 17.806,
+        "routed_to": "finance",
+        "correct": true
+      },
+      "science": {
+        "ppl": 13.62,
+        "routed_to": "creative_writing",
+        "correct": false
+      },
+      "cooking": {
+        "ppl": 3.224,
+        "routed_to": "cybersecurity",
+        "correct": false
+      },
+      "creative_writing": {
+        "ppl": 23.135,
+        "routed_to": "agriculture",
+        "correct": false
+      }
+    },
+    "composed_top2": {
+      "medical": {
+        "ppl": 5.126,
+        "top2": [
+          "health_fitness",
+          "medical"
+        ]
+      },
+      "code": {
+        "ppl": 3.523,
+        "top2": [
+          "code",
+          "legal"
+        ]
+      },
+      "math": {
+        "ppl": 3.645,
+        "top2": [
+          "math",
+          "legal"
+        ]
+      },
+      "legal": {
+        "ppl": 19.929,
+        "top2": [
+          "legal",
+          "finance"
+        ]
+      },
+      "finance": {
+        "ppl": 17.861,
+        "top2": [
+          "finance",
+          "psychology"
+        ]
+      },
+      "science": {
+        "ppl": 13.387,
+        "top2": [
+          "creative_writing",
+          "history"
+        ]
+      },
+      "cooking": {
+        "ppl": 3.14,
+        "top2": [
+          "cybersecurity",
+          "sociology"
+        ]
+      },
+      "creative_writing": {
+        "ppl": 22.854,
+        "top2": [
+          "agriculture",
+          "marketing"
+        ]
+      }
+    },
+    "worst_single_ppl": 26.301
+  },
+  "orthogonality": {
+    "mean_abs_cosine": 0.023816,
+    "max_abs_cosine": 0.089257,
+    "top5_pairs": [
+      {
+        "pair": "creative_writing-sports",
+        "cosine": 0.089257
+      },
+      {
+        "pair": "history-linguistics",
+        "cosine": 0.083305
+      },
+      {
+        "pair": "economics-sports",
+        "cosine": 0.081699
+      },
+      {
+        "pair": "education-engineering",
+        "cosine": 0.075571
+      },
+      {
+        "pair": "history-science",
+        "cosine": 0.070373
+      }
+    ],
+    "n_pairs": 276,
+    "elapsed_s": 1.5
+  },
+  "kill_criteria": {
+    "K721": {
+      "description": "Ridge router accuracy >= 50% at N=24",
+      "pass": false,
+      "value": 0.3758,
+      "threshold": 0.5,
+      "random_baseline": 0.0417
+    },
+    "K722": {
+      "description": "Null-space gradient preservation >= 50% at N=24",
+      "pass": false,
+      "value": 0.3607,
+      "threshold": 0.5,
+      "theoretical": 0.8562
+    },
+    "K723": {
+      "description": "Composed PPL <= 2x worst single-adapter PPL",
+      "pass": true,
+      "value": 22.854,
+      "threshold": 52.602,
+      "worst_single_ppl": 26.301
+    }
+  },
+  "all_pass": false
+}

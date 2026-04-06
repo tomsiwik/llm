@@ -1,0 +1,219 @@
+{
+  "experiment": "pierre_unified_pipeline_v2",
+  "total_time_s": 185.5,
+  "routing": {
+    "routing_accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.409,
+      "code": 4.749,
+      "math": 3.732,
+      "legal": 22.837,
+      "finance": 19.96
+    },
+    "single": {
+      "medical": 3.291,
+      "code": 2.81,
+      "math": 2.346,
+      "legal": 15.781,
+      "finance": 14.359
+    },
+    "pierre": {
+      "medical": 3.291,
+      "code": 2.81,
+      "math": 2.346,
+      "legal": 15.781,
+      "finance": 14.359
+    },
+    "degradation": {
+      "medical": 0.0,
+      "code": 0.0,
+      "math": 0.0,
+      "legal": 0.0,
+      "finance": 0.0
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.345,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.573,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.599,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.066,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.079,
+        "routed_to": "finance"
+      }
+    },
+    "generations": [
+      {
+        "domain": "medical",
+        "routed_to": "medical",
+        "score": 0.276
+      },
+      {
+        "domain": "medical",
+        "routed_to": "medical",
+        "score": 0.333
+      },
+      {
+        "domain": "medical",
+        "routed_to": "medical",
+        "score": 0.462
+      },
+      {
+        "domain": "medical",
+        "routed_to": "medical",
+        "score": 0.441
+      },
+      {
+        "domain": "medical",
+        "routed_to": "medical",
+        "score": 0.214
+      },
+      {
+        "domain": "code",
+        "routed_to": "code",
+        "score": 0.18
+      },
+      {
+        "domain": "code",
+        "routed_to": "code",
+        "score": 0.925
+      },
+      {
+        "domain": "code",
+        "routed_to": "code",
+        "score": 0.76
+      },
+      {
+        "domain": "code",
+        "routed_to": "code",
+        "score": 0.075
+      },
+      {
+        "domain": "code",
+        "routed_to": "code",
+        "score": 0.925
+      },
+      {
+        "domain": "math",
+        "routed_to": "math",
+        "score": 0.583
+      },
+      {
+        "domain": "math",
+        "routed_to": "math",
+        "score": 0.333
+      },
+      {
+        "domain": "math",
+        "routed_to": "math",
+        "score": 1.0
+      },
+      {
+        "domain": "math",
+        "routed_to": "math",
+        "score": 0.714
+      },
+      {
+        "domain": "math",
+        "routed_to": "math",
+        "score": 0.364
+      },
+      {
+        "domain": "legal",
+        "routed_to": "legal",
+        "score": 0.026
+      },
+      {
+        "domain": "legal",
+        "routed_to": "legal",
+        "score": 0.056
+      },
+      {
+        "domain": "legal",
+        "routed_to": "legal",
+        "score": 0.092
+      },
+      {
+        "domain": "legal",
+        "routed_to": "legal",
+        "score": 0.011
+      },
+      {
+        "domain": "legal",
+        "routed_to": "legal",
+        "score": 0.143
+      },
+      {
+        "domain": "finance",
+        "routed_to": "finance",
+        "score": 0.012
+      },
+      {
+        "domain": "finance",
+        "routed_to": "finance",
+        "score": 0.158
+      },
+      {
+        "domain": "finance",
+        "routed_to": "finance",
+        "score": 0.049
+      },
+      {
+        "domain": "finance",
+        "routed_to": "finance",
+        "score": 0.123
+      },
+      {
+        "domain": "finance",
+        "routed_to": "finance",
+        "score": 0.051
+      }
+    ],
+    "overall": 0.332
+  },
+  "latency": {
+    "base_tps": 47.7,
+    "pierre_tps": 47.7,
+    "overhead_pct": 0.0
+  },
+  "kill_criteria": {
+    "K715": {
+      "pass": true,
+      "value": 0.996,
+      "threshold": 0.8
+    },
+    "K716": {
+      "pass": true,
+      "value": 0.0,
+      "threshold": 10.0
+    },
+    "K717": {
+      "pass": true,
+      "value": 0.332,
+      "threshold": 0.3
+    }
+  },
+  "all_pass": true
+}

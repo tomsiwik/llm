@@ -1,0 +1,228 @@
+{
+  "experiment": "block_diagonal_single_pass",
+  "type": "guided-exploration",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "n_domain_pairs": 10,
+  "sequences_per_pair": 20,
+  "segment_length": 128,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "seed": 42,
+  "timestamp": "2026-04-06 11:32:09",
+  "pair_results": {
+    "python+math": {
+      "block_diag_single_ppl": 2.733,
+      "seg_isolated_ppl": 2.5211,
+      "multi_pass_mlp_ppl": 2.8582,
+      "per_seq_best_ppl": 2.9586,
+      "base_only_ppl": 3.37,
+      "n_sequences": 20
+    },
+    "python+medical": {
+      "block_diag_single_ppl": 2.6907,
+      "seg_isolated_ppl": 2.4761,
+      "multi_pass_mlp_ppl": 2.714,
+      "per_seq_best_ppl": 2.7737,
+      "base_only_ppl": 3.0272,
+      "n_sequences": 20
+    },
+    "python+legal": {
+      "block_diag_single_ppl": 5.6639,
+      "seg_isolated_ppl": 5.2162,
+      "multi_pass_mlp_ppl": 5.8033,
+      "per_seq_best_ppl": 5.8559,
+      "base_only_ppl": 6.8263,
+      "n_sequences": 20
+    },
+    "python+creative": {
+      "block_diag_single_ppl": 3.8544,
+      "seg_isolated_ppl": 3.5812,
+      "multi_pass_mlp_ppl": 3.985,
+      "per_seq_best_ppl": 4.0679,
+      "base_only_ppl": 4.6995,
+      "n_sequences": 20
+    },
+    "math+medical": {
+      "block_diag_single_ppl": 3.3162,
+      "seg_isolated_ppl": 3.0321,
+      "multi_pass_mlp_ppl": 3.3029,
+      "per_seq_best_ppl": 3.3555,
+      "base_only_ppl": 3.8794,
+      "n_sequences": 20
+    },
+    "math+legal": {
+      "block_diag_single_ppl": 7.1091,
+      "seg_isolated_ppl": 6.5472,
+      "multi_pass_mlp_ppl": 7.2045,
+      "per_seq_best_ppl": 7.4736,
+      "base_only_ppl": 8.8741,
+      "n_sequences": 20
+    },
+    "math+creative": {
+      "block_diag_single_ppl": 4.6747,
+      "seg_isolated_ppl": 4.2757,
+      "multi_pass_mlp_ppl": 4.8865,
+      "per_seq_best_ppl": 5.2223,
+      "base_only_ppl": 6.1961,
+      "n_sequences": 20
+    },
+    "medical+legal": {
+      "block_diag_single_ppl": 5.294,
+      "seg_isolated_ppl": 4.7924,
+      "multi_pass_mlp_ppl": 5.4296,
+      "per_seq_best_ppl": 5.4718,
+      "base_only_ppl": 6.1815,
+      "n_sequences": 20
+    },
+    "medical+creative": {
+      "block_diag_single_ppl": 4.4419,
+      "seg_isolated_ppl": 4.0377,
+      "multi_pass_mlp_ppl": 4.6422,
+      "per_seq_best_ppl": 4.8817,
+      "base_only_ppl": 5.4632,
+      "n_sequences": 20
+    },
+    "legal+creative": {
+      "block_diag_single_ppl": 8.736,
+      "seg_isolated_ppl": 8.1149,
+      "multi_pass_mlp_ppl": 9.1086,
+      "per_seq_best_ppl": 9.7882,
+      "base_only_ppl": 11.1668,
+      "n_sequences": 20
+    }
+  },
+  "summary": {
+    "block_diag_single": 4.5294,
+    "seg_isolated": 4.1606,
+    "multi_pass_mlp": 4.6561,
+    "per_seq_best": 4.8147,
+    "base_only": 5.5213
+  },
+  "K796_bd_ppl": 4.5294,
+  "K796_ref": 4.815,
+  "K796_pass": true,
+  "K797_max_diff": 0.375,
+  "K797_pass": false,
+  "K798_ratio_pct": 8.8641,
+  "K798_ratio_pct_vs_f305": 12.0584,
+  "K798_ref": 4.042,
+  "K798_ref_measured_isolated": 4.1606,
+  "K798_pass": false,
+  "K798_note": "8.86% gap vs this experiment's measured isolated (4.161); 12.06% gap vs Finding #305 reference (4.042). FAIL under either reference.",
+  "bd_vs_multi_ppl_ratio_pct": 2.7212,
+  "per_token_comparison": {
+    "bd_vs_iso_max_diff": 0.375,
+    "bd_vs_iso_mean_diff": 0.015029430389404297,
+    "seg_a_bd_vs_iso_mean": 0.010464439392089844,
+    "seg_a_bd_vs_iso_max": 0.034912109375,
+    "seg_b_bd_vs_iso_mean": 0.01959442138671875,
+    "seg_b_bd_vs_iso_max": 0.038818359375,
+    "bd_vs_multi_max_diff": 16.125,
+    "bd_vs_multi_mean_diff": 0.12850490976125,
+    "seg_a_bd_vs_multi_mean": 0.0,
+    "seg_b_bd_vs_multi_mean": 0.2580216529220343,
+    "total_tokens_compared": 51000,
+    "n_sequences": 200
+  },
+  "pair_analysis": {
+    "python+math": {
+      "block_diag_ppl": 2.733,
+      "seg_isolated_ppl": 2.5211,
+      "multi_pass_ppl": 2.8582,
+      "per_seq_best_ppl": 2.9586,
+      "bd_vs_iso_pct": 8.4051,
+      "bd_vs_multi_pct": 4.3804
+    },
+    "python+medical": {
+      "block_diag_ppl": 2.6907,
+      "seg_isolated_ppl": 2.4761,
+      "multi_pass_ppl": 2.714,
+      "per_seq_best_ppl": 2.7737,
+      "bd_vs_iso_pct": 8.6669,
+      "bd_vs_multi_pct": 0.8585
+    },
+    "python+legal": {
+      "block_diag_ppl": 5.6639,
+      "seg_isolated_ppl": 5.2162,
+      "multi_pass_ppl": 5.8033,
+      "per_seq_best_ppl": 5.8559,
+      "bd_vs_iso_pct": 8.5829,
+      "bd_vs_multi_pct": 2.4021
+    },
+    "python+creative": {
+      "block_diag_ppl": 3.8544,
+      "seg_isolated_ppl": 3.5812,
+      "multi_pass_ppl": 3.985,
+      "per_seq_best_ppl": 4.0679,
+      "bd_vs_iso_pct": 7.6287,
+      "bd_vs_multi_pct": 3.2773
+    },
+    "math+medical": {
+      "block_diag_ppl": 3.3162,
+      "seg_isolated_ppl": 3.0321,
+      "multi_pass_ppl": 3.3029,
+      "per_seq_best_ppl": 3.3555,
+      "bd_vs_iso_pct": 9.3697,
+      "bd_vs_multi_pct": 0.4027
+    },
+    "math+legal": {
+      "block_diag_ppl": 7.1091,
+      "seg_isolated_ppl": 6.5472,
+      "multi_pass_ppl": 7.2045,
+      "per_seq_best_ppl": 7.4736,
+      "bd_vs_iso_pct": 8.5823,
+      "bd_vs_multi_pct": 1.3242
+    },
+    "math+creative": {
+      "block_diag_ppl": 4.6747,
+      "seg_isolated_ppl": 4.2757,
+      "multi_pass_ppl": 4.8865,
+      "per_seq_best_ppl": 5.2223,
+      "bd_vs_iso_pct": 9.3318,
+      "bd_vs_multi_pct": 4.3344
+    },
+    "medical+legal": {
+      "block_diag_ppl": 5.294,
+      "seg_isolated_ppl": 4.7924,
+      "multi_pass_ppl": 5.4296,
+      "per_seq_best_ppl": 5.4718,
+      "bd_vs_iso_pct": 10.4666,
+      "bd_vs_multi_pct": 2.4974
+    },
+    "medical+creative": {
+      "block_diag_ppl": 4.4419,
+      "seg_isolated_ppl": 4.0377,
+      "multi_pass_ppl": 4.6422,
+      "per_seq_best_ppl": 4.8817,
+      "bd_vs_iso_pct": 10.0106,
+      "bd_vs_multi_pct": 4.3148
+    },
+    "legal+creative": {
+      "block_diag_ppl": 8.736,
+      "seg_isolated_ppl": 8.1149,
+      "multi_pass_ppl": 9.1086,
+      "per_seq_best_ppl": 9.7882,
+      "bd_vs_iso_pct": 7.6538,
+      "bd_vs_multi_pct": 4.0906
+    }
+  },
+  "finding_313_reference": {
+    "single_pass_mlp_ppl": 4.684,
+    "multi_pass_mlp_ppl": 4.656,
+    "per_seq_best_ppl": 4.815,
+    "same_segment_max_diff": 0.0,
+    "cross_segment_mean_diff": 0.068
+  },
+  "finding_305_reference": {
+    "seg_isolated_ppl": 4.042
+  },
+  "total_time_s": 262.7
+}

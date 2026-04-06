@@ -1,0 +1,297 @@
+{
+  "experiment": "pierre_v51_lota_merge",
+  "total_time_s": 629.7,
+  "best_omega": 4,
+  "routing": {
+    "accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl_sweep": {
+    "base": {
+      "medical": 6.412,
+      "code": 4.752,
+      "math": 3.734,
+      "legal": 22.813,
+      "finance": 19.99
+    },
+    "by_omega": {
+      "0": {
+        "ppl": {
+          "medical": 573114151.446,
+          "code": 35833997.54,
+          "math": 5253010867.956,
+          "legal": 6345292671.026,
+          "finance": 3725883645.162
+        },
+        "merge_stats": {
+          "medical": {
+            "modules_merged": 210,
+            "total_flips": 1741994478,
+            "total_weights": 2084044800,
+            "flip_rate": 83.5872,
+            "boundary_clips": 515948033,
+            "omega": 0
+          },
+          "code": {
+            "modules_merged": 210,
+            "total_flips": 1741821416,
+            "total_weights": 2084044800,
+            "flip_rate": 83.5789,
+            "boundary_clips": 515907853,
+            "omega": 0
+          },
+          "math": {
+            "modules_merged": 210,
+            "total_flips": 1739914003,
+            "total_weights": 2084044800,
+            "flip_rate": 83.4874,
+            "boundary_clips": 515274246,
+            "omega": 0
+          },
+          "legal": {
+            "modules_merged": 210,
+            "total_flips": 1740494273,
+            "total_weights": 2084044800,
+            "flip_rate": 83.5152,
+            "boundary_clips": 515458030,
+            "omega": 0
+          },
+          "finance": {
+            "modules_merged": 210,
+            "total_flips": 1739810097,
+            "total_weights": 2084044800,
+            "flip_rate": 83.4824,
+            "boundary_clips": 515203625,
+            "omega": 0
+          }
+        }
+      },
+      "1": {
+        "ppl": {
+          "medical": 194983159.358,
+          "code": 1851422343.051,
+          "math": 7026653082.575,
+          "legal": 5844018504.01,
+          "finance": 3877435699.851
+        },
+        "merge_stats": {
+          "medical": {
+            "modules_merged": 210,
+            "total_flips": 1195600979,
+            "total_weights": 2084044800,
+            "flip_rate": 57.3693,
+            "boundary_clips": 354183822,
+            "omega": 1
+          },
+          "code": {
+            "modules_merged": 210,
+            "total_flips": 1195147860,
+            "total_weights": 2084044800,
+            "flip_rate": 57.3475,
+            "boundary_clips": 354058421,
+            "omega": 1
+          },
+          "math": {
+            "modules_merged": 210,
+            "total_flips": 1190331738,
+            "total_weights": 2084044800,
+            "flip_rate": 57.1164,
+            "boundary_clips": 352551695,
+            "omega": 1
+          },
+          "legal": {
+            "modules_merged": 210,
+            "total_flips": 1191658178,
+            "total_weights": 2084044800,
+            "flip_rate": 57.1801,
+            "boundary_clips": 352957822,
+            "omega": 1
+          },
+          "finance": {
+            "modules_merged": 210,
+            "total_flips": 1189912146,
+            "total_weights": 2084044800,
+            "flip_rate": 57.0963,
+            "boundary_clips": 352385462,
+            "omega": 1
+          }
+        }
+      },
+      "2": {
+        "ppl": {
+          "medical": 435651728.82,
+          "code": 4824688.864,
+          "math": 7429817429.397,
+          "legal": 3853974574.069,
+          "finance": 37868144.486
+        },
+        "merge_stats": {
+          "medical": {
+            "modules_merged": 210,
+            "total_flips": 744824072,
+            "total_weights": 2084044800,
+            "flip_rate": 35.7394,
+            "boundary_clips": 220729941,
+            "omega": 2
+          },
+          "code": {
+            "modules_merged": 210,
+            "total_flips": 744393149,
+            "total_weights": 2084044800,
+            "flip_rate": 35.7187,
+            "boundary_clips": 220584192,
+            "omega": 2
+          },
+          "math": {
+            "modules_merged": 210,
+            "total_flips": 739031790,
+            "total_weights": 2084044800,
+            "flip_rate": 35.4614,
+            "boundary_clips": 218920896,
+            "omega": 2
+          },
+          "legal": {
+            "modules_merged": 210,
+            "total_flips": 740074320,
+            "total_weights": 2084044800,
+            "flip_rate": 35.5114,
+            "boundary_clips": 219240344,
+            "omega": 2
+          },
+          "finance": {
+            "modules_merged": 210,
+            "total_flips": 737660056,
+            "total_weights": 2084044800,
+            "flip_rate": 35.3956,
+            "boundary_clips": 218494106,
+            "omega": 2
+          }
+        }
+      },
+      "4": {
+        "ppl": {
+          "medical": 12075.994,
+          "code": 12208.164,
+          "math": 300751011.243,
+          "legal": 83851.496,
+          "finance": 2174.869
+        },
+        "merge_stats": {
+          "medical": {
+            "modules_merged": 210,
+            "total_flips": 209574958,
+            "total_weights": 2084044800,
+            "flip_rate": 10.0562,
+            "boundary_clips": 62176189,
+            "omega": 4
+          },
+          "code": {
+            "modules_merged": 210,
+            "total_flips": 209691517,
+            "total_weights": 2084044800,
+            "flip_rate": 10.0618,
+            "boundary_clips": 62191757,
+            "omega": 4
+          },
+          "math": {
+            "modules_merged": 210,
+            "total_flips": 207402297,
+            "total_weights": 2084044800,
+            "flip_rate": 9.9519,
+            "boundary_clips": 61472010,
+            "omega": 4
+          },
+          "legal": {
+            "modules_merged": 210,
+            "total_flips": 206919423,
+            "total_weights": 2084044800,
+            "flip_rate": 9.9287,
+            "boundary_clips": 61333255,
+            "omega": 4
+          },
+          "finance": {
+            "modules_merged": 210,
+            "total_flips": 204701675,
+            "total_weights": 2084044800,
+            "flip_rate": 9.8223,
+            "boundary_clips": 60664752,
+            "omega": 4
+          }
+        }
+      }
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.0,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.015,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.0,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.0,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.0,
+        "routed_to": "finance"
+      }
+    },
+    "omega": 4,
+    "overall": 0.003
+  },
+  "latency": {
+    "base_tps": 139.2,
+    "merged_tps": 138.3,
+    "overhead_pct": 0.65,
+    "still_bitlinear": true,
+    "merge_stats": {
+      "modules_merged": 210,
+      "total_flips": 209574958,
+      "total_weights": 2084044800,
+      "flip_rate": 10.0562,
+      "boundary_clips": 62176189,
+      "omega": 4
+    }
+  },
+  "ppl_vs_v5": {
+    "medical": 218985.52,
+    "code": 302907.3,
+    "math": 8814507849.68,
+    "legal": 408971.6,
+    "finance": 11563.37
+  },
+  "kill_criteria": {
+    "K730": {
+      "pass": false,
+      "detail": "Worst PPL/base ratio: 80543923.74x"
+    },
+    "K731": {
+      "pass": true,
+      "detail": "Speed: 138.3 tok/s"
+    },
+    "K732": {
+      "pass": false,
+      "detail": "Behavioral: 0.003"
+    }
+  },
+  "all_pass": false,
+  "comparison": {
+    "v4_ternary_premerge": "141 tok/s, 0% overhead, KILLED (PPL +475-1348%)",
+    "v5_ternary_sidepath": "77 tok/s, 45% overhead, behavioral 0.317",
+    "v51_lota_merge": "138.3 tok/s, 0.65% overhead, behavioral 0.003"
+  }
+}

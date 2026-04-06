@@ -28,6 +28,27 @@ experiment complete <id> --status supported \
 `claim` outputs full YAML: kill criteria with IDs, success criteria, deps, blocks, tags, refs, notes.
 `complete` updates kill criteria, adds evidence, sets status+dir, clears claim — all in one call.
 
+### RUN — execute via pueue (process-isolated, serial queue, guaranteed cleanup)
+
+```bash
+# Run by experiment ID (looks up experiment_dir from DB)
+experiment run <id>
+
+# Run by script path
+experiment run micro/models/<name>/run_experiment.py
+
+# Submit and return immediately
+experiment run --no-wait <id>
+
+# Queue management
+experiment run --status           # check queue
+experiment run --clean            # remove finished tasks
+experiment run --kill <id>        # kill running experiment
+```
+
+**MANDATORY:** Always use `experiment run` instead of bare `uv run python`.
+Pueue kills the entire process group on exit/crash, guaranteeing Metal buffer recycling.
+
 ---
 
 ## All Commands — Exact Signatures

@@ -1,0 +1,248 @@
+{
+  "experiment": "n24_composition_proof",
+  "total_time_s": 534.4,
+  "n_domains": 24,
+  "adapter_type": "SFT",
+  "routing": {
+    "accuracy": 0.4208,
+    "per_domain": {
+      "agriculture": 0.4,
+      "code": 0.9,
+      "cooking": 0.2,
+      "creative_writing": 0.1,
+      "cybersecurity": 0.3,
+      "economics": 0.0,
+      "education": 0.2,
+      "engineering": 0.3,
+      "environmental": 0.0,
+      "finance": 1.0,
+      "health_fitness": 1.0,
+      "history": 0.0,
+      "legal": 1.0,
+      "linguistics": 0.4,
+      "marketing": 0.1,
+      "math": 1.0,
+      "medical": 1.0,
+      "music": 0.3,
+      "philosophy": 0.0,
+      "politics": 0.3,
+      "psychology": 1.0,
+      "science": 0.0,
+      "sociology": 0.5,
+      "sports": 0.1
+    },
+    "confusion": {
+      "agriculture": {
+        "history": 1,
+        "creative_writing": 1,
+        "philosophy": 1,
+        "science": 2,
+        "environmental": 1
+      },
+      "code": {
+        "music": 1
+      },
+      "cooking": {
+        "cybersecurity": 4,
+        "history": 1,
+        "sociology": 2,
+        "marketing": 1
+      },
+      "creative_writing": {
+        "marketing": 1,
+        "politics": 1,
+        "economics": 2,
+        "environmental": 3,
+        "history": 2
+      },
+      "cybersecurity": {
+        "marketing": 2,
+        "math": 1,
+        "education": 1,
+        "sociology": 1,
+        "cooking": 2
+      },
+      "economics": {
+        "philosophy": 2,
+        "finance": 2,
+        "creative_writing": 1,
+        "agriculture": 2,
+        "environmental": 1,
+        "politics": 2
+      },
+      "education": {
+        "music": 2,
+        "code": 4,
+        "engineering": 2
+      },
+      "engineering": {
+        "music": 2,
+        "code": 3,
+        "sports": 2
+      },
+      "environmental": {
+        "agriculture": 1,
+        "politics": 2,
+        "medical": 2,
+        "science": 1,
+        "philosophy": 2,
+        "history": 1,
+        "sociology": 1
+      },
+      "history": {
+        "environmental": 2,
+        "science": 2,
+        "economics": 3,
+        "philosophy": 1,
+        "finance": 1,
+        "agriculture": 1
+      },
+      "linguistics": {
+        "sociology": 3,
+        "environmental": 1,
+        "medical": 1,
+        "cybersecurity": 1
+      },
+      "marketing": {
+        "finance": 1,
+        "cooking": 3,
+        "cybersecurity": 3,
+        "linguistics": 1,
+        "education": 1
+      },
+      "music": {
+        "code": 3,
+        "education": 2,
+        "sociology": 1,
+        "sports": 1
+      },
+      "philosophy": {
+        "environmental": 1,
+        "creative_writing": 1,
+        "agriculture": 1,
+        "economics": 1,
+        "politics": 1,
+        "cooking": 1,
+        "history": 1,
+        "science": 2,
+        "psychology": 1
+      },
+      "politics": {
+        "finance": 1,
+        "science": 1,
+        "environmental": 2,
+        "math": 1,
+        "economics": 1,
+        "agriculture": 1
+      },
+      "science": {
+        "environmental": 3,
+        "politics": 2,
+        "history": 1,
+        "agriculture": 2,
+        "philosophy": 1,
+        "legal": 1
+      },
+      "sociology": {
+        "finance": 1,
+        "linguistics": 1,
+        "marketing": 1,
+        "cooking": 1,
+        "code": 1
+      },
+      "sports": {
+        "code": 1,
+        "education": 3,
+        "engineering": 2,
+        "music": 3
+      }
+    }
+  },
+  "orthogonality": {
+    "mean_cosine": 0.004348,
+    "median_cosine": 0.002842,
+    "p95_cosine": 0.013118,
+    "max_cosine": 0.023394,
+    "n_pairs": 276
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.433,
+      "code": 6.098,
+      "math": 4.194,
+      "legal": 21.428,
+      "finance": 15.949,
+      "music": 3.809,
+      "psychology": 18.017,
+      "engineering": 3.462
+    },
+    "single_adapter": {
+      "medical": 6.481,
+      "code": 4.571,
+      "math": 4.103,
+      "legal": 21.601,
+      "finance": 15.846,
+      "music": 3.87,
+      "psychology": 18.202,
+      "engineering": 3.458
+    },
+    "routed": {
+      "medical": 6.481,
+      "code": 4.571,
+      "math": 4.103,
+      "legal": 21.601,
+      "finance": 15.846,
+      "music": 3.331,
+      "psychology": 18.202,
+      "engineering": 3.458
+    }
+  },
+  "composition": {
+    "top_2": {
+      "domains": [
+        "medical",
+        "code"
+      ],
+      "ppls": {
+        "medical": 6.502,
+        "code": 6.347
+      },
+      "mean_ppl": 6.425
+    },
+    "top_5": {
+      "domains": [
+        "medical",
+        "code",
+        "math",
+        "legal",
+        "finance"
+      ],
+      "ppls": {
+        "medical": 6.596,
+        "code": 6.2,
+        "math": 4.265,
+        "legal": 22.115,
+        "finance": 16.246
+      },
+      "mean_ppl": 11.084
+    }
+  },
+  "kill_criteria": {
+    "K753": {
+      "pass": false,
+      "value": 0.4208,
+      "threshold": 0.5
+    },
+    "K754": {
+      "pass": true,
+      "value": 0.004348,
+      "threshold": 0.1
+    },
+    "K755": {
+      "pass": true,
+      "value": 11.084,
+      "threshold": 64.803
+    }
+  },
+  "all_pass": false
+}

@@ -1,0 +1,807 @@
+{
+  "experiment": "scale_aware_composition_n15_n24",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_values": [
+    15
+  ],
+  "scales": [
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    20.0
+  ],
+  "n5_optimal_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "smoke_test": true,
+  "n_prompts_per_domain": 3,
+  "oracle_analysis": {
+    "15": {
+      "medical": {
+        "optimal_scale": 8.0,
+        "optimal_score": 0.13595739314765862,
+        "n5_scale": 20.0,
+        "n5_score": 0.12030625470890959,
+        "uniform_score": 0.12030625470890959,
+        "base_score": 0.12867853631127968,
+        "scale_shift_ratio": 0.4,
+        "beats_base": true,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.12867853631127968,
+            "std": 0.022189352729031997,
+            "stderr": 0.012811028771250182,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.14285714285714285
+            ]
+          },
+          "2.0": {
+            "mean": 0.12867853631127968,
+            "std": 0.022189352729031997,
+            "stderr": 0.012811028771250182,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.14285714285714285
+            ]
+          },
+          "4.0": {
+            "mean": 0.133007540640284,
+            "std": 0.025546162720202385,
+            "stderr": 0.01474908392327083,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "8.0": {
+            "mean": 0.13595739314765862,
+            "std": 0.021438563446511225,
+            "stderr": 0.012377560376882127,
+            "format_mean": 1.0,
+            "scores": [
+              0.10619469026548672,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "20.0": {
+            "mean": 0.12030625470890959,
+            "std": 0.05542680563833971,
+            "stderr": 0.0320006811556165,
+            "format_mean": 1.0,
+            "scores": [
+              0.061946902654867256,
+              0.10416666666666667,
+              0.19480519480519481
+            ]
+          }
+        }
+      },
+      "code": {
+        "optimal_scale": 8.0,
+        "optimal_score": 0.52531328320802,
+        "n5_scale": 20.0,
+        "n5_score": 0.5226817042606515,
+        "uniform_score": 0.5226817042606515,
+        "base_score": 0.015789473684210523,
+        "scale_shift_ratio": 0.4,
+        "beats_base": true,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.015789473684210523,
+            "std": 0.022329687826943605,
+            "stderr": 0.0128920512778062,
+            "format_mean": 1.0,
+            "scores": [
+              0.047368421052631574,
+              0.0,
+              0.0
+            ]
+          },
+          "2.0": {
+            "mean": 0.015789473684210523,
+            "std": 0.022329687826943605,
+            "stderr": 0.0128920512778062,
+            "format_mean": 1.0,
+            "scores": [
+              0.047368421052631574,
+              0.0,
+              0.0
+            ]
+          },
+          "4.0": {
+            "mean": 0.015789473684210523,
+            "std": 0.022329687826943605,
+            "stderr": 0.0128920512778062,
+            "format_mean": 1.0,
+            "scores": [
+              0.047368421052631574,
+              0.0,
+              0.0
+            ]
+          },
+          "8.0": {
+            "mean": 0.52531328320802,
+            "std": 0.3392137759089702,
+            "stderr": 0.19584516483387338,
+            "format_mean": 1.0,
+            "scores": [
+              0.047368421052631574,
+              0.7999999999999999,
+              0.7285714285714285
+            ]
+          },
+          "20.0": {
+            "mean": 0.5226817042606515,
+            "std": 0.3502614091713233,
+            "stderr": 0.20222351887180118,
+            "format_mean": 1.0,
+            "scores": [
+              0.7394736842105263,
+              0.7999999999999999,
+              0.028571428571428567
+            ]
+          }
+        }
+      },
+      "math": {
+        "optimal_scale": 1.0,
+        "optimal_score": 0.0,
+        "n5_scale": 20.0,
+        "n5_score": 0.0,
+        "uniform_score": 0.0,
+        "base_score": 0.0,
+        "scale_shift_ratio": 0.05,
+        "beats_base": false,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "2.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "4.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "8.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 0.9787878787878789,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "20.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 0.9833333333333334,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "legal": {
+        "optimal_scale": 4.0,
+        "optimal_score": 0.041729135432283855,
+        "n5_scale": 4.0,
+        "n5_score": 0.041729135432283855,
+        "uniform_score": 0.03954689322005664,
+        "base_score": 0.034832583708145924,
+        "scale_shift_ratio": 1.0,
+        "beats_base": true,
+        "scale_within_2x": true,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.034832583708145924,
+            "std": 0.014579176741758567,
+            "stderr": 0.00841729161641744,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.027586206896551724,
+              0.05517241379310345
+            ]
+          },
+          "2.0": {
+            "mean": 0.034832583708145924,
+            "std": 0.014579176741758567,
+            "stderr": 0.00841729161641744,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.027586206896551724,
+              0.05517241379310345
+            ]
+          },
+          "4.0": {
+            "mean": 0.041729135432283855,
+            "std": 0.014412745083687126,
+            "stderr": 0.008321202253828219,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.04827586206896552,
+              0.05517241379310345
+            ]
+          },
+          "8.0": {
+            "mean": 0.03023488255872064,
+            "std": 0.006007403938116595,
+            "stderr": 0.0034683762808024343,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.034482758620689655,
+              0.034482758620689655
+            ]
+          },
+          "20.0": {
+            "mean": 0.03954689322005664,
+            "std": 0.007981134492652375,
+            "stderr": 0.004607910147771456,
+            "format_mean": 1.0,
+            "scores": [
+              0.028985507246376812,
+              0.041379310344827586,
+              0.04827586206896552
+            ]
+          }
+        }
+      },
+      "finance": {
+        "optimal_scale": 8.0,
+        "optimal_score": 0.0991982136365997,
+        "n5_scale": 1.0,
+        "n5_score": 0.0927735368956743,
+        "uniform_score": 0.08318948953627252,
+        "base_score": 0.09563067975281715,
+        "scale_shift_ratio": 8.0,
+        "beats_base": true,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.0927735368956743,
+            "std": 0.09209252884346898,
+            "stderr": 0.0531696463181302,
+            "format_mean": 1.0,
+            "scores": [
+              0.2183206106870229,
+              0.06,
+              0.0
+            ]
+          },
+          "2.0": {
+            "mean": 0.0927735368956743,
+            "std": 0.09209252884346898,
+            "stderr": 0.0531696463181302,
+            "format_mean": 1.0,
+            "scores": [
+              0.2183206106870229,
+              0.06,
+              0.0
+            ]
+          },
+          "4.0": {
+            "mean": 0.09563067975281715,
+            "std": 0.09115965689770801,
+            "stderr": 0.05263105244912565,
+            "format_mean": 1.0,
+            "scores": [
+              0.2183206106870229,
+              0.06857142857142856,
+              0.0
+            ]
+          },
+          "8.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          },
+          "20.0": {
+            "mean": 0.08318948953627252,
+            "std": 0.08981379702670687,
+            "stderr": 0.051854019890311624,
+            "format_mean": 1.0,
+            "scores": [
+              0.20916030534351146,
+              0.03428571428571428,
+              0.006122448979591836
+            ]
+          }
+        }
+      }
+    }
+  },
+  "averaging_analysis": {
+    "15": {
+      "medical": {
+        "optimal_scale": 1.0,
+        "optimal_score": 0.133007540640284,
+        "n5_scale": 20.0,
+        "n5_score": 0.13005768813290938,
+        "uniform_score": 0.13005768813290938,
+        "base_score": 0.12867853631127968,
+        "scale_shift_ratio": 0.05,
+        "beats_base": true,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.133007540640284,
+            "std": 0.025546162720202385,
+            "stderr": 0.01474908392327083,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "2.0": {
+            "mean": 0.133007540640284,
+            "std": 0.025546162720202385,
+            "stderr": 0.01474908392327083,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "4.0": {
+            "mean": 0.133007540640284,
+            "std": 0.025546162720202385,
+            "stderr": 0.01474908392327083,
+            "format_mean": 1.0,
+            "scores": [
+              0.09734513274336283,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "8.0": {
+            "mean": 0.13005768813290938,
+            "std": 0.029671659476090757,
+            "stderr": 0.01713094058582391,
+            "format_mean": 1.0,
+            "scores": [
+              0.08849557522123894,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          },
+          "20.0": {
+            "mean": 0.13005768813290938,
+            "std": 0.029671659476090757,
+            "stderr": 0.01713094058582391,
+            "format_mean": 1.0,
+            "scores": [
+              0.08849557522123894,
+              0.14583333333333334,
+              0.15584415584415584
+            ]
+          }
+        }
+      },
+      "code": {
+        "optimal_scale": 20.0,
+        "optimal_score": 0.2586466165413534,
+        "n5_scale": 20.0,
+        "n5_score": 0.2586466165413534,
+        "uniform_score": 0.2586466165413534,
+        "base_score": 0.015789473684210523,
+        "scale_shift_ratio": 1.0,
+        "beats_base": true,
+        "scale_within_2x": true,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.013157894736842105,
+            "std": 0.01860807318911967,
+            "stderr": 0.0107433760648385,
+            "format_mean": 1.0,
+            "scores": [
+              0.039473684210526314,
+              0.0,
+              0.0
+            ]
+          },
+          "2.0": {
+            "mean": 0.013157894736842105,
+            "std": 0.01860807318911967,
+            "stderr": 0.0107433760648385,
+            "format_mean": 1.0,
+            "scores": [
+              0.039473684210526314,
+              0.0,
+              0.0
+            ]
+          },
+          "4.0": {
+            "mean": 0.013157894736842105,
+            "std": 0.01860807318911967,
+            "stderr": 0.0107433760648385,
+            "format_mean": 1.0,
+            "scores": [
+              0.039473684210526314,
+              0.0,
+              0.0
+            ]
+          },
+          "8.0": {
+            "mean": 0.013157894736842105,
+            "std": 0.01860807318911967,
+            "stderr": 0.0107433760648385,
+            "format_mean": 1.0,
+            "scores": [
+              0.039473684210526314,
+              0.0,
+              0.0
+            ]
+          },
+          "20.0": {
+            "mean": 0.2586466165413534,
+            "std": 0.33284925371643437,
+            "stderr": 0.19217060623274942,
+            "format_mean": 1.0,
+            "scores": [
+              0.047368421052631574,
+              0.0,
+              0.7285714285714285
+            ]
+          }
+        }
+      },
+      "math": {
+        "optimal_scale": 1.0,
+        "optimal_score": 0.0,
+        "n5_scale": 20.0,
+        "n5_score": 0.0,
+        "uniform_score": 0.0,
+        "base_score": 0.0,
+        "scale_shift_ratio": 0.05,
+        "beats_base": false,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "2.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "4.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "8.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "20.0": {
+            "mean": 0.0,
+            "std": 0.0,
+            "stderr": 0.0,
+            "format_mean": 1.0,
+            "scores": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "legal": {
+        "optimal_scale": 20.0,
+        "optimal_score": 0.03833916375145761,
+        "n5_scale": 4.0,
+        "n5_score": 0.03713143428285857,
+        "uniform_score": 0.03833916375145761,
+        "base_score": 0.034832583708145924,
+        "scale_shift_ratio": 5.0,
+        "beats_base": true,
+        "scale_within_2x": false,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.03713143428285857,
+            "std": 0.013776978892388268,
+            "stderr": 0.00795414247214016,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.034482758620689655,
+              0.05517241379310345
+            ]
+          },
+          "2.0": {
+            "mean": 0.03713143428285857,
+            "std": 0.013776978892388268,
+            "stderr": 0.00795414247214016,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.034482758620689655,
+              0.05517241379310345
+            ]
+          },
+          "4.0": {
+            "mean": 0.03713143428285857,
+            "std": 0.013776978892388268,
+            "stderr": 0.00795414247214016,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.034482758620689655,
+              0.05517241379310345
+            ]
+          },
+          "8.0": {
+            "mean": 0.03713143428285857,
+            "std": 0.013776978892388268,
+            "stderr": 0.00795414247214016,
+            "format_mean": 1.0,
+            "scores": [
+              0.021739130434782608,
+              0.034482758620689655,
+              0.05517241379310345
+            ]
+          },
+          "20.0": {
+            "mean": 0.03833916375145761,
+            "std": 0.012471683544977139,
+            "stderr": 0.007200529851940377,
+            "format_mean": 1.0,
+            "scores": [
+              0.025362318840579712,
+              0.034482758620689655,
+              0.05517241379310345
+            ]
+          }
+        }
+      },
+      "finance": {
+        "optimal_scale": 1.0,
+        "optimal_score": 0.0991982136365997,
+        "n5_scale": 1.0,
+        "n5_score": 0.0991982136365997,
+        "uniform_score": 0.0991982136365997,
+        "base_score": 0.09563067975281715,
+        "scale_shift_ratio": 1.0,
+        "beats_base": true,
+        "scale_within_2x": true,
+        "all_scales": {
+          "1.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          },
+          "2.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          },
+          "4.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          },
+          "8.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          },
+          "20.0": {
+            "mean": 0.0991982136365997,
+            "std": 0.09111058983031382,
+            "stderr": 0.052602723564557266,
+            "format_mean": 1.0,
+            "scores": [
+              0.22290076335877865,
+              0.06857142857142856,
+              0.006122448979591836
+            ]
+          }
+        }
+      }
+    }
+  },
+  "kill_criteria": {
+    "K636": {
+      "15": {
+        "degraded_count": 1,
+        "threshold": 1,
+        "pass": true
+      }
+    },
+    "K637": {
+      "oracle_N15": {
+        "within_2x_count": 1,
+        "pass": false
+      },
+      "avg_N15": {
+        "within_2x_count": 2,
+        "pass": false
+      }
+    }
+  },
+  "timing": {
+    "total_s": 2122.2549879550934,
+    "total_min": 35.37091646591822
+  },
+  "predictions_vs_measured": {
+    "N15": {
+      "medical": {
+        "prediction_oracle_scale_stable": "s* identical to N=5",
+        "measured_oracle_optimal_scale": 8.0,
+        "n5_optimal_scale": 20.0,
+        "scale_shift_ratio": 0.4,
+        "match": false
+      },
+      "code": {
+        "prediction_oracle_scale_stable": "s* identical to N=5",
+        "measured_oracle_optimal_scale": 8.0,
+        "n5_optimal_scale": 20.0,
+        "scale_shift_ratio": 0.4,
+        "match": false
+      },
+      "math": {
+        "prediction_oracle_scale_stable": "s* identical to N=5",
+        "measured_oracle_optimal_scale": 1.0,
+        "n5_optimal_scale": 20.0,
+        "scale_shift_ratio": 0.05,
+        "match": false
+      },
+      "legal": {
+        "prediction_oracle_scale_stable": "s* identical to N=5",
+        "measured_oracle_optimal_scale": 4.0,
+        "n5_optimal_scale": 4.0,
+        "scale_shift_ratio": 1.0,
+        "match": true
+      },
+      "finance": {
+        "prediction_oracle_scale_stable": "s* identical to N=5",
+        "measured_oracle_optimal_scale": 8.0,
+        "n5_optimal_scale": 1.0,
+        "scale_shift_ratio": 8.0,
+        "match": false
+      }
+    }
+  },
+  "sample_generations": {
+    "N15": {
+      "medical": {
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the body?",
+        "reference": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringom",
+        "base": "Syringomyelia is a rare neurological condition characterized by the presence of a fluid-filled cavity, called a syrinx, within the spinal cord. This",
+        "oracle_best": "Syringomyelia is a condition where a fluid-filled cavity, called a syrinx, forms in the spinal cord. This can cause a range of"
+      },
+      "code": {
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "reference": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title",
+        "base": "To extract titles of all YouTube videos from a given URL, you can use the `requests` library to fetch the webpage content and the `BeautifulSoup` library",
+        "oracle_best": "To extract titles of all YouTube videos from a URL, you can use the `requests` library to fetch the webpage content and the `BeautifulSoup` library to"
+      },
+      "math": {
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 necklaces for $83 each; and 1 computer game for $90. Since Mr. Grey purchased all those using his cre",
+        "reference": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gif",
+        "base": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the total cost of the polo shirts.\n2.",
+        "oracle_best": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the cost of the polo shirts.\n2. Calculate"
+      },
+      "legal": {
+        "prompt": "Speed bumps on private non-hoa road (California)",
+        "reference": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job ",
+        "base": "It sounds like you're dealing with a specific issue related to speed bumps on a private non-HOA road in California. Here are some steps you can take to",
+        "oracle_best": "It sounds like you're dealing with a specific issue regarding speed bumps on a private non-HOA road in California. Here are some steps you can take to address"
+      },
+      "finance": {
+        "prompt": "What should I do with my $10K windfall, given these options?",
+        "reference": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list be",
+        "base": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net.\n\n2. **Investment",
+        "oracle_best": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net in case of unforeseen circumstances"
+      }
+    }
+  }
+}

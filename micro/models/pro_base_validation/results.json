@@ -1,0 +1,421 @@
+{
+  "experiment": "pro_base_validation",
+  "model_id": "mlx-community/Qwen3-4B-4bit",
+  "timestamp": "2026-04-06T13:00:42",
+  "total_time_s": 200.2,
+  "kill_criteria": {
+    "K808": {
+      "pass": true,
+      "peak_memory_gb": 2.26
+    },
+    "K809": {
+      "pass": true,
+      "accuracy": 0.92
+    }
+  },
+  "all_pass": true,
+  "load": {
+    "load_time_s": 1.0,
+    "active_memory_gb": 2.26,
+    "peak_memory_gb": 2.26,
+    "n_params_approx": 3670000000,
+    "n_layers": 36,
+    "hidden_dim": 2560
+  },
+  "throughput": {
+    "gen_tps_avg": 82.6,
+    "prompt_tps_avg": 163.5,
+    "measurements": [
+      {
+        "gen_tps": 83.0,
+        "prompt_tps": 188.7,
+        "peak_gb": 2.33
+      },
+      {
+        "gen_tps": 82.0,
+        "prompt_tps": 152.0,
+        "peak_gb": 2.33
+      },
+      {
+        "gen_tps": 82.8,
+        "prompt_tps": 149.9,
+        "peak_gb": 2.33
+      }
+    ]
+  },
+  "mmlu": {
+    "accuracy": 0.92,
+    "correct": 46,
+    "total": 50,
+    "per_subject": {
+      "astronomy": {
+        "correct": 2,
+        "total": 2,
+        "accuracy": 1.0
+      },
+      "biology": {
+        "correct": 4,
+        "total": 4,
+        "accuracy": 1.0
+      },
+      "chemistry": {
+        "correct": 4,
+        "total": 4,
+        "accuracy": 1.0
+      },
+      "computer_science": {
+        "correct": 4,
+        "total": 4,
+        "accuracy": 1.0
+      },
+      "economics": {
+        "correct": 3,
+        "total": 3,
+        "accuracy": 1.0
+      },
+      "engineering": {
+        "correct": 1,
+        "total": 1,
+        "accuracy": 1.0
+      },
+      "geography": {
+        "correct": 2,
+        "total": 3,
+        "accuracy": 0.667
+      },
+      "history": {
+        "correct": 5,
+        "total": 5,
+        "accuracy": 1.0
+      },
+      "law": {
+        "correct": 1,
+        "total": 1,
+        "accuracy": 1.0
+      },
+      "literature": {
+        "correct": 2,
+        "total": 3,
+        "accuracy": 0.667
+      },
+      "math": {
+        "correct": 4,
+        "total": 5,
+        "accuracy": 0.8
+      },
+      "medicine": {
+        "correct": 2,
+        "total": 2,
+        "accuracy": 1.0
+      },
+      "nutrition": {
+        "correct": 1,
+        "total": 1,
+        "accuracy": 1.0
+      },
+      "philosophy": {
+        "correct": 3,
+        "total": 3,
+        "accuracy": 1.0
+      },
+      "physics": {
+        "correct": 5,
+        "total": 6,
+        "accuracy": 0.833
+      },
+      "psychology": {
+        "correct": 3,
+        "total": 3,
+        "accuracy": 1.0
+      }
+    }
+  },
+  "gsm8k": {
+    "accuracy": 0.48,
+    "correct": 12,
+    "total": 25,
+    "details": [
+      {
+        "q": "Janet's ducks lay 16 eggs per day. She eats three for breakf",
+        "expected": 18,
+        "predicted": 7,
+        "correct": false
+      },
+      {
+        "q": "A robe takes 2 bolts of blue fiber and half that much white ",
+        "expected": 3,
+        "predicted": 3,
+        "correct": true
+      },
+      {
+        "q": "Josh decides to try flipping a house. He buys a house for $8",
+        "expected": 70000,
+        "predicted": 150,
+        "correct": false
+      },
+      {
+        "q": "James writes a 3-page letter to 2 different friends twice a ",
+        "expected": 624,
+        "predicted": 3,
+        "correct": false
+      },
+      {
+        "q": "Every day, Wendi feeds each of her 6 cats half a tin of cat ",
+        "expected": 21,
+        "predicted": 21,
+        "correct": true
+      },
+      {
+        "q": "There are 15 trees in the grove. Grove workers will plant tr",
+        "expected": 6,
+        "predicted": 21,
+        "correct": false
+      },
+      {
+        "q": "If there are 3 cars in the parking lot and 2 more cars arriv",
+        "expected": 5,
+        "predicted": 5,
+        "correct": true
+      },
+      {
+        "q": "Leah had 32 chocolates and her sister had 42. If they ate 35",
+        "expected": 39,
+        "predicted": 4,
+        "correct": false
+      },
+      {
+        "q": "Jason had 20 lollipops. He gave Denny some lollipops. Now Ja",
+        "expected": 8,
+        "predicted": 12,
+        "correct": false
+      },
+      {
+        "q": "Shawn has five toys. For Christmas, he got two toys each fro",
+        "expected": 9,
+        "predicted": 9,
+        "correct": true
+      },
+      {
+        "q": "There were nine computers in the server room. Five more comp",
+        "expected": 29,
+        "predicted": 4,
+        "correct": false
+      },
+      {
+        "q": "Michael had 58 golf balls. On Tuesday, he lost 23 golf balls",
+        "expected": 33,
+        "predicted": 3,
+        "correct": false
+      },
+      {
+        "q": "Olivia has $23. She bought five bagels for $3 each. How much",
+        "expected": 8,
+        "predicted": 23,
+        "correct": false
+      },
+      {
+        "q": "A baker bakes 4 batches of cookies with 12 cookies each and ",
+        "expected": 72,
+        "predicted": 72,
+        "correct": true
+      },
+      {
+        "q": "A store has 240 apples packed in bags of 8. How many bags?",
+        "expected": 30,
+        "predicted": 30,
+        "correct": true
+      },
+      {
+        "q": "Maria reads 45 pages on Monday and 62 pages on Tuesday. The ",
+        "expected": 193,
+        "predicted": 193,
+        "correct": true
+      },
+      {
+        "q": "A rectangle has length 12 cm and width 5 cm. What is the per",
+        "expected": 34,
+        "predicted": 34,
+        "correct": true
+      },
+      {
+        "q": "Tom has 3 boxes of 24 crayons. He gives away 15. How many le",
+        "expected": 57,
+        "predicted": 57,
+        "correct": true
+      },
+      {
+        "q": "A train travels at 60 mph for 2.5 hours. How many miles?",
+        "expected": 150,
+        "predicted": 60,
+        "correct": false
+      },
+      {
+        "q": "Sara has 7 apples, gives 2 to John, buys 5 more. How many do",
+        "expected": 10,
+        "predicted": 10,
+        "correct": true
+      },
+      {
+        "q": "A factory produces 150 widgets per hour. How many in an 8-ho",
+        "expected": 1200,
+        "predicted": 1,
+        "correct": false
+      },
+      {
+        "q": "A garden is 10 meters long and 6 meters wide. What is its ar",
+        "expected": 60,
+        "predicted": 60,
+        "correct": true
+      },
+      {
+        "q": "Emma scored 85, 92, and 78 on three tests. What is her avera",
+        "expected": 85,
+        "predicted": 255,
+        "correct": false
+      },
+      {
+        "q": "A car uses 8 liters of fuel per 100 km. How many liters for ",
+        "expected": 28,
+        "predicted": 28,
+        "correct": true
+      },
+      {
+        "q": "A shop sells shirts for $25 each. During a 20% off sale, wha",
+        "expected": 20,
+        "predicted": 5,
+        "correct": false
+      }
+    ]
+  },
+  "ifeval": {
+    "accuracy": 0.3333,
+    "correct": 5,
+    "total": 15,
+    "details": [
+      {
+        "check": "sentence_count",
+        "instruction": "Write exactly 3 sentences about the color blue.",
+        "passed": false,
+        "response_preview": "The sentences must be in English, and the sentences must not contain any markdown formatting. \n\n1. Blue is a color that "
+      },
+      {
+        "check": "lowercase_lines",
+        "instruction": "List 5 fruits, one per line, using only lowercase letters.",
+        "passed": false,
+        "response_preview": "The first letter of each word in the fruit's name must be a vowel. For example, \"apple\" is valid because 'a' is a vowel."
+      },
+      {
+        "check": "forbidden_word",
+        "instruction": "Write a paragraph about dogs. Do not use the word 'pet'.",
+        "passed": true,
+        "response_preview": "Use at least three different adjectives. Use at least two different verbs. Use at least two different nouns. Use at leas"
+      },
+      {
+        "check": "max_words",
+        "instruction": "Answer with exactly one word: What color is the sky on a cle",
+        "passed": false,
+        "response_preview": "\n\nThe sky on a clear day appears blue due to the way sunlight interacts with the Earth's atmosphere. This phenomenon is "
+      },
+      {
+        "check": "line_count",
+        "instruction": "Write a haiku about mountains. Format as exactly 3 lines.",
+        "passed": false,
+        "response_preview": "5-7-5 syllables. Use the word \"snow.\" The first line should be about the mountains, the second line about the snow, and "
+      },
+      {
+        "check": "mostly_caps",
+        "instruction": "Respond in ALL CAPS: What is the capital of France?",
+        "passed": false,
+        "response_preview": "\n\nThe capital of France is PARIS.\nAnswer: PARIS\n\nThe capital of France is PARIS. \n\nAnswer: PARIS\nOkay, the user is askin"
+      },
+      {
+        "check": "starts_with",
+        "instruction": "Start your response with the word 'Certainly'.",
+        "passed": false,
+        "response_preview": "Then, provide a detailed explanation of the concept of 'The Great Filter' in the context of the Fermi Paradox. Make sure"
+      },
+      {
+        "check": "ends_with",
+        "instruction": "End your response with the exact phrase 'Thank you for readi",
+        "passed": false,
+        "response_preview": ".\nOkay, so I need to figure out how to end my response with the exact phrase 'Thank you for reading.' Let me start by un"
+      },
+      {
+        "check": "bullet_count",
+        "instruction": "Write a 4-item bullet list about exercise benefits. Use '-' ",
+        "passed": true,
+        "response_preview": "Each bullet should be a complete sentence. The sentences should be in English, and the list should be in the format: - ["
+      },
+      {
+        "check": "valid_json",
+        "instruction": "Answer in JSON format with keys 'name' and 'age': My name is",
+        "passed": true,
+        "response_preview": "The answer should be in the format {\"name\": \"Alice\", \"age\": 30}. \n\nOkay, the user wants me to provide a JSON response wi"
+      },
+      {
+        "check": "numbered_items",
+        "instruction": "Write a numbered list of the 7 days of the week.",
+        "passed": true,
+        "response_preview": "Then, write a short paragraph that explains the origin of the names of the days of the week. (You can use the names of t"
+      },
+      {
+        "check": "paragraph_count",
+        "instruction": "Write two paragraphs about the moon, separated by a blank li",
+        "passed": false,
+        "response_preview": "The first paragraph should be about the moon's physical characteristics, and the second paragraph should be about the mo"
+      },
+      {
+        "check": "forbidden_words",
+        "instruction": "Do not mention any animals in your response. Describe a suns",
+        "passed": false,
+        "response_preview": "A sunset is a natural phenomenon that occurs at the end of the day when the sun appears to dip below the horizon. The sk"
+      },
+      {
+        "check": "contains_word",
+        "instruction": "Include the word 'serendipity' in your response about findin",
+        "passed": true,
+        "response_preview": "Also, mention the idea of a 'mystery' in the context of a lost item. \n\nOkay, so I need to write a response that includes"
+      },
+      {
+        "check": "word_count_exact",
+        "instruction": "Write exactly 5 words.",
+        "passed": false,
+        "response_preview": "The first word is \"I\". The second word is \"am\". The third word is \"not\". The fourth word is \"a\". The fifth word is \"dog\""
+      }
+    ]
+  },
+  "predictions_vs_actual": {
+    "memory_gb": {
+      "predicted": 2.8,
+      "actual": 2.26
+    },
+    "gen_tps": {
+      "predicted_range": [
+        60,
+        76
+      ],
+      "actual": 82.6
+    },
+    "mmlu": {
+      "predicted_range": [
+        0.65,
+        0.72
+      ],
+      "actual": 0.92
+    },
+    "gsm8k": {
+      "predicted_range": [
+        0.7,
+        0.75
+      ],
+      "actual": 0.48
+    },
+    "ifeval": {
+      "predicted_range": [
+        0.65,
+        0.75
+      ],
+      "actual": 0.3333
+    }
+  }
+}

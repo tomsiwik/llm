@@ -1,0 +1,395 @@
+{
+  "experiment": "per_domain_module_selection",
+  "hypothesis": "Per-domain module selection: attn-only for prose, full for code",
+  "type": "guided-exploration",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "perturbation": {
+    "medical": {
+      "attn_frob_sq": 82836.83,
+      "mlp_frob_sq": 191200.56,
+      "total_frob_sq": 274037.38,
+      "attn_fraction": 0.3023,
+      "mlp_fraction": 0.6977,
+      "per_module": {
+        "self_attn.q_proj": 29938.73,
+        "self_attn.k_proj": 7776.76,
+        "self_attn.v_proj": 9760.09,
+        "self_attn.o_proj": 35361.24,
+        "mlp.gate_proj": 77641.74,
+        "mlp.up_proj": 81387.71,
+        "mlp.down_proj": 32171.11
+      },
+      "scale": 20.0
+    },
+    "code": {
+      "attn_frob_sq": 75120.05,
+      "mlp_frob_sq": 166511.2,
+      "total_frob_sq": 241631.26,
+      "attn_fraction": 0.3109,
+      "mlp_fraction": 0.6891,
+      "per_module": {
+        "self_attn.q_proj": 25643.37,
+        "self_attn.k_proj": 6949.28,
+        "self_attn.v_proj": 8795.72,
+        "self_attn.o_proj": 33731.68,
+        "mlp.gate_proj": 65867.23,
+        "mlp.up_proj": 67157.95,
+        "mlp.down_proj": 33486.02
+      },
+      "scale": 20.0
+    },
+    "math": {
+      "attn_frob_sq": 100263.98,
+      "mlp_frob_sq": 220820.04,
+      "total_frob_sq": 321084.02,
+      "attn_fraction": 0.3123,
+      "mlp_fraction": 0.6877,
+      "per_module": {
+        "self_attn.q_proj": 31416.68,
+        "self_attn.k_proj": 8589.5,
+        "self_attn.v_proj": 12498.92,
+        "self_attn.o_proj": 47758.88,
+        "mlp.gate_proj": 83654.37,
+        "mlp.up_proj": 88184.74,
+        "mlp.down_proj": 48980.93
+      },
+      "scale": 20.0
+    },
+    "legal": {
+      "attn_frob_sq": 3553.8,
+      "mlp_frob_sq": 7048.64,
+      "total_frob_sq": 10602.44,
+      "attn_fraction": 0.3352,
+      "mlp_fraction": 0.6648,
+      "per_module": {
+        "self_attn.q_proj": 1172.64,
+        "self_attn.k_proj": 324.99,
+        "self_attn.v_proj": 488.07,
+        "self_attn.o_proj": 1568.1,
+        "mlp.gate_proj": 2765.99,
+        "mlp.up_proj": 2905.83,
+        "mlp.down_proj": 1376.82
+      },
+      "scale": 4.0
+    },
+    "finance": {
+      "attn_frob_sq": 213.23,
+      "mlp_frob_sq": 414.1,
+      "total_frob_sq": 627.33,
+      "attn_fraction": 0.3399,
+      "mlp_fraction": 0.6601,
+      "per_module": {
+        "self_attn.q_proj": 69.19,
+        "self_attn.k_proj": 19.62,
+        "self_attn.v_proj": 28.82,
+        "self_attn.o_proj": 95.59,
+        "mlp.gate_proj": 164.11,
+        "mlp.up_proj": 174.43,
+        "mlp.down_proj": 75.56
+      },
+      "scale": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.21,
+      "code": 4.767,
+      "math": 3.758,
+      "legal": 23.039,
+      "finance": 20.485
+    },
+    "full": {
+      "medical": 5.546,
+      "code": 4.007,
+      "math": 3.778,
+      "legal": 20.907,
+      "finance": 20.107
+    },
+    "attn_only": {
+      "medical": 5.323,
+      "code": 4.16,
+      "math": 3.431,
+      "legal": 22.077,
+      "finance": 20.337
+    },
+    "mlp_only": {
+      "medical": 5.429,
+      "code": 3.908,
+      "math": 3.657,
+      "legal": 21.602,
+      "finance": 20.25
+    },
+    "attn_retention": {
+      "medical": 133.6,
+      "code": 79.9,
+      "math": 0.0,
+      "legal": 45.1,
+      "finance": 39.2
+    },
+    "mlp_retention": {
+      "medical": 117.6,
+      "code": 113.0,
+      "math": 0.0,
+      "legal": 67.4,
+      "finance": 62.2
+    },
+    "interaction": {
+      "medical": 151.2,
+      "code": 92.9,
+      "math": 2240.0,
+      "legal": 12.5,
+      "finance": 1.3
+    }
+  },
+  "behavioral": {
+    "full": {
+      "medical": 0.435,
+      "code": 0.865,
+      "math": 0.662,
+      "legal": 0.115,
+      "finance": 0.127
+    },
+    "attn_only": {
+      "medical": 0.467,
+      "code": 0.281,
+      "math": 0.665,
+      "legal": 0.108,
+      "finance": 0.118
+    },
+    "behavioral_retention": {
+      "medical": 107.4,
+      "code": 32.5,
+      "math": 100.5,
+      "legal": 93.9,
+      "finance": 92.9
+    }
+  },
+  "mmlu": {
+    "base": {
+      "accuracy": 0.413,
+      "correct": 31,
+      "total": 75,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 6,
+          "total": 15
+        },
+        "math": {
+          "accuracy": 0.4,
+          "correct": 6,
+          "total": 15
+        },
+        "legal": {
+          "accuracy": 0.6,
+          "correct": 9,
+          "total": 15
+        },
+        "finance": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        }
+      }
+    },
+    "full": {
+      "accuracy": 0.387,
+      "correct": 29,
+      "total": 75,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.267,
+          "correct": 4,
+          "total": 15
+        },
+        "code": {
+          "accuracy": 0.467,
+          "correct": 7,
+          "total": 15
+        },
+        "math": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        },
+        "legal": {
+          "accuracy": 0.533,
+          "correct": 8,
+          "total": 15
+        },
+        "finance": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        }
+      }
+    },
+    "attn_only": {
+      "accuracy": 0.427,
+      "correct": 32,
+      "total": 75,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 6,
+          "total": 15
+        },
+        "code": {
+          "accuracy": 0.6,
+          "correct": 9,
+          "total": 15
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 3,
+          "total": 15
+        },
+        "legal": {
+          "accuracy": 0.6,
+          "correct": 9,
+          "total": 15
+        },
+        "finance": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        }
+      }
+    },
+    "hybrid": {
+      "accuracy": 0.4,
+      "correct": 30,
+      "total": 75,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.4,
+          "correct": 6,
+          "total": 15
+        },
+        "code": {
+          "accuracy": 0.467,
+          "correct": 7,
+          "total": 15
+        },
+        "math": {
+          "accuracy": 0.2,
+          "correct": 3,
+          "total": 15
+        },
+        "legal": {
+          "accuracy": 0.6,
+          "correct": 9,
+          "total": 15
+        },
+        "finance": {
+          "accuracy": 0.333,
+          "correct": 5,
+          "total": 15
+        }
+      }
+    },
+    "degradation": {
+      "full": {
+        "overall_pp": -2.6,
+        "by_domain": {
+          "medical": -6.6,
+          "code": 6.7,
+          "math": -6.7,
+          "legal": -6.7,
+          "finance": 0.0
+        }
+      },
+      "attn_only": {
+        "overall_pp": 1.4,
+        "by_domain": {
+          "medical": 6.7,
+          "code": 20.0,
+          "math": -20.0,
+          "legal": 0.0,
+          "finance": 0.0
+        }
+      },
+      "hybrid": {
+        "overall_pp": -1.3,
+        "by_domain": {
+          "medical": 6.7,
+          "code": 6.7,
+          "math": -20.0,
+          "legal": 0.0,
+          "finance": 0.0
+        }
+      }
+    }
+  },
+  "predictions": {
+    "attn_perturbation_fraction": {
+      "predicted": "~28%",
+      "measured": "31.5%",
+      "match": true
+    },
+    "code_needs_mlp": {
+      "predicted": "code behavioral drops significantly with attn-only",
+      "measured": "full=0.865, attn=0.281",
+      "match": true
+    },
+    "prose_attn_sufficient": {
+      "predicted": "medical/math behavioral >= full with attn-only",
+      "measured": "medical: full=0.435, attn=0.467; math: full=0.662, attn=0.665",
+      "match": true
+    }
+  },
+  "optimal_config": {
+    "medical": "attn_only",
+    "code": "full",
+    "math": "attn_only",
+    "legal": "attn_only",
+    "finance": "attn_only"
+  },
+  "kill_criteria": {
+    "K766": {
+      "text": "Per-domain selection reduces MMLU degradation vs full-module",
+      "pass": true,
+      "full_mmlu_pp": -2.6,
+      "attn_mmlu_pp": 1.4,
+      "hybrid_mmlu_pp": -1.3
+    },
+    "K767": {
+      "text": "Hybrid retains >= 80% domain PPL improvement",
+      "pass": false,
+      "retentions": {
+        "medical": 133.6,
+        "code": 100.0,
+        "math": 0.0,
+        "legal": 45.1,
+        "finance": 39.2
+      },
+      "min_retention": 0.0
+    },
+    "K768": {
+      "text": "Module interaction effects < 10%",
+      "pass": false,
+      "interactions": {
+        "medical": 151.2,
+        "code": 92.9,
+        "math": 2240.0,
+        "legal": 12.5,
+        "finance": 1.3
+      },
+      "max_interaction": 2240.0
+    }
+  },
+  "all_pass": false,
+  "total_time_s": 1103.3
+}

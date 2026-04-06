@@ -1,0 +1,1284 @@
+{
+  "experiment": "behavioral_eval_routed",
+  "description": "Existential P0 test: routed composition behavioral quality vs base",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "routing": "oracle_top1",
+  "domain_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "n_domains": 5,
+  "n_prompts_per_domain": 10,
+  "max_new_tokens": 128,
+  "temperature": 0.0,
+  "comparison": {
+    "medical": {
+      "base_mean": 0.2626,
+      "routed_mean": 0.2908,
+      "improvement": 0.0281,
+      "improvement_pct": 10.7,
+      "routed_better": true,
+      "behavioral_direction": 1,
+      "mmlu_direction": 0,
+      "contradicts_mmlu": false,
+      "method": "factual_recall (medical facts vs reference)",
+      "n_samples": 10,
+      "adapter_used": "medical",
+      "scale_used": 20.0
+    },
+    "code": {
+      "base_mean": 0.419,
+      "routed_mean": 0.6237,
+      "improvement": 0.2047,
+      "improvement_pct": 48.9,
+      "routed_better": true,
+      "behavioral_direction": 1,
+      "mmlu_direction": 0,
+      "contradicts_mmlu": false,
+      "method": "syntax_parse + factual_recall",
+      "n_samples": 10,
+      "adapter_used": "code",
+      "scale_used": 20.0,
+      "base_syntax_valid": 5,
+      "routed_syntax_valid": 8
+    },
+    "math": {
+      "base_mean": 0.1,
+      "routed_mean": 0.8,
+      "improvement": 0.7,
+      "improvement_pct": 700.0,
+      "routed_better": true,
+      "behavioral_direction": 1,
+      "mmlu_direction": -1,
+      "contradicts_mmlu": true,
+      "method": "numerical_answer_match (eps=0.01)",
+      "n_samples": 10,
+      "adapter_used": "math",
+      "scale_used": 20.0,
+      "base_correct": 1,
+      "routed_correct": 8
+    },
+    "legal": {
+      "base_mean": 0.0979,
+      "routed_mean": 0.0959,
+      "improvement": -0.002,
+      "improvement_pct": -2.1,
+      "routed_better": false,
+      "behavioral_direction": 0,
+      "mmlu_direction": -1,
+      "contradicts_mmlu": false,
+      "method": "factual_recall (legal facts vs reference)",
+      "n_samples": 10,
+      "adapter_used": "legal",
+      "scale_used": 4.0
+    },
+    "finance": {
+      "base_mean": 0.1761,
+      "routed_mean": 0.1555,
+      "improvement": -0.0206,
+      "improvement_pct": -11.7,
+      "routed_better": false,
+      "behavioral_direction": -1,
+      "mmlu_direction": 0,
+      "contradicts_mmlu": false,
+      "method": "factual_recall + numerical_accuracy",
+      "n_samples": 10,
+      "adapter_used": "finance",
+      "scale_used": 1.0
+    }
+  },
+  "summary": {
+    "domains_routed_better": 3,
+    "domains_routed_worse": 1,
+    "domains_neutral": 1,
+    "behavioral_mmlu_contradictions": 1,
+    "mmlu_degraded_domains": [
+      "math",
+      "legal"
+    ],
+    "behavioral_improved_despite_mmlu": [
+      "math"
+    ]
+  },
+  "kill_criteria": {
+    "K1_642": {
+      "description": "Routed worse than base on behavioral for >=3/5 domains",
+      "domains_worse": 1,
+      "threshold": 3,
+      "result": "PASS"
+    },
+    "K2_643": {
+      "description": "No metric-behavioral gap exists (0 contradictions)",
+      "contradictions": 1,
+      "result": "PASS"
+    }
+  },
+  "predictions_vs_measured": {
+    "P1_math_improved": {
+      "predicted": "math behavioral >= 0.20 (vs base 0.10)",
+      "measured_base": 0.1,
+      "measured_routed": 0.8,
+      "match": true
+    },
+    "P2_code_improved": {
+      "predicted": "code behavioral >= 0.50 (vs base 0.42)",
+      "measured_base": 0.419,
+      "measured_routed": 0.6237,
+      "match": true
+    },
+    "P3_prose_neutral": {
+      "predicted": "routed >= base on >= 2/3 prose domains",
+      "medical_delta": 0.0281,
+      "legal_delta": -0.002,
+      "finance_delta": -0.0206,
+      "prose_better_count": 2,
+      "match": true
+    },
+    "P4_mmlu_behavioral_gap": {
+      "predicted": "behavioral improves on >= 1 MMLU-degraded domain",
+      "contradictions": 1,
+      "domains": [
+        "math"
+      ],
+      "match": true
+    },
+    "P5_overall": {
+      "predicted": "routed >= base on >= 3/5 domains",
+      "domains_better_or_neutral": 4,
+      "match": true
+    }
+  },
+  "base_eval_details": {
+    "medical": [
+      {
+        "domain": "medical",
+        "generated_len": 606,
+        "score": 0.20353982300884957,
+        "factual_recall": 0.20353982300884957,
+        "factual_precision": 0.26136363636363635,
+        "factual_f1": 0.22885572139303484,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "generated_preview": "Syringomyelia is a rare neurological condition characterized by the presence of a fluid-filled cavity, called a syrinx, within the spinal cord. This condition can lead to various symptoms, primarily a"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 637,
+        "score": 0.2916666666666667,
+        "factual_recall": 0.2916666666666667,
+        "factual_precision": 0.1511627906976744,
+        "factual_f1": 0.19912472647702406,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "generated_preview": "The hormone secretin is a bicarbonate transporter that plays a crucial role in the regulation of blood pH. It is secreted by the chief cells of the small intestine, specifically in the duodenum, which"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 589,
+        "score": 0.2597402597402597,
+        "factual_recall": 0.2597402597402597,
+        "factual_precision": 0.2247191011235955,
+        "factual_f1": 0.24096385542168672,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "generated_preview": "Right heart failure occurs when the right side of the heart is unable to pump blood effectively, leading to a buildup of fluid in the body. This can result from various conditions, such as heart failu"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 580,
+        "score": 0.265625,
+        "factual_recall": 0.265625,
+        "factual_precision": 0.27941176470588236,
+        "factual_f1": 0.2723440134907251,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "generated_preview": "Cystinuria is a genetic disorder characterized by the presence of cystine in the urine, which is a non-proteinogenic amino acid. The primary cause of cystinuria is a mutation in the SLC35A2 gene, whic"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 563,
+        "score": 0.1111111111111111,
+        "factual_recall": 0.1111111111111111,
+        "factual_precision": 0.05194805194805195,
+        "factual_f1": 0.07079646017699115,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "generated_preview": "The potential cardiac complication associated with tricyclic antidepressants (TCAs) is ventricular tachycardia (VT). This can lead to a specific electrocardiographic abnormality known as a \"triglycine"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 519,
+        "score": 0.2777777777777778,
+        "factual_recall": 0.2777777777777778,
+        "factual_precision": 0.0625,
+        "factual_f1": 0.10204081632653061,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "generated_preview": "\u03b1-thalassemia is a genetic blood disorder characterized by the reduced production of one or more of the globin chains that make up hemoglobin. This results in anemia and can lead to a variety of sympt"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 592,
+        "score": 0.47058823529411764,
+        "factual_recall": 0.47058823529411764,
+        "factual_precision": 0.10843373493975904,
+        "factual_f1": 0.1762545899632803,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "generated_preview": "\u03b2-Blockers are primarily used to manage cardiovascular conditions such as hypertension, angina, and certain arrhythmias by blocking \u03b2-adrenergic receptors, which reduces heart rate and myocardial cont"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 625,
+        "score": 0.3225806451612903,
+        "factual_recall": 0.3225806451612903,
+        "factual_precision": 0.12222222222222222,
+        "factual_f1": 0.177276390008058,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "generated_preview": "Small cell lung carcinoma (SCLC) is a type of non-small cell lung cancer (NSCLC) that is characterized by small, round cells with scant cytoplasm and prominent nucleoli. It is typically associated wit"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 586,
+        "score": 0.2903225806451613,
+        "factual_recall": 0.2903225806451613,
+        "factual_precision": 0.2318840579710145,
+        "factual_f1": 0.2578334825425247,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "generated_preview": "Cystinuria is a rare genetic disorder characterized by the presence of cystine in the urine. It is caused by mutations in the SLC35A2 gene, which encodes the cystine/glutamate cotransporter. This tran"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 637,
+        "score": 0.13333333333333333,
+        "factual_recall": 0.13333333333333333,
+        "factual_precision": 0.08108108108108109,
+        "factual_f1": 0.10084033613445378,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "generated_preview": "Secondary amyloidosis is a condition where amyloid proteins, which are normally found in the body, accumulate in the body's tissues and organs. This occurs when the body's immune system mistakenly att"
+      }
+    ],
+    "code": [
+      {
+        "domain": "code",
+        "generated_len": 587,
+        "score": 0.07105263157894737,
+        "syntax_valid": false,
+        "factual_recall": 0.23684210526315788,
+        "factual_f1": 0.16513761467889906,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "generated_preview": "To extract titles of all YouTube videos from a given URL, you can use the `requests` library to fetch the webpage content and the `BeautifulSoup` library to parse the HTML. Here's a step-by-step guide"
+      },
+      {
+        "domain": "code",
+        "generated_len": 426,
+        "score": 0.03333333333333333,
+        "syntax_valid": false,
+        "factual_recall": 0.1111111111111111,
+        "factual_f1": 0.08450704225352113,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python function to calculate an exponential series",
+        "generated_preview": "Certainly! An exponential series is a sum of terms of the form \\( a^n \\) where \\( n \\) is a non-negative integer. The series can be written as:\n\n\\[ S = a + a^2 + a^3 + \\cdots + a^n \\]\n\nTo calculate th"
+      },
+      {
+        "domain": "code",
+        "generated_len": 587,
+        "score": 0.7285714285714285,
+        "syntax_valid": true,
+        "factual_recall": 0.09523809523809523,
+        "factual_f1": 0.0718562874251497,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "generated_preview": "Certainly! Below is a Python program that takes a list of lists and converts it into a dictionary where the first element of each list becomes the key and the rest of the elements become the values.\n\n"
+      },
+      {
+        "domain": "code",
+        "generated_len": 545,
+        "score": 0.0375,
+        "syntax_valid": false,
+        "factual_recall": 0.125,
+        "factual_f1": 0.07228915662650602,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Generate an api response in Python for the provided data.",
+        "generated_preview": "Certainly! To generate an API response in Python, you typically use a library like `requests`. Below is an example of how you might create an API response using the `requests` library.\n\nLet's assume y"
+      },
+      {
+        "domain": "code",
+        "generated_len": 485,
+        "score": 0.8090909090909091,
+        "syntax_valid": true,
+        "factual_recall": 0.36363636363636365,
+        "factual_f1": 0.126984126984127,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "generated_preview": "Certainly! Below is an example of a for loop in Python that calculates the total sum of all elements in a given list:\n\n```python\n# Define the list of numbers\nnumbers = [1, 2, 3, 4, 5]\n\n# Initialize th"
+      },
+      {
+        "domain": "code",
+        "generated_len": 469,
+        "score": 0.0818181818181818,
+        "syntax_valid": false,
+        "factual_recall": 0.2727272727272727,
+        "factual_f1": 0.15544041450777202,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "generated_preview": "Certainly! Below is a Python class that represents a 3D vector. This class includes methods for common vector operations such as addition, subtraction, dot product, and magnitude.\n\n```python\nimport ma"
+      },
+      {
+        "domain": "code",
+        "generated_len": 528,
+        "score": 0.02222222222222222,
+        "syntax_valid": false,
+        "factual_recall": 0.07407407407407407,
+        "factual_f1": 0.057971014492753624,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "generated_preview": "Certainly! Below is a Python program that demonstrates how to clean up a list of emails and put them into a new list. This example assumes that the emails are in a list of strings, and we want to remo"
+      },
+      {
+        "domain": "code",
+        "generated_len": 495,
+        "score": 0.8090909090909091,
+        "syntax_valid": true,
+        "factual_recall": 0.36363636363636365,
+        "factual_f1": 0.18045112781954886,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "generated_preview": "Certainly! Below is a Python function that takes a list of numbers as input and prints out the largest value from that list.\n\n```python\ndef print_largest_value(numbers):\n    if not numbers:\n        pr"
+      },
+      {
+        "domain": "code",
+        "generated_len": 577,
+        "score": 0.7771428571428571,
+        "syntax_valid": true,
+        "factual_recall": 0.2571428571428571,
+        "factual_f1": 0.22670025188916876,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "generated_preview": "Certainly! Below is an example of a web scraper using Python's `requests` library to fetch data from an online web store and `BeautifulSoup` to parse the HTML content. For this example, let's assume w"
+      },
+      {
+        "domain": "code",
+        "generated_len": 491,
+        "score": 0.82,
+        "syntax_valid": true,
+        "factual_recall": 0.4,
+        "factual_f1": 0.16000000000000003,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "generated_preview": "```python\nclass SumCalculator:\n    def __init__(self):\n        pass\n\n    def calculate_sum(self, num1, num2):\n        return num1 + num2\n\n# Example usage:\ncalculator = SumCalculator()\nresult = calcula"
+      }
+    ],
+    "math": [
+      {
+        "domain": "math",
+        "generated_len": 457,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 3.0,
+        "gt_answer": 322.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "generated_preview": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the total cost of the polo shirts.\n2. Calculate the total cost of the necklaces.\n3. Add the cost of t"
+      },
+      {
+        "domain": "math",
+        "generated_len": 412,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 8.0,
+        "gt_answer": 22.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "generated_preview": "To solve this problem, we need to calculate the total number of legs contributed by each type of animal and then sum them up.\n\n1. **Humans:**\n   - Javier and his wife have 2 legs each.\n   - Total legs"
+      },
+      {
+        "domain": "math",
+        "generated_len": 427,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 8.0,
+        "gt_answer": 19.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "generated_preview": "To solve this problem, we need to determine the current age of Cori's aunt. Let's break down the information given:\n\n1. Cori is 3 years old today.\n2. In 5 years, Cori will be \\(3 + 5 = 8\\) years old.\n"
+      },
+      {
+        "domain": "math",
+        "generated_len": 504,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 5.0,
+        "gt_answer": 75.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "generated_preview": "To determine how many origami stars Kyle must make to fill all the glass bottles he bought, we need to follow these steps:\n\n1. **Calculate the total number of glass bottles Kyle bought:**\n   Kyle init"
+      },
+      {
+        "domain": "math",
+        "generated_len": 500,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 18.0,
+        "gt_answer": 27.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "generated_preview": "To determine how many weeks Oscar should start training, we need to calculate the total distance he needs to cover and then figure out how many weeks it will take to reach that distance.\n\n1. **Calcula"
+      },
+      {
+        "domain": "math",
+        "generated_len": 503,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 105.0,
+        "gt_answer": 140.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "generated_preview": "To determine how much more money Tina made compared to Marvin, we need to calculate the total amount of money each of them made and then find the difference.\n\n1. **Calculate the number of candy bars T"
+      },
+      {
+        "domain": "math",
+        "generated_len": 515,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "generated_preview": "To find the combined experience of James and his partner, we need to add their individual teaching years together.\n\nJames's experience: 40 years\nPartner's experience: 40 years - 10 years = 30 years\n\nC"
+      },
+      {
+        "domain": "math",
+        "generated_len": 405,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 24.0,
+        "gt_answer": 48.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "generated_preview": "To find the dog's full adult weight, we need to calculate the weight at each stage and add the final weight.\n\n1. **Weeks 1-9:**\n   - At 7 weeks old, the puppy weighed 6 pounds.\n   - By week 9, it doub"
+      },
+      {
+        "domain": "math",
+        "generated_len": 513,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 10.0,
+        "gt_answer": 35.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "generated_preview": "To solve this problem, we need to calculate the cost of movie tickets for both Wednesday and Saturday, and then sum these costs.\n\n1. **Cost on Monday:**\n   - The cost of a movie ticket on Monday is $5"
+      },
+      {
+        "domain": "math",
+        "generated_len": 541,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 10.0,
+        "gt_answer": 80.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "generated_preview": "To determine what percentage Calvin is towards his goal, we need to calculate the total number of haircuts he needs to reach his goal and then find the percentage of those haircuts he has already comp"
+      }
+    ],
+    "legal": [
+      {
+        "domain": "legal",
+        "generated_len": 634,
+        "score": 0.025362318840579712,
+        "factual_recall": 0.025362318840579712,
+        "factual_precision": 0.09722222222222222,
+        "factual_f1": 0.040229885057471264,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Speed bumps on private non-hoa road (California)",
+        "generated_preview": "It sounds like you're dealing with a specific issue related to speed bumps on a private non-HOA road in California. Here are some steps you can take to address this:\n\n1. **Review the Property Agreemen"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 677,
+        "score": 0.041379310344827586,
+        "factual_recall": 0.041379310344827586,
+        "factual_precision": 0.0625,
+        "factual_f1": 0.04979253112033195,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Can an employer dictate when an employee can take annual leave?",
+        "generated_preview": "Yes, an employer can dictate when an employee can take annual leave. The specifics of this can vary depending on the employment contract, company policies, and labor laws in the jurisdiction. Generall"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 661,
+        "score": 0.0896551724137931,
+        "factual_recall": 0.0896551724137931,
+        "factual_precision": 0.12631578947368421,
+        "factual_f1": 0.10487394957983193,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Is a list of the most common English words copyrightable under US law?",
+        "generated_preview": "No, a list of the most common English words is not copyrightable under US law. In the United States, copyright law protects original works of authorship, such as literary, musical, and artistic works."
+      },
+      {
+        "domain": "legal",
+        "generated_len": 704,
+        "score": 0.062111801242236024,
+        "factual_recall": 0.062111801242236024,
+        "factual_precision": 0.1,
+        "factual_f1": 0.07662835249042145,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Is it illegal to misinform someone about the terms of a contract",
+        "generated_preview": "Misinforming someone about the terms of a contract is generally considered unethical and can have serious legal consequences. Here are some key points to consider:\n\n1. **Legal Implications**: In many "
+      },
+      {
+        "domain": "legal",
+        "generated_len": 593,
+        "score": 0.06666666666666667,
+        "factual_recall": 0.06666666666666667,
+        "factual_precision": 0.05714285714285714,
+        "factual_f1": 0.061538461538461535,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "How to get a copyright on a video game?",
+        "generated_preview": "To obtain a copyright for a video game, you need to follow these steps:\n\n1. **Create the Game**: Develop the video game. This includes writing the code, creating the graphics, and designing the gamepl"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 670,
+        "score": 0.2727272727272727,
+        "factual_recall": 0.2727272727272727,
+        "factual_precision": 0.08536585365853659,
+        "factual_f1": 0.13003095975232198,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "generated_preview": "As a US citizen opening a business in the EU, you will need to file taxes in the country where your business is located. Here are the general steps you should follow:\n\n1. **Choose a Jurisdiction**: De"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 685,
+        "score": 0.08176100628930817,
+        "factual_recall": 0.08176100628930817,
+        "factual_precision": 0.19402985074626866,
+        "factual_f1": 0.11504424778761062,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "generated_preview": "US Business Activities: These are the business activities of a company that are conducted in the United States. This includes any business activity that is carried out in the US, such as manufacturing"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 722,
+        "score": 0.19444444444444445,
+        "factual_recall": 0.19444444444444445,
+        "factual_precision": 0.07692307692307693,
+        "factual_f1": 0.11023622047244093,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Startup making me pay legal costs of my vested options, is that legal?",
+        "generated_preview": "Yes, it is legal for a startup to recover legal costs from an employee who has vested in options. This is a common practice in employment agreements, particularly in the context of stock options. The "
+      },
+      {
+        "domain": "legal",
+        "generated_len": 616,
+        "score": 0.09782608695652174,
+        "factual_recall": 0.09782608695652174,
+        "factual_precision": 0.15151515151515152,
+        "factual_f1": 0.11889035667107001,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Can I amend a contract after end date",
+        "generated_preview": "Yes, you can amend a contract after the end date. However, the specifics of how to do this will depend on the terms of the contract itself, as well as any applicable laws in your jurisdiction. General"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 617,
+        "score": 0.047058823529411764,
+        "factual_recall": 0.047058823529411764,
+        "factual_precision": 0.037037037037037035,
+        "factual_f1": 0.04145077720207254,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Liability for neighbor injured on my property",
+        "generated_preview": "Liability for a neighbor injured on your property can arise from various scenarios, including:\n\n1. **Negligence**: If the injured party can prove that you were negligent in maintaining your property, "
+      }
+    ],
+    "finance": [
+      {
+        "domain": "finance",
+        "generated_len": 563,
+        "score": 0.44122137404580153,
+        "factual_recall": 0.06870229007633588,
+        "factual_f1": 0.06338028169014084,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What should I do with my $10K windfall, given these options?",
+        "generated_preview": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net.\n\n2. **Investment**: Allocate $3,000 to a diversified investment portfolio."
+      },
+      {
+        "domain": "finance",
+        "generated_len": 560,
+        "score": 0.4857142857142857,
+        "factual_recall": 0.14285714285714285,
+        "factual_f1": 0.1566265060240964,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What's the average rate of return for some of the most mainstream index funds?",
+        "generated_preview": "The average rate of return for some of the most mainstream index funds can vary depending on the specific fund and the time period considered. However, as of recent data, here are some general trends:"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 558,
+        "score": 0.2489795918367347,
+        "factual_recall": 0.08163265306122448,
+        "factual_f1": 0.08011444921316165,
+        "numerical_accuracy": 0.5,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "generated_preview": "Determining the ideal size of a \"nest egg\" and the appropriate age to reach that goal can vary based on individual financial situations, goals, and risk tolerance. Here are some general guidelines:\n\n1"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 602,
+        "score": 0.4507692307692308,
+        "factual_recall": 0.08461538461538462,
+        "factual_f1": 0.10945273631840796,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "generated_preview": "When considering whether to be more aggressive in a Roth IRA, 401k, or taxable account, it's important to consider your overall financial goals, risk tolerance, and current financial situation. Here a"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 648,
+        "score": 0.021818181818181816,
+        "factual_recall": 0.03636363636363636,
+        "factual_f1": 0.041237113402061855,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "How can I find hotel properties to buy other than using Google?",
+        "generated_preview": "1. **Real Estate Websites**: Websites like Zillow, Redfin, and Realtor.com offer a wide range of properties for sale. You can filter by location, price, and other criteria to find suitable hotel prope"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 678,
+        "score": 0.022727272727272728,
+        "factual_recall": 0.022727272727272728,
+        "factual_f1": 0.01834862385321101,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Rate of change of beta",
+        "generated_preview": "To find the rate of change of beta, we need to understand the context in which beta is being used. Beta typically represents the beta coefficient in regression analysis, which measures the sensitivity"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 620,
+        "score": 0.00972972972972973,
+        "factual_recall": 0.016216216216216217,
+        "factual_f1": 0.026734563971992364,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "How does giving to charity work?",
+        "generated_preview": "Giving to charity involves making a donation to an organization or cause that supports a specific social issue or community. Here's a step-by-step guide on how it typically works:\n\n1. **Identify a Cha"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 597,
+        "score": 0.056410256410256404,
+        "factual_recall": 0.09401709401709402,
+        "factual_f1": 0.13213213213213215,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "generated_preview": "Yes, you can claim a tax deduction for working from home as an employee. The IRS allows you to deduct a percentage of your home office expenses, which can include expenses such as rent, utilities, and"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 529,
+        "score": 0.023809523809523808,
+        "factual_recall": 0.023809523809523808,
+        "factual_f1": 0.029126213592233007,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Simple and safe way to manage a lot of cash",
+        "generated_preview": "To manage a large amount of cash safely, consider the following steps:\n\n1. **Use a Secure Wallet or Money Belt**:\n   - Invest in a high-quality, secure wallet or money belt that is designed to protect"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 614,
+        "score": 0.0,
+        "factual_recall": 0.0,
+        "factual_f1": 0.0,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "generated_preview": "1. **Set Clear Goals**: Define what you want to achieve with your budget. Are you saving for a specific goal, like a vacation or a down payment on a house? Having clear goals will help you stay motiva"
+      }
+    ]
+  },
+  "routed_eval_details": {
+    "medical": [
+      {
+        "domain": "medical",
+        "generated_len": 608,
+        "score": 0.18584070796460178,
+        "factual_recall": 0.18584070796460178,
+        "factual_precision": 0.26506024096385544,
+        "factual_f1": 0.2184913691179948,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "generated_preview": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, particularly in the lower extrem"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 608,
+        "score": 0.2916666666666667,
+        "factual_recall": 0.2916666666666667,
+        "factual_precision": 0.18181818181818182,
+        "factual_f1": 0.224,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "generated_preview": "Secretin is a hormone that is secreted from the duodenum in the small intestine. It is involved in the regulation of gastric acid secretion. The hormone is released in response to the presence of food"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 670,
+        "score": 0.2987012987012987,
+        "factual_recall": 0.2987012987012987,
+        "factual_precision": 0.2894736842105263,
+        "factual_f1": 0.294015107495642,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "generated_preview": "Right heart failure is a condition in which the right side of the heart is unable to pump blood effectively. Some symptoms that may be associated with right heart failure include swelling in the legs,"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 615,
+        "score": 0.203125,
+        "factual_recall": 0.203125,
+        "factual_precision": 0.2542372881355932,
+        "factual_f1": 0.22582513028372903,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "generated_preview": "Cystinuria is a medical condition that is characterized by the accumulation of cystine in the urine. The primary cause of cystinuria is a defect in the reabsorption of cystine in the kidneys. This def"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 619,
+        "score": 0.4074074074074074,
+        "factual_recall": 0.4074074074074074,
+        "factual_precision": 0.15492957746478872,
+        "factual_f1": 0.22448979591836735,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "generated_preview": "Tricyclic antidepressants (TCAs) can cause a potential cardiac complication known as QT prolongation. This can lead to a specific electrocardiographic abnormality called QT prolongation. It is importa"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 491,
+        "score": 0.2222222222222222,
+        "factual_recall": 0.2222222222222222,
+        "factual_precision": 0.0784313725490196,
+        "factual_f1": 0.11594202898550723,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "generated_preview": "\u03b1-thalassemia is characterized by a reduced number of \u03b1-globin chains and \u03b34 tetramers are known as HbH. These tetramers are formed by the combination of two HbH molecules and are present in the blood"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 631,
+        "score": 0.47058823529411764,
+        "factual_recall": 0.47058823529411764,
+        "factual_precision": 0.11940298507462686,
+        "factual_f1": 0.19047619047619047,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "generated_preview": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone in situations where there is a high level of \u03b11 receptor density in the body. This can lead to increased heart rate and other cardiovascular ef"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 677,
+        "score": 0.3548387096774194,
+        "factual_recall": 0.3548387096774194,
+        "factual_precision": 0.15789473684210525,
+        "factual_f1": 0.21854304635761593,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "generated_preview": "Small (oat) cell lung carcinoma is a type of lung cancer that can produce antibodies against neurons. The potential consequences of this type of cancer producing antibodies against neurons include the"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 594,
+        "score": 0.3064516129032258,
+        "factual_recall": 0.3064516129032258,
+        "factual_precision": 0.2608695652173913,
+        "factual_f1": 0.28182941903584674,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "generated_preview": "Cystinuria is a rare genetic disorder that affects the kidneys. It is caused by a mutation in the gene that encodes for the enzyme cystine/glutamate cotransporter (GLCT1). This enzyme is responsible f"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 652,
+        "score": 0.16666666666666666,
+        "factual_recall": 0.16666666666666666,
+        "factual_precision": 0.08333333333333333,
+        "factual_f1": 0.1111111111111111,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "generated_preview": "Secondary amyloidosis is a condition where AA amyloid is deposited systemically in the body. AA amyloid is a type of amyloid that is deposited in the body and is associated with a variety of diseases,"
+      }
+    ],
+    "code": [
+      {
+        "domain": "code",
+        "generated_len": 579,
+        "score": 0.7710526315789473,
+        "syntax_valid": true,
+        "factual_recall": 0.23684210526315788,
+        "factual_f1": 0.1592920353982301,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://www.youtube.com/watch?v=abc123'\n\nresponse = requests.get(url)\nsoup = BeautifulSoup(response.text, 'html.parser')\n\ntitles = soup.find_all('"
+      },
+      {
+        "domain": "code",
+        "generated_len": 242,
+        "score": 0.8333333333333333,
+        "syntax_valid": true,
+        "factual_recall": 0.4444444444444444,
+        "factual_f1": 0.24242424242424243,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python function to calculate an exponential series",
+        "generated_preview": "def exponential_series(n):\n    result = 1\n    for i in range(n):\n        result *= (1 + 0.1)\n    return result\n\nprint(exponential_series(5)) # Output: 2.5937424601e+16.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0."
+      },
+      {
+        "domain": "code",
+        "generated_len": 367,
+        "score": 0.7571428571428571,
+        "syntax_valid": true,
+        "factual_recall": 0.19047619047619047,
+        "factual_f1": 0.2162162162162162,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "generated_preview": "def list_to_dict(list_of_lists):\n    result = {}\n    for i in range(len(list_of_lists)):\n        result[list_of_lists[i][0]] = list_of_lists[i][1:]\n    return result\n\nlist_of_lists = [['a', 'b'], ['c'"
+      },
+      {
+        "domain": "code",
+        "generated_len": 337,
+        "score": 0.7374999999999999,
+        "syntax_valid": true,
+        "factual_recall": 0.125,
+        "factual_f1": 0.1098901098901099,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Generate an api response in Python for the provided data.",
+        "generated_preview": "import requests\nurl = 'https://api.example.com/data'\nresponse = requests.get(url)\nprint(response.json()) # prints the response in JSON format. Response: [1, 2, 3] Response: [4, 5, 6] Response: [7, 8, "
+      },
+      {
+        "domain": "code",
+        "generated_len": 451,
+        "score": 0.8090909090909091,
+        "syntax_valid": true,
+        "factual_recall": 0.36363636363636365,
+        "factual_f1": 0.26666666666666666,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "generated_preview": "total_sum = 0\nfor element in list:\n    total_sum += element\nprint(total_sum) # prints the total sum of all elements in the list. 0 in this case. 0 is the sum of all elements in the list. 0 is the sum "
+      },
+      {
+        "domain": "code",
+        "generated_len": 435,
+        "score": 0.0818181818181818,
+        "syntax_valid": false,
+        "factual_recall": 0.2727272727272727,
+        "factual_f1": 0.20689655172413793,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "generated_preview": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.magnitude = self.calculate_magnitude()\n    def calculate_magnitude(self):\n       "
+      },
+      {
+        "domain": "code",
+        "generated_len": 529,
+        "score": 0.711111111111111,
+        "syntax_valid": true,
+        "factual_recall": 0.037037037037037035,
+        "factual_f1": 0.058823529411764705,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "generated_preview": "emails = ['example1@example.com', 'example2@example.com', 'example3@example.com']\nnew_emails = [email for email in emails if email.endswith('@example.com')] # Clean up the list of emails and put them "
+      },
+      {
+        "domain": "code",
+        "generated_len": 543,
+        "score": 0.7545454545454545,
+        "syntax_valid": true,
+        "factual_recall": 0.18181818181818182,
+        "factual_f1": 0.19672131147540986,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "generated_preview": "def largest_value(lst):\n    max_value = max(lst)\n    print(max_value)  # prints the largest value from the list.  # prints the largest value from the list.  # prints the largest value from the list.  "
+      },
+      {
+        "domain": "code",
+        "generated_len": 430,
+        "score": 0.7514285714285713,
+        "syntax_valid": true,
+        "factual_recall": 0.17142857142857143,
+        "factual_f1": 0.1927007299270073,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://www.example.com'\n\nresponse = requests.get(url)\n\nsoup = BeautifulSoup(response.text, 'html.parser')\n\nfor item in soup.find_all('div', class"
+      },
+      {
+        "domain": "code",
+        "generated_len": 148,
+        "score": 0.03,
+        "syntax_valid": false,
+        "factual_recall": 0.1,
+        "factual_f1": 0.15384615384615383,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "generated_preview": "def sum(a, b): \n    return a + b...................................................................................................................."
+      }
+    ],
+    "math": [
+      {
+        "domain": "math",
+        "generated_len": 354,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 322.0,
+        "gt_answer": 322.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all th"
+      },
+      {
+        "domain": "math",
+        "generated_len": 292,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 26.0,
+        "gt_answer": 22.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of his 3 children has 2 legs, so 2*3= <<2*3=6>>6 legs.\nEach dog has 4 legs, so 2 dogs have 2*4= <<2*4=8>>8 legs.\nThe cat has 4 legs.\nIncluding Javier, "
+      },
+      {
+        "domain": "math",
+        "generated_len": 350,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 19.0,
+        "gt_answer": 19.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = <<8*3=24>>24 years old in 5 years.\n"
+      },
+      {
+        "domain": "math",
+        "generated_len": 268,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 75.0,
+        "gt_answer": 75.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each.\nSo, 2 * 15 = <<2*15=30>>30 stars.\nHe bought another 3 identical glass bottles.\nSo, 3 * 15 = <<3*15=45>>45 stars.\nTherefore, Kyle must m"
+      },
+      {
+        "domain": "math",
+        "generated_len": 277,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 27.0,
+        "gt_answer": 27.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe runs 2/3 of a mile each week.\nHe needs 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n##"
+      },
+      {
+        "domain": "math",
+        "generated_len": 353,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 140.0,
+        "gt_answer": 140.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $<<35*2=70>>70\nTina sold 3 * 35 = <<3*35=105>>105 candy bars, so she made 105 * $2 = $<<105*2=210>>210\nTina made $210 - $70 = $<<210-70=140>>140 more th"
+      },
+      {
+        "domain": "math",
+        "generated_len": 428,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n\nQuestion: James spends 40 years teaching. His partner has b"
+      },
+      {
+        "domain": "math",
+        "generated_len": 422,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 48.0,
+        "gt_answer": 48.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "generated_preview": "The dog doubled in weight at 7 weeks old, so it weighed 6 pounds * 2 = <<6*2=12>>12 pounds at 7 weeks old.\nIt doubled in weight again at 3 months old, so it weighed 12 pounds * 2 = <<12*2=24>>24 pound"
+      },
+      {
+        "domain": "math",
+        "generated_len": 288,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 35.0,
+        "gt_answer": 35.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "generated_preview": "Movie tickets cost $5 each on a Monday.\nMovie tickets cost $5 x 2 = $<<5*2=10>>10 on a Wednesday.\nMovie tickets cost $5 x 5 = $<<5*5=25>>25 on a Saturday.\nGlenn goes to the movie theater on Wednesday "
+      },
+      {
+        "domain": "math",
+        "generated_len": 224,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 0.8,
+        "gt_answer": 80.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "generated_preview": "He has 8 haircuts so far.\nHe needs 2 more haircuts.\nHe has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 10 - 8 = <<10-8=2>>2 more haircuts.\nHe has 8/10 = <<8/10=0.8>>0.8 of his goal.\n#### 0.8\nThe "
+      }
+    ],
+    "legal": [
+      {
+        "domain": "legal",
+        "generated_len": 645,
+        "score": 0.025362318840579712,
+        "factual_recall": 0.025362318840579712,
+        "factual_precision": 0.09210526315789473,
+        "factual_f1": 0.03977272727272727,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Speed bumps on private non-hoa road (California)",
+        "generated_preview": "It sounds like you're dealing with a specific issue regarding speed bumps on a private non-HOA road in California. Here are some steps you can take to address this:\n\n1. **Review the Property Agreement"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 712,
+        "score": 0.08275862068965517,
+        "factual_recall": 0.08275862068965517,
+        "factual_precision": 0.14457831325301204,
+        "factual_f1": 0.10526315789473684,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Can an employer dictate when an employee can take annual leave?",
+        "generated_preview": "Yes, an employer can dictate when an employee can take annual leave. However, there are certain conditions and legal requirements that must be met. Here are some key points to consider:\n\n1. **Employme"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 614,
+        "score": 0.08275862068965517,
+        "factual_recall": 0.08275862068965517,
+        "factual_precision": 0.15151515151515152,
+        "factual_f1": 0.10704727921498661,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Is a list of the most common English words copyrightable under US law?",
+        "generated_preview": "No, a list of the most common English words is not copyrightable under US law. Copyright law protects original works of authorship fixed in a tangible medium of expression, such as books, music, and s"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 667,
+        "score": 0.049689440993788817,
+        "factual_recall": 0.049689440993788817,
+        "factual_precision": 0.1076923076923077,
+        "factual_f1": 0.06800242865816636,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Is it illegal to misinform someone about the terms of a contract",
+        "generated_preview": "Misinforming someone about the terms of a contract is generally considered unethical and can lead to legal consequences. However, the specific laws and regulations vary by jurisdiction. In many places"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 571,
+        "score": 0.1,
+        "factual_recall": 0.1,
+        "factual_precision": 0.06756756756756757,
+        "factual_f1": 0.08064516129032258,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "How to get a copyright on a video game?",
+        "generated_preview": "To get a copyright on a video game, you need to follow these steps:\n\n1. **Create the Game**: Develop the video game. This includes writing the code, creating the graphics, and designing the gameplay m"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 654,
+        "score": 0.2727272727272727,
+        "factual_recall": 0.2727272727272727,
+        "factual_precision": 0.07894736842105263,
+        "factual_f1": 0.12244897959183672,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "generated_preview": "As a US citizen opening a business in the EU, you will need to file taxes in the EU country where your business is registered. The specific tax filing requirements will depend on the country where you"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 692,
+        "score": 0.05660377358490566,
+        "factual_recall": 0.05660377358490566,
+        "factual_precision": 0.19148936170212766,
+        "factual_f1": 0.08737864077669905,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "generated_preview": "US Business Activities: These are the activities of a US entity that are conducted in the United States. This includes activities such as manufacturing, distribution, and sales of goods and services.\n"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 579,
+        "score": 0.16666666666666666,
+        "factual_recall": 0.16666666666666666,
+        "factual_precision": 0.11764705882352941,
+        "factual_f1": 0.13793103448275862,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Startup making me pay legal costs of my vested options, is that legal?",
+        "generated_preview": "I am a startup founder and I have invested in a company that has gone through a lot of changes. I have vested options that I am not sure about. I have been told that I have to pay legal costs of my ve"
+      },
+      {
+        "domain": "legal",
+        "generated_len": 670,
+        "score": 0.08695652173913043,
+        "factual_recall": 0.08695652173913043,
+        "factual_precision": 0.1111111111111111,
+        "factual_f1": 0.0975609756097561,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Can I amend a contract after end date",
+        "generated_preview": "Yes, you can amend a contract after the end date. However, the terms of the amendment will depend on the specific terms of the original contract and the laws of the jurisdiction in which the contract "
+      },
+      {
+        "domain": "legal",
+        "generated_len": 610,
+        "score": 0.03529411764705882,
+        "factual_recall": 0.03529411764705882,
+        "factual_precision": 0.02531645569620253,
+        "factual_f1": 0.029484029484029485,
+        "method": "factual_recall (legal facts vs reference)",
+        "prompt": "Liability for neighbor injured on my property",
+        "generated_preview": "Liability for a neighbor injured on your property can be complex and depends on various factors. Here are some key points to consider:\n\n1. **Duty of Care**: As a property owner, you have a duty of car"
+      }
+    ],
+    "finance": [
+      {
+        "domain": "finance",
+        "generated_len": 603,
+        "score": 0.4549618320610687,
+        "factual_recall": 0.0916030534351145,
+        "factual_f1": 0.0892193308550186,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What should I do with my $10K windfall, given these options?",
+        "generated_preview": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net.\n\n2. **Investment**: Allocate $3,000 to invest in a diversified portfolio o"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 569,
+        "score": 0.47714285714285715,
+        "factual_recall": 0.12857142857142856,
+        "factual_f1": 0.14435533621221466,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What's the average rate of return for some of the most mainstream index funds?",
+        "generated_preview": "The average rate of return for some of the most mainstream index funds can vary depending on the fund's specific investment strategy, fees, and market conditions. However, as of recent data, here are "
+      },
+      {
+        "domain": "finance",
+        "generated_len": 584,
+        "score": 0.03673469387755102,
+        "factual_recall": 0.061224489795918366,
+        "factual_f1": 0.051172707889125806,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "generated_preview": "Determining the ideal size of a \"nest egg\" and the appropriate age to reach that goal can vary based on individual financial situations, goals, and risk tolerance. Here are some general guidelines:\n\n1"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 651,
+        "score": 0.4507692307692308,
+        "factual_recall": 0.08461538461538462,
+        "factual_f1": 0.10041077133728891,
+        "numerical_accuracy": 1.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "generated_preview": "When considering whether to be more aggressive in a Roth IRA, 401k, or taxable account, it's essential to evaluate your financial goals, risk tolerance, and current financial situation. Here are some "
+      },
+      {
+        "domain": "finance",
+        "generated_len": 673,
+        "score": 0.021818181818181816,
+        "factual_recall": 0.03636363636363636,
+        "factual_f1": 0.044150110375275935,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "How can I find hotel properties to buy other than using Google?",
+        "generated_preview": "1. **Real Estate Websites**: Websites like Zillow, Redfin, and Realtor.com offer a wide range of properties for sale. You can filter by location, price, and other criteria to find suitable hotel prope"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 691,
+        "score": 0.022727272727272728,
+        "factual_recall": 0.022727272727272728,
+        "factual_f1": 0.018867924528301886,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Rate of change of beta",
+        "generated_preview": "To find the rate of change of beta, we need to understand the context in which beta is being used. Beta typically represents the beta coefficient in regression analysis, which measures the sensitivity"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 627,
+        "score": 0.016216216216216217,
+        "factual_recall": 0.02702702702702703,
+        "factual_f1": 0.04225352112676056,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "How does giving to charity work?",
+        "generated_preview": "Giving to charity involves making a donation to an organization or cause that supports a specific social issue or community. Here's a step-by-step guide on how it typically works:\n\n1. **Identify a Cha"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 626,
+        "score": 0.05128205128205128,
+        "factual_recall": 0.08547008547008547,
+        "factual_f1": 0.11764705882352944,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "generated_preview": "Yes, you can claim a tax deduction for working from home as an employee. The IRS allows you to deduct a percentage of your home office expenses, which can include expenses such as rent, utilities, and"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 529,
+        "score": 0.023809523809523808,
+        "factual_recall": 0.023809523809523808,
+        "factual_f1": 0.029126213592233007,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "Simple and safe way to manage a lot of cash",
+        "generated_preview": "To manage a large amount of cash safely, consider the following steps:\n\n1. **Use a Secure Wallet or Money Belt**:\n   - Invest in a high-quality, secure wallet or money belt that is designed to protect"
+      },
+      {
+        "domain": "finance",
+        "generated_len": 614,
+        "score": 0.0,
+        "factual_recall": 0.0,
+        "factual_f1": 0.0,
+        "numerical_accuracy": 0.0,
+        "method": "factual_recall + numerical_accuracy",
+        "prompt": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "generated_preview": "1. **Set Clear Goals**: Define what you want to achieve with your budget. Are you saving for a specific goal, like a vacation or a down payment on a house? Having clear goals will help you stay motiva"
+      }
+    ]
+  },
+  "timing": {
+    "base_gen_time_s": 122.1,
+    "routed_gen_time_s": 283.0,
+    "eval_time_s": 0.0,
+    "total_time_s": 405.2
+  }
+}

@@ -1,0 +1,441 @@
+{
+  "experiment": "boundary_detection_binary_heads",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "domains": [
+    "python",
+    "math",
+    "medical",
+    "legal",
+    "creative"
+  ],
+  "n_sequences": 150,
+  "segment_length": 128,
+  "window_sizes_tested": [
+    16,
+    32,
+    64
+  ],
+  "best_window_size": 64,
+  "window_results": {
+    "16": {
+      "window_size": 16,
+      "stride": 8,
+      "tolerance": 16,
+      "f1": 0.2421,
+      "precision": 0.1377,
+      "recall": 1.0,
+      "tp": 150,
+      "fp": 939,
+      "fn": 0,
+      "mean_loc_error_tokens": 5.39,
+      "mean_window_accuracy": 0.8596,
+      "mean_latency_ms": 5433.11,
+      "median_latency_ms": 5440.79,
+      "pair_f1s": {
+        "medical+legal": {
+          "f1": 0.2609,
+          "precision": 0.15,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 85,
+          "fn": 0
+        },
+        "medical+creative": {
+          "f1": 0.1948,
+          "precision": 0.1079,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 124,
+          "fn": 0
+        },
+        "legal+creative": {
+          "f1": 0.2158,
+          "precision": 0.121,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 109,
+          "fn": 0
+        },
+        "math+medical": {
+          "f1": 0.411,
+          "precision": 0.2586,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 43,
+          "fn": 0
+        },
+        "python+legal": {
+          "f1": 0.2143,
+          "precision": 0.12,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 110,
+          "fn": 0
+        },
+        "python+medical": {
+          "f1": 0.2174,
+          "precision": 0.122,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 108,
+          "fn": 0
+        },
+        "python+creative": {
+          "f1": 0.1554,
+          "precision": 0.0843,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 163,
+          "fn": 0
+        },
+        "python+math": {
+          "f1": 0.3093,
+          "precision": 0.1829,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 67,
+          "fn": 0
+        },
+        "math+legal": {
+          "f1": 0.4762,
+          "precision": 0.3125,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 33,
+          "fn": 0
+        },
+        "math+creative": {
+          "f1": 0.2362,
+          "precision": 0.1339,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 97,
+          "fn": 0
+        }
+      }
+    },
+    "32": {
+      "window_size": 32,
+      "stride": 16,
+      "tolerance": 32,
+      "f1": 0.6122,
+      "precision": 0.4412,
+      "recall": 1.0,
+      "tp": 150,
+      "fp": 190,
+      "fn": 0,
+      "mean_loc_error_tokens": 10.54,
+      "mean_window_accuracy": 0.9236,
+      "mean_latency_ms": 3008.81,
+      "median_latency_ms": 3014.9,
+      "pair_f1s": {
+        "medical+legal": {
+          "f1": 0.6122,
+          "precision": 0.4412,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 19,
+          "fn": 0
+        },
+        "medical+creative": {
+          "f1": 0.5882,
+          "precision": 0.4167,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 21,
+          "fn": 0
+        },
+        "legal+creative": {
+          "f1": 0.5556,
+          "precision": 0.3846,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 24,
+          "fn": 0
+        },
+        "math+medical": {
+          "f1": 0.75,
+          "precision": 0.6,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 10,
+          "fn": 0
+        },
+        "python+legal": {
+          "f1": 0.5085,
+          "precision": 0.3409,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 29,
+          "fn": 0
+        },
+        "python+medical": {
+          "f1": 0.5085,
+          "precision": 0.3409,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 29,
+          "fn": 0
+        },
+        "python+creative": {
+          "f1": 0.5172,
+          "precision": 0.3488,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 28,
+          "fn": 0
+        },
+        "python+math": {
+          "f1": 0.6977,
+          "precision": 0.5357,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 13,
+          "fn": 0
+        },
+        "math+legal": {
+          "f1": 0.8333,
+          "precision": 0.7143,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 6,
+          "fn": 0
+        },
+        "math+creative": {
+          "f1": 0.7317,
+          "precision": 0.5769,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 11,
+          "fn": 0
+        }
+      }
+    },
+    "64": {
+      "window_size": 64,
+      "stride": 32,
+      "tolerance": 64,
+      "f1": 0.8817,
+      "precision": 0.7926,
+      "recall": 0.9933,
+      "tp": 149,
+      "fp": 39,
+      "fn": 1,
+      "mean_loc_error_tokens": 19.6,
+      "mean_window_accuracy": 0.8867,
+      "mean_latency_ms": 1688.88,
+      "median_latency_ms": 1684.34,
+      "pair_f1s": {
+        "medical+legal": {
+          "f1": 0.9333,
+          "precision": 0.9333,
+          "recall": 0.9333,
+          "tp": 14,
+          "fp": 1,
+          "fn": 1
+        },
+        "medical+creative": {
+          "f1": 0.75,
+          "precision": 0.6,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 10,
+          "fn": 0
+        },
+        "legal+creative": {
+          "f1": 0.9375,
+          "precision": 0.8824,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 2,
+          "fn": 0
+        },
+        "math+medical": {
+          "f1": 0.8824,
+          "precision": 0.7895,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 4,
+          "fn": 0
+        },
+        "python+legal": {
+          "f1": 0.8824,
+          "precision": 0.7895,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 4,
+          "fn": 0
+        },
+        "python+medical": {
+          "f1": 0.7692,
+          "precision": 0.625,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 9,
+          "fn": 0
+        },
+        "python+creative": {
+          "f1": 0.8333,
+          "precision": 0.7143,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 6,
+          "fn": 0
+        },
+        "python+math": {
+          "f1": 0.9677,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 1,
+          "fn": 0
+        },
+        "math+legal": {
+          "f1": 0.9677,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 1,
+          "fn": 0
+        },
+        "math+creative": {
+          "f1": 0.9677,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "tp": 15,
+          "fp": 1,
+          "fn": 0
+        }
+      }
+    }
+  },
+  "best_detection": {
+    "window_size": 64,
+    "f1": 0.8817,
+    "precision": 0.7926,
+    "recall": 0.9933,
+    "mean_loc_error_tokens": 19.6,
+    "mean_window_accuracy": 0.8867,
+    "pair_f1s": {
+      "medical+legal": {
+        "f1": 0.9333,
+        "precision": 0.9333,
+        "recall": 0.9333,
+        "tp": 14,
+        "fp": 1,
+        "fn": 1
+      },
+      "medical+creative": {
+        "f1": 0.75,
+        "precision": 0.6,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 10,
+        "fn": 0
+      },
+      "legal+creative": {
+        "f1": 0.9375,
+        "precision": 0.8824,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 2,
+        "fn": 0
+      },
+      "math+medical": {
+        "f1": 0.8824,
+        "precision": 0.7895,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 4,
+        "fn": 0
+      },
+      "python+legal": {
+        "f1": 0.8824,
+        "precision": 0.7895,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 4,
+        "fn": 0
+      },
+      "python+medical": {
+        "f1": 0.7692,
+        "precision": 0.625,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 9,
+        "fn": 0
+      },
+      "python+creative": {
+        "f1": 0.8333,
+        "precision": 0.7143,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 6,
+        "fn": 0
+      },
+      "python+math": {
+        "f1": 0.9677,
+        "precision": 0.9375,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 1,
+        "fn": 0
+      },
+      "math+legal": {
+        "f1": 0.9677,
+        "precision": 0.9375,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 1,
+        "fn": 0
+      },
+      "math+creative": {
+        "f1": 0.9677,
+        "precision": 0.9375,
+        "recall": 1.0,
+        "tp": 15,
+        "fp": 1,
+        "fn": 0
+      }
+    }
+  },
+  "end_to_end_ppl": {
+    "per_seq_ppl": 4.6943,
+    "oracle_ppl": 3.9584,
+    "detected_ppl": 5.2613,
+    "ppl_gap_vs_oracle_pct": 32.91,
+    "improvement_vs_per_seq_pct": -12.08
+  },
+  "latency": {
+    "window_size": 32,
+    "stride": 16,
+    "n_windows": 15,
+    "n_adapters": 5,
+    "n_forward_passes": 75,
+    "mean_latency_ms": 3008.89,
+    "median_latency_ms": 3017.27,
+    "min_latency_ms": 2996.0,
+    "max_latency_ms": 3021.38,
+    "n_trials": 10
+  },
+  "K775_f1": 0.8817,
+  "K775_threshold": 0.7,
+  "K775_pass": true,
+  "K776_ppl_gap_pct": 32.91,
+  "K776_threshold": 5.0,
+  "K776_pass": false,
+  "K777_latency_ms": 3017.27,
+  "K777_threshold": 5.0,
+  "K777_pass": false,
+  "predictions_vs_measured": {
+    "f1_predicted_ge": 0.94,
+    "f1_measured": 0.8817,
+    "loc_error_predicted_le": 32,
+    "loc_error_measured": 19.6,
+    "ppl_gap_predicted_le_pct": 1.1,
+    "ppl_gap_measured_pct": 32.91
+  },
+  "total_time_s": 1762.4,
+  "timestamp": "2026-04-06 06:46:30"
+}

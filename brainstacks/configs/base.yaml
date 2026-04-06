@@ -1,0 +1,72 @@
+# Configuration for Brainstacks: Frozen MoE-LoRA Stacks for Continual LLM Learning
+# Paper: https://arxiv.org/abs/2604.01152
+# All values cited to paper section or flagged as [UNSPECIFIED]
+
+moe_lora:
+  num_experts: 4              # §3.1 — "N = 4 experts"
+  top_k: 2                    # §3.1 — "top-K = 2 are active per token"
+  rank: 16                    # §3.1 — "rank r = 16"
+  alpha: 16                   # §3.1 — "α = r = 16"
+  # rsLoRA effective scale: α/√r = 16/√16 = 4.0
+  aux_loss_coeff: 0.01        # §3.1 — "λ_aux = 0.01"
+  target_modules:             # §3.1 — "all seven target projections"
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+inner_loop:
+  max_rounds: 2               # §3.3 — "up to 2 rounds (configurable per domain)"
+  min_loss_delta: 0.002        # §3.3 — "minimum loss delta threshold (0.002)"
+  spike_threshold: 0.1         # §3.3 — "spike_threshold=0.1"
+  patience: 4                  # §3.3 — "patience=4 evaluation steps"
+
+null_space:
+  n_samples: 400               # §3.5 — "n_samples = 400 validation examples"
+  top_k_directions: 64         # §3.5 — "top-K = 64 principal directions"
+
+meta_router:
+  hidden_dim: 512              # §3.6 — "hidden dim 512"
+  mid_layer_weight: 0.45       # §3.6 — "0.45 × mid"
+  last_layer_weight: 0.55      # §3.6 — "0.55 × last"
+  chat_floor: 0.20             # §3.6 — "chat floor of 0.20"
+  gate_threshold: 0.12         # §3.6 — "gate threshold (0.12)"
+  target_blend_discovered: 0.8 # §3.6 — "discovered target (80%)"
+  target_blend_label: 0.2      # §3.6 — "prior label target (20%)"
+  reasoning_soft_boost: 0.5    # §3.6 — "set its target to 0.5"
+  activation: "gelu"           # §3.6 — "GELU activation"
+  dropout: 0.1                 # [UNSPECIFIED] — dropout mentioned but rate not given
+  lr: 0.001                    # [UNSPECIFIED] — router LR not stated
+  epochs: 8                    # §3.6 — "8 epochs"
+  score_weights:               # §3.6 — checkpoint selection
+    single_top1_accuracy: 0.50
+    mixed_set_match: 0.35
+    val_bce: -0.15
+  confidence_margin: 0.1       # [UNSPECIFIED] — "confidence margin penalty" value not given
+
+training:
+  batch_size: 4                # §4.3 — "batch=4"
+  grad_accum: 4                # §4.3 — "grad_accum=4 (effective batch 16)"
+  seq_len: 512                 # §4.3 — "seq_len=512"
+  lr: 0.0001                   # §4.3 — "lr=1×10^-4"
+  max_steps_per_domain: 500    # §4.3 — "max_steps=500 per domain"
+  max_steps_reasoning: 600     # §4.3 — "600 for reasoning"
+  optimizer: "adamw"           # [UNSPECIFIED] — SFTTrainer default assumed
+  weight_decay: 0.01           # [UNSPECIFIED] — AdamW default
+  gradient_checkpointing: true # §4.3 — "gradient checkpointing"
+  use_reentrant: false         # §4.3 — "use_reentrant=False"
+
+domains:                       # §3.4 — domain ordering: "Chat → Code → Math → Medical → Reasoning"
+  - name: chat
+    rounds: 2
+  - name: code
+    rounds: 2
+  - name: math
+    rounds: 2
+  - name: medical
+    rounds: 2
+  - name: reasoning
+    rounds: 2

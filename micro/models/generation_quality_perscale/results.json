@@ -1,0 +1,411 @@
+{
+  "experiment": "generation_quality_perscale",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "optimal_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "uniform_scale": 20.0,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "n_prompts": 10,
+  "base_scores": {
+    "medical": {
+      "mean": 0.26262854327385676,
+      "std": 0.09584609590798764,
+      "stderr": 0.03030919679041852,
+      "scores": [
+        0.20353982300884957,
+        0.2916666666666667,
+        0.2597402597402597,
+        0.265625,
+        0.1111111111111111,
+        0.2777777777777778,
+        0.47058823529411764,
+        0.3225806451612903,
+        0.2903225806451613,
+        0.13333333333333333
+      ],
+      "format_mean": 0.9550333748574502
+    },
+    "code": {
+      "mean": 0.4189822472848789,
+      "std": 0.3709064827539337,
+      "stderr": 0.11729092844243927,
+      "scores": [
+        0.07105263157894737,
+        0.03333333333333333,
+        0.7285714285714285,
+        0.0375,
+        0.8090909090909091,
+        0.0818181818181818,
+        0.02222222222222222,
+        0.8090909090909091,
+        0.7771428571428571,
+        0.82
+      ],
+      "format_mean": 0.9417985081623483
+    },
+    "math": {
+      "mean": 0.1,
+      "std": 0.30000000000000004,
+      "stderr": 0.09486832980505139,
+      "scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "format_mean": 0.8830085076028558
+    },
+    "legal": {
+      "mean": 0.09789929034550619,
+      "std": 0.07315141820484165,
+      "stderr": 0.023132509559880523,
+      "scores": [
+        0.025362318840579712,
+        0.041379310344827586,
+        0.0896551724137931,
+        0.062111801242236024,
+        0.06666666666666667,
+        0.2727272727272727,
+        0.08176100628930817,
+        0.19444444444444445,
+        0.09782608695652174,
+        0.047058823529411764
+      ],
+      "format_mean": 0.9503822856366171
+    },
+    "finance": {
+      "mean": 0.17425647282462986,
+      "std": 0.19906483149493714,
+      "stderr": 0.06294982695616225,
+      "scores": [
+        0.44122137404580153,
+        0.4857142857142857,
+        0.2489795918367347,
+        0.4507692307692308,
+        0.021818181818181816,
+        0.013636363636363636,
+        0.00972972972972973,
+        0.056410256410256404,
+        0.014285714285714284,
+        0.0
+      ],
+      "format_mean": 0.9557171196091572
+    }
+  },
+  "uniform_scores": {
+    "medical": {
+      "mean": 0.30956321469272025,
+      "std": 0.1005598996028975,
+      "stderr": 0.03179983240230178,
+      "scores": [
+        0.21238938053097345,
+        0.4375,
+        0.24675324675324675,
+        0.234375,
+        0.25925925925925924,
+        0.2777777777777778,
+        0.47058823529411764,
+        0.41935483870967744,
+        0.3709677419354839,
+        0.16666666666666666
+      ],
+      "format_mean": 0.8241163130158089
+    },
+    "code": {
+      "mean": 0.5709946646920331,
+      "std": 0.3271267635557576,
+      "stderr": 0.10344656564355557,
+      "scores": [
+        0.07894736842105263,
+        0.8333333333333333,
+        0.057142857142857134,
+        0.8125,
+        0.7818181818181817,
+        0.0818181818181818,
+        0.7555555555555555,
+        0.7545454545454545,
+        0.7642857142857142,
+        0.7899999999999999
+      ],
+      "format_mean": 0.7948911400974618
+    },
+    "math": {
+      "mean": 0.8,
+      "std": 0.4,
+      "stderr": 0.12649110640673517,
+      "scores": [
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "format_mean": 0.7636995570153202
+    },
+    "legal": {
+      "mean": 0.06694831532828462,
+      "std": 0.0705830394832791,
+      "stderr": 0.022320316894475615,
+      "scores": [
+        0.028985507246376812,
+        0.04827586206896552,
+        0.05517241379310345,
+        0.037267080745341616,
+        0.03333333333333333,
+        0.2727272727272727,
+        0.050314465408805034,
+        0.05555555555555555,
+        0.07608695652173914,
+        0.011764705882352941
+      ],
+      "format_mean": 0.6200559314454326
+    },
+    "finance": {
+      "mean": 0.150445279035118,
+      "std": 0.1727955478948052,
+      "stderr": 0.05464275008842977,
+      "scores": [
+        0.450381679389313,
+        0.27714285714285714,
+        0.2122448979591837,
+        0.44153846153846155,
+        0.010909090909090908,
+        0.013636363636363636,
+        0.0,
+        0.06666666666666667,
+        0.014285714285714284,
+        0.01764705882352941
+      ],
+      "format_mean": 0.8313897217929405
+    }
+  },
+  "perscale_scores": {
+    "medical": {
+      "mean": 0.30956321469272025,
+      "std": 0.1005598996028975,
+      "stderr": 0.03179983240230178,
+      "scores": [
+        0.21238938053097345,
+        0.4375,
+        0.24675324675324675,
+        0.234375,
+        0.25925925925925924,
+        0.2777777777777778,
+        0.47058823529411764,
+        0.41935483870967744,
+        0.3709677419354839,
+        0.16666666666666666
+      ],
+      "format_mean": 0.8241163130158089
+    },
+    "code": {
+      "mean": 0.5709946646920331,
+      "std": 0.3271267635557576,
+      "stderr": 0.10344656564355557,
+      "scores": [
+        0.07894736842105263,
+        0.8333333333333333,
+        0.057142857142857134,
+        0.8125,
+        0.7818181818181817,
+        0.0818181818181818,
+        0.7555555555555555,
+        0.7545454545454545,
+        0.7642857142857142,
+        0.7899999999999999
+      ],
+      "format_mean": 0.7948911400974618
+    },
+    "math": {
+      "mean": 0.8,
+      "std": 0.4,
+      "stderr": 0.12649110640673517,
+      "scores": [
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "format_mean": 0.7636995570153202
+    },
+    "legal": {
+      "mean": 0.0995421648017298,
+      "std": 0.07228936497721995,
+      "stderr": 0.022859904393522108,
+      "scores": [
+        0.025362318840579712,
+        0.08275862068965517,
+        0.08275862068965517,
+        0.062111801242236024,
+        0.06666666666666667,
+        0.2727272727272727,
+        0.07547169811320754,
+        0.19444444444444445,
+        0.09782608695652174,
+        0.03529411764705882
+      ],
+      "format_mean": 0.948193374874746
+    },
+    "finance": {
+      "mean": 0.1766150221099865,
+      "std": 0.19798554063918886,
+      "stderr": 0.06260852521996657,
+      "scores": [
+        0.4458015267175573,
+        0.4857142857142857,
+        0.2489795918367347,
+        0.4507692307692308,
+        0.021818181818181816,
+        0.013636363636363636,
+        0.016216216216216217,
+        0.05128205128205128,
+        0.014285714285714284,
+        0.01764705882352941
+      ],
+      "format_mean": 0.9480280943759828
+    }
+  },
+  "analysis": {
+    "kill_criteria": {
+      "K631": {
+        "pass": true,
+        "perscale_worse_count": 0
+      },
+      "K632": {
+        "pass": true,
+        "improvement_domains": [
+          "legal",
+          "finance"
+        ]
+      },
+      "K633": {
+        "pass": true
+      }
+    },
+    "hypotheses": {
+      "H1_perscale_beats_base_4of5": true,
+      "H2_perscale_beats_uniform_3of5": false,
+      "H3_legal_flips": true,
+      "H4_finance_flips": true,
+      "H5_math_strong": true
+    },
+    "domain_results": {
+      "medical": {
+        "base": 0.26262854327385676,
+        "uniform": 0.30956321469272025,
+        "perscale": 0.30956321469272025,
+        "uniform_adv_pct": 17.871123539653567,
+        "perscale_adv_pct": 17.871123539653567,
+        "perscale_vs_uniform_pct": 0.0
+      },
+      "code": {
+        "base": 0.4189822472848789,
+        "uniform": 0.5709946646920331,
+        "perscale": 0.5709946646920331,
+        "uniform_adv_pct": 36.28135043721705,
+        "perscale_adv_pct": 36.28135043721705,
+        "perscale_vs_uniform_pct": 0.0
+      },
+      "math": {
+        "base": 0.1,
+        "uniform": 0.8,
+        "perscale": 0.8,
+        "uniform_adv_pct": 700.0,
+        "perscale_adv_pct": 700.0,
+        "perscale_vs_uniform_pct": 0.0
+      },
+      "legal": {
+        "base": 0.09789929034550619,
+        "uniform": 0.06694831532828462,
+        "perscale": 0.0995421648017298,
+        "uniform_adv_pct": -31.615116828722034,
+        "perscale_adv_pct": 1.6781270328166453,
+        "perscale_vs_uniform_pct": 48.68509284157414
+      },
+      "finance": {
+        "base": 0.17425647282462986,
+        "uniform": 0.150445279035118,
+        "perscale": 0.1766150221099865,
+        "uniform_adv_pct": -13.664452977580478,
+        "perscale_adv_pct": 1.35349307094621,
+        "perscale_vs_uniform_pct": 17.394858278510526
+      }
+    },
+    "counts": {
+      "uniform_better_than_base": 3,
+      "perscale_better_than_base": 5,
+      "perscale_better_than_uniform": 2
+    }
+  },
+  "timing": {
+    "base_s": 122.92162680625916,
+    "uniform_s": 640.906839132309,
+    "perscale_s": 642.3065001964569,
+    "total_s": 1406.3199830055237
+  },
+  "sample_generations": {
+    "medical": {
+      "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the body?",
+      "reference": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringom",
+      "base": "Syringomyelia is a rare neurological condition characterized by the presence of a fluid-filled cavity, called a syrinx, within the spinal cord. This condition can lead to various symptoms, primarily affecting the nervous system. The typical symptoms of syringomyelia include:\n\n1. **Neurological Sympt",
+      "uniform": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, making it difficult to feel pain or temperature changes in the affected areas. In some cases, syringomyelia can lead to muscle weakn",
+      "perscale": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, making it difficult to feel pain or temperature changes in the affected areas. In some cases, syringomyelia can lead to muscle weakn"
+    },
+    "code": {
+      "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+      "reference": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title",
+      "base": "To extract titles of all YouTube videos from a given URL, you can use the `requests` library to fetch the webpage content and the `BeautifulSoup` library to parse the HTML. Here's a step-by-step guide to create such a program:\n\n1. Install the required libraries:\n   ```bash\n   pip install requests be",
+      "uniform": "import requests\nfrom bs4 import BeautifulSoup\n\ndef extract_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.text, 'html.parser')\n    titles = soup.find_all('h3')\n    return [title.text for title in titles]\n\nurl = 'https://www.youtube.com/watch?v=1q2l0F8J2oQ'\ntitles = e",
+      "perscale": "import requests\nfrom bs4 import BeautifulSoup\n\ndef extract_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.text, 'html.parser')\n    titles = soup.find_all('h3')\n    return [title.text for title in titles]\n\nurl = 'https://www.youtube.com/watch?v=1q2l0F8J2oQ'\ntitles = e"
+    },
+    "math": {
+      "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 necklaces for $83 each; and 1 computer game for $90. Since Mr. Grey purchased all those using his cre",
+      "reference": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gif",
+      "base": "To find the total cost of the gifts after the rebate, we need to follow these steps:\n\n1. Calculate the total cost of the polo shirts.\n2. Calculate the total cost of the necklaces.\n3. Add the cost of the computer game.\n4. Sum up all the costs.\n5. Subtract the rebate from the total cost.\n\nLet's go thr",
+      "uniform": "The total cost of the polo shirts is 3 * $26 = $<<3*26=78>>78\nThe total cost of the necklaces is 2 * $83 = $<<2*83=166>>166\nThe total cost of the computer game is $90\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334\nAfter the rebate, the total cost is $334 - $12 = $<<334-1",
+      "perscale": "The total cost of the polo shirts is 3 * $26 = $<<3*26=78>>78\nThe total cost of the necklaces is 2 * $83 = $<<2*83=166>>166\nThe total cost of the computer game is $90\nThe total cost of all the gifts is $78 + $166 + $90 = $<<78+166+90=334>>334\nAfter the rebate, the total cost is $334 - $12 = $<<334-1"
+    },
+    "legal": {
+      "prompt": "Speed bumps on private non-hoa road (California)",
+      "reference": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job ",
+      "base": "It sounds like you're dealing with a specific issue related to speed bumps on a private non-HOA road in California. Here are some steps you can take to address this:\n\n1. **Review the Property Agreement**: Check the terms of the property agreement to see if there are any clauses related to road maint",
+      "uniform": "I have a private non-hoa road in california. I have speed bumps installed on the road. I have a hoa that is trying to get me to remove the speed bumps. I have a hoa attorney that is trying to get me to remove the speed bumps. I have a hoa board that is trying to get me to remove the speed bumps. I h",
+      "perscale": "It sounds like you're dealing with a specific issue regarding speed bumps on a private non-HOA road in California. Here are some steps you can take to address this:\n\n1. **Review the Property Agreement**: Check the terms of the property agreement to see if there are any clauses related to maintenance"
+    },
+    "finance": {
+      "prompt": "What should I do with my $10K windfall, given these options?",
+      "reference": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list be",
+      "base": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net.\n\n2. **Investment**: Allocate $3,000 to a diversified investment portfolio. Consider a mix of stocks, bonds, and real estate to maximize returns.\n\n3. **Retirement Savings**: C",
+      "uniform": "1. Invest in a diversified portfolio of stocks and bonds. This is the most common and safe way to grow your money. You can also consider investing in real estate, but that's a riskier option. 2. Pay off high-interest debt. If you have credit card debt, student loans, or other high-interest debt, it'",
+      "perscale": "1. **Emergency Fund**: Set aside $2,000 for unexpected expenses or emergencies. This ensures you have a financial safety net.\n\n2. **Investment**: Allocate $3,000 to invest in a diversified portfolio of stocks, bonds, or mutual funds. Consider consulting a financial advisor to tailor your investment "
+    }
+  }
+}

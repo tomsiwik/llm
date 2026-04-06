@@ -1,0 +1,46 @@
+# Fisher-Rao Karcher Mean Merging Configuration
+# Paper: "Functionality-Oriented LLM Merging on the Fisher-Rao Manifold"
+# ArXiv: 2603.04972 (Wang, Ye, Yin 2025)
+
+# --- Karcher mean fixed-point iteration (Section 3.3) ---
+# Step size eta in (0, 1] for the Riemannian gradient step.
+# eta=1.0 is the full step; the paper uses eta=1.0 (implicit from
+# the spherical closed-form update converging in few iterations).
+step_size: 1.0  # eta, Section 3.3 Eq. (5)
+
+# Maximum iterations for the Karcher mean fixed-point loop.
+# On S^(d-1) with closed-form log/exp, convergence is typically <20 iters.
+max_iterations: 100  # Section 3.3
+
+# Convergence tolerance: stop when max angular change < tol radians.
+convergence_tol: 1.0e-7  # Unspecified in paper; chosen for numerical stability
+
+# --- Spherical proxy (Section 3.4) ---
+# Granularity of parameter blocks for normalization.
+# "tensor" = each named parameter is one block (paper default).
+# "layer"  = concatenate all params in a transformer layer into one block.
+block_mode: "tensor"  # Section 3.4: "e.g., layer or tensor group"
+
+# Minimum norm threshold: skip merging for blocks with all-source
+# mean norm below this value (avoids division by near-zero).
+min_norm: 1.0e-8  # Unspecified; numerical guard
+
+# --- Merge weights (Section 3.1) ---
+# Default: equal weights alpha^(i) = 1/N for N models.
+# Override per-model via CLI or by editing this list.
+# weights: [0.5, 0.5]  # must sum to 1; length = number of models
+
+# --- Norm rescaling (Section 3.4) ---
+# After computing the spherical Karcher mean (unit-norm direction),
+# rescale by a representative norm. Options:
+#   "mean"   = arithmetic mean of source norms (paper default)
+#   "median" = median of source norms
+#   "max"    = max of source norms
+norm_rescale: "mean"  # Section 3.4: "the mean norm of sources for that block"
+
+# --- Optional Fisher preconditioning (Section 3.4, Connection to Fisher geometry) ---
+# When enabled, weight the log-map tangent vectors by diagonal Fisher estimates.
+# This is the "natural-gradient-style preconditioning" mentioned in Section 3.4.
+# Requires pre-computed Fisher information files (one per model).
+fisher_preconditioning: false
+# fisher_paths: []  # list of paths to diagonal Fisher .npz files

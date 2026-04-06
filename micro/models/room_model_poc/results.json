@@ -1,0 +1,228 @@
+{
+  "experiment": "room_model_poc",
+  "total_time_s": 270.5,
+  "equivalence": {
+    "n_modules_tested": 21,
+    "layers_tested": [
+      0,
+      14,
+      29
+    ],
+    "per_module_mean_mse": 5.627500761257969e-07,
+    "per_module_max_mse": 1.574188218000927e-06,
+    "logit_mse": 53.92047119140625,
+    "logit_max_abs_diff": 63.8974609375,
+    "k763_pass": false
+  },
+  "soft_routing": {
+    "overall_accuracy": 0.14,
+    "per_domain": {
+      "medical": {
+        "accuracy": 0.0,
+        "n_samples": 20
+      },
+      "code": {
+        "accuracy": 0.2,
+        "n_samples": 20
+      },
+      "math": {
+        "accuracy": 0.5,
+        "n_samples": 20
+      },
+      "legal": {
+        "accuracy": 0.0,
+        "n_samples": 20
+      },
+      "finance": {
+        "accuracy": 0.0,
+        "n_samples": 20
+      }
+    },
+    "n_total": 100,
+    "n_correct": 14,
+    "mean_correct_domain_weight": 0.1967,
+    "mean_other_domain_weight": 0.2008,
+    "k764_pass": false,
+    "sample_weights": [
+      {
+        "true_domain": "medical",
+        "predicted": "math",
+        "weights": {
+          "medical": 0.2025,
+          "code": 0.1956,
+          "math": 0.2452,
+          "legal": 0.1534,
+          "finance": 0.2033
+        },
+        "correct": false
+      },
+      {
+        "true_domain": "medical",
+        "predicted": "math",
+        "weights": {
+          "medical": 0.1641,
+          "code": 0.2278,
+          "math": 0.2465,
+          "legal": 0.1846,
+          "finance": 0.177
+        },
+        "correct": false
+      },
+      {
+        "true_domain": "medical",
+        "predicted": "math",
+        "weights": {
+          "medical": 0.1821,
+          "code": 0.226,
+          "math": 0.2418,
+          "legal": 0.1495,
+          "finance": 0.2006
+        },
+        "correct": false
+      },
+      {
+        "true_domain": "medical",
+        "predicted": "math",
+        "weights": {
+          "medical": 0.212,
+          "code": 0.1994,
+          "math": 0.2522,
+          "legal": 0.1942,
+          "finance": 0.1421
+        },
+        "correct": false
+      },
+      {
+        "true_domain": "medical",
+        "predicted": "code",
+        "weights": {
+          "medical": 0.1724,
+          "code": 0.2603,
+          "math": 0.2131,
+          "legal": 0.1773,
+          "finance": 0.1769
+        },
+        "correct": false
+      }
+    ]
+  },
+  "ppl": {
+    "base_ppls": {
+      "medical": 6.11,
+      "code": 5.122,
+      "math": 3.822,
+      "legal": 22.106,
+      "finance": 19.392
+    },
+    "v3_single_ppls": {
+      "medical": 5.452,
+      "code": 4.302,
+      "math": 3.815,
+      "legal": 21.528,
+      "finance": 19.941
+    },
+    "v3_composed_ppls": {
+      "medical": 5.104,
+      "code": 4.761,
+      "math": 3.776,
+      "legal": 21.16,
+      "finance": 18.991
+    },
+    "room_ppls": {
+      "medical": 10.465,
+      "code": 7.28,
+      "math": 5.182,
+      "legal": 24.051,
+      "finance": 22.224
+    },
+    "mean_base": 11.31,
+    "mean_v3_single": 11.008,
+    "mean_v3_composed": 10.758,
+    "mean_room": 13.84,
+    "ppl_ratio_vs_composed": 1.2865,
+    "n_injected_modules": 210,
+    "w_combined_gb": 4.168,
+    "k765_pass": false
+  },
+  "speed": {
+    "base_tps": 142.2,
+    "base_mem_gb": 1.23,
+    "v3_single_tps": 76.1,
+    "v3_single_mem_gb": 1.31,
+    "room_tps": 39.2,
+    "room_mem_gb": 5.69,
+    "predicted_room_tps": "40-50",
+    "n_injected": 210
+  },
+  "kill_criteria": {
+    "K763": {
+      "pass": false,
+      "value": 53.92047119140625,
+      "threshold": 1e-06,
+      "description": "W_combined logit MSE vs sequential-sum < 1e-6"
+    },
+    "K764": {
+      "pass": false,
+      "value": 0.14,
+      "threshold": 0.6,
+      "description": "Soft routing domain accuracy >= 60%"
+    },
+    "K765": {
+      "pass": false,
+      "value": 1.2865,
+      "threshold": 1.1,
+      "description": "Room PPL within 10% of v3 composed baseline"
+    }
+  },
+  "all_pass": false,
+  "predictions_vs_actual": {
+    "per_module_mse": {
+      "predicted": "~0 (Theorem 1, float32)",
+      "actual": 1.574188218000927e-06
+    },
+    "logit_mse": {
+      "predicted": "< 1e-6 (Theorem 1, float32 accumulation)",
+      "actual": 53.92047119140625
+    },
+    "routing_accuracy": {
+      "predicted": ">= 60% (Theorem 2)",
+      "actual": 0.14
+    },
+    "ppl_ratio": {
+      "predicted": "<= 1.10 (Theorem 1 implies ~1.0)",
+      "actual": 1.2865
+    },
+    "speed_tok_s": {
+      "predicted": "40-50 (Theorem 3)",
+      "actual": 39.2
+    },
+    "memory_gb": {
+      "predicted": "~5.8 GB",
+      "actual": 5.69
+    }
+  },
+  "architecture": {
+    "model": "microsoft/BitNet-b1.58-2B-4T",
+    "n_domains": 5,
+    "domains": [
+      "medical",
+      "code",
+      "math",
+      "legal",
+      "finance"
+    ],
+    "lora_scale": 20.0,
+    "lora_rank": 16,
+    "n_layers": 30,
+    "adapter_targets": [
+      "self_attn.q_proj",
+      "self_attn.k_proj",
+      "self_attn.v_proj",
+      "self_attn.o_proj",
+      "mlp.gate_proj",
+      "mlp.up_proj",
+      "mlp.down_proj"
+    ],
+    "n_modules": 210
+  }
+}

@@ -1,0 +1,1491 @@
+{
+  "experiment": "exp_input_dependent_scaling",
+  "description": "Input-dependent adapter scaling via TF-IDF embedding similarity",
+  "type": "guided-exploration",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "eval_domains": [
+    "math",
+    "code",
+    "medical"
+  ],
+  "n_prompts_per_domain": 10,
+  "max_new_tokens": 128,
+  "alpha": 0.3,
+  "domain_scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "sim_stats": {
+    "medical": {
+      "mean": 0.13991647419955888,
+      "std": 0.0615603694561807,
+      "min": 0.031354433819355515,
+      "max": 0.3553814337772143,
+      "p25": 0.09767878976406753,
+      "p75": 0.16677055524415596
+    },
+    "code": {
+      "mean": 0.24735025066425226,
+      "std": 0.0757550080099709,
+      "min": 0.04497984297598372,
+      "max": 0.552344683909785,
+      "p25": 0.1951767849862814,
+      "p75": 0.2994648204845537
+    },
+    "math": {
+      "mean": 0.1286136834163353,
+      "std": 0.042914603001683455,
+      "min": 0.034197231804757186,
+      "max": 0.27116621402829466,
+      "p25": 0.0974414959776149,
+      "p75": 0.15820076190787732
+    },
+    "legal": {
+      "mean": 0.1138561711346548,
+      "std": 0.06161988995978303,
+      "min": 0.022235470808395094,
+      "max": 0.30643442044059904,
+      "p25": 0.06391306235086686,
+      "p75": 0.15351564179025579
+    },
+    "finance": {
+      "mean": 0.11871272199137213,
+      "std": 0.05694717794381551,
+      "min": 0.021112022554268046,
+      "max": 0.2871224632800532,
+      "p25": 0.07597763962730619,
+      "p75": 0.1511883382001775
+    }
+  },
+  "comparison": {
+    "math": {
+      "fixed_mean": 0.8,
+      "dynamic_mean": 0.9,
+      "improvement": 0.1,
+      "improvement_pct": 12.5,
+      "improved": true,
+      "fixed_scale": 20.0,
+      "n_samples": 10
+    },
+    "code": {
+      "fixed_mean": 0.6237,
+      "dynamic_mean": 0.6383,
+      "improvement": 0.0146,
+      "improvement_pct": 2.3,
+      "improved": false,
+      "fixed_scale": 20.0,
+      "n_samples": 10
+    },
+    "medical": {
+      "fixed_mean": 0.2908,
+      "dynamic_mean": 0.2771,
+      "improvement": -0.0137,
+      "improvement_pct": -4.7,
+      "improved": false,
+      "fixed_scale": 20.0,
+      "n_samples": 10
+    }
+  },
+  "correlation": {
+    "per_domain": {
+      "math": {
+        "correlation": -0.00885887900302753,
+        "n": 10,
+        "sim_mean": 0.132144657143275,
+        "sim_std": 0.03609389296813049,
+        "score_mean": 0.9,
+        "score_std": 0.30000000000000004
+      },
+      "code": {
+        "correlation": 0.03223592110905323,
+        "n": 10,
+        "sim_mean": 0.2591403405117077,
+        "sim_std": 0.07397774972210533,
+        "score_mean": 0.6382596358320043,
+        "score_std": 0.2807091386754721
+      },
+      "medical": {
+        "correlation": -0.09315962618783177,
+        "n": 10,
+        "sim_mean": 0.1653684938128755,
+        "sim_std": 0.05948557414621041,
+        "score_mean": 0.2770934453429552,
+        "score_std": 0.10604508108165686
+      }
+    },
+    "overall": -0.07936569063055382
+  },
+  "kill_criteria": {
+    "K1_domains_improved": {
+      "id": 663,
+      "value": 1,
+      "threshold": ">=1 to pass, 0 to kill",
+      "result": "pass"
+    },
+    "K2_correlation": {
+      "id": 664,
+      "value": -0.0794,
+      "threshold": "|r| >= 0.3",
+      "result": "fail"
+    },
+    "K3_incoherent": {
+      "id": 665,
+      "value": 3.3,
+      "threshold": "<= 20%",
+      "result": "pass"
+    }
+  },
+  "per_query_info": {
+    "math": [
+      {
+        "prompt_idx": 0,
+        "instruction_preview": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shir",
+        "similarities": {
+          "medical": 0.002436745300147033,
+          "code": 0.01930863477828305,
+          "math": 0.10911893629619018,
+          "legal": 0.039791436135178965,
+          "finance": 0.10864912356757885
+        },
+        "sim_to_routed_domain": 0.10911893629619018,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 1,
+        "instruction_preview": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, ",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.0034846467690450946,
+          "math": 0.08206528894534515,
+          "legal": 0.007874670291742342,
+          "finance": 0.019767449253451905
+        },
+        "sim_to_routed_domain": 0.08206528894534515,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 2,
+        "instruction_preview": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aun",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.0046246673913446215,
+          "math": 0.12426195871632975,
+          "legal": 0.014698870148440051,
+          "finance": 0.03770199570159298
+        },
+        "sim_to_routed_domain": 0.12426195871632975,
+        "input_dependent_scale": 8.82843540917645,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.44142177045882247
+      },
+      {
+        "prompt_idx": 3,
+        "instruction_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought ",
+        "similarities": {
+          "medical": 0.010160665075289909,
+          "code": 0.004229187458921459,
+          "math": 0.14353397432709283,
+          "legal": 0.016515136124187847,
+          "finance": 0.03369904063323058
+        },
+        "sim_to_routed_domain": 0.14353397432709283,
+        "input_dependent_scale": 15.172164325481297,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.7586082162740648
+      },
+      {
+        "prompt_idx": 4,
+        "instruction_preview": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week unt",
+        "similarities": {
+          "medical": 0.0008212014872024288,
+          "code": 0.007287016321597798,
+          "math": 0.1331039114349337,
+          "legal": 0.003984565522363806,
+          "finance": 0.011306845576526576
+        },
+        "sim_to_routed_domain": 0.1331039114349337,
+        "input_dependent_scale": 11.738922421561508,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.5869461210780754
+      },
+      {
+        "prompt_idx": 5,
+        "instruction_preview": "Marvin and Tina were selling candy bars to help fund their class trip.  The cand",
+        "similarities": {
+          "medical": 0.014890788451105565,
+          "code": 0.02076644253381296,
+          "math": 0.18251761013818876,
+          "legal": 0.022765577023268233,
+          "finance": 0.06531959914419479
+        },
+        "sim_to_routed_domain": 0.18251761013818876,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 6,
+        "instruction_preview": "James spends 40 years teaching.  His partner has been teaching for 10 years less",
+        "similarities": {
+          "medical": 0.0046124366619826294,
+          "code": 0.004841531401403398,
+          "math": 0.1607097483370044,
+          "legal": 0.01375327150325853,
+          "finance": 0.0274958806276697
+        },
+        "sim_to_routed_domain": 0.1607097483370044,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 7,
+        "instruction_preview": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.001821021672907648,
+          "math": 0.14960064457997843,
+          "legal": 0.012436198355641822,
+          "finance": 0.037927609866372544
+        },
+        "sim_to_routed_domain": 0.14960064457997843,
+        "input_dependent_scale": 17.169117435431218,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.8584558717715609
+      },
+      {
+        "prompt_idx": 8,
+        "instruction_preview": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five t",
+        "similarities": {
+          "medical": 0.016755466555274254,
+          "code": 0.0023606399105961995,
+          "math": 0.17190266340432506,
+          "legal": 0.04016259784646095,
+          "finance": 0.02854151621327437
+        },
+        "sim_to_routed_domain": 0.17190266340432506,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 9,
+        "instruction_preview": "Calvin has been saving his hair clippings after each haircut to make a wig for h",
+        "similarities": {
+          "medical": 0.004508635376989938,
+          "code": 0.0021114688601197805,
+          "math": 0.06463183525336182,
+          "legal": 0.008451786761865001,
+          "finance": 0.0224191505787506
+        },
+        "sim_to_routed_domain": 0.06463183525336182,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      }
+    ],
+    "code": [
+      {
+        "prompt_idx": 0,
+        "instruction_preview": "Create a program in Python that extracts titles of all YouTube videos from a URL",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.20498327532094043,
+          "math": 0.00035627170963176044,
+          "legal": 0.01711086525887179,
+          "finance": 0.0052820803546276395
+        },
+        "sim_to_routed_domain": 0.20498327532094043,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 1,
+        "instruction_preview": "Write a python function to calculate an exponential series",
+        "similarities": {
+          "medical": 0.0030753264064313996,
+          "code": 0.28581977787282936,
+          "math": 0.017263040947428213,
+          "legal": 0.008294817433861899,
+          "finance": 0.011206387467788575
+        },
+        "sim_to_routed_domain": 0.28581977787282936,
+        "input_dependent_scale": 17.38320075806771,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.8691600379033855
+      },
+      {
+        "prompt_idx": 2,
+        "instruction_preview": "Write a Python program to convert a list of lists into a dictionary where the fi",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.35195050776965575,
+          "math": 0.01787891290764992,
+          "legal": 0.022797361263332976,
+          "finance": 0.010938114236776021
+        },
+        "sim_to_routed_domain": 0.35195050776965575,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 3,
+        "instruction_preview": "Generate an api response in Python for the provided data.",
+        "similarities": {
+          "medical": 0.0026657718467211176,
+          "code": 0.20400573483213982,
+          "math": 0.0017031138170848497,
+          "legal": 0.020128808946131203,
+          "finance": 0.002374687842351717
+        },
+        "sim_to_routed_domain": 0.20400573483213982,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 4,
+        "instruction_preview": "Create a for loop in Python to calculate the total sum of all elements in the gi",
+        "similarities": {
+          "medical": 0.0007231504580476276,
+          "code": 0.2620941631246793,
+          "math": 0.05381008788443689,
+          "legal": 0.0006825521020561776,
+          "finance": 0.012977045218979015
+        },
+        "sim_to_routed_domain": 0.2620941631246793,
+        "input_dependent_scale": 12.83318413635407,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.6416592068177035
+      },
+      {
+        "prompt_idx": 5,
+        "instruction_preview": "Create a Python class which represents a 3D Vector",
+        "similarities": {
+          "medical": 0.015634668219597983,
+          "code": 0.2917089344852621,
+          "math": 0.012500908637057582,
+          "legal": 0.0012993808091548392,
+          "finance": 0.0016451310807746283
+        },
+        "sim_to_routed_domain": 0.2917089344852621,
+        "input_dependent_scale": 18.51260291514071,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.9256301457570355
+      },
+      {
+        "prompt_idx": 6,
+        "instruction_preview": "Write a python program to clean up a list of emails and put them into a new list",
+        "similarities": {
+          "medical": 0.004609423258606353,
+          "code": 0.31960667338512994,
+          "math": 0.020281496233208966,
+          "legal": 0.013003302229135632,
+          "finance": 0.01846873131912484
+        },
+        "sim_to_routed_domain": 0.31960667338512994,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 7,
+        "instruction_preview": "Create a function in Python that prints out the largest value from a given list ",
+        "similarities": {
+          "medical": 0.003289517544928034,
+          "code": 0.3673147780640778,
+          "math": 0.005269452717243328,
+          "legal": 0.00536304862509257,
+          "finance": 0.029720975916592278
+        },
+        "sim_to_routed_domain": 0.3673147780640778,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 8,
+        "instruction_preview": "Develop a web scraper with Python BeautifulSoup to scrape data from an online we",
+        "similarities": {
+          "medical": 0.0,
+          "code": 0.14834918584143805,
+          "math": 0.01776858393849809,
+          "legal": 0.053393097641606206,
+          "finance": 0.015591304547893464
+        },
+        "sim_to_routed_domain": 0.14834918584143805,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 9,
+        "instruction_preview": "Complete the Python class below so that it can calculate the sum of two integers",
+        "similarities": {
+          "medical": 0.010346932442972048,
+          "code": 0.15557037442092486,
+          "math": 0.021116077644987644,
+          "legal": 0.0036166411644093397,
+          "finance": 0.007963541388806155
+        },
+        "sim_to_routed_domain": 0.15557037442092486,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      }
+    ],
+    "medical": [
+      {
+        "prompt_idx": 0,
+        "instruction_preview": "What are the typical symptoms of syringomyelia, and how does this condition affe",
+        "similarities": {
+          "medical": 0.3027881240426217,
+          "code": 0.0001620053877977077,
+          "math": 0.03776411143440037,
+          "legal": 0.05104602599985688,
+          "finance": 0.04045119125035529
+        },
+        "sim_to_routed_domain": 0.3027881240426217,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 1,
+        "instruction_preview": "What is the hormone secretin and where is it secreted from in the body?",
+        "similarities": {
+          "medical": 0.1244910864586607,
+          "code": 0.0,
+          "math": 0.0,
+          "legal": 0.0,
+          "finance": 0.0
+        },
+        "sim_to_routed_domain": 0.1244910864586607,
+        "input_dependent_scale": 7.7613581034689885,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3880679051734494
+      },
+      {
+        "prompt_idx": 2,
+        "instruction_preview": "What is right heart failure and what are some of the symptoms that may be associ",
+        "similarities": {
+          "medical": 0.20327503156411003,
+          "code": 0.0,
+          "math": 0.002448517660460971,
+          "legal": 0.017306710989304128,
+          "finance": 0.0023283026464077615
+        },
+        "sim_to_routed_domain": 0.20327503156411003,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 3,
+        "instruction_preview": "What is the medical condition known as cystinuria and what is its primary cause?",
+        "similarities": {
+          "medical": 0.19696109436316336,
+          "code": 0.002937375257138845,
+          "math": 0.0024599183147739874,
+          "legal": 0.014984139522484782,
+          "finance": 0.005957962365070174
+        },
+        "sim_to_routed_domain": 0.19696109436316336,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 4,
+        "instruction_preview": "What is the potential cardiac complication associated with tricyclic antidepress",
+        "similarities": {
+          "medical": 0.13267417899027695,
+          "code": 0.0026075126145358265,
+          "math": 0.00033697122980261025,
+          "legal": 0.011077604553057235,
+          "finance": 0.0016878014958205234
+        },
+        "sim_to_routed_domain": 0.13267417899027695,
+        "input_dependent_scale": 10.130118685791796,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.5065059342895898
+      },
+      {
+        "prompt_idx": 5,
+        "instruction_preview": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "similarities": {
+          "medical": 0.10329667401096325,
+          "code": 0.0,
+          "math": 0.0,
+          "legal": 0.0,
+          "finance": 0.0
+        },
+        "sim_to_routed_domain": 0.10329667401096325,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      },
+      {
+        "prompt_idx": 6,
+        "instruction_preview": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "similarities": {
+          "medical": 0.15638068179416106,
+          "code": 0.060286408793919145,
+          "math": 0.003874918032984081,
+          "legal": 0.0,
+          "finance": 0.011447642539169599
+        },
+        "sim_to_routed_domain": 0.15638068179416106,
+        "input_dependent_scale": 16.992442332946563,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.8496221166473281
+      },
+      {
+        "prompt_idx": 7,
+        "instruction_preview": "What is small (oat) cell lung carcinoma, and what are the potential consequences",
+        "similarities": {
+          "medical": 0.1600994802499365,
+          "code": 0.0028095946901849954,
+          "math": 0.01055028685037433,
+          "legal": 0.002341431211963008,
+          "finance": 0.008922504039933145
+        },
+        "sim_to_routed_domain": 0.1600994802499365,
+        "input_dependent_scale": 18.06892327968027,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.9034461639840135
+      },
+      {
+        "prompt_idx": 8,
+        "instruction_preview": "Can you explain the medical condition known as cystinuria and what causes it? Wh",
+        "similarities": {
+          "medical": 0.1904284018138313,
+          "code": 0.00467231282561598,
+          "math": 0.0003553861114535515,
+          "legal": 0.018238277711335817,
+          "finance": 0.006772014948488539
+        },
+        "sim_to_routed_domain": 0.1904284018138313,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 1.0
+      },
+      {
+        "prompt_idx": 9,
+        "instruction_preview": "What is secondary amyloidosis and what is the origin of AA amyloid, which is dep",
+        "similarities": {
+          "medical": 0.08329018484102986,
+          "code": 0.0,
+          "math": 0.0,
+          "legal": 0.0033552384651249195,
+          "finance": 0.0
+        },
+        "sim_to_routed_domain": 0.08329018484102986,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0,
+        "scale_ratio": 0.3
+      }
+    ]
+  },
+  "fixed_eval_details": {
+    "math": [
+      {
+        "domain": "math",
+        "generated_len": 354,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 322.0,
+        "gt_answer": 322.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all th",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 292,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 26.0,
+        "gt_answer": 22.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "generated_preview": "Javier has 2 legs, his wife has 2 legs, and each of his 3 children has 2 legs, so 2*3= <<2*3=6>>6 legs.\nEach dog has 4 legs, so 2 dogs have 2*4= <<2*4=8>>8 legs.\nThe cat has 4 legs.\nIncluding Javier, ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 350,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 19.0,
+        "gt_answer": 19.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "generated_preview": "Cori is 3 years old today.\nIn 5 years, she will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, she will be one-third the age of her aunt.\nSo, her aunt will be 8 * 3 = <<8*3=24>>24 years old in 5 years.\n",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 268,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 75.0,
+        "gt_answer": 75.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "generated_preview": "Kyle bought 2 glass bottles that can hold 15 origami stars each.\nSo, 2 * 15 = <<2*15=30>>30 stars.\nHe bought another 3 identical glass bottles.\nSo, 3 * 15 = <<3*15=45>>45 stars.\nTherefore, Kyle must m",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 277,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 27.0,
+        "gt_answer": 27.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe runs 2/3 of a mile each week.\nHe needs 18 / (2/3) = <<18/(2/3)=27>>27 weeks.\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n#### 27\n##",
+        "coherent": false,
+        "coherence_reason": "garbled"
+      },
+      {
+        "domain": "math",
+        "generated_len": 353,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 140.0,
+        "gt_answer": 140.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $<<35*2=70>>70\nTina sold 3 * 35 = <<3*35=105>>105 candy bars, so she made 105 * $2 = $<<105*2=210>>210\nTina made $210 - $70 = $<<210-70=140>>140 more th",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 428,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n\nQuestion: James spends 40 years teaching. His partner has b",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 422,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 48.0,
+        "gt_answer": 48.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "generated_preview": "The dog doubled in weight at 7 weeks old, so it weighed 6 pounds * 2 = <<6*2=12>>12 pounds at 7 weeks old.\nIt doubled in weight again at 3 months old, so it weighed 12 pounds * 2 = <<12*2=24>>24 pound",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 288,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 35.0,
+        "gt_answer": 35.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "generated_preview": "Movie tickets cost $5 each on a Monday.\nMovie tickets cost $5 x 2 = $<<5*2=10>>10 on a Wednesday.\nMovie tickets cost $5 x 5 = $<<5*5=25>>25 on a Saturday.\nGlenn goes to the movie theater on Wednesday ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "math",
+        "generated_len": 224,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 0.8,
+        "gt_answer": 80.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "generated_preview": "He has 8 haircuts so far.\nHe needs 2 more haircuts.\nHe has 8 + 2 = <<8+2=10>>10 haircuts in total.\nHe needs 10 - 8 = <<10-8=2>>2 more haircuts.\nHe has 8/10 = <<8/10=0.8>>0.8 of his goal.\n#### 0.8\nThe ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      }
+    ],
+    "code": [
+      {
+        "domain": "code",
+        "generated_len": 579,
+        "score": 0.7710526315789473,
+        "syntax_valid": true,
+        "factual_recall": 0.23684210526315788,
+        "factual_f1": 0.1592920353982301,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://www.youtube.com/watch?v=abc123'\n\nresponse = requests.get(url)\nsoup = BeautifulSoup(response.text, 'html.parser')\n\ntitles = soup.find_all('",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 242,
+        "score": 0.8333333333333333,
+        "syntax_valid": true,
+        "factual_recall": 0.4444444444444444,
+        "factual_f1": 0.24242424242424243,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python function to calculate an exponential series",
+        "generated_preview": "def exponential_series(n):\n    result = 1\n    for i in range(n):\n        result *= (1 + 0.1)\n    return result\n\nprint(exponential_series(5)) # Output: 2.5937424601e+16.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 367,
+        "score": 0.7571428571428571,
+        "syntax_valid": true,
+        "factual_recall": 0.19047619047619047,
+        "factual_f1": 0.2162162162162162,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "generated_preview": "def list_to_dict(list_of_lists):\n    result = {}\n    for i in range(len(list_of_lists)):\n        result[list_of_lists[i][0]] = list_of_lists[i][1:]\n    return result\n\nlist_of_lists = [['a', 'b'], ['c'",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 337,
+        "score": 0.7374999999999999,
+        "syntax_valid": true,
+        "factual_recall": 0.125,
+        "factual_f1": 0.1098901098901099,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Generate an api response in Python for the provided data.",
+        "generated_preview": "import requests\nurl = 'https://api.example.com/data'\nresponse = requests.get(url)\nprint(response.json()) # prints the response in JSON format. Response: [1, 2, 3] Response: [4, 5, 6] Response: [7, 8, ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 451,
+        "score": 0.8090909090909091,
+        "syntax_valid": true,
+        "factual_recall": 0.36363636363636365,
+        "factual_f1": 0.26666666666666666,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "generated_preview": "total_sum = 0\nfor element in list:\n    total_sum += element\nprint(total_sum) # prints the total sum of all elements in the list. 0 in this case. 0 is the sum of all elements in the list. 0 is the sum ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 435,
+        "score": 0.0818181818181818,
+        "syntax_valid": false,
+        "factual_recall": 0.2727272727272727,
+        "factual_f1": 0.20689655172413793,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "generated_preview": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.magnitude = self.calculate_magnitude()\n    def calculate_magnitude(self):\n       ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 529,
+        "score": 0.711111111111111,
+        "syntax_valid": true,
+        "factual_recall": 0.037037037037037035,
+        "factual_f1": 0.058823529411764705,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "generated_preview": "emails = ['example1@example.com', 'example2@example.com', 'example3@example.com']\nnew_emails = [email for email in emails if email.endswith('@example.com')] # Clean up the list of emails and put them ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 543,
+        "score": 0.7545454545454545,
+        "syntax_valid": true,
+        "factual_recall": 0.18181818181818182,
+        "factual_f1": 0.19672131147540986,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "generated_preview": "def largest_value(lst):\n    max_value = max(lst)\n    print(max_value)  # prints the largest value from the list.  # prints the largest value from the list.  # prints the largest value from the list.  ",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 430,
+        "score": 0.7514285714285713,
+        "syntax_valid": true,
+        "factual_recall": 0.17142857142857143,
+        "factual_f1": 0.1927007299270073,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://www.example.com'\n\nresponse = requests.get(url)\n\nsoup = BeautifulSoup(response.text, 'html.parser')\n\nfor item in soup.find_all('div', class",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "code",
+        "generated_len": 148,
+        "score": 0.03,
+        "syntax_valid": false,
+        "factual_recall": 0.1,
+        "factual_f1": 0.15384615384615383,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "generated_preview": "def sum(a, b): \n    return a + b....................................................................................................................",
+        "coherent": false,
+        "coherence_reason": "garbled"
+      }
+    ],
+    "medical": [
+      {
+        "domain": "medical",
+        "generated_len": 608,
+        "score": 0.18584070796460178,
+        "factual_recall": 0.18584070796460178,
+        "factual_precision": 0.26506024096385544,
+        "factual_f1": 0.2184913691179948,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "generated_preview": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, particularly in the lower extrem",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 608,
+        "score": 0.2916666666666667,
+        "factual_recall": 0.2916666666666667,
+        "factual_precision": 0.18181818181818182,
+        "factual_f1": 0.224,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "generated_preview": "Secretin is a hormone that is secreted from the duodenum in the small intestine. It is involved in the regulation of gastric acid secretion. The hormone is released in response to the presence of food",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 670,
+        "score": 0.2987012987012987,
+        "factual_recall": 0.2987012987012987,
+        "factual_precision": 0.2894736842105263,
+        "factual_f1": 0.294015107495642,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "generated_preview": "Right heart failure is a condition in which the right side of the heart is unable to pump blood effectively. Some symptoms that may be associated with right heart failure include swelling in the legs,",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 615,
+        "score": 0.203125,
+        "factual_recall": 0.203125,
+        "factual_precision": 0.2542372881355932,
+        "factual_f1": 0.22582513028372903,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "generated_preview": "Cystinuria is a medical condition that is characterized by the accumulation of cystine in the urine. The primary cause of cystinuria is a defect in the reabsorption of cystine in the kidneys. This def",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 619,
+        "score": 0.4074074074074074,
+        "factual_recall": 0.4074074074074074,
+        "factual_precision": 0.15492957746478872,
+        "factual_f1": 0.22448979591836735,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "generated_preview": "Tricyclic antidepressants (TCAs) can cause a potential cardiac complication known as QT prolongation. This can lead to a specific electrocardiographic abnormality called QT prolongation. It is importa",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 491,
+        "score": 0.2222222222222222,
+        "factual_recall": 0.2222222222222222,
+        "factual_precision": 0.0784313725490196,
+        "factual_f1": 0.11594202898550723,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "generated_preview": "\u03b1-thalassemia is characterized by a reduced number of \u03b1-globin chains and \u03b34 tetramers are known as HbH. These tetramers are formed by the combination of two HbH molecules and are present in the blood",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 631,
+        "score": 0.47058823529411764,
+        "factual_recall": 0.47058823529411764,
+        "factual_precision": 0.11940298507462686,
+        "factual_f1": 0.19047619047619047,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "generated_preview": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone in situations where there is a high level of \u03b11 receptor density in the body. This can lead to increased heart rate and other cardiovascular ef",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 677,
+        "score": 0.3548387096774194,
+        "factual_recall": 0.3548387096774194,
+        "factual_precision": 0.15789473684210525,
+        "factual_f1": 0.21854304635761593,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "generated_preview": "Small (oat) cell lung carcinoma is a type of lung cancer that can produce antibodies against neurons. The potential consequences of this type of cancer producing antibodies against neurons include the",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 594,
+        "score": 0.3064516129032258,
+        "factual_recall": 0.3064516129032258,
+        "factual_precision": 0.2608695652173913,
+        "factual_f1": 0.28182941903584674,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "generated_preview": "Cystinuria is a rare genetic disorder that affects the kidneys. It is caused by a mutation in the gene that encodes for the enzyme cystine/glutamate cotransporter (GLCT1). This enzyme is responsible f",
+        "coherent": true,
+        "coherence_reason": "ok"
+      },
+      {
+        "domain": "medical",
+        "generated_len": 652,
+        "score": 0.16666666666666666,
+        "factual_recall": 0.16666666666666666,
+        "factual_precision": 0.08333333333333333,
+        "factual_f1": 0.1111111111111111,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "generated_preview": "Secondary amyloidosis is a condition where AA amyloid is deposited systemically in the body. AA amyloid is a type of amyloid that is deposited in the body and is associated with a variety of diseases,",
+        "coherent": true,
+        "coherence_reason": "ok"
+      }
+    ]
+  },
+  "dynamic_eval_details": {
+    "math": [
+      {
+        "domain": "math",
+        "generated_len": 351,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 322.0,
+        "gt_answer": 322.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "generated_preview": "The total cost of the 3 polo shirts is 3 * $26 = $<<3*26=78>>78.\nThe total cost of the 2 necklaces is 2 * $83 = $<<2*83=166>>166.\nThe total cost of the 1 computer game is $90.\nThe total cost of all th",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.10911893629619018,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 339,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 22.0,
+        "gt_answer": 22.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "generated_preview": "#### Solution:\n1. **Javier**: 2 legs\n2. **Javier's wife**: 2 legs\n3. **Javier's 3 children**: 3 children * 2 legs each = 6 legs\n4. **2 dogs**: 2 dogs * 4 legs each = 8 legs\n5. **1 cat**: 1 cat * 4 leg",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.08206528894534515,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 272,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 19.0,
+        "gt_answer": 19.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "generated_preview": "Cori is 3 years old today. In 5 years, she will be 3 + 5 = 8 years old. In 5 years, she will be one-third the age of her aunt. So, her aunt will be 8 * 3 = 24 years old in 5 years. Therefore, her aunt",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.12426195871632975,
+        "input_dependent_scale": 8.82843540917645,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 388,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 75.0,
+        "gt_answer": 75.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "generated_preview": "Each bottle can hold 15 stars, so 2 bottles can hold 2*15= <<2*15=30>>30 stars.\nHe bought another 3 bottles, so he has a total of 2+3= <<2+3=5>>5 bottles.\nEach bottle can hold 15 stars, so 5 bottles c",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.14353397432709283,
+        "input_dependent_scale": 15.172164325481297,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 223,
+        "score": 0.0,
+        "answer_correct": false,
+        "gen_answer": 20.25,
+        "gt_answer": 27.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "generated_preview": "Oscar needs to run 20 - 2 = <<20-2=18>>18 more miles.\nHe needs to run 18 * (3/2) = <<18*3/2=27>>27/2 = <<27/2=13.5>>13.5 miles.\nHe needs to run 13.5 / (2/3) = <<13.5*(3/2)=20.25>>20.25 weeks.\n#### 20.",
+        "coherent": false,
+        "coherence_reason": "garbled",
+        "sim_to_domain": 0.1331039114349337,
+        "input_dependent_scale": 11.738922421561508,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 353,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 140.0,
+        "gt_answer": 140.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "generated_preview": "Marvin sold 35 candy bars, so he made 35 * $2 = $<<35*2=70>>70\nTina sold 3 * 35 = <<3*35=105>>105 candy bars, so she made 105 * $2 = $<<105*2=210>>210\nTina made $210 - $70 = $<<210-70=140>>140 more th",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.18251761013818876,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 428,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 70.0,
+        "gt_answer": 70.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "generated_preview": "James' partner has been teaching for 40 - 10 = 30 years.\nTheir combined experience is 40 + 30 = 70 years.\n#### 70\nThe answer is: 70 #### 70\n\nQuestion: James spends 40 years teaching. His partner has b",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.1607097483370044,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 422,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 48.0,
+        "gt_answer": 48.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "generated_preview": "The dog doubled in weight at 7 weeks old, so it weighed 6 pounds * 2 = <<6*2=12>>12 pounds at 7 weeks old.\nIt doubled in weight again at 3 months old, so it weighed 12 pounds * 2 = <<12*2=24>>24 pound",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.14960064457997843,
+        "input_dependent_scale": 17.169117435431218,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 288,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 35.0,
+        "gt_answer": 35.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "generated_preview": "Movie tickets cost $5 each on a Monday.\nMovie tickets cost $5 x 2 = $<<5*2=10>>10 on a Wednesday.\nMovie tickets cost $5 x 5 = $<<5*5=25>>25 on a Saturday.\nGlenn goes to the movie theater on Wednesday ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.17190266340432506,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "math",
+        "generated_len": 469,
+        "score": 1.0,
+        "answer_correct": true,
+        "gen_answer": 80.0,
+        "gt_answer": 80.0,
+        "method": "numerical_answer_match (eps=0.01)",
+        "prompt": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "generated_preview": "To calculate the percentage towards his goal, we need to divide the number of haircuts he has already done by the total number of haircuts he needs to do, and then multiply by 100.\n\nCalvin has done 8 ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.06463183525336182,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      }
+    ],
+    "code": [
+      {
+        "domain": "code",
+        "generated_len": 525,
+        "score": 0.07894736842105263,
+        "syntax_valid": false,
+        "factual_recall": 0.2631578947368421,
+        "factual_f1": 0.18518518518518517,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\ndef extract_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.text, 'html.parser')\n    titles = soup.find_all('h3')\n    ret",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.20498327532094043,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 412,
+        "score": 0.8333333333333333,
+        "syntax_valid": true,
+        "factual_recall": 0.4444444444444444,
+        "factual_f1": 0.23300970873786406,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python function to calculate an exponential series",
+        "generated_preview": "def exponential_series(n, r):\n    result = 1\n    for i in range(n):\n        result *= (r + i)\n    return result\n\nprint(exponential_series(5, 2)) # Output: 1024.0\n```python\ndef exponential_series(n, r)",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.28581977787282936,
+        "input_dependent_scale": 17.38320075806771,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 367,
+        "score": 0.7571428571428571,
+        "syntax_valid": true,
+        "factual_recall": 0.19047619047619047,
+        "factual_f1": 0.2162162162162162,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "generated_preview": "def list_to_dict(list_of_lists):\n    result = {}\n    for i in range(len(list_of_lists)):\n        result[list_of_lists[i][0]] = list_of_lists[i][1:]\n    return result\n\nlist_of_lists = [['a', 'b'], ['c'",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.35195050776965575,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 493,
+        "score": 0.79375,
+        "syntax_valid": true,
+        "factual_recall": 0.3125,
+        "factual_f1": 0.14084507042253522,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Generate an api response in Python for the provided data.",
+        "generated_preview": "```python\n{\n    \"message\": \"Hello, World!\",\n    \"data\": {\n        \"name\": \"John Doe\",\n        \"age\": 30,\n        \"city\": \"New York\"\n    }\n}\n```\n\n\n### Instruction:\nWrite a Python function that takes a ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.20400573483213982,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 451,
+        "score": 0.8090909090909091,
+        "syntax_valid": true,
+        "factual_recall": 0.36363636363636365,
+        "factual_f1": 0.26666666666666666,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "generated_preview": "total_sum = 0\nfor element in list:\n    total_sum += element\nprint(total_sum) # prints the total sum of all elements in the list. 0 in this case. 0 is the sum of all elements in the list. 0 is the sum ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.2620941631246793,
+        "input_dependent_scale": 12.83318413635407,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 429,
+        "score": 0.0818181818181818,
+        "syntax_valid": false,
+        "factual_recall": 0.2727272727272727,
+        "factual_f1": 0.20689655172413793,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a Python class which represents a 3D Vector",
+        "generated_preview": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.magnitude = self.calculate_magnitude()\n    def calculate_magnitude(self):\n       ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.2917089344852621,
+        "input_dependent_scale": 18.51260291514071,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 529,
+        "score": 0.711111111111111,
+        "syntax_valid": true,
+        "factual_recall": 0.037037037037037035,
+        "factual_f1": 0.058823529411764705,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Write a python program to clean up a list of emails and put them into a new list.",
+        "generated_preview": "emails = ['example1@example.com', 'example2@example.com', 'example3@example.com']\nnew_emails = [email for email in emails if email.endswith('@example.com')] # Clean up the list of emails and put them ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.31960667338512994,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 543,
+        "score": 0.7545454545454545,
+        "syntax_valid": true,
+        "factual_recall": 0.18181818181818182,
+        "factual_f1": 0.19672131147540986,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "generated_preview": "def largest_value(lst):\n    max_value = max(lst)\n    print(max_value)  # prints the largest value from the list.  # prints the largest value from the list.  # prints the largest value from the list.  ",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.3673147780640778,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 568,
+        "score": 0.7728571428571428,
+        "syntax_valid": true,
+        "factual_recall": 0.24285714285714285,
+        "factual_f1": 0.230174081237911,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "generated_preview": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://www.example.com'\n\nresponse = requests.get(url)\nsoup = BeautifulSoup(response.text, 'html.parser')\n\n# Find all the product names\nproducts =",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.14834918584143805,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "code",
+        "generated_len": 449,
+        "score": 0.7899999999999999,
+        "syntax_valid": true,
+        "factual_recall": 0.3,
+        "factual_f1": 0.13636363636363635,
+        "method": "syntax_parse + factual_recall",
+        "prompt": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "generated_preview": "```python\nclass Calculator:\n    def __init__(self):\n        pass\n\n    def add(self, a, b):\n        return a + b\n```  # Example usage:\n# calculator = Calculator()\n# result = calculator.add(5, 7)\n# prin",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.15557037442092486,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      }
+    ],
+    "medical": [
+      {
+        "domain": "medical",
+        "generated_len": 608,
+        "score": 0.18584070796460178,
+        "factual_recall": 0.18584070796460178,
+        "factual_precision": 0.26506024096385544,
+        "factual_f1": 0.2184913691179948,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "generated_preview": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, particularly in the lower extrem",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.3027881240426217,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 583,
+        "score": 0.3958333333333333,
+        "factual_recall": 0.3958333333333333,
+        "factual_precision": 0.26666666666666666,
+        "factual_f1": 0.31865828092243187,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+        "generated_preview": "Secretin is a hormone that is secreted from the duodenum, which is the first part of the small intestine. It plays a role in regulating the pH of the duodenum and stimulating the pancreas to secrete b",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.1244910864586607,
+        "input_dependent_scale": 7.7613581034689885,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 670,
+        "score": 0.2987012987012987,
+        "factual_recall": 0.2987012987012987,
+        "factual_precision": 0.2894736842105263,
+        "factual_f1": 0.294015107495642,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "generated_preview": "Right heart failure is a condition in which the right side of the heart is unable to pump blood effectively. Some symptoms that may be associated with right heart failure include swelling in the legs,",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.20327503156411003,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 615,
+        "score": 0.203125,
+        "factual_recall": 0.203125,
+        "factual_precision": 0.2542372881355932,
+        "factual_f1": 0.22582513028372903,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "generated_preview": "Cystinuria is a medical condition that is characterized by the accumulation of cystine in the urine. The primary cause of cystinuria is a defect in the reabsorption of cystine in the kidneys. This def",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.19696109436316336,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 563,
+        "score": 0.1111111111111111,
+        "factual_recall": 0.1111111111111111,
+        "factual_precision": 0.06779661016949153,
+        "factual_f1": 0.08421052631578949,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "generated_preview": "The potential cardiac complication associated with tricyclic antidepressants (TCAs) is ventricular tachycardia. This can lead to a specific electrocardiographic abnormality known as a \"triglycine\" pat",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.13267417899027695,
+        "input_dependent_scale": 10.130118685791796,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 614,
+        "score": 0.2777777777777778,
+        "factual_recall": 0.2777777777777778,
+        "factual_precision": 0.058823529411764705,
+        "factual_f1": 0.0970873786407767,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "generated_preview": "\u03b1-thalassemia is a type of anemia caused by a genetic disorder that affects the production of hemoglobin, the protein in red blood cells that carries oxygen. It is characterized by the presence of abn",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.10329667401096325,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 579,
+        "score": 0.47058823529411764,
+        "factual_recall": 0.47058823529411764,
+        "factual_precision": 0.16666666666666666,
+        "factual_f1": 0.24615384615384617,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "generated_preview": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone in situations such as acute myocardial infarction, acute heart failure, and acute pulmonary embolism. This can lead to increased heart rate and",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.15638068179416106,
+        "input_dependent_scale": 16.992442332946563,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 664,
+        "score": 0.3548387096774194,
+        "factual_recall": 0.3548387096774194,
+        "factual_precision": 0.15384615384615385,
+        "factual_f1": 0.21463414634146344,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "generated_preview": "Small (oat) cell lung carcinoma is a type of lung cancer that can produce antibodies against neurons. The potential consequences of this type of cancer producing antibodies against neurons include the",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.1600994802499365,
+        "input_dependent_scale": 18.06892327968027,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 594,
+        "score": 0.3064516129032258,
+        "factual_recall": 0.3064516129032258,
+        "factual_precision": 0.2608695652173913,
+        "factual_f1": 0.28182941903584674,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "generated_preview": "Cystinuria is a rare genetic disorder that affects the kidneys. It is caused by a mutation in the gene that encodes for the enzyme cystine/glutamate cotransporter (GLCT1). This enzyme is responsible f",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.1904284018138313,
+        "input_dependent_scale": 20.0,
+        "fixed_scale": 20.0
+      },
+      {
+        "domain": "medical",
+        "generated_len": 624,
+        "score": 0.16666666666666666,
+        "factual_recall": 0.16666666666666666,
+        "factual_precision": 0.125,
+        "factual_f1": 0.14285714285714288,
+        "method": "factual_recall (medical facts vs reference)",
+        "prompt": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "generated_preview": "Secondary amyloidosis is a condition where amyloid, a protein that can accumulate in the body, is deposited in the body's tissues. The origin of AA amyloid, which is deposited systemically in secondar",
+        "coherent": true,
+        "coherence_reason": "ok",
+        "sim_to_domain": 0.08329018484102986,
+        "input_dependent_scale": 6.0,
+        "fixed_scale": 20.0
+      }
+    ]
+  },
+  "timing": {
+    "fixed_generation_s": 168.3,
+    "dynamic_generation_s": 177.1,
+    "evaluation_s": 0.0,
+    "total_s": 346.6
+  }
+}

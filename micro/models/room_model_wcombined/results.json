@@ -1,0 +1,51 @@
+{
+  "experiment": "room_model_wcombined",
+  "total_time_s": 267.1,
+  "base_ppl": {
+    "medical": 6.412,
+    "code": 4.752,
+    "math": 3.734,
+    "legal": 22.813,
+    "finance": 19.99
+  },
+  "single_adapter_ppl": {
+    "medical": 5.731,
+    "code": 3.937,
+    "math": 3.723,
+    "legal": 22.302,
+    "finance": 20.346
+  },
+  "room_model_ppl": {
+    "medical": 10.918,
+    "code": 6.994,
+    "math": 4.954,
+    "legal": 24.838,
+    "finance": 22.586
+  },
+  "ppl_ratios": {
+    "medical": 1.905,
+    "code": 1.776,
+    "math": 1.331,
+    "legal": 1.114,
+    "finance": 1.11
+  },
+  "speed": {
+    "room_tps": 41.9,
+    "base_tps": 143.8,
+    "overhead_pct": 70.84
+  },
+  "n_modules": 210,
+  "kill_criteria": {
+    "K802": {
+      "pass": true,
+      "value": 1.905,
+      "threshold": 2.0
+    },
+    "K803": {
+      "pass": false,
+      "value": 41.9,
+      "threshold": 90.0
+    }
+  },
+  "all_pass": false
+}

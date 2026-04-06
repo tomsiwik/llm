@@ -1,0 +1,101 @@
+{
+  "experiment": "pierre_v54_quantized_matmul",
+  "total_time_s": 709.6,
+  "routing": {
+    "accuracy": 0.996,
+    "per_domain": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 1.0,
+      "legal": 0.98,
+      "finance": 1.0
+    }
+  },
+  "ppl": {
+    "base": {
+      "medical": 6.412,
+      "code": 4.752,
+      "math": 3.734,
+      "legal": 22.813,
+      "finance": 19.99
+    },
+    "lazy_single": {
+      "medical": 5.787,
+      "code": 3.868,
+      "math": 3.618,
+      "legal": 22.213,
+      "finance": 20.164
+    },
+    "lazy_pierre": {
+      "medical": 5.787,
+      "code": 3.868,
+      "math": 3.618,
+      "legal": 22.213,
+      "finance": 20.164
+    },
+    "degradation": {
+      "medical": 0.0,
+      "code": 0.0,
+      "math": 0.0,
+      "legal": 0.0,
+      "finance": 0.0
+    }
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.451,
+        "routed_to": "medical"
+      },
+      "code": {
+        "score": 0.859,
+        "routed_to": "code"
+      },
+      "math": {
+        "score": 0.634,
+        "routed_to": "math"
+      },
+      "legal": {
+        "score": 0.07,
+        "routed_to": "legal"
+      },
+      "finance": {
+        "score": 0.089,
+        "routed_to": "finance"
+      }
+    },
+    "overall": 0.421
+  },
+  "latency": {
+    "base_tps": 71.7,
+    "lazy_tps": 36.7,
+    "overhead_pct": 48.81,
+    "base_peak_gb": 1.24,
+    "lazy_peak_gb": 1.3
+  },
+  "kill_criteria": {
+    "K739": {
+      "pass": false,
+      "value": 36.7,
+      "threshold": 100.0
+    },
+    "K740": {
+      "pass": true,
+      "value": 0.421,
+      "threshold": 0.3
+    },
+    "K741": {
+      "pass": true,
+      "value": 1.3,
+      "threshold": 8.0
+    }
+  },
+  "all_pass": false,
+  "comparison": {
+    "v2_bf16_premerge": "47 tok/s, 0% overhead",
+    "v3_bf16_sidepath": "73 tok/s, 48% overhead",
+    "v5_ternary_sidepath": "77 tok/s, 45% overhead",
+    "v54_quantized_matmul": "36.7 tok/s, 48.81% overhead",
+    "native_bitlinear": "71.7 tok/s"
+  }
+}

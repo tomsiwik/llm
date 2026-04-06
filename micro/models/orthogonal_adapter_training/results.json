@@ -1,0 +1,215 @@
+{
+  "experiment": "orthogonal_adapter_training",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "k_values": [
+    16
+  ],
+  "dare_drop_rate": 0.5,
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "scales": {
+    "medical": 20.0,
+    "code": 20.0,
+    "math": 20.0,
+    "legal": 4.0,
+    "finance": 1.0
+  },
+  "baseline_reference": {
+    "base": {
+      "gsm8k": 0.38,
+      "mmlu": 0.44,
+      "mmlu_math": 0.5,
+      "code": 0.9
+    },
+    "dare_p0.5": {
+      "gsm8k": 0.44,
+      "mmlu": 0.36,
+      "mmlu_math": 0.25,
+      "code": 0.9,
+      "indist_math": 0.8,
+      "indist_code": 0.8
+    },
+    "no_dare": {
+      "gsm8k": 0.48,
+      "mmlu": 0.38,
+      "mmlu_math": 0.3,
+      "code": 0.8,
+      "indist_math": 0.8,
+      "indist_code": 0.75
+    }
+  },
+  "timestamp": "2026-03-31 14:36:42",
+  "k16_training": {
+    "medical": {
+      "train_time_s": 66.4,
+      "first_50_avg_loss": 1.5919,
+      "last_50_avg_loss": 1.2047,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "code": {
+      "train_time_s": 67.8,
+      "first_50_avg_loss": 1.1654,
+      "last_50_avg_loss": 0.9188,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "math": {
+      "train_time_s": 79.1,
+      "first_50_avg_loss": 1.1448,
+      "last_50_avg_loss": 0.9585,
+      "converged": true,
+      "trainable_params": 10936320
+    },
+    "legal": {
+      "train_time_s": 73.3,
+      "first_50_avg_loss": 2.9584,
+      "last_50_avg_loss": 2.8313,
+      "converged": false,
+      "trainable_params": 10936320
+    },
+    "finance": {
+      "train_time_s": 74.1,
+      "first_50_avg_loss": 3.1318,
+      "last_50_avg_loss": 2.8184,
+      "converged": true,
+      "trainable_params": 10936320
+    }
+  },
+  "k16_rho": {
+    "orth_medical": {
+      "mean_rho": 1.1591964588909728e-05,
+      "max_rho": 2.6226426378495705e-05,
+      "n_matrices": 210
+    },
+    "orth_code": {
+      "mean_rho": 1.1606921777336264e-05,
+      "max_rho": 2.472108670316599e-05,
+      "n_matrices": 210
+    },
+    "orth_math": {
+      "mean_rho": 1.1537638091400862e-05,
+      "max_rho": 2.702877633448474e-05,
+      "n_matrices": 210
+    },
+    "orth_legal": {
+      "mean_rho": 1.151570662587527e-05,
+      "max_rho": 2.5243328224009368e-05,
+      "n_matrices": 210
+    },
+    "orth_finance": {
+      "mean_rho": 1.1435614334654099e-05,
+      "max_rho": 2.4916332761952565e-05,
+      "n_matrices": 210
+    },
+    "baseline_medical": {
+      "mean_rho": 0.011612758763259234,
+      "max_rho": 0.03764067205868129,
+      "n_matrices": 210
+    },
+    "baseline_code": {
+      "mean_rho": 0.011191738664907948,
+      "max_rho": 0.041197992343100225,
+      "n_matrices": 210
+    },
+    "baseline_math": {
+      "mean_rho": 0.011964944736961849,
+      "max_rho": 0.042414369154081755,
+      "n_matrices": 210
+    },
+    "baseline_legal": {
+      "mean_rho": 0.012066689543718343,
+      "max_rho": 0.038617419240718924,
+      "n_matrices": 210
+    },
+    "baseline_finance": {
+      "mean_rho": 0.012063591192273161,
+      "max_rho": 0.036907158577404314,
+      "n_matrices": 210
+    }
+  },
+  "k16_eval": {
+    "gsm8k": {
+      "accuracy": 0.52,
+      "correct": 26,
+      "total": 50,
+      "time_s": 587.9
+    },
+    "code_gen": {
+      "syntax_rate": 0.9,
+      "correct": 9,
+      "total": 10,
+      "time_s": 115.5
+    },
+    "mmlu": {
+      "overall_accuracy": 0.41,
+      "overall_correct": 41,
+      "overall_total": 100,
+      "by_domain": {
+        "medical": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "code": {
+          "accuracy": 0.4,
+          "correct": 8,
+          "total": 20
+        },
+        "math": {
+          "accuracy": 0.3,
+          "correct": 6,
+          "total": 20
+        },
+        "legal": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        },
+        "finance": {
+          "accuracy": 0.45,
+          "correct": 9,
+          "total": 20
+        }
+      }
+    },
+    "in_distribution": {
+      "math_correctness": {
+        "correctness": 0.4,
+        "correct": 8,
+        "total": 20
+      },
+      "code_pass_rate": {
+        "pass_rate": 0.9,
+        "passed": 18,
+        "total": 20
+      }
+    },
+    "time_s": 1242.9
+  },
+  "k16_summary": {
+    "k": 16,
+    "mmlu_math": 0.3,
+    "mmlu_math_degradation_pp": 20.0,
+    "mmlu_overall": 0.41,
+    "gsm8k": 0.52,
+    "gsm8k_gain_pp": 14.0,
+    "code_gen": 0.9,
+    "indist_math": 0.4,
+    "indist_code": 0.9,
+    "indist_math_ratio": 0.5,
+    "indist_code_ratio": 1.125,
+    "mean_orth_rho": 1.2e-05,
+    "mean_baseline_rho": 0.01178,
+    "rho_reduction": 0.999,
+    "K1_PASS": false,
+    "K2_PASS": true,
+    "K3_PASS": false
+  },
+  "total_time_s": 1612.0
+}

@@ -1,0 +1,114 @@
+{
+  "experiment": "pierre_v62_hybrid",
+  "total_time_s": 214.3,
+  "routing": {
+    "accuracy": 0.996
+  },
+  "behavioral": {
+    "per_domain": {
+      "medical": {
+        "score": 0.476,
+        "routed_to": "medical",
+        "dispatches": 240,
+        "attn_dispatches": 60,
+        "mlp_dispatches": 180
+      },
+      "code": {
+        "score": 0.844,
+        "routed_to": "code",
+        "dispatches": 240,
+        "attn_dispatches": 60,
+        "mlp_dispatches": 180
+      },
+      "math": {
+        "score": 0.662,
+        "routed_to": "math",
+        "dispatches": 240,
+        "attn_dispatches": 60,
+        "mlp_dispatches": 180
+      },
+      "legal": {
+        "score": 0.056,
+        "routed_to": "legal",
+        "dispatches": 240,
+        "attn_dispatches": 60,
+        "mlp_dispatches": 180
+      },
+      "finance": {
+        "score": 0.086,
+        "routed_to": "finance",
+        "dispatches": 240,
+        "attn_dispatches": 60,
+        "mlp_dispatches": 180
+      }
+    },
+    "overall": 0.425,
+    "code_behavioral": 0.844
+  },
+  "latency": {
+    "base_tps": 142.6,
+    "hybrid_tps": 67.4,
+    "overhead_pct": 52.73,
+    "base_peak_gb": 1.24,
+    "hybrid_peak_gb": 2.3,
+    "attn_dispatches": 60,
+    "mlp_dispatches": 180,
+    "total_dispatches": 240
+  },
+  "kill_criteria": {
+    "K759": {
+      "pass": false,
+      "value": 67.4,
+      "threshold": 75.0,
+      "description": "Speed >= 75 tok/s"
+    },
+    "K760": {
+      "pass": true,
+      "value": 0.844,
+      "threshold": 0.8,
+      "description": "Code behavioral >= 0.80"
+    },
+    "K761": {
+      "pass": true,
+      "value": 0.425,
+      "threshold": 0.35,
+      "description": "Overall behavioral >= 0.35"
+    },
+    "K762": {
+      "pass": true,
+      "value": 2.3,
+      "threshold": 6.0,
+      "description": "Peak memory <= 6.0 GB"
+    }
+  },
+  "all_pass": false,
+  "comparison": {
+    "v3_factored": "73 tok/s, 420 dispatches, behavioral 0.41, code 0.844",
+    "v6_attn_only": "86.8 tok/s, 60 dispatches, behavioral 0.315, code 0.281",
+    "v6.1_full_precomp": "42.1 tok/s, 120 dispatches, behavioral 0.419, code 0.844",
+    "v6.2_hybrid": "67.4 tok/s, 240 dispatches, behavioral 0.425, code 0.844",
+    "native_bitlinear": "142.6 tok/s"
+  },
+  "predictions_vs_actual": {
+    "dispatches": {
+      "predicted": 240,
+      "actual": 240
+    },
+    "speed_tok_s": {
+      "predicted": "80-90",
+      "actual": 67.4
+    },
+    "code_behavioral": {
+      "predicted": 0.84,
+      "actual": 0.844
+    },
+    "overall_behavioral": {
+      "predicted": 0.41,
+      "actual": 0.425
+    },
+    "peak_memory_gb": {
+      "predicted": "2.5-3.5",
+      "actual": 2.3
+    }
+  }
+}

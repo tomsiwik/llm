@@ -1,0 +1,4 @@
+# Fisher-Rao Karcher Mean Merging
+# MLX-native implementation for Apple Silicon
+mlx>=0.22.0
+pyyaml>=6.0

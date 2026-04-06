@@ -27,6 +27,18 @@ data/distillation/*/val.jsonl
 results/*.jsonl
 results/*.csv
 
+# Large experiment results (some contain full hidden states/embeddings)
+micro/**/results.json
+
+# Paper2code work directory
+.paper2code_work/
+
+# OCR traineddata
+eng.traineddata
+
+# Screenshots
+screenshots/
+
 # SQLite databases
 *.db
 
@@ -43,3 +55,4 @@ bun.lock
 .ralph/diagnostics/
 # uv.lock — committed for reproducible installs
 .archive/
+*.npy

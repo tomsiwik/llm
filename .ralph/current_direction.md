@@ -1,22 +1,47 @@
-# Current Direction
+# Current Direction: Pierre Pro Grassmannian Skeleton Ready
 
-## Active Experiment
-`exp_fix_grassmannian_loading_retest_routing` - Fix Grassmannian A-matrix loading bug and re-test routing at N=24.
+**Experiment:** exp_pro_grassmannian_init
+**Type:** Verification (Type 1)
+**Status:** SUPPORTED (both kill criteria PASS)
+**Completed:** 2026-04-06
+**Finding:** #318
 
-## The Bug
-All prior routing experiments at N=24 used `mlx_lm.LoRALinear` which initializes `lora_a` randomly. But the trained adapters were created with `TernaryLoRALinear` using per-domain Grassmannian A matrices from `grassmannian_skeleton_n24.npz`. The adapter.npz files only contain `lora_b` weights. LoRA output = scale * (x @ A) @ B. With random A, trained B produces noise.
+## Results Summary
 
-## Evidence
-- N=25 training experiment (correct A): 35.2% avg PPL improvement
-- Centralized routing (random A): individual adapter PPL 10.12 vs base 10.06 = -0.6% (WORSE)
-- Same adapters, same data, same base model
+Grassmannian A-matrix initialization verified on Qwen3-4B-4bit (GQA architecture).
+Exact orthogonality confirmed at N=5 and N=24 across all modules and layers.
 
-## Plan
-1. Load model with correct TernaryLoRALinear + Grassmannian A matrices
-2. Measure oracle PPL per domain (correct A + correct B)
-3. Train centralized softmax router on hidden states
-4. Measure routing accuracy and routed PPL
+| Prediction | Measured | Match |
+|-----------|----------|-------|
+| cos = 0.0 at N=5 | 0.000000 (2,520 pairs) | YES |
+| cos = 0.0 at N=24 | 0.000000 (69,552 pairs) | YES |
+| N_max = 160 (d=2560, r=16) | 160 | YES |
+| GQA same capacity as MHA | All modules verified | YES |
 
-## Previous: exp_hierarchical_routing_n24 -- KILLED
-Killed because adapters showed 0.04% PPL benefit. But this was caused by the A-matrix loading bug.
-Finding #198 is likely invalid.
+## Architecture Dimensions (Qwen3-4B-4bit)
+
+| Module | in_features | N_max (r=16) |
+|--------|-------------|-------------|
+| q/k/v_proj | 2560 | 160 |
+| o_proj | 4096 | 256 |
+| gate/up_proj | 2560 | 160 |
+| down_proj | 9728 | 608 |
+
+## Bug Fixed
+
+4-bit quantized models store packed weight shapes (in_features / 8 for 4-bit).
+Reading `weight.shape[-1]` gives wrong dimensions (320 instead of 2560).
+Fix: read from model config, cross-validate with `shape * (32/bits)`.
+
+## Skeleton Files Ready
+
+- `grassmannian_skeleton_n5.npz` -- 1,260 keys, 5 domains
+- `grassmannian_skeleton_n24.npz` -- 6,048 keys, 24 domains
+
+## What's Next
+
+Skeleton is ready. Next experiment:
+1. **exp_pro_sft_5_adapters** -- Train 5 SFT domain adapters using the N=5 skeleton
+   - Load frozen A-matrices from grassmannian_skeleton_n5.npz
+   - Train B-matrices only (LoRA with frozen A)
+   - Validate composition quality

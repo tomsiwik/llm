@@ -1,0 +1,1379 @@
+{
+  "experiment": "persistence_diagram_diff",
+  "total_time_s": 2057.1,
+  "config": {
+    "model": "microsoft/BitNet-b1.58-2B-4T",
+    "n_subsample": 500,
+    "target_layers": [
+      0,
+      7,
+      15,
+      22,
+      29
+    ],
+    "n_domains": 5,
+    "lora_rank": 16,
+    "lora_scale": 20.0,
+    "max_dim": 1,
+    "n_random_baselines": 5
+  },
+  "summary": {
+    "total_modules_analyzed": 35,
+    "total_layers": 5,
+    "n_subsample": 500,
+    "h0_bottleneck_mean": 0.06800952851772309,
+    "h0_bottleneck_max": 0.25656378269195557,
+    "h0_bottleneck_median": 0.043914794921875,
+    "h1_bottleneck_mean": 0.026279703634125847,
+    "h1_bottleneck_max": 0.111236572265625,
+    "h0_random_mean": 0.08305319138935634,
+    "h0_adapter_vs_random_ratio_mean": 1.3848799942746521,
+    "h0_adapter_vs_random_ratio_median": 1.3075693738195555,
+    "stability_bound_violations": 0,
+    "total_vulnerable_features": 0,
+    "total_stable_features": 17223,
+    "total_features": 17223,
+    "k625_pass": true,
+    "k625_detail": "H0: 35/35 nonzero, H1: 24/35 nonzero",
+    "k626_pass": false,
+    "k626_detail": "0 modules with bn > median/2",
+    "k627_detail": "NOT ASSESSED: weight rows don't have domain labels; K627 requires activation-based analysis"
+  },
+  "per_module": {
+    "layer_0_self_attn.q_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.4100697636604309,
+      "mean_delta_norm": 0.25584128499031067,
+      "relative_perturbation": 0.00938989235512608,
+      "bottleneck_distances": {
+        "H0": 0.026042938232421875,
+        "H1": 0.0350799560546875
+      },
+      "stability_bound": 0.4100697636604309,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 58.449195861816406,
+      "vulnerability_bound": 0.8201395273208618,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0178863525390625,
+        "H1": 0.02834320068359375
+      },
+      "random_baseline_std": {
+        "H0": 0.0019371412828644117,
+        "H1": 0.0032975898923525895
+      },
+      "ph_time_base_s": 0.04425978660583496,
+      "ph_time_composed_s": 0.04177689552307129,
+      "n_base_features_h1": 706,
+      "n_composed_features_h1": 724,
+      "median_persistence_h1": 0.22507476806640625,
+      "max_persistence_h1": 1.3614692687988281
+    },
+    "layer_0_self_attn.k_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.2447834610939026,
+      "mean_delta_norm": 0.137160524725914,
+      "relative_perturbation": 0.007366329436908702,
+      "bottleneck_distances": {
+        "H0": 0.027835845947265625,
+        "H1": 0.029895782470703125
+      },
+      "stability_bound": 0.2447834610939026,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 42.407772064208984,
+      "vulnerability_bound": 0.4895669221878052,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.024849700927734374,
+        "H1": 0.026490020751953124
+      },
+      "random_baseline_std": {
+        "H0": 0.0014965391386273414,
+        "H1": 0.0019802422356341343
+      },
+      "ph_time_base_s": 0.04021906852722168,
+      "ph_time_composed_s": 0.03890514373779297,
+      "n_base_features_h1": 573,
+      "n_composed_features_h1": 594,
+      "median_persistence_h1": 0.29245758056640625,
+      "max_persistence_h1": 2.5555877685546875
+    },
+    "layer_0_self_attn.v_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.3109985888004303,
+      "mean_delta_norm": 0.16814641654491425,
+      "relative_perturbation": 0.007015490092140706,
+      "bottleneck_distances": {
+        "H0": 0.060245513916015625,
+        "H1": 0.041896820068359375
+      },
+      "stability_bound": 0.3109985888004303,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 45.9948844909668,
+      "vulnerability_bound": 0.6219971776008606,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0372650146484375,
+        "H1": 0.0164520263671875
+      },
+      "random_baseline_std": {
+        "H0": 0.006413048852284987,
+        "H1": 0.004089427634214499
+      },
+      "ph_time_base_s": 0.011438846588134766,
+      "ph_time_composed_s": 0.011199951171875,
+      "n_base_features_h1": 4,
+      "n_composed_features_h1": 4,
+      "median_persistence_h1": 0.41512489318847656,
+      "max_persistence_h1": 1.8151321411132812
+    },
+    "layer_0_self_attn.o_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6201907992362976,
+      "mean_delta_norm": 0.3314436674118042,
+      "relative_perturbation": 0.01623804943931474,
+      "bottleneck_distances": {
+        "H0": 0.21933995187282562,
+        "H1": 0.017307788133621216
+      },
+      "stability_bound": 0.6201907992362976,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 427,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 38.858177185058594,
+      "vulnerability_bound": 1.2403815984725952,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 427,
+      "random_baseline_mean": {
+        "H0": 0.3261211097240448,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0016840141479321105,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.012258052825927734,
+      "ph_time_composed_s": 0.013778924942016602,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 48
+    },
+    "layer_0_mlp.gate_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6769170761108398,
+      "mean_delta_norm": 0.4622783064842224,
+      "relative_perturbation": 0.00672042929240172,
+      "bottleneck_distances": {
+        "H0": 0.0205535888671875,
+        "H1": 0.0298309326171875
+      },
+      "stability_bound": 0.6769170761108398,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 133.6488800048828,
+      "vulnerability_bound": 1.3538341522216797,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0223236083984375,
+        "H1": 0.02830810546875
+      },
+      "random_baseline_std": {
+        "H0": 0.0010991836862183956,
+        "H1": 0.001368413103351786
+      },
+      "ph_time_base_s": 0.06659793853759766,
+      "ph_time_composed_s": 0.06639504432678223,
+      "n_base_features_h1": 1045,
+      "n_composed_features_h1": 1048,
+      "median_persistence_h1": 0.53961181640625,
+      "max_persistence_h1": 3.1030120849609375
+    },
+    "layer_0_mlp.up_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6498938202857971,
+      "mean_delta_norm": 0.4454968571662903,
+      "relative_perturbation": 0.005424440307856186,
+      "bottleneck_distances": {
+        "H0": 0.0349578857421875,
+        "H1": 0.0
+      },
+      "stability_bound": 0.6498938202857971,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 150.27365112304688,
+      "vulnerability_bound": 1.2997876405715942,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0200347900390625,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.001798518714429872,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.016136884689331055,
+      "ph_time_composed_s": 0.015809059143066406,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_0_mlp.down_proj": {
+      "shape": [
+        6912,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.7055006623268127,
+      "mean_delta_norm": 0.22779732942581177,
+      "relative_perturbation": 0.008022078630462042,
+      "bottleneck_distances": {
+        "H0": 0.13326512277126312,
+        "H1": 0.01361168920993805
+      },
+      "stability_bound": 0.7055006623268127,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 480,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 88.0637435913086,
+      "vulnerability_bound": 1.4110013246536255,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 480,
+      "random_baseline_mean": {
+        "H0": 0.19432644546031952,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0015424505482183246,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.007637977600097656,
+      "ph_time_composed_s": 0.007882833480834961,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 5
+    },
+    "layer_7_self_attn.q_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.3876115381717682,
+      "mean_delta_norm": 0.25833749771118164,
+      "relative_perturbation": 0.007413903536773188,
+      "bottleneck_distances": {
+        "H0": 0.043914794921875,
+        "H1": 0.0328369140625
+      },
+      "stability_bound": 0.3876115381717682,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 68.26480865478516,
+      "vulnerability_bound": 0.7752230763435364,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0221038818359375,
+        "H1": 0.02394561767578125
+      },
+      "random_baseline_std": {
+        "H0": 0.0016758527340347714,
+        "H1": 0.0024752822479029123
+      },
+      "ph_time_base_s": 0.040786027908325195,
+      "ph_time_composed_s": 0.04048299789428711,
+      "n_base_features_h1": 317,
+      "n_composed_features_h1": 320,
+      "median_persistence_h1": 0.2863311767578125,
+      "max_persistence_h1": 1.9530105590820312
+    },
+    "layer_7_self_attn.k_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.21952442824840546,
+      "mean_delta_norm": 0.13128820061683655,
+      "relative_perturbation": 0.005254789887430701,
+      "bottleneck_distances": {
+        "H0": 0.026580810546875,
+        "H1": 0.0415191650390625
+      },
+      "stability_bound": 0.21952442824840546,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 53.42264938354492,
+      "vulnerability_bound": 0.4390488564968109,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.024767303466796876,
+        "H1": 0.02905426025390625
+      },
+      "random_baseline_std": {
+        "H0": 0.0023899747834567474,
+        "H1": 0.002620455024129544
+      },
+      "ph_time_base_s": 0.06519770622253418,
+      "ph_time_composed_s": 0.061800241470336914,
+      "n_base_features_h1": 1342,
+      "n_composed_features_h1": 1393,
+      "median_persistence_h1": 0.4215278625488281,
+      "max_persistence_h1": 2.328571319580078
+    },
+    "layer_7_self_attn.v_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.271339476108551,
+      "mean_delta_norm": 0.16543780267238617,
+      "relative_perturbation": 0.004163509682431082,
+      "bottleneck_distances": {
+        "H0": 0.04659271240234375,
+        "H1": 0.0
+      },
+      "stability_bound": 0.271339476108551,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 69.36961364746094,
+      "vulnerability_bound": 0.542678952217102,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.02889251708984375,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.001446457551032189,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.002604961395263672,
+      "ph_time_composed_s": 0.002248048782348633,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_7_self_attn.o_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6953774094581604,
+      "mean_delta_norm": 0.3388082981109619,
+      "relative_perturbation": 0.00777516334391487,
+      "bottleneck_distances": {
+        "H0": 0.03363800048828125,
+        "H1": 0.0
+      },
+      "stability_bound": 0.6953774094581604,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 90.72830200195312,
+      "vulnerability_bound": 1.3907548189163208,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0321380615234375,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.003966456400066033,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.006532907485961914,
+      "ph_time_composed_s": 0.006139039993286133,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_7_mlp.gate_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.7587568759918213,
+      "mean_delta_norm": 0.46408095955848694,
+      "relative_perturbation": 0.006208672798182303,
+      "bottleneck_distances": {
+        "H0": 0.0274658203125,
+        "H1": 0.0298309326171875
+      },
+      "stability_bound": 0.7587568759918213,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 167.16998291015625,
+      "vulnerability_bound": 1.5175137519836426,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0210052490234375,
+        "H1": 0.033880615234375
+      },
+      "random_baseline_std": {
+        "H0": 0.00206900627387088,
+        "H1": 0.006636647828583668
+      },
+      "ph_time_base_s": 0.1676487922668457,
+      "ph_time_composed_s": 0.16762113571166992,
+      "n_base_features_h1": 1852,
+      "n_composed_features_h1": 1869,
+      "median_persistence_h1": 0.4976043701171875,
+      "max_persistence_h1": 5.211395263671875
+    },
+    "layer_7_mlp.up_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.7464335560798645,
+      "mean_delta_norm": 0.4735674262046814,
+      "relative_perturbation": 0.006339483925087427,
+      "bottleneck_distances": {
+        "H0": 0.034210205078125,
+        "H1": 0.010650634765625
+      },
+      "stability_bound": 0.7464335560798645,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 152.2611083984375,
+      "vulnerability_bound": 1.492867112159729,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0253997802734375,
+        "H1": 0.013214111328125
+      },
+      "random_baseline_std": {
+        "H0": 0.0018402276742060528,
+        "H1": 0.0038400403279990765
+      },
+      "ph_time_base_s": 0.044786930084228516,
+      "ph_time_composed_s": 0.04381537437438965,
+      "n_base_features_h1": 3,
+      "n_composed_features_h1": 3,
+      "median_persistence_h1": 0.1659088134765625,
+      "max_persistence_h1": 1.4279937744140625
+    },
+    "layer_7_mlp.down_proj": {
+      "shape": [
+        6912,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.4979844093322754,
+      "mean_delta_norm": 0.23116737604141235,
+      "relative_perturbation": 0.005345590791604849,
+      "bottleneck_distances": {
+        "H0": 0.13432693481445312,
+        "H1": 0.013052821159362793
+      },
+      "stability_bound": 0.4979844093322754,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 483,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 93.24755859375,
+      "vulnerability_bound": 0.9959688186645508,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 483,
+      "random_baseline_mean": {
+        "H0": 0.15432525873184205,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.000785652568946183,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.007206916809082031,
+      "ph_time_composed_s": 0.007359981536865234,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 6
+    },
+    "layer_15_self_attn.q_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.5192843675613403,
+      "mean_delta_norm": 0.2760171592235565,
+      "relative_perturbation": 0.008310147087487424,
+      "bottleneck_distances": {
+        "H0": 0.0299224853515625,
+        "H1": 0.0380706787109375
+      },
+      "stability_bound": 0.5192843675613403,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 83.32672119140625,
+      "vulnerability_bound": 1.0385687351226807,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.02114105224609375,
+        "H1": 0.03005218505859375
+      },
+      "random_baseline_std": {
+        "H0": 0.002359361116418979,
+        "H1": 0.001460450259469445
+      },
+      "ph_time_base_s": 0.11295104026794434,
+      "ph_time_composed_s": 0.1121368408203125,
+      "n_base_features_h1": 1851,
+      "n_composed_features_h1": 1884,
+      "median_persistence_h1": 0.43292999267578125,
+      "max_persistence_h1": 2.187286376953125
+    },
+    "layer_15_self_attn.k_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.26950687170028687,
+      "mean_delta_norm": 0.14593450725078583,
+      "relative_perturbation": 0.00525382466876757,
+      "bottleneck_distances": {
+        "H0": 0.03063201904296875,
+        "H1": 0.037841796875
+      },
+      "stability_bound": 0.26950687170028687,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 65.02304077148438,
+      "vulnerability_bound": 0.5390137434005737,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.029119873046875,
+        "H1": 0.03086090087890625
+      },
+      "random_baseline_std": {
+        "H0": 0.0030031584055567905,
+        "H1": 0.002081233943699713
+      },
+      "ph_time_base_s": 0.07112812995910645,
+      "ph_time_composed_s": 0.06784224510192871,
+      "n_base_features_h1": 1361,
+      "n_composed_features_h1": 1410,
+      "median_persistence_h1": 0.5407333374023438,
+      "max_persistence_h1": 3.2319564819335938
+    },
+    "layer_15_self_attn.v_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.3426550030708313,
+      "mean_delta_norm": 0.18628671765327454,
+      "relative_perturbation": 0.0037288639047705577,
+      "bottleneck_distances": {
+        "H0": 0.036529541015625,
+        "H1": 0.0
+      },
+      "stability_bound": 0.3426550030708313,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 97.66140747070312,
+      "vulnerability_bound": 0.6853100061416626,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.03677825927734375,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.004162167501737358,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.0024881362915039062,
+      "ph_time_composed_s": 0.0022630691528320312,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_15_self_attn.o_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6406961679458618,
+      "mean_delta_norm": 0.34204885363578796,
+      "relative_perturbation": 0.005760248610681639,
+      "bottleneck_distances": {
+        "H0": 0.0675506591796875,
+        "H1": 0.069732666015625
+      },
+      "stability_bound": 0.6406961679458618,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 139.8635711669922,
+      "vulnerability_bound": 1.2813923358917236,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.030816650390625,
+        "H1": 0.0273284912109375
+      },
+      "random_baseline_std": {
+        "H0": 0.003233604906150004,
+        "H1": 0.0035303971096130285
+      },
+      "ph_time_base_s": 0.01909184455871582,
+      "ph_time_composed_s": 0.018352031707763672,
+      "n_base_features_h1": 66,
+      "n_composed_features_h1": 65,
+      "median_persistence_h1": 0.8067703247070312,
+      "max_persistence_h1": 5.3329925537109375
+    },
+    "layer_15_mlp.gate_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.9022458791732788,
+      "mean_delta_norm": 0.49460864067077637,
+      "relative_perturbation": 0.006545944196592924,
+      "bottleneck_distances": {
+        "H0": 0.03125,
+        "H1": 0.0396575927734375
+      },
+      "stability_bound": 0.9022458791732788,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 188.52825927734375,
+      "vulnerability_bound": 1.8044917583465576,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.026165771484375,
+        "H1": 0.036578369140625
+      },
+      "random_baseline_std": {
+        "H0": 0.005056638376552985,
+        "H1": 0.003554733297032048
+      },
+      "ph_time_base_s": 0.11492800712585449,
+      "ph_time_composed_s": 0.11647415161132812,
+      "n_base_features_h1": 1686,
+      "n_composed_features_h1": 1704,
+      "median_persistence_h1": 0.5669631958007812,
+      "max_persistence_h1": 2.940032958984375
+    },
+    "layer_15_mlp.up_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.8731898665428162,
+      "mean_delta_norm": 0.5054869055747986,
+      "relative_perturbation": 0.006403340243661434,
+      "bottleneck_distances": {
+        "H0": 0.0562744140625,
+        "H1": 0.045257568359375
+      },
+      "stability_bound": 0.8731898665428162,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 181.0869140625,
+      "vulnerability_bound": 1.7463797330856323,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.027362060546875,
+        "H1": 0.027740478515625
+      },
+      "random_baseline_std": {
+        "H0": 0.0021584666855008245,
+        "H1": 0.003380102486072404
+      },
+      "ph_time_base_s": 0.049462080001831055,
+      "ph_time_composed_s": 0.04816317558288574,
+      "n_base_features_h1": 159,
+      "n_composed_features_h1": 160,
+      "median_persistence_h1": 0.5151824951171875,
+      "max_persistence_h1": 2.3970947265625
+    },
+    "layer_15_mlp.down_proj": {
+      "shape": [
+        6912,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.30479681491851807,
+      "mean_delta_norm": 0.1863485723733902,
+      "relative_perturbation": 0.00297365756437952,
+      "bottleneck_distances": {
+        "H0": 0.03087615966796875,
+        "H1": 0.0
+      },
+      "stability_bound": 0.30479681491851807,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 102.49896240234375,
+      "vulnerability_bound": 0.6095936298370361,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0166015625,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0019810586385641455,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.005934953689575195,
+      "ph_time_composed_s": 0.005580902099609375,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_22_self_attn.q_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.46297577023506165,
+      "mean_delta_norm": 0.2707206904888153,
+      "relative_perturbation": 0.008225920173753093,
+      "bottleneck_distances": {
+        "H0": 0.02602386474609375,
+        "H1": 0.03415679931640625
+      },
+      "stability_bound": 0.46297577023506165,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 74.9687271118164,
+      "vulnerability_bound": 0.9259515404701233,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.02085113525390625,
+        "H1": 0.02783203125
+      },
+      "random_baseline_std": {
+        "H0": 0.0012093974133565893,
+        "H1": 0.0022306554385486898
+      },
+      "ph_time_base_s": 0.1054692268371582,
+      "ph_time_composed_s": 0.10502195358276367,
+      "n_base_features_h1": 1883,
+      "n_composed_features_h1": 1909,
+      "median_persistence_h1": 0.41315460205078125,
+      "max_persistence_h1": 2.2756195068359375
+    },
+    "layer_22_self_attn.k_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.2544114589691162,
+      "mean_delta_norm": 0.14609812200069427,
+      "relative_perturbation": 0.005488869046709174,
+      "bottleneck_distances": {
+        "H0": 0.02957916259765625,
+        "H1": 0.037212371826171875
+      },
+      "stability_bound": 0.2544114589691162,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 59.02812194824219,
+      "vulnerability_bound": 0.5088229179382324,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.026104736328125,
+        "H1": 0.0340362548828125
+      },
+      "random_baseline_std": {
+        "H0": 0.0022752555819373415,
+        "H1": 0.0026356854003351886
+      },
+      "ph_time_base_s": 0.06462883949279785,
+      "ph_time_composed_s": 0.06241488456726074,
+      "n_base_features_h1": 1360,
+      "n_composed_features_h1": 1400,
+      "median_persistence_h1": 0.48732757568359375,
+      "max_persistence_h1": 2.6736488342285156
+    },
+    "layer_22_self_attn.v_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.4112569987773895,
+      "mean_delta_norm": 0.19450777769088745,
+      "relative_perturbation": 0.005123867737615867,
+      "bottleneck_distances": {
+        "H0": 0.06231689453125,
+        "H1": 0.0
+      },
+      "stability_bound": 0.4112569987773895,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 87.67255401611328,
+      "vulnerability_bound": 0.822513997554779,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0383514404296875,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.006003389005525214,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.0025658607482910156,
+      "ph_time_composed_s": 0.0022499561309814453,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_22_self_attn.o_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 1.2628103494644165,
+      "mean_delta_norm": 0.48380571603775024,
+      "relative_perturbation": 0.012616873905752436,
+      "bottleneck_distances": {
+        "H0": 0.06557464599609375,
+        "H1": 0.0
+      },
+      "stability_bound": 1.2628103494644165,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 100.5306167602539,
+      "vulnerability_bound": 2.525620698928833,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.05955772399902344,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.010104838532950742,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.007642030715942383,
+      "ph_time_composed_s": 0.0074939727783203125,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_22_mlp.gate_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 1.1778723001480103,
+      "mean_delta_norm": 0.5472464561462402,
+      "relative_perturbation": 0.007712647120015259,
+      "bottleneck_distances": {
+        "H0": 0.0346221923828125,
+        "H1": 0.06103515625
+      },
+      "stability_bound": 1.1778723001480103,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 207.33763122558594,
+      "vulnerability_bound": 2.3557446002960205,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.027001953125,
+        "H1": 0.0381378173828125
+      },
+      "random_baseline_std": {
+        "H0": 0.0029648671356605734,
+        "H1": 0.005085263370189153
+      },
+      "ph_time_base_s": 0.057810068130493164,
+      "ph_time_composed_s": 0.05698394775390625,
+      "n_base_features_h1": 525,
+      "n_composed_features_h1": 530,
+      "median_persistence_h1": 0.530364990234375,
+      "max_persistence_h1": 4.32281494140625
+    },
+    "layer_22_mlp.up_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 1.0599182844161987,
+      "mean_delta_norm": 0.5308650135993958,
+      "relative_perturbation": 0.007214066621258328,
+      "bottleneck_distances": {
+        "H0": 0.037811279296875,
+        "H1": 0.0279388427734375
+      },
+      "stability_bound": 1.0599182844161987,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 193.24758911132812,
+      "vulnerability_bound": 2.1198365688323975,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0284393310546875,
+        "H1": 0.029156494140625
+      },
+      "random_baseline_std": {
+        "H0": 0.0030700501579822032,
+        "H1": 0.005386394900406635
+      },
+      "ph_time_base_s": 0.04007577896118164,
+      "ph_time_composed_s": 0.0401301383972168,
+      "n_base_features_h1": 96,
+      "n_composed_features_h1": 96,
+      "median_persistence_h1": 0.5797195434570312,
+      "max_persistence_h1": 4.0328216552734375
+    },
+    "layer_22_mlp.down_proj": {
+      "shape": [
+        6912,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.4600696563720703,
+      "mean_delta_norm": 0.20176221430301666,
+      "relative_perturbation": 0.004016957857138521,
+      "bottleneck_distances": {
+        "H0": 0.12723539769649506,
+        "H1": 0.0
+      },
+      "stability_bound": 0.4600696563720703,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 495,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 114.56793975830078,
+      "vulnerability_bound": 0.9201393127441406,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 495,
+      "random_baseline_mean": {
+        "H0": 0.14165380895137786,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0006031905843954812,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.006464958190917969,
+      "ph_time_composed_s": 0.0059430599212646484,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_29_self_attn.q_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.7124239206314087,
+      "mean_delta_norm": 0.34339284896850586,
+      "relative_perturbation": 0.016411135582670655,
+      "bottleneck_distances": {
+        "H0": 0.07070159912109375,
+        "H1": 0.0
+      },
+      "stability_bound": 0.7124239206314087,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 43.411006927490234,
+      "vulnerability_bound": 1.4248478412628174,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.02457122802734375,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.002432965229991125,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.005704164505004883,
+      "ph_time_composed_s": 0.0056188106536865234,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_29_self_attn.k_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.28350135684013367,
+      "mean_delta_norm": 0.17960378527641296,
+      "relative_perturbation": 0.008735014935172975,
+      "bottleneck_distances": {
+        "H0": 0.05883026123046875,
+        "H1": 0.0
+      },
+      "stability_bound": 0.28350135684013367,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 32.45573806762695,
+      "vulnerability_bound": 0.5670027136802673,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.03010902404785156,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0022209953731875684,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.002202272415161133,
+      "ph_time_composed_s": 0.002023935317993164,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_29_self_attn.v_proj": {
+      "shape": [
+        2560,
+        640
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.6625939011573792,
+      "mean_delta_norm": 0.2558630704879761,
+      "relative_perturbation": 0.01969156875943068,
+      "bottleneck_distances": {
+        "H0": 0.08902549743652344,
+        "H1": 0.0
+      },
+      "stability_bound": 0.6625939011573792,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 33.64860916137695,
+      "vulnerability_bound": 1.3251878023147583,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.049639129638671876,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0057845339547848915,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.0021648406982421875,
+      "ph_time_composed_s": 0.0020112991333007812,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 0
+    },
+    "layer_29_self_attn.o_proj": {
+      "shape": [
+        2560,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 1.993637204170227,
+      "mean_delta_norm": 0.5966622233390808,
+      "relative_perturbation": 0.05391729646264704,
+      "bottleneck_distances": {
+        "H0": 0.25656378269195557,
+        "H1": 0.051494598388671875
+      },
+      "stability_bound": 1.993637204170227,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 383,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 38.680908203125,
+      "vulnerability_bound": 3.987274408340454,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 383,
+      "random_baseline_mean": {
+        "H0": 0.8472162961959839,
+        "H1": 0.014827346801757813
+      },
+      "random_baseline_std": {
+        "H0": 0.0009380131486431812,
+        "H1": 0.008865107058433224
+      },
+      "ph_time_base_s": 0.016629934310913086,
+      "ph_time_composed_s": 0.0171358585357666,
+      "n_base_features_h1": 1,
+      "n_composed_features_h1": 53,
+      "median_persistence_h1": 0.3501472473144531,
+      "max_persistence_h1": 0.3501472473144531
+    },
+    "layer_29_mlp.gate_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 2.3065340518951416,
+      "mean_delta_norm": 0.7092278003692627,
+      "relative_perturbation": 0.012785491796746293,
+      "bottleneck_distances": {
+        "H0": 0.056854248046875,
+        "H1": 0.0554656982421875
+      },
+      "stability_bound": 2.3065340518951416,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 237.5625,
+      "vulnerability_bound": 4.613068103790283,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.0400054931640625,
+        "H1": 0.037139892578125
+      },
+      "random_baseline_std": {
+        "H0": 0.006512213776827995,
+        "H1": 0.004974646063056395
+      },
+      "ph_time_base_s": 0.046150922775268555,
+      "ph_time_composed_s": 0.04601907730102539,
+      "n_base_features_h1": 108,
+      "n_composed_features_h1": 107,
+      "median_persistence_h1": 0.6975631713867188,
+      "max_persistence_h1": 3.8424530029296875
+    },
+    "layer_29_mlp.up_proj": {
+      "shape": [
+        2560,
+        6912
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 1.9280980825424194,
+      "mean_delta_norm": 0.6505985260009766,
+      "relative_perturbation": 0.01149996422683421,
+      "bottleneck_distances": {
+        "H0": 0.1097869873046875,
+        "H1": 0.111236572265625
+      },
+      "stability_bound": 1.9280980825424194,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 499,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 222.99090576171875,
+      "vulnerability_bound": 3.856196165084839,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 499,
+      "random_baseline_mean": {
+        "H0": 0.03970947265625,
+        "H1": 0.0448974609375
+      },
+      "random_baseline_std": {
+        "H0": 0.006839591820661531,
+        "H1": 0.003860643707268355
+      },
+      "ph_time_base_s": 0.05050301551818848,
+      "ph_time_composed_s": 0.049822092056274414,
+      "n_base_features_h1": 308,
+      "n_composed_features_h1": 312,
+      "median_persistence_h1": 0.6904983520507812,
+      "max_persistence_h1": 4.2375030517578125
+    },
+    "layer_29_mlp.down_proj": {
+      "shape": [
+        6912,
+        2560
+      ],
+      "n_subsample": 500,
+      "max_delta_norm": 0.83951735496521,
+      "mean_delta_norm": 0.3061416745185852,
+      "relative_perturbation": 0.009110941913218495,
+      "bottleneck_distances": {
+        "H0": 0.20340228080749512,
+        "H1": 0.015175849199295044
+      },
+      "stability_bound": 0.83951735496521,
+      "bound_satisfied": {
+        "H0": true,
+        "H1": true
+      },
+      "n_base_features_h0": 484,
+      "n_composed_features_h0": 499,
+      "median_persistence_h0": 92.2708511352539,
+      "vulnerability_bound": 1.67903470993042,
+      "n_vulnerable_base_h0": 0,
+      "n_stable_base_h0": 484,
+      "random_baseline_mean": {
+        "H0": 0.39422662258148194,
+        "H1": 0.0
+      },
+      "random_baseline_std": {
+        "H0": 0.0018589676077889058,
+        "H1": 0.0
+      },
+      "ph_time_base_s": 0.0070400238037109375,
+      "ph_time_composed_s": 0.007050037384033203,
+      "n_base_features_h1": 0,
+      "n_composed_features_h1": 1
+    }
+  }
+}

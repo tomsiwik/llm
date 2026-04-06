@@ -1,0 +1,10 @@
+# Experiment runner configuration
+# Controls how `experiment run` submits jobs to pueue.
+
+# Maximum concurrent experiments. MLX experiments compete for the same Metal GPU
+# and unified memory — running >1 CPU-bound experiment causes thrashing, not speedup.
+# Set to 2+ only for I/O-bound or lightweight analysis scripts.
+parallel: 1
+
+# Pueue group name for experiment tasks.
+group: experiments

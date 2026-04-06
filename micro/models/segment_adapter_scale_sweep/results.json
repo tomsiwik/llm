@@ -1,0 +1,156 @@
+{
+  "experiment": "exp_segment_adapter_scale_sweep",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "domains": [
+    "medical",
+    "code",
+    "math",
+    "legal",
+    "finance"
+  ],
+  "n_domains": 5,
+  "scales_tested": [
+    2.0,
+    5.0,
+    10.0,
+    15.0,
+    20.0
+  ],
+  "training_scale": 20.0,
+  "segment_length": 128,
+  "n_eval_per_domain": 10,
+  "n_gen_per_domain": 5,
+  "seed": 42,
+  "ppl": {
+    "base_overall": 7.993132033632626,
+    "base_per_domain": {
+      "medical": 5.333543014574123,
+      "code": 4.106612277346208,
+      "math": 4.887173760082383,
+      "legal": 19.09843317972486,
+      "finance": 15.959890644622297
+    },
+    "perseq_overall": 10.479553907494628,
+    "perseq_per_domain": {
+      "medical": 6.614752127459929,
+      "code": 6.14652388154766,
+      "math": 4.283389029340467,
+      "legal": 21.612287789550187,
+      "finance": 16.175619744901965
+    },
+    "scale_results": {
+      "2.0": {
+        "per_domain": {
+          "medical": 5.341948911991677,
+          "code": 4.100150260935016,
+          "math": 4.894876160002428,
+          "legal": 19.068380576678734,
+          "finance": 15.909702350685679
+        },
+        "overall_ppl": 7.988098575339547,
+        "total_nll": 13195.0,
+        "total_n": 6350,
+        "delta_vs_base_pct": -0.06297229010980843
+      },
+      "5.0": {
+        "per_domain": {
+          "medical": 5.3503680574717665,
+          "code": 4.103379997090203,
+          "math": 4.9141853111857845,
+          "legal": 19.14360091552724,
+          "finance": 15.934776738487226
+        },
+        "overall_ppl": 8.006990403931923,
+        "total_nll": 13210.0,
+        "total_n": 6350,
+        "delta_vs_base_pct": 0.17337847343175117
+      },
+      "10.0": {
+        "per_domain": {
+          "medical": 5.405416869738306,
+          "code": 4.103379997090203,
+          "math": 4.929687460215376,
+          "legal": 19.32534260361631,
+          "finance": 16.010237261121627
+        },
+        "overall_ppl": 8.051245272102724,
+        "total_nll": 13245.0,
+        "total_n": 6350,
+        "delta_vs_base_pct": 0.7270396413517899
+      },
+      "15.0": {
+        "per_domain": {
+          "medical": 5.448147216232236,
+          "code": 4.113084478178322,
+          "math": 4.95693398577234,
+          "legal": 19.416859446110593,
+          "finance": 16.010237261121627
+        },
+        "overall_ppl": 8.084278581874438,
+        "total_nll": 13271.0,
+        "total_n": 6350,
+        "delta_vs_base_pct": 1.1403108050548338
+      },
+      "20.0": {
+        "per_domain": {
+          "medical": 5.482574572593316,
+          "code": 4.126059497334984,
+          "math": 4.992186627815567,
+          "legal": 19.462780259054817,
+          "finance": 16.162232048276994
+        },
+        "overall_ppl": 8.130240876130118,
+        "total_nll": 13307.0,
+        "total_n": 6350,
+        "delta_vs_base_pct": 1.7153331375058034
+      }
+    }
+  },
+  "best_scale": 2.0,
+  "best_scale_ppl": 7.988098575339547,
+  "behavioral": {
+    "base_only": {
+      "medical": 0.3911690653272803,
+      "code": 0.24499999999999997,
+      "math": 0.7106671106671106,
+      "legal": 0.12272606456006238,
+      "finance": 0.12106204935255102,
+      "mean": 0.3181248579814008
+    },
+    "best_scale": {
+      "medical": 0.39427251360314236,
+      "code": 0.24499999999999997,
+      "math": 0.7106671106671106,
+      "legal": 0.10881553064952847,
+      "finance": 0.12747076840088548,
+      "mean": 0.3172451846641334
+    },
+    "training_scale": {
+      "medical": 0.3911690653272803,
+      "code": 0.24499999999999997,
+      "math": 0.7106671106671106,
+      "legal": 0.12047870618367176,
+      "finance": 0.12212077137457814,
+      "mean": 0.31788713071052815
+    }
+  },
+  "kill_criteria": {
+    "K787": {
+      "pass": false,
+      "detail": "FAIL: Best segment PPL=7.9881 at s=2.0 vs base=7.9931 (delta=-0.06%). This is ~5 nats over 6350 tokens -- noise, not statistically significant. No CI, no bootstrap, no multi-seed."
+    },
+    "K788": {
+      "pass": false,
+      "detail": "FAIL: Curve is monotonically increasing (7.988, 8.007, 8.051, 8.084, 8.130). U-shape prediction refuted. s*=2 != s_train=20 satisfies only the weaker sub-condition, not the predicted non-monotonicity."
+    },
+    "K789": {
+      "pass": true,
+      "detail": "PASS (trivial): Best-scale behavioral=0.317, training-scale behavioral=0.318, ratio=0.998. Passes because adapter has zero behavioral effect at any scale."
+    }
+  },
+  "verdict": "KILLED",
+  "phase1_time_s": 26.5,
+  "phase2_time_s": 246.3,
+  "total_time_s": 273.0,
+  "timestamp": "2026-04-06 09:17:49"
+}

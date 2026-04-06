@@ -1,0 +1,2693 @@
+{
+  "experiment": "universal_adapter_ablation",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "n_prompts_per_domain": 10,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "max_new_tokens": 200,
+  "temperature": 0.0,
+  "times": {
+    "base_gen_s": 185.7,
+    "code_gen_s": 1075.8,
+    "domain_gen_s": 1007.8,
+    "routed_gen_s": 3268.7,
+    "total_s": 5538.1
+  },
+  "analysis": {
+    "domains": {
+      "medical": {
+        "base_mean": 0.6014,
+        "code_adapter_mean": 0.5805,
+        "domain_adapter_mean": 0.5966,
+        "routed_mean": 0.5966,
+        "alpha_coverage": 0.9731,
+        "domain_beats_code": true,
+        "code_vs_base_pct": -3.5,
+        "domain_vs_base_pct": -0.8,
+        "routed_vs_base_pct": -0.8,
+        "breakdown": {
+          "factual_overlap": {
+            "base": 0.48957245425222773,
+            "code_adapter": 0.4780798037983671,
+            "domain_adapter": 0.5349790911494041,
+            "routed": 0.5349790911494041
+          },
+          "response_quality": {
+            "base": 0.7690523214239449,
+            "code_adapter": 0.7341278718007093,
+            "domain_adapter": 0.6889441718674197,
+            "routed": 0.6889441718674197
+          }
+        }
+      },
+      "code": {
+        "base_mean": 0.5707,
+        "code_adapter_mean": 0.7099,
+        "domain_adapter_mean": 0.7099,
+        "routed_mean": 0.7099,
+        "alpha_coverage": 1.0,
+        "domain_beats_code": false,
+        "code_vs_base_pct": 24.4,
+        "domain_vs_base_pct": 24.4,
+        "routed_vs_base_pct": 24.4,
+        "breakdown": {
+          "syntax_valid": {
+            "base": 0.5,
+            "code_adapter": 0.8,
+            "domain_adapter": 0.8,
+            "routed": 0.8
+          },
+          "response_quality": {
+            "base": 0.7356010292886829,
+            "code_adapter": 0.49964539710761746,
+            "domain_adapter": 0.49964539710761746,
+            "routed": 0.49964539710761746
+          }
+        }
+      },
+      "math": {
+        "base_mean": 0.3778,
+        "code_adapter_mean": 0.7727,
+        "domain_adapter_mean": 0.6415,
+        "routed_mean": 0.6415,
+        "alpha_coverage": 1.2045,
+        "domain_beats_code": false,
+        "code_vs_base_pct": 104.6,
+        "domain_vs_base_pct": 69.8,
+        "routed_vs_base_pct": 69.8,
+        "breakdown": {
+          "answer_correct": {
+            "base": 0.3,
+            "code_adapter": 0.8,
+            "domain_adapter": 0.7,
+            "routed": 0.7
+          },
+          "response_quality": {
+            "base": 0.6887747702857344,
+            "code_adapter": 0.6635490304504822,
+            "domain_adapter": 0.4075048355251255,
+            "routed": 0.4075048355251255
+          }
+        }
+      },
+      "legal": {
+        "base_mean": 0.4227,
+        "code_adapter_mean": 0.3725,
+        "domain_adapter_mean": 0.2975,
+        "routed_mean": 0.2853,
+        "alpha_coverage": 1.2522,
+        "domain_beats_code": false,
+        "code_vs_base_pct": -11.9,
+        "domain_vs_base_pct": -29.6,
+        "routed_vs_base_pct": -32.5,
+        "breakdown": {
+          "factual_overlap": {
+            "base": 0.19094467341900107,
+            "code_adapter": 0.1447518222732377,
+            "domain_adapter": 0.09966733203179125,
+            "routed": 0.07976137591893859
+          },
+          "response_quality": {
+            "base": 0.7702940139478027,
+            "code_adapter": 0.7140818674176023,
+            "domain_adapter": 0.5941669332728444,
+            "routed": 0.593686018218635
+          }
+        }
+      },
+      "finance": {
+        "base_mean": 0.3688,
+        "code_adapter_mean": 0.3517,
+        "domain_adapter_mean": 0.3162,
+        "routed_mean": 0.3148,
+        "alpha_coverage": 1.1123,
+        "domain_beats_code": false,
+        "code_vs_base_pct": -4.6,
+        "domain_vs_base_pct": -14.3,
+        "routed_vs_base_pct": -14.6,
+        "breakdown": {
+          "factual_overlap": {
+            "base": 0.09502612609232342,
+            "code_adapter": 0.10109591974945151,
+            "domain_adapter": 0.06903120916984319,
+            "routed": 0.08264284144001204
+          },
+          "response_quality": {
+            "base": 0.779439550645321,
+            "code_adapter": 0.7276563843391407,
+            "domain_adapter": 0.6869442867671671,
+            "routed": 0.6630619250517787
+          }
+        }
+      }
+    },
+    "totals": {
+      "base": 2.3413,
+      "code_adapter": 2.7873,
+      "domain_specific": 2.5616,
+      "routed": 2.5481
+    },
+    "kill_criteria": {
+      "K608": {
+        "description": "Code adapter >= 50% of routed total",
+        "code_total": 2.7873,
+        "routed_total": 2.5481,
+        "ratio": 1.0939,
+        "threshold": 0.5,
+        "result": "PASS"
+      },
+      "K609": {
+        "description": "At least 2/5 domains where domain > code",
+        "domains_domain_beats_code": 1,
+        "threshold": 2,
+        "result": "FAIL",
+        "per_domain": {
+          "medical": true,
+          "code": false,
+          "math": false,
+          "legal": false,
+          "finance": false
+        }
+      },
+      "K610": {
+        "description": "Uses execution-based metrics",
+        "metrics_used": {
+          "code": "ast.parse syntax validation",
+          "math": "numerical answer correctness",
+          "prose": "factual entity overlap + response quality"
+        },
+        "result": "PASS"
+      }
+    },
+    "alpha_coverage": {
+      "medical": 0.9731,
+      "code": 1.0,
+      "math": 1.2045,
+      "legal": 1.2522,
+      "finance": 1.1123
+    },
+    "routing_value": -0.0881,
+    "routing_accuracy": 0.86
+  },
+  "base_results": {
+    "medical": [
+      {
+        "instruction": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "ground_truth": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringomyelia is a bi-lateral loss of pain and temperature sensation in a \"cape-like\" distribution, affectin",
+        "score": 0.5451765562431744,
+        "breakdown": {
+          "factual_overlap": 0.34146341463414637,
+          "response_quality": 0.8507462686567164
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the hormone secretin and where is it secreted from in the body?",
+        "ground_truth": "Secretin is a hormone that is secreted from specialized cells called S cells in the duodenum, which is the first part of the small intestine. Secretin plays an important role in regulating the digestive system by stimulating the pancreas to release bicarbonate, which helps to neutralize stomach acid",
+        "score": 0.7155896069287142,
+        "breakdown": {
+          "factual_overlap": 0.6842105263157895,
+          "response_quality": 0.7626582278481013
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "ground_truth": "Right heart failure is a condition in which the heart is unable to pump blood effectively through the pulmonary circulation. This can lead to a range of symptoms, including shortness of breath, fatigue, and swelling in the legs and feet. In some cases, right heart failure may also cause painful hepa",
+        "score": 0.6322742474916387,
+        "breakdown": {
+          "factual_overlap": 0.5217391304347826,
+          "response_quality": 0.7980769230769231
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "ground_truth": "Cystinuria is a genetic disorder that is primarily caused by a defect in renal PCT and intestinal amino acid transporters, which leads to the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead ",
+        "score": 0.6438709677419354,
+        "breakdown": {
+          "factual_overlap": 0.6,
+          "response_quality": 0.7096774193548387
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "ground_truth": "TCAs are a class of antidepressants that can cause QT interval prolongation, which can precipitate Torsades de pointes, a potentially life-threatening cardiac arrhythmia.",
+        "score": 0.5168304668304669,
+        "breakdown": {
+          "factual_overlap": 0.36363636363636365,
+          "response_quality": 0.7466216216216216
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "ground_truth": "\u03b1-thalassemia is characterized by a four gene deletion, and it is characterized by the formation of \u03b34 tetramers, which are known as Hb Barts.",
+        "score": 0.572857142857143,
+        "breakdown": {
+          "factual_overlap": 0.42857142857142855,
+          "response_quality": 0.7892857142857144
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "ground_truth": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone for cocaine toxicity or pheochromocytoma.",
+        "score": 0.6965384615384616,
+        "breakdown": {
+          "factual_overlap": 0.625,
+          "response_quality": 0.8038461538461539
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "ground_truth": "Small (oat) cell lung carcinoma is a type of lung cancer, and if it produces antibodies against neurons, it can cause paraneoplastic myelitis, encephalitis, and subacute cerebellar degeneration.",
+        "score": 0.5864772170504655,
+        "breakdown": {
+          "factual_overlap": 0.46153846153846156,
+          "response_quality": 0.7738853503184713
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "ground_truth": "Cystinuria is a genetic disorder that is caused by a defect in renal PCT and intestinal amino acid transporters, which results in the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead to the f",
+        "score": 0.6624776652769506,
+        "breakdown": {
+          "factual_overlap": 0.6086956521739131,
+          "response_quality": 0.7431506849315068
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "ground_truth": "Secondary amyloidosis is a medical condition that is characterized by the systemic deposition of AA amyloid, which is derived from serum amyloid-associated protein (SAA). This condition is typically associated with chronic inflammatory disorders such as rheumatoid arthritis, inflammatory bowel disea",
+        "score": 0.44155167925019523,
+        "breakdown": {
+          "factual_overlap": 0.2608695652173913,
+          "response_quality": 0.7125748502994012
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "code": [
+      {
+        "instruction": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "ground_truth": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title in titles:\n print(title[1])",
+        "score": 0.24146341463414633,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.8048780487804879
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python function to calculate an exponential series",
+        "ground_truth": "def exponential_series(x,n):\n    sum = 0\n    for i in range(n+1):\n        sum += x ** i\n    return sum",
+        "score": 0.20905511811023622,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.6968503937007874
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "ground_truth": "dict1 = {}\nfor lst in [list1, list2]:\n key = lst[0]\n val = lst[1:]\n dict1[key] = val\n\nprint(dict1)\n# Output: {'apple': ['red', 'green'], 'banana': ['yellow', 'green']}",
+        "score": 0.9331818181818181,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.7772727272727273
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Generate an api response in Python for the provided data.",
+        "ground_truth": "response = {\n  \"status\": 200,\n  \"data\": {\"name\": \"John\",\"age\":28},\n  \"message\": \"Success\"\n}",
+        "score": 0.23104838709677417,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.7701612903225806
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "ground_truth": "total = 0\nfor element in data:\n    total = total + element\nprint(total)",
+        "score": 0.9078571428571428,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6928571428571428
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a Python class which represents a 3D Vector",
+        "ground_truth": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n    \n    def __str__(self):\n        return \"(\" + str(self.x) + \", \" + str(self.y) + \", \" + str(self.z) + \")\"",
+        "score": 0.21486486486486486,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.7162162162162162
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python program to clean up a list of emails and put them into a new list.",
+        "ground_truth": "original_list = ['bob@example.com', 'alice+bob@cafe.com', 'bob@gmail.com.uk', 'bob+alice@example']\n\nclean_list = []\n\nfor email in original_list:\n email_without_plus = email.split('+')[0]\n email_without_dot_uk = email_without_plus.split('.uk')[0]\n clean_list.append(email_without_dot_uk)\n\nprint(clean_",
+        "score": 0.2352,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.784
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "ground_truth": "def get_max_value(numbers): \n    return max(numbers)\n\nprint(get_max_value(list))  # 6",
+        "score": 0.915267175572519,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.7175572519083969
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "ground_truth": "import requests\nfrom bs4 import BeautifulSoup\n \n# Make a GET request to fetch the raw HTML content\nhtml_content = requests.get('http://web-store.com').text\n \n# Parse the html content\nsoup = BeautifulSoup(html_content, \"lxml\")\n \n# Get the product data\nproducts = soup.find_all('div', attrs={\"itemprop\"",
+        "score": 0.932720588235294,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.7757352941176471
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "ground_truth": "class Sum:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n        \n    def add(self):\n        return self.x + self.y",
+        "score": 0.8861445783132529,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6204819277108433
+        },
+        "metric_type": "execution_code"
+      }
+    ],
+    "math": [
+      {
+        "instruction": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "ground_truth": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gifts.\nAfter the rebate, the total cost of the gifts is now $334 - $12 = $<<334-12=322>>322.\n#### 322",
+        "score": 0.14017857142857146,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.7008928571428572
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "ground_truth": "For the humans in the house, there are 5 * 2 = <<5*2=10>>10 legs\nJavier has a total of 2 + 1 = <<2+1=3>>3 four-legged pets\nFor the pets in the house, there are 3 * 4 = <<3*4=12>>12 legs\nThere are a total of 10 + 12 = <<10+12=22>>22 legs\n#### 22",
+        "score": 0.13818181818181818,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6909090909090909
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "ground_truth": "In 5 years, Cori will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, Cori\u2019s aunt will be 8 x 3 = <<8*3=24>>24 years old.\nToday, her aunt is 24 - 5 = <<24-5=19>>19 years old.\n#### 19",
+        "score": 0.1411764705882353,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.7058823529411764
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "ground_truth": "Kyle has 2 + 3 = <<2+3=5>>5 glass bottles.\nHe needs to make 15 x 5 = <<15*5=75>>75 origami stars\n#### 75",
+        "score": 0.9364341085271318,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6821705426356589
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "ground_truth": "Oscar needs to increase his maximum running time from 20 - 2 = <<20-2=18>>18 miles.\nOscar will need a total of 18 / ( 2 / 3 ) = <<18/(2/3)=27>>27 weeks to prepare.\n#### 27",
+        "score": 0.14365079365079367,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.7182539682539683
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "ground_truth": "Marvin sold 35 candy bars at $2 each so 35 * 2 = $<<35*2=70>>70 worth of candy\nTina sold three times the amount of candy so $70 * 3 = $<<70*3=210>>210 worth of candy\nIf Tina sold $210 worth of candy and Marvin sold $70 in candy then 210 - 70 = $<<210-70=140>>140 more sold than Marvin\n#### 140",
+        "score": 0.13361344537815129,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6680672268907564
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "ground_truth": "His partner has been teaching for 40-10=<<40-10=30>>30 years\nSo together they have 40+30=<<40+30=70>>70 years of experience\n#### 70",
+        "score": 0.924264705882353,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6213235294117647
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "ground_truth": "At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9 to reach a weight of 6*2=<<6+6=12>>12 pounds.\nIt doubled in weight again at 3 months old to reach a weight of 12*2=<<12*2=24>>24 pounds.\nIt doubled in weight again at 5 months old to reach a weight of 24*2=<<24*2=48>>48 poun",
+        "score": 0.14434782608695654,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.7217391304347827
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "ground_truth": "He spends 5*2=$<<5*2=10>>10 on Wednesday to pay for a movie ticket.\nHe spends 5*5=$<<5*5=25>>25 on Saturday to pay for a movie ticket.\nHe spends a total of 10+25=$<<10+25=35>>35.\n#### 35",
+        "score": 0.93671875,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.68359375
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "ground_truth": "His goal is 10 haircuts because 8 + 2 = <<8+2=10>>10\nHe is 80% there because (8 / 10) x 100 = <<(8/10)*100=80>>80\n#### 80",
+        "score": 0.13898305084745763,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6949152542372882
+        },
+        "metric_type": "execution_math"
+      }
+    ],
+    "legal": [
+      {
+        "instruction": "Speed bumps on private non-hoa road (California)",
+        "ground_truth": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job of asking everyone to chip in for snow plowing, and then another neighbor got a quote for repaving a",
+        "score": 0.3428325969563083,
+        "breakdown": {
+          "factual_overlap": 0.05154639175257732,
+          "response_quality": 0.7797619047619048
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can an employer dictate when an employee can take annual leave?",
+        "ground_truth": "My employer is trying enforce new rules about how we use our annual leave. Among other points they require the following are the ones of concern:\n\n\n1. 50% of annual leave must be booked (planned, bot necessarily taken) by September\n2. There must be at least two people in the office on all working da",
+        "score": 0.32873563218390806,
+        "breakdown": {
+          "factual_overlap": 0.034482758620689655,
+          "response_quality": 0.7701149425287357
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is a list of the most common English words copyrightable under US law?",
+        "ground_truth": "I am currently interested in doing some research performing various measurements and algorithms on the most common words in the English language. I have found a few good word lists online that would be suitable, but I am concerned that they may be subject to copyright and would like to be sure about",
+        "score": 0.44192279321367106,
+        "breakdown": {
+          "factual_overlap": 0.22448979591836735,
+          "response_quality": 0.7680722891566265
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is it illegal to misinform someone about the terms of a contract",
+        "ground_truth": "I have been in a number of discussions, which the other party described the contract terms verbally in a way to convince me to proceed with the contract. I want to ask if this is not fraud, and how to handle such situations. To clarify the point, what I mean is for one of the parties to state a defi",
+        "score": 0.41280423280423284,
+        "breakdown": {
+          "factual_overlap": 0.15714285714285714,
+          "response_quality": 0.7962962962962963
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How to get a copyright on a video game?",
+        "ground_truth": "I like to make video games and I figured I might as well make some money off of it. The problem with it is I have no idea how to get a copyright on my games before I start selling them. How would I do this? (Just comment if I need to specify anything else or if this is the wrong site.)",
+        "score": 0.4021116138763198,
+        "breakdown": {
+          "factual_overlap": 0.15384615384615385,
+          "response_quality": 0.7745098039215687
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "ground_truth": "I'm opening a business via the e-residency program with Estonia. I am a United States citizen and reside there, as well. Who should I file taxes with?",
+        "score": 0.5236363636363637,
+        "breakdown": {
+          "factual_overlap": 0.36363636363636365,
+          "response_quality": 0.7636363636363637
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "ground_truth": "I know this is a confusing matter and there's been number of questions here and articles elsewhere, but maybe it would be simpler in the situation explained below.\n\n\nAssume there's a non-US company selling software on App Store and providing certain subscription services. The following information h",
+        "score": 0.35674358141046475,
+        "breakdown": {
+          "factual_overlap": 0.14705882352941177,
+          "response_quality": 0.6712707182320442
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Startup making me pay legal costs of my vested options, is that legal?",
+        "ground_truth": "A startup I worked for had promised me to grant my options that were vested, however, they are making me pay the legal costs of executing those options. Is that legal? On the contract, it says nothing about legal costs. I feel like I'm being hold for ransom with the fees.",
+        "score": 0.5961538461538463,
+        "breakdown": {
+          "factual_overlap": 0.46153846153846156,
+          "response_quality": 0.7980769230769231
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I amend a contract after end date",
+        "ground_truth": "I'm a freelance web developer and I entered into a contract with a client in August 2018. The contract was set to end and product delivered by October 5 2018. However, due to the client changes in ideas and work in progress, we went way past that end date and now I am only going to deliver the final",
+        "score": 0.42522727272727273,
+        "breakdown": {
+          "factual_overlap": 0.1875,
+          "response_quality": 0.7818181818181817
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Liability for neighbor injured on my property",
+        "ground_truth": "My neighbor does odd jobs for me such as taking out the trash, cleaning out the gutters, etc. They fell off a ladder and required medical attention. Recently, they received a letter from their insurance provider that states:\n\n\n\n> \n> If another person or entity caused or may be responsible for the\n> ",
+        "score": 0.39667616334283,
+        "breakdown": {
+          "factual_overlap": 0.1282051282051282,
+          "response_quality": 0.7993827160493827
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "finance": [
+      {
+        "instruction": "What should I do with my $10K windfall, given these options?",
+        "ground_truth": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list before you start to think about any sizable \"fun\" spending.  If you don't have #1, set that aside firs",
+        "score": 0.3620546810273405,
+        "breakdown": {
+          "factual_overlap": 0.058823529411764705,
+          "response_quality": 0.8169014084507042
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What's the average rate of return for some of the most mainstream index funds?",
+        "ground_truth": "When asking about rate of return it is imperative to specify the time period. Average over all time? Average over the last 10 years? I've heard a good rule of thumb is 8-10% on average for all stocks over all time. That may be overstated now given the current economic climate. You can also look up f",
+        "score": 0.45292694726656996,
+        "breakdown": {
+          "factual_overlap": 0.23076923076923078,
+          "response_quality": 0.7861635220125787
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "ground_truth": "Here's another answer on the topic: Saving for retirement: How much is enough? An angle on it this question made me think of: a good approach here is to focus on savings rate (which you can control) rather than the final number (which you can't, plus it will fluctuate with the markets and make you n",
+        "score": 0.43820544774790815,
+        "breakdown": {
+          "factual_overlap": 0.17073170731707318,
+          "response_quality": 0.8394160583941606
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "ground_truth": "I think you may be drawing the wrong conclusion about why you put what type of investment in a taxable vs. tax-advantaged account. It is not so much about risk, but type of return. If you're investing both tax-advantaged and taxable accounts, you can benefit by putting more tax-inefficient investmen",
+        "score": 0.33915343915343915,
+        "breakdown": {
+          "factual_overlap": 0.07142857142857142,
+          "response_quality": 0.7407407407407407
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How can I find hotel properties to buy other than using Google?",
+        "ground_truth": "Probably the easiest way to invest in hotel rooms in the U.S. is to invest in a Real Estate Investment Trust, or REIT.  REITs are securities that invest in real estate and trade like a stock.  There are different REITs that invest in different things: some own office buildings, some residential rent",
+        "score": 0.3838700059630292,
+        "breakdown": {
+          "factual_overlap": 0.11627906976744186,
+          "response_quality": 0.7852564102564102
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Rate of change of beta",
+        "ground_truth": "This is a useful metric in that it gives you a trust factor on how reliable the beta is for future expectations   It is akin to velocity and acceleration  First  and second order derivatives of distance / time.  Erratic acceleration implies the velocity is less trustworthy  Same idea for beta",
+        "score": 0.27972972972972976,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.6993243243243243
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How does giving to charity work?",
+        "ground_truth": "For many people, giving to charity will have minimal effect on their taxes. Non-profits love to attract donations by saying the money is tax deductible, but for most people, it doesn't work out that way. You will only itemize deductions if they exceed your standard deduction. The IRS allows you to e",
+        "score": 0.36764203117144295,
+        "breakdown": {
+          "factual_overlap": 0.06153846153846154,
+          "response_quality": 0.826797385620915
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "ground_truth": "The short answer is yes you probably can take the deduction for a home office because the space is used exclusively and you are working there for the convenience of your employer if you don't have a desk at your employers office. The long answer is that it may not be worth it to take the home office",
+        "score": 0.35515515515515517,
+        "breakdown": {
+          "factual_overlap": 0.13513513513513514,
+          "response_quality": 0.6851851851851851
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Simple and safe way to manage a lot of cash",
+        "ground_truth": "If this money is intended to be used for retirement and depending on how old \"older\" is, it sounds a little risky to be putting too much money in a stock based mutual fund.  While the CDs may seem like crappy investments right now, it is important to down-shift risk as you get closer to retirement b",
+        "score": 0.35191780821917806,
+        "breakdown": {
+          "factual_overlap": 0.05,
+          "response_quality": 0.8047945205479452
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "ground_truth": "It's simple, really: Practice. Fiscal responsibility is not a trick you can learn look up on Google, or a service you can buy from your accountant.  Being responsible with your money is a skill that is learned over a lifetime.  The only way to get better at it is to practice, and not get discouraged",
+        "score": 0.3572597137014315,
+        "breakdown": {
+          "factual_overlap": 0.05555555555555555,
+          "response_quality": 0.8098159509202454
+        },
+        "metric_type": "execution_prose"
+      }
+    ]
+  },
+  "code_results": {
+    "medical": [
+      {
+        "instruction": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "ground_truth": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringomyelia is a bi-lateral loss of pain and temperature sensation in a \"cape-like\" distribution, affectin",
+        "score": 0.4720867208672087,
+        "breakdown": {
+          "factual_overlap": 0.2682926829268293,
+          "response_quality": 0.7777777777777778
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the hormone secretin and where is it secreted from in the body?",
+        "ground_truth": "Secretin is a hormone that is secreted from specialized cells called S cells in the duodenum, which is the first part of the small intestine. Secretin plays an important role in regulating the digestive system by stimulating the pancreas to release bicarbonate, which helps to neutralize stomach acid",
+        "score": 0.7322786735625191,
+        "breakdown": {
+          "factual_overlap": 0.7368421052631579,
+          "response_quality": 0.7254335260115607
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "ground_truth": "Right heart failure is a condition in which the heart is unable to pump blood effectively through the pulmonary circulation. This can lead to a range of symptoms, including shortness of breath, fatigue, and swelling in the legs and feet. In some cases, right heart failure may also cause painful hepa",
+        "score": 0.5692807801706623,
+        "breakdown": {
+          "factual_overlap": 0.43478260869565216,
+          "response_quality": 0.7710280373831775
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "ground_truth": "Cystinuria is a genetic disorder that is primarily caused by a defect in renal PCT and intestinal amino acid transporters, which leads to the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead ",
+        "score": 0.6678709677419354,
+        "breakdown": {
+          "factual_overlap": 0.64,
+          "response_quality": 0.7096774193548387
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "ground_truth": "TCAs are a class of antidepressants that can cause QT interval prolongation, which can precipitate Torsades de pointes, a potentially life-threatening cardiac arrhythmia.",
+        "score": 0.4505050505050505,
+        "breakdown": {
+          "factual_overlap": 0.2727272727272727,
+          "response_quality": 0.7171717171717171
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "ground_truth": "\u03b1-thalassemia is characterized by a four gene deletion, and it is characterized by the formation of \u03b34 tetramers, which are known as Hb Barts.",
+        "score": 0.5571428571428572,
+        "breakdown": {
+          "factual_overlap": 0.42857142857142855,
+          "response_quality": 0.75
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "ground_truth": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone for cocaine toxicity or pheochromocytoma.",
+        "score": 0.6552919708029197,
+        "breakdown": {
+          "factual_overlap": 0.625,
+          "response_quality": 0.7007299270072993
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "ground_truth": "Small (oat) cell lung carcinoma is a type of lung cancer, and if it produces antibodies against neurons, it can cause paraneoplastic myelitis, encephalitis, and subacute cerebellar degeneration.",
+        "score": 0.5850991775520078,
+        "breakdown": {
+          "factual_overlap": 0.46153846153846156,
+          "response_quality": 0.770440251572327
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "ground_truth": "Cystinuria is a genetic disorder that is caused by a defect in renal PCT and intestinal amino acid transporters, which results in the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead to the f",
+        "score": 0.6153804347826087,
+        "breakdown": {
+          "factual_overlap": 0.5652173913043478,
+          "response_quality": 0.690625
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "ground_truth": "Secondary amyloidosis is a medical condition that is characterized by the systemic deposition of AA amyloid, which is derived from serum amyloid-associated protein (SAA). This condition is typically associated with chronic inflammatory disorders such as rheumatoid arthritis, inflammatory bowel disea",
+        "score": 0.500053676865271,
+        "breakdown": {
+          "factual_overlap": 0.34782608695652173,
+          "response_quality": 0.7283950617283951
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "code": [
+      {
+        "instruction": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "ground_truth": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title in titles:\n print(title[1])",
+        "score": 0.22499999999999998,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.75
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python function to calculate an exponential series",
+        "ground_truth": "def exponential_series(x,n):\n    sum = 0\n    for i in range(n+1):\n        sum += x ** i\n    return sum",
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "ground_truth": "dict1 = {}\nfor lst in [list1, list2]:\n key = lst[0]\n val = lst[1:]\n dict1[key] = val\n\nprint(dict1)\n# Output: {'apple': ['red', 'green'], 'banana': ['yellow', 'green']}",
+        "score": 0.7945945945945946,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.3153153153153153
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Generate an api response in Python for the provided data.",
+        "ground_truth": "response = {\n  \"status\": 200,\n  \"data\": {\"name\": \"John\",\"age\":28},\n  \"message\": \"Success\"\n}",
+        "score": 0.8839999999999999,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6133333333333333
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "ground_truth": "total = 0\nfor element in data:\n    total = total + element\nprint(total)",
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a Python class which represents a 3D Vector",
+        "ground_truth": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n    \n    def __str__(self):\n        return \"(\" + str(self.x) + \", \" + str(self.y) + \", \" + str(self.z) + \")\"",
+        "score": 0.17766990291262133,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.5922330097087378
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python program to clean up a list of emails and put them into a new list.",
+        "ground_truth": "original_list = ['bob@example.com', 'alice+bob@cafe.com', 'bob@gmail.com.uk', 'bob+alice@example']\n\nclean_list = []\n\nfor email in original_list:\n email_without_plus = email.split('+')[0]\n email_without_dot_uk = email_without_plus.split('.uk')[0]\n clean_list.append(email_without_dot_uk)\n\nprint(clean_",
+        "score": 0.8858695652173912,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6195652173913043
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "ground_truth": "def get_max_value(numbers): \n    return max(numbers)\n\nprint(get_max_value(list))  # 6",
+        "score": 0.8747572815533979,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.5825242718446602
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "ground_truth": "import requests\nfrom bs4 import BeautifulSoup\n \n# Make a GET request to fetch the raw HTML content\nhtml_content = requests.get('http://web-store.com').text\n \n# Parse the html content\nsoup = BeautifulSoup(html_content, \"lxml\")\n \n# Get the product data\nproducts = soup.find_all('div', attrs={\"itemprop\"",
+        "score": 0.8959459459459459,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6531531531531531
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "ground_truth": "class Sum:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n        \n    def add(self):\n        return self.x + self.y",
+        "score": 0.901098901098901,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6703296703296704
+        },
+        "metric_type": "execution_code"
+      }
+    ],
+    "math": [
+      {
+        "instruction": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "ground_truth": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gifts.\nAfter the rebate, the total cost of the gifts is now $334 - $12 = $<<334-12=322>>322.\n#### 322",
+        "score": 0.9360902255639099,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6804511278195489
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "ground_truth": "For the humans in the house, there are 5 * 2 = <<5*2=10>>10 legs\nJavier has a total of 2 + 1 = <<2+1=3>>3 four-legged pets\nFor the pets in the house, there are 3 * 4 = <<3*4=12>>12 legs\nThere are a total of 10 + 12 = <<10+12=22>>22 legs\n#### 22",
+        "score": 0.12013888888888889,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6006944444444444
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "ground_truth": "In 5 years, Cori will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, Cori\u2019s aunt will be 8 x 3 = <<8*3=24>>24 years old.\nToday, her aunt is 24 - 5 = <<24-5=19>>19 years old.\n#### 19",
+        "score": 0.9408333333333334,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.7041666666666666
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "ground_truth": "Kyle has 2 + 3 = <<2+3=5>>5 glass bottles.\nHe needs to make 15 x 5 = <<15*5=75>>75 origami stars\n#### 75",
+        "score": 0.9377358490566038,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6886792452830188
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "ground_truth": "Oscar needs to increase his maximum running time from 20 - 2 = <<20-2=18>>18 miles.\nOscar will need a total of 18 / ( 2 / 3 ) = <<18/(2/3)=27>>27 weeks to prepare.\n#### 27",
+        "score": 0.9382113821138212,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6910569105691057
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "ground_truth": "Marvin sold 35 candy bars at $2 each so 35 * 2 = $<<35*2=70>>70 worth of candy\nTina sold three times the amount of candy so $70 * 3 = $<<70*3=210>>210 worth of candy\nIf Tina sold $210 worth of candy and Marvin sold $70 in candy then 210 - 70 = $<<210-70=140>>140 more sold than Marvin\n#### 140",
+        "score": 0.9325301204819277,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6626506024096386
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "ground_truth": "His partner has been teaching for 40-10=<<40-10=30>>30 years\nSo together they have 40+30=<<40+30=70>>70 years of experience\n#### 70",
+        "score": 0.91203007518797,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.5601503759398496
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "ground_truth": "At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9 to reach a weight of 6*2=<<6+6=12>>12 pounds.\nIt doubled in weight again at 3 months old to reach a weight of 12*2=<<12*2=24>>24 pounds.\nIt doubled in weight again at 5 months old to reach a weight of 24*2=<<24*2=48>>48 poun",
+        "score": 0.1453125,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.7265625
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "ground_truth": "He spends 5*2=$<<5*2=10>>10 on Wednesday to pay for a movie ticket.\nHe spends 5*5=$<<5*5=25>>25 on Saturday to pay for a movie ticket.\nHe spends a total of 10+25=$<<10+25=35>>35.\n#### 35",
+        "score": 0.9333333333333333,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6666666666666666
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "ground_truth": "His goal is 10 haircuts because 8 + 2 = <<8+2=10>>10\nHe is 80% there because (8 / 10) x 100 = <<(8/10)*100=80>>80\n#### 80",
+        "score": 0.9308823529411765,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6544117647058824
+        },
+        "metric_type": "execution_math"
+      }
+    ],
+    "legal": [
+      {
+        "instruction": "Speed bumps on private non-hoa road (California)",
+        "ground_truth": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job of asking everyone to chip in for snow plowing, and then another neighbor got a quote for repaving a",
+        "score": 0.3394245670776902,
+        "breakdown": {
+          "factual_overlap": 0.05154639175257732,
+          "response_quality": 0.7712418300653594
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can an employer dictate when an employee can take annual leave?",
+        "ground_truth": "My employer is trying enforce new rules about how we use our annual leave. Among other points they require the following are the ones of concern:\n\n\n1. 50% of annual leave must be booked (planned, bot necessarily taken) by September\n2. There must be at least two people in the office on all working da",
+        "score": 0.3670245715465621,
+        "breakdown": {
+          "factual_overlap": 0.1206896551724138,
+          "response_quality": 0.7365269461077845
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is a list of the most common English words copyrightable under US law?",
+        "ground_truth": "I am currently interested in doing some research performing various measurements and algorithms on the most common words in the English language. I have found a few good word lists online that would be suitable, but I am concerned that they may be subject to copyright and would like to be sure about",
+        "score": 0.3648079704322674,
+        "breakdown": {
+          "factual_overlap": 0.12244897959183673,
+          "response_quality": 0.7283464566929134
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is it illegal to misinform someone about the terms of a contract",
+        "ground_truth": "I have been in a number of discussions, which the other party described the contract terms verbally in a way to convince me to proceed with the contract. I want to ask if this is not fraud, and how to handle such situations. To clarify the point, what I mean is for one of the parties to state a defi",
+        "score": 0.36526315789473685,
+        "breakdown": {
+          "factual_overlap": 0.1,
+          "response_quality": 0.763157894736842
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How to get a copyright on a video game?",
+        "ground_truth": "I like to make video games and I figured I might as well make some money off of it. The problem with it is I have no idea how to get a copyright on my games before I start selling them. How would I do this? (Just comment if I need to specify anything else or if this is the wrong site.)",
+        "score": 0.39230769230769236,
+        "breakdown": {
+          "factual_overlap": 0.15384615384615385,
+          "response_quality": 0.75
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "ground_truth": "I'm opening a business via the e-residency program with Estonia. I am a United States citizen and reside there, as well. Who should I file taxes with?",
+        "score": 0.4771982116244411,
+        "breakdown": {
+          "factual_overlap": 0.36363636363636365,
+          "response_quality": 0.6475409836065573
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "ground_truth": "I know this is a confusing matter and there's been number of questions here and articles elsewhere, but maybe it would be simpler in the situation explained below.\n\n\nAssume there's a non-US company selling software on App Store and providing certain subscription services. The following information h",
+        "score": 0.30545514295103515,
+        "breakdown": {
+          "factual_overlap": 0.08823529411764706,
+          "response_quality": 0.6312849162011174
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Startup making me pay legal costs of my vested options, is that legal?",
+        "ground_truth": "A startup I worked for had promised me to grant my options that were vested, however, they are making me pay the legal costs of executing those options. Is that legal? On the contract, it says nothing about legal costs. I feel like I'm being hold for ransom with the fees.",
+        "score": 0.4655314151497358,
+        "breakdown": {
+          "factual_overlap": 0.3076923076923077,
+          "response_quality": 0.7022900763358779
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I amend a contract after end date",
+        "ground_truth": "I'm a freelance web developer and I entered into a contract with a client in August 2018. The contract was set to end and product delivered by October 5 2018. However, due to the client changes in ideas and work in progress, we went way past that end date and now I am only going to deliver the final",
+        "score": 0.3228146853146853,
+        "breakdown": {
+          "factual_overlap": 0.0625,
+          "response_quality": 0.7132867132867133
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Liability for neighbor injured on my property",
+        "ground_truth": "My neighbor does odd jobs for me such as taking out the trash, cleaning out the gutters, etc. They fell off a ladder and required medical attention. Recently, they received a letter from their insurance provider that states:\n\n\n\n> \n> If another person or entity caused or may be responsible for the\n> ",
+        "score": 0.325010989010989,
+        "breakdown": {
+          "factual_overlap": 0.07692307692307693,
+          "response_quality": 0.6971428571428572
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "finance": [
+      {
+        "instruction": "What should I do with my $10K windfall, given these options?",
+        "ground_truth": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list before you start to think about any sizable \"fun\" spending.  If you don't have #1, set that aside firs",
+        "score": 0.33187742162733364,
+        "breakdown": {
+          "factual_overlap": 0.09803921568627451,
+          "response_quality": 0.6826347305389222
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What's the average rate of return for some of the most mainstream index funds?",
+        "ground_truth": "When asking about rate of return it is imperative to specify the time period. Average over all time? Average over the last 10 years? I've heard a good rule of thumb is 8-10% on average for all stocks over all time. That may be overstated now given the current economic climate. You can also look up f",
+        "score": 0.4181243414120127,
+        "breakdown": {
+          "factual_overlap": 0.19230769230769232,
+          "response_quality": 0.7568493150684932
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "ground_truth": "Here's another answer on the topic: Saving for retirement: How much is enough? An angle on it this question made me think of: a good approach here is to focus on savings rate (which you can control) rather than the final number (which you can't, plus it will fluctuate with the markets and make you n",
+        "score": 0.4125570416994493,
+        "breakdown": {
+          "factual_overlap": 0.1951219512195122,
+          "response_quality": 0.7387096774193549
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "ground_truth": "I think you may be drawing the wrong conclusion about why you put what type of investment in a taxable vs. tax-advantaged account. It is not so much about risk, but type of return. If you're investing both tax-advantaged and taxable accounts, you can benefit by putting more tax-inefficient investmen",
+        "score": 0.40857142857142853,
+        "breakdown": {
+          "factual_overlap": 0.16666666666666666,
+          "response_quality": 0.7714285714285714
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How can I find hotel properties to buy other than using Google?",
+        "ground_truth": "Probably the easiest way to invest in hotel rooms in the U.S. is to invest in a Real Estate Investment Trust, or REIT.  REITs are securities that invest in real estate and trade like a stock.  There are different REITs that invest in different things: some own office buildings, some residential rent",
+        "score": 0.359472490073738,
+        "breakdown": {
+          "factual_overlap": 0.09302325581395349,
+          "response_quality": 0.7591463414634146
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Rate of change of beta",
+        "ground_truth": "This is a useful metric in that it gives you a trust factor on how reliable the beta is for future expectations   It is akin to velocity and acceleration  First  and second order derivatives of distance / time.  Erratic acceleration implies the velocity is less trustworthy  Same idea for beta",
+        "score": 0.27299270072992704,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.6824817518248175
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How does giving to charity work?",
+        "ground_truth": "For many people, giving to charity will have minimal effect on their taxes. Non-profits love to attract donations by saying the money is tax deductible, but for most people, it doesn't work out that way. You will only itemize deductions if they exceed your standard deduction. The IRS allows you to e",
+        "score": 0.38435222672064784,
+        "breakdown": {
+          "factual_overlap": 0.1076923076923077,
+          "response_quality": 0.799342105263158
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "ground_truth": "The short answer is yes you probably can take the deduction for a home office because the space is used exclusively and you are working there for the convenience of your employer if you don't have a desk at your employers office. The long answer is that it may not be worth it to take the home office",
+        "score": 0.3390027958993476,
+        "breakdown": {
+          "factual_overlap": 0.10810810810810811,
+          "response_quality": 0.6853448275862069
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Simple and safe way to manage a lot of cash",
+        "ground_truth": "If this money is intended to be used for retirement and depending on how old \"older\" is, it sounds a little risky to be putting too much money in a stock based mutual fund.  While the CDs may seem like crappy investments right now, it is important to down-shift risk as you get closer to retirement b",
+        "score": 0.27260355029585803,
+        "breakdown": {
+          "factual_overlap": 0.05,
+          "response_quality": 0.606508875739645
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "ground_truth": "It's simple, really: Practice. Fiscal responsibility is not a trick you can learn look up on Google, or a service you can buy from your accountant.  Being responsible with your money is a skill that is learned over a lifetime.  The only way to get better at it is to practice, and not get discouraged",
+        "score": 0.31764705882352945,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.7941176470588236
+        },
+        "metric_type": "execution_prose"
+      }
+    ]
+  },
+  "domain_results": {
+    "medical": [
+      {
+        "instruction": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "ground_truth": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringomyelia is a bi-lateral loss of pain and temperature sensation in a \"cape-like\" distribution, affectin",
+        "score": 0.5403191809695875,
+        "breakdown": {
+          "factual_overlap": 0.3902439024390244,
+          "response_quality": 0.7654320987654322
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the hormone secretin and where is it secreted from in the body?",
+        "ground_truth": "Secretin is a hormone that is secreted from specialized cells called S cells in the duodenum, which is the first part of the small intestine. Secretin plays an important role in regulating the digestive system by stimulating the pancreas to release bicarbonate, which helps to neutralize stomach acid",
+        "score": 0.708390977443609,
+        "breakdown": {
+          "factual_overlap": 0.7368421052631579,
+          "response_quality": 0.6657142857142857
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "ground_truth": "Right heart failure is a condition in which the heart is unable to pump blood effectively through the pulmonary circulation. This can lead to a range of symptoms, including shortness of breath, fatigue, and swelling in the legs and feet. In some cases, right heart failure may also cause painful hepa",
+        "score": 0.5173401534526854,
+        "breakdown": {
+          "factual_overlap": 0.43478260869565216,
+          "response_quality": 0.6411764705882352
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "ground_truth": "Cystinuria is a genetic disorder that is primarily caused by a defect in renal PCT and intestinal amino acid transporters, which leads to the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead ",
+        "score": 0.5702278481012658,
+        "breakdown": {
+          "factual_overlap": 0.52,
+          "response_quality": 0.6455696202531646
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "ground_truth": "TCAs are a class of antidepressants that can cause QT interval prolongation, which can precipitate Torsades de pointes, a potentially life-threatening cardiac arrhythmia.",
+        "score": 0.5706835799859056,
+        "breakdown": {
+          "factual_overlap": 0.5454545454545454,
+          "response_quality": 0.6085271317829457
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "ground_truth": "\u03b1-thalassemia is characterized by a four gene deletion, and it is characterized by the formation of \u03b34 tetramers, which are known as Hb Barts.",
+        "score": 0.5052441229656419,
+        "breakdown": {
+          "factual_overlap": 0.42857142857142855,
+          "response_quality": 0.620253164556962
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "ground_truth": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone for cocaine toxicity or pheochromocytoma.",
+        "score": 0.6404088050314465,
+        "breakdown": {
+          "factual_overlap": 0.625,
+          "response_quality": 0.6635220125786163
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "ground_truth": "Small (oat) cell lung carcinoma is a type of lung cancer, and if it produces antibodies against neurons, it can cause paraneoplastic myelitis, encephalitis, and subacute cerebellar degeneration.",
+        "score": 0.6291744840525328,
+        "breakdown": {
+          "factual_overlap": 0.5384615384615384,
+          "response_quality": 0.7652439024390244
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "ground_truth": "Cystinuria is a genetic disorder that is caused by a defect in renal PCT and intestinal amino acid transporters, which results in the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead to the f",
+        "score": 0.7193780593147135,
+        "breakdown": {
+          "factual_overlap": 0.6956521739130435,
+          "response_quality": 0.7549668874172186
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "ground_truth": "Secondary amyloidosis is a medical condition that is characterized by the systemic deposition of AA amyloid, which is derived from serum amyloid-associated protein (SAA). This condition is typically associated with chronic inflammatory disorders such as rheumatoid arthritis, inflammatory bowel disea",
+        "score": 0.5644840230487167,
+        "breakdown": {
+          "factual_overlap": 0.43478260869565216,
+          "response_quality": 0.7590361445783133
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "code": [
+      {
+        "instruction": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "ground_truth": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title in titles:\n print(title[1])",
+        "score": 0.22499999999999998,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.75
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python function to calculate an exponential series",
+        "ground_truth": "def exponential_series(x,n):\n    sum = 0\n    for i in range(n+1):\n        sum += x ** i\n    return sum",
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "ground_truth": "dict1 = {}\nfor lst in [list1, list2]:\n key = lst[0]\n val = lst[1:]\n dict1[key] = val\n\nprint(dict1)\n# Output: {'apple': ['red', 'green'], 'banana': ['yellow', 'green']}",
+        "score": 0.7945945945945946,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.3153153153153153
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Generate an api response in Python for the provided data.",
+        "ground_truth": "response = {\n  \"status\": 200,\n  \"data\": {\"name\": \"John\",\"age\":28},\n  \"message\": \"Success\"\n}",
+        "score": 0.8839999999999999,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6133333333333333
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "ground_truth": "total = 0\nfor element in data:\n    total = total + element\nprint(total)",
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a Python class which represents a 3D Vector",
+        "ground_truth": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n    \n    def __str__(self):\n        return \"(\" + str(self.x) + \", \" + str(self.y) + \", \" + str(self.z) + \")\"",
+        "score": 0.17766990291262133,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.5922330097087378
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python program to clean up a list of emails and put them into a new list.",
+        "ground_truth": "original_list = ['bob@example.com', 'alice+bob@cafe.com', 'bob@gmail.com.uk', 'bob+alice@example']\n\nclean_list = []\n\nfor email in original_list:\n email_without_plus = email.split('+')[0]\n email_without_dot_uk = email_without_plus.split('.uk')[0]\n clean_list.append(email_without_dot_uk)\n\nprint(clean_",
+        "score": 0.8858695652173912,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6195652173913043
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "ground_truth": "def get_max_value(numbers): \n    return max(numbers)\n\nprint(get_max_value(list))  # 6",
+        "score": 0.8747572815533979,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.5825242718446602
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "ground_truth": "import requests\nfrom bs4 import BeautifulSoup\n \n# Make a GET request to fetch the raw HTML content\nhtml_content = requests.get('http://web-store.com').text\n \n# Parse the html content\nsoup = BeautifulSoup(html_content, \"lxml\")\n \n# Get the product data\nproducts = soup.find_all('div', attrs={\"itemprop\"",
+        "score": 0.8959459459459459,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6531531531531531
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "ground_truth": "class Sum:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n        \n    def add(self):\n        return self.x + self.y",
+        "score": 0.901098901098901,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6703296703296704
+        },
+        "metric_type": "execution_code"
+      }
+    ],
+    "math": [
+      {
+        "instruction": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "ground_truth": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gifts.\nAfter the rebate, the total cost of the gifts is now $334 - $12 = $<<334-12=322>>322.\n#### 322",
+        "score": 0.8571428571428572,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.2857142857142857
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "ground_truth": "For the humans in the house, there are 5 * 2 = <<5*2=10>>10 legs\nJavier has a total of 2 + 1 = <<2+1=3>>3 four-legged pets\nFor the pets in the house, there are 3 * 4 = <<3*4=12>>12 legs\nThere are a total of 10 + 12 = <<10+12=22>>22 legs\n#### 22",
+        "score": 0.12178217821782178,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6089108910891089
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "ground_truth": "In 5 years, Cori will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, Cori\u2019s aunt will be 8 x 3 = <<8*3=24>>24 years old.\nToday, her aunt is 24 - 5 = <<24-5=19>>19 years old.\n#### 19",
+        "score": 0.1193877551020408,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.596938775510204
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "ground_truth": "Kyle has 2 + 3 = <<2+3=5>>5 glass bottles.\nHe needs to make 15 x 5 = <<15*5=75>>75 origami stars\n#### 75",
+        "score": 0.9288288288288289,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6441441441441441
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "ground_truth": "Oscar needs to increase his maximum running time from 20 - 2 = <<20-2=18>>18 miles.\nOscar will need a total of 18 / ( 2 / 3 ) = <<18/(2/3)=27>>27 weeks to prepare.\n#### 27",
+        "score": 0.935483870967742,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6774193548387097
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "ground_truth": "Marvin sold 35 candy bars at $2 each so 35 * 2 = $<<35*2=70>>70 worth of candy\nTina sold three times the amount of candy so $70 * 3 = $<<70*3=210>>210 worth of candy\nIf Tina sold $210 worth of candy and Marvin sold $70 in candy then 210 - 70 = $<<210-70=140>>140 more sold than Marvin\n#### 140",
+        "score": 0.8593333333333334,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.29666666666666663
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "ground_truth": "His partner has been teaching for 40-10=<<40-10=30>>30 years\nSo together they have 40+30=<<40+30=70>>70 years of experience\n#### 70",
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "ground_truth": "At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9 to reach a weight of 6*2=<<6+6=12>>12 pounds.\nIt doubled in weight again at 3 months old to reach a weight of 12*2=<<12*2=24>>24 pounds.\nIt doubled in weight again at 5 months old to reach a weight of 24*2=<<24*2=48>>48 poun",
+        "score": 0.13305084745762713,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6652542372881356
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "ground_truth": "He spends 5*2=$<<5*2=10>>10 on Wednesday to pay for a movie ticket.\nHe spends 5*5=$<<5*5=25>>25 on Saturday to pay for a movie ticket.\nHe spends a total of 10+25=$<<10+25=35>>35.\n#### 35",
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "ground_truth": "His goal is 10 haircuts because 8 + 2 = <<8+2=10>>10\nHe is 80% there because (8 / 10) x 100 = <<(8/10)*100=80>>80\n#### 80",
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      }
+    ],
+    "legal": [
+      {
+        "instruction": "Speed bumps on private non-hoa road (California)",
+        "ground_truth": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job of asking everyone to chip in for snow plowing, and then another neighbor got a quote for repaving a",
+        "score": 0.25041071723909814,
+        "breakdown": {
+          "factual_overlap": 0.041237113402061855,
+          "response_quality": 0.5641711229946524
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can an employer dictate when an employee can take annual leave?",
+        "ground_truth": "My employer is trying enforce new rules about how we use our annual leave. Among other points they require the following are the ones of concern:\n\n\n1. 50% of annual leave must be booked (planned, bot necessarily taken) by September\n2. There must be at least two people in the office on all working da",
+        "score": 0.29110904007455735,
+        "breakdown": {
+          "factual_overlap": 0.06896551724137931,
+          "response_quality": 0.6243243243243244
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is a list of the most common English words copyrightable under US law?",
+        "ground_truth": "I am currently interested in doing some research performing various measurements and algorithms on the most common words in the English language. I have found a few good word lists online that would be suitable, but I am concerned that they may be subject to copyright and would like to be sure about",
+        "score": 0.2691046360740828,
+        "breakdown": {
+          "factual_overlap": 0.061224489795918366,
+          "response_quality": 0.5809248554913294
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is it illegal to misinform someone about the terms of a contract",
+        "ground_truth": "I have been in a number of discussions, which the other party described the contract terms verbally in a way to convince me to proceed with the contract. I want to ask if this is not fraud, and how to handle such situations. To clarify the point, what I mean is for one of the parties to state a defi",
+        "score": 0.3118681318681319,
+        "breakdown": {
+          "factual_overlap": 0.08571428571428572,
+          "response_quality": 0.6510989010989011
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How to get a copyright on a video game?",
+        "ground_truth": "I like to make video games and I figured I might as well make some money off of it. The problem with it is I have no idea how to get a copyright on my games before I start selling them. How would I do this? (Just comment if I need to specify anything else or if this is the wrong site.)",
+        "score": 0.28916459884201823,
+        "breakdown": {
+          "factual_overlap": 0.07692307692307693,
+          "response_quality": 0.6075268817204301
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "ground_truth": "I'm opening a business via the e-residency program with Estonia. I am a United States citizen and reside there, as well. Who should I file taxes with?",
+        "score": 0.44332467532467534,
+        "breakdown": {
+          "factual_overlap": 0.36363636363636365,
+          "response_quality": 0.5628571428571428
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "ground_truth": "I know this is a confusing matter and there's been number of questions here and articles elsewhere, but maybe it would be simpler in the situation explained below.\n\n\nAssume there's a non-US company selling software on App Store and providing certain subscription services. The following information h",
+        "score": 0.2894052648683783,
+        "breakdown": {
+          "factual_overlap": 0.08823529411764706,
+          "response_quality": 0.5911602209944752
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Startup making me pay legal costs of my vested options, is that legal?",
+        "ground_truth": "A startup I worked for had promised me to grant my options that were vested, however, they are making me pay the legal costs of executing those options. Is that legal? On the contract, it says nothing about legal costs. I feel like I'm being hold for ransom with the fees.",
+        "score": 0.32307692307692304,
+        "breakdown": {
+          "factual_overlap": 0.15384615384615385,
+          "response_quality": 0.5769230769230769
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I amend a contract after end date",
+        "ground_truth": "I'm a freelance web developer and I entered into a contract with a client in August 2018. The contract was set to end and product delivered by October 5 2018. However, due to the client changes in ideas and work in progress, we went way past that end date and now I am only going to deliver the final",
+        "score": 0.27443181818181817,
+        "breakdown": {
+          "factual_overlap": 0.03125,
+          "response_quality": 0.6392045454545454
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Liability for neighbor injured on my property",
+        "ground_truth": "My neighbor does odd jobs for me such as taking out the trash, cleaning out the gutters, etc. They fell off a ladder and required medical attention. Recently, they received a letter from their insurance provider that states:\n\n\n\n> \n> If another person or entity caused or may be responsible for the\n> ",
+        "score": 0.23277591973244147,
+        "breakdown": {
+          "factual_overlap": 0.02564102564102564,
+          "response_quality": 0.5434782608695652
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "finance": [
+      {
+        "instruction": "What should I do with my $10K windfall, given these options?",
+        "ground_truth": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list before you start to think about any sizable \"fun\" spending.  If you don't have #1, set that aside firs",
+        "score": 0.3818308388444135,
+        "breakdown": {
+          "factual_overlap": 0.11764705882352941,
+          "response_quality": 0.7781065088757396
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What's the average rate of return for some of the most mainstream index funds?",
+        "ground_truth": "When asking about rate of return it is imperative to specify the time period. Average over all time? Average over the last 10 years? I've heard a good rule of thumb is 8-10% on average for all stocks over all time. That may be overstated now given the current economic climate. You can also look up f",
+        "score": 0.3632888070013819,
+        "breakdown": {
+          "factual_overlap": 0.19230769230769232,
+          "response_quality": 0.6197604790419162
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "ground_truth": "Here's another answer on the topic: Saving for retirement: How much is enough? An angle on it this question made me think of: a good approach here is to focus on savings rate (which you can control) rather than the final number (which you can't, plus it will fluctuate with the markets and make you n",
+        "score": 0.2977327378907592,
+        "breakdown": {
+          "factual_overlap": 0.024390243902439025,
+          "response_quality": 0.7077464788732395
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "ground_truth": "I think you may be drawing the wrong conclusion about why you put what type of investment in a taxable vs. tax-advantaged account. It is not so much about risk, but type of return. If you're investing both tax-advantaged and taxable accounts, you can benefit by putting more tax-inefficient investmen",
+        "score": 0.32085385878489325,
+        "breakdown": {
+          "factual_overlap": 0.11904761904761904,
+          "response_quality": 0.6235632183908046
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How can I find hotel properties to buy other than using Google?",
+        "ground_truth": "Probably the easiest way to invest in hotel rooms in the U.S. is to invest in a Real Estate Investment Trust, or REIT.  REITs are securities that invest in real estate and trade like a stock.  There are different REITs that invest in different things: some own office buildings, some residential rent",
+        "score": 0.30157253599114064,
+        "breakdown": {
+          "factual_overlap": 0.023255813953488372,
+          "response_quality": 0.719047619047619
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Rate of change of beta",
+        "ground_truth": "This is a useful metric in that it gives you a trust factor on how reliable the beta is for future expectations   It is akin to velocity and acceleration  First  and second order derivatives of distance / time.  Erratic acceleration implies the velocity is less trustworthy  Same idea for beta",
+        "score": 0.24415584415584415,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.6103896103896104
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How does giving to charity work?",
+        "ground_truth": "For many people, giving to charity will have minimal effect on their taxes. Non-profits love to attract donations by saying the money is tax deductible, but for most people, it doesn't work out that way. You will only itemize deductions if they exceed your standard deduction. The IRS allows you to e",
+        "score": 0.2231578947368421,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.5578947368421052
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "ground_truth": "The short answer is yes you probably can take the deduction for a home office because the space is used exclusively and you are working there for the convenience of your employer if you don't have a desk at your employers office. The long answer is that it may not be worth it to take the home office",
+        "score": 0.3382825863838522,
+        "breakdown": {
+          "factual_overlap": 0.10810810810810811,
+          "response_quality": 0.6835443037974683
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Simple and safe way to manage a lot of cash",
+        "ground_truth": "If this money is intended to be used for retirement and depending on how old \"older\" is, it sounds a little risky to be putting too much money in a stock based mutual fund.  While the CDs may seem like crappy investments right now, it is important to down-shift risk as you get closer to retirement b",
+        "score": 0.3369767441860465,
+        "breakdown": {
+          "factual_overlap": 0.05,
+          "response_quality": 0.7674418604651163
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "ground_truth": "It's simple, really: Practice. Fiscal responsibility is not a trick you can learn look up on Google, or a service you can buy from your accountant.  Being responsible with your money is a skill that is learned over a lifetime.  The only way to get better at it is to practice, and not get discouraged",
+        "score": 0.35411255411255416,
+        "breakdown": {
+          "factual_overlap": 0.05555555555555555,
+          "response_quality": 0.801948051948052
+        },
+        "metric_type": "execution_prose"
+      }
+    ]
+  },
+  "routed_results": {
+    "medical": [
+      {
+        "instruction": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+        "ground_truth": "Syringomyelia is a condition that can cause a range of symptoms, including muscle weakness, stiffness, and spasms, as well as bladder and bowel dysfunction. One of the most common symptoms of syringomyelia is a bi-lateral loss of pain and temperature sensation in a \"cape-like\" distribution, affectin",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.718669829988859,
+        "score": 0.5403191809695875,
+        "breakdown": {
+          "factual_overlap": 0.3902439024390244,
+          "response_quality": 0.7654320987654322
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the hormone secretin and where is it secreted from in the body?",
+        "ground_truth": "Secretin is a hormone that is secreted from specialized cells called S cells in the duodenum, which is the first part of the small intestine. Secretin plays an important role in regulating the digestive system by stimulating the pancreas to release bicarbonate, which helps to neutralize stomach acid",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.40746238521948036,
+        "score": 0.708390977443609,
+        "breakdown": {
+          "factual_overlap": 0.7368421052631579,
+          "response_quality": 0.6657142857142857
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+        "ground_truth": "Right heart failure is a condition in which the heart is unable to pump blood effectively through the pulmonary circulation. This can lead to a range of symptoms, including shortness of breath, fatigue, and swelling in the legs and feet. In some cases, right heart failure may also cause painful hepa",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.5716448390454897,
+        "score": 0.5173401534526854,
+        "breakdown": {
+          "factual_overlap": 0.43478260869565216,
+          "response_quality": 0.6411764705882352
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+        "ground_truth": "Cystinuria is a genetic disorder that is primarily caused by a defect in renal PCT and intestinal amino acid transporters, which leads to the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead ",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.7281389119551044,
+        "score": 0.5702278481012658,
+        "breakdown": {
+          "factual_overlap": 0.52,
+          "response_quality": 0.6455696202531646
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+        "ground_truth": "TCAs are a class of antidepressants that can cause QT interval prolongation, which can precipitate Torsades de pointes, a potentially life-threatening cardiac arrhythmia.",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.5093442142447874,
+        "score": 0.5706835799859056,
+        "breakdown": {
+          "factual_overlap": 0.5454545454545454,
+          "response_quality": 0.6085271317829457
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+        "ground_truth": "\u03b1-thalassemia is characterized by a four gene deletion, and it is characterized by the formation of \u03b34 tetramers, which are known as Hb Barts.",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.44623621630290616,
+        "score": 0.5052441229656419,
+        "breakdown": {
+          "factual_overlap": 0.42857142857142855,
+          "response_quality": 0.620253164556962
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+        "ground_truth": "\u03b2-blockers may cause unopposed \u03b11 agonism if given alone for cocaine toxicity or pheochromocytoma.",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.5184490115897079,
+        "score": 0.6404088050314465,
+        "breakdown": {
+          "factual_overlap": 0.625,
+          "response_quality": 0.6635220125786163
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+        "ground_truth": "Small (oat) cell lung carcinoma is a type of lung cancer, and if it produces antibodies against neurons, it can cause paraneoplastic myelitis, encephalitis, and subacute cerebellar degeneration.",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.5821235441475024,
+        "score": 0.6291744840525328,
+        "breakdown": {
+          "factual_overlap": 0.5384615384615384,
+          "response_quality": 0.7652439024390244
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+        "ground_truth": "Cystinuria is a genetic disorder that is caused by a defect in renal PCT and intestinal amino acid transporters, which results in the improper reabsorption of certain amino acids, including cystine, ornithine, lysine, and arginine. The accumulation of these amino acids in the urine can lead to the f",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.7128813890145828,
+        "score": 0.7193780593147135,
+        "breakdown": {
+          "factual_overlap": 0.6956521739130435,
+          "response_quality": 0.7549668874172186
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+        "ground_truth": "Secondary amyloidosis is a medical condition that is characterized by the systemic deposition of AA amyloid, which is derived from serum amyloid-associated protein (SAA). This condition is typically associated with chronic inflammatory disorders such as rheumatoid arthritis, inflammatory bowel disea",
+        "routed_to": "medical",
+        "routing_correct": true,
+        "routing_confidence": 0.44596034540529533,
+        "score": 0.5644840230487167,
+        "breakdown": {
+          "factual_overlap": 0.43478260869565216,
+          "response_quality": 0.7590361445783133
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "code": [
+      {
+        "instruction": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+        "ground_truth": "import requests\nimport re\n\nurl = \"https://www.youtube.com/user/Thexvid/videos\"\n\nr = requests.get(url)\ntitles = re.findall('<a href=\"/watch\\?v=([^\"]+)\">(.+?)<\\/a>',r.content.decode('utf-8'))\n\nfor title in titles:\n print(title[1])",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.7507074315167878,
+        "score": 0.22499999999999998,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.75
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python function to calculate an exponential series",
+        "ground_truth": "def exponential_series(x,n):\n    sum = 0\n    for i in range(n+1):\n        sum += x ** i\n    return sum",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.8567772169313391,
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+        "ground_truth": "dict1 = {}\nfor lst in [list1, list2]:\n key = lst[0]\n val = lst[1:]\n dict1[key] = val\n\nprint(dict1)\n# Output: {'apple': ['red', 'green'], 'banana': ['yellow', 'green']}",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.8069406467898748,
+        "score": 0.7945945945945946,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.3153153153153153
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Generate an api response in Python for the provided data.",
+        "ground_truth": "response = {\n  \"status\": 200,\n  \"data\": {\"name\": \"John\",\"age\":28},\n  \"message\": \"Success\"\n}",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.678958567694836,
+        "score": 0.8839999999999999,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6133333333333333
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+        "ground_truth": "total = 0\nfor element in data:\n    total = total + element\nprint(total)",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.7973261885480083,
+        "score": 0.73,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a Python class which represents a 3D Vector",
+        "ground_truth": "class Vector3D:\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n    \n    def __str__(self):\n        return \"(\" + str(self.x) + \", \" + str(self.y) + \", \" + str(self.z) + \")\"",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.8780689342870279,
+        "score": 0.17766990291262133,
+        "breakdown": {
+          "syntax_valid": 0.0,
+          "response_quality": 0.5922330097087378
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Write a python program to clean up a list of emails and put them into a new list.",
+        "ground_truth": "original_list = ['bob@example.com', 'alice+bob@cafe.com', 'bob@gmail.com.uk', 'bob+alice@example']\n\nclean_list = []\n\nfor email in original_list:\n email_without_plus = email.split('+')[0]\n email_without_dot_uk = email_without_plus.split('.uk')[0]\n clean_list.append(email_without_dot_uk)\n\nprint(clean_",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.7684728014094618,
+        "score": 0.8858695652173912,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6195652173913043
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Create a function in Python that prints out the largest value from a given list of numbers.",
+        "ground_truth": "def get_max_value(numbers): \n    return max(numbers)\n\nprint(get_max_value(list))  # 6",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.8902489693746165,
+        "score": 0.8747572815533979,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.5825242718446602
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+        "ground_truth": "import requests\nfrom bs4 import BeautifulSoup\n \n# Make a GET request to fetch the raw HTML content\nhtml_content = requests.get('http://web-store.com').text\n \n# Parse the html content\nsoup = BeautifulSoup(html_content, \"lxml\")\n \n# Get the product data\nproducts = soup.find_all('div', attrs={\"itemprop\"",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.5594510720758825,
+        "score": 0.8959459459459459,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6531531531531531
+        },
+        "metric_type": "execution_code"
+      },
+      {
+        "instruction": "Complete the Python class below so that it can calculate the sum of two integers.",
+        "ground_truth": "class Sum:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n        \n    def add(self):\n        return self.x + self.y",
+        "routed_to": "code",
+        "routing_correct": true,
+        "routing_confidence": 0.5674906811105375,
+        "score": 0.901098901098901,
+        "breakdown": {
+          "syntax_valid": 1.0,
+          "response_quality": 0.6703296703296704
+        },
+        "metric_type": "execution_code"
+      }
+    ],
+    "math": [
+      {
+        "instruction": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+        "ground_truth": "Mr. Grey paid $26/shirt x 3 shirts = $<<26*3=78>>78 on polo shirts.\nHe paid $83/necklace x 2 necklaces = $<<83*2=166>>166 on necklaces.\nSo, he paid $78 + $166 + $90 = $<<78+166+90=334>>334 for the gifts.\nAfter the rebate, the total cost of the gifts is now $334 - $12 = $<<334-12=322>>322.\n#### 322",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.31941195444760145,
+        "score": 0.8571428571428572,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.2857142857142857
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+        "ground_truth": "For the humans in the house, there are 5 * 2 = <<5*2=10>>10 legs\nJavier has a total of 2 + 1 = <<2+1=3>>3 four-legged pets\nFor the pets in the house, there are 3 * 4 = <<3*4=12>>12 legs\nThere are a total of 10 + 12 = <<10+12=22>>22 legs\n#### 22",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.41895772635303696,
+        "score": 0.12178217821782178,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6089108910891089
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+        "ground_truth": "In 5 years, Cori will be 3 + 5 = <<3+5=8>>8 years old.\nIn 5 years, Cori\u2019s aunt will be 8 x 3 = <<8*3=24>>24 years old.\nToday, her aunt is 24 - 5 = <<24-5=19>>19 years old.\n#### 19",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.44595239994976615,
+        "score": 0.1193877551020408,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.596938775510204
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+        "ground_truth": "Kyle has 2 + 3 = <<2+3=5>>5 glass bottles.\nHe needs to make 15 x 5 = <<15*5=75>>75 origami stars\n#### 75",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.4809197845251285,
+        "score": 0.9288288288288289,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6441441441441441
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+        "ground_truth": "Oscar needs to increase his maximum running time from 20 - 2 = <<20-2=18>>18 miles.\nOscar will need a total of 18 / ( 2 / 3 ) = <<18/(2/3)=27>>27 weeks to prepare.\n#### 27",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.48213497694506663,
+        "score": 0.935483870967742,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.6774193548387097
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+        "ground_truth": "Marvin sold 35 candy bars at $2 each so 35 * 2 = $<<35*2=70>>70 worth of candy\nTina sold three times the amount of candy so $70 * 3 = $<<70*3=210>>210 worth of candy\nIf Tina sold $210 worth of candy and Marvin sold $70 in candy then 210 - 70 = $<<210-70=140>>140 more sold than Marvin\n#### 140",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.4210729503426807,
+        "score": 0.8593333333333334,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.29666666666666663
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+        "ground_truth": "His partner has been teaching for 40-10=<<40-10=30>>30 years\nSo together they have 40+30=<<40+30=70>>70 years of experience\n#### 70",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.5078894862058736,
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+        "ground_truth": "At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9 to reach a weight of 6*2=<<6+6=12>>12 pounds.\nIt doubled in weight again at 3 months old to reach a weight of 12*2=<<12*2=24>>24 pounds.\nIt doubled in weight again at 5 months old to reach a weight of 24*2=<<24*2=48>>48 poun",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.565042281361471,
+        "score": 0.13305084745762713,
+        "breakdown": {
+          "answer_correct": 0.0,
+          "response_quality": 0.6652542372881356
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+        "ground_truth": "He spends 5*2=$<<5*2=10>>10 on Wednesday to pay for a movie ticket.\nHe spends 5*5=$<<5*5=25>>25 on Saturday to pay for a movie ticket.\nHe spends a total of 10+25=$<<10+25=35>>35.\n#### 35",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.4574131938917335,
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      },
+      {
+        "instruction": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+        "ground_truth": "His goal is 10 haircuts because 8 + 2 = <<8+2=10>>10\nHe is 80% there because (8 / 10) x 100 = <<(8/10)*100=80>>80\n#### 80",
+        "routed_to": "math",
+        "routing_correct": true,
+        "routing_confidence": 0.3130635502369108,
+        "score": 0.8200000000000001,
+        "breakdown": {
+          "answer_correct": 1.0,
+          "response_quality": 0.1
+        },
+        "metric_type": "execution_math"
+      }
+    ],
+    "legal": [
+      {
+        "instruction": "Speed bumps on private non-hoa road (California)",
+        "ground_truth": "I live on a private non-city-maintained road. There are ~30 houses, and I'm roughly in the middle, it's a dead end road. There's no HOA and since we get snow there's one neighbor who has done the job of asking everyone to chip in for snow plowing, and then another neighbor got a quote for repaving a",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.3006845962575836,
+        "score": 0.25041071723909814,
+        "breakdown": {
+          "factual_overlap": 0.041237113402061855,
+          "response_quality": 0.5641711229946524
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can an employer dictate when an employee can take annual leave?",
+        "ground_truth": "My employer is trying enforce new rules about how we use our annual leave. Among other points they require the following are the ones of concern:\n\n\n1. 50% of annual leave must be booked (planned, bot necessarily taken) by September\n2. There must be at least two people in the office on all working da",
+        "routed_to": "finance",
+        "routing_correct": false,
+        "routing_confidence": 0.3349137444644272,
+        "score": 0.2890226484390941,
+        "breakdown": {
+          "factual_overlap": 0.05172413793103448,
+          "response_quality": 0.6449704142011834
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is a list of the most common English words copyrightable under US law?",
+        "ground_truth": "I am currently interested in doing some research performing various measurements and algorithms on the most common words in the English language. I have found a few good word lists online that would be suitable, but I am concerned that they may be subject to copyright and would like to be sure about",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.2720269770282623,
+        "score": 0.2691046360740828,
+        "breakdown": {
+          "factual_overlap": 0.061224489795918366,
+          "response_quality": 0.5809248554913294
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Is it illegal to misinform someone about the terms of a contract",
+        "ground_truth": "I have been in a number of discussions, which the other party described the contract terms verbally in a way to convince me to proceed with the contract. I want to ask if this is not fraud, and how to handle such situations. To clarify the point, what I mean is for one of the parties to state a defi",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.5093763142907817,
+        "score": 0.3118681318681319,
+        "breakdown": {
+          "factual_overlap": 0.08571428571428572,
+          "response_quality": 0.6510989010989011
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How to get a copyright on a video game?",
+        "ground_truth": "I like to make video games and I figured I might as well make some money off of it. The problem with it is I have no idea how to get a copyright on my games before I start selling them. How would I do this? (Just comment if I need to specify anything else or if this is the wrong site.)",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.522004046412806,
+        "score": 0.28916459884201823,
+        "breakdown": {
+          "factual_overlap": 0.07692307692307693,
+          "response_quality": 0.6075268817204301
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+        "ground_truth": "I'm opening a business via the e-residency program with Estonia. I am a United States citizen and reside there, as well. Who should I file taxes with?",
+        "routed_to": "finance",
+        "routing_correct": false,
+        "routing_confidence": 0.3237702365103526,
+        "score": 0.34167517875383047,
+        "breakdown": {
+          "factual_overlap": 0.18181818181818182,
+          "response_quality": 0.5814606741573034
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+        "ground_truth": "I know this is a confusing matter and there's been number of questions here and articles elsewhere, but maybe it would be simpler in the situation explained below.\n\n\nAssume there's a non-US company selling software on App Store and providing certain subscription services. The following information h",
+        "routed_to": "finance",
+        "routing_correct": false,
+        "routing_confidence": 0.3307226617096181,
+        "score": 0.27178175618073314,
+        "breakdown": {
+          "factual_overlap": 0.08823529411764706,
+          "response_quality": 0.5471014492753623
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Startup making me pay legal costs of my vested options, is that legal?",
+        "ground_truth": "A startup I worked for had promised me to grant my options that were vested, however, they are making me pay the legal costs of executing those options. Is that legal? On the contract, it says nothing about legal costs. I feel like I'm being hold for ransom with the fees.",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.4856217544080347,
+        "score": 0.32307692307692304,
+        "breakdown": {
+          "factual_overlap": 0.15384615384615385,
+          "response_quality": 0.5769230769230769
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I amend a contract after end date",
+        "ground_truth": "I'm a freelance web developer and I entered into a contract with a client in August 2018. The contract was set to end and product delivered by October 5 2018. However, due to the client changes in ideas and work in progress, we went way past that end date and now I am only going to deliver the final",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.5147507751297026,
+        "score": 0.27443181818181817,
+        "breakdown": {
+          "factual_overlap": 0.03125,
+          "response_quality": 0.6392045454545454
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Liability for neighbor injured on my property",
+        "ground_truth": "My neighbor does odd jobs for me such as taking out the trash, cleaning out the gutters, etc. They fell off a ladder and required medical attention. Recently, they received a letter from their insurance provider that states:\n\n\n\n> \n> If another person or entity caused or may be responsible for the\n> ",
+        "routed_to": "legal",
+        "routing_correct": true,
+        "routing_confidence": 0.35499338052170226,
+        "score": 0.23277591973244147,
+        "breakdown": {
+          "factual_overlap": 0.02564102564102564,
+          "response_quality": 0.5434782608695652
+        },
+        "metric_type": "execution_prose"
+      }
+    ],
+    "finance": [
+      {
+        "instruction": "What should I do with my $10K windfall, given these options?",
+        "ground_truth": "I've been listening to Dave Ramsey a lot lately, and he encourages (encourage might be too light of a word for him) this priority list for budgeting: I would strongly advise you to tackle this list before you start to think about any sizable \"fun\" spending.  If you don't have #1, set that aside firs",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.33929295282664046,
+        "score": 0.3818308388444135,
+        "breakdown": {
+          "factual_overlap": 0.11764705882352941,
+          "response_quality": 0.7781065088757396
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What's the average rate of return for some of the most mainstream index funds?",
+        "ground_truth": "When asking about rate of return it is imperative to specify the time period. Average over all time? Average over the last 10 years? I've heard a good rule of thumb is 8-10% on average for all stocks over all time. That may be overstated now given the current economic climate. You can also look up f",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.3461820503072587,
+        "score": 0.3632888070013819,
+        "breakdown": {
+          "factual_overlap": 0.19230769230769232,
+          "response_quality": 0.6197604790419162
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+        "ground_truth": "Here's another answer on the topic: Saving for retirement: How much is enough? An angle on it this question made me think of: a good approach here is to focus on savings rate (which you can control) rather than the final number (which you can't, plus it will fluctuate with the markets and make you n",
+        "routed_to": "math",
+        "routing_correct": false,
+        "routing_confidence": 0.24026251167519944,
+        "score": 0.4250277161862528,
+        "breakdown": {
+          "factual_overlap": 0.1951219512195122,
+          "response_quality": 0.7698863636363636
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+        "ground_truth": "I think you may be drawing the wrong conclusion about why you put what type of investment in a taxable vs. tax-advantaged account. It is not so much about risk, but type of return. If you're investing both tax-advantaged and taxable accounts, you can benefit by putting more tax-inefficient investmen",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.5401631359153345,
+        "score": 0.32085385878489325,
+        "breakdown": {
+          "factual_overlap": 0.11904761904761904,
+          "response_quality": 0.6235632183908046
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How can I find hotel properties to buy other than using Google?",
+        "ground_truth": "Probably the easiest way to invest in hotel rooms in the U.S. is to invest in a Real Estate Investment Trust, or REIT.  REITs are securities that invest in real estate and trade like a stock.  There are different REITs that invest in different things: some own office buildings, some residential rent",
+        "routed_to": "legal",
+        "routing_correct": false,
+        "routing_confidence": 0.2366684404116674,
+        "score": 0.23016970458830927,
+        "breakdown": {
+          "factual_overlap": 0.023255813953488372,
+          "response_quality": 0.5405405405405406
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Rate of change of beta",
+        "ground_truth": "This is a useful metric in that it gives you a trust factor on how reliable the beta is for future expectations   It is akin to velocity and acceleration  First  and second order derivatives of distance / time.  Erratic acceleration implies the velocity is less trustworthy  Same idea for beta",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.30299532973539356,
+        "score": 0.24415584415584415,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.6103896103896104
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "How does giving to charity work?",
+        "ground_truth": "For many people, giving to charity will have minimal effect on their taxes. Non-profits love to attract donations by saying the money is tax deductible, but for most people, it doesn't work out that way. You will only itemize deductions if they exceed your standard deduction. The IRS allows you to e",
+        "routed_to": "legal",
+        "routing_correct": false,
+        "routing_confidence": 0.28096836773105544,
+        "score": 0.23464513387165323,
+        "breakdown": {
+          "factual_overlap": 0.015384615384615385,
+          "response_quality": 0.56353591160221
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+        "ground_truth": "The short answer is yes you probably can take the deduction for a home office because the space is used exclusively and you are working there for the convenience of your employer if you don't have a desk at your employers office. The long answer is that it may not be worth it to take the home office",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.33235338885683796,
+        "score": 0.3382825863838522,
+        "breakdown": {
+          "factual_overlap": 0.10810810810810811,
+          "response_quality": 0.6835443037974683
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "Simple and safe way to manage a lot of cash",
+        "ground_truth": "If this money is intended to be used for retirement and depending on how old \"older\" is, it sounds a little risky to be putting too much money in a stock based mutual fund.  While the CDs may seem like crappy investments right now, it is important to down-shift risk as you get closer to retirement b",
+        "routed_to": "legal",
+        "routing_correct": false,
+        "routing_confidence": 0.2544611552750746,
+        "score": 0.2557377049180328,
+        "breakdown": {
+          "factual_overlap": 0.0,
+          "response_quality": 0.639344262295082
+        },
+        "metric_type": "execution_prose"
+      },
+      {
+        "instruction": "I can make a budget, but how can I get myself to consistently follow my budget?",
+        "ground_truth": "It's simple, really: Practice. Fiscal responsibility is not a trick you can learn look up on Google, or a service you can buy from your accountant.  Being responsible with your money is a skill that is learned over a lifetime.  The only way to get better at it is to practice, and not get discouraged",
+        "routed_to": "finance",
+        "routing_correct": true,
+        "routing_confidence": 0.2619046302147753,
+        "score": 0.35411255411255416,
+        "breakdown": {
+          "factual_overlap": 0.05555555555555555,
+          "response_quality": 0.801948051948052
+        },
+        "metric_type": "execution_prose"
+      }
+    ]
+  },
+  "routing_decisions": [
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.718669829988859
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.40746238521948036
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.5716448390454897
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.7281389119551044
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.5093442142447874
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.44623621630290616
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.5184490115897079
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.5821235441475024
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.7128813890145828
+    },
+    {
+      "true_domain": "medical",
+      "pred_domain": "medical",
+      "correct": true,
+      "confidence": 0.44596034540529533
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.7507074315167878
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.8567772169313391
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.8069406467898748
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.678958567694836
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.7973261885480083
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.8780689342870279
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.7684728014094618
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.8902489693746165
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.5594510720758825
+    },
+    {
+      "true_domain": "code",
+      "pred_domain": "code",
+      "correct": true,
+      "confidence": 0.5674906811105375
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.31941195444760145
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.41895772635303696
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.44595239994976615
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.4809197845251285
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.48213497694506663
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.4210729503426807
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.5078894862058736
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.565042281361471
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.4574131938917335
+    },
+    {
+      "true_domain": "math",
+      "pred_domain": "math",
+      "correct": true,
+      "confidence": 0.3130635502369108
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.3006845962575836
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "finance",
+      "correct": false,
+      "confidence": 0.3349137444644272
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.2720269770282623
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.5093763142907817
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.522004046412806
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "finance",
+      "correct": false,
+      "confidence": 0.3237702365103526
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "finance",
+      "correct": false,
+      "confidence": 0.3307226617096181
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.4856217544080347
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.5147507751297026
+    },
+    {
+      "true_domain": "legal",
+      "pred_domain": "legal",
+      "correct": true,
+      "confidence": 0.35499338052170226
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.33929295282664046
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.3461820503072587
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "math",
+      "correct": false,
+      "confidence": 0.24026251167519944
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.5401631359153345
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "legal",
+      "correct": false,
+      "confidence": 0.2366684404116674
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.30299532973539356
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "legal",
+      "correct": false,
+      "confidence": 0.28096836773105544
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.33235338885683796
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "legal",
+      "correct": false,
+      "confidence": 0.2544611552750746
+    },
+    {
+      "true_domain": "finance",
+      "pred_domain": "finance",
+      "correct": true,
+      "confidence": 0.2619046302147753
+    }
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "experiment": "cpt_vs_sft_prose_adapters",
+  "hypothesis": "CPT adapters improve prose domain behavioral quality vs SFT",
+  "status": "killed",
+  "total_time_s": 407.7,
+  "kill_criteria": {
+    "K1_cpt_vs_sft": {
+      "result": "pass",
+      "cpt_worse_count": 1,
+      "total_domains": 2
+    },
+    "K2_coherence": {
+      "result": "pass",
+      "max_incoherent_pct": 0.0,
+      "threshold": 20
+    },
+    "K3_training": {
+      "result": "fail",
+      "total_train_time_s": 126.9,
+      "all_converged": false,
+      "threshold_s": 7200
+    }
+  },
+  "training": {
+    "legal": {
+      "train_time_s": 68.1,
+      "first_50_avg_loss": 3.0871,
+      "last_50_avg_loss": 3.0951,
+      "converged": false,
+      "trainable_params": 10936320,
+      "n_train_sequences": 400
+    },
+    "medical": {
+      "train_time_s": 58.8,
+      "first_50_avg_loss": 2.2707,
+      "last_50_avg_loss": 1.8456,
+      "converged": true,
+      "trainable_params": 10936320,
+      "n_train_sequences": 399
+    }
+  },
+  "comparison": {
+    "legal": {
+      "base_score": 0.0979,
+      "sft_score": 0.0559,
+      "cpt_score": 0.0974,
+      "cpt_vs_sft_delta": 0.0415,
+      "cpt_vs_sft_pct": 74.2,
+      "cpt_vs_base_delta": -0.0005,
+      "sft_vs_base_delta": -0.042,
+      "cpt_coherent_pct": 100.0
+    },
+    "medical": {
+      "base_score": 0.2626,
+      "sft_score": 0.2908,
+      "cpt_score": 0.2902,
+      "cpt_vs_sft_delta": -0.0005,
+      "cpt_vs_sft_pct": -0.2,
+      "cpt_vs_base_delta": 0.0276,
+      "sft_vs_base_delta": 0.0281,
+      "cpt_coherent_pct": 100.0
+    }
+  },
+  "per_domain_details": {
+    "legal": {
+      "base": {
+        "mean_score": 0.09789929034550619,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.025362318840579712,
+          0.041379310344827586,
+          0.0896551724137931,
+          0.062111801242236024,
+          0.06666666666666667,
+          0.2727272727272727,
+          0.08176100628930817,
+          0.19444444444444445,
+          0.09782608695652174,
+          0.047058823529411764
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "Speed bumps on private non-hoa road (California)",
+            "preview": "It sounds like you're dealing with a specific issue related to speed bumps on a private non-HOA road in California. Here are some steps you can take to address this:\n\n1. **Review the Property Agreemen",
+            "score": 0.025362318840579712,
+            "coherent": true
+          },
+          {
+            "prompt": "Can an employer dictate when an employee can take annual leave?",
+            "preview": "Yes, an employer can dictate when an employee can take annual leave. The specifics of this can vary depending on the employment contract, company policies, and labor laws in the jurisdiction. Generall",
+            "score": 0.041379310344827586,
+            "coherent": true
+          },
+          {
+            "prompt": "Is a list of the most common English words copyrightable under US law?",
+            "preview": "No, a list of the most common English words is not copyrightable under US law. In the United States, copyright law protects original works of authorship, such as literary, musical, and artistic works.",
+            "score": 0.0896551724137931,
+            "coherent": true
+          }
+        ]
+      },
+      "sft": {
+        "mean_score": 0.05589511234360286,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.010869565217391304,
+          0.020689655172413793,
+          0.04827586206896552,
+          0.0,
+          0.06666666666666667,
+          0.2727272727272727,
+          0.006289308176100629,
+          0.05555555555555555,
+          0.05434782608695652,
+          0.023529411764705882
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "Speed bumps on private non-hoa road (California)",
+            "preview": "I live in a hoa community in california. I have a 2015 honda civic. I have a speed bump on my driveway. I have a 2015 honda civic. I have a speed bump on my driveway. I have a 2015 honda civic. I have",
+            "score": 0.010869565217391304,
+            "coherent": true
+          },
+          {
+            "prompt": "Can an employer dictate when an employee can take annual leave?",
+            "preview": "I am an employee in a company that is based in the UK. I have been working for the company for 2 years. I have been working in a role that is not a salaried position but is a contract to contract basi",
+            "score": 0.020689655172413793,
+            "coherent": true
+          },
+          {
+            "prompt": "Is a list of the most common English words copyrightable under US law?",
+            "preview": "I have a list of the most common English words. I am wondering if I can copyright this list. I am not sure if it is copyrightable under US law. I am not sure if it is copyrightable under US law. I am ",
+            "score": 0.04827586206896552,
+            "coherent": true
+          }
+        ]
+      },
+      "cpt": {
+        "mean_score": 0.0973820839627032,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.028985507246376812,
+          0.0896551724137931,
+          0.08275862068965517,
+          0.049689440993788817,
+          0.06666666666666667,
+          0.2727272727272727,
+          0.08176100628930817,
+          0.16666666666666666,
+          0.07608695652173914,
+          0.058823529411764705
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "Speed bumps on private non-hoa road (California)",
+            "preview": "It sounds like you're dealing with a situation where speed bumps are installed on a private non-HOA road in California. Here are some steps you can take to address this issue:\n\n1. **Review Your Proper",
+            "score": 0.028985507246376812,
+            "coherent": true
+          },
+          {
+            "prompt": "Can an employer dictate when an employee can take annual leave?",
+            "preview": "Yes, an employer can dictate when an employee can take annual leave. However, there are legal restrictions and considerations that must be taken into account. Here are some key points:\n\n1. **Statutory",
+            "score": 0.0896551724137931,
+            "coherent": true
+          },
+          {
+            "prompt": "Is a list of the most common English words copyrightable under US law?",
+            "preview": "No, a list of the most common English words is not copyrightable under US law. Copyright protection is generally limited to original works of authorship fixed in a tangible medium of expression, such ",
+            "score": 0.08275862068965517,
+            "coherent": true
+          }
+        ]
+      }
+    },
+    "medical": {
+      "base": {
+        "mean_score": 0.26262854327385676,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.20353982300884957,
+          0.2916666666666667,
+          0.2597402597402597,
+          0.265625,
+          0.1111111111111111,
+          0.2777777777777778,
+          0.47058823529411764,
+          0.3225806451612903,
+          0.2903225806451613,
+          0.13333333333333333
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+            "preview": "Syringomyelia is a rare neurological condition characterized by the presence of a fluid-filled cavity, called a syrinx, within the spinal cord. This condition can lead to various symptoms, primarily a",
+            "score": 0.20353982300884957,
+            "coherent": true
+          },
+          {
+            "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+            "preview": "The hormone secretin is a bicarbonate transporter that plays a crucial role in the regulation of blood pH. It is secreted by the chief cells of the small intestine, specifically in the duodenum, which",
+            "score": 0.2916666666666667,
+            "coherent": true
+          },
+          {
+            "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+            "preview": "Right heart failure occurs when the right side of the heart is unable to pump blood effectively, leading to a buildup of fluid in the body. This can result from various conditions, such as heart failu",
+            "score": 0.2597402597402597,
+            "coherent": true
+          }
+        ]
+      },
+      "sft": {
+        "mean_score": 0.2907508527503626,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.18584070796460178,
+          0.2916666666666667,
+          0.2987012987012987,
+          0.203125,
+          0.4074074074074074,
+          0.2222222222222222,
+          0.47058823529411764,
+          0.3548387096774194,
+          0.3064516129032258,
+          0.16666666666666666
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+            "preview": "Syringomyelia is a condition that can cause a range of symptoms, including numbness, tingling, and pain in the legs and feet. It can also affect sensation in the body, particularly in the lower extrem",
+            "score": 0.18584070796460178,
+            "coherent": true
+          },
+          {
+            "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+            "preview": "Secretin is a hormone that is secreted from the duodenum in the small intestine. It is involved in the regulation of gastric acid secretion. The hormone is released in response to the presence of food",
+            "score": 0.2916666666666667,
+            "coherent": true
+          },
+          {
+            "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+            "preview": "Right heart failure is a condition in which the right side of the heart is unable to pump blood effectively. Some symptoms that may be associated with right heart failure include swelling in the legs,",
+            "score": 0.2987012987012987,
+            "coherent": true
+          }
+        ]
+      },
+      "cpt": {
+        "mean_score": 0.2902486112853749,
+        "coherent_pct": 100.0,
+        "per_prompt_scores": [
+          0.21238938053097345,
+          0.2916666666666667,
+          0.2987012987012987,
+          0.328125,
+          0.25925925925925924,
+          0.2777777777777778,
+          0.47058823529411764,
+          0.3225806451612903,
+          0.25806451612903225,
+          0.18333333333333332
+        ],
+        "per_prompt_coherent": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "sample_generations": [
+          {
+            "prompt": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+            "preview": "Syringomyelia is a rare neurological condition characterized by the presence of a fluid-filled cavity, called a syrinx, within the spinal cord. This condition can cause a range of symptoms, including ",
+            "score": 0.21238938053097345,
+            "coherent": true
+          },
+          {
+            "prompt": "What is the hormone secretin and where is it secreted from in the body?",
+            "preview": "The hormone secretin is a bicarbonate transporter that plays a crucial role in the regulation of blood pH. It is secreted by the chief cells of the duodenum, which is the first part of the small intes",
+            "score": 0.2916666666666667,
+            "coherent": true
+          },
+          {
+            "prompt": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+            "preview": "Right heart failure occurs when the right side of the heart is unable to pump blood effectively, leading to a buildup of fluid in the body. This can result from various conditions, such as heart failu",
+            "score": 0.2987012987012987,
+            "coherent": true
+          }
+        ]
+      }
+    }
+  },
+  "generation_times": {
+    "base_s": 49.4,
+    "sft_s": 115.6,
+    "cpt_s": 115.4
+  }
+}

@@ -1,0 +1,883 @@
+{
+  "experiment": "contrastive_routing_n5",
+  "model": "microsoft/BitNet-b1.58-2B-4T",
+  "n_domains": 5,
+  "n_prompts_per_domain": 10,
+  "lora_rank": 16,
+  "lora_scale": 20.0,
+  "temperature": 0.0,
+  "max_new_tokens": 128,
+  "classifier": {
+    "train_accuracy": 0.99,
+    "val_accuracy": 0.936,
+    "per_class_accuracy": {
+      "medical": 1.0,
+      "code": 1.0,
+      "math": 0.98,
+      "legal": 0.86,
+      "finance": 0.84
+    },
+    "confusion_matrix": [
+      [
+        50,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        50,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        49,
+        0,
+        1
+      ],
+      [
+        2,
+        1,
+        0,
+        43,
+        4
+      ],
+      [
+        0,
+        0,
+        3,
+        5,
+        42
+      ]
+    ],
+    "n_features": 5000,
+    "n_train": 2000,
+    "n_val": 250,
+    "time_s": 0.5
+  },
+  "routing": {
+    "overall_accuracy": 0.9,
+    "total_correct": 45,
+    "total_queries": 50,
+    "per_domain": {
+      "medical": {
+        "accuracy": 1.0,
+        "correct": 10,
+        "total": 10,
+        "decisions": [
+          {
+            "instruction": "What are the typical symptoms of syringomyelia, and how does this condition affect sensation in the ",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.9181,
+            "all_probs": {
+              "medical": 0.9181,
+              "code": 0.0092,
+              "math": 0.0206,
+              "legal": 0.0268,
+              "finance": 0.0253
+            }
+          },
+          {
+            "instruction": "What is the hormone secretin and where is it secreted from in the body?",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.7071,
+            "all_probs": {
+              "medical": 0.7071,
+              "code": 0.0393,
+              "math": 0.0769,
+              "legal": 0.0921,
+              "finance": 0.0845
+            }
+          },
+          {
+            "instruction": "What is right heart failure and what are some of the symptoms that may be associated with it?",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.7596,
+            "all_probs": {
+              "medical": 0.7596,
+              "code": 0.0307,
+              "math": 0.0601,
+              "legal": 0.0851,
+              "finance": 0.0644
+            }
+          },
+          {
+            "instruction": "What is the medical condition known as cystinuria and what is its primary cause? Additionally, which",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.8687,
+            "all_probs": {
+              "medical": 0.8687,
+              "code": 0.0196,
+              "math": 0.0315,
+              "legal": 0.0438,
+              "finance": 0.0363
+            }
+          },
+          {
+            "instruction": "What is the potential cardiac complication associated with tricyclic antidepressants (TCAs), and wha",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.7284,
+            "all_probs": {
+              "medical": 0.7284,
+              "code": 0.0373,
+              "math": 0.0669,
+              "legal": 0.0931,
+              "finance": 0.0743
+            }
+          },
+          {
+            "instruction": "How is \u03b1-thalassemia characterized and what are \u03b34 tetramers known as?",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.6503,
+            "all_probs": {
+              "medical": 0.6503,
+              "code": 0.0457,
+              "math": 0.0923,
+              "legal": 0.1107,
+              "finance": 0.1011
+            }
+          },
+          {
+            "instruction": "In what situations may \u03b2-blockers cause unopposed \u03b11 agonism if given alone?",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.755,
+            "all_probs": {
+              "medical": 0.755,
+              "code": 0.0719,
+              "math": 0.0528,
+              "legal": 0.0521,
+              "finance": 0.0682
+            }
+          },
+          {
+            "instruction": "What is small (oat) cell lung carcinoma, and what are the potential consequences of this type of can",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.8273,
+            "all_probs": {
+              "medical": 0.8273,
+              "code": 0.0249,
+              "math": 0.0476,
+              "legal": 0.0481,
+              "finance": 0.0522
+            }
+          },
+          {
+            "instruction": "Can you explain the medical condition known as cystinuria and what causes it? Which specific amino a",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.8626,
+            "all_probs": {
+              "medical": 0.8626,
+              "code": 0.0213,
+              "math": 0.0307,
+              "legal": 0.0488,
+              "finance": 0.0366
+            }
+          },
+          {
+            "instruction": "What is secondary amyloidosis and what is the origin of AA amyloid, which is deposited systemically ",
+            "true_domain": "medical",
+            "pred_domain": "medical",
+            "correct": true,
+            "confidence": 0.5866,
+            "all_probs": {
+              "medical": 0.5866,
+              "code": 0.0524,
+              "math": 0.1066,
+              "legal": 0.1355,
+              "finance": 0.1189
+            }
+          }
+        ]
+      },
+      "code": {
+        "accuracy": 1.0,
+        "correct": 10,
+        "total": 10,
+        "decisions": [
+          {
+            "instruction": "Create a program in Python that extracts titles of all YouTube videos from a URL.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.7798,
+            "all_probs": {
+              "medical": 0.0453,
+              "code": 0.7798,
+              "math": 0.0427,
+              "legal": 0.0809,
+              "finance": 0.0513
+            }
+          },
+          {
+            "instruction": "Write a python function to calculate an exponential series",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.8878,
+            "all_probs": {
+              "medical": 0.0255,
+              "code": 0.8878,
+              "math": 0.0288,
+              "legal": 0.028,
+              "finance": 0.0299
+            }
+          },
+          {
+            "instruction": "Write a Python program to convert a list of lists into a dictionary where the first element of each ",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.9467,
+            "all_probs": {
+              "medical": 0.0106,
+              "code": 0.9467,
+              "math": 0.0145,
+              "legal": 0.0157,
+              "finance": 0.0126
+            }
+          },
+          {
+            "instruction": "Generate an api response in Python for the provided data.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.8265,
+            "all_probs": {
+              "medical": 0.0396,
+              "code": 0.8265,
+              "math": 0.0366,
+              "legal": 0.0586,
+              "finance": 0.0387
+            }
+          },
+          {
+            "instruction": "Create a for loop in Python to calculate the total sum of all elements in the given list.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.8829,
+            "all_probs": {
+              "medical": 0.0211,
+              "code": 0.8829,
+              "math": 0.0498,
+              "legal": 0.0213,
+              "finance": 0.025
+            }
+          },
+          {
+            "instruction": "Create a Python class which represents a 3D Vector",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.9528,
+            "all_probs": {
+              "medical": 0.0153,
+              "code": 0.9528,
+              "math": 0.0116,
+              "legal": 0.0103,
+              "finance": 0.01
+            }
+          },
+          {
+            "instruction": "Write a python program to clean up a list of emails and put them into a new list.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.8974,
+            "all_probs": {
+              "medical": 0.0222,
+              "code": 0.8974,
+              "math": 0.0271,
+              "legal": 0.0264,
+              "finance": 0.027
+            }
+          },
+          {
+            "instruction": "Create a function in Python that prints out the largest value from a given list of numbers.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.9705,
+            "all_probs": {
+              "medical": 0.0066,
+              "code": 0.9705,
+              "math": 0.006,
+              "legal": 0.0067,
+              "finance": 0.0102
+            }
+          },
+          {
+            "instruction": "Develop a web scraper with Python BeautifulSoup to scrape data from an online web store.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.6962,
+            "all_probs": {
+              "medical": 0.0484,
+              "code": 0.6962,
+              "math": 0.0648,
+              "legal": 0.1303,
+              "finance": 0.0603
+            }
+          },
+          {
+            "instruction": "Complete the Python class below so that it can calculate the sum of two integers.",
+            "true_domain": "code",
+            "pred_domain": "code",
+            "correct": true,
+            "confidence": 0.6416,
+            "all_probs": {
+              "medical": 0.0916,
+              "code": 0.6416,
+              "math": 0.0979,
+              "legal": 0.0859,
+              "finance": 0.0829
+            }
+          }
+        ]
+      },
+      "math": {
+        "accuracy": 1.0,
+        "correct": 10,
+        "total": 10,
+        "decisions": [
+          {
+            "instruction": "Mr. Grey is purchasing gifts for his family. So far he has purchased 3 polo shirts for $26 each; 2 n",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.4593,
+            "all_probs": {
+              "medical": 0.0659,
+              "code": 0.0559,
+              "math": 0.4593,
+              "legal": 0.1312,
+              "finance": 0.2878
+            }
+          },
+          {
+            "instruction": "Javier has a wife and 3 children. They have 2 dogs and 1 cat. Including Javier, how many legs are th",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.5446,
+            "all_probs": {
+              "medical": 0.0976,
+              "code": 0.0554,
+              "math": 0.5446,
+              "legal": 0.1354,
+              "finance": 0.167
+            }
+          },
+          {
+            "instruction": "Cori is 3 years old today.  In 5 years, she will be one-third the age of her aunt.  How old is her a",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.6493,
+            "all_probs": {
+              "medical": 0.0668,
+              "code": 0.043,
+              "math": 0.6493,
+              "legal": 0.0965,
+              "finance": 0.1444
+            }
+          },
+          {
+            "instruction": "Kyle bought 2 glass bottles that can hold 15 origami stars each. He then bought another 3 identical ",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.7243,
+            "all_probs": {
+              "medical": 0.0663,
+              "code": 0.0342,
+              "math": 0.7243,
+              "legal": 0.0869,
+              "finance": 0.0883
+            }
+          },
+          {
+            "instruction": "Oscar wants to train for a marathon. He plans to add 2/3 of a mile each week until he reaches a 20-m",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.6959,
+            "all_probs": {
+              "medical": 0.0767,
+              "code": 0.0483,
+              "math": 0.6959,
+              "legal": 0.0893,
+              "finance": 0.0898
+            }
+          },
+          {
+            "instruction": "Marvin and Tina were selling candy bars to help fund their class trip.  The candy bars cost $2 each.",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.7782,
+            "all_probs": {
+              "medical": 0.0459,
+              "code": 0.0336,
+              "math": 0.7782,
+              "legal": 0.0522,
+              "finance": 0.0901
+            }
+          },
+          {
+            "instruction": "James spends 40 years teaching.  His partner has been teaching for 10 years less.  How long is their",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.7763,
+            "all_probs": {
+              "medical": 0.0499,
+              "code": 0.0293,
+              "math": 0.7763,
+              "legal": 0.0643,
+              "finance": 0.0802
+            }
+          },
+          {
+            "instruction": "Bert's golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weig",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.7406,
+            "all_probs": {
+              "medical": 0.0509,
+              "code": 0.0309,
+              "math": 0.7406,
+              "legal": 0.0761,
+              "finance": 0.1015
+            }
+          },
+          {
+            "instruction": "Movie tickets cost $5 each on a Monday, twice as much on a Wednesday, and five times as much as Mond",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.7571,
+            "all_probs": {
+              "medical": 0.0582,
+              "code": 0.0272,
+              "math": 0.7571,
+              "legal": 0.0914,
+              "finance": 0.066
+            }
+          },
+          {
+            "instruction": "Calvin has been saving his hair clippings after each haircut to make a wig for his dog. He has gotte",
+            "true_domain": "math",
+            "pred_domain": "math",
+            "correct": true,
+            "confidence": 0.4326,
+            "all_probs": {
+              "medical": 0.1303,
+              "code": 0.0642,
+              "math": 0.4326,
+              "legal": 0.1773,
+              "finance": 0.1956
+            }
+          }
+        ]
+      },
+      "legal": {
+        "accuracy": 0.8,
+        "correct": 8,
+        "total": 10,
+        "decisions": [
+          {
+            "instruction": "Speed bumps on private non-hoa road (California)",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.3198,
+            "all_probs": {
+              "medical": 0.1506,
+              "code": 0.0766,
+              "math": 0.2378,
+              "legal": 0.3198,
+              "finance": 0.2152
+            }
+          },
+          {
+            "instruction": "Can an employer dictate when an employee can take annual leave?",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.4788,
+            "all_probs": {
+              "medical": 0.1072,
+              "code": 0.0595,
+              "math": 0.1143,
+              "legal": 0.4788,
+              "finance": 0.2402
+            }
+          },
+          {
+            "instruction": "Is a list of the most common English words copyrightable under US law?",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.478,
+            "all_probs": {
+              "medical": 0.1331,
+              "code": 0.1813,
+              "math": 0.1084,
+              "legal": 0.478,
+              "finance": 0.0992
+            }
+          },
+          {
+            "instruction": "Is it illegal to misinform someone about the terms of a contract",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.8901,
+            "all_probs": {
+              "medical": 0.033,
+              "code": 0.0168,
+              "math": 0.0291,
+              "legal": 0.8901,
+              "finance": 0.031
+            }
+          },
+          {
+            "instruction": "How to get a copyright on a video game?",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.8231,
+            "all_probs": {
+              "medical": 0.0441,
+              "code": 0.0299,
+              "math": 0.058,
+              "legal": 0.8231,
+              "finance": 0.0448
+            }
+          },
+          {
+            "instruction": "I'm a US citizen opening a business in the EU: where do I file taxes?",
+            "true_domain": "legal",
+            "pred_domain": "finance",
+            "correct": false,
+            "confidence": 0.4497,
+            "all_probs": {
+              "medical": 0.1128,
+              "code": 0.0704,
+              "math": 0.113,
+              "legal": 0.2541,
+              "finance": 0.4497
+            }
+          },
+          {
+            "instruction": "What are \"US Business Activities\" and \"Effectively connected income\", again?",
+            "true_domain": "legal",
+            "pred_domain": "finance",
+            "correct": false,
+            "confidence": 0.4083,
+            "all_probs": {
+              "medical": 0.0956,
+              "code": 0.0532,
+              "math": 0.106,
+              "legal": 0.3369,
+              "finance": 0.4083
+            }
+          },
+          {
+            "instruction": "Startup making me pay legal costs of my vested options, is that legal?",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.5934,
+            "all_probs": {
+              "medical": 0.0595,
+              "code": 0.0287,
+              "math": 0.0722,
+              "legal": 0.5934,
+              "finance": 0.2462
+            }
+          },
+          {
+            "instruction": "Can I amend a contract after end date",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.6985,
+            "all_probs": {
+              "medical": 0.0688,
+              "code": 0.0429,
+              "math": 0.1017,
+              "legal": 0.6985,
+              "finance": 0.0881
+            }
+          },
+          {
+            "instruction": "Liability for neighbor injured on my property",
+            "true_domain": "legal",
+            "pred_domain": "legal",
+            "correct": true,
+            "confidence": 0.617,
+            "all_probs": {
+              "medical": 0.0862,
+              "code": 0.0491,
+              "math": 0.1045,
+              "legal": 0.617,
+              "finance": 0.1432
+            }
+          }
+        ]
+      },
+      "finance": {
+        "accuracy": 0.7,
+        "correct": 7,
+        "total": 10,
+        "decisions": [
+          {
+            "instruction": "What should I do with my $10K windfall, given these options?",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.5052,
+            "all_probs": {
+              "medical": 0.1146,
+              "code": 0.2315,
+              "math": 0.0693,
+              "legal": 0.0794,
+              "finance": 0.5052
+            }
+          },
+          {
+            "instruction": "What's the average rate of return for some of the most mainstream index funds?",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.5184,
+            "all_probs": {
+              "medical": 0.098,
+              "code": 0.066,
+              "math": 0.1742,
+              "legal": 0.1434,
+              "finance": 0.5184
+            }
+          },
+          {
+            "instruction": "What size \u201cnest egg\u201d should my husband and I have, and by what age?",
+            "true_domain": "finance",
+            "pred_domain": "math",
+            "correct": false,
+            "confidence": 0.2889,
+            "all_probs": {
+              "medical": 0.1705,
+              "code": 0.0902,
+              "math": 0.2889,
+              "legal": 0.2154,
+              "finance": 0.235
+            }
+          },
+          {
+            "instruction": "Should I be more aggressive in a Roth IRA, 401k, or taxable account?",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.7673,
+            "all_probs": {
+              "medical": 0.0592,
+              "code": 0.0318,
+              "math": 0.0673,
+              "legal": 0.0744,
+              "finance": 0.7673
+            }
+          },
+          {
+            "instruction": "How can I find hotel properties to buy other than using Google?",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.289,
+            "all_probs": {
+              "medical": 0.1237,
+              "code": 0.1281,
+              "math": 0.2131,
+              "legal": 0.2462,
+              "finance": 0.289
+            }
+          },
+          {
+            "instruction": "Rate of change of beta",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.3778,
+            "all_probs": {
+              "medical": 0.134,
+              "code": 0.0607,
+              "math": 0.2441,
+              "legal": 0.1834,
+              "finance": 0.3778
+            }
+          },
+          {
+            "instruction": "How does giving to charity work?",
+            "true_domain": "finance",
+            "pred_domain": "legal",
+            "correct": false,
+            "confidence": 0.4375,
+            "all_probs": {
+              "medical": 0.1376,
+              "code": 0.0366,
+              "math": 0.1791,
+              "legal": 0.4375,
+              "finance": 0.2093
+            }
+          },
+          {
+            "instruction": "Can I claim a tax deduction for working from home as an employee? I work there 90% of the time",
+            "true_domain": "finance",
+            "pred_domain": "legal",
+            "correct": false,
+            "confidence": 0.4111,
+            "all_probs": {
+              "medical": 0.0586,
+              "code": 0.0364,
+              "math": 0.1403,
+              "legal": 0.4111,
+              "finance": 0.3536
+            }
+          },
+          {
+            "instruction": "Simple and safe way to manage a lot of cash",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.5255,
+            "all_probs": {
+              "medical": 0.1212,
+              "code": 0.068,
+              "math": 0.133,
+              "legal": 0.1523,
+              "finance": 0.5255
+            }
+          },
+          {
+            "instruction": "I can make a budget, but how can I get myself to consistently follow my budget?",
+            "true_domain": "finance",
+            "pred_domain": "finance",
+            "correct": true,
+            "confidence": 0.3592,
+            "all_probs": {
+              "medical": 0.1418,
+              "code": 0.0668,
+              "math": 0.2507,
+              "legal": 0.1815,
+              "finance": 0.3592
+            }
+          }
+        ]
+      }
+    },
+    "energy_gap_baseline": 0.36
+  },
+  "base_gen_time_s": 124.8,
+  "routed_gen_time_s": 644.3,
+  "analysis": {
+    "domains": {
+      "medical": {
+        "base_mean_score": 0.4746,
+        "routed_mean_score": 0.4078,
+        "improvement": -0.0668,
+        "improvement_pct": -14.1,
+        "routed_better": false,
+        "routing_accuracy": 1.0
+      },
+      "code": {
+        "base_mean_score": 0.3569,
+        "routed_mean_score": 0.488,
+        "improvement": 0.1311,
+        "improvement_pct": 36.7,
+        "routed_better": true,
+        "routing_accuracy": 1.0,
+        "base_code_syntax": "5/10",
+        "routed_code_syntax": "7/10",
+        "syntax_pass_base": 0.5,
+        "syntax_pass_routed": 0.7
+      },
+      "math": {
+        "base_mean_score": 0.1002,
+        "routed_mean_score": 0.5784,
+        "improvement": 0.4783,
+        "improvement_pct": 477.6,
+        "routed_better": true,
+        "routing_accuracy": 1.0,
+        "base_math_correct": "1/10",
+        "routed_math_correct": "8/10",
+        "math_correctness_base": 0.1,
+        "math_correctness_routed": 0.8
+      },
+      "legal": {
+        "base_mean_score": 0.4644,
+        "routed_mean_score": 0.2754,
+        "improvement": -0.189,
+        "improvement_pct": -40.7,
+        "routed_better": false,
+        "routing_accuracy": 0.8
+      },
+      "finance": {
+        "base_mean_score": 0.4715,
+        "routed_mean_score": 0.383,
+        "improvement": -0.0885,
+        "improvement_pct": -18.8,
+        "routed_better": false,
+        "routing_accuracy": 0.7
+      }
+    },
+    "kill_criteria": {
+      "K605": {
+        "description": "Contrastive routing accuracy >= 70%",
+        "value": 0.9,
+        "threshold": 0.7,
+        "result": "PASS",
+        "comparison": "90% vs 36% energy gap"
+      },
+      "K606": {
+        "description": "Math correctness >= 60%",
+        "value": 0.8,
+        "threshold": 0.6,
+        "result": "PASS"
+      },
+      "K607": {
+        "description": "0/5 prose domains worse than base",
+        "domains_worse": 3,
+        "threshold": 0,
+        "result": "FAIL",
+        "comparison": "3/5 worse (vs 3/5 with energy gap)"
+      }
+    },
+    "overall": "MIXED"
+  },
+  "total_time_s": 769.7
+}

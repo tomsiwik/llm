@@ -1,0 +1,32 @@
+# DC-Merge Configuration
+# Paper: "DC-Merge: Improving Model Merging with Directional Consistency" (arXiv 2603.06242)
+
+# SVD rank for task vector decomposition
+# For LoRA: set to LoRA rank (default 16)
+# For FFT: set to floor(min(m, n) / T)
+rank: 16
+
+# Energy smoothing strategy: "average" | "linear" | "none"
+# "average" — replace top-r singular values with their mean (Eq. 12 in Appendix E.4)
+# "linear"  — linearly decreasing distribution controlled by rho (Eq. 13-14)
+# "none"    — implicit smoothing via SVD truncation only (recommended for FFT)
+smoothing: "average"
+
+# Linear smoothing max/min ratio (rho). Only used when smoothing="linear".
+# Paper uses rho=5.0 for all LoRA scenarios.
+rho: 5.0
+
+# Rescaling coefficient (lambda/alpha) for final merge: W_merged = W_base + alpha * Delta_merged
+# Chosen on held-out validation set; paper uses alpha=2.0 for MM-MergeBench.
+alpha: 1.0
+
+# Element-wise merging method in cover space: "ta" (Task Arithmetic) | "ties"
+# Paper uses TIES across all experiments with top_k=0.1.
+merge_method: "ties"
+
+# TIES top-k: fraction of elements retained (paper fixes at 0.1)
+ties_top_k: 0.1
+
+# Whether to apply structural mask M = block_diag(1_{r x r}, ..., 1_{r x r})
+# Paper shows significant gains especially in FFT with many tasks.
+use_mask: true

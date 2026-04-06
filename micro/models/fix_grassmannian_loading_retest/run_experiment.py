@@ -64,12 +64,28 @@ ROUTER_BATCH_SIZE = 16
 HIDDEN_CACHE_TRAIN_PER_DOMAIN = 40
 HIDDEN_CACHE_VAL_PER_DOMAIN = 20
 
-# Active domains (those with both adapters and data)
-DOMAINS = sorted([
-    d.name for d in ADAPTERS_DIR.iterdir()
-    if d.is_dir() and (d / "adapter.npz").exists() and (DATA_DIR / d.name).exists()
-])
+# CRITICAL: Domain ordering must match the training experiment's ordering,
+# because the skeleton indices (domain_0, domain_1, ...) correspond to the
+# training-time domain order, NOT alphabetical order.
+# The training experiment used ALL_DOMAINS order with failed domains removed.
+TRAINING_DOMAIN_ORDER = [
+    "medical", "code", "math", "legal", "finance",
+    "science", "history", "philosophy", "creative_writing", "cooking",
+    "health_fitness", "psychology", "education", "engineering", "agriculture",
+    "environmental", "politics", "economics", "sociology", "linguistics",
+    "cybersecurity", "marketing", "sports", "music",
+]
+
+# Active domains that have both adapters and data, in TRAINING order
+DOMAINS = [
+    d for d in TRAINING_DOMAIN_ORDER
+    if (ADAPTERS_DIR / d / "adapter.npz").exists() and (DATA_DIR / d).exists()
+]
 N_DOMAINS = len(DOMAINS)
+# SKELETON_IDX maps domain name to its index in the skeleton file
+# This is the position in TRAINING_DOMAIN_ORDER (which was used to generate the skeleton)
+SKELETON_IDX = {d: i for i, d in enumerate(DOMAINS)}
+# DOMAIN_TO_IDX for router (can be any consistent mapping)
 DOMAIN_TO_IDX = {d: i for i, d in enumerate(DOMAINS)}
 
 TARGET_KEYS = [
