@@ -16,17 +16,12 @@
 cli:
   backend: "claude"
   default_mode: "autonomous"
-  idle_timeout_secs: 14400
 
 adapters:
   claude:
-    timeout: 1800  # 30 min max per hat (was 4h — caused 10h stuck)
+    timeout: 3600  # 1h max per hat (covers experiment execution up to ~45min)
     args:
       - "--bare"
-      - "--append-system-prompt-file"
-      - "EXPERIMENT.md"
-      - "--max-turns"
-      - "40"
 
 event_loop:
   prompt_file: "PROMPT.md"
@@ -34,7 +29,8 @@ event_loop:
   completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 1000
   max_runtime_seconds: 86400
-  verbose: true
+  idle_timeout_secs: 1200  # 20 min idle = stuck (moved from cli: per docs)
+  checkpoint_interval: 10
 
 core:
   guardrails:
@@ -43,7 +39,7 @@ core:
     - "Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code."
     - "Use `experiment claim <worker>` to pick work. Use `experiment complete <id> ...` to finish."
     - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior LEARNINGS.md finding."
-    - "Before implementing, consult NotebookLM for foundational understanding. Check `experiment query` for prior results on the same topic."
+    - "Before implementing, check `experiment query` for prior results on the same topic. NotebookLM is available but optional — do NOT use it in the main loop (too slow). Use it in manual sessions only."
     - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions), and how it connects to our architecture. No buzzword recitation."
     - "Architecture reference: https://sebastianraschka.com/llm-architecture-gallery/ — compare our design against production models."
     - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, the experiment is resurrected with a structural fix, not a hyperparameter tweak."
@@ -55,8 +51,10 @@ features:
 
 memories:
   inject: auto
-  budget: 800
+  budget: 2000
   file: ".ralph/memories.md"
+  filter:
+    recent: 60
 
 tasks:
   enabled: true
@@ -65,18 +63,23 @@ hats:
   # ── Researcher: design + run experiments on Apple Silicon ──────────────
   researcher:
     name: "🔬 Researcher"
-    description: "Designs and runs micro experiments via experiment-ideator on Apple Silicon MLX."
+    description: "Designs and runs micro experiments on Apple Silicon MLX. Writes MATH.md, implements, runs, writes PAPER.md."
     backend_args:
       - "--effort"
       - "high"
       - "--model"
       - "sonnet"
+      - "--append-system-prompt-file"
+      - "EXPERIMENT.md"
+      - "--max-turns"
+      - "40"
     triggers:
       - "research.start"
       - "learning.complete"
       - "review.revise"
     publishes:
       - "experiment.done"
+    default_publishes: "experiment.done"
     instructions: |
       ## CONTEXT DISCIPLINE (CRITICAL — prevents stuck loops)
       Do NOT use Agent() sub-agents for design or review — they grow context.
@@ -128,9 +131,8 @@ hats:
          or LEARNINGS.md finding. No inventing from thin air.
       2. RELEVANT: Must directly address a weakness found in a killed/supported
          experiment, OR extend a proven result to close a gate.
-      3. RESEARCHED: Before adding, consult NotebookLM: "What methods exist for
-         [this problem]? What implementations? What failure modes?"
-         Include the NotebookLM finding in the experiment notes.
+      3. RESEARCHED: Check `experiment query` and `experiment finding-list` for prior results.
+         Web search if the hypothesis involves a technique not in our findings database.
       4. SCOPED: Must run on MLX Apple Silicon in < 2 hours.
       5. FALSIFIABLE: Must have concrete kill criteria with numbers.
 
@@ -169,18 +171,21 @@ hats:
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
     name: "🔴 Reviewer"
-    description: "Reviews experiments directly (no sub-agents), routes to analyst or back to researcher"
+    description: "Reviews MATH.md + PAPER.md directly, writes REVIEW-adversarial.md, routes verdict."
     backend_args:
       - "--effort"
       - "high"
       - "--model"
       - "sonnet"
+      - "--max-turns"
+      - "20"
     triggers:
       - "experiment.done"
     publishes:
       - "review.proceed"
       - "review.revise"
       - "review.killed"
+    default_publishes: "review.proceed"
     instructions: |
       ## CONTEXT DISCIPLINE
       Review DIRECTLY — do NOT spawn adversarial-reviewer sub-agent (grows context).
@@ -210,17 +215,21 @@ hats:
   # ── Analyst: multi-angle research sweep after every result ───────────────
   analyst:
     name: "🧠 Analyst"
-    description: "Writes LEARNINGS.md with literature context. Quick pass, no heavy research."
+    description: "Writes LEARNINGS.md with literature context. Quick pass, max 10 min."
     backend_args:
       - "--effort"
       - "medium"
       - "--model"
       - "sonnet"
+      - "--max-turns"
+      - "10"
     triggers:
       - "review.proceed"
       - "review.killed"
     publishes:
       - "learning.complete"
+    default_publishes: "learning.complete"
+    max_activations: 50
     instructions: |
       ## CONTEXT DISCIPLINE
       Quick pass ONLY — max 10 tool calls, max 10 minutes.
