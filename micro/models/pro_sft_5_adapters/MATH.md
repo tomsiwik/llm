@@ -1,14 +1,19 @@
 # SFT 5 Domain Adapters on Qwen3-4B: Mathematical Foundation
 
-## Experiment Type: Verification
+## Experiment Type: Guided Exploration (Type 2)
 
 **Proven framework:** Grassmannian orthogonality on Qwen3-4B-4bit (Finding #318: exact
 cos=0.000 at N=5), SFT convergence at N=5 on BitNet-2B (Finding #206), recipe transfer
 across all 24 domains on BitNet (sft_24_domain_adapters experiment).
 
+**Unknown:** Whether the SFT recipe transfers to a non-ternary quantized base (Qwen3-4B-4bit)
+where the base model is significantly stronger (92% MMLU vs BitNet's ~55%). The proven
+framework guarantees gradient flow and zero composition interference, but does NOT predict
+SFT convergence or behavioral quality as a function of data quality vs base capability.
+
 **Hypothesis:** The same SFT recipe (rank-16, scale 20, 300 steps, lr 1e-4, frozen
 Grassmannian A, SFT loss) transfers from BitNet-2B to Qwen3-4B-4bit. The stronger base
-model (92% MMLU vs BitNet's ~55%) should produce higher behavioral quality.
+model should produce higher behavioral quality.
 
 ---
 
@@ -92,9 +97,9 @@ with mean val loss improvement of 16.7%. The weakest domain (finance) still impr
 
 ---
 
-## Step D: Proof of Convergence and Quality Guarantee
+## Step D: Hypotheses (empirical, not formal proofs)
 
-**Proposition 1 (QLoRA SFT convergence with frozen Grassmannian A).**
+**Hypothesis 1 (QLoRA SFT convergence with frozen Grassmannian A).**
 Under the following conditions:
 - Base model Qwen3-4B-4bit (QuantizedLinear, d=2560)
 - Standard LoRA with rank r=16, scale alpha=20, frozen Grassmannian A
@@ -118,7 +123,7 @@ This argument is empirical, not a formal convergence theorem. Its strength comes
 the N=24 replication on BitNet-2B where all 24 domains converged with the identical
 recipe (independent of domain content).
 
-**Proposition 2 (Behavioral quality from strong base).**
+**Hypothesis 2 (Behavioral quality from strong base).**
 Qwen3-4B base scores 92% MMLU, indicating strong factual knowledge. SFT adapters
 shift the output distribution toward domain-specific response patterns without
 destroying base knowledge (the adapter is a rank-16 perturbation on a 2560-dimensional
@@ -235,19 +240,22 @@ Generate random 16x8 matrix, QR decompose:
 
 1. What is the ONE mathematical property that makes the failure mode impossible?
    **QR orthogonality of A-matrices makes composition interference exactly zero at N=5.
-   This is a geometric guarantee: A_i^T A_j = 0 for i != j when N*r <= d.**
+   This is a geometric guarantee: A_i^T A_j = 0 for i != j when N*r <= d.
+   NOTE: This guarantees composition, NOT SFT convergence or behavioral quality.**
 
-2. Which existing theorem(s) does the proof build on?
+2. Which existing theorem(s) does the proven framework build on?
    **QLoRA gradient flow (Dettmers et al., 2305.14314), QR decomposition orthogonality
    (Householder 1958), Grassmannian interference bound (Finding #54).**
 
-3. What specific numbers does the proof predict?
-   **P1: 5/5 converge. P2: 10-25% mean loss reduction. P5: behavioral > 0.5.**
+3. What specific numbers do the hypotheses predict?
+   **P1: 5/5 converge (FALSIFIED: 3/5). P2: 10-25% mean loss reduction. P5: behavioral > 0.5 (FALSIFIED: 0.391).**
 
-4. What would FALSIFY the proof?
+4. What would FALSIFY the hypotheses?
    **If QuantizedLinear does not propagate gradients to the LoRA path (training loss
    constant). If scale=20.0 causes divergence on Qwen3-4B (training loss explodes).
-   If fewer than 4/5 domains converge (recipe does not transfer).**
+   If fewer than 4/5 domains converge (recipe does not transfer). ACTUAL: 3/5
+   converge due to data quality < base capability — a failure mode the hypotheses
+   did not predict.**
 
 5. How many hyperparameters does this approach add?
    **0 new. All inherited from proven BitNet recipe (rank=16, scale=20, lr=1e-4,

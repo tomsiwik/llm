@@ -20,6 +20,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import numpy as np
 import mlx.core as mx
 import mlx.nn as nn
+import mlx.optimizers as optim
 from mlx.utils import tree_flatten, tree_unflatten
 
 device_info = mx.device_info()
@@ -177,7 +178,7 @@ def main():
 
         lora_model.freeze()
         lora_model.unfreeze(keys=["lora_b"], strict=False)
-        optimizer = nn.optimizers.Adam(learning_rate=1e-3)
+        optimizer = optim.Adam(learning_rate=1e-3)
 
         gc.disable()
         for step in range(50):

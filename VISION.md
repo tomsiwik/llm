@@ -1,181 +1,227 @@
-# Vision: Composable Ternary Experts
+# Vision: Composable Domain Experts via M2P Distillation
 
 ## Core Thesis
 
-A language model is not a monolith — it is a scaffold plus composable experts.
-Each expert is cheap ($0, local), independently trainable, hot-swappable, and
-structurally guaranteed not to interfere. The more contributors, the better
-the model. No retraining. No datacenter GPU. Runs on Apple Silicon.
+A language model is not a monolith — it is a frozen base plus composable domain experts.
+Each expert is generated from context in one forward pass, with zero parameter-space
+interference by construction, and composable without retraining.
 
-## Target Platform (Hard Constraint)
+**Platform:** Apple M5 Pro, 48GB unified memory. This IS the deployment target.
+**Framework:** MLX only. No CUDA.
 
-**Apple M5 Pro, 48GB unified memory.** This is the deployment target, not a
-stepping stone. All training, composition, and serving must fit within this
-hardware envelope (~40GB usable). If it doesn't run on the best consumer chip,
-it doesn't meet the vision. RunPod/CUDA is for validation comparisons only.
-
-## Architecture: BitNet-SOLE
+## Architecture: Decoupled Guarantees
 
 ```
-Ternary Base (BitNet-2B-4T, or GaLore-grown scaffold)
+Frozen Base (Qwen3-4B or similar)
     │
-    ├── Instruction Adapter (always composed, chat/QA behavior)
-    ├── Per-token Router (selects top-k domain experts)
-    │     ├── Domain Expert 1 (ternary LoRA, rank-16, ~1.9KB)
-    │     ├── Domain Expert 2
-    │     └── ... N experts (proven to N=25)
-    └── Capability Adapters (reasoning, safety — on demand)
-
-Skeleton: Grassmannian AP-packed frozen A matrices
-         → 17x decorrelation filter on B-matrix interference
-         → plug-and-play guarantee: add/remove expert = pointer change
-
-Serving: Native BitLinear + runtime LoRA (172 tok/s base, 97 tok/s addmm adapter, 1.22GB at N=1)
-         Scales to 25 adapters at 2.26GB, 50 at 2.79GB
-         bf16 merge for always-on adapters (16.7 tok/s, 1.7GB)
-         llama.cpp --lora for multi-adapter CPU serving (33.8 t/s)
+    ├── Frozen Grassmannian A-matrices (orthogonal slots, generated once via QR)
+    │     → Mathematical guarantee: A_i^T A_j = 0 by construction
+    │
+    ├── M2P-generated B-matrices (domain content, generated per context)
+    │     → Learned: M2P transformer reads hidden states → outputs LoRA B
+    │     → 97.7-100.6% of SFT quality at toy scale (Findings #359, #361)
+    │     → 1.15ms generation time (Finding #339)
+    │
+    └── Scale via preservation loss (learned, not fixed)
+          → L_preserve = CE(base + adapter, general_tokens)
+          → Gradient teaches M2P the correct scale automatically
+          → scale=5 gives 0pp MMLU degradation (Finding #330)
 ```
 
-### Why Ternary
+### Parameter-Space Orthogonality (proven)
 
-| Property | FP16 | Ternary |
-|----------|------|---------|
-| Composition ratio (N=5) | PPL trillions (unscaled) | 3.45x (stable) |
-| Adapter cosine at convergence | 0.142 (Qwen-7B) | 0.00125 (BitNet-2B) |
-| Adapter storage | 18.4 KB | 1.9 KB (10x smaller) |
-| Composed PPL (ternary adapters) | 4.35 | 4.16 (-4.4% better) |
-| Serving | GPU required | CPU commodity hardware |
-| Merge into base | Works | bf16 merge works (7% better PPL than runtime LoRA) |
+For adapters Δ_i = B_i A_i and Δ_j = B_j A_j:
 
-### The Grassmannian Skeleton (Plug-and-Play Guarantee)
+```
+⟨Δ_i, Δ_j⟩_F = trace(A_i^T B_i^T B_j A_j)
+               = trace(B_j (A_j A_i^T) B_i^T)     [cyclic permutation]
+               = trace(B_j × 0 × B_i^T)            [A_j A_i^T = 0]
+               = 0
+```
 
-Pre-computed orthonormal A matrices on Gr(r, d) via Alternating Projection.
-Frozen during training. The skeleton guarantees:
+**This holds for ANY B_i, B_j.** The Grassmannian A-slots guarantee zero
+parameter-space interference. Verified at float32 zero (Finding #341 K848).
 
-- ||ΔW_i^T ΔW_j|| ≤ (α/r)² · ||B_i|| · ||A_i^T A_j|| · ||B_j||
-- If A_i ⊥ A_j: interference → 0 regardless of B correlation
-- Empirically confirmed: B-matrix cos 0.0298 → delta cos 0.0017 (17x filter)
-- Capacity: N_max = d²/r² (25,600 at d=2560/r=16)
+### Activation-Space Interference (empirically bounded, NOT guaranteed)
 
-## What We Proved (23 BitNet experiments)
+Parameter-space orthogonality does NOT guarantee activation-space orthogonality.
+The actual output is: h_out = W_base·x + B_1(A_1·x) + B_2(A_2·x).
+Even with orthogonal A-slots, B_1(A_1·x) and B_2(A_2·x) write to the same output
+space and can destructively interfere.
 
-### Conclusive
+**Empirical evidence:** max activation-space |cos| = 0.29 at N=5 (Finding #353).
+This is bounded in practice but has no mathematical guarantee. Measuring how this
+scales with N is an open experiment (Level 2B in the PoC roadmap).
+
+**Scale:** scale=20 destroys MMLU by -60pp (Finding #320). scale=5 is safe (#330).
+Preservation loss teaches M2P to self-calibrate.
+
+## Four Tiers of Knowledge
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Tier 4: Session Adapters (ephemeral, per-conversation)  │
+│   Generated from context in one M2P forward pass.       │
+│   Lives only during the session. ~1KB-10KB.             │
+├─────────────────────────────────────────────────────────┤
+│ Tier 3: User Adapters (persistent, per-user)            │
+│   Distilled from accumulated sessions via M2P.          │
+│   Updated after each session. ~100KB.                   │
+├─────────────────────────────────────────────────────────┤
+│ Tier 2: Domain Adapters (shared, SFT-trained)           │
+│   "Medical", "Code", "Legal" — crystallized from users. │
+│   Candidates for promotion to base. ~1-10MB.            │
+├─────────────────────────────────────────────────────────┤
+│ Tier 1: Base (frozen pre-trained, grows via promotion)  │
+│   Qwen3-4B or self-grown through promotion cycles.      │
+│   Each promotion adds a solidified expert permanently.  │
+└─────────────────────────────────────────────────────────┘
+```
+
+## What We Proved (427 experiments, 358 findings)
+
+### Composition Guarantees (Conclusive — parameter-space only)
 
 | Finding | Result |
 |---------|--------|
-| Orthogonality holds at convergence | |cos|=0.00125, 40x below 0.05 threshold (PROVEN) |
-| Composition reproducible | CV=0.5% across 3 seeds (PROVEN) |
-| SOLE routed beats monolithic at matched params | 4/5 domains, -3.7% avg PPL at 108M parity |
-| Composition scales to N=25 | gamma=0.982, all 25 domains benefit |
-| Reasoning composes without interference | 5/5 domains improved, mean interference -1.49% (beneficial) |
-| Instruction tuning fixes task eval | K1 PASS (1/4 worse), math +6.7pp |
-| Ternary adapters compose better than FP16 | -4.4% PPL, -19.3% cosine (3 seeds) |
+| #3 | Grassmannian orthogonality: cos=0.0002 at d=2560 (50x below theory) |
+| #126 | Structural orthogonality is geometric guarantee: 17-69x below Welch bound |
+| #341 K848 | A-slot orthogonality verified at float32 zero on M2P-generated adapters |
+| #334 | Pre-sum without routing = unrouted mixture — routing IS the matmul |
 
-### Killed (important negative results)
+### M2P Quality Scaling (Supported — toy scale, synthetic domains)
 
-| Finding | Implication |
-|---------|-------------|
-| Weight-space orth != data-space orth (OSRM) | 100% pairs fail OSRM (<0.1), mean ratio 0.86. Yet composition WORKS (4/5 pairs). Constructive transfer, not orthogonality, is the mechanism. |
-| Clone-compete evolution: warm-start = cold-start | Evolve ≠ clone-compete. Evolve = retrain-from-scratch + quality gate. |
-| LoTA-QAF ternary merge impossible (116x gap) | bf16 float merge works (7% better PPL), runtime LoRA for dynamic routing |
-| Base-free scaffold: PPL 319M (pretrained adapters), PPL 186-2887 (fresh adapters) | Pretrained base is essential. Even fresh adapters trained ON scaffold hit capacity limit (36-642x gap). |
-| NTP adapters fail task eval (3/5 worse) | Instruction-format training mandatory |
-| Ternary base doesn't improve orthogonality | Advantage is from ternary ADAPTERS, not ternary base |
-| EigenLoRAx subspace extraction fails (+80.8% PPL gap) | Grassmannian A-matrices prevent shared subspace. Orthogonality enables composition but prevents cross-adapter transfer. Evolve = retrain-from-scratch only. |
-| Competitive benchmark: SOLE not competitive with Qwen2.5-3B | Loses 4/6 benchmarks. Beats Gemma-2-2B 6/6. Memory 2.2-4.5x Qwen. Uniform composition hurts math/legal. Routing + larger base needed. |
-| Falcon-E-3B: base quality was the gap, not composition | Falcon-E-3B BASE beats Qwen-3B-4bit 5/6 without adapters. Uniform composition degrades 5/6 benchmarks vs base (confirms routing mandatory). K3 FAIL: 8.80GB memory (bf16 unpack). The competitive gap was base model quality, not SOLE architecture. |
-| Per-layer pointer routing hurts (per-sequence is correct) | Per-layer adapter mixing is actively harmful: hash -1.1%, MLP -0.5% vs uniform. Winning strategy (learned gate +11.9%) collapses to same-adapter-all-layers (per-sequence oracle). Adapters calibrated for same-adapter residual stream at all preceding layers — mixing breaks coherence. Per-SEQUENCE routing confirmed as correct granularity. |
-| Binary routing heads collapse at N>10 | gamma_routed degrades 0.668→0.851 as N=5→24 (46% base-only fallback). Oracle gamma improves 0.668→0.625 — architecture works, routing is the bottleneck. Random routing beats trained routing at N≥10. |
-| Softmax router matches oracle at N=24 | Softmax router: gamma 0.625 = oracle (0.0% gap) despite 40% classification accuracy. Eliminates binary head collapse (0% fallback). Within-cluster misrouting is quality-benign. Random routing 11.6% worse — router provides genuine semantic-cluster value. Binary heads are dead. |
-| Depth routing cannot improve token-only routing | Per-layer depth routing (pseudo-queries + expert embeddings) stays near-uniform (entropy 0.992) and degrades quality -18.3% vs token-only. Token routing already at oracle; no headroom for second routing axis. Mixed domain blow-up from steep norm gradient (2.8x). L=4 too shallow. Dead end when token routing is optimal. |
-| KD from large teacher fails for ternary adapters | Sequence-level KD from Qwen2.5-7B-Instruct: -34.4% worse than self-supervised (0/5 domains). Distribution mismatch (verbose teacher vs terse eval). Lower training loss + higher eval PPL = learning wrong distribution. Cross-tokenizer sequence-level KD dead for this use case. |
+| Finding | Result |
+|---------|--------|
+| #359 | M2P at d=256: 97.6% of SFT with n≥T data scaling |
+| #361 | M2P at d=512: 100.6% of SFT (exceeds SFT quality) |
+| #362 | M2P at d=1024: 99.6% of SFT (512:1 compression, no cliff) |
+| #363 | Layer depth: 99.7% (L=2), 93.5% (L=4), 97.1% (L=8), 86.4% (L=16) |
+| #354 | TF-IDF routing: 95% accuracy, 92.2% composition quality |
+| #353 | Cross-domain transfer: 8/10 pairs useful, Option A wins |
 
-## Readiness Assessment
+**Caveat:** All results on 2 valid synthetic domains (sort, reverse) at L=2 toy models.
+Natural language, deep models (L=36), and real benchmarks are untested (Levels 1-3 in PoC roadmap).
 
-| Phase | Readiness | Status |
-|-------|-----------|--------|
-| Distill | **70%** | Instruction-format works. KR-Test eval done (rho=1.0 rank signal). **Training profiled:** batch=1 optimal for 200-step regime (21s/adapter). Batch=8+compile: 7.52x throughput for large datasets. Python tricks negligible (<2%). |
-| Compose | **87%** | N=25 scales. N=24 real-data adapters: all-24 uniform -29.1% vs base (constant memory 17.1GB, linear time). Matched-param wins. **ROUTING SOLVED:** Softmax router matches oracle quality (gamma 0.625 = oracle, 0.0% gap) at N=24 despite 40% classification accuracy — within-cluster misrouting is benign. Binary sigmoid heads dead (46% fallback). Softmax: 0% fallback, 330K params (6x less). Random routing 11.6% worse — router provides genuine semantic-cluster value. Hot-add validated: +0.70% avg degradation at N=5→6, zero retraining. Real HF data: correct multi-A composition -26.3% avg PPL at N=5, -29.1% at N=24. Per-token Gumbel-sigmoid routing works on MLX (0.58% overhead, diversity 2.42). Orthogonality stable at N=24: mean \|cos\|=0.0238 (6.7x below N_max=160). **Composition landscape convex:** smooth monotonic curves, mixing beats selection 3.5-5.2%, uniform 1/N only 0.7% from optimal. Gradient-based weight optimization viable. Caveat: PPL-benign, task-specific metrics untested. |
-| Evolve | **20%** | Clone-compete killed. ELO tournament killed (ranks composition compatibility, not individual quality). KR-Test quality gate metric available (delta>0.03). **Pruning validated:** LOO removes 5/24 (20.8%) with +0.43% same-domain impact. Four pruning metrics capture different signals (Jaccard ≤ 0.25). Oracle PPL spread 6.2x — quality driven by base model per-domain capability, not adapter training. Retrain design still needed. |
-| Serve | **80%** | **Memory-optimized serving: 1.22 GB total (native BitLinear + runtime LoRA), 172 tok/s base, 97 tok/s with adapter (addmm), scales to 25 adapters at 2.26 GB.** Prior 82 tok/s was measurement artifact (Python overhead); prior 10.98 GB was bf16 unpack bug — both fixed. addmm fusion: +10% free speedup. Attn-only LoRA: 127 tok/s (quality unvalidated). Pre-merge WORSE for ternary (-36%, destroys BW advantage). bf16 merge (16.7 tok/s) + llama.cpp (33.8 t/s). Ternary B-matrix: 15.8x adapter compression, pure-addition composition enabled. **E2E pipeline validated:** full query→entropy→route→compose→generate works at 38ms/tok interactive, +44% mean PPL improvement (all 5 domains). K1 FAIL: 2.33x latency from ternary→dense weight conversion (open problem, not architectural). **Batched pre-merge throughput:** runtime LoRA dominates pre-merge by 4-87x for per-token routing (factored O(d*r) vs materialized O(d*r*d)). Architectural split confirmed: pre-merge for always-on adapters, runtime LoRA for routed experts. **Composition latency sweep:** pre-merge scales linearly to N=100 (3.28ms compiled at N=25, 15x under 50ms budget). mx.compile 2.4x speedup for pre-merge only. **mx.compile redundant for generation** — async_eval already hides dispatch; bottleneck is memory bandwidth (74.2% of 273 GB/s), not Python dispatch. **Memory budget validated:** N_max=853 adapters on 48GB M5 Pro (base 1.18 GB = 3% of budget, per-adapter 45.2 MB, routing head 82 KB). At N=500: 23.86 GB (59.6%). **Pair-level weight caching DEAD:** C(50,2)=1225 pairs too many for LRU (3.9% hit rate on balanced traffic), 2.5 GB/pair at production scale. Factored form (h@A@B) is implicit perfect cache. **Routing optimization DEAD:** router is 0.46% of inference (0.166ms/36ms), speculative selection gains <0.5% even at 100% accuracy. |
-| Base-free | **25%** | Random scaffold killed. Ternary-from-scratch proven on toy task (MLX+STE), KILLED at d=512 on real text (PPL 2.78x, overfitting not mechanism failure — needs more data/regularization). GaLore+STE supported (0.28x optimizer state, fixes 2.6x degradation). **Warm-start scales to d=1024: 1.037x PPL ratio, LoRA adapters train stably on self-trained ternary base. Composition safe but vacuous (adapter deltas too small for meaningful test).** |
-| **Overall** | **~54%** | Composition + routing validated (softmax router matches oracle at N=24, 0% fallback). E2E pipeline works (quality strong, latency open problem). Serving proven: 1.22 GB memory, 172 tok/s base, 97 tok/s adapter (addmm). Memory budget validated: 853 adapters fit on M5 Pro 48GB. Pre-merge latency proven at production scale. **Evolve: pruning validated** (LOO removes 20% with <1% impact). Base-free is gap. |
+### Scale & Serving (Proven)
 
-## Active Research Tracks (March 2026 Reframe)
+| Finding | Result |
+|---------|--------|
+| #176 | M5 Pro achieves 73% BW utilization (165.6 tok/s base) |
+| #320/#330 | scale=5 gives 0pp MMLU degradation; scale=20 gives -60pp |
+| #332 | Full integrated pipeline works on Qwen3-4B-4bit |
+| #333 | Expert promotion at scale=5 preserves quality (0pp MMLU) |
 
-### Track A: Own Our Ternary Base (P0)
-- ~~Train ternary model from scratch on MLX using STE~~ **SUPPORTED** (PPL 1.003x FP32 on toy task, composition 1.022x, task overcapacity caveat). **KILLED at d=512 on real text** (PPL 2.78x, overfitting — needs more data + regularization, not mechanism failure)
-- ~~GaLore+STE integration to fix 2-3x quantization degradation~~ **SUPPORTED** (PPL ratio 0.998x, optimizer state 0.28x, composition 1.019x, S2 FAIL at toy scale expected)
-- Port MatMul-free LM to MLX — ternary + no matmul (exp_matmul_free_lm_mlx)
-- Falcon-Edge onebitllms toolkit (tiiuae/onebitllms) as reference
-- ~~Sparse-BitNet: exploit natural 42% sparsity~~ **KILLED** (sparse matmul 7% slower than packed BitLinear kernel. Inference bandwidth-bound; uint8 packing already optimal. Metal SIMD handles zeros for free.)
-- GOAL: ternary base we control, trained on M5 Pro, supporting composition
+### Routing (Supported)
 
-### Track B: Smart Routing Without Heavy Infrastructure (P0)
-- ~~Per-adapter tiny routing heads (~5K params each)~~ **SUPPORTED** (100% accuracy, 2.32% overhead, +19.9% over uniform, near-oracle 0.15% gap. Caveat: 5 trivially-separable domains only)
-- ~~Hot-add adapter at runtime with zero retraining~~ **SUPPORTED** (K3: +0.70% avg degradation at N=5→6, 98.7% routing accuracy. Caveat: medical +3.5% from science-medical overlap)
-- ~~Entropy-adaptive gating: skip experts when base is confident~~ **SUPPORTED** (63% tokens skip at 1.13% PPL cost, Otsu threshold CV=0.87/eta=0.68. Two-pass 2.1x slower — value is as pre-filter for routing heads, not standalone. 5 domains, uniform composition baseline)
-- Test-Time Training for runtime expert selection (exp_ttt_expert_selection_mlx)
-- ~~MoLoRA per-token routing on MLX~~ **SUPPORTED** (null result: per-token equivalent to per-sequence on clean domains, -0.46%. Gumbel-sigmoid mechanism works: 0.58% overhead, diversity 2.42. Needs mixed-domain data)
-- ~~Text-to-LoRA hypernetwork for zero-training adapter generation~~ **KILLED** (K2 FAIL: convex-combination over 24 adapters + orthogonal projection = tautological kill. NN retrieval 1.28x PPL but redundant with softmax router. Need thousands of training pairs.)
-- GOAL: efficient expert selection without dedicated router overhead
+| Finding | Result |
+|---------|--------|
+| #310 | Per-token hidden states linearly separable at 98.3% |
+| #313 | Single-pass MLP routing within 0.61% of oracle |
+| #28 | Softmax router matches oracle at N=24 (0% gap, 0% fallback) |
 
-### Track C: Mechanism & Foundation (P1)
-- Fix orthogonality.py to measure effective delta vec(B@A) (exp_bitnet_effective_delta_cosine)
-- ~~XSA for composition quality improvement~~ **KILLED** (11.85% degradation, capacity cost outweighs at d_h=32)
-- ~~AttnRes depth-wise attention for composition~~ **SUPPORTED** (K1 PASS, K3 PASS mechanism validated; K2 INCONCLUSIVE at L=4, needs L=16+ test)
-- ~~Partial RoPE: position-free dims as routing features~~ **KILLED** (silhouette = -0.007, domain labels not the natural clustering axis for any internal representation. Full hidden states better than Q features but both have negative silhouette. Zero-parameter routing dead.)
-- ~~PiSSA vs Grassmannian init~~ **KILLED** (PiSSA gives same A to all adapters → cos=1.0. Ternary SVD spectrum too flat. Grassmannian random orthonormal confirmed correct.)
-- GOAL: settle the mechanism question, find better init strategies
+### Permanently Closed Paths
 
-### Track D: Production Serving on Apple Silicon (P2)
-- Pre-merge is FREE (0.80% overhead proven on MLX)
-- Per-token routing via pre-merge (merge selected experts before forward pass)
-- ~~Sparse-BitNet for 1.5-2x speedup via natural ternary sparsity~~ **KILLED** (sparse ops slower on Apple Silicon, bandwidth-bound)
-- GOAL: interactive serving on M5 Pro with dynamic expert selection
+| Path | Why It's Dead |
+|------|---------------|
+| Weight-space merge into ternary | δ=±1.0 vs needed δ=0.002 (500x too coarse) — #289, #291, #303 |
+| SVD solidification for composition | Loses Grassmannian structure: -26pp vs scale reduction — #329 |
+| Self-growing from random init | Catastrophic interference at promotion 3 — #331 |
+| Room Model (pre-sum W_combined) | Inter-layer nonlinearities kill it — #303, #334 |
+| Per-layer routing | Actively harmful, collapses to per-sequence oracle — #29 |
+| Binary routing heads | Collapse at N>10, 46% base-only fallback — #27 |
+| Sparse-BitNet | Sparse matmul 7% slower on Apple Silicon — #36 |
+| KD from large teacher | -34.4% worse than self-supervised — #30 |
+| Energy/Gini/spectral routing | NRE is the ceiling, all others killed — spectral arc closed |
+| Text-to-LoRA hypernetwork | Tautological kill at N=24 — #33 |
+| EigenLoRAx subspace extraction | Grassmannian prevents shared subspace by design — #84 |
+| Ternary base advantage | Advantage from ternary ADAPTERS, not base — #52 |
 
-### Parked: Macro/CUDA Experiments (P5)
-- All macro-scale RunPod experiments deprioritized
-- Will revisit only after MLX-native mechanisms are proven
-- Reasoning composition, 500-expert scaling, full base-free pipeline etc.
+## Active Research: M2P Distillation Pipeline
+
+### The Problem (Finding #341, #342)
+
+M2P with Grassmannian A produces perfect orthogonality (K848 PASS), but B-matrices
+collapse to centroid when trained on multiple domains simultaneously. Domains with
+low base loss (already-competent) receive adapters calibrated for hard tasks.
+
+- Additive domain conditioning: improved median to 47.3% but didn't break centroid (#342)
+- Root cause: M2P attention bottleneck makes embedding gradients low-rank
+
+### What Needs to Happen Next
+
+| Experiment | What It Tests | Status |
+|-----------|---------------|--------|
+| **exp_m2p_scale_calibrated** | Preservation loss teaches M2P correct scale | Active (P0) |
+| **exp_m2p_composition_n5** | 5 M2P-generated adapters compose with Grassmannian guarantee | Open (P0) |
+| **exp_m2p_teacher_distillation** | Teacher→student knowledge transfer via M2P (Qwen3-8B → 4B) | Open (P1) |
+| exp_shine_architecture_study | Port full SHINE architecture to MLX | Active |
+| exp_multi_tenant_serving | Different adapter stacks per user | Active |
+
+### The Fix Strategy
+
+The centroid collapse (#341, #342) is the current bottleneck. Potential fixes:
+
+1. **Multiplicative gating** (not additive) — force M2P attention to domain signal
+2. **Per-domain loss normalization** — equalize gradient magnitudes across domains
+3. **Separate M2P heads per domain** — break the shared bottleneck
+4. **Train on single domain, eval on composition** — sidestep multi-domain training entirely
+
+Each fix must maintain the Grassmannian A guarantee (which is unaffected by training dynamics).
+
+## Capacity Planning
+
+| Scale | Hidden dim | Max orthogonal adapters (d/r at r=16) |
+|-------|-----------|--------------------------------------|
+| Toy GPT | 64 | 4 |
+| BitNet-2B | 2560 | 160 |
+| Qwen3-4B | 3584 | 224 |
+| Qwen3-8B | 8192 | 512 |
+
+Memory budget on M5 Pro 48GB (Finding #332):
+- Base: ~1.2 GB (Qwen3-4B-4bit)
+- Per adapter: ~45 MB
+- N_max = 853 adapters fit in memory
+- At N=500: 23.86 GB (59.6% of budget)
+
+## Two Products
+
+### Pierre Tiny (edge, free tier)
+- Base: BitNet-2B or small Qwen
+- 5-25 SFT domain adapters
+- 73-97 tok/s on M5 Pro
+- 1.7-3GB memory
+- Per-token softmax routing
+
+### Pierre Pro (cloud, pro tier)
+- Base: Qwen3-4B (or promoted)
+- 25-200+ domain adapters
+- Session adapters (M2P-generated, ephemeral)
+- User profile adapters (M2P-distilled)
+- Full promotion lifecycle at scale=5
+- Per-token routing + block-diagonal attention
 
 ## Key References
 
-### Ternary Architectures
-- BitNet b1.58 (arxiv 2402.17764) — ternary architecture, the current base
-- MatMul-free LM (arxiv 2406.02528) — ternary + no matmul, GRU attention, up to 2.7B
-- Sparse-BitNet (arxiv 2603.05168) — natural 42% sparsity in ternary weights
-- MoTE (arxiv 2506.14435) — frozen shared + ternary routed experts
-- Falcon-Edge: tiiuae/onebitllms — open ternary training toolkit with Triton kernels
+### Core Architecture
+- SHINE (arXiv:2602.06358) — M2P transformer generates adapters from context
+- PHATGOOSE (post-hoc gating) — independently trained experts with zero-shot routing
+- Grassmannian packing — QR-based orthogonal A-matrices (our approach)
+- ReLoRA (arXiv:2307.05695) — repeated merge = full pre-training (promotion foundation)
+- FlexMoRE — SVD extraction preserves/improves quality (but kills Grassmannian — #329)
 
 ### Composition & Routing
-- MoLoRA (arxiv 2603.15965) — per-token LoRA routing, 1.7B+4 adapters beats 8B
-- Text-to-LoRA (arxiv 2506.06105) — hypernetwork generates adapters from text, ICML 2025
-- PiSSA (arxiv 2404.02948) — SVD-init LoRA, NeurIPS 2024 spotlight
-- Cross-LoRA (arxiv 2508.05232) — data-free LoRA transfer across base models
-- LD-MoLE (arxiv 2509.25684) — learnable dynamic routing for MoLoRA experts
-- Naive LoRA Summation (arxiv 2508.11985) — orthogonality enables additive composition
-- LoRA Soups (arxiv 2410.13025) — CAT composition beats data mixing
-- CLONE (arxiv 2506.02847) — MoE router for dynamic LoRA on edge devices
+- Naive LoRA Summation (arXiv:2508.11985) — orthogonality enables additive composition
+- LoRA Soups (arXiv:2410.13025) — CAT composition beats data mixing
+- MoLoRA (arXiv:2603.15965) — per-token LoRA routing
+- CLONE (arXiv:2506.02847) — MoE router for dynamic LoRA on edge
 
 ### Foundations
-- GaLore (arxiv 2403.03507) — low-rank gradient training from scratch, <1% gap at 1B
-- LoRI (arxiv 2504.07448) — frozen A + 90% sparse B, 17.3% better merge
-- OSRM (arxiv 2505.22934) — data-aware orthogonality fixes weight-only gap, +12.78%
-- FlyLoRA (arxiv 2510.08396) — frozen random A as implicit router, JL-lemma orthogonality
-- KR-Test (arxiv 2601.03505) — knowledge retention eval via contrastive examples
-- Cornerstone Layers (arxiv 2409.14381) — layer criticality explains base-free kill
-- TTT Done Right (arxiv 2505.23884) — test-time training reference implementation
-
-### Parameter Golf Intelligence
-- https://github.com/openai/parameter-golf — $1M challenge, 16MB model in 10min
-- TTT is biggest lever (#1: 1.1194 BPB via per-document adaptation)
-- MoE fails below 500M params (Apple scaling laws, ICML 2025)
-- N-gram + entropy mixing: 0.9674 BPB (15%+ over neural alone)
-- XSA (Exclusive Self-Attention): zero-param attention fix, last 3-4 layers
-- Partial RoPE (25% dims): position-free dims learn pure semantic similarity
+- GaLore (arXiv:2403.03507) — low-rank gradient training from scratch
+- FlyLoRA (arXiv:2510.08396) — frozen random A as implicit router, JL-lemma
+- LeJEPA (arXiv:2511.08544) — SIGReg reasoning chain: make failure impossible with existing math
+- BitNet b1.58 (arXiv:2402.17764) — ternary architecture fundamentals
 
 ### MLX / Apple Silicon
 - MLX-BitNet: exo-explore/mlx-bitnet — first ternary impl for Apple Silicon
-- M5 Neural Accelerators: up to 4x speedup over M4 for matmul-heavy workloads
-- X-LoRA: EricLBuehler/xlora — mixture of LoRA experts, in HF PEFT
+- Architecture gallery: sebastianraschka.com/llm-architecture-gallery/
