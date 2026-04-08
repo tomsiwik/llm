@@ -1,6 +1,22 @@
 # Manifold Composition Theory: Connecting Grassmannian, SLERP, and Dual Quaternion Blending
 
-## Why This Document Exists
+## STATUS: ARCHIVED (2026-04-08)
+
+**Adversarial Review V2 verdict:** The experimental program tested the core proposals:
+- **SLERP (Section 2): KILLED.** Finding #382/#383 — LERP wins on all 5 domains. Candy wrapper is implicit regularization, not a defect.
+- **Polar Decomposition (Section 3): UNTESTED.** Theoretical only. SLERP kill suggests diminishing returns.
+- **PBD (Section 4): KILLED.** Finding #391 — unnecessary given sub-linear interference (α=0.38).
+- **Symplectic (Section 5): THEORETICALLY UNSOUND.** No Hamiltonian, no phase space, no smooth ODE. Promotion is a discrete sequence of unrelated perturbations, not a continuous trajectory.
+
+**What remains valid:** The Grassmannian analysis (Section 1) and the Pythagorean promotion bound (sqrt(K) compounding) are mathematically correct. The game dev analogies inspired useful experiments but are metaphors, not theorems.
+
+**This document is preserved for intellectual history. Do not cite it as current theory.**
+
+---
+
+## Original Content (preserved below)
+
+## Why This Document Was Written
 
 Pierre composes adapters via linear combination: `h = W·x + Σ αᵢ Bᵢ(Aᵢ·x)`.
 Grassmannian A guarantees ε₁ = 0 (parameter-space interference).
@@ -8,7 +24,9 @@ But ε₂ > 0 (activation-space interference) because linear blending of B-matri
 does not respect the geometry of the weight manifold.
 
 Game engines solved this 20 years ago for skeletal animation.
-This document formalizes the connection and derives the fix.
+This document formalized the connection and proposed fixes. The experiments showed
+that the problem (candy wrapper / activation interference) is either beneficial
+(implicit regularization) or already handled by routing.
 
 ---
 

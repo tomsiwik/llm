@@ -361,10 +361,13 @@ def promotion_error_analysis(d_model: int, rank: int, scale: float,
     w_norm = np.sqrt(d_model)  # rough estimate
     relative_perturbation = total_frob / w_norm
 
-    # Condition number effect
-    # Typical transformer: κ(W) ≈ 10-100 for attention, ≈ 5-20 for MLP
-    kappa_attn = 50  # conservative
-    kappa_mlp = 10
+    # Condition number effect — MEASURED values from Finding #385
+    # q_proj: κ=44 (safe), o_proj: κ=21 (safe), MLP: κ=18-66 (safe)
+    # k_proj: κ=56,013 (UNSAFE — 4-bit quantization artifact)
+    # v_proj: κ=16,445 (UNSAFE — 4-bit quantization artifact)
+    # Strategy: promote only q_proj/o_proj/MLP modules, exclude k/v_proj
+    kappa_attn = 44   # measured q_proj mean (Finding #385)
+    kappa_mlp = 40    # measured gate/up/down mean (Finding #385)
 
     functional_bound_attn = kappa_attn * relative_perturbation
     functional_bound_mlp = kappa_mlp * relative_perturbation
@@ -463,8 +466,16 @@ def routing_error_analysis(routing_accuracy: float, n_domains: int,
         "min_accuracy_5pct": max(0, min_accuracy),
     }
 
+# Real domains: Q_wrong = -0.58 (Finding #386: wrong adapter HARMS)
+result_real = routing_error_analysis(0.95, 5, 0.93, -0.58)
+print(f"  REAL DOMAINS (Finding #386): p=95%, Q_correct=93%, Q_wrong=-58%")
+print(f"    Expected quality:  {result_real['expected_quality']:.1%}")
+print(f"    ε₅ (routing loss): {result_real['epsilon_5']:.1%}")
+print(f"    Min accuracy for <5% loss: {result_real['min_accuracy_5pct']:.1%}")
+print()
+
 result = routing_error_analysis(0.95, 5, 0.93, 0.35)
-print(f"  TF-IDF routing: p=95%, Q_correct=93%, Q_wrong=35%")
+print(f"  TOY DOMAINS (for comparison): p=95%, Q_correct=93%, Q_wrong=35%")
 print(f"    Expected quality:  {result['expected_quality']:.1%}")
 print(f"    ε₅ (routing loss): {result['epsilon_5']:.1%}")
 print(f"    Min accuracy for <5% loss: {result['min_accuracy_5pct']:.1%}")
