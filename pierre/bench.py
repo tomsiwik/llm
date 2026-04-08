@@ -415,6 +415,70 @@ class Experiment:
         print(f"  {kid}: {status} — {metric_name}={value} {op} {threshold}", flush=True)
         return passed
 
+    # ── Tradeoff analysis (cost vs quality) ───────────────────
+
+    def tradeoff(self, name, *,
+                 quality: dict,
+                 cost: dict,
+                 complexity: dict = None,
+                 scalability: str = None):
+        """Record a complete tradeoff profile for an approach.
+
+        Args:
+            name: approach identifier (e.g., "loss_gated", "headroom_scale")
+            quality: dict with per-domain scores + aggregates
+                Required keys: worst_domain_delta, median_quality, n_domains_protected
+            cost: dict with timing and memory
+                Required keys: merge_time_s, inference_overhead_s, peak_memory_gb
+                Optional: training_overhead_s, eval_calls (number of forward passes)
+            complexity: dict describing implementation burden
+                Optional keys: n_hyperparams, n_new_components, lines_of_code
+            scalability: big-O string for N adapters (e.g., "O(N*D)" or "O(N^2)")
+        """
+        profile = {
+            "quality": quality,
+            "cost": cost,
+        }
+        if complexity:
+            profile["complexity"] = complexity
+        if scalability:
+            profile["scalability"] = scalability
+
+        if "tradeoffs" not in self.results:
+            self.results["tradeoffs"] = {}
+        self.results["tradeoffs"][name] = profile
+
+        # Print summary
+        wc = quality.get("worst_domain_delta", "?")
+        mq = quality.get("median_quality", "?")
+        mt = cost.get("merge_time_s", "?")
+        io = cost.get("inference_overhead_s", 0)
+        prot = quality.get("n_domains_protected", "?")
+        print(f"  [{name}] median={mq}, worst_Δ={wc}, "
+              f"protected={prot}/5, merge={mt}s, infer_overhead={io}s",
+              flush=True)
+
+    def tradeoff_summary(self):
+        """Print comparison table of all recorded tradeoffs."""
+        tradeoffs = self.results.get("tradeoffs", {})
+        if not tradeoffs:
+            return
+        print(f"\n{'='*70}", flush=True)
+        print(f"{'Approach':<22} {'Median Q':>9} {'Worst Δ':>9} {'Prot':>5} "
+              f"{'Merge(s)':>9} {'Infer(s)':>9} {'HParams':>8}", flush=True)
+        print(f"{'-'*70}", flush=True)
+        for name, p in tradeoffs.items():
+            q = p["quality"]
+            c = p["cost"]
+            cx = p.get("complexity", {})
+            print(f"{name:<22} {q.get('median_quality','?'):>9} "
+                  f"{q.get('worst_domain_delta','?'):>9} "
+                  f"{q.get('n_domains_protected','?'):>5} "
+                  f"{c.get('merge_time_s','?'):>9} "
+                  f"{c.get('inference_overhead_s',0):>9} "
+                  f"{cx.get('n_hyperparams','?'):>8}", flush=True)
+        print(f"{'='*70}", flush=True)
+
     # ── Save results ─────────────────────────────────────────
 
     def save(self):

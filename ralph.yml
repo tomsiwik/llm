@@ -20,11 +20,13 @@ cli:
 
 adapters:
   claude:
-    timeout: 14400
+    timeout: 1800  # 30 min max per hat (was 4h — caused 10h stuck)
     args:
       - "--bare"
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
+      - "--max-turns"
+      - "40"
 
 event_loop:
   prompt_file: "PROMPT.md"
@@ -76,43 +78,34 @@ hats:
     publishes:
       - "experiment.done"
     instructions: |
-      Delegate to experiment-ideator sub-agent. Do NOT do research yourself.
+      ## CONTEXT DISCIPLINE (CRITICAL — prevents stuck loops)
+      Do NOT use Agent() sub-agents for design or review — they grow context.
+      Instead: read files, run CLI commands, write files, emit events. ALL state on disk.
+      Max 40 tool calls per hat. If approaching limit, emit experiment.done with partial results.
+      REVISE fixes: max 15 minutes. Apply top 3 blocking fixes only. Defer rest.
 
-      ## Context (if triggered by review.revise or learning.complete)
-      Read .ralph/current_direction.md. If triggered by revise, read REVIEW-adversarial.md.
-      If triggered by learning.complete, read LEARNINGS.md for context.
+      ## Workflow
 
-      ## Orphan check
-      If last experiment's REVIEW-adversarial.md or LEARNINGS.md is missing, resolve first.
+      1. Read .ralph/current_direction.md for context.
+         If triggered by review.revise: read the experiment's REVIEW-adversarial.md,
+         apply the blocking fixes directly (edit MATH.md/PAPER.md), then re-emit experiment.done.
+         Do NOT re-run the experiment for documentation-only fixes.
 
-      ## Pick + Delegate
-
-      1. Run: `experiment claim researcher`
+      2. Run: `experiment claim researcher`
          This gives you full YAML: kill criteria with IDs, notes, deps, everything.
 
-      2. Check if run_experiment.py already exists in the experiment dir.
-         If YES: skip design, go straight to step 3 (run).
-         If NO: Delegate DESIGN to experiment-ideator (Sonnet):
-           Agent(subagent_type="experiment-ideator", model="sonnet", prompt=
-           "Design experiment [id]: '[title]'. [paste kill criteria + notes].
-            SCALE: micro. PLATFORM: Apple Silicon MLX.
-            Write MATH.md, implement run_experiment.py.
-            Write direction to .ralph/current_direction.md.
-            Invoke /fast-mlx and /mlx-dev before MLX code.
-            Do NOT run the experiment — just design and implement.")
+      3. Check if run_experiment.py already exists in the experiment dir.
+         If YES: skip design, go straight to step 4 (run).
+         If NO: Write MATH.md + run_experiment.py directly (do NOT delegate to sub-agents).
+           Invoke /fast-mlx and /mlx-dev skills first.
+           Write direction to .ralph/current_direction.md.
 
-      3. Delegate RUN to experiment-programmer (Haiku):
-         Agent(subagent_type="experiment-programmer", model="haiku", prompt=
-         "Run experiment [id] in micro/models/[name]/.
-          Use: experiment run <id>
-          Monitor output. When done, parse results.json.
-          Write PAPER.md with prediction-vs-measurement table.
-          Report kill criteria results.")
+      4. Run experiment: `experiment run <id>` (waits for completion via pueue).
+         When done, read results.json. Write PAPER.md with prediction-vs-measurement table.
 
-      3. After sub-agent returns, verify PAPER.md exists, then:
-         `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
+      5. Complete: `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
 
-      4. Emit experiment.done with key results.
+      6. Emit experiment.done with key results.
 
       ## Hypothesis generation (STRICT RULES)
 
@@ -176,12 +169,12 @@ hats:
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
     name: "🔴 Reviewer"
-    description: "Spawns adversarial-reviewer sub-agent, then integrates results and routes to analyst"
+    description: "Reviews experiments directly (no sub-agents), routes to analyst or back to researcher"
     backend_args:
       - "--effort"
       - "high"
       - "--model"
-      - "opus"
+      - "sonnet"
     triggers:
       - "experiment.done"
     publishes:
@@ -189,82 +182,59 @@ hats:
       - "review.revise"
       - "review.killed"
     instructions: |
-      Delegate review to adversarial-reviewer sub-agent. Do NOT review yourself.
+      ## CONTEXT DISCIPLINE
+      Review DIRECTLY — do NOT spawn adversarial-reviewer sub-agent (grows context).
+      Read MATH.md + PAPER.md + results.json from disk. Write REVIEW-adversarial.md. Emit event.
+      Max 20 tool calls. Max 15 minutes. If review is complex, write top 3 issues and PROCEED.
 
-      1. Read .ralph/current_direction.md to find experiment_dir (micro/models/[name]/).
-         Verify PAPER.md exists.
+      ## Review Checklist (quick)
 
-      2. Delegate: Agent(subagent_type="adversarial-reviewer", model="opus"):
-         "Review [experiment_dir]/. Read MATH.md + PAPER.md.
-          Check experiment TYPE (verification / guided-exploration / frontier-extension):
-          - TYPE=verification: MATH.md must have Theorem/Proof/QED. PAPER.md must have
-            prediction-vs-measurement table. No proof → REVISE.
-          - TYPE=guided-exploration: MATH.md must state the proven framework and identify
-            the unknown precisely. Exploration must narrow the unknown, not just 'try and see.'
-          - TYPE=frontier-extension: MATH.md must state the proven result being extended and
-            the mathematical gap. Finding status capped at provisional.
-          - NO TYPE or no mathematical framework at all → REVISE.
-          Write REVIEW-adversarial.md with verdict: PROCEED, REVISE, or KILL."
+      1. Read .ralph/current_direction.md → find experiment dir.
+      2. Read experiment's MATH.md, PAPER.md, results.json.
+      3. Check:
+         - Does PAPER.md have prediction-vs-measurement table? (REVISE if missing)
+         - Do kill criteria results match the evidence? (KILL if fabricated)
+         - Is the finding status appropriate for the experiment type?
+         - Are there obvious math errors or unsupported claims?
+      4. Write REVIEW-adversarial.md (max 1 page) with verdict: PROCEED, REVISE (max 3 fixes), or KILL.
+      5. Route:
+         - REVISE: emit review.revise with ≤3 numbered fixes.
+         - KILL: `experiment complete <id> --status killed ...` + `experiment finding-add ...` → emit review.killed.
+         - PROCEED: `experiment finding-add ...` → emit review.proceed.
 
-      3. Read verdict from REVIEW-adversarial.md:
-         - REVISE: emit review.revise with numbered fixes.
-         - KILL: `experiment complete <id> --status killed --evidence "KILLED: [reason]"`
-                 Record finding: `experiment finding-add --title "[what was tested]" --status killed --result "[why it failed]" --caveat "[limitations]" --failure-mode "[what degenerate behavior]" --impossibility-structure "[OPEN: what structure could fix it]"`
-                 Emit review.killed.
-         - PROCEED: Determine status based on proof quality:
-                    * `conclusive` = formal proof verified, all predictions match measurements
-                    * `supported` = proof exists, predictions mostly match, minor gaps noted
-                    * `provisional` = no formal proof, but empirical result is directionally useful
-                    Add finding: `experiment finding-add --title "..." --status <status> --result "..." --caveat "..." --failure-mode "..." --impossibility-structure "..."`
-                    Update VISION.md readiness if applicable.
-                    Emit review.proceed.
+      ## REVISE discipline
+      Max 3 blocking fixes per REVISE. If more issues exist, note them as non-blocking
+      in REVIEW-adversarial.md. The researcher will apply the 3 blocking fixes and re-emit.
+      Do NOT create REVISE cycles longer than 2 rounds — on round 3, PROCEED with caveats.
 
   # ── Analyst: multi-angle research sweep after every result ───────────────
   analyst:
     name: "🧠 Analyst"
-    description: "Researches WHY a result happened, finds confirming/contradicting literature, writes LEARNINGS.md."
+    description: "Writes LEARNINGS.md with literature context. Quick pass, no heavy research."
     backend_args:
       - "--effort"
       - "medium"
       - "--model"
-      - "haiku"
+      - "sonnet"
     triggers:
       - "review.proceed"
       - "review.killed"
     publishes:
       - "learning.complete"
     instructions: |
-      Research WHY a result happened. Do NOT just summarize PAPER.md — ADD knowledge.
+      ## CONTEXT DISCIPLINE
+      Quick pass ONLY — max 10 tool calls, max 10 minutes.
+      Read PAPER.md + REVIEW-adversarial.md. Write LEARNINGS.md. Emit event. Done.
+      Do NOT spawn sub-agents. Do NOT query NotebookLM (too slow for the loop).
+      Web search ONLY if the finding is a KILL and you need to find why it failed.
 
-      1. Read [experiment_dir]/PAPER.md + REVIEW-adversarial.md.
+      ## Workflow
 
-      2. Query NotebookLM from 3 angles:
-         - Confirming: "What research supports [core finding]?"
-         - Contradicting: "What papers found the opposite?"
-         - Alternatives: "What PROVEN methods exist for this problem? Include arxiv IDs."
-         Web search as fallback only.
-
-      3. For KILLED experiments, additionally research:
-         - "What causes [failure mode] in the literature? How did others fix it?"
-         - "Are there papers that succeeded where we failed? What did they do differently?"
-         - Check if our kill matches known failure patterns from prior LEARNINGS.md files
-
-      4. Write [experiment_dir]/LEARNINGS.md:
+      1. Read .ralph/current_direction.md → find experiment dir.
+      2. Read PAPER.md + REVIEW-adversarial.md.
+      3. Write LEARNINGS.md (max 30 lines):
          - Core Finding (1-2 sentences)
-         - Why This Happened (cite specific papers with arxiv IDs)
-         - Confirming Evidence (arxiv IDs)
-         - Contradicting Evidence
-         - Alternative Approaches (ONLY methods with paper references or proven in our own experiments)
-         - Implications for Next Experiments
-         - Recommended Follow-Up (if any — must cite motivation from literature or prior experiment)
-
-      5. Add new papers: `experiment ref-add --arxiv <id> --title "..." --relevance "..." --tag <tag>`
-
-      6. If recommending a new experiment, it MUST include:
-         - MOTIVATION: which specific result/paper motivates it
-         - LITERATURE: arxiv ID proving the approach works elsewhere
-         - Why it would fix the specific failure mode observed
-         Do NOT recommend experiments based on analogies (e.g., "TCP for routing").
-         Only recommend approaches with published evidence for LLM/LoRA/composition.
-
-      7. Emit learning.complete with experiment name + 1-line core learning.
+         - Why (1-2 sentences with arxiv ID if known)
+         - Implications for Next Experiment (1-2 sentences)
+      4. If KILLED: add 1 reference via `experiment ref-add` if relevant paper found.
+      5. Emit learning.complete with experiment name + 1-line finding.

@@ -46,3 +46,10 @@ Read .ralph/current_direction.md. If last experiment's REVIEW-adversarial.md or 
 - Every new hypothesis MUST cite arxiv paper or prior finding. No analogies
 - Killed experiments: derive impossibility structure, then re-test
 - KEEP GOING. After each cycle, pick next experiment. Never stop early
+
+## Anti-Stuck Rules (CRITICAL)
+- REVISE fixes: max 30 minutes per REVISE cycle. If fixes take longer, emit experiment.done with partial fixes and a note. Do NOT spend hours on documentation polish.
+- If a REVISE has >3 blocking fixes, apply the top 3 and defer the rest to a follow-up.
+- If you notice context getting large (many prior experiments in scratchpad), summarize and clear old entries. Keep only the current experiment + last 2 completed.
+- Each hat transition (researcher → reviewer → analyst) should complete in <30 minutes. If stuck, emit the next event with "[TIMEOUT]" prefix and move on.
+- Never retry a failed API call more than 3 times. Emit the event with partial results.
