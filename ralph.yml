@@ -2,11 +2,11 @@
 # A specialized 5-hat pipeline designed to ruthlessly audit and challenge prior experiments.
 #
 # Flow:
-#   loophole.start → Coordinator (picks next experiment)
+#   loophole.start → Coordinator (picks next finding to audit)
 #                  → experiment.analyze_start → Finding Analyzer (critiques results/claims)
 #                  → finding.analyzed         → Code Analyzer (audits code/implementation)
 #                  → code.analyzed            → Methodology Analyzer (audits math/proofs)
-#                  → methodology.analyzed     → Synthesizer (synthesizes & designs follow-up)
+#                  → methodology.analyzed     → Synthesizer (synthesizes & marks off in DB)
 #                  → synthesis.complete       → Coordinator (picks next)
 #
 # Start:     ralph -a
@@ -36,6 +36,7 @@ core:
     - "Do not accept ANY findings at face value. A successful experiment is just an experiment that hasn't been audited hard enough yet."
     - "ALL critiques must be written to the experiment's directory as LOOPHOLE_FINDING.md, LOOPHOLE_CODE.md, LOOPHOLE_METHODOLOGY.md, and LOOPHOLE_FOLLOWUP.md."
     - "When designing a follow-up, it must meet the same strict MLX/Apple Silicon requirements as the original project."
+    - "ONE AT A TIME: Only process the specific finding and experiment identified by the Coordinator in the current turn."
 
 features:
   parallel: false
@@ -54,7 +55,7 @@ tasks:
 hats:
   coordinator:
     name: "📋 Coordinator"
-    description: "Finds the next finalized experiment to analyze and orchestrates the pipeline."
+    description: "Identifies the next unaudited finding and orchestrates the audit pipeline."
     backend_args:
       - "--model"
       - "gemini-2.5-flash"
@@ -66,16 +67,23 @@ hats:
     default_publishes: "experiment.analyze_start"
     instructions: |
       ## Workflow
-      1. Read docs/tasks/loopholes_progress.txt (create it if it doesn't exist).
-      2. Scan `micro/models/` and `macro/` directories for completed experiments that have a `results.json` or `PAPER.md` but DO NOT have a `LOOPHOLE_FOLLOWUP.md`.
-      3. Select ONE experiment. Append its path to `docs/tasks/loopholes_progress.txt`.
-      4. Write the chosen experiment path to `.ralph/current_loophole_target.md`.
-      5. Emit `experiment.analyze_start` with the experiment path.
-      6. If no more experiments are found, emit `ALL_LOOPHOLES_EXHAUSTED` in your message to terminate the loop.
+      1. Get all findings: `experiment finding-list`.
+      2. For each finding, check if it has already been audited. Audited findings contain "LOOPHOLE_AUDITED" in their caveat.
+         Use `experiment finding-get <id>` to check details if needed.
+      3. Select the first finding that has NOT been audited.
+      4. Get its associated experiment ID and directory: `experiment get <exp_id> --yaml`.
+      5. Write the target details to `.ralph/current_loophole_target.md`:
+         ```
+         FINDING_ID: <id>
+         EXP_ID: <exp_id>
+         DIR: <experiment_dir>
+         ```
+      6. Emit `experiment.analyze_start` with the finding ID and experiment path.
+      7. If no more unaudited findings are found, emit `ALL_LOOPHOLES_EXHAUSTED` to terminate.
 
   finding_analyzer:
     name: "🔍 Finding Analyzer"
-    description: "Critiques the stated finding, metrics, and conclusions of the experiment."
+    description: "Critiques the stated finding, metrics, and conclusions."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -86,19 +94,14 @@ hats:
     default_publishes: "finding.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md` to get the target directory.
-      2. Read the target's `PAPER.md` and `results.json` (and `LEARNINGS.md` if present).
-      3. Critique the finding aggressively:
-         - Are the metrics actually proxying what they claim?
-         - Is the baseline appropriate?
-         - Is the finding statistically/practically significant, or just noise?
-         - Does the conclusion over-extrapolate the data?
-      4. Write your critique to `LOOPHOLE_FINDING.md` in the target directory.
-      5. Emit `finding.analyzed`.
+      1. Read `.ralph/current_loophole_target.md` for the target finding/experiment.
+      2. Read the target's `PAPER.md`, `results.json`, and `MATH.md`.
+      3. Critique the finding aggressively (LOOPHOLE_FINDING.md).
+      4. Emit `finding.analyzed`.
 
   code_analyzer:
     name: "💻 Code Analyzer"
-    description: "Audits the implementation code for bugs, data leakage, and cheats."
+    description: "Audits the implementation code for bugs and leaks."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -109,19 +112,14 @@ hats:
     default_publishes: "code.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md` to get the target directory.
-      2. Read `run_experiment.py` (or equivalent scripts) and any local modules it imports.
-      3. Hunt for implementation flaws:
-         - Data leakage between train/test.
-         - Improper evaluation bounds or hardcoded cheats.
-         - Incorrect MLX tensor shapes or broadcasting bugs.
-         - Floating point precision issues or missing normalizations.
-      4. Write your rigorous code audit to `LOOPHOLE_CODE.md` in the target directory.
-      5. Emit `code.analyzed`.
+      1. Read `.ralph/current_loophole_target.md`.
+      2. Read the implementation scripts in the target directory.
+      3. Audit the code for flaws (LOOPHOLE_CODE.md).
+      4. Emit `code.analyzed`.
 
   methodology_analyzer:
     name: "🔬 Methodology Analyzer"
-    description: "Audits the mathematical foundations and prior review methodology."
+    description: "Audits the mathematical foundations and prior review."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -132,18 +130,14 @@ hats:
     default_publishes: "methodology.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md` to get the target directory.
-      2. Read `MATH.md`, `REVIEW-adversarial.md` (and `LOOPHOLE_FINDING.md` / `LOOPHOLE_CODE.md` for context).
-      3. Challenge the math:
-         - Was the proof actually valid, or did it skip steps?
-         - Did the implementation faithfully represent the mathematical framework?
-         - Was the prior review too lenient? Did it miss a glaring theoretical gap?
-      4. Write your theoretical critique to `LOOPHOLE_METHODOLOGY.md` in the target directory.
-      5. Emit `methodology.analyzed`.
+      1. Read `.ralph/current_loophole_target.md`.
+      2. Read `MATH.md`, `REVIEW-adversarial.md`.
+      3. Challenge the theoretical foundations (LOOPHOLE_METHODOLOGY.md).
+      4. Emit `methodology.analyzed`.
 
   synthesizer:
     name: "🧠 Synthesizer"
-    description: "Synthesizes critiques and designs a rigorous follow-up experiment."
+    description: "Synthesizes critiques and marks the finding as audited in the experiment CLI."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -154,9 +148,9 @@ hats:
     default_publishes: "synthesis.complete"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md` to get the target directory.
-      2. Read `LOOPHOLE_FINDING.md`, `LOOPHOLE_CODE.md`, and `LOOPHOLE_METHODOLOGY.md`.
-      3. Synthesize the findings into a final verdict: Is the original experiment Robust, Partially Flawed, or Invalid?
-      4. If flawed or invalid (or if a stronger test is needed), design a strict follow-up experiment to properly test the claim or fix the bug. Provide the new hypothesis, math sketch, and kill criteria.
-      5. Write this final synthesis and follow-up design to `LOOPHOLE_FOLLOWUP.md`.
-      6. Emit `synthesis.complete`.
+      1. Read `.ralph/current_loophole_target.md`.
+      2. Synthesize all LOOPHOLE_*.md files into LOOPHOLE_FOLLOWUP.md.
+      3. Determine the audit verdict: [Robust | Partially Flawed | Invalid].
+      4. **Mark off the finding**:
+         Run `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: <verdict> - See LOOPHOLE_FOLLOWUP.md in <DIR>"`
+      5. Emit `synthesis.complete`.
