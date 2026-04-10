@@ -1,0 +1,172 @@
+# Ralph Orchestrator — Loophole Discovery Pipeline
+# A specialized 5-hat pipeline designed to ruthlessly audit and challenge prior experiments.
+#
+# Flow:
+#   loophole.start → Coordinator (picks next experiment)
+#                  → experiment.analyze_start → Finding Analyzer (critiques results/claims)
+#                  → finding.analyzed         → Code Analyzer (audits code/implementation)
+#                  → code.analyzed            → Methodology Analyzer (audits math/proofs)
+#                  → methodology.analyzed     → Synthesizer (synthesizes & designs follow-up)
+#                  → synthesis.complete       → Coordinator (picks next)
+#
+# Start:     ralph run -c loopholes_ralph.yml -a -v
+
+cli:
+  backend: "claude"
+  default_mode: "autonomous"
+
+adapters:
+  claude:
+    timeout: 3600
+    args:
+      - "--bare"
+
+event_loop:
+  prompt_file: "LOOPHOLES_PROMPT.md"
+  starting_event: "loophole.start"
+  completion_promise: "ALL_LOOPHOLES_EXHAUSTED"
+  max_iterations: 1000
+  max_runtime_seconds: 86400
+  idle_timeout_secs: 1200
+  checkpoint_interval: 10
+
+core:
+  guardrails:
+    - "RADICAL SKEPTICISM: Your primary directive is to tear down the existing experiments. Find the flaws, the false assumptions, the metric hacking, the logical leaps, and the implementation bugs."
+    - "Do not accept ANY findings at face value. A successful experiment is just an experiment that hasn't been audited hard enough yet."
+    - "ALL critiques must be written to the experiment's directory as LOOPHOLE_FINDING.md, LOOPHOLE_CODE.md, LOOPHOLE_METHODOLOGY.md, and LOOPHOLE_FOLLOWUP.md."
+    - "When designing a follow-up, it must meet the same strict MLX/Apple Silicon requirements as the original project."
+
+features:
+  parallel: false
+  auto_merge: true
+
+memories:
+  inject: auto
+  budget: 2000
+  file: ".ralph/loopholes_memories.md"
+  filter:
+    recent: 60
+
+tasks:
+  enabled: true
+
+hats:
+  coordinator:
+    name: "📋 Coordinator"
+    description: "Finds the next finalized experiment to analyze and orchestrates the pipeline."
+    backend_args:
+      - "--effort"
+      - "low"
+      - "--model"
+      - "sonnet"
+    triggers:
+      - "loophole.start"
+      - "synthesis.complete"
+    publishes:
+      - "experiment.analyze_start"
+    default_publishes: "experiment.analyze_start"
+    instructions: |
+      ## Workflow
+      1. Read docs/tasks/loopholes_progress.txt (create it if it doesn't exist).
+      2. Scan `micro/models/` and `macro/` directories for completed experiments that have a `results.json` or `PAPER.md` but DO NOT have a `LOOPHOLE_FOLLOWUP.md`.
+      3. Select ONE experiment. Append its path to `docs/tasks/loopholes_progress.txt`.
+      4. Write the chosen experiment path to `.ralph/current_loophole_target.md`.
+      5. Emit `experiment.analyze_start` with the experiment path.
+      6. If no more experiments are found, emit `ALL_LOOPHOLES_EXHAUSTED` in your message to terminate the loop.
+
+  finding_analyzer:
+    name: "🔍 Finding Analyzer"
+    description: "Critiques the stated finding, metrics, and conclusions of the experiment."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "sonnet"
+    triggers:
+      - "experiment.analyze_start"
+    publishes:
+      - "finding.analyzed"
+    default_publishes: "finding.analyzed"
+    instructions: |
+      ## Workflow
+      1. Read `.ralph/current_loophole_target.md` to get the target directory.
+      2. Read the target's `PAPER.md` and `results.json` (and `LEARNINGS.md` if present).
+      3. Critique the finding aggressively:
+         - Are the metrics actually proxying what they claim?
+         - Is the baseline appropriate?
+         - Is the finding statistically/practically significant, or just noise?
+         - Does the conclusion over-extrapolate the data?
+      4. Write your critique to `LOOPHOLE_FINDING.md` in the target directory.
+      5. Emit `finding.analyzed`.
+
+  code_analyzer:
+    name: "💻 Code Analyzer"
+    description: "Audits the implementation code for bugs, data leakage, and cheats."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "sonnet"
+    triggers:
+      - "finding.analyzed"
+    publishes:
+      - "code.analyzed"
+    default_publishes: "code.analyzed"
+    instructions: |
+      ## Workflow
+      1. Read `.ralph/current_loophole_target.md` to get the target directory.
+      2. Read `run_experiment.py` (or equivalent scripts) and any local modules it imports.
+      3. Hunt for implementation flaws:
+         - Data leakage between train/test.
+         - Improper evaluation bounds or hardcoded cheats.
+         - Incorrect MLX tensor shapes or broadcasting bugs.
+         - Floating point precision issues or missing normalizations.
+      4. Write your rigorous code audit to `LOOPHOLE_CODE.md` in the target directory.
+      5. Emit `code.analyzed`.
+
+  methodology_analyzer:
+    name: "🔬 Methodology Analyzer"
+    description: "Audits the mathematical foundations and prior review methodology."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "sonnet"
+    triggers:
+      - "code.analyzed"
+    publishes:
+      - "methodology.analyzed"
+    default_publishes: "methodology.analyzed"
+    instructions: |
+      ## Workflow
+      1. Read `.ralph/current_loophole_target.md` to get the target directory.
+      2. Read `MATH.md`, `REVIEW-adversarial.md` (and `LOOPHOLE_FINDING.md` / `LOOPHOLE_CODE.md` for context).
+      3. Challenge the math:
+         - Was the proof actually valid, or did it skip steps?
+         - Did the implementation faithfully represent the mathematical framework?
+         - Was the prior review too lenient? Did it miss a glaring theoretical gap?
+      4. Write your theoretical critique to `LOOPHOLE_METHODOLOGY.md` in the target directory.
+      5. Emit `methodology.analyzed`.
+
+  synthesizer:
+    name: "🧠 Synthesizer"
+    description: "Synthesizes critiques and designs a rigorous follow-up experiment."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "sonnet"
+    triggers:
+      - "methodology.analyzed"
+    publishes:
+      - "synthesis.complete"
+    default_publishes: "synthesis.complete"
+    instructions: |
+      ## Workflow
+      1. Read `.ralph/current_loophole_target.md` to get the target directory.
+      2. Read `LOOPHOLE_FINDING.md`, `LOOPHOLE_CODE.md`, and `LOOPHOLE_METHODOLOGY.md`.
+      3. Synthesize the findings into a final verdict: Is the original experiment Robust, Partially Flawed, or Invalid?
+      4. If flawed or invalid (or if a stronger test is needed), design a strict follow-up experiment to properly test the claim or fix the bug. Provide the new hypothesis, math sketch, and kill criteria.
+      5. Write this final synthesis and follow-up design to `LOOPHOLE_FOLLOWUP.md`.
+      6. Emit `synthesis.complete`.
