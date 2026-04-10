@@ -2,11 +2,11 @@
 # A specialized 5-hat pipeline designed to ruthlessly audit and challenge prior experiments.
 #
 # Flow:
-#   loophole.start → Coordinator (picks next finding to audit)
+#   loophole.start → Coordinator (picks next finding and its context cluster)
 #                  → experiment.analyze_start → Finding Analyzer (critiques results/claims)
 #                  → finding.analyzed         → Code Analyzer (audits code/implementation)
 #                  → code.analyzed            → Methodology Analyzer (audits math/proofs)
-#                  → methodology.analyzed     → Synthesizer (synthesizes & marks off in DB)
+#                  → methodology.analyzed     → Synthesizer (synthesizes & formalizes in DB)
 #                  → synthesis.complete       → Coordinator (picks next)
 #
 # Start:     ralph -a
@@ -34,9 +34,8 @@ core:
   guardrails:
     - "RADICAL SKEPTICISM: Your primary directive is to tear down the existing experiments. Find the flaws, the false assumptions, the metric hacking, the logical leaps, and the implementation bugs."
     - "Do not accept ANY findings at face value. A successful experiment is just an experiment that hasn't been audited hard enough yet."
-    - "ALL critiques must be written to the experiment's directory as LOOPHOLE_FINDING.md, LOOPHOLE_CODE.md, LOOPHOLE_METHODOLOGY.md, and LOOPHOLE_FOLLOWUP.md."
-    - "When designing a follow-up, it must meet the same strict MLX/Apple Silicon requirements as the original project."
-    - "ONE AT A TIME: Only process the specific finding and experiment identified by the Coordinator in the current turn."
+    - "ALL critiques must be written to the experiment's directory as LOOPHOLE_*.md files AND formalized as 'evidence' in the DB."
+    - "META-AWARENESS: If you find a flaw, check if it's a systemic 'Meta-Loophole' shared with the 'cluster' of findings provided by the Coordinator."
 
 features:
   parallel: false
@@ -55,7 +54,7 @@ tasks:
 hats:
   coordinator:
     name: "📋 Coordinator"
-    description: "Identifies the next unaudited finding and orchestrates the audit pipeline."
+    description: "Identifies the next unaudited finding and its 'Context Cluster' (related findings/tags)."
     backend_args:
       - "--model"
       - "gemini-2.5-flash"
@@ -68,22 +67,23 @@ hats:
     instructions: |
       ## Workflow
       1. Get all findings: `experiment finding-list`.
-      2. For each finding, check if it has already been audited. Audited findings contain "LOOPHOLE_AUDITED" in their caveat.
-         Use `experiment finding-get <id>` to check details if needed.
-      3. Select the first finding that has NOT been audited.
-      4. Get its associated experiment ID and directory: `experiment get <exp_id> --yaml`.
-      5. Write the target details to `.ralph/current_loophole_target.md`:
+      2. Select the first finding that has NOT been audited (no "LOOPHOLE_AUDITED" in caveat).
+      3. **CONTEXT CLUSTER**:
+         a) Get finding details: `experiment finding-get <id>`.
+         b) Find all findings with the same tags or status: `experiment finding-list --status [status]`.
+         c) Get associated experiment details: `experiment get <exp_id> --yaml`.
+      4. Write target details to `.ralph/current_loophole_target.md`:
          ```
          FINDING_ID: <id>
          EXP_ID: <exp_id>
          DIR: <experiment_dir>
+         CLUSTER_CONTEXT: [List IDs of findings sharing the same tags/failure-modes]
          ```
-      6. Emit `experiment.analyze_start` with the finding ID and experiment path.
-      7. If no more unaudited findings are found, emit `ALL_LOOPHOLES_EXHAUSTED` to terminate.
+      5. Emit `experiment.analyze_start` with the finding ID and cluster context.
 
   finding_analyzer:
     name: "🔍 Finding Analyzer"
-    description: "Critiques the stated finding, metrics, and conclusions."
+    description: "Critiques the stated finding. Looks for 'Meta-Loopholes' shared with the context cluster."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -94,14 +94,15 @@ hats:
     default_publishes: "finding.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md` for the target finding/experiment.
-      2. Read the target's `PAPER.md`, `results.json`, and `MATH.md`.
-      3. Critique the finding aggressively (LOOPHOLE_FINDING.md).
-      4. Emit `finding.analyzed`.
+      1. Read `.ralph/current_loophole_target.md`.
+      2. Read `PAPER.md`, `results.json`, and `MATH.md`.
+      3. Compare this finding against the `CLUSTER_CONTEXT`. Are the same metric biases appearing across the cluster?
+      4. Write critique to `LOOPHOLE_FINDING.md`.
+      5. Emit `finding.analyzed`.
 
   code_analyzer:
     name: "💻 Code Analyzer"
-    description: "Audits the implementation code for bugs and leaks."
+    description: "Audits the implementation code for bugs and systemic leaks."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -112,9 +113,9 @@ hats:
     default_publishes: "code.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md`.
-      2. Read the implementation scripts in the target directory.
-      3. Audit the code for flaws (LOOPHOLE_CODE.md).
+      1. Read the implementation scripts in the target directory.
+      2. Audit for leaks. Check if the leakage mechanism (e.g. wrong shuffle) exists in other experiments in the cluster.
+      3. Write audit to `LOOPHOLE_CODE.md`.
       4. Emit `code.analyzed`.
 
   methodology_analyzer:
@@ -130,14 +131,14 @@ hats:
     default_publishes: "methodology.analyzed"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md`.
-      2. Read `MATH.md`, `REVIEW-adversarial.md`.
-      3. Challenge the theoretical foundations (LOOPHOLE_METHODOLOGY.md).
+      1. Read `MATH.md`, `REVIEW-adversarial.md`.
+      2. Identify "Root Math Failures" (e.g. invalid proof steps) that might be plaguing the entire project.
+      3. Write critique to `LOOPHOLE_METHODOLOGY.md`.
       4. Emit `methodology.analyzed`.
 
   synthesizer:
     name: "🧠 Synthesizer"
-    description: "Synthesizes critiques and marks the finding as audited in the experiment CLI."
+    description: "Synthesizes critiques and formalizes the audit as structured 'evidence' in the DB."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -148,9 +149,9 @@ hats:
     default_publishes: "synthesis.complete"
     instructions: |
       ## Workflow
-      1. Read `.ralph/current_loophole_target.md`.
-      2. Synthesize all LOOPHOLE_*.md files into LOOPHOLE_FOLLOWUP.md.
-      3. Determine the audit verdict: [Robust | Partially Flawed | Invalid].
-      4. **Mark off the finding**:
-         Run `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: <verdict> - See LOOPHOLE_FOLLOWUP.md in <DIR>"`
-      5. Emit `synthesis.complete`.
+      1. Read `.ralph/current_loophole_target.md` and all `LOOPHOLE_*.md` files.
+      2. Synthesize into `LOOPHOLE_FOLLOWUP.md`.
+      3. **DB FORMALIZATION**:
+         a) Update Finding Caveat: `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md"`
+         b) Add Formal Evidence: `experiment evidence <EXP_ID> --claim "LOOPHOLE_AUDIT: [Brief summary of flaws/success]" --source "LOOPHOLE_FOLLOWUP.md" --verdict [pass|fail|inconclusive]`
+      4. Emit `synthesis.complete`.
