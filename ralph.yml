@@ -36,7 +36,8 @@ core:
     - "Do not accept ANY findings at face value. A successful experiment is just an experiment that hasn't been audited hard enough yet."
     - "ALL critiques must be written to the experiment's directory as LOOPHOLE_*.md files AND formalized as 'evidence' in the DB."
     - "META-AWARENESS: If you find a flaw, check if it's a systemic 'Meta-Loophole' shared with the 'cluster' of findings provided by the Coordinator."
-    - "UV-ONLY EXECUTION: NEVER execute Python scripts directly (e.g. `python script.py`). ALL experiment executions MUST be run via the `experiment run` CLI, which is pre-configured to use `uv run` and manage process isolation via `pueue`."
+    - "UV-ONLY EXECUTION: NEVER execute Python scripts directly (e.g. `python script.py`). ALL experiment executions MUST be run via the `experiment run` CLI."
+    - "NO SCRATCHPAD SCRIPTS: NEVER write Python scripts or shell scripts just to 'find' experiments or filter lists. Use the `experiment` CLI directly (e.g., `experiment finding-list`). If you find yourself writing a script to process file paths, YOU ARE STUCK. STOP and rethink."
 
 features:
   parallel: false
@@ -55,7 +56,7 @@ tasks:
 hats:
   coordinator:
     name: "📋 Coordinator"
-    description: "Identifies the next unaudited finding and its 'Context Cluster' (related findings/tags)."
+    description: "Identifies the next unaudited finding using the experiment CLI. NO SCRIPTS."
     backend_args:
       - "--model"
       - "gemini-2.5-flash"
@@ -66,25 +67,25 @@ hats:
       - "experiment.analyze_start"
     default_publishes: "experiment.analyze_start"
     instructions: |
-      ## Workflow
+      ## Workflow (STRICT — NO SCRIPTS)
       1. Get all findings: `experiment finding-list`.
-      2. Select the first finding that has NOT been audited (no "LOOPHOLE_AUDITED" in caveat).
-      3. **CONTEXT CLUSTER**:
-         a) Get finding details: `experiment finding-get <id>`.
-         b) Find related findings by status/scale: `experiment finding-list --status <status>`.
-         c) Get associated experiment details: `experiment get <exp_id> --yaml`.
+      2. Find the first finding ID that has NOT been audited (no "LOOPHOLE_AUDITED" in caveat).
+      3. For that finding:
+         a) Get its details: `experiment finding-get <id>`.
+         b) Get its context cluster (related by status): `experiment finding-list --status <status>`.
+         c) Get the associated experiment: `experiment get <exp_id> --yaml`.
       4. Write target details to `.ralph/current_loophole_target.md`:
          ```
          FINDING_ID: <id>
          EXP_ID: <exp_id>
          DIR: <experiment_dir>
-         CLUSTER_CONTEXT: [Summary of related findings]
+         CLUSTER_CONTEXT: [Summary of IDs]
          ```
-      5. Emit `experiment.analyze_start` with the finding ID and experiment path.
+      5. Emit `experiment.analyze_start` with the ID.
 
   finding_analyzer:
     name: "🔍 Finding Analyzer"
-    description: "Critiques the stated finding. Looks for 'Meta-Loopholes' shared with the context cluster."
+    description: "Critiques the stated finding. Looks for 'Meta-Loopholes'."
     backend_args:
       - "--model"
       - "gemini-3.1-pro-preview"
@@ -96,8 +97,8 @@ hats:
     instructions: |
       ## Workflow
       1. Read `.ralph/current_loophole_target.md`.
-      2. Read `PAPER.md`, `results.json`, and `MATH.md` in the experiment directory.
-      3. Critique the finding aggressively (LOOPHOLE_FINDING.md).
+      2. Read `PAPER.md`, `results.json`, and `MATH.md` in the target experiment directory.
+      3. Critique finding aggressively in `LOOPHOLE_FINDING.md`.
       4. Emit `finding.analyzed`.
 
   code_analyzer:
@@ -153,5 +154,4 @@ hats:
       3. **DB FORMALIZATION**:
          a) Update Finding Caveat: `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md"`
          b) Add Formal Evidence: `experiment evidence <EXP_ID> --claim "LOOPHOLE_AUDIT: [Summary]" --source "LOOPHOLE_FOLLOWUP.md" --verdict [pass|fail|inconclusive]`
-      4. If a follow-up experiment is needed, design it in `LOOPHOLE_FOLLOWUP.md`. Instruction: future agents must run this follow-up ONLY via `experiment run`.
-      5. Emit `synthesis.complete`.
+      4. Emit `synthesis.complete`.
