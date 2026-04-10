@@ -1,0 +1,44 @@
+{
+    "adapter_path": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_adapter",
+    "batch_size": 1,
+    "clear_cache_threshold": 0,
+    "config": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_config.yaml",
+    "data": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_data",
+    "fine_tune_type": "lora",
+    "grad_accumulation_steps": 1,
+    "grad_checkpoint": false,
+    "iters": 20,
+    "learning_rate": 0.0001,
+    "lora_parameters": {
+        "rank": 6,
+        "scale": 6.0,
+        "dropout": 0.0,
+        "keys": [
+            "self_attn.q_proj"
+        ]
+    },
+    "lr_schedule": null,
+    "mask_prompt": false,
+    "max_seq_length": 384,
+    "model": "mlx-community/Qwen3-0.6B-4bit",
+    "num_layers": -1,
+    "optimizer": "adam",
+    "optimizer_config": {
+        "adam": {},
+        "adamw": {},
+        "muon": {},
+        "sgd": {},
+        "adafactor": {}
+    },
+    "project_name": null,
+    "report_to": null,
+    "resume_adapter_file": null,
+    "save_every": 20,
+    "seed": 42,
+    "steps_per_eval": 20,
+    "steps_per_report": 5,
+    "test": false,
+    "test_batches": 500,
+    "train": true,
+    "val_batches": 5
+}
