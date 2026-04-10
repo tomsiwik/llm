@@ -1,0 +1,44 @@
+{
+    "adapter_path": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_multi_domain_5/adapters/finance",
+    "batch_size": 2,
+    "clear_cache_threshold": 0,
+    "config": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_multi_domain_5/lora_config_finance.yaml",
+    "data": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_multi_domain_5/data/finance",
+    "fine_tune_type": "lora",
+    "grad_accumulation_steps": 1,
+    "grad_checkpoint": true,
+    "iters": 1000,
+    "learning_rate": 0.0001,
+    "lora_parameters": {
+        "dropout": 0.0,
+        "keys": [
+            "self_attn.q_proj"
+        ],
+        "rank": 6,
+        "scale": 6.0
+    },
+    "lr_schedule": null,
+    "mask_prompt": true,
+    "max_seq_length": 512,
+    "model": "mlx-community/gemma-4-e4b-it-4bit",
+    "num_layers": -1,
+    "optimizer": "adam",
+    "optimizer_config": {
+        "adam": {},
+        "adamw": {},
+        "muon": {},
+        "sgd": {},
+        "adafactor": {}
+    },
+    "project_name": null,
+    "report_to": null,
+    "resume_adapter_file": null,
+    "save_every": 1000,
+    "seed": 42,
+    "steps_per_eval": 1000,
+    "steps_per_report": 100,
+    "test": false,
+    "test_batches": 500,
+    "train": true,
+    "val_batches": 5
+}

@@ -1,0 +1,15 @@
+{
+  "adapter_path": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t3_pairwise_interference/merged_adapter",
+  "batch_size": 2,
+  "fine_tune_type": "lora",
+  "lora_parameters": {
+    "rank": 30,
+    "scale": 6.0,
+    "dropout": 0.0,
+    "keys": [
+      "self_attn.q_proj"
+    ]
+  },
+  "model": "mlx-community/gemma-4-e4b-it-4bit",
+  "num_layers": -1
+}

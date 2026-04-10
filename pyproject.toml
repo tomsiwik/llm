@@ -11,6 +11,7 @@ dependencies = [
     "scipy>=1.17.1",
     "ripser>=0.6.14",
     "sentence-transformers>=5.3.0",
+    "mlx-lm>=0.31.2",
 ]
 
 [project.optional-dependencies]
@@ -56,4 +57,11 @@ packages = ["composer", "micro", "macro"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+]
+
+[tool.uv]
+# `serve` extra requires vllm (transformers<5), conflicts with mlx-lm>=0.31.2 (transformers>=5).
+# We override transformers for the lock; serve extra is only used in CUDA environments anyway.
+override-dependencies = [
+    "transformers>=5.5.0",
 ]

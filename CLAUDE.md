@@ -68,8 +68,33 @@ Killed experiments: derive what structure makes the failure impossible, then re-
 
 ## Key Files
 - `PROMPT.md` — research loop instructions
-- `VISION.md` — architecture, proven results, readiness
+- `VISION.md` — v1 architecture, proven results, readiness (473 experiments)
+- `../VISION_P1.md` — P1 enhanced vision: Gemma 4 + polar adapters + PLE-M2P
+- `../ARCHITECTURE_P1.md` — complete mathematical reference for P1 (every Gemma 4 mechanism formalized)
+- `docs/MLX_GEMMA4_GUIDE.md` — HOW TO: load, train, adapt Gemma 4 on MLX (verified commands + code)
 - `experiment finding-list` — all findings (DB-backed, queryable)
 - `experiment query "<term>"` — full-text search across experiments + evidence + findings
+- `experiment list -t p1` — Pierre P1 experiment collection (40 experiments, 7 tiers)
 - `CODING_GUIDELINES.md` — mandatory MLX memory/cleanup patterns
 - `.ralph/current_direction.md` — what's in progress
+
+## Pierre P1 Experiments
+P1 experiments are tagged `p1` in the experiment DB. Start with T0 (math foundation):
+```bash
+experiment list -t p1 -t t0-foundation    # 5 foundation experiments
+experiment list -t p1 -t critical-path    # critical path only
+experiment claim <worker> --tag p1        # claim next P1 experiment
+```
+
+## Gemma 4 on MLX (Quick Reference)
+```bash
+# Inference
+uv run python -m mlx_lm.generate --model mlx-community/gemma-4-e4b-it-4bit --prompt "test"
+
+# LoRA training
+uv run python -m mlx_lm.lora --model mlx-community/gemma-4-e4b-it-4bit --train --data ./data/ --iters 1000
+
+# With adapter
+uv run python -m mlx_lm.generate --model mlx-community/gemma-4-e4b-it-4bit --adapter-path ./adapters/math/
+```
+Full guide: `docs/MLX_GEMMA4_GUIDE.md`

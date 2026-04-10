@@ -60,8 +60,9 @@ export default class Claim extends Command {
       targetId = flags.id;
     } else {
       // Auto-pick: highest priority open experiment with satisfied dependencies
+      // No scale filter — both micro and macro experiments are claimable
       const allOpen = await db.select().from(experiments)
-        .where(and(eq(experiments.status, "open"), eq(experiments.scale, "micro")))
+        .where(eq(experiments.status, "open"))
         .orderBy(experiments.priority)
         .all();
 
@@ -87,8 +88,12 @@ export default class Claim extends Command {
         }
       }
 
+      // Track rejection reasons for diagnostic output
+      let skippedByTag = 0;
+      let skippedByDeps = 0;
+
       for (const candidate of candidates) {
-        if (taggedIds && !taggedIds.has(candidate.id)) continue;
+        if (taggedIds && !taggedIds.has(candidate.id)) { skippedByTag++; continue; }
 
         const deps = await db.select({ id: experimentDependencies.dependsOnId })
           .from(experimentDependencies)
@@ -98,11 +103,22 @@ export default class Claim extends Command {
         if (deps.every(d => resolved.has(d.id))) {
           targetId = candidate.id;
           break;
+        } else {
+          skippedByDeps++;
         }
       }
 
       if (!targetId) {
-        this.log("No claimable experiments found (all blocked by deps, exceed max-priority, or no matching tag)");
+        const total = allOpen.length;
+        const priority = candidates.length;
+        const parts: string[] = [`No claimable experiments found.`];
+        parts.push(`  ${total} open, ${priority} within priority <= ${flags["max-priority"]}`);
+        if (skippedByTag > 0) parts.push(`  ${skippedByTag} skipped (tag mismatch)`);
+        if (skippedByDeps > 0) parts.push(`  ${skippedByDeps} skipped (unresolved deps)`);
+        if (priority - skippedByTag - skippedByDeps === 0 && priority > 0) {
+          parts.push(`  Hint: resolve deps or use --id <exp> to claim directly`);
+        }
+        this.log(parts.join("\n"));
         return;
       }
     }

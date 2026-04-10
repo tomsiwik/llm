@@ -1,0 +1,22 @@
+model: "mlx-community/Qwen3-0.6B-4bit"
+train: true
+data: "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_data"
+fine_tune_type: "lora"
+num_layers: -1
+iters: 20
+batch_size: 1
+learning_rate: 0.0001
+lora_parameters:
+  rank: 6
+  scale: 6.0
+  dropout: 0.0
+  keys: ["self_attn.q_proj"]
+adapter_path: "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_adapter"
+save_every: 20
+val_batches: 5
+steps_per_report: 5
+steps_per_eval: 20
+max_seq_length: 384
+mask_prompt: false
+grad_checkpoint: false
+seed: 42
