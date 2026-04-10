@@ -36,6 +36,7 @@ core:
     - "Do not accept ANY findings at face value. A successful experiment is just an experiment that hasn't been audited hard enough yet."
     - "ALL critiques must be written to the experiment's directory as LOOPHOLE_*.md files AND formalized as 'evidence' in the DB."
     - "META-AWARENESS: If you find a flaw, check if it's a systemic 'Meta-Loophole' shared with the 'cluster' of findings provided by the Coordinator."
+    - "UV-ONLY EXECUTION: NEVER execute Python scripts directly (e.g. `python script.py`). ALL experiment executions MUST be run via the `experiment run` CLI, which is pre-configured to use `uv run` and manage process isolation via `pueue`."
 
 features:
   parallel: false
@@ -114,7 +115,8 @@ hats:
       ## Workflow
       1. Read the implementation scripts in the target directory (e.g. `run_experiment.py`).
       2. Audit for flaws (LOOPHOLE_CODE.md).
-      3. Emit `code.analyzed`.
+      3. If verification code needs to be run, use `experiment run <path_to_script>`. NEVER run python raw.
+      4. Emit `code.analyzed`.
 
   methodology_analyzer:
     name: "🔬 Methodology Analyzer"
@@ -151,4 +153,5 @@ hats:
       3. **DB FORMALIZATION**:
          a) Update Finding Caveat: `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md"`
          b) Add Formal Evidence: `experiment evidence <EXP_ID> --claim "LOOPHOLE_AUDIT: [Summary]" --source "LOOPHOLE_FOLLOWUP.md" --verdict [pass|fail|inconclusive]`
-      4. Emit `synthesis.complete`.
+      4. If a follow-up experiment is needed, design it in `LOOPHOLE_FOLLOWUP.md`. Instruction: future agents must run this follow-up ONLY via `experiment run`.
+      5. Emit `synthesis.complete`.
