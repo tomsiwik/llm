@@ -1,0 +1,13 @@
+[[rule]]
+# Target all common file system reading tools
+toolName = ["read_file", "list_directory", "glob", "grep_search"]
+
+# Use a regex pattern to match the directory paths in the tool arguments
+# Note: argsPattern tests against the JSON string of the tool's arguments
+argsPattern = "(/tmp/|/var/folders/)"
+
+# Grant automatic access without prompting
+decision = "allow"
+
+# High priority to override default restrictions (0-999)
+priority = 500

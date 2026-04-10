@@ -20,6 +20,10 @@ adapters:
     timeout: 3600
     args:
       - "--yolo"
+      - "--include-directories"
+      - "/tmp,/var/folders"
+      - "--policy"
+      - ".gemini/policies/external-access.toml"
 
 event_loop:
   prompt_file: "LOOPHOLES_PROMPT.md"
