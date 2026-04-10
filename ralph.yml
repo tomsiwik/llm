@@ -70,16 +70,16 @@ hats:
       2. Select the first finding that has NOT been audited (no "LOOPHOLE_AUDITED" in caveat).
       3. **CONTEXT CLUSTER**:
          a) Get finding details: `experiment finding-get <id>`.
-         b) Find all findings with the same tags or status: `experiment finding-list --status [status]`.
+         b) Find related findings by status/scale: `experiment finding-list --status <status>`.
          c) Get associated experiment details: `experiment get <exp_id> --yaml`.
       4. Write target details to `.ralph/current_loophole_target.md`:
          ```
          FINDING_ID: <id>
          EXP_ID: <exp_id>
          DIR: <experiment_dir>
-         CLUSTER_CONTEXT: [List IDs of findings sharing the same tags/failure-modes]
+         CLUSTER_CONTEXT: [Summary of related findings]
          ```
-      5. Emit `experiment.analyze_start` with the finding ID and cluster context.
+      5. Emit `experiment.analyze_start` with the finding ID and experiment path.
 
   finding_analyzer:
     name: "🔍 Finding Analyzer"
@@ -95,10 +95,9 @@ hats:
     instructions: |
       ## Workflow
       1. Read `.ralph/current_loophole_target.md`.
-      2. Read `PAPER.md`, `results.json`, and `MATH.md`.
-      3. Compare this finding against the `CLUSTER_CONTEXT`. Are the same metric biases appearing across the cluster?
-      4. Write critique to `LOOPHOLE_FINDING.md`.
-      5. Emit `finding.analyzed`.
+      2. Read `PAPER.md`, `results.json`, and `MATH.md` in the experiment directory.
+      3. Critique the finding aggressively (LOOPHOLE_FINDING.md).
+      4. Emit `finding.analyzed`.
 
   code_analyzer:
     name: "💻 Code Analyzer"
@@ -113,10 +112,9 @@ hats:
     default_publishes: "code.analyzed"
     instructions: |
       ## Workflow
-      1. Read the implementation scripts in the target directory.
-      2. Audit for leaks. Check if the leakage mechanism (e.g. wrong shuffle) exists in other experiments in the cluster.
-      3. Write audit to `LOOPHOLE_CODE.md`.
-      4. Emit `code.analyzed`.
+      1. Read the implementation scripts in the target directory (e.g. `run_experiment.py`).
+      2. Audit for flaws (LOOPHOLE_CODE.md).
+      3. Emit `code.analyzed`.
 
   methodology_analyzer:
     name: "🔬 Methodology Analyzer"
@@ -131,10 +129,9 @@ hats:
     default_publishes: "methodology.analyzed"
     instructions: |
       ## Workflow
-      1. Read `MATH.md`, `REVIEW-adversarial.md`.
-      2. Identify "Root Math Failures" (e.g. invalid proof steps) that might be plaguing the entire project.
-      3. Write critique to `LOOPHOLE_METHODOLOGY.md`.
-      4. Emit `methodology.analyzed`.
+      1. Read `MATH.md`, `REVIEW-adversarial.md` in the experiment directory.
+      2. Challenge theoretical foundations (LOOPHOLE_METHODOLOGY.md).
+      3. Emit `methodology.analyzed`.
 
   synthesizer:
     name: "🧠 Synthesizer"
@@ -153,5 +150,5 @@ hats:
       2. Synthesize into `LOOPHOLE_FOLLOWUP.md`.
       3. **DB FORMALIZATION**:
          a) Update Finding Caveat: `experiment finding-update <FINDING_ID> --caveat "LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md"`
-         b) Add Formal Evidence: `experiment evidence <EXP_ID> --claim "LOOPHOLE_AUDIT: [Brief summary of flaws/success]" --source "LOOPHOLE_FOLLOWUP.md" --verdict [pass|fail|inconclusive]`
+         b) Add Formal Evidence: `experiment evidence <EXP_ID> --claim "LOOPHOLE_AUDIT: [Summary]" --source "LOOPHOLE_FOLLOWUP.md" --verdict [pass|fail|inconclusive]`
       4. Emit `synthesis.complete`.
