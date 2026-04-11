@@ -1,0 +1,102 @@
+# Ralph Orchestrator — Loophole Discovery Pipeline
+# A specialized 5-hat pipeline designed to ruthlessly audit and challenge prior experiments.
+#
+# Start:     ralph -a
+
+cli:
+  backend: "gemini"
+  default_mode: "autonomous"
+
+adapters:
+  gemini:
+    timeout: 3600
+    args:
+      - "--yolo"
+      - "--include-directories"
+      - "/tmp,/var/folders"
+      - "--policy"
+      - ".gemini/policies/external-access.toml"
+
+event_loop:
+  prompt_file: "LOOPHOLES_PROMPT.md"
+  starting_event: "loophole.start"
+  completion_promise: "ALL_LOOPHOLES_EXHAUSTED"
+  max_iterations: 1000
+  checkpoint_interval: 1
+
+core:
+  guardrails:
+    - "RADICAL SKEPTICISM: Your primary directive is to tear down the existing experiments. Find the flaws, the false assumptions, the metric hacking, the logical leaps, and the implementation bugs."
+    - "ALL critiques must be written to the experiment's directory as LOOPHOLE_*.md files AND formalized as 'evidence' in the DB."
+    - "CLI-FIRST DISCOVERY: NEVER write Python/Shell scripts to scan directories or findings. Use `experiment finding-list` and `experiment get` ONLY. Manual scanning is a failure of logic."
+    - "DB INTEGRITY: The audit is NOT complete until `experiment finding-update` and `experiment evidence` have been executed successfully. Verify the DB update at the end of every loop."
+
+hats:
+  coordinator:
+    name: "📋 Coordinator"
+    description: "Finds the next finding that does NOT have a LOOPHOLE_AUDITED caveat. Use CLI only."
+    backend_args: ["--model", "gemini-2.5-flash"]
+    triggers: ["loophole.start", "synthesis.complete"]
+    publishes: ["experiment.analyze_start"]
+    instructions: |
+      1. Run `experiment finding-list`. Find the FIRST finding ID that lacks "LOOPHOLE_AUDITED" in its caveat.
+      2. Run `experiment finding-get <id>` to get details.
+      3. Run `experiment get <exp_id> --yaml` to get the experiment directory.
+      4. Write target to `.ralph/current_loophole_target.md`:
+         ```
+         FINDING_ID: <id>
+         EXP_ID: <exp_id>
+         DIR: <experiment_dir>
+         ```
+      5. Emit `experiment.analyze_start` with the ID.
+
+  finding_analyzer:
+    name: "🔍 Finding Analyzer"
+    description: "Critiques the PAPER.md and results.json."
+    backend_args: ["--model", "gemini-3.1-pro-preview"]
+    triggers: ["experiment.analyze_start"]
+    publishes: ["finding.analyzed"]
+    instructions: |
+      1. Read `.ralph/current_loophole_target.md`.
+      2. Read the PAPER.md and results.json in the target DIR.
+      3. Write radical critique to `LOOPHOLE_FINDING.md` in that DIR.
+      4. Emit `finding.analyzed`.
+
+  code_analyzer:
+    name: "💻 Code Analyzer"
+    description: "Audits implementation scripts via experiment run."
+    backend_args: ["--model", "gemini-3.1-pro-preview"]
+    triggers: ["finding.analyzed"]
+    publishes: ["code.analyzed"]
+    instructions: |
+      1. Read the target DIR from `.ralph/current_loophole_target.md`.
+      2. Audit the `run_experiment.py` script.
+      3. Write critique to `LOOPHOLE_CODE.md` in that DIR.
+      4. Emit `code.analyzed`.
+
+  methodology_analyzer:
+    name: "🔬 Methodology Analyzer"
+    description: "Audits MATH.md and adversarial reviews."
+    backend_args: ["--model", "gemini-3.1-pro-preview"]
+    triggers: ["code.analyzed"]
+    publishes: ["methodology.analyzed"]
+    instructions: |
+      1. Read the target DIR from `.ralph/current_loophole_target.md`.
+      2. Audit MATH.md and REVIEW-adversarial.md.
+      3. Write critique to `LOOPHOLE_METHODOLOGY.md` in that DIR.
+      4. Emit `methodology.analyzed`.
+
+  synthesizer:
+    name: "🧠 Synthesizer"
+    description: "Formalizes the audit in the DB. This is the most critical step."
+    backend_args: ["--model", "gemini-3.1-pro-preview"]
+    triggers: ["methodology.analyzed"]
+    publishes: ["synthesis.complete"]
+    instructions: |
+      1. Read `.ralph/current_loophole_target.md` and all `LOOPHOLE_*.md` files.
+      2. Synthesize into `LOOPHOLE_FOLLOWUP.md`.
+      3. MANDATORY DB UPDATE:
+         a) `experiment finding-update <FINDING_ID> --caveat \"LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md\"`
+         b) `experiment evidence <EXP_ID> --claim \"LOOPHOLE_AUDIT: [Summary]\" --source \"LOOPHOLE_FOLLOWUP.md\" --verdict [pass|fail]`
+      4. Verify the caveat was updated by running `experiment finding-get <FINDING_ID>`.
+      5. Emit `synthesis.complete`.
