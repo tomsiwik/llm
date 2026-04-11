@@ -1,0 +1,13 @@
+{
+    "model": "mlx-community/gemma-4-e4b-it-4bit",
+    "fine_tune_type": "lora",
+    "lora_parameters": {
+        "rank": 10,
+        "scale": 1.0,
+        "dropout": 0.0,
+        "keys": [
+            "self_attn.q_proj"
+        ]
+    },
+    "num_layers": -1
+}

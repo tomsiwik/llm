@@ -3,7 +3,7 @@ train: true
 data: "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_data"
 fine_tune_type: "lora"
 num_layers: -1
-iters: 20
+iters: 300
 batch_size: 1
 learning_rate: 0.0001
 lora_parameters:
@@ -12,10 +12,10 @@ lora_parameters:
   dropout: 0.0
   keys: ["self_attn.q_proj"]
 adapter_path: "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p1_t2_ple_m2p_vs_weight/lora_adapter"
-save_every: 20
+save_every: 300
 val_batches: 5
-steps_per_report: 5
-steps_per_eval: 20
+steps_per_report: 30
+steps_per_eval: 300
 max_seq_length: 384
 mask_prompt: false
 grad_checkpoint: false

@@ -469,9 +469,10 @@ def main():
     adapter_d = PLEFullAdapter(N_LAYERS, PLE_DIM, D_HIDDEN)
     mx.eval(adapter_d.parameters())
 
+    from mlx.utils import tree_flatten as _tf
     n_params_d = (sum(e.size for e in adapter_d.e_vecs) +
                   sum(p.size for g in adapter_d.gates
-                      for p in g.parameters().values()))
+                      for _, p in _tf(g.parameters())))
     log(f"  trainable params (full): {n_params_d}")
 
     def fwd_d(ids):
@@ -544,7 +545,10 @@ def main():
         for i, (layer, c) in enumerate(zip(qm.layers, cache)):
             h = layer(h, mask, c)
             h = lat_gates[i](h, lat_evecs[i])
-        return base_model.lm_head(qm.norm(h))
+        h_norm = qm.norm(h)
+        if base_model.args.tie_word_embeddings:
+            return qm.embed_tokens.as_linear(h_norm)
+        return base_model.lm_head(h_norm)
 
     ple_ms, ple_std = benchmark(ple_lat, sample_ids)
     overhead = ple_ms / max(base_ms, 1e-6)

@@ -1,0 +1,22 @@
+model: mlx-community/gemma-4-e4b-it-4bit
+train: true
+data: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p3_b0_medical_oe_adapter/lora_data
+adapter_path: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p3_b0_medical_oe_adapter/lora_adapter
+seed: 42
+lora_parameters:
+  rank: 6
+  scale: 6.0
+  dropout: 0.0
+  keys:
+    - self_attn.q_proj
+num_layers: -1
+batch_size: 2
+iters: 500
+val_batches: 5
+steps_per_report: 100
+steps_per_eval: 500
+save_every: 500
+max_seq_length: 512
+grad_checkpoint: true
+mask_prompt: true
+learning_rate: 1e-4

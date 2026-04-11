@@ -1,0 +1,44 @@
+{
+    "adapter_path": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p3_c5_rank16_cache_fixed/rank16_personal_adapter",
+    "batch_size": 2,
+    "clear_cache_threshold": 0,
+    "config": "/var/tmp/tmps4l7zd2u.yaml",
+    "data": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p3_c5_rank16_cache_fixed/diverse_training_data",
+    "fine_tune_type": "lora",
+    "grad_accumulation_steps": 1,
+    "grad_checkpoint": true,
+    "iters": 500,
+    "learning_rate": 0.0001,
+    "lora_parameters": {
+        "dropout": 0.0,
+        "keys": [
+            "self_attn.q_proj"
+        ],
+        "rank": 16,
+        "scale": 4.0
+    },
+    "lr_schedule": null,
+    "mask_prompt": true,
+    "max_seq_length": 256,
+    "model": "/Users/tom/Code/tomsiwik/llm/micro/models/exp_p3_b5_domain_conditional_retrain/domain_fused_base",
+    "num_layers": 16,
+    "optimizer": "adam",
+    "optimizer_config": {
+        "adam": {},
+        "adamw": {},
+        "muon": {},
+        "sgd": {},
+        "adafactor": {}
+    },
+    "project_name": null,
+    "report_to": null,
+    "resume_adapter_file": null,
+    "save_every": 500,
+    "seed": 42,
+    "steps_per_eval": 50,
+    "steps_per_report": 50,
+    "test": false,
+    "test_batches": 500,
+    "train": true,
+    "val_batches": 5
+}

@@ -36,7 +36,7 @@ IS_SMOKE = os.environ.get("SMOKE_TEST", "0") == "1"
 N_ROUTE_TRIALS = 30 if IS_SMOKE else 1000   # TF-IDF latency benchmark
 N_SWAP_TRIALS  = 5  if IS_SMOKE else 50     # adapter swap latency
 N_E2E_TRIALS   = 3  if IS_SMOKE else 20     # full e2e pipeline trials
-N_GEN_TOKENS   = 10 if IS_SMOKE else 50     # tokens for throughput measurement
+N_GEN_TOKENS   = 30 if IS_SMOKE else 50     # tokens for throughput measurement
 N_GEN_TRIALS   = 2  if IS_SMOKE else 10     # trials per throughput measurement
 
 # Adapter paths (trained in T2.1 and T2.6)
@@ -177,8 +177,10 @@ def generate_n_tokens(model, tokenizer, prompt: str, n_tokens: int) -> tuple[flo
     t0 = time.perf_counter()
     text = generate(model, tokenizer, prompt=prompt, max_tokens=n_tokens, verbose=False)
     t1 = time.perf_counter()
-    n_out = len(tokenizer.encode(text))
     elapsed = t1 - t0
+    # Use tokenizer encode; fall back to word count if text is empty
+    encoded = tokenizer.encode(text) if text.strip() else []
+    n_out = len(encoded) if encoded else max(1, len(text.split()))
     tok_s = n_out / elapsed if elapsed > 0 else 0
     return tok_s, n_out
 
