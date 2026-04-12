@@ -1,0 +1,274 @@
+{
+  "accuracy": 0.2,
+  "correct": 4,
+  "total": 20,
+  "per_item": [
+    {
+      "true_domain": "medical",
+      "projections": {
+        "medical": 2169.651817,
+        "code": 2121.675507,
+        "math": 1932.075008,
+        "legal": 6446.493245,
+        "finance": 2437.256639
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "medical",
+      "projections": {
+        "medical": 2173.072674,
+        "code": 2186.802989,
+        "math": 1989.618724,
+        "legal": 6431.255876,
+        "finance": 2461.551086
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "medical",
+      "projections": {
+        "medical": 2283.558033,
+        "code": 2253.997415,
+        "math": 2007.971854,
+        "legal": 6650.368145,
+        "finance": 2592.089684
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "medical",
+      "projections": {
+        "medical": 2412.228444,
+        "code": 2316.71091,
+        "math": 2008.394643,
+        "legal": 7269.131337,
+        "finance": 2637.403232
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "code",
+      "projections": {
+        "medical": 1912.69752,
+        "code": 2061.70219,
+        "math": 1711.761332,
+        "legal": 5931.652695,
+        "finance": 2094.20197
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "code",
+      "projections": {
+        "medical": 2067.732202,
+        "code": 2339.453135,
+        "math": 1967.495805,
+        "legal": 6309.165202,
+        "finance": 2544.001472
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "code",
+      "projections": {
+        "medical": 2077.588015,
+        "code": 2254.318818,
+        "math": 1933.345566,
+        "legal": 6255.10553,
+        "finance": 2463.308068
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "code",
+      "projections": {
+        "medical": 2212.46649,
+        "code": 2329.780284,
+        "math": 2053.462152,
+        "legal": 6742.404984,
+        "finance": 2507.752814
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "math",
+      "projections": {
+        "medical": 1776.766793,
+        "code": 1868.969673,
+        "math": 1667.0395,
+        "legal": 5693.683282,
+        "finance": 2024.374967
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "math",
+      "projections": {
+        "medical": 1506.467491,
+        "code": 1440.970672,
+        "math": 1310.253987,
+        "legal": 4783.153121,
+        "finance": 1585.518401
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "math",
+      "projections": {
+        "medical": 1874.927358,
+        "code": 1924.945514,
+        "math": 1796.261091,
+        "legal": 6026.54145,
+        "finance": 2138.48974
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "math",
+      "projections": {
+        "medical": 1913.798759,
+        "code": 1967.312586,
+        "math": 1763.934494,
+        "legal": 6140.796947,
+        "finance": 2069.030369
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "legal",
+      "projections": {
+        "medical": 2072.375812,
+        "code": 2090.733063,
+        "math": 1794.988408,
+        "legal": 6664.389152,
+        "finance": 2336.674914
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "legal",
+      "projections": {
+        "medical": 2361.952024,
+        "code": 2408.723814,
+        "math": 2076.786882,
+        "legal": 6998.959463,
+        "finance": 2660.747235
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "legal",
+      "projections": {
+        "medical": 2179.197606,
+        "code": 2216.527198,
+        "math": 1899.813842,
+        "legal": 6677.456988,
+        "finance": 2403.28289
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "legal",
+      "projections": {
+        "medical": 2294.154011,
+        "code": 2323.324336,
+        "math": 1972.710144,
+        "legal": 7034.255703,
+        "finance": 2575.904141
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "finance",
+      "projections": {
+        "medical": 2151.727828,
+        "code": 2287.077281,
+        "math": 2059.300624,
+        "legal": 6480.919683,
+        "finance": 2440.570149
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "finance",
+      "projections": {
+        "medical": 2271.854764,
+        "code": 2479.597307,
+        "math": 2136.544003,
+        "legal": 7070.167158,
+        "finance": 2724.008648
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "finance",
+      "projections": {
+        "medical": 2309.388245,
+        "code": 2426.187471,
+        "math": 2076.520523,
+        "legal": 7018.759943,
+        "finance": 2781.131299
+      },
+      "predicted": "legal"
+    },
+    {
+      "true_domain": "finance",
+      "projections": {
+        "medical": 2158.310972,
+        "code": 2091.918708,
+        "math": 1921.961,
+        "legal": 6588.865927,
+        "finance": 2384.396291
+      },
+      "predicted": "legal"
+    }
+  ],
+  "per_layer_accuracy": {
+    "16": 0.2,
+    "17": 0.2,
+    "18": 0.2,
+    "19": 0.2,
+    "20": 0.2,
+    "21": 0.2,
+    "22": 0.2,
+    "23": 0.2
+  },
+  "confusion": {
+    "medical": {
+      "medical": 0,
+      "code": 0,
+      "math": 0,
+      "legal": 4,
+      "finance": 0
+    },
+    "code": {
+      "medical": 0,
+      "code": 0,
+      "math": 0,
+      "legal": 4,
+      "finance": 0
+    },
+    "math": {
+      "medical": 0,
+      "code": 0,
+      "math": 0,
+      "legal": 4,
+      "finance": 0
+    },
+    "legal": {
+      "medical": 0,
+      "code": 0,
+      "math": 0,
+      "legal": 4,
+      "finance": 0
+    },
+    "finance": {
+      "medical": 0,
+      "code": 0,
+      "math": 0,
+      "legal": 4,
+      "finance": 0
+    }
+  }
+}

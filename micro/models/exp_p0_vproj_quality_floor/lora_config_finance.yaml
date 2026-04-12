@@ -1,0 +1,24 @@
+adapter_path: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p0_vproj_quality_floor/adapter_finance
+batch_size: 2
+data: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p0_vproj_quality_floor/data_finance
+fine_tune_type: lora
+grad_checkpoint: true
+iters: 1000
+learning_rate: 0.0002
+lora_parameters:
+  dropout: 0.0
+  keys:
+  - self_attn.v_proj
+  - self_attn.o_proj
+  rank: 16
+  scale: 4.0
+mask_prompt: true
+max_seq_length: 512
+model: mlx-community/gemma-4-e4b-it-4bit
+num_layers: 16
+save_every: 1000
+seed: 42
+steps_per_eval: 250
+steps_per_report: 100
+train: true
+val_batches: 3

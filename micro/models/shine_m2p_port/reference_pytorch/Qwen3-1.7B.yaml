@@ -1,0 +1,130 @@
+name: default
+mode: train # pretrain | grain
+
+resume_global_step: -1  # -1: don't resume,   int: resume from global steps,  latest: resume from latest
+test_global_step: latest # int: test at global steps,  latest: test at latest
+
+run:
+  seed: 42
+  use_amp: false           # set false to disable AMP (can't be used now, bugs)
+  gradient_accumulation_steps: 4
+  device: cuda                # auto | cuda | cpu
+  use_gradient_checkpoint: true
+  
+paths:
+  model_path: "./models/Qwen3-1.7B"
+  output_dir: "qwen-finetuned"   # final save; checkpoints go under Hydra's run dir unless overridden
+
+data:
+  context_max_length: 1024
+  conversation_max_length: 1024
+  train_batch_size: 1
+  eval_batch_size: 1
+  num_workers: 4
+  # Switch between "mock" and "hf" when you add a real dataset loader
+  source: squad
+
+optim:
+  learning_rate: 0.00005
+  weight_decay: 0.01
+  adapter_reg: 0.0 # 0.000001
+  num_epochs: 1
+  warmup_steps: 2000
+  grad_clip_norm: 1.0
+
+pretrain:
+  completion_freq: 0.5
+  max_completion_ratio: 0.3
+  min_completion_ratio: 0.1
+
+visualize:
+  visualize_steps: -1
+  visualize_mode: "pretrain"
+
+logging:
+  logging_steps: 1
+
+eval:
+  eval_steps: 1250
+
+save:
+  save_steps: 1250
+  # save_best: true    # best files sometimes corrupted, disable for now
+
+# If you use a custom local module for LoRA-wrapped Qwen, keep it here.
+# Otherwise, replace with a transformers model import path and update train.py accordingly.
+model:
+  lora_r: 4
+  metalora_r: 4
+  ift_additional_metalora_r: -1 # <0: finetune pretrain metalora;  >=0: freeze pretrain metalora, add new metalora with this r
+  num_mem_token: ${num_mem_token}
+  metamodel_class_path: "LoraQwen.LoraQwen3ForCausalLM" # module.ClassName
+  config_class_path: "LoraQwen.Qwen3Config" # module.ClassName
+  tokenizer_from: "${paths.model_path}"
+  model_from: "${paths.model_path}"
+
+metanetwork:
+  type: "transformer"
+  method: "rl"
+  transformer_cfg:
+    encoder_cfg:
+      d_model: 2048 # Fixed
+      nhead: 16
+      dim_feedforward: 4096
+      dropout: 0
+      activation: gelu
+      layer_norm_eps: 0.00001
+      batch_first: True
+      norm_first: False
+      bias: True
+    couple_encoder_cfg:
+      d_model: 2048
+      nhead: 16
+      dim_feedforward: 4096
+      dropout: 0
+      activation: gelu
+      layer_norm_eps: 0.00001
+      batch_first: True
+      norm_first: False
+      bias: True
+    layer_transformer_first: True
+    mean_pool_size: 1 # Don't use
+    num_layers: 4 # Must be even
+    couple_num_layers: 0 # if > 0, use couple layers
+    scale: 0.001
+  linear_cfg:
+    num_layers: 4
+    linear_hidden_dim: 8192
+    scale: 0.001
+    bias: false
+  linear_gate_cfg:
+    num_layers: 4
+    linear_hidden_dim: 8192
+    scale: 0.001
+    bias: false
+    
+
+test:
+  source: squad
+  context_avg_len: 512
+  context_max_length: 1300
+  conversation_max_length: 128
+  max_new_tokens: 128
+  save_path: test/${name}
+  batch_size: 4
+  num_workers: 4 
+  judger_model: gpt-4.1-nano
+  max_concurrency: 32
+  max_retries: 6
+
+hydra:
+  job:
+    chdir: false
+  run:
+    # everyone uses the SAME dir
+    dir: checkpoints/${name}/${mode}/${now:%H-%M-%S}
+  output_subdir: null  # avoid multiple `.hydra` subdirs trying to coexist
+
+hidden_size: -1
+num_layers: -1
+num_mem_token: 4

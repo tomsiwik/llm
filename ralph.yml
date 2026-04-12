@@ -1,102 +1,249 @@
-# Ralph Orchestrator — Loophole Discovery Pipeline
-# A specialized 5-hat pipeline designed to ruthlessly audit and challenge prior experiments.
+# Ralph Orchestrator — Infinite Research Loop
+# 5-hat pipeline using Claude Code sub-agents for the heavy lifting.
+# Separation of concerns: research design vs engineering vs review vs learning.
 #
-# Start:     ralph -a
+# Flow:
+#   research.start → Researcher (ideation + math + run micro experiments)
+#                  → experiment.done → Reviewer → verdict
+#   verdict        → Analyst (multi-angle research sweep: WHY + literature + implications)
+#                  → learning.complete → Researcher picks next experiment
+#
+# Start:     ralph run -a -v
+#   Ralph spawns Claude with --dangerously-skip-permissions.
+#   Effort level is set to "high" in .claude/settings.local.json.
+# Continue:  ralph emit "experiment.done"
 
 cli:
-  backend: "gemini"
+  backend: "claude"
   default_mode: "autonomous"
 
 adapters:
-  gemini:
-    timeout: 3600
+  claude:
+    timeout: 3600  # 1h max per hat (covers experiment execution up to ~45min)
     args:
-      - "--yolo"
-      - "--include-directories"
-      - "/tmp,/var/folders"
-      - "--policy"
-      - ".gemini/policies/external-access.toml"
+      - "--bare"
 
 event_loop:
-  prompt_file: "LOOPHOLES_PROMPT.md"
-  starting_event: "loophole.start"
-  completion_promise: "ALL_LOOPHOLES_EXHAUSTED"
+  prompt_file: "PROMPT.md"
+  starting_event: "research.start"
+  completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 1000
-  checkpoint_interval: 1
+  max_runtime_seconds: 86400
+  idle_timeout_secs: 1200  # 20 min idle = stuck (moved from cli: per docs)
+  checkpoint_interval: 10
 
 core:
   guardrails:
-    - "RADICAL SKEPTICISM: Your primary directive is to tear down the existing experiments. Find the flaws, the false assumptions, the metric hacking, the logical leaps, and the implementation bugs."
-    - "ALL critiques must be written to the experiment's directory as LOOPHOLE_*.md files AND formalized as 'evidence' in the DB."
-    - "CLI-FIRST DISCOVERY: NEVER write Python/Shell scripts to scan directories or findings. Use `experiment finding-list` and `experiment get` ONLY. Manual scanning is a failure of logic."
-    - "DB INTEGRITY: The audit is NOT complete until `experiment finding-update` and `experiment evidence` have been executed successfully. Verify the DB update at the end of every loop."
+    - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies — the real question is always behavioral: 'does this produce useful output?' and 'does this advance the vision?' A metric improving without behavioral progress is not a finding. A metric degrading with behavioral progress IS a finding."
+    - "ALL experiments MUST run on Apple Silicon via MLX. No CUDA. No RunPod. Target: M5 Pro 48GB."
+    - "Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code."
+    - "Use `experiment claim <worker>` to pick work. Use `experiment complete <id> ...` to finish."
+    - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior LEARNINGS.md finding."
+    - "Before implementing, check `experiment query` for prior results on the same topic. NotebookLM is available but optional — do NOT use it in the main loop (too slow). Use it in manual sessions only."
+    - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions), and how it connects to our architecture. No buzzword recitation."
+    - "Architecture reference: https://sebastianraschka.com/llm-architecture-gallery/ — compare our design against production models."
+    - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, the experiment is resurrected with a structural fix, not a hyperparameter tweak."
+    - "BEHAVIORAL OUTCOMES OVER METRICS: PPL, cosine, accuracy are proxies. The real questions: Does routed composition produce USEFUL text? Does the system advance toward the VISION? A finding that 'PPL improved by 4%' without showing behavioral improvement is provisional at best. The project proved PPL doesn't predict task quality (r=0.08). Design experiments that test behavioral claims, not metric claims."
+
+features:
+  parallel: true
+  auto_merge: true
+
+memories:
+  inject: auto
+  budget: 2000
+  file: ".ralph/memories.md"
+  filter:
+    recent: 60
+
+tasks:
+  enabled: true
 
 hats:
-  coordinator:
-    name: "📋 Coordinator"
-    description: "Finds the next finding that does NOT have a LOOPHOLE_AUDITED caveat. Use CLI only."
-    backend_args: ["--model", "gemini-2.5-flash"]
-    triggers: ["loophole.start", "synthesis.complete"]
-    publishes: ["experiment.analyze_start"]
+  # ── Researcher: design + run experiments on Apple Silicon ──────────────
+  researcher:
+    name: "🔬 Researcher"
+    description: "Designs and runs micro experiments on Apple Silicon MLX. Writes MATH.md, implements, runs, writes PAPER.md."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "opus"
+      - "--append-system-prompt-file"
+      - "EXPERIMENT.md"
+      - "--max-turns"
+      - "40"
+    triggers:
+      - "research.start"
+      - "learning.complete"
+      - "review.revise"
+    publishes:
+      - "experiment.done"
+    default_publishes: "experiment.done"
     instructions: |
-      1. Run `experiment finding-list`. Find the FIRST finding ID that lacks "LOOPHOLE_AUDITED" in its caveat.
-      2. Run `experiment finding-get <id>` to get details.
-      3. Run `experiment get <exp_id> --yaml` to get the experiment directory.
-      4. Write target to `.ralph/current_loophole_target.md`:
-         ```
-         FINDING_ID: <id>
-         EXP_ID: <exp_id>
-         DIR: <experiment_dir>
-         ```
-      5. Emit `experiment.analyze_start` with the ID.
+      ## CONTEXT DISCIPLINE (CRITICAL — prevents stuck loops)
+      Do NOT use Agent() sub-agents for design or review — they grow context.
+      Instead: read files, run CLI commands, write files, emit events. ALL state on disk.
+      Max 40 tool calls per hat. If approaching limit, emit experiment.done with partial results.
+      REVISE fixes: max 15 minutes. Apply top 3 blocking fixes only. Defer rest.
 
-  finding_analyzer:
-    name: "🔍 Finding Analyzer"
-    description: "Critiques the PAPER.md and results.json."
-    backend_args: ["--model", "gemini-3.1-pro-preview"]
-    triggers: ["experiment.analyze_start"]
-    publishes: ["finding.analyzed"]
-    instructions: |
-      1. Read `.ralph/current_loophole_target.md`.
-      2. Read the PAPER.md and results.json in the target DIR.
-      3. Write radical critique to `LOOPHOLE_FINDING.md` in that DIR.
-      4. Emit `finding.analyzed`.
+      ## Workflow
 
-  code_analyzer:
-    name: "💻 Code Analyzer"
-    description: "Audits implementation scripts via experiment run."
-    backend_args: ["--model", "gemini-3.1-pro-preview"]
-    triggers: ["finding.analyzed"]
-    publishes: ["code.analyzed"]
-    instructions: |
-      1. Read the target DIR from `.ralph/current_loophole_target.md`.
-      2. Audit the `run_experiment.py` script.
-      3. Write critique to `LOOPHOLE_CODE.md` in that DIR.
-      4. Emit `code.analyzed`.
+      1. Read .ralph/current_direction.md for context.
+         If triggered by review.revise: read the experiment's REVIEW-adversarial.md,
+         apply the blocking fixes directly (edit MATH.md/PAPER.md), then re-emit experiment.done.
+         Do NOT re-run the experiment for documentation-only fixes.
 
-  methodology_analyzer:
-    name: "🔬 Methodology Analyzer"
-    description: "Audits MATH.md and adversarial reviews."
-    backend_args: ["--model", "gemini-3.1-pro-preview"]
-    triggers: ["code.analyzed"]
-    publishes: ["methodology.analyzed"]
-    instructions: |
-      1. Read the target DIR from `.ralph/current_loophole_target.md`.
-      2. Audit MATH.md and REVIEW-adversarial.md.
-      3. Write critique to `LOOPHOLE_METHODOLOGY.md` in that DIR.
-      4. Emit `methodology.analyzed`.
+      2. Run: `experiment claim researcher`
+         This gives you full YAML: kill criteria with IDs, notes, deps, everything.
 
-  synthesizer:
-    name: "🧠 Synthesizer"
-    description: "Formalizes the audit in the DB. This is the most critical step."
-    backend_args: ["--model", "gemini-3.1-pro-preview"]
-    triggers: ["methodology.analyzed"]
-    publishes: ["synthesis.complete"]
+      3. Check if run_experiment.py already exists in the experiment dir.
+         If YES: skip design, go straight to step 4 (run).
+         If NO: Write MATH.md + run_experiment.py directly (do NOT delegate to sub-agents).
+           Invoke /fast-mlx and /mlx-dev skills first.
+           Write direction to .ralph/current_direction.md.
+
+      4. Run experiment: `experiment run <id>` (waits for completion via pueue).
+         When done, read results.json. Write PAPER.md with prediction-vs-measurement table.
+
+      5. Complete: `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
+
+      6. Emit experiment.done with key results.
+
+      ## Hypothesis generation (STRICT RULES)
+
+      Only generate new experiments if fewer than 3 open P0-P2 experiments remain.
+      Every new hypothesis MUST meet ALL of these criteria:
+
+      0. SIGREG REASONING CHAIN (apply to every hypothesis):
+         a) Am I treating SYMPTOMS or the DISEASE? If adding a 3rd+ fix, stop.
+            Find the single constraint that makes all failure modes impossible.
+         b) Ask the RIGHT QUESTION — not "how do we prevent X?" but "what is
+            the OPTIMAL structure such that X is geometrically impossible?"
+            (LeCun didn't ask "how to prevent collapse" — he asked "what is the
+            optimal embedding distribution?" Collapse prevention was a consequence.)
+         c) Derive the answer from EXISTING MATH — JL-lemma, Welch bound,
+            contraction mappings, Cramer-Wold, concentration inequalities.
+            The hard part is asking the right question, not inventing technique.
+         d) Each hyperparameter you eliminate = one more understood degree of freedom.
+         Reference: LeJEPA (arxiv 2511.08544), LeWorldModel (arxiv 2603.19312).
+      1. GROUNDED: Must cite a specific paper (arxiv ID), prior experiment result,
+         or LEARNINGS.md finding. No inventing from thin air.
+      2. RELEVANT: Must directly address a weakness found in a killed/supported
+         experiment, OR extend a proven result to close a gate.
+      3. RESEARCHED: Check `experiment query` and `experiment finding-list` for prior results.
+         Web search if the hypothesis involves a technique not in our findings database.
+      4. SCOPED: Must run on MLX Apple Silicon in < 2 hours.
+      5. FALSIFIABLE: Must have concrete kill criteria with numbers.
+
+      DO NOT generate experiments about: information theory analogies (Shannon,
+      Huffman, etc.), data structure routing (splay trees, bloom filters, etc.),
+      or any mechanism without a paper reference showing it works for LLM/LoRA.
+
+      Format for new experiment notes:
+      ```
+      TYPE: [verification | guided-exploration | frontier-extension]
+      FAILURE MODE: [what specific degenerate behavior are we preventing?]
+      PRIOR MATH: [which existing theorems/bounds apply? cite theorem + paper]
+
+      # For TYPE=verification:
+      PROOF SKETCH: [1-3 sentence outline of the formal proof to be written in MATH.md]
+      PREDICTIONS: [what specific outcomes will the proof predict?]
+
+      # For TYPE=guided-exploration:
+      PROVEN FRAMEWORK: [which theorem/result is the exploration operating within?]
+      UNKNOWN: [what parameter/function/constant is unknown? what does the math predict about it?]
+
+      # For TYPE=frontier-extension:
+      PROVEN RESULT: [which theorem is being extended?]
+      GAP: [what new math would be needed to formalize the extension?]
+
+      MOTIVATION: [which killed/supported experiment motivates this]
+      LITERATURE: [arxiv ID or NotebookLM source supporting the approach]
+      HYPOTHESIS: [one falsifiable sentence]
+      KILL CRITERIA: K1: ... K2: ...
+      ```
+
+      ## Fallback handling
+      If a gate experiment is KILLED, check for a matching exp_fallback_g*_ experiment.
+      These are pre-designed Plan B experiments. Claim and run the fallback next.
+
+  # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
+  reviewer:
+    name: "🔴 Reviewer"
+    description: "Reviews MATH.md + PAPER.md directly, writes REVIEW-adversarial.md, routes verdict."
+    backend_args:
+      - "--effort"
+      - "high"
+      - "--model"
+      - "opus"
+      - "--max-turns"
+      - "20"
+    triggers:
+      - "experiment.done"
+    publishes:
+      - "review.proceed"
+      - "review.revise"
+      - "review.killed"
+    default_publishes: "review.proceed"
     instructions: |
-      1. Read `.ralph/current_loophole_target.md` and all `LOOPHOLE_*.md` files.
-      2. Synthesize into `LOOPHOLE_FOLLOWUP.md`.
-      3. MANDATORY DB UPDATE:
-         a) `experiment finding-update <FINDING_ID> --caveat \"LOOPHOLE_AUDITED: [Robust|Flawed|Invalid] - See LOOPHOLE_FOLLOWUP.md\"`
-         b) `experiment evidence <EXP_ID> --claim \"LOOPHOLE_AUDIT: [Summary]\" --source \"LOOPHOLE_FOLLOWUP.md\" --verdict [pass|fail]`
-      4. Verify the caveat was updated by running `experiment finding-get <FINDING_ID>`.
-      5. Emit `synthesis.complete`.
+      ## CONTEXT DISCIPLINE
+      Review DIRECTLY — do NOT spawn adversarial-reviewer sub-agent (grows context).
+      Read MATH.md + PAPER.md + results.json from disk. Write REVIEW-adversarial.md. Emit event.
+      Max 20 tool calls. Max 15 minutes. If review is complex, write top 3 issues and PROCEED.
+
+      ## Review Checklist (quick)
+
+      1. Read .ralph/current_direction.md → find experiment dir.
+      2. Read experiment's MATH.md, PAPER.md, results.json.
+      3. Check:
+         - Does PAPER.md have prediction-vs-measurement table? (REVISE if missing)
+         - Do kill criteria results match the evidence? (KILL if fabricated)
+         - Is the finding status appropriate for the experiment type?
+         - Are there obvious math errors or unsupported claims?
+      4. Write REVIEW-adversarial.md (max 1 page) with verdict: PROCEED, REVISE (max 3 fixes), or KILL.
+      5. Route:
+         - REVISE: emit review.revise with ≤3 numbered fixes.
+         - KILL: `experiment complete <id> --status killed ...` + `experiment finding-add ...` → emit review.killed.
+         - PROCEED: `experiment finding-add ...` → emit review.proceed.
+
+      ## REVISE discipline
+      Max 3 blocking fixes per REVISE. If more issues exist, note them as non-blocking
+      in REVIEW-adversarial.md. The researcher will apply the 3 blocking fixes and re-emit.
+      Do NOT create REVISE cycles longer than 2 rounds — on round 3, PROCEED with caveats.
+
+  # ── Analyst: multi-angle research sweep after every result ───────────────
+  analyst:
+    name: "🧠 Analyst"
+    description: "Writes LEARNINGS.md with literature context. Quick pass, max 10 min."
+    backend_args:
+      - "--effort"
+      - "medium"
+      - "--model"
+      - "sonnet"
+      - "--max-turns"
+      - "10"
+    triggers:
+      - "review.proceed"
+      - "review.killed"
+    publishes:
+      - "learning.complete"
+    default_publishes: "learning.complete"
+    max_activations: 50
+    instructions: |
+      ## CONTEXT DISCIPLINE
+      Quick pass ONLY — max 10 tool calls, max 10 minutes.
+      Read PAPER.md + REVIEW-adversarial.md. Write LEARNINGS.md. Emit event. Done.
+      Do NOT spawn sub-agents. Do NOT query NotebookLM (too slow for the loop).
+      Web search ONLY if the finding is a KILL and you need to find why it failed.
+
+      ## Workflow
+
+      1. Read .ralph/current_direction.md → find experiment dir.
+      2. Read PAPER.md + REVIEW-adversarial.md.
+      3. Write LEARNINGS.md (max 30 lines):
+         - Core Finding (1-2 sentences)
+         - Why (1-2 sentences with arxiv ID if known)
+         - Implications for Next Experiment (1-2 sentences)
+      4. If KILLED: add 1 reference via `experiment ref-add` if relevant paper found.
+      5. Emit learning.complete with experiment name + 1-line finding.

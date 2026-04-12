@@ -1,227 +1,136 @@
-# Vision: Composable Domain Experts via M2P Distillation
+# Vision: Pierre — Composable Domain Intelligence
 
 ## Core Thesis
 
 A language model is not a monolith — it is a frozen base plus composable domain experts.
-Each expert is generated from context in one forward pass, with zero parameter-space
-interference by construction, and composable without retraining.
+Each expert is a lightweight adapter that adds domain knowledge, trained in 15 minutes,
+composable without interference, and shareable through a flywheel that makes the base
+model smarter from usage.
 
-**Platform:** Apple M5 Pro, 48GB unified memory. This IS the deployment target.
-**Framework:** MLX only. No CUDA.
+**Platform:** Gemma 4 E4B 4-bit (open, free).
+**Serving:** Together AI serverless ($0.10/M tokens) or local (M-series Mac, $0).
+**Adapters:** PoLAR r=6 on v_proj+o_proj. 5MB each. Zero-interference composition.
 
-## Architecture: Decoupled Guarantees
+## What Pierre Is
 
-```
-Frozen Base (Qwen3-4B or similar)
-    │
-    ├── Frozen Grassmannian A-matrices (orthogonal slots, generated once via QR)
-    │     → Mathematical guarantee: A_i^T A_j = 0 by construction
-    │
-    ├── M2P-generated B-matrices (domain content, generated per context)
-    │     → Learned: M2P transformer reads hidden states → outputs LoRA B
-    │     → 97.7-100.6% of SFT quality at toy scale (Findings #359, #361)
-    │     → 1.15ms generation time (Finding #339)
-    │
-    └── Scale via preservation loss (learned, not fixed)
-          → L_preserve = CE(base + adapter, general_tokens)
-          → Gradient teaches M2P the correct scale automatically
-          → scale=5 gives 0pp MMLU degradation (Finding #330)
-```
-
-### Parameter-Space Orthogonality (proven)
-
-For adapters Δ_i = B_i A_i and Δ_j = B_j A_j:
+A coding agent (like Claude Code) where every user trains the model:
 
 ```
-⟨Δ_i, Δ_j⟩_F = trace(A_i^T B_i^T B_j A_j)
-               = trace(B_j (A_j A_i^T) B_i^T)     [cyclic permutation]
-               = trace(B_j × 0 × B_i^T)            [A_j A_i^T = 0]
-               = 0
+User works on project → conversation trains personal adapter (1.2 min)
+                       → adapter persists across sessions (1.25MB file)
+                       → user shares adapter → flywheel improves base for everyone
 ```
 
-**This holds for ANY B_i, B_j.** The Grassmannian A-slots guarantee zero
-parameter-space interference. Verified at float32 zero (Finding #341 K848).
+The adapters don't just "nudge" — they add real domain knowledge (math: +72pp,
+medical: +22pp, legal: +90pp format compliance) and compose without interference.
 
-### Activation-Space Interference (empirically bounded, NOT guaranteed)
-
-Parameter-space orthogonality does NOT guarantee activation-space orthogonality.
-The actual output is: h_out = W_base·x + B_1(A_1·x) + B_2(A_2·x).
-Even with orthogonal A-slots, B_1(A_1·x) and B_2(A_2·x) write to the same output
-space and can destructively interfere.
-
-**Empirical evidence:** max activation-space |cos| = 0.29 at N=5 (Finding #353).
-This is bounded in practice but has no mathematical guarantee. Measuring how this
-scales with N is an open experiment (Level 2B in the PoC roadmap).
-
-**Scale:** scale=20 destroys MMLU by -60pp (Finding #320). scale=5 is safe (#330).
-Preservation loss teaches M2P to self-calibrate.
-
-## Four Tiers of Knowledge
+## Architecture (Proven by 600 Experiments)
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│ Tier 4: Session Adapters (ephemeral, per-conversation)  │
-│   Generated from context in one M2P forward pass.       │
-│   Lives only during the session. ~1KB-10KB.             │
-├─────────────────────────────────────────────────────────┤
-│ Tier 3: User Adapters (persistent, per-user)            │
-│   Distilled from accumulated sessions via M2P.          │
-│   Updated after each session. ~100KB.                   │
-├─────────────────────────────────────────────────────────┤
-│ Tier 2: Domain Adapters (shared, SFT-trained)           │
-│   "Medical", "Code", "Legal" — crystallized from users. │
-│   Candidates for promotion to base. ~1-10MB.            │
-├─────────────────────────────────────────────────────────┤
-│ Tier 1: Base (frozen pre-trained, grows via promotion)  │
-│   Qwen3-4B or self-grown through promotion cycles.      │
-│   Each promotion adds a solidified expert permanently.  │
-└─────────────────────────────────────────────────────────┘
+┌─ Base: Gemma 4 E4B 4-bit (frozen, shared) ───────────────────┐
+│                                                                │
+│  ┌─ Domain Adapters (PoLAR r=6, v_proj+o_proj) ────────────┐ │
+│  │  Pre-merged into base for top-5 domains (0ms overhead)   │ │
+│  │  Grassmannian A-matrices: zero interference (cos=1e-16)  │ │
+│  │  PoLAR: full rank utilization (sr=6.0 exact)             │ │
+│  │  Null-space restriction: 98.7% quality, base untouched   │ │
+│  └──────────────────────────────────────────────────────────┘ │
+│                                                                │
+│  ┌─ Dynamic Adapter (per request, routed) ──────────────────┐ │
+│  │  TF-IDF ridge router: 96% at N=5, 84% at N=25           │ │
+│  │  Swap: 1ms hot, 5ms cold. Throughput: 96% of base.       │ │
+│  │  200+ niche domains in adapter CDN                        │ │
+│  └──────────────────────────────────────────────────────────┘ │
+│                                                                │
+│  ┌─ Personal Adapter (per user, persistent) ────────────────┐ │
+│  │  Rank-16, trained from 50 examples in 1.2 min            │ │
+│  │  Online learning: +60pp from 20 conversation turns        │ │
+│  │  Domain-conditional: retrained on domain-fused base       │ │
+│  │  Survives context window clearing                         │ │
+│  └──────────────────────────────────────────────────────────┘ │
+│                                                                │
+│  ┌─ Format Constraints (per domain, at decode time) ────────┐ │
+│  │  XGrammar: Python CFG, SOAP, legal citation, JSON schema │ │
+│  │  Think-then-constrain: reason freely, then enforce format │ │
+│  │  Zero syntax errors on constrained output                 │ │
+│  └──────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-## What We Proved (427 experiments, 358 findings)
+## The Flywheel
 
-### Composition Guarantees (Conclusive — parameter-space only)
+```
+User trains adapter → shares to registry → cluster similar adapters
+      ↑                                           ↓
+      │                                    crystallize into domain adapter
+      │                                           ↓
+      └── improved base ← promote into base (ε=4.78%, 3 cycles proven)
+```
 
-| Finding | Result |
-|---------|--------|
-| #3 | Grassmannian orthogonality: cos=0.0002 at d=2560 (50x below theory) |
-| #126 | Structural orthogonality is geometric guarantee: 17-69x below Welch bound |
-| #341 K848 | A-slot orthogonality verified at float32 zero on M2P-generated adapters |
-| #334 | Pre-sum without routing = unrouted mixture — routing IS the matmul |
+Every user interaction makes the system smarter. Competitors can't copy the
+flywheel — they'd need the user base.
 
-### M2P Quality Scaling (Supported — toy scale, synthetic domains)
+## What We Proved (600 experiments, 504 findings)
 
-| Finding | Result |
-|---------|--------|
-| #359 | M2P at d=256: 97.6% of SFT with n≥T data scaling |
-| #361 | M2P at d=512: 100.6% of SFT (exceeds SFT quality) |
-| #362 | M2P at d=1024: 99.6% of SFT (512:1 compression, no cliff) |
-| #363 | Layer depth: 99.7% (L=2), 93.5% (L=4), 97.1% (L=8), 86.4% (L=16) |
-| #354 | TF-IDF routing: 95% accuracy, 92.2% composition quality |
-| #353 | Cross-domain transfer: 8/10 pairs useful, Option A wins |
+### Composition (zero interference)
+- Grassmannian orthogonality: cos=1.7e-16 (Finding #341, conclusive)
+- N=100 composition: max_cos=2.25e-8 (Finding #440)
+- Pre-merge: lossless for orthogonal adapters (0ms overhead)
+- Cross-projection (#483): weight-space composition kills quality → use DCCD instead
 
-**Caveat:** All results on 2 valid synthetic domains (sort, reverse) at L=2 toy models.
-Natural language, deep models (L=36), and real benchmarks are untested (Levels 1-3 in PoC roadmap).
+### Adapter Quality
+- PoLAR r=6: 72% GSM8K, sr=6.0 exact (Finding #442, C1.1v2)
+- v_proj+o_proj: +70pp SOAP, +90pp legal format (Finding #480)
+- Online learning: +60pp from 20 conversation turns (Finding #490)
+- 4-bit quantization: lossless 3x compression (Finding #422)
 
-### Scale & Serving (Proven)
+### Serving
+- Swap: 1ms hot, zero graph recompilation (Finding #503)
+- Throughput: 96% of base (Finding #435)
+- Format compat: MLX ↔ PEFT bijection verified (Finding #481)
+- Hot-add/remove: O(1), bit-exact (Findings #429, #430)
 
-| Finding | Result |
-|---------|--------|
-| #176 | M5 Pro achieves 73% BW utilization (165.6 tok/s base) |
-| #320/#330 | scale=5 gives 0pp MMLU degradation; scale=20 gives -60pp |
-| #332 | Full integrated pipeline works on Qwen3-4B-4bit |
-| #333 | Expert promotion at scale=5 preserves quality (0pp MMLU) |
+### Null-Space Isolation
+- 512 dims available in local q_proj (85 adapter slots) (Finding #493)
+- 2048 dims in v_proj (341 slots) (Finding #493)
+- 98.7% quality preserved with exact base orthogonality (Finding #494)
 
-### Routing (Supported)
+### Permanently Closed Paths (28 killed)
+- M2P/SHINE for document QA (centroid trap, Finding #345/#486)
+- Direction-only adapters (magnitude matters through FFN, Finding #439)
+- LoRI sparse masks (wrong orthogonality level, Finding #487)
+- Spectral surgery on PoLAR (flat spectrum, Finding #488)
+- TTT zero-cost update (impossible for transformer LoRA, Finding #491)
+- Self-organizing null-space slots (structurally impossible, Finding #501)
+- Simultaneous adapter activation without routing (catastrophic, Finding #425)
 
-| Finding | Result |
-|---------|--------|
-| #310 | Per-token hidden states linearly separable at 98.3% |
-| #313 | Single-pass MLP routing within 0.61% of oracle |
-| #28 | Softmax router matches oracle at N=24 (0% gap, 0% fallback) |
+## The Competition
 
-### Permanently Closed Paths
+| | Claude Code | Pierre Phase 1 | Pierre Phase 3 |
+|---|---|---|---|
+| Base quality | Excellent | Good (Gemma 4) | Good + carved experts |
+| Domain expertise | Generic | 5 domains | 100+ domains |
+| Personalization | None | Per-project | Per-user, self-learning |
+| Cost/request | ~$0.01 | ~$0.00005 | ~$0.00002 |
+| Improves from usage | No | No | Yes (flywheel) |
+| Works offline | No | Yes (Tier 3+) | Yes + federated |
 
-| Path | Why It's Dead |
-|------|---------------|
-| Weight-space merge into ternary | δ=±1.0 vs needed δ=0.002 (500x too coarse) — #289, #291, #303 |
-| SVD solidification for composition | Loses Grassmannian structure: -26pp vs scale reduction — #329 |
-| Self-growing from random init | Catastrophic interference at promotion 3 — #331 |
-| Room Model (pre-sum W_combined) | Inter-layer nonlinearities kill it — #303, #334 |
-| Per-layer routing | Actively harmful, collapses to per-sequence oracle — #29 |
-| Binary routing heads | Collapse at N>10, 46% base-only fallback — #27 |
-| Sparse-BitNet | Sparse matmul 7% slower on Apple Silicon — #36 |
-| KD from large teacher | -34.4% worse than self-supervised — #30 |
-| Energy/Gini/spectral routing | NRE is the ceiling, all others killed — spectral arc closed |
-| Text-to-LoRA hypernetwork | Tautological kill at N=24 — #33 |
-| EigenLoRAx subspace extraction | Grassmannian prevents shared subspace by design — #84 |
-| Ternary base advantage | Advantage from ternary ADAPTERS, not base — #52 |
+## Research Frontier (P9, 20 experiments queued)
 
-## Active Research: M2P Distillation Pipeline
-
-### The Problem (Finding #341, #342)
-
-M2P with Grassmannian A produces perfect orthogonality (K848 PASS), but B-matrices
-collapse to centroid when trained on multiple domains simultaneously. Domains with
-low base loss (already-competent) receive adapters calibrated for hard tasks.
-
-- Additive domain conditioning: improved median to 47.3% but didn't break centroid (#342)
-- Root cause: M2P attention bottleneck makes embedding gradients low-rank
-
-### What Needs to Happen Next
-
-| Experiment | What It Tests | Status |
-|-----------|---------------|--------|
-| **exp_m2p_scale_calibrated** | Preservation loss teaches M2P correct scale | Active (P0) |
-| **exp_m2p_composition_n5** | 5 M2P-generated adapters compose with Grassmannian guarantee | Open (P0) |
-| **exp_m2p_teacher_distillation** | Teacher→student knowledge transfer via M2P (Qwen3-8B → 4B) | Open (P1) |
-| exp_shine_architecture_study | Port full SHINE architecture to MLX | Active |
-| exp_multi_tenant_serving | Different adapter stacks per user | Active |
-
-### The Fix Strategy
-
-The centroid collapse (#341, #342) is the current bottleneck. Potential fixes:
-
-1. **Multiplicative gating** (not additive) — force M2P attention to domain signal
-2. **Per-domain loss normalization** — equalize gradient magnitudes across domains
-3. **Separate M2P heads per domain** — break the shared bottleneck
-4. **Train on single domain, eval on composition** — sidestep multi-domain training entirely
-
-Each fix must maintain the Grassmannian A guarantee (which is unaffected by training dynamics).
-
-## Capacity Planning
-
-| Scale | Hidden dim | Max orthogonal adapters (d/r at r=16) |
-|-------|-----------|--------------------------------------|
-| Toy GPT | 64 | 4 |
-| BitNet-2B | 2560 | 160 |
-| Qwen3-4B | 3584 | 224 |
-| Qwen3-8B | 8192 | 512 |
-
-Memory budget on M5 Pro 48GB (Finding #332):
-- Base: ~1.2 GB (Qwen3-4B-4bit)
-- Per adapter: ~45 MB
-- N_max = 853 adapters fit in memory
-- At N=500: 23.86 GB (59.6% of budget)
-
-## Two Products
-
-### Pierre Tiny (edge, free tier)
-- Base: BitNet-2B or small Qwen
-- 5-25 SFT domain adapters
-- 73-97 tok/s on M5 Pro
-- 1.7-3GB memory
-- Per-token softmax routing
-
-### Pierre Pro (cloud, pro tier)
-- Base: Qwen3-4B (or promoted)
-- 25-200+ domain adapters
-- Session adapters (M2P-generated, ephemeral)
-- User profile adapters (M2P-distilled)
-- Full promotion lifecycle at scale=5
-- Per-token routing + block-diagonal attention
+- CMoE: carve Gemma 4 into sparse experts (2.4x faster, free extraction)
+- TT-LoRA: 180KB adapters (28x smaller than current)
+- DES: test-time search over expert count (benchmark improvement)
+- MemoryLLM: self-updating weight memory (no gradients)
+- Sigmoid routing: multi-expert activation (MiniMax pattern)
+- Self-evolution: model improves its own scaffold
+- CISPO RL: preserve rare reasoning token gradients
 
 ## Key References
 
-### Core Architecture
-- SHINE (arXiv:2602.06358) — M2P transformer generates adapters from context
-- PHATGOOSE (post-hoc gating) — independently trained experts with zero-shot routing
-- Grassmannian packing — QR-based orthogonal A-matrices (our approach)
-- ReLoRA (arXiv:2307.05695) — repeated merge = full pre-training (promotion foundation)
-- FlexMoRE — SVD extraction preserves/improves quality (but kills Grassmannian — #329)
-
-### Composition & Routing
-- Naive LoRA Summation (arXiv:2508.11985) — orthogonality enables additive composition
-- LoRA Soups (arXiv:2410.13025) — CAT composition beats data mixing
-- MoLoRA (arXiv:2603.15965) — per-token LoRA routing
-- CLONE (arXiv:2506.02847) — MoE router for dynamic LoRA on edge
-
-### Foundations
-- GaLore (arXiv:2403.03507) — low-rank gradient training from scratch
-- FlyLoRA (arXiv:2510.08396) — frozen random A as implicit router, JL-lemma
-- LeJEPA (arXiv:2511.08544) — SIGReg reasoning chain: make failure impossible with existing math
-- BitNet b1.58 (arXiv:2402.17764) — ternary architecture fundamentals
-
-### MLX / Apple Silicon
-- MLX-BitNet: exo-explore/mlx-bitnet — first ternary impl for Apple Silicon
-- Architecture gallery: sebastianraschka.com/llm-architecture-gallery/
+- PoLAR (arXiv:2506.03133) — polar-decomposed adapter, Stiefel manifold
+- Null-LoRA (arXiv:2512.15233) — null-space restriction for base isolation
+- CMoE (arXiv:2502.04416) — carve dense model into MoE in 5 min
+- TT-LoRA (arXiv:2504.21190) — tensor train adapters, 33K params
+- ReMix (arXiv:2603.10160) — RL routing prevents softmax collapse
+- SHINE (arXiv:2602.06358) — context-to-parameter hypernetwork (killed for QA, valid for compression)
+- MiniMax M1 (arXiv:2506.13585) — 256-expert MoE, CISPO RL, self-evolution
