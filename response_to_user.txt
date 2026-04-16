@@ -1,1 +1,0 @@
-I am waiting for you to provide the task directly in the chat or a path to a file within the current workspace `/Users/tom/Code/tomsiwik/spaghetti` or the project temporary directory `/Users/tom/.gemini/tmp/spaghetti`.

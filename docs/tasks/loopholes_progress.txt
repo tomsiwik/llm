@@ -1,2 +1,0 @@
-micro/models/expert_promotion
-micro/models/lz_dictionary_moe

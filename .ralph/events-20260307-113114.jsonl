@@ -1,1 +1,0 @@
-{"payload":"exp_persistent_expert_tree v2 REVISE complete: 6 fixes applied. Tree API used throughout, leaf-only fine-tuning, flat-dict baseline, same-version cherry-pick control. KC1 PASS (-0.85% cross vs same), KC2 FAIL at micro (101.6%) but 32.8% savings vs flat-dict. Structural sharing confirmed (ratio=1.58).","topic":"experiment.done","ts":"2026-03-07T15:45:25.361039+00:00"}

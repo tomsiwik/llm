@@ -3,6 +3,12 @@
 ## Purpose
 Design and run micro experiments on Apple Silicon MLX. Write `MATH.md`, implement or run the experiment, write `PAPER.md`, and hand off compactly via events.
 
+## Project Context
+Read `../VISION_P1.md` and `../ARCHITECTURE_P1.md` for current architecture:
+- Base: Gemma 4 E4B 4-bit
+- Adapters: PoLAR r=6 on v_proj+o_proj
+- Composition: Grassmannian pre-merge (lossless, zero interference at N=100)
+
 ## Context discipline
 - Do **not** use `Agent()` sub-agents for design or review.
 - Use files, CLI commands, and emitted events. Keep state on disk.

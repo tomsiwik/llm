@@ -496,7 +496,7 @@ Before running any P1 experiment on MLX + Gemma 4:
 
 1. **Verify model loads:** `python -m mlx_lm.generate --model <model_id> --prompt "test" --max-tokens 10`
 2. **Check memory:** `mx.get_active_memory()` after loading — must leave room for adapters + training
-3. **Follow CODING_GUIDELINES.md:** Function scoping, cleanup between phases, `mx.eval()` in training loops
+3. **Follow mlx-dev skill patterns:** Function scoping, cleanup between phases, `mx.eval()` in training loops
 4. **Use `experiment run`:** Never bare `uv run python` — pueue manages process lifecycle
 5. **Save adapters to disk:** Never accumulate in memory across phases
 6. **Log memory:** Use `log_memory()` helper between phases

@@ -20,7 +20,8 @@ adapters:
       - "--bare"
 
 event_loop:
-  prompt_file: "PROMPT.md"
+  # prompt_file removed — hat instructions are self-contained
+  # Project context: ../VISION_P1.md, ../ARCHITECTURE_P1.md
   starting_event: "research.start"
   completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 1000
@@ -43,6 +44,8 @@ core:
     - "Architecture reference: https://sebastianraschka.com/llm-architecture-gallery/ — compare our design against production models."
     - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, the experiment is resurrected with a structural fix, not a hyperparameter tweak."
     - "BEHAVIORAL OUTCOMES OVER METRICS: PPL, cosine, accuracy are proxies. The real questions: Does routed composition produce USEFUL text? Does the system advance toward the VISION? A finding that 'PPL improved by 4%' without showing behavioral improvement is provisional at best. The project proved PPL doesn't predict task quality (r=0.08). Design experiments that test behavioral claims, not metric claims."
+    - "ANTI-STUCK: REVISE fixes max 30 min. If >3 blocking fixes, apply top 3 and defer rest. Each hat transition <30 min. If stuck, emit next event with [TIMEOUT] prefix. Never retry failed API call >3 times."
+    - "PROJECT CONTEXT: Read ../VISION_P1.md and ../ARCHITECTURE_P1.md for current architecture. This is a Gemma 4 + PoLAR adapter + Grassmannian composition system."
 
 features:
   # Ralph worktree parallelism is counterproductive here:
