@@ -3,131 +3,252 @@
 BENCH: MMLU-Pro Baseline + Pierre Adapted
 Google target: 69.4%
 
-Runs MMLU-Pro via lm-eval-harness against mlx_lm.server.
-Two phases: (1) base model, (2) base + best adapter merged.
+Direct MMLU-Pro evaluation using mlx_lm in-process (no server).
+Two phases: (1) base model, (2) base + math adapter.
 """
 
+import gc
 import json
 import os
-import signal
-import subprocess
-import sys
+import re
 import time
 from pathlib import Path
 
+import mlx.core as mx
+import pandas as pd
+from mlx_lm import generate, load
+
 EXPERIMENT_DIR = Path(__file__).parent
 RESULTS_FILE = EXPERIMENT_DIR / "results.json"
+DATA_FILE = EXPERIMENT_DIR / "data" / "test.parquet"
 MODEL_ID = "mlx-community/gemma-4-e4b-it-4bit"
-PORT = 8321
 IS_SMOKE = os.environ.get("SMOKE_TEST", "0") == "1"
 
-# Smoke: use a tiny task for validation; full: mmlu_pro
-TASK = "mmlu_pro" if not IS_SMOKE else "mmlu_pro"
-LIMIT = 20 if IS_SMOKE else None  # None = full dataset
+# Best single adapter: math from T2.1 (82% delta on MMLU math, q_proj LoRA r=6)
+MATH_ADAPTER = Path(__file__).parent.parent / "exp_p1_t2_single_domain_training" / "adapters" / "math"
+
+LIMIT_PER_CAT = 3 if IS_SMOKE else 100
+OPTION_LETTERS = "ABCDEFGHIJ"
 
 
 def log(msg):
     print(msg, flush=True)
 
 
-def start_mlx_server(model_path, adapter_path=None, port=PORT):
-    """Start mlx_lm.server in background. Returns Popen."""
-    cmd = [sys.executable, "-m", "mlx_lm.server",
-           "--model", model_path, "--port", str(port)]
-    if adapter_path:
-        cmd += ["--adapter-path", str(adapter_path)]
-    log(f"  Starting MLX server: {' '.join(cmd)}")
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # Wait for server to be ready
-    import urllib.request
-    for _ in range(60):
-        time.sleep(2)
-        try:
-            urllib.request.urlopen(f"http://localhost:{port}/v1/models", timeout=2)
-            log(f"  MLX server ready on port {port}")
-            return proc
-        except Exception:
-            continue
-    raise RuntimeError("MLX server failed to start in 120s")
+def load_data(limit_per_cat):
+    """Load MMLU-Pro test set from parquet, sample per category."""
+    df = pd.read_parquet(DATA_FILE)
+    if limit_per_cat:
+        sampled = []
+        for cat in sorted(df["category"].unique()):
+            cat_df = df[df["category"] == cat]
+            n = min(limit_per_cat, len(cat_df))
+            sampled.append(cat_df.sample(n=n, random_state=42))
+        df = pd.concat(sampled, ignore_index=True)
+    log(f"  Loaded {len(df)} questions across {df['category'].nunique()} categories")
+    return df
 
 
-def stop_server(proc):
-    """Kill server process group."""
-    if proc and proc.poll() is None:
-        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-        proc.wait(timeout=10)
-        log("  MLX server stopped")
+def format_prompt(row, tokenizer):
+    """Format MMLU-Pro question with chat template."""
+    options = row["options"]
+    option_text = "\n".join(
+        f"{OPTION_LETTERS[i]}. {opt}" for i, opt in enumerate(options)
+    )
+    content = (
+        f"The following is a multiple choice question. "
+        f"Answer with ONLY the letter of the correct option "
+        f"(A through {OPTION_LETTERS[len(options)-1]}). "
+        f"Do not explain.\n\n"
+        f"Question: {row['question']}\n\n"
+        f"Options:\n{option_text}\n\n"
+        f"Answer:"
+    )
+    return tokenizer.apply_chat_template(
+        [{"role": "user", "content": content}],
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=False,
+    )
 
 
-def run_lm_eval(task, port=PORT, limit=None, output_dir="results"):
-    """Run lm-eval-harness against local server. Returns parsed results."""
-    out_path = EXPERIMENT_DIR / output_dir
-    out_path.mkdir(parents=True, exist_ok=True)
+def parse_answer(response):
+    """Extract answer letter from model response."""
+    if not response:
+        return None
+    response = response.strip()
+    # Direct single letter
+    if len(response) == 1 and response.upper() in OPTION_LETTERS:
+        return response.upper()
+    # Starts with letter (possibly followed by punctuation)
+    m = re.match(r"^([A-J])[.\s:)\-,]", response)
+    if m:
+        return m.group(1)
+    # "The answer is X" pattern
+    m = re.search(r"(?:answer|correct)\s+(?:is\s+)?([A-J])", response, re.IGNORECASE)
+    if m:
+        return m.group(1).upper()
+    # First letter found
+    for ch in response:
+        if ch.upper() in OPTION_LETTERS:
+            return ch.upper()
+    return None
 
-    cmd = [
-        sys.executable, "-m", "lm_eval",
-        "--model", "local-chat-completions",
-        "--model_args", f"model=gemma-4-e4b,base_url=http://localhost:{port}/v1,tokenized_requests=False",
-        "--tasks", task,
-        "--batch_size", "1",
-        "--output_path", str(out_path),
-        "--log_samples",
-    ]
-    if limit:
-        cmd += ["--limit", str(limit)]
 
-    log(f"  Running: {' '.join(cmd)}")
+def evaluate(df, model, tokenizer, label="eval"):
+    """Evaluate all questions using in-process generation."""
+    total_correct = 0
+    total_count = 0
+    total_errors = 0
+    category_results = {}
     t0 = time.time()
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=7 * 3600)
+
+    categories = sorted(df["category"].unique())
+    for cat in categories:
+        cat_df = df[df["category"] == cat]
+        correct = 0
+        errors = 0
+        for idx, (_, row) in enumerate(cat_df.iterrows()):
+            prompt = format_prompt(row, tokenizer)
+            try:
+                response = generate(model, tokenizer, prompt=prompt, max_tokens=16)
+            except Exception as e:
+                response = f"ERROR: {e}"
+                errors += 1
+
+            predicted = parse_answer(response)
+            gold = row["answer"]
+            if predicted == gold:
+                correct += 1
+            if predicted is None:
+                errors += 1
+
+            if (idx + 1) % 20 == 0:
+                elapsed = time.time() - t0
+                rate = (total_count + idx + 1) / elapsed if elapsed > 0 else 0
+                log(f"    [{label}] {cat} {idx+1}/{len(cat_df)}: "
+                    f"{correct}/{idx+1} ({100*correct/(idx+1):.1f}%) | "
+                    f"{rate:.1f} q/s | {elapsed:.0f}s")
+
+        cat_acc = correct / len(cat_df) if len(cat_df) > 0 else 0
+        category_results[cat] = {
+            "correct": correct,
+            "total": len(cat_df),
+            "accuracy": round(cat_acc, 4),
+            "errors": errors,
+        }
+        total_correct += correct
+        total_count += len(cat_df)
+        total_errors += errors
+        elapsed = time.time() - t0
+        log(f"  [{label}] {cat}: {correct}/{len(cat_df)} = {100*cat_acc:.1f}% "
+            f"(cumulative: {100*total_correct/total_count:.1f}%, {elapsed:.0f}s)")
+
+    overall_acc = total_correct / total_count if total_count > 0 else 0
     elapsed = time.time() - t0
-
-    log(f"  lm-eval completed in {elapsed:.0f}s (exit={result.returncode})")
-    if result.returncode != 0:
-        log(f"  STDERR: {result.stderr[-500:]}")
-        return {"error": result.stderr[-500:], "elapsed_s": elapsed}
-
-    # Parse results from output
-    log(f"  STDOUT (last 1000 chars): {result.stdout[-1000:]}")
-
-    # Try to find results JSON
-    results_files = list(out_path.rglob("results_*.json"))
-    if results_files:
-        with open(results_files[-1]) as f:
-            parsed = json.load(f)
-        return {"parsed": parsed, "elapsed_s": elapsed}
-    return {"stdout": result.stdout[-2000:], "elapsed_s": elapsed}
+    return {
+        "overall_accuracy": round(overall_acc, 4),
+        "total_correct": total_correct,
+        "total_count": total_count,
+        "total_errors": total_errors,
+        "categories": category_results,
+        "elapsed_s": round(elapsed, 1),
+    }
 
 
 def main():
     log("=" * 70)
-    log("BENCH: MMLU-Pro — Base E4B vs Pierre Adapted")
-    log(f"SMOKE_TEST={IS_SMOKE}, LIMIT={LIMIT}")
+    log("BENCH: MMLU-Pro -- Base E4B vs Pierre Adapted (math adapter)")
+    log(f"SMOKE_TEST={IS_SMOKE}, LIMIT_PER_CAT={LIMIT_PER_CAT}")
+    log(f"Math adapter: {MATH_ADAPTER}")
+    log(f"Adapter exists: {MATH_ADAPTER.exists()}")
     log("=" * 70)
 
-    results = {"experiment": "exp_bench_mmlu_pro", "smoke": IS_SMOKE}
+    df = load_data(LIMIT_PER_CAT)
+    results = {
+        "experiment": "exp_bench_mmlu_pro",
+        "smoke": IS_SMOKE,
+        "limit_per_cat": LIMIT_PER_CAT,
+        "total_questions": len(df),
+        "model": MODEL_ID,
+        "thinking_enabled": False,
+    }
 
     # Phase 1: Base model
-    log("\n[Phase 1] Base Gemma 4 E4B")
-    server = start_mlx_server(MODEL_ID)
-    try:
-        base_results = run_lm_eval(TASK, limit=LIMIT, output_dir="results_base")
-        results["base"] = base_results
-    finally:
-        stop_server(server)
+    log("\n[Phase 1] Base Gemma 4 E4B (4-bit)")
+    model, tokenizer = load(MODEL_ID)
+    base_eval = evaluate(df, model, tokenizer, label="base")
+    results["base"] = base_eval
+    log(f"\n  Phase 1 result: {base_eval['overall_accuracy']*100:.1f}% "
+        f"({base_eval['total_correct']}/{base_eval['total_count']}) in {base_eval['elapsed_s']:.0f}s")
 
-    # Phase 2: Pierre adapted (TODO: merge best adapter and test)
-    # For now, just record base results
-    log("\n[Phase 2] Pierre Adapted — skipped (adapter merge needed)")
-    results["adapted"] = {"status": "pending", "note": "Merge best adapter and re-run"}
+    # Free memory before Phase 2
+    del model
+    gc.collect()
+    mx.metal.clear_cache()
+
+    # Phase 2: Pierre adapted (math adapter)
+    log("\n[Phase 2] Pierre Adapted (math adapter)")
+    if not MATH_ADAPTER.exists():
+        log(f"  SKIP: Math adapter not found at {MATH_ADAPTER}")
+        results["adapted"] = {"status": "skipped", "reason": "adapter not found"}
+    else:
+        model, tokenizer = load(MODEL_ID, adapter_path=str(MATH_ADAPTER))
+        adapted_eval = evaluate(df, model, tokenizer, label="adapted")
+        results["adapted"] = adapted_eval
+        log(f"\n  Phase 2 result: {adapted_eval['overall_accuracy']*100:.1f}% "
+            f"({adapted_eval['total_correct']}/{adapted_eval['total_count']}) in {adapted_eval['elapsed_s']:.0f}s")
+        del model
+        gc.collect()
+        mx.metal.clear_cache()
 
     # Summary
+    base_acc = results["base"]["overall_accuracy"]
+    adapted_acc = results.get("adapted", {}).get("overall_accuracy")
+    delta = (adapted_acc - base_acc) if adapted_acc is not None else None
+
+    total_time = results["base"]["elapsed_s"] + results.get("adapted", {}).get("elapsed_s", 0)
+    summary = {
+        "base_accuracy": base_acc,
+        "adapted_accuracy": adapted_acc,
+        "delta_pp": round(delta * 100, 1) if delta is not None else None,
+        "total_elapsed_s": round(total_time, 1),
+        "total_elapsed_h": round(total_time / 3600, 2),
+    }
+
+    # Kill criteria
+    google_target = 0.694
+    k1_pass = abs(base_acc - google_target) <= 0.05
+    k2_pass = delta is not None and delta >= 0.02
+    k3_pass = total_time < 6 * 3600
+
+    kill = {
+        "K1411": {"pass": k1_pass, "detail": f"Base={base_acc:.4f}, target={google_target}, gap={abs(base_acc-google_target)*100:.1f}pp"},
+        "K1412": {"pass": k2_pass, "detail": f"Delta={delta*100:.1f}pp" if delta else "Delta=N/A"},
+        "K1413": {"pass": k3_pass, "detail": f"Elapsed={total_time/3600:.2f}h"},
+    }
+    summary["kill_criteria"] = kill
+    results["summary"] = summary
+
     log("\n" + "=" * 70)
-    log("RESULTS")
+    log("RESULTS SUMMARY")
     log("=" * 70)
-    if "parsed" in results.get("base", {}):
-        log(f"  Base results: {json.dumps(results['base']['parsed'].get('results', {}), indent=2)[:500]}")
-    else:
-        log(f"  Base: {results.get('base', {}).get('error', 'unknown')}")
+    log(f"  Base: {base_acc*100:.1f}%")
+    log(f"  Adapted: {adapted_acc*100:.1f}%" if adapted_acc else "  Adapted: N/A")
+    log(f"  Delta: {summary['delta_pp']}pp" if delta else "  Delta: N/A")
+    log(f"  Time: {summary['total_elapsed_h']}h")
+    log(f"  K1411 (base within 5pp of 69.4%): {'PASS' if k1_pass else 'FAIL'}")
+    log(f"  K1412 (adapted >= base + 2pp): {'PASS' if k2_pass else 'FAIL'}")
+    log(f"  K1413 (< 6h): {'PASS' if k3_pass else 'FAIL'}")
+
+    # Per-category comparison
+    if adapted_acc is not None:
+        log("\n  Per-category (base -> adapted):")
+        for cat in sorted(results["base"]["categories"]):
+            b = results["base"]["categories"][cat]["accuracy"]
+            a = results["adapted"]["categories"][cat]["accuracy"]
+            d = (a - b) * 100
+            log(f"    {cat:20s}: {b*100:5.1f}% -> {a*100:5.1f}% ({d:+.1f}pp)")
 
     RESULTS_FILE.write_text(json.dumps(results, indent=2, default=str))
     log(f"\nSaved to {RESULTS_FILE}")

@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "notebooklm": {
+      "source": "teng-lin/notebooklm-py",
+      "sourceType": "github",
+      "computedHash": "8fc897e1277b856177d695ed9d900c723a01879bb19e9aebc2ff833badd51fc9"
+    },
     "paper2code": {
       "source": "PrathamLearnsToCode/paper2code",
       "sourceType": "github",

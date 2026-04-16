@@ -1,0 +1,100 @@
+# PAPER: P9.G1 — Benchmark Showdown: Pierre v3 vs Base vs Gemma 4 27B
+
+## Summary
+
+Comprehensive comparison of Pierre v3 (Gemma 4 E4B 4-bit + domain adapters) against
+the base 4-bit model and published Gemma 4 27B numbers. The question: for which tasks
+does a specialized 4B model match or beat a dense 27B model at 14.8% the serving cost?
+
+---
+
+## Prediction vs Measurement
+
+| Kill | Criterion | MATH.md Prediction | Measured | Status |
+|------|-----------|--------------------|----------|--------|
+| K1390 | Math adapter GSM8K ≥ Gemma 4 27B (90%) | LIKELY FAIL (82% < 90%) | TBD | TBD |
+| K1391 | Math adapter GSM8K gain ≥ base + 20pp | EXPECTED PASS (~27pp if math=82%, base=55%) | TBD | TBD |
+| K1392 | Medical adapter MedMCQA ≥ base + 3pp | UNCERTAIN (registry=50%, base unknown) | TBD | TBD |
+| [INFO] | Serving cost ratio 4B/27B | PASS by math (14.8%) | 14.8% | Informational |
+
+**Note on K1390**: MATH.md predicts K1390 will FAIL because Gemma 4 27B's published
+GSM8K score (~90-91%) exceeds our math adapter's 82%. This is the "scale debt" —
+the 9pp gap represents the quality improvement needed from P1 improvements (GRPO,
+thinking adapter, s1K reasoning training) to close.
+
+**Note on K1391 (revised)**: Replaced tautological HumanEval criterion (63-42=21, always PASS)
+with freshly-measured math adapter GSM8K gain over base. Registry shows math adapter at 82%,
+if base is ~55%, expected gain is ~27pp (PASS). If base is >62%, gain drops and may FAIL.
+This is a real measurement, not a fixed computation.
+
+**Note on K1392 (revised)**: Replaced tautological cost ratio criterion (15.8%<50%, always PASS)
+with freshly-measured medical MedMCQA gain. Registry medical adapter = 50.0% MedMCQA;
+base is unmeasured. If base is ~47-48%, adapter barely passes. UNCERTAIN — honest test.
+
+---
+
+## Benchmark Results Table
+
+| Benchmark | Base E4B 4-bit | Pierre v3 (adapted) | Delta | Gemma 4 27B (published) |
+|-----------|----------------|---------------------|-------|------------------------|
+| GSM8K | TBD% | TBD% (math adapter) | TBD | ~90% |
+| MedMCQA | TBD% | TBD% (medical adapter) | TBD | ~70% (estimated) |
+| MMLU-Pro | 62.1%* | TBD% (oracle routing) | TBD | ~79% |
+| HumanEval | ~42% (est) | 63% (from registry) | +21pp | ~74% |
+
+*62.1% from Finding #530 (with thinking). Oracle routing may degrade MCQ (Finding #517).
+
+---
+
+## Value Proposition
+
+Pierre v3 delivers:
+- Math task quality: 82% GSM8K (from registry, refreshed below) — 9pp below 27B
+- Code task quality: 63% HumanEval — 11pp below 27B
+- Medical MCQ: TBD — potentially competitive with 27B for focused medical queries
+- Serving cost: ~14.8% of Gemma 4 27B (15× cheaper to serve)
+
+**Interpretation**: Pierre v3 is NOT a general replacement for 27B. It IS a cost-efficient
+specialist system that delivers 90-92% of 27B math quality at 14.8% the cost. For
+high-throughput domain-specific serving, this is the right trade-off.
+
+---
+
+## Published Reference Numbers
+
+| Model | GSM8K | HumanEval | MMLU-Pro | Source |
+|-------|-------|-----------|----------|--------|
+| Gemma 4 E4B (base) | ~55% | ~42% | 62.1%* | Finding #530 + estimate |
+| Pierre v3 (adapted) | 82% | 63% | TBD | Finding #421 + registry |
+| Gemma 4 27B | ~90% | ~74% | ~79% | Google Gemma 4 Tech Report |
+
+*62.1% uses thinking mode. Without thinking: 41.7%.
+
+**Source note**: Gemma 4 27B numbers are from Google's Gemma 4 technical report and
+competitive benchmarks. These are approximate figures; K1390 uses the published 90%
+number as the reference threshold.
+
+---
+
+## Dependency Note
+
+This experiment depends on exp_p9_full_stack_integration (G0) completing first.
+G0 establishes that the routing + adapter stack functions end-to-end. G1 then
+provides the competitive comparison against external reference points.
+
+---
+
+## Caveats
+
+1. **Base GSM8K freshly measured** (K1391): Registry math adapter = 82%; base GSM8K
+   measured in Phase 1. Expected gain ~27pp. If base is >62% (unlikely), K1391 may FAIL.
+   HumanEval comparison (63% code vs ~42% est base) preserved as informational in Phase 6.
+
+2. **Oracle routing ≠ production routing**: MMLU-Pro results use ground-truth category
+   labels to select adapters. Production routing (97.7% accuracy) introduces ~2pp noise.
+
+3. **Domain adapters hurt MCQ** (Finding #517): Math adapter on MMLU-Pro = 36.1% (vs 62.1%
+   base). Oracle routing only helps for categories where the domain adapter is beneficial.
+
+4. **27B reference numbers**: Google's published benchmark conditions may differ from
+   ours (prompt format, temperature, sampling strategy). Exact parity not guaranteed.

@@ -1,17 +1,13 @@
-# Ralph Orchestrator — Infinite Research Loop
-# 5-hat pipeline using Claude Code sub-agents for the heavy lifting.
-# Separation of concerns: research design vs engineering vs review vs learning.
+# Ralph Orchestrator — Experiment Research Loop
+# 3-hat event-driven workflow on top of Ralph v2.
+# Ralph handles routing; `experiment` owns experiment state; `experiment run`/pueue own execution.
 #
 # Flow:
-#   research.start → Researcher (ideation + math + run micro experiments)
-#                  → experiment.done → Reviewer → verdict
-#   verdict        → Analyst (multi-angle research sweep: WHY + literature + implications)
-#                  → learning.complete → Researcher picks next experiment
+#   research.start -> Researcher -> experiment.done -> Reviewer -> review.proceed|review.revise|review.killed
+#   review.proceed|review.killed -> Analyst -> learning.complete -> Researcher
 #
-# Start:     ralph run -a -v
-#   Ralph spawns Claude with --dangerously-skip-permissions.
-#   Effort level is set to "high" in .claude/settings.local.json.
-# Continue:  ralph emit "experiment.done"
+# Start: ralph run -a -v
+# Manual event injection is available via `ralph emit`, but normal operation is event-driven from the loop.
 
 cli:
   backend: "claude"
@@ -33,6 +29,9 @@ event_loop:
   checkpoint_interval: 10
 
 core:
+  # Make Ralph's working files explicit instead of relying on defaults.
+  scratchpad: ".ralph/agent/scratchpad.md"
+  specs_dir: ".ralph/specs/"
   guardrails:
     - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies — the real question is always behavioral: 'does this produce useful output?' and 'does this advance the vision?' A metric improving without behavioral progress is not a finding. A metric degrading with behavioral progress IS a finding."
     - "ALL experiments MUST run on Apple Silicon via MLX. No CUDA. No RunPod. Target: M5 Pro 48GB."
@@ -46,8 +45,11 @@ core:
     - "BEHAVIORAL OUTCOMES OVER METRICS: PPL, cosine, accuracy are proxies. The real questions: Does routed composition produce USEFUL text? Does the system advance toward the VISION? A finding that 'PPL improved by 4%' without showing behavioral improvement is provisional at best. The project proved PPL doesn't predict task quality (r=0.08). Design experiments that test behavioral claims, not metric claims."
 
 features:
-  parallel: true
-  auto_merge: true
+  # Ralph worktree parallelism is counterproductive here:
+  # experiment claim + Turso DB already coordinate ownership, and pueue serializes actual runs.
+  # Keep one Ralph loop as the orchestrator of record.
+  parallel: false
+  auto_merge: false
 
 memories:
   inject: auto
@@ -68,7 +70,7 @@ hats:
       - "--effort"
       - "high"
       - "--model"
-      - "opus"
+      - "sonnet"
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
       - "--max-turns"
@@ -81,92 +83,9 @@ hats:
       - "experiment.done"
     default_publishes: "experiment.done"
     instructions: |
-      ## CONTEXT DISCIPLINE (CRITICAL — prevents stuck loops)
-      Do NOT use Agent() sub-agents for design or review — they grow context.
-      Instead: read files, run CLI commands, write files, emit events. ALL state on disk.
-      Max 40 tool calls per hat. If approaching limit, emit experiment.done with partial results.
-      REVISE fixes: max 15 minutes. Apply top 3 blocking fixes only. Defer rest.
-
-      ## Workflow
-
-      1. Read .ralph/current_direction.md for context.
-         If triggered by review.revise: read the experiment's REVIEW-adversarial.md,
-         apply the blocking fixes directly (edit MATH.md/PAPER.md), then re-emit experiment.done.
-         Do NOT re-run the experiment for documentation-only fixes.
-
-      2. Run: `experiment claim researcher`
-         This gives you full YAML: kill criteria with IDs, notes, deps, everything.
-
-      3. Check if run_experiment.py already exists in the experiment dir.
-         If YES: skip design, go straight to step 4 (run).
-         If NO: Write MATH.md + run_experiment.py directly (do NOT delegate to sub-agents).
-           Invoke /fast-mlx and /mlx-dev skills first.
-           Write direction to .ralph/current_direction.md.
-
-      4. Run experiment: `experiment run <id>` (waits for completion via pueue).
-         When done, read results.json. Write PAPER.md with prediction-vs-measurement table.
-
-      5. Complete: `experiment complete <id> --status supported --dir micro/models/[name]/ --k <id>:pass --k <id>:fail --evidence "summary"`
-
-      6. Emit experiment.done with key results.
-
-      ## Hypothesis generation (STRICT RULES)
-
-      Only generate new experiments if fewer than 3 open P0-P2 experiments remain.
-      Every new hypothesis MUST meet ALL of these criteria:
-
-      0. SIGREG REASONING CHAIN (apply to every hypothesis):
-         a) Am I treating SYMPTOMS or the DISEASE? If adding a 3rd+ fix, stop.
-            Find the single constraint that makes all failure modes impossible.
-         b) Ask the RIGHT QUESTION — not "how do we prevent X?" but "what is
-            the OPTIMAL structure such that X is geometrically impossible?"
-            (LeCun didn't ask "how to prevent collapse" — he asked "what is the
-            optimal embedding distribution?" Collapse prevention was a consequence.)
-         c) Derive the answer from EXISTING MATH — JL-lemma, Welch bound,
-            contraction mappings, Cramer-Wold, concentration inequalities.
-            The hard part is asking the right question, not inventing technique.
-         d) Each hyperparameter you eliminate = one more understood degree of freedom.
-         Reference: LeJEPA (arxiv 2511.08544), LeWorldModel (arxiv 2603.19312).
-      1. GROUNDED: Must cite a specific paper (arxiv ID), prior experiment result,
-         or LEARNINGS.md finding. No inventing from thin air.
-      2. RELEVANT: Must directly address a weakness found in a killed/supported
-         experiment, OR extend a proven result to close a gate.
-      3. RESEARCHED: Check `experiment query` and `experiment finding-list` for prior results.
-         Web search if the hypothesis involves a technique not in our findings database.
-      4. SCOPED: Must run on MLX Apple Silicon in < 2 hours.
-      5. FALSIFIABLE: Must have concrete kill criteria with numbers.
-
-      DO NOT generate experiments about: information theory analogies (Shannon,
-      Huffman, etc.), data structure routing (splay trees, bloom filters, etc.),
-      or any mechanism without a paper reference showing it works for LLM/LoRA.
-
-      Format for new experiment notes:
-      ```
-      TYPE: [verification | guided-exploration | frontier-extension]
-      FAILURE MODE: [what specific degenerate behavior are we preventing?]
-      PRIOR MATH: [which existing theorems/bounds apply? cite theorem + paper]
-
-      # For TYPE=verification:
-      PROOF SKETCH: [1-3 sentence outline of the formal proof to be written in MATH.md]
-      PREDICTIONS: [what specific outcomes will the proof predict?]
-
-      # For TYPE=guided-exploration:
-      PROVEN FRAMEWORK: [which theorem/result is the exploration operating within?]
-      UNKNOWN: [what parameter/function/constant is unknown? what does the math predict about it?]
-
-      # For TYPE=frontier-extension:
-      PROVEN RESULT: [which theorem is being extended?]
-      GAP: [what new math would be needed to formalize the extension?]
-
-      MOTIVATION: [which killed/supported experiment motivates this]
-      LITERATURE: [arxiv ID or NotebookLM source supporting the approach]
-      HYPOTHESIS: [one falsifiable sentence]
-      KILL CRITERIA: K1: ... K2: ...
-      ```
-
-      ## Fallback handling
-      If a gate experiment is KILLED, check for a matching exp_fallback_g*_ experiment.
-      These are pre-designed Plan B experiments. Claim and run the fallback next.
+      Read `ralph/hats/researcher.md` first and follow it for role-specific behavior.
+      Treat `AGENTS.md` and loaded skills as the source of domain policy and CLI knowledge.
+      Use event payloads as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
 
   # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
   reviewer:
@@ -176,7 +95,7 @@ hats:
       - "--effort"
       - "high"
       - "--model"
-      - "opus"
+      - "sonnet"
       - "--max-turns"
       - "20"
     triggers:
@@ -187,30 +106,9 @@ hats:
       - "review.killed"
     default_publishes: "review.proceed"
     instructions: |
-      ## CONTEXT DISCIPLINE
-      Review DIRECTLY — do NOT spawn adversarial-reviewer sub-agent (grows context).
-      Read MATH.md + PAPER.md + results.json from disk. Write REVIEW-adversarial.md. Emit event.
-      Max 20 tool calls. Max 15 minutes. If review is complex, write top 3 issues and PROCEED.
-
-      ## Review Checklist (quick)
-
-      1. Read .ralph/current_direction.md → find experiment dir.
-      2. Read experiment's MATH.md, PAPER.md, results.json.
-      3. Check:
-         - Does PAPER.md have prediction-vs-measurement table? (REVISE if missing)
-         - Do kill criteria results match the evidence? (KILL if fabricated)
-         - Is the finding status appropriate for the experiment type?
-         - Are there obvious math errors or unsupported claims?
-      4. Write REVIEW-adversarial.md (max 1 page) with verdict: PROCEED, REVISE (max 3 fixes), or KILL.
-      5. Route:
-         - REVISE: emit review.revise with ≤3 numbered fixes.
-         - KILL: `experiment complete <id> --status killed ...` + `experiment finding-add ...` → emit review.killed.
-         - PROCEED: `experiment finding-add ...` → emit review.proceed.
-
-      ## REVISE discipline
-      Max 3 blocking fixes per REVISE. If more issues exist, note them as non-blocking
-      in REVIEW-adversarial.md. The researcher will apply the 3 blocking fixes and re-emit.
-      Do NOT create REVISE cycles longer than 2 rounds — on round 3, PROCEED with caveats.
+      Read `ralph/hats/reviewer.md` first and follow it for role-specific behavior.
+      Review from disk directly, not via sub-agents.
+      Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
 
   # ── Analyst: multi-angle research sweep after every result ───────────────
   analyst:
@@ -231,19 +129,6 @@ hats:
     default_publishes: "learning.complete"
     max_activations: 50
     instructions: |
-      ## CONTEXT DISCIPLINE
-      Quick pass ONLY — max 10 tool calls, max 10 minutes.
-      Read PAPER.md + REVIEW-adversarial.md. Write LEARNINGS.md. Emit event. Done.
-      Do NOT spawn sub-agents. Do NOT query NotebookLM (too slow for the loop).
-      Web search ONLY if the finding is a KILL and you need to find why it failed.
-
-      ## Workflow
-
-      1. Read .ralph/current_direction.md → find experiment dir.
-      2. Read PAPER.md + REVIEW-adversarial.md.
-      3. Write LEARNINGS.md (max 30 lines):
-         - Core Finding (1-2 sentences)
-         - Why (1-2 sentences with arxiv ID if known)
-         - Implications for Next Experiment (1-2 sentences)
-      4. If KILLED: add 1 reference via `experiment ref-add` if relevant paper found.
-      5. Emit learning.complete with experiment name + 1-line finding.
+      Read `ralph/hats/analyst.md` first and follow it for role-specific behavior.
+      Keep this pass short and synthesis-focused.
+      Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.

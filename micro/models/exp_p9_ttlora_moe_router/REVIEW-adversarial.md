@@ -1,45 +1,55 @@
 # REVIEW-adversarial.md -- exp_p9_ttlora_moe_router
 
-**Verdict: REVISE** (2 blocking fixes)
+**Verdict: PROCEED**
 
-## Pre-Review Summary
+## Round 1 (pre-experiment): REVISE -- 2 blocking fixes (PAPER.md missing, code data caveat)
+## Round 2 (post-experiment): PROCEED -- both fixes applied, experiment complete
 
-Experiment is still running in pueue (task 0, training adapter 1/5 at review time). PAPER.md and results.json do not exist yet. This review covers MATH.md methodology and run_experiment.py implementation.
+---
 
-## MATH.md Assessment
+## Checklist
 
-**Theorem 1 (Domain Separability):** Acceptable for guided exploration. The JL-lemma argument shows dimensional sufficiency (d=2560 >> 161), but the "proof" is a plausibility argument — it doesn't constructively show that Gemma 4's hidden states separate these 5 MMLU domains. The constant c is undefined. The real evidence is empirical (LLMs encode domain information, and the cited paper reports 99-100% routing accuracy with <=6 experts). For a guided exploration where the unknown IS separability, this framing is appropriate.
+| Check | Status |
+|---|---|
+| Prediction-vs-measurement table | Present, all 3 kill criteria |
+| Kill criteria match evidence | Verified against results.json |
+| Finding status appropriate | Yes -- "supported" for guided exploration |
+| Math errors | One non-blocking concern (see below) |
 
-**Theorem 2 (Size Bound):** Correct. Direct parameter counting.
+## Verified Claims
 
-**Theorem 3 (MoE Advantage):** The formula Delta >= (alpha - 1/K)(q_bar - q_off) is algebraically correct. The predicted values (q_bar=60%, q_off=35%) are guesses with no grounding — they could be wildly off. The formula itself is the useful contribution; the specific prediction of 17.5pp is aspirational. Acceptable for guided exploration.
+1. **K1360 PASS:** Router 97.7% matches results.json `router_eval_acc: 97.7`. Per-domain
+   breakdown consistent across PAPER.md and results.json. Prediction (95%) met.
 
-## Implementation Assessment
+2. **K1361 FAIL:** MoE 25.8% vs SingleBest 27.2% = -1.4pp. Cross-domain accuracy matrix
+   in results.json confirms all adapters at random (~25%). Oracle routing = 25.1% confirms
+   this is not a routing problem. Honest reporting.
 
-The code is well-structured:
-- Sequential adapter training with proper reinit between domains
-- Router trained on non-overlapping data (offset from adapter training set)
-- Logit-based MCQ eval (correct for MMLU)
-- Cross-domain accuracy matrix + oracle routing comparison
-- Memory management follows MLX patterns
+3. **K1362 PASS:** 814,434 bytes in results.json = 795 KB. Slight overshoot vs 652 KB
+   prediction (format overhead in saved files). PAPER.md reports correctly.
 
-## Blocking Fixes
+## Non-Blocking Concerns
 
-**Fix 1: Experiment not complete — PAPER.md required.**
-PAPER.md with prediction-vs-measurement table is mandatory per proof-first protocol. Wait for pueue task 0 to finish, then write PAPER.md with:
-- Prediction vs measurement for all 3 kill criteria
-- Cross-domain accuracy matrix
-- Router confusion matrix (which domains get misrouted)
-- Comparison to oracle routing (upper bound on MoE quality)
+**1. Theorem 3 input assumptions were ungrounded.**
+MATH.md assumed q_bar ~ 60% and q_off ~ 35% without measurement basis. Finding #516
+measured PPL quality retention (84.4%), not MCQ accuracy. The experiment itself proved
+PPL doesn't predict MCQ accuracy (r=0.08 from prior work). A tighter MATH.md would have
+flagged this as the key unknown and made the prediction conditional: "IF q_bar >= 60%
+THEN Delta >= 17.5pp." This would have made K1361's failure mode a predicted possibility
+rather than a surprise. PAPER.md correctly diagnoses this post-hoc, so no REVISE needed.
 
-**Fix 2: Address code domain data scarcity in PAPER.md.**
-The code domain has only 412 train / 42 eval examples (vs 1000/100 target). This affects:
-- Adapter quality for code (fewer training steps with meaningful data)
-- Router accuracy for code (fewer hidden state examples)
-- Statistical reliability of code eval (42 examples = +-15% confidence interval)
-PAPER.md must flag this as a caveat and report code results separately.
+**2. Base model MCQ accuracy not measured.**
+The experiment never measures the base model (no adapter) MCQ accuracy. If base = 25%,
+then adapters add nothing. If base = 35%, adapters actually hurt. This baseline would
+strengthen the impossibility argument. Not blocking because the conclusion (adapters at
+random) is clear regardless.
 
-## Non-Blocking Notes
+## What the Review Validates
 
-- Theorem 1 would be stronger citing a specific probing study (e.g., Conneau et al. "What you can cram into a single $&!#* vector") rather than JL-lemma for the separability claim. The JL-lemma guarantees embedding capacity, not that the model uses it.
-- The 17.5pp MoE advantage prediction is likely too optimistic — it assumes q_bar=60% and q_off=35%, but off-domain accuracy on MMLU MCQ with a 4-bit model could be higher (random = 25%, but LLMs have general knowledge that inflates off-domain scores).
+- Router mechanism is proven (97.7%, 12K params, 25 KB). Reusable component.
+- Impossibility structure is correct: v_proj-only 64K TT-LoRA is below the behavioral
+  change threshold. The 4 proposed next steps (multi-projection, higher rank, FFN, full LoRA)
+  are the right design space to explore.
+- PAPER.md is well-structured: prediction table, root cause analysis, data scarcity caveat,
+  impossibility structure. Meets proof-first standards.
+- Prior round 1 fixes (PAPER.md + code data caveat) both applied.

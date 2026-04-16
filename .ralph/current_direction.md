@@ -1,28 +1,55 @@
-# Current Direction: P9.B2 TT-LoRA MoE Router
+# Current Direction: P11.G0 GRPO Improve — Awaiting Reviewer
 
-## Status
-STARTING -- exp_p9_ttlora_moe_router
+## Orphan Fix (this iteration)
+- exp_p11_grpo_improve: PAPER.md written, emitting experiment.done → Reviewer
+- exp_p11_thinkpo_polish: still needs PAPER.md + experiment.done (next iteration)
 
-## What We're Testing
-Can a linear router on base model hidden states correctly select among 5 TT-LoRA
-domain experts (math/code/medical/legal/finance)?
+## Previous State: P11 Experiments Running
 
-## Design
-- 5 MMLU domain groups: math (5 subjects), code (4), medical (6), legal (3), finance (4)
-- TT-LoRA r=6 on v_proj, 500 steps per domain adapter (~44 min each)
-- Linear router: 2560 -> 5 (12,805 params) trained on base model hidden states
-- Evaluation: logit-based MCQ accuracy (no generation needed)
+## Pueue Queue Status
+- Task 0: exp_p11_reasoning_sft_s1k (RUNNING since Apr 13 23:12 — base eval MMLU-Pro thinking)
+- Task 1: exp_p11_baseline_eval (QUEUED — will run after s1K)
+- Task 2: exp_p11_plan_and_solve_prompt (QUEUED — will run after baseline_eval)
 
-## Kill Criteria
-- K1360: Router expert selection accuracy >= 90% on 5 domains
-- K1361: Routed TT-LoRA MoE outperforms single best TT-LoRA by >= 5pp avg
-- K1362: Total system size (5 experts + router) < 2 MB
+## Pending PAPER.md writes
+When each task completes, read results.json and write PAPER.md + complete in DB:
+- s1K: MATH.md exists, kill criteria K1515-K1518
+- baseline_eval: MATH.md + LEARNINGS.md exist, kill criteria K1505-K1507
+- plan_and_solve: MATH.md just written, kill criteria K1529-K1531
 
-## Predictions (MATH.md)
-- Router accuracy >= 95% (vocabulary separation in 2560-d hidden space)
-- MoE advantage ~17.5pp (routing premium with alpha >= 0.9)
-- Total size ~652 KB (5 * 154 KB + 25 KB router)
+## plan_and_solve Kill Criteria
+- K1529: best prompt + thinking >= 64% MMLU-Pro (>= 2pp over 62.1% baseline)
+- K1530: PS+ >= PS accuracy (self-check adds value)
+- K1531: best prompt output token count <= 2x direct-answer count
 
-## Prior
-- Finding #516: TT-LoRA 84.4% quality at 12.4x compression (154 KB adapter)
-- arXiv:2504.21190: TT-LoRA MoE reports 99-100% routing accuracy with <=6 experts
+## baseline_eval Kill Criteria
+- K1505: All 5 adapters evaluated on GSM8K + MMLU-Pro (thinking ON and OFF)
+- K1506: Base model MMLU-Pro+thinking ≈ 62.1% (Finding #530 validation)
+- K1507: registry.json updated with all eval scores
+
+## exp_p11_w4a16_verification (pueue task 4, QUEUED)
+- MATH.md + run_experiment.py written, LEARNINGS.md written
+- Kill: K1538 (confirm W4A16), K1539 (N/A if W4A16), K1540 (8-bit >= 4-bit + 5pp)
+
+## exp_p11_reasoning_sft_limo (pueue task 5, QUEUED)
+- MATH.md written: capability-boundary gradient maximization theorem (arXiv:2502.03387)
+- run_experiment.py written: GAIR/LIMO dataset, correct Gemma 4 thinking regex
+- Kill: K1493 (≥65% MMLU-Pro), K1494 (≥85% GSM8K), K1495 (<1h training)
+
+## CRITICAL BUG IN s1K (task 0)
+- Phase 4a base eval: 12.5% / 0 thinking chars → INVALID
+- Cause: strip_thinking uses <think>...</think> but Gemma 4 uses <|channel>thought...<channel|>
+- Phase 4b adapter: same bug but results may be partially valid
+- PAPER.md should document this and note re-run needed
+
+## exp_p8_xgrammar_constrained_generation (pueue task 7, QUEUED)
+- MATH.md + run_experiment.py written: self-repair grammar constraint protocol
+- Tests: direct vs think-then-code vs self-repair on 20 Python problems
+- Kill: K1333 (≤2% syntax errors after N=3 retries), K1334 (<5pp accuracy drop), K1335 (<5% overhead)
+- cite: arXiv:2411.15100 (XGrammar), arXiv:2601.07525 (Think-then-constrain)
+
+## Next unclaimed work
+- exp_p11_grpo_reasoning (open) → claim after LIMO design complete
+
+## Key path fix
+run_experiment.py files need REPO_ROOT = Path(__file__).parent.parent.parent (3 levels up from micro/models/exp_name/)

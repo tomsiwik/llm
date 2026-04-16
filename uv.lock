@@ -1904,6 +1904,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/df/b3/8c2923ad4c4d911307e20ab9c7d7869d3811b5a76fe6dbe53678aafbeb04/lm_eval-0.4.11-py3-none-any.whl", hash = "sha256:9c9945475a715558649a38ffcb90f46e7bd23a849524a5e838f249161b030517", size = 8744826, upload-time = "2026-02-13T20:22:56.317Z" },
 ]
 
+[package.optional-dependencies]
+api = [
+    { name = "aiohttp" },
+    { name = "requests" },
+    { name = "tenacity" },
+    { name = "tiktoken" },
+    { name = "tqdm" },
+]
+
 [[package]]
 name = "lm-format-enforcer"
 version = "0.11.3"
@@ -1938,6 +1947,7 @@ version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "autograd" },
+    { name = "lm-eval", extra = ["api"] },
     { name = "mlx-lm" },
     { name = "numpy" },
     { name = "python-dotenv" },
@@ -1991,6 +2001,7 @@ requires-dist = [
     { name = "datasets", marker = "extra == 'train'" },
     { name = "httpx", marker = "extra == 'serverless'" },
     { name = "lm-eval", marker = "extra == 'eval'", specifier = ">=0.4" },
+    { name = "lm-eval", extras = ["api"], specifier = ">=0.4.11" },
     { name = "mlx", marker = "extra == 'micro'", specifier = ">=0.22" },
     { name = "mlx-lm", specifier = ">=0.31.2" },
     { name = "mlx-lm", marker = "extra == 'micro'", specifier = ">=0.21" },
@@ -4704,6 +4715,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/80/cc/44f2d81d8f9093aad81c3467a5bf5718d2b5f786e887b6e4adcfc17ec6b9/tcolorpy-0.1.7.tar.gz", hash = "sha256:0fbf6bf238890bbc2e32662aa25736769a29bf6d880328f310c910a327632614", size = 299437, upload-time = "2024-12-29T15:24:23.847Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/05/a2/ed023f2edd1e011b4d99b6727bce8253842d66c3fbf9ed0a26fc09a92571/tcolorpy-0.1.7-py3-none-any.whl", hash = "sha256:26a59d52027e175a37e0aba72efc99dda43f074db71f55b316d3de37d3251378", size = 8096, upload-time = "2024-12-29T15:24:21.33Z" },
+]
+
+[[package]]
+name = "tenacity"
+version = "9.1.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/47/c6/ee486fd809e357697ee8a44d3d69222b344920433d3b6666ccd9b374630c/tenacity-9.1.4.tar.gz", hash = "sha256:adb31d4c263f2bd041081ab33b498309a57c77f9acf2db65aadf0898179cf93a", size = 49413, upload-time = "2026-02-07T10:45:33.841Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/c1/eb8f9debc45d3b7918a32ab756658a0904732f75e555402972246b0b8e71/tenacity-9.1.4-py3-none-any.whl", hash = "sha256:6095a360c919085f28c6527de529e76a06ad89b23659fa881ae0649b867a9d55", size = 28926, upload-time = "2026-02-07T10:45:32.24Z" },
 ]
 
 [[package]]

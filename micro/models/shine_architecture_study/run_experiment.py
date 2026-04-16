@@ -202,8 +202,7 @@ def count_params(model: nn.Module) -> int:
 def component_breakdown(model: M2PTransformer) -> dict:
     """Break down parameters by component."""
     def sz(m):
-        leaves, _ = mx.tree_util.tree_flatten(m.parameters())
-        return sum(v.size for v in leaves)
+        return sum(v.size for _, v in mlx.utils.tree_flatten(m.parameters()))
     return {
         "pos_layer": model.pos_layer.weight.size,
         "pos_token": model.pos_token.weight.size,
@@ -224,15 +223,7 @@ def run_architecture_agnosticism_check(model: M2PTransformer, config_name: str) 
         "M2PTransformer", "M2PLayer", "M2PAttention", "M2PFFN",
         "LayerNorm", "Linear", "Embedding", "list",
     }
-    found_types = set()
-
-    def collect_types(module):
-        found_types.add(type(module).__name__)
-        for child in module.children():
-            if isinstance(child, nn.Module):
-                collect_types(child)
-
-    collect_types(model)
+    found_types = {type(m).__name__ for _, m in model.named_modules()}
 
     # Check for any architecture-specific components
     qwen_specific = {"RotaryEmbedding", "RMSNorm", "GQA", "SwiGLU", "MoE", "Expert"}

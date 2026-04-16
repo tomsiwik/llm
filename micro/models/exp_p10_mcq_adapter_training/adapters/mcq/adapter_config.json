@@ -1,0 +1,10 @@
+{
+  "rank": 6,
+  "scale": 1.0,
+  "dropout": 0.0,
+  "keys": [
+    "self_attn.v_proj",
+    "self_attn.o_proj"
+  ],
+  "num_layers": 42
+}
