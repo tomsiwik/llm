@@ -1,0 +1,25 @@
+model: mlx-community/gemma-4-e4b-it-4bit
+train: true
+fine_tune_type: lora
+data: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p11_reasoning_sft_s1k/data
+adapter_path: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p11_cloq_calibrated_init/adapters/cloq_trained
+resume_adapter_file: /Users/tom/Code/tomsiwik/llm/micro/models/exp_p11_cloq_calibrated_init/adapters/cloq_init/adapters.safetensors
+num_layers: 16
+batch_size: 1
+iters: 1000
+val_batches: 10
+save_every: 200
+steps_per_report: 10
+steps_per_eval: 200
+seed: 42
+grad_checkpoint: true
+learning_rate: 1e-05
+mask_prompt: false
+max_seq_length: 2048
+lora_parameters:
+  rank: 8
+  scale: 1.0
+  dropout: 0.0
+  keys:
+    - self_attn.v_proj
+    - self_attn.o_proj

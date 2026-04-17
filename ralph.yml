@@ -21,7 +21,7 @@ adapters:
 
 event_loop:
   # prompt_file removed — hat instructions are self-contained
-  # Project context: ../VISION_P1.md, ../ARCHITECTURE_P1.md
+  # Framework + current focus: PLAN.md
   starting_event: "research.start"
   completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 1000
@@ -34,18 +34,19 @@ core:
   scratchpad: ".ralph/agent/scratchpad.md"
   specs_dir: ".ralph/specs/"
   guardrails:
-    - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies — the real question is always behavioral: 'does this produce useful output?' and 'does this advance the vision?' A metric improving without behavioral progress is not a finding. A metric degrading with behavioral progress IS a finding."
-    - "ALL experiments MUST run on Apple Silicon via MLX. No CUDA. No RunPod. Target: M5 Pro 48GB."
-    - "Invoke /fast-mlx and /mlx-dev skills before writing ANY MLX code."
+    - "READ `PLAN.md` FIRST. Part 1 = framework principles (stable); Part 2 = current research focus (the 'what' for now). If Part 2 references parent-dir deep docs for architecture detail, read those too — do not duplicate them into the repo."
+    - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies. A metric improving without behavioral progress is not a finding."
     - "Use `experiment claim <worker>` to pick work. Use `experiment complete <id> ...` to finish."
-    - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior LEARNINGS.md finding."
-    - "Before implementing, check `experiment query` for prior results on the same topic. NotebookLM is available but optional — do NOT use it in the main loop (too slow). Use it in manual sessions only."
-    - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions), and how it connects to our architecture. No buzzword recitation."
-    - "Architecture reference: https://sebastianraschka.com/llm-architecture-gallery/ — compare our design against production models."
-    - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, the experiment is resurrected with a structural fix, not a hyperparameter tweak."
-    - "BEHAVIORAL OUTCOMES OVER METRICS: PPL, cosine, accuracy are proxies. The real questions: Does routed composition produce USEFUL text? Does the system advance toward the VISION? A finding that 'PPL improved by 4%' without showing behavioral improvement is provisional at best. The project proved PPL doesn't predict task quality (r=0.08). Design experiments that test behavioral claims, not metric claims."
-    - "ANTI-STUCK: REVISE fixes max 30 min. If >3 blocking fixes, apply top 3 and defer rest. Each hat transition <30 min. If stuck, emit next event with [TIMEOUT] prefix. Never retry failed API call >3 times."
-    - "PROJECT CONTEXT: Read ../VISION_P1.md and ../ARCHITECTURE_P1.md for current architecture. This is a Gemma 4 + PoLAR adapter + Grassmannian composition system."
+    - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior finding."
+    - "Before implementing, check `experiment query` for prior results on the same topic."
+    - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions). No buzzword recitation."
+    - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, resurrect with a structural fix — not a hyperparameter tweak."
+    - "BEHAVIORAL OUTCOMES OVER METRICS: measured r≈0.08 between PPL and task quality in this codebase. Design experiments that test behavioral claims, not metric claims."
+    - "AUTONOMY: NEVER wait for user input. Ralph runs unattended. If a decision is ambiguous, make the most defensible call and log the assumption in MATH.md/PAPER.md/REVIEW-adversarial.md/LEARNINGS.md. Do not ask clarifying questions via event payload. Do not pause. Always pick and proceed."
+    - "ANTI-STUCK: REVISE fixes max 30 min. If >3 blocking fixes, apply top 3 and defer rest. Each hat transition <30 min. Never retry a failed API call >3 times."
+    - "VERDICT CONSISTENCY: before `experiment complete --status supported`, verify PLAN.md §1 checklist (results.json verdict, all_pass, PAPER.md verdict line, is_smoke flag, KC git-diff, antipattern match). Never silently upgrade a KILLED result to supported."
+    - "Platform/model specifics (target hardware, base model, framework, required skills) live in PLAN.md Part 2, not here. Update Part 2 when the target changes; guardrails stay generic."
+    - "INVOKE REQUIRED SKILLS BEFORE WRITING CODE. PLAN.md Part 2 lists the skills required for the current target platform (e.g. `/mlx-dev`, `/fast-mlx` for MLX). Skipping them is the single biggest cause of broken code in this repo's history — the audit confirms it. If the skills aren't invoked, the code is not trusted; the reviewer will REVISE."
 
 features:
   # Ralph worktree parallelism is counterproductive here:
@@ -57,7 +58,7 @@ features:
 memories:
   inject: auto
   budget: 2000
-  file: ".ralph/memories.md"
+  file: ".ralph/agent/memories.md"
   filter:
     recent: 60
 
@@ -65,15 +66,15 @@ tasks:
   enabled: true
 
 hats:
-  # ── Researcher: design + run experiments on Apple Silicon ──────────────
+  # ── Researcher: design + run experiments ────────────────────────────────
   researcher:
     name: "🔬 Researcher"
-    description: "Designs and runs micro experiments on Apple Silicon MLX. Writes MATH.md, implements, runs, writes PAPER.md."
+    description: "Designs and runs micro experiments per PLAN.md. Writes MATH.md, implements, runs, writes PAPER.md."
     backend_args:
       - "--effort"
-      - "high"
+      - "xhigh"
       - "--model"
-      - "sonnet"
+      - "opus"
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
       - "--max-turns"
@@ -86,19 +87,19 @@ hats:
       - "experiment.done"
     default_publishes: "experiment.done"
     instructions: |
-      Read `ralph/hats/researcher.md` first and follow it for role-specific behavior.
-      Treat `AGENTS.md` and loaded skills as the source of domain policy and CLI knowledge.
+      Read `.ralph/hats/researcher.md` first and follow it for role-specific behavior.
+      Read `PLAN.md` for framework principles (Part 1) and current research focus (Part 2).
       Use event payloads as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
 
-  # ── Reviewer: delegate to adversarial-reviewer sub-agent ────────────────
+  # ── Reviewer: adversarial checklist, writes verdict ─────────────────────
   reviewer:
     name: "🔴 Reviewer"
     description: "Reviews MATH.md + PAPER.md directly, writes REVIEW-adversarial.md, routes verdict."
     backend_args:
       - "--effort"
-      - "high"
+      - "xhigh"
       - "--model"
-      - "sonnet"
+      - "opus"
       - "--max-turns"
       - "20"
     triggers:
@@ -109,19 +110,19 @@ hats:
       - "review.killed"
     default_publishes: "review.proceed"
     instructions: |
-      Read `ralph/hats/reviewer.md` first and follow it for role-specific behavior.
+      Read `.ralph/hats/reviewer.md` first and follow it for role-specific behavior.
       Review from disk directly, not via sub-agents.
       Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
 
-  # ── Analyst: multi-angle research sweep after every result ───────────────
+  # ── Analyst: synthesis, appends antipatterns to memory ──────────────────
   analyst:
     name: "🧠 Analyst"
     description: "Writes LEARNINGS.md with literature context. Quick pass, max 10 min."
     backend_args:
       - "--effort"
-      - "medium"
+      - "xhigh"
       - "--model"
-      - "sonnet"
+      - "opus"
       - "--max-turns"
       - "10"
     triggers:
@@ -132,6 +133,6 @@ hats:
     default_publishes: "learning.complete"
     max_activations: 50
     instructions: |
-      Read `ralph/hats/analyst.md` first and follow it for role-specific behavior.
+      Read `.ralph/hats/analyst.md` first and follow it for role-specific behavior.
       Keep this pass short and synthesis-focused.
       Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.

@@ -4,6 +4,7 @@
 Read the completed paper and review, then write compact `LEARNINGS.md` notes with implications for the next experiment.
 
 ## Context discipline
+- **Never wait for user input.** Draft `LEARNINGS.md` from the evidence on disk; emit `learning.complete` unconditionally.
 - Quick pass only.
 - Max 10 tool calls.
 - Max 10 minutes.
@@ -28,7 +29,9 @@ Read the completed paper and review, then write compact `LEARNINGS.md` notes wit
 4. If the experiment was killed and a relevant paper explains the failure mode:
    - add one reference with `experiment ref-add`
 
-5. Emit `learning.complete` with:
+5. **Antipattern capture.** If the REVIEW flagged a process bug that would likely recur (copy-pasted scaffolding, hard-coded KC pass, scale=20, tautological routing, thinking-mode truncation, KC-swap-after-failure, dispatch-kill mislabelled as killed, cited-not-measured baseline, etc.), append a new memory to `.ralph/agent/memories.md` with the frontmatter `<!-- type: fix | tags: ... | source: <exp_id> -->`. These auto-inject into every subsequent hat activation (see memories config in `ralph.yml`, budget=2000). Do NOT duplicate an existing `mem-antipattern-*` — update or add tags instead.
+
+6. Emit `learning.complete` with:
    - experiment id
    - short result summary
    - one-line implication for next work
