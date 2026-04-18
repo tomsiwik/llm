@@ -1,53 +1,36 @@
-# Current direction (2026-04-18)
+# Current direction (2026-04-19)
 
 ## Last completed
-- `exp_followup_m2p_cross_attention_conditioning` → **KILLED**
-  (researcher this iteration). Replaces mean-pool additive memory
-  with cross-attention context conditioning; tests Theorem 1 Step 5
-  self-calibration. Dir:
-  `micro/models/exp_followup_m2p_cross_attention_conditioning/`.
-  - Tags: `routing, audit-2026-04-17, followup` (no audit-rerun tag —
-    fresh design + fresh code).
-  - MATH.md pre-registered in commit `201a762`; `git diff MATH.md`
-    clean between pre-reg and completion. KCs K1556a/b/c frozen.
-  - K1556a FAIL: `CV_cross_attn = 0.0200` < 0.05 threshold.
-  - K1556b PASS: `CV_mean_pool = 0.0153` ≤ 0.02 (reproduces parent
-    kill `exp_m2p_scale_calibrated` Finding #343 within the expected
-    noise band; 0.0093 → 0.0153 shift attributed to `||B||` regime
-    difference between runs).
-  - K1556c FAIL: `ratio = 1.31` < 3× threshold predicted by Lemma 2
-    Jacobian rank bound (8 / 1).
-  - P4 hard/easy ratio = 0.971 (predicted ≥ 1.10) — wrong sign, same
-    as parent kill.
-  - P5 gen-degradation delta = 0.80 pp (predicted ≤ 10 pp) — PASS,
-    confirms the architecture change does not move the KKT operating
-    point of `L_total`.
-  - **Narrowed closure rule.** Parent kill's closure C1
-    (`additive-context-injection-blocks-calibration`) is refined to
-    `additive-pooled-concat-unpacking-blocks-calibration`: the
-    mean-pool centroid is necessary for the collapse but the `B_proj`
-    flat-concat unpacking head and/or post-cross-attn self-attn
-    re-pooling dominates the remaining CV budget. Rank-increasing the
-    conditioning layer is necessary-but-not-sufficient.
-  - Artifacts: MATH.md (locked, 3 lemmas + 5 predictions + 3 KCs),
-    run_experiment.py (fresh; reuses base GPT / Grassmannian / loss
-    scaffolding from sibling, unique M2P classes
-    `M2PMeanPool` + `M2PCrossAttn` + `CrossAttention`), results.json
-    (verdict=killed, all_pass=false, is_smoke=false), PAPER.md (full
-    prediction-vs-measurement table + verdict-consistency pre-flight).
-  - Next-experiment seeds (not generated here — analyst/researcher
-    downstream): (i) per-slot independent `B_proj` heads, (ii) skip
-    connection from cross-attention output to `B_proj` bypassing the
-    2 self-attn blocks. Both target the newly-identified bottleneck.
-  - Queue state: `experiment claim researcher` pulled this one;
-    `experiment complete --status killed` ran cleanly. Two other
-    experiments remain `active` (`exp_followup_grassmannian_native_macro`,
-    `exp_followup_lora_scale_safe_sweep`) — likely stuck from a prior
-    iteration. Next researcher should either inspect them or claim
-    fresh.
+- `exp_followup_sequential_activation_compose_real` → **KILLED (K_vacate)**
+  (researcher, this iteration). Tests model-level sequential pipeline
+  `h = personal_forward(domain_forward(base_forward(x)))` with the
+  existing q_proj adapters.
+  Dir: `micro/models/exp_followup_sequential_activation_compose_real/`.
+  - Tags: `audit-2026-04-17, followup, composition-bug`.
+  - MATH.md pre-registered in commit `51e506e`; run_experiment.py in
+    `ea8ae1e`; K_vacate branch added pre-run.
+  - **Thm 1 PASS (Phase 0)**: personal adapter loaded; shape check
+    confirms `d_in=2560`, `d_out=2048` on q_proj. Weight-space and
+    per-layer activation-space sequential composition architecturally
+    infeasible (cross-term dims don't match).
+  - **K_vacate triggered**: parent math adapter at
+    `exp_p1_t2_single_domain_training/adapters/math/adapters.safetensors`
+    does NOT exist on disk (gitignored, not recoverable). Behavioural
+    KCs K1563a (pipeline style ≥ 24%) and K1563b (pipeline MCQ ≥ 15%)
+    could not be evaluated.
+  - Semantic verdict: PROVISIONAL (smoke + K_vacate). DB-level status
+    is `killed` because `experiment complete` CLI accepts only
+    supported|proven|killed. Documented explicitly in PAPER.md.
+  - Same infrastructure blocker as `exp_followup_hypernetwork_residual`
+    (2026-04-18): gitignored parent adapter artefacts. One rerun of
+    `exp_p1_t2_single_domain_training` at LORA_SCALE=5 unblocks both
+    follow-ups.
 
-## Cross-reference
-Refines parent kill `exp_m2p_scale_calibrated` (Finding #343,
-CV=0.0093). Same closure family, narrower rule. Sibling:
-`additive-context-injection-blocks-calibration` →
-`additive-pooled-concat-unpacking-blocks-calibration`.
+## Infrastructure blocker (RE-FLAGGED)
+Same as 2026-04-18: parent adapter artefacts (math/code/medical from
+exp_p1_t2_single_domain_training, and the 24 BitNet adapters from
+exp_real_data_25_domain_adapters) are gitignored and not on disk.
+Any follow-up depending on these adapters will K_vacate. Fix: spawn
+`exp_p1_t2_single_domain_training_rerun` and
+`exp_real_data_25_domain_adapters_rerun` at LORA_SCALE=5 to regenerate
+artefacts. Then rerun affected followups at full scale (SMOKE_TEST=0).

@@ -1,6 +1,18 @@
 # PAPER.md — exp_followup_sequential_activation_compose_real
 
-## Verdict: PROVISIONAL (K_vacate active)
+## Verdict: KILLED (K_vacate; Thm 1 structural PASS)
+
+The DB-level status is `killed` (the `experiment complete` CLI accepts
+only `supported|proven|killed`; `provisional` is not a valid enum value
+for that command). The appropriate semantic classification of this run
+is **PROVISIONAL** with `K_vacate_active=true` — Thm 1 passed structurally
+but the behavioral KCs could not be evaluated. For DB consistency we map
+this to `killed` with `--k 1563:inconclusive`, and document the
+semantics here so the analyst (and any sibling review) does not treat
+this as a falsification of sequential pipeline composition. It is a
+*vacate*, not a *falsification*.
+
+## Semantic Verdict: PROVISIONAL (K_vacate active)
 
 **Headline.** Thm 1 (architectural infeasibility of weight/activation-space
 sequential LoRA composition on `q_proj`) verified via loaded-adapter shape
