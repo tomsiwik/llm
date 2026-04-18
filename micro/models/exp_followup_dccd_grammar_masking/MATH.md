@@ -121,8 +121,19 @@ need revision.
 
 ## Assumptions
 
-- Phase 1 medical adapter adapters.safetensors at
-  `micro/models/exp_p1_t2_single_domain_training/adapters/medical/` (verified present).
+- **Adapter availability (runtime-contingent).** Phase 1 uses the medical q_proj
+  adapter at `micro/models/exp_p1_t2_single_domain_training/adapters/medical/`
+  IF `adapters.safetensors` is present. Pre-first-run check revealed the
+  safetensors file is missing (only `adapter_config.json` remains, confirming
+  parent audit note "medical q_proj adapter deleted"). Phase 1 therefore falls
+  back to the base model. This *strictly weakens* the Phase 1 draft's medical
+  content; the K1558b threshold (7.4 keywords) was set assuming a trained
+  adapter, so K1558b is interpreted as **provisional** — the measurement is
+  still recorded and compared to the parent-era 7.4 threshold, but the verdict
+  is capped at `provisional` when the adapter is unavailable. Structural
+  claims (K1558a from Theorem 1, K1558c from Theorem 3) do not depend on the
+  draft source and remain testable. This amendment is pre-registered before
+  the first run, not edited afterwards.
 - N_EVAL = 10 for full run (parent-matched); SMOKE_TEST=1 uses N_EVAL=3.
 - SOAP grammar is the minimal four-section FSM (S → O → A → P); substructure
   inside each section is unconstrained.
