@@ -107,3 +107,34 @@ The experiment correctly identifies its own failure modes and the kill on K2 is 
 4. **The "data scale is the fundamental bottleneck" claim is correct** but the convex-combination architecture is an additional, independent bottleneck that the paper underemphasizes. A direct-generation hypernetwork would fail differently (overfit to 24 examples) but would at least make K2 a meaningful test.
 
 No revisions warranted -- the experiment is dead and should remain killed. The NN retrieval finding is already subsumed by the softmax router results. The hypernetwork direction requires orders of magnitude more training data than the SOLE architecture can provide.
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+Experiment re-queued under `audit-2026-04-17-rerun/lora-scale`. Researcher applied a **mathematical closure**, not a rerun. Reviewing the closure for soundness.
+
+### Adversarial checklist on closure
+- (a) results.json verdict=KILLED; proposed status=killed. **CONSISTENT.**
+- (b) K2 fail=true, status=killed. **CONSISTENT.**
+- (c) PAPER.md Addendum verdict line: "KILLED preserved, no rerun required." **CONSISTENT.**
+- (d) `is_smoke` not set; this is a closure, not a run. N/A.
+- (e) MATH.md KCs unchanged (K1 thr 3.0, K2 thr 0.5, K3 48GB). Addendum is in PAPER.md only. **No KC-swap.**
+- (f) Tautology sniff test: K2 FAIL IS tautological — but the tautology supports a KILL verdict, not a bogus PASS. Safe direction. Further, the existing Section 5 of this review already calls out the tautology. **OK.**
+- (g) K#217 numeric ID matches DB/PAPER/evidence. **OK.**
+- (h)-(m) code-level antipatterns: no code changes in this iteration. N/A.
+- (i) LORA_SCALE=20 in original run is flagged — but the Addendum theorem proves scale-invariance, so the kill holds at s=5. **Documented, OK.**
+- (r) PAPER.md has KC table. **OK.**
+
+### Scale-invariance theorem soundness
+The theorem reads:
+1. `B_new = Σ α_i B_i`, `α_i ≥ 0`, `Σ α_i = 1` → `B_new ∈ span{B_i}` by construction. ✓
+2. Orthogonal projection against `span{B_i}` of any element in that span equals that element → `B_proj = 0` in exact arithmetic. ✓
+3. `span{s·B_1, …, s·B_N} = span{B_1, …, B_N}` for any `s ≠ 0` (span is closed under uniform scaling). ✓
+4. Therefore `ρ = ‖B_proj‖²/‖B_new‖²` is independent of `s`. ✓
+
+The theorem is mathematically watertight. The 0.45% residual is numerical (imperfect classical Gram-Schmidt + 0.024 mean inter-adapter cosine), not signal.
+
+### Candidate antipattern promotion
+Researcher flagged `ap-convex-hull-projection-tautology` as a new candidate. Concur: this is a **pattern-level** design error — K2 on a generator whose output is a linear combination of the basis it projects against is tautological. The prior review (Section 5) already identified this; the addendum now formalizes it as a promotable antipattern. **Recommend analyst promote if a second instance surfaces.**
+
+### Verdict on closure
+**KILL preserved.** No rerun needed. Closure is mathematically complete, consistency is intact, and the existing REVIEW body already endorses KILL for the same underlying reason.

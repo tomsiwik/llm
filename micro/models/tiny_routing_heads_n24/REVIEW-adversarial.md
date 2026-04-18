@@ -123,3 +123,42 @@ The experiment is correctly killed. The kill criteria were hit cleanly (K584: 39
 4. Cover's theorem is applied to distributions, not points, which is a subtle misuse (though the conclusion -- separability is easy -- is still directionally correct).
 
 **For future work:** The impossibility structure (independent binary classifiers fail at ranking without calibration) should be formalized as a theorem with a proof. Specifically: given N independent binary classifiers with accuracy a and FPR p, derive the probability that argmax over scores selects the correct classifier as a function of N. This would give a precise N_max where decentralized routing fails, turning this killed experiment into a proven negative result.
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+Reviewer on `experiment.done exp_tiny_routing_heads_n24: KILLED (audit-rerun closure)`.
+
+**State:** `git status` shows only PAPER.md modified (+109 lines append-only). MATH.md, run_experiment.py, results.json, LEARNINGS.md untouched. DB status=killed with 2026-04-18 evidence row. KC IDs 584/585/586 consistent across DB ↔ MATH.md ↔ PAPER.md ↔ results.json. `results.json["verdict"]="KILLED"` matches PAPER.md verdict (lines 21, 272).
+
+**Adversarial checklist:** (a)-(s) all PASS.
+- (a-c) verdict consistency: results.json KILLED = PAPER KILLED = DB killed. No PROVISIONAL qualifier.
+- (d) no `is_smoke` flag present.
+- (e) `git log MATH.md` shows single commit — no KC swap.
+- (f) K585 (routed vs uniform PPL) and K584 (top-1 accuracy) are non-tautological behavioral metrics.
+- (h) no composition math bugs (`add_weighted_adapter`, `sum(lora_A`, `shutil.copy` all absent).
+- (i) `LORA_SCALE=20` present at line 43 — inherited from upstream `exp_real_data_25_domain_adapters` adapters, NOT set for this routing-head experiment. Closure's Thm C1 (zero-headroom) is scale-independent: the argument rests on `|individual_ppl − base_ppl| ≈ 0.03` being smaller than estimation noise, which persists regardless of scale. Kill-direction preserved. Acknowledged honestly in closure §Antipattern.
+- (k-l) no shutil.copy, no hardcoded pass dict.
+- (m) BitNet-b1.58-2B-4T in MATH.md matches code.
+- (o) N_val = 20 × 24 = 480 samples, well above 15.
+- (r) prediction-vs-measurement table present (PAPER.md lines 13-19).
+
+**Closure theorems:**
+- **Thm C1 (formal kill-invariance on K585):** avg_individual_ppl 10.09 vs avg_base_ppl 10.06 → adapter specialization signal ≈ 0.03 PPL units, below estimation noise over 20 val samples per domain. Any routing mechanism (BCE-fixed or otherwise) interpolates between base and individual adapters; headroom < noise floor. **Sound** — same abstract structure as mem-021 (CEILING-HEADROOM COLLAPSE) at the behavioral-metric ceiling.
+- **Thm C2 (directional kill on K584):** BCE fix would optimistically lift per-head acc 87→90%, FPR 0.13→0.10 → expected FPs = 23·0.10 = 2.3 → top-1 ≈ 30-50% < 60% K584 threshold. Honestly framed as directional, not formally invariant. Failure direction.
+- **Thm C3 (structural uncalibration):** cites original REVIEW §"Impossibility Structure" (independent binary classifiers cannot solve competitive ranking without calibration). BCE fix addresses detection, not calibration. Kill-mechanism preserved. Consistent with LEARNINGS "four routing kills all lack cross-expert calibration."
+
+**Code-bug acknowledged, fix deferred:** MLX `nn.losses.binary_cross_entropy(mx.sigmoid(logit), target)` double-applies sigmoid (defaults to `with_logits=True`). Properly routed to `exp_followup_bce_with_logits_routing` which exists in DB as the clean isolated venue. No rerun needed here — kill is invariant.
+
+**Verdict: KILL (reaffirmed).**
+
+**Route:** `review.killed` → Analyst.
+
+**Open threads for analyst:**
+- **Promote mem-021 CEILING-HEADROOM COLLAPSE to 3-instance confidence.** Instances: (1) oracle-router ceiling test-time [exp_depth_routed_adapters], (2) orthogonality ceiling training-time [exp_flat_lora_training], (3) adapter-specialization ceiling behavioral-metric [this experiment]. Three abstract instantiations of "mechanism layered on baseline at the mechanism's theoretical ceiling → zero headroom."
+- Candidate closure-rule Finding distinct from #191: "Any routing mechanism proposing to beat uniform-weight composition where individual adapter PPL ≈ base PPL has zero K2-style headroom; behavioral PPL-comparison KCs are structurally unreachable." The adapter-specialization-ceiling rule.
+- No new Finding strictly required — mem-021 promotion may suffice. Analyst judgment.
+- Low-priority code-bug fix in line 331 belongs in `exp_followup_bce_with_logits_routing`, not here.
+
+**Backlog state after this iteration:** P=1 open remaining: `exp_p1_t5_user_local_training` (last P=1, macro). P=2 active open: ~73 → ~72 (this P=2 closed). Nothing stuck in `experiment list --status active`.

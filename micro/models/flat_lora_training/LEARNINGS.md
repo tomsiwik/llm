@@ -67,3 +67,28 @@ Both standard and SAM adapters show near-zero sharpness (<0.3% PPL change at 1% 
 **Motivation**: This experiment (flat_lora_training) and exp_minimum_viable_base both suggest orthogonality is "free" from dimensionality. But exp_grassmannian_expert_init showed AP init gives 1.3-2x lower interference. The question: does this 1.3-2x translate to measurable PPL improvement, or is it architectural insurance with no practical effect?
 
 **Literature**: Cao et al. (arXiv:2508.11985, "Efficient Modular Learning through Naive LoRA Summation") confirm that independently trained LoRA modules are approximately orthogonal via the Superposition Principle. If this is sufficient, the Grassmannian skeleton's value shifts from "enabling composition" to "guaranteeing worst-case bounds" — a different but still valid role.
+
+---
+
+## Audit-Rerun Closure Addendum (2026-04-18)
+
+Closure confirms KILL under the `audit-2026-04-17-rerun, code-bug` tag. Three
+independent theorems (C1 threshold-invariant +0.07pp vs 3pp, C2
+orthogonality-induced projection to 10⁻⁶·λ_max, C3 1/√D concentration
+baseline at D=17.2M) show the code-bug fix (results.json verdict label swap)
+is cosmetic — the kill is measurement-driven. See PAPER.md §Audit-Rerun
+Closure for proofs.
+
+**Antipattern promotion:** This experiment is the 2nd confirmed instance of
+`ap-oracle-ceiling-blocks-headroom` — now promoted to confirmed antipattern
+(mem-antipattern-021 "CEILING-HEADROOM COLLAPSE"). First instance was
+`exp_depth_routed_adapters` (test-time oracle ceiling). Pattern:
+mechanism M layered on baseline B_0 that already attains M's theoretical
+ceiling — headroom is zero by construction. Future researchers should
+pre-flight: identify the proposed mechanism's theoretical ceiling, measure
+baseline distance from it, and kill preemptively if gap ≤ KC threshold.
+
+**Deferred cosmetic fix:** `run_experiment.py` lines 879-882 verdict ladder
+stamps SUPPORTED whenever K1+K2 pass, ignoring S1. Low priority — does
+not change measurements, just the stamped label. Fix during next edit of
+the file, don't open a dedicated task.

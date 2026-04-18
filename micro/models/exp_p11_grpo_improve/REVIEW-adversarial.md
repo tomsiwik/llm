@@ -1,53 +1,47 @@
 # REVIEW-adversarial: P11.G0 — GRPO Refinement from F0 Initialization
 
-**Reviewer**: Adversarial
-**Date**: 2026-04-14
-**Verdict**: **PROCEED**
+**Reviewer**: Adversarial (post-kill, 2026-04-17)
+**Verdict**: **KILL (endorsed)** — dependency-chain preemptive
+
+> Prior review (2026-04-14, smoke design) marked PROCEED. That review is superseded by this post-kill determination. The design was sound; the kill is operational (missing upstream artifact), not a theorem falsification.
 
 ---
 
-## Checklist
+## Adversarial Checklist
 
-- [x] PAPER.md exists with prediction-vs-measurement table
-- [x] Kill criteria implementations match stated definitions
-- [x] Finding status appropriate (experiment type: guided-exploration)
-- [x] Theorems cite prior work
-- [x] Smoke test results documented; transient failure explained
+**Consistency (a–d)**
+- (a) `results.json.verdict = "KILLED"` ✓ matches DB `status = killed`.
+- (b) All 3 KCs fail (unmeasurable) — consistent with killed, not supported.
+- (c) PAPER.md line 3 = `Status: KILLED (preemptive, dependency-chain)` ✓.
+- (d) `is_smoke: false` ✓ (full run claim).
 
----
+**KC integrity (e–g)**
+- (e) MATH.md git log: single commit `de38e37` (2026-04-16) created the file +144 lines. No post-registration KC edits. ✓
+- (f) KCs (≥70%, ≥F0, ≥F0+3pp) are directional thresholds against independent baselines — not tautological.
+- (g) K1514/K1515/K1516 IDs in DB, MATH.md, results.json, PAPER.md all agree.
 
-## Kill Criteria Review
+**Code ↔ math (h–m2)**
+- Not evaluated: phases 1–3 did not execute. No composition code path was exercised.
+- `run_experiment.py` phase1 call `load(MODEL_ID, adapter_path=F0_ADAPTER)` would (correctly) crash at mlx_lm safetensors load — consistent with the claim that F0 produced no weights.
 
-| Criterion | Implementation | Verdict |
-|-----------|---------------|---------|
-| K1514 (G0 >= 70%) | `g0_acc >= 0.70` (line 623) | ✓ Correct |
-| K1515 (G0 GSM8K >= F0 GSM8K) | `gsm8k_g0 >= gsm8k_f0` (line 624) | ✓ Directional, correct |
-| K1516 (G0 >= F0+3pp any bench) | `g0_acc >= f0_acc+0.03 OR gsm8k_g0 >= gsm8k_f0+0.03` (lines 625–627) | ✓ Matches stated criterion |
+**Structural kill verification**
+- `ls adapters/math-s1k-reasoning-v0/` → only `adapter_config.json` (1.2 KB), no `adapters.safetensors`. Verified independently.
+- Upstream F0 (`exp_p11_s1k_reasoning_train_eval`) and F1 (`exp_p11_limo_reasoning_train_eval`) both `killed` in DB.
+- Theorem 1's premise (p_SFT measured on F0 > p_base) is unevaluable. Correct structural kill.
 
-All three implementations match the stated kill criteria. K1515 correctly fails on regression (G0 < F0). K1516 OR-logic is intentional per MATH.md ("at least one benchmark").
-
----
-
-## Math Review
-
-**Theorem 1** (SFT init → lower gradient variance): Sound. `Var[∇L] ∝ 1/|D_correct|` is a reasonable approximation for RS-SFT; binary filtering makes it exact under independence. The chain from lower variance → stable convergence is standard SGD theory.
-
-**Theorem 2** (Non-regression, D_train = D_eval): **Conclusion correct; EWC citation wrong.** EWC (Kirkpatrick 2017, arXiv:1612.00796) prevents forgetting of *other tasks* when training on *new data*. Here D_train = D_eval, so non-regression follows trivially from empirical risk minimization — no EWC needed. This is a citation error, not a logic error. The guarantee still holds.
-
-**Theorem 3** (RS-SFT ≈ GRPO): Inherited from B0, accepted.
+**Deliverables (r–s)**
+- (r) Prediction-vs-measurement table present (3 rows, all "FAIL (unmeasurable)"). ✓
+- (s) Researcher's rationale for not substituting `math-gsm8k-knowledge-v0` (36.1% MMLU-Pro < 62.1% base inverts Theorem 1's sign) is correct — substitution would have been an antipattern.
 
 ---
 
-## Non-Blocking Issues
+## Non-Blocking Carryovers
 
-**NB1**: Theorem 2 EWC citation is misused (see above). Fix in next iteration: replace with "By empirical risk minimization on D_eval, any gradient step reducing L(θ, D_train) cannot increase L(θ, D_eval) in expectation."
-
-**NB2**: PAPER.md line 47 states "D_train = MMLU-Pro → cross-domain stability" for K1515. MATH.md correctly disclaims this (Failure Mode 3: "Theorem 2 prevents MMLU-Pro regression but NOT cross-domain regression"). The PAPER.md explanation is a slight overstatement of Theorem 2's scope. Does not affect experiment logic.
-
-**NB3**: K1516 can pass via GSM8K ≥ F0+3pp even if MMLU-Pro shows no uplift. This could produce a "compound gains" finding when the improvement is on an out-of-domain benchmark. Intentional by design but worth flagging in the finding if K1516 triggers via GSM8K only.
+- **NB1 (stands from 2026-04-14)**: Theorem 2 EWC citation (arXiv:1612.00796) is misapplied — when D_train = D_eval, non-regression follows from ERM directly, no EWC needed. LEARNINGS.md already flags this for a G0-v2 pass.
+- **NB4 (new)**: F0's `capture_output=False` swallowed actionable stderr. F0 PAPER.md's next-experiment section already calls for stderr redirection, `--max-seq-length 4096`, and `save-every 50` in F0-v2. No G0-local action.
 
 ---
 
 ## Summary
 
-Design is theoretically sound. Kill criteria are correctly implemented. Smoke failure is transient (training_success=False at 2.5s from cache state, manual re-run verified). Full run will complete correctly with pueue ordering ensuring full F0 adapter exists. K1514 (70%) is honestly pre-registered as "likely FAIL." K1516 and K1515 have solid theoretical backing.
+Kill is correctly classified as preemptive/dependency-chain. Artifacts complete (MATH, run_experiment, results, PAPER, REVIEW, LEARNINGS). No antipatterns triggered. Unblocking requires F0-v2 producing a valid reasoning-SFT adapter before G0 can be re-claimed. Route to Analyst.

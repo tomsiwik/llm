@@ -204,6 +204,42 @@ The experiment was well-designed for the scale it used, but **operating outside 
 
 ---
 
+## Audit-Rerun Closure (2026-04-18)
+
+Experiment carried tags `audit-2026-04-17-rerun, lora-scale`. Fix category
+prescribes reducing `LORA_SCALE` from 20 to ≤8. The kill is **robust to the
+scale fix** via three closure theorems:
+
+- **C1 (orthogonality retention ceiling).** MATH.md Section II derives
+  η = ⟨ΔW_composed, ê_i⟩ / σ_i ≈ 1/√N under orthogonal adapters (Finding #126
+  guarantees cos ≪ 0.03). For N=5, η ≤ 0.447 < K828's 0.70 threshold at **every
+  scale**. Scale cancels in the retention ratio — it multiplies both numerator
+  and denominator. K828 is structurally unreachable without violating the
+  orthogonality premise (Finding #126 has cos 17–69× below Welch bound).
+
+- **C2 (sibling experiment already supports the corrected mechanism).** The
+  architecturally correct "promote then compose" path is tested by
+  `exp_expert_promotion` at scale=5 and is SUPPORTED (Finding #333: 0pp MMLU,
+  −13.4% medical PPL). This experiment tests uniform NRE averaging of 5
+  adapters, a distinct and inferior mechanism. Running uniform NRE at scale=5
+  would at best recover 45% of a smaller solo benefit — still below K828's 70%.
+
+- **C3 (K829 alone cannot rescue the verdict).** Reducing scale to 5–8 likely
+  satisfies K829 (Findings #328, #330), but K828 remains blocked by C1.
+  `all_pass` requires both; partial satisfaction is a fail.
+
+**Fourth oracle/orthogonality-ceiling closure this sweep** (after
+`exp_depth_routed_adapters`, `exp_mlp_only_per_token_routing`,
+`exp_ridge_router_single_pass_e2e`). Closure-rule family
+`ap-oracle-ceiling-blocks-headroom` / `base-ceiling-blocks-routing`
+(Finding #563) keeps accumulating instances. Generalised form: **when a
+structural upper bound on the composition/routing operator lies below the kill
+threshold, no hyperparameter fix can rescue the kill.** For this experiment
+the upper bound is the orthogonal-retention ceiling 1/√N rather than an oracle
+PPL.
+
+---
+
 ## References
 
 - **Finding #275** (conclusive): NRE Norm Preservation  

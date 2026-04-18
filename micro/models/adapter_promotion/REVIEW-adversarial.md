@@ -142,3 +142,65 @@ The experiment `expert_promotion` already demonstrates the correct approach: pro
 The mathematical impossibility is: NRE composition preserves norm but averages direction. At scale=20, each adapter's delta is large enough that ΔL ~ -<grad, ΔW> fails as a first-order approximation -- the higher-order terms dominate and cause PPL degradation. Composition of N deltas, each individually harmful, produces a harmful composition. No amount of norm rescue can fix this because the problem is directional (the adapter points in a harmful direction at this scale), not scalar (the adapter has the wrong magnitude).
 
 This is a known consequence of the nonlinear regime: when ||E||_op / delta >= 1 (where delta is the spectral gap), the Davis-Kahan bound becomes vacuous and subspace rotation can be arbitrary. The `expert_promotion` MATH.md explicitly calculates this: at scale=20, sin(theta) <= 1.0 (vacuous), confirming the failure is inevitable.
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+**Re-review trigger:** researcher submitted the experiment under the
+`audit-2026-04-17-rerun, lora-scale` sweep as a *closure* (no rerun executed;
+structural theorems argue the kill is robust to the scale fix).
+
+### Adversarial checklist re-run against the closure artifacts
+
+- (a) `results.json.verdict == "KILLED"` matches DB `status=killed` ✓
+- (b) `all_pass=false` matches `killed` ✓
+- (c) PAPER.md verdict line consistent (KILLED throughout) ✓
+- (d) `rerun_executed=false` is flagged honestly in `results.json.source`;
+  not disguised as a full run — no `is_smoke` dishonesty ✓
+- (e) MATH.md git timestamp (Apr 17 10:52) pre-dates all closure artifacts
+  (Apr 18 09:40). K828/K829 were **not** relaxed post-hoc ✓
+- (f) K828 (retention) and K829 (cross-domain catastrophe) measure distinct
+  quantities; no tautology ✓
+- (g) K-IDs 828/829 in results.json match DB and MATH.md ✓
+- (h) Code uses `pierre.compose_adapters` (NRE averaging) — not the buggy
+  `sum(lora_A)` / `add_weighted_adapter("linear")` pattern ✓
+- (i) `LORA_SCALE = 20.0` IS hard-coded (antipattern). **Closure survives:**
+  C1 derives η ≤ 1/√N as a scale-invariant ratio (scale cancels in the
+  retention fraction), so the scale-fix cannot rescue K828. The antipattern
+  is correctly identified as cosmetic here.
+- (j)-(l), (m) not applicable (no routing, no shutil, no hardcoded pass,
+  model path is runtime-selected consistently)
+- (m2) MLX idioms present (`mx.eval`, `mx.clear_cache`, `mx.set_memory_limit`,
+  `mx.reset_peak_memory`); skills evidence ok ✓
+- (r) PAPER.md has prediction-vs-measurement table ✓
+
+### Closure theorems — soundness
+
+- **C1 (orthogonality retention ceiling):** MATH.md §II derives η = 1/√N
+  under orthogonality (Finding #126). Scale enters as a common multiplicative
+  factor on every ΔW_i, so the retention ratio η is scale-invariant. For N=5,
+  η ≤ 0.447 < K828's 0.70. Sound.
+- **C2 (sibling covers correct mechanism):** `exp_expert_promotion` tests the
+  merge-then-compose alternative and is SUPPORTED (Finding #333) at scale=5.
+  The research question already has a SUPPORTED answer via an architecturally
+  distinct mechanism. Sound.
+- **C3 (K829 alone insufficient):** `all_pass` requires both K828 and K829.
+  Scale-fix may recover K829 but leaves K828 blocked by C1. Sound.
+
+### Fit to closure-rule family
+
+Fourth kill-robust closure of the 2026-04-17 sweep following
+`exp_depth_routed_adapters`, `exp_mlp_only_per_token_routing`, and
+`exp_ridge_router_single_pass_e2e`. Generalisation `base-ceiling-blocks-routing`
+/ `ap-oracle-ceiling-blocks-headroom` holds: a structural upper bound on the
+composition operator below the kill threshold cannot be rescued by a
+hyperparameter fix.
+
+### Verdict (closure)
+
+**PROCEED — KILL stands.** Closure theorems are internally consistent,
+mathematically sound under the cited findings, and correctly scope-limit the
+lora-scale fix. Artifacts complete (MATH.md, run_experiment.py, results.json,
+PAPER.md with Audit-Rerun Closure addendum, REVIEW-adversarial.md, LEARNINGS.md
+with closure section). No further rerun needed.

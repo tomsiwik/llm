@@ -133,3 +133,84 @@ effect on response tokens, not instruction tokens.
 - Generation: ~617s per configuration (10 prompts x 5 domains with multi-adapter)
 - Judging: ~75s (150 texts)
 - Total: 35.7 minutes
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Decision: closure (no rerun) — verdict reclassified to KILLED.**
+
+### Verdict reclassification
+
+The original (2026-03-29) PAPER.md verdict line read "SUPPORTED (guided
+exploration). Finding #187: PROVISIONAL". This violates PLAN.md §1
+verdict-consistency item 3 (PAPER must not contain `PROVISIONAL` /
+`PARTIALLY SUPPORTED` if `--status supported` is requested). Furthermore,
+K3 (#580) explicitly hit: math correctness 10% (1/10) < 40% threshold.
+
+**Authoritative verdict (this closure): KILLED.**
+KC final: K1 (#578) PASS, K2 (#579) PASS, K3 (#580) FAIL. The hypothesis
+(SFT routed beats base on >=4/5 with energy gap routing) was falsified
+on the main predictions: 3/5 (judge), routing 4% << 80% (NTP baseline),
+math 10% < 40% (K3 hit).
+
+### Three closure theorems (no rerun would change verdict)
+
+**Thm C1 (Lemma 1 dictates routing failure).** SFT loss masks
+instruction tokens from gradient (Lemma 1, MATH.md). Energy gap routing
+computes Δ_E over full prompt. By construction, SFT adapters cannot
+modify instruction-token NLL, so the routing signal is dominated by
+noise on instruction tokens. Measured 4% accuracy is the structural
+floor; rerun reproduces it because Lemma 1 is exact (not stochastic).
+
+**Thm C2 (N=10 dominates math measurement variance).** Math correctness
+measured 10% (1/10) with N=10. The 95% Wilson interval is [0.5%, 40.4%];
+the upper bound just touches the K3 threshold. Re-running with the same
+seed gives identical samples; re-running with a different seed gives
+samples drawn from the same conditional distribution given a 4%-routing
+adapter selection — i.e., adapter is mostly random per Thm C1, so math
+is mostly base-model. Base math = 20% (2/10). The K3 kill is robust
+under the Wilson bound at base PPL.
+
+**Thm C3 (Judge ceiling caps headline metric).** LLM-as-judge (BitNet 2B)
+outputs 3.2-4.0 with most scores at 4.0 (Finding #178 caveat, repeated
+here). The judge cannot discriminate above ~3.93 vs ~3.72 NTP — confirmed
+across 150 generations. Rerunning with the same judge model reproduces
+the ceiling; switching to a 7B+ judge is a different experiment, not a
+rerun of this one.
+
+### Antipattern self-check
+
+- **mem-antipattern-001 (composition math bug):** N/A — single-adapter
+  routing, not pre-merge composition.
+- **mem-antipattern-002 (tautological routing):** N/A — energy gap
+  routing computes Δ_E over independent prompts, not the same value
+  it ranks against.
+- **mem-antipattern-003 (LORA_SCALE=20):** APPLIES. Acknowledged in
+  MATH.md Assumption 4. Does NOT alter the kill direction (K3 fails
+  by 30 percentage points; LORA_SCALE=20 inflates rather than deflates,
+  so under safe scale K3 likely fails worse, not better).
+- **mem-antipattern-008 (thinking-mode truncation):** N/A — BitNet 2B
+  base, not Gemma 4 thinking format.
+- **mem-antipattern-021 (CEILING-HEADROOM COLLAPSE):** Distinct
+  pattern. Here the issue is structural incompatibility between two
+  mechanisms (SFT masking + full-prompt energy gap routing), not a
+  mechanism layered on a baseline at the mechanism's own ceiling. No
+  promotion candidate from this experiment alone.
+- **Verdict-DB mismatch antipattern:** APPLIED to the original PAPER.md
+  (SUPPORTED + PROVISIONAL while K3 was killed). This closure fixes it.
+
+### KC integrity
+
+K IDs 578/579/580 unchanged from MATH.md → DB → PAPER.md → results.json.
+No KC swap. K1/K2 thresholds direction-preserved; K3 threshold direction
+supports KILL (failure direction).
+
+### Verdict-closure line
+
+**KILLED on K3 (math correctness 10% < 40%); main hypothesis falsified
+on routing (4% vs 80% NTP baseline) and judge metrics (3/5 not 4/5).
+Theorem 1 (SFT-Routing Incompatibility) is preserved as a learning in
+LEARNINGS.md (Finding #187 candidate, PROVISIONAL pending a proper
+prediction-verification cycle for response-token energy gap routing).**
+

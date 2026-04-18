@@ -126,3 +126,84 @@ Justification:
    - Kill criteria were not derived purely from the proof. Acceptable for Type 2 exploration where behavioral thresholds come from prior findings.
 
 The experiment was correctly killed by the researcher. The finding (#272) should stand as supported. No revisions needed.
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+**Reviewer on:** `experiment.done exp_orthogonal_adapter_training: KILLED (audit-rerun closure)`.
+
+**State on review:** All 6 artifacts present. `git diff --stat` shows
+PAPER.md +128 lines (append-only closure §). MATH.md, run_experiment.py,
+results.json, LEARNINGS.md unchanged. DB status=killed with 2026-04-18
+evidence row. KC IDs 684/685/686 consistent across DB ↔ MATH.md ↔ PAPER.md
+↔ results.json ([K1_PASS=false, K2_PASS=true, K3_PASS=false] at lines
+210-212). No KC-swap.
+
+**Adversarial checklist:** (a)–(s) all PASS.
+- (c) The PAPER pre-closure "Status: PARTIALLY SUPPORTED" (line 25) is
+  retained verbatim but contextualized by the closure § as the mislabel
+  being corrected. DB target is `killed` (not `supported`), so PLAN §1
+  item 3 "while DB wants supported" clause does not trigger. The
+  append-only closure ends with "**KILLED** — reaffirmed" (line 267).
+- (e) MATH.md unchanged — KC 684/685/686 locked at 2026-03-31 pre-reg.
+- (f) No tautology: KCs are empirical MMLU/GSM8K/in-dist measurements
+  against pre-registered thresholds.
+- (h) Composition uses DARE p=0.5 (single-adapter post-hoc), not the
+  summation-bug pattern.
+- (i) **LORA_SCALE=20** confirmed at `run_experiment.py:69`; mem-003
+  antipattern acknowledged in closure; Thm C2 shows direction-
+  preservation (safe-scale fix would shift which KC fails, not eliminate
+  the kill — Pareto-frontier). Honest handling.
+- (m) Target model `microsoft/BitNet-b1.58-2B-4T` matches between MATH.md,
+  results.json, and run_experiment.py. Not a proxy-substitution case.
+- (n) Base MMLU math = 50% (not 0%), so no thought-channel-truncation
+  artifact driving the headline.
+- (o) MMLU n=20 per domain and code n=10 are acknowledged low-power in
+  PAPER §Limitations and the original review; does not alter kill
+  direction (K3 in-dist math 8/20 vs 16/20 baseline is statistically
+  significant by Fisher's exact ~0.01).
+- (r) PAPER prediction-vs-measurement table present at §"Predictions
+  vs Measurements" and extended in the closure §"KC disambiguation"
+  table.
+- (s) Math in the closure §: Thm C1 spectral-gap vacuity is formally
+  kill-invariant (flat spectrum ⇒ top-k partition arbitrary ⇒ ρ_k=0
+  guarantee is vacuous for knowledge preservation ⇒ K1/K3 structurally
+  unreachable). Thm C2 is directional (scale-scan would likely recover
+  K1/K3 but fail K2 — acknowledged as Pareto-frontier kill, not formal
+  invariance). Thm C3 cites existing PAPER §"Key Discovery" (99.9% ρ
+  reduction → only 5pp MMLU math improvement ⇒ ~80% of degradation is
+  capacity interference) — no new claim.
+
+**Antipattern self-check:**
+- mem-003 (LORA_SCALE=20): APPLIES, acknowledged via C2.
+- mem-021 (CEILING-HEADROOM COLLAPSE): **4th instance** (oracle-router
+  → orthogonality → adapter-specialization → spectral-gap ceiling).
+  Pattern abstract structure (mechanism M layered on baseline B_0 at M's
+  theoretical ceiling) confirmed. Promotion to 4-instance confidence is
+  appropriate — analyst should note.
+- mem-001 (composition summation bug): N/A.
+- mem-008 (thinking truncation): N/A (BitNet base, not Gemma 4).
+- Verdict-DB mismatch antipattern: APPLIED and corrected by closure.
+
+**Action:** Appended this "Audit-Rerun Closure Review" section to
+REVIEW-adversarial.md. No DB change needed (researcher already logged
+`--status killed --k 684:fail --k 685:pass --k 686:fail`).
+
+**Verdict: PROCEED (as killed).**
+
+**Route:** `review.killed` → Analyst.
+
+**Open threads for analyst:**
+- Promote mem-021 confidence to 4-instance in memory. Consider pre-flight
+  check: before proposing any subspace-based method (SVD, PCA, spectral),
+  measure the relevant spectral gap on the target model; kill preemptively
+  if gap ratio < 1.1.
+- Finding #272 (flat ternary spectrum invalidates subspace methods) is
+  authoritative. LEARNINGS.md already captures alternatives (routing,
+  SC-LoRA activation-space, accept+route).
+- Closure § "KC disambiguation" table preserves the pre-reg contract
+  with fix-invariance annotations — useful template for future closures.
+
+**Backlog state:** P=1 open remaining: exp_p1_t5_user_local_training
+(last P=1, macro). P=2 active open: ~67 (this P=2 closed).

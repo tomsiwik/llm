@@ -1,65 +1,69 @@
-# PAPER: P11.G0 — GRPO Refinement from F0 Initialization
+# PAPER — P11.G0: GRPO Refinement from F0 Initialization
 
-## Prediction vs Measurement Table
+**Status: KILLED (preemptive, dependency-chain)** — both upstream reasoning-SFT adapters (F0 s1K, F1 LIMO) are killed and no usable warm-start adapter exists. Theorem 1's premise (p_SFT > p_base, measured on F0) cannot be evaluated; the experiment is not executable.
 
-| Prediction | Theorem | Predicted Value | Smoke Result | Full Run |
-|------------|---------|-----------------|--------------|----------|
-| Phase 1 yield (F0 init) | Thm 1 (p_SFT ≥ p_base) | ≥ 62.1% | 64.3% (9/14) ✓ | TBD |
-| G0 MMLU-Pro vs F0 | Thm 2 (non-regression) | G0 ≥ F0 | N/A (training failed) | TBD |
-| G0 MMLU-Pro target | Thm 1+2 (compound) | ≥ 70% | N/A | TBD |
-| G0 GSM8K vs F0 | Thm 2 | G0 ≥ F0 | N/A | TBD |
+## Summary
+G0's MATH.md assumes a valid F0 adapter exists with accuracy p_SFT on MMLU-Pro, and that GRPO refinement on top of F0 will compound SFT+RL gains. Both upstream dependencies were killed before producing a usable adapter:
 
-## Kill Criteria
+- **F0** (`exp_p11_s1k_reasoning_train_eval`, killed 2026-04-17): `mlx_lm.lora` subprocess crashed at step 3 after ~31 min on the full run. `adapters/math-s1k-reasoning-v0/` contains only `adapter_config.json` — no `.safetensors`. Root-cause hypothesis: OOM at MAX_SEQ_LEN=8192 on long s1K traces, compounded by `capture_output=False` discarding stderr and `save-every=200` meaning no checkpoint landed before the crash.
+- **F1** (`exp_p11_limo_reasoning_train_eval`, killed 2026-04-14): preemptively killed upstream due to catastrophic-forgetting impossibility structure.
 
-| Criterion | Threshold | Smoke | Full Run |
-|-----------|-----------|-------|----------|
-| K1514: G0 MMLU-Pro+thinking | ≥ 70% | — | TBD |
-| K1515: G0 GSM8K ≥ F0 GSM8K | no regression | — | TBD |
-| K1516: G0 ≥ F0 + 3pp (either bench) | +3pp uplift | — | TBD |
+Running `run_experiment.py` now would crash at phase1: `load(MODEL_ID, adapter_path=F0_ADAPTER)` calls mlx_lm which expects `adapters.safetensors` in the adapter dir. The existence check (`F0_ADAPTER.exists()`) passes (the dir exists) but the actual weight load fails.
 
-## Smoke Test Results (IS_SMOKE=True)
+## Prediction vs Measurement
 
-**Phase 1** (rejection sampling with F0 adapter):
-- `n_sampled=14, n_correct=9, yield_rate=64.3%`
-- `avg_thinking_chars=2901`
-- Theorem 1 prediction (≥62.1% yield) confirmed ✓
+| KC | Prediction (Theorem) | Measured | Verdict |
+|----|----------------------|----------|---------|
+| K1514: G0 MMLU-Pro+thinking ≥ 70% | Compound gains (Thm 1+2) predict possible 67–72% | Not measured — no adapter | FAIL (unmeasurable) |
+| K1515: G0 GSM8K ≥ F0 GSM8K | Thm 2 (D_train=MMLU-Pro → no MMLU-Pro regression, does not protect GSM8K) | Not measured | FAIL (unmeasurable) |
+| K1516: G0 ≥ F0 + 3pp (either bench) | Thm 1 (better init → lower var → faster convergence) | Not measured | FAIL (unmeasurable) |
 
-**Phase 2** (SFT training from F0 init):
-- `training_success=False` — TRANSIENT FAILURE (verified below)
-- Training data: 8 train + 1 val examples
-- Root cause: likely MLX cache state from Phase 1 teardown
-- Verified fix: re-running with same data files succeeds (3 steps, val_loss=3.04→3.02) ✓
+All three KCs fail as **unmeasurable** — the kill is structural, not empirical.
 
-**Phase 3**: Not reached (Phase 2 fatal=True in smoke)
+## results.json (verbatim)
+```
+{
+  "verdict": "KILLED",
+  "killed": true,
+  "killed_reason": "upstream_dependencies_killed",
+  "f0_adapter_exists": true,
+  "f0_adapter_usable": false,
+  "phase1_executed": false,
+  "phase2_executed": false,
+  "phase3_executed": false,
+  "kill_criteria": {
+    "K1514_g0_mmlu_ge_70pct": false,
+    "K1515_g0_gsm8k_ge_f0": false,
+    "K1516_g0_ge_f0_plus_3pp": false
+  }
+}
+```
 
-## Key Caveat: F0 Dependency
+## Assumptions (per researcher-hat Autonomy rule)
+- I did not re-attempt F0. Rationale: (a) F0 is registered as `killed` in the DB with a specific training-subprocess failure; rerunning G0's scaffolding would not fix F0's OOM. (b) A fresh F0-v2 is out of scope for a claim on G0 — it would require a new experiment (e.g. `exp_p11_s1k_reasoning_train_eval_v2`) with smaller MAX_SEQ_LEN, `capture_output=True`, and `save-every=50`.
+- I did not attempt to substitute a different adapter (e.g. `math-gsm8k-knowledge-v0`, 36.1% MMLU-Pro) because doing so would violate Theorem 1's premise (p_SFT > p_base = 62.1%) — the substitute is *worse* than base on MMLU-Pro, invalidating the entire theoretical motivation.
+- The SMOKE PAPER.md artifact (prior to this rewrite) showed phase1 yield=64.3% using a smoke F0 adapter (20 steps). That adapter is gone — the full run overwrote the config and never produced safetensors. The smoke result is not recoverable as evidence.
+- KC IDs (1514, 1515, 1516) are unchanged from MATH.md registration; no post-hoc edits.
 
-G0 depends on P11.F0 (exp_p11_s1k_reasoning_train_eval, pueue task 12).
-- Smoke F0 adapter: 20 training steps (weak signal)
-- Full F0 adapter: 200 training steps (task 12 must complete first)
-- Pueue ordering ensures task 12 (F0) completes before task 20 (G0) ✓
+## Verdict Pre-flight Check (§PLAN.md §5)
+1. `results.json["verdict"] = "KILLED"` ✓
+2. `all_pass` — not applicable to kill
+3. PAPER.md verdict line = **KILLED** ✓
+4. `is_smoke = false` ✓
+5. No KC edits post-MATH.md (git-clean on MATH.md KC table) ✓
+6. Antipattern audit: no composition bugs, no tautological routing, no unsafe adapter scale, no `shutil.copy` as new adapter, no hardcoded `"pass": True`, no eval-template truncation, no proxy substitution, no N=smoke-reported-as-full. The kill is structural (missing upstream artifact), not an antipattern ✓
 
-## Theoretical Justification
+**Verdict: KILLED — dependency-chain preemptive**. No falsification of Theorem 1, 2, or 3 — the experiment was not executed.
 
-**Theorem 1 (Gradient Variance Reduction)**: SFT initialization provides higher yield
-(64.3% vs 62.1% from base), giving more correct traces per sampling budget.
-Lower gradient variance → more stable convergence to RS-SFT fixed point.
+## Next Experiment
+Unblocking G0 requires producing a valid reasoning SFT adapter. Either:
+1. **F0-v2** (`exp_p11_s1k_reasoning_train_eval_v2`): re-run s1K training with (a) `--max-seq-length 4096` (filter traces >4k tokens or truncate), (b) `capture_output` redirected to a log file for postmortem, (c) `save-every 50` so a partial checkpoint survives late crashes.
+2. **F1-v2**: revisit LIMO with a structural fix for the catastrophic-forgetting impossibility (the 2026-04-14 kill reason).
 
-**Theorem 2 (Non-Regression)**: D_train = D_eval (MMLU-Pro) ensures DPO steps
-cannot increase MMLU-Pro loss. EWC guarantee applies (Kirkpatrick 2017).
-
-**Theorem 3 (RS-SFT ≈ GRPO)**: Inherited from B0. KL(π_θ || π_SFT) ≈ 0 at init,
-which is tighter than B0's KL(π_θ || π_0) since π_SFT is closer to the RL fixed point.
-
-## Expected Failure Modes
-
-1. **K1514 FAIL** (likely): 70% is an ambitious target; RS-SFT ceiling may be 63-65%.
-2. **K1516 PASS** (likely): G0 > F0 on MMLU-Pro is expected given better init.
-3. **K1515 PASS** (likely): D_train = MMLU-Pro → cross-domain stability.
+Only after one of these produces a registered adapter can G0 be resurrected. This is a hypothesis-generation decision and out of scope for a Researcher-hat claim on G0; the next iteration (or a follow-up with fewer open P0-P2 tasks) should generate the unblocking experiment.
 
 ## References
-
-- arXiv:2602.04118: GRPO sample efficiency from better initialization
-- arXiv:2402.03300: GRPO (Shao et al. 2024)
-- arXiv:2501.12948: DeepSeek-R1 RS-SFT as GRPO warmup
-- arXiv:1612.00796: EWC catastrophic forgetting bounds
+- arXiv:2602.04118 (GRPO sample efficiency — premise requires trained SFT init)
+- arXiv:2402.03300 (GRPO; Shao et al. 2024)
+- arXiv:2501.12948 (DeepSeek-R1 RS-SFT as GRPO warmup — same dependency)
+- arXiv:1612.00796 (EWC; see REVIEW-adversarial.md NB1 — EWC citation acknowledged as misapplied, fix deferred to a G0-v2 under a future claim)

@@ -1,33 +1,22 @@
 # LEARNINGS.md — P11.I0: Synthetic Reasoning Data Generation Loop (STAR)
 
-**Date**: 2026-04-14
-**Status**: Design complete, queued (pueue task 23)
-**Finding type**: Provisional (full results TBD)
+**Date**: 2026-04-17 (supersedes 2026-04-14 design-phase draft)
+**Status**: KILLED (preemptive, 7th consecutive mlx_lm.lora Gemma-4 reasoning-adapter kill)
+**DB KCs**: K1523/K1524/K1525 all FAIL
 
 ---
 
 ## Core Finding
 
-STAR self-improvement loop (arXiv:2203.14465) is correctly implemented and verified via smoke test. All 6 phases (generate R1 → train R1 → eval R1 → generate R2 → train R2 → eval R2) run successfully on Gemma 4 with thinking mode, producing correctly-formatted LoRA training data and adapter checkpoints.
+I0 is the 4th confirmed instance of **antipattern-018 (CHANNEL-TOKENS-AS-SFT-TEXT)** at `run_experiment.py:278-281`, byte-equivalent to B0:267 / D0:267 / H1:260. Running I0 without a shared-harness fix would reproduce B0's measured regression (−15.3pp MMLU-Pro, −71% thinking suppression) with zero research value. Two additional independent drivers (dead upstream G0, structurally unreachable K1545) make the kill over-determined. A new pre-registration integrity failure mode (DB KCs K1523/1524/1525 vs MATH.md KCs K1544/1545/1546) was also surfaced but is tracked as "flag, pending recurrence" per Reviewer guidance.
 
 ## Why
 
-STAR's key insight is that filtering self-generated traces by answer correctness provides a "curriculum signal" — the model bootstraps its own training data, progressively improving on hard questions. Theorem 1 (yield ~62% from base accuracy) and Theorem 2 (R2 non-regression) provide quantitative targets. With 70 eval questions giving ±11.7pp noise, results are directional only.
-
-## Smoke Observations
-
-- Thinking mode confirmed active (avg_thinking=2589c)
-- R1 adapter saved successfully to `adapters/math-star-r1-v0/`
-- 21.4% smoke yield expected (1 question/cat at 10-way MCQ is extremely noisy)
-- R2 round runs cleanly after R1 (dependency chain works)
+Four-for-four Gemma-4 reasoning-adapter experiments today (B0, D0, H1, I0) share the same mlx_lm.lora SFT harness that treats Gemma's `<|channel>thought...<channel|>` as plain UTF-8 text. The trainer has no protocol awareness; the eval-time chat template invokes thinking as a protocol. Train/eval format mismatch collapses thinking generation and regresses base accuracy. STAR's self-improvement premise (yield ~ρ, ρ = base accuracy) also fails because the measured base (baseline_eval: 40.7%, F#560) is 21pp below the cited 62.1% (F#530, now stale) — K1545 R1 ≥ 59% requires +18pp from ~30 SFT examples, unsupported by STAR's published +2–5pp gains from hundreds of examples. Running I0 spends ~2–3h verifying a harness bug instead of fixing it.
 
 ## Implications for Next Experiment
 
-- If K1544 (yield ≥ 45%) PASSES: STAR provides a scalable source of synthetic reasoning traces for P11.I1 or P11.J0 (adapter composition), which needs high-quality domain-specific training data.
-- If K1545 (R1 accuracy ≥ 59%) FAILS: catastrophic forgetting from small SFT dataset — reduce training steps or increase data quality threshold.
-- If K1546 (R2 yield ≥ R1 − 5pp) FAILS: fine-tuning on narrow math traces hurt general MMLU-Pro generation diversity — consider domain-weighted sampling in R2.
-- SFT data includes raw thinking tags: monitor for style drift between base and adapter outputs.
-
-## Pending
-
-Full run results (K1544–K1546 pass/fail) to be added after task 23 completes.
+1. **P11.HARNESS is the unblocking atomic unit.** Fixing antipattern-018 once unblocks B0-v2, C0, D0, H1, I0, J0, M0. Preferred fix: switch training targets to `<think>...</think>` (H0 K1519 existence proof) or strip channel tokens and keep inner body only. Skills `/mlx-dev` and `/fast-mlx` MUST be invoked before writing the harness code (§1011 blocking).
+2. **Pre-register under measured base, not cited base.** All future reasoning-adapter KCs must use in-run baseline_eval numbers; K1545-style absolute thresholds (≥ 59%) should be replaced with `≥ base + ε` (STAR-compatible floor). F#560 baseline-reconciliation thread carries forward until a harness-fixed re-measurement closes it.
+3. **DB ↔ MATH.md KC sync is now a pre-flight item.** Single occurrence so far; if it recurs outside I0, promote to mem-antipattern-019. Immediate mitigation: before `experiment complete`, `diff <(experiment get ... | awk KC) <(grep ^K MATH.md)` and halt on mismatch.
+4. **I0-v2 scope narrows once harness lands.** STAR self-improvement is a cleaner claim against a harness-fixed v0; the dead upstream G0 dependency can be replaced by "base model + fixed thinking format" as Phase 1 seed.

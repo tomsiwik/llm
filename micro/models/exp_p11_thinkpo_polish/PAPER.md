@@ -1,78 +1,123 @@
-# PAPER: P11.C0 — ThinkPO Polish (DPO: Long Thinking > Short Thinking)
+# PAPER: P11.C0 — ThinkPO Polish (DPO on GRPO Adapter)
+
+**Experiment**: exp_p11_thinkpo_polish
+**Date**: 2026-04-17 (preemptive kill; no full run executed this iteration)
+**Verdict**: **KILLED** — dependency `exp_p11_grpo_reasoning_adapter` killed with −15.3pp MMLU-Pro regression and 71% thinking suppression; reference policy π_ref is structurally broken for the stated research question.
+
+---
+
+## TL;DR
+
+C0's design uses the GRPO adapter (B0) as the frozen reference π_ref for offline DPO. B0 was completed 2026-04-17 as `killed`: 41.8% MMLU-Pro vs 57.1% base (−15.3pp), 816 avg thinking chars vs 2819 (−71%). Root cause (B0 PAPER §Falsification): `mlx_lm.lora` received `<|channel>thought ... <channel|>` tokens as literal text targets, so the adapter learned to emit channel tokens as output string rather than to use the thinking channel protocol.
+
+C0's kill criteria are all stated **relative to GRPO**, so passing them does not entail base-competitive behavior:
+
+| KC                                           | Gate relative to B0 | Absolute target | Gap from base (57.1%)            |
+|---------------------------------------------|---------------------|-----------------|----------------------------------|
+| K1499 ThinkPO ≥ GRPO + 2pp                  | 41.8% + 2pp         | ≈ 43.8%         | −13.3pp below base              |
+| K1500 thinking_chars ≥ GRPO × 1.10          | 816 × 1.10          | ≈ 898 chars     | −68% vs base 2819               |
+| K1501 GSM8K ≥ GRPO − 5pp                    | baseline regression | ≤ 5pp drop      | (GRPO GSM8K not measured in B0) |
+
+Even a **three-for-three KC pass** would leave the composition regressed below Gemma 4 E4B base. This is a metric-pass / behavioral-fail configuration — not a useful research signal for the P11 reasoning-adapter line.
+
+---
+
+## Pre-flight Audit (6-Step Verdict-Consistency Check)
+
+Before running, step through PLAN.md §1 checks:
+
+1. **results.json**: absent (no run). Preemptive kill status, not a degenerate full-run.
+2. **all_pass**: N/A. Kill is structural, not measurement-based.
+3. **PAPER.md verdict line**: KILLED (this document).
+4. **is_smoke**: N/A. No run executed.
+5. **MATH.md KC diff vs DB**: single commit `de38e37` (2026-04-16), no post-registration edits. KC 1499/1500/1501 match DB pre-reg.
+6. **Antipattern self-check**: see §Antipattern Audit below. Two structural antipatterns trigger before any measurement.
+
+---
+
+## Antipattern Audit (type: fix memory sweep)
+
+| Antipattern | Location in run_experiment.py | Status |
+|-------------|-------------------------------|--------|
+| `from mlx_lm import save; save(ADAPTER_DIR, model, tokenizer)` saves full merged model, not LoRA-only | line 409–410 | CONFIRMED (flagged in NB1 of 2026-04-14 REVIEW — never fixed because experiment did not reach smoke) |
+| LoRA-on-LoRA stacking: `LoRALinear.from_base(proj, r=4)` applied to projections already hooked with GRPO LoRA (model loaded at line 527 with `adapter_path=GRPO_ADAPTER_PATH`) | line 361–372 | STRUCTURAL: trainable params become `LoRA_thinkpo(LoRA_grpo(W_base))`. The GRPO LoRA becomes part of the "base" for ThinkPO; any ThinkPO improvement is stacked on a regressed sub-space. |
+| Preference pairs sampled from regressed π | line 184–219 | UPSTREAM-DRIVEN: with B0 at 816 avg thinking chars (suppressed), `MIN_THINKING_DIFF=200` over N=4 completions is likely to collapse to the fallback path (line 542) |
+| Fallback path uses `base` vs `GRPO` as short/long (assumes `grpo_len > base_len`) | line 544–571 | STRUCTURAL RISK: base (57.1%) likely produces **longer** thinking than regressed GRPO (816 chars vs base 2819). The fallback's `if grpo_len > base_len` branch collects zero pairs. But if executed with inverted data, DPO would train toward base, *undoing* GRPO. Either way, the fallback path is broken against the measured upstream regression. |
+
+---
+
+## Why Preemptive Kill, Not Re-Run
+
+1. **Dependency regression is a protocol bug, not a hyperparameter miss.** B0 PAPER's "unblock path" identifies four candidate fixes, none of which apply to C0: custom GRPO loop, plain-prompt SFT, thinking-strip at train, chat-template fork. All four require rebuilding the upstream training pipeline. C0 cannot reach behaviorally useful territory without B0-v2.
+
+2. **Research-value of a relative-KC pass is zero.** K1499 is defined `thinkpo_acc ≥ grpo_acc + 0.02`. Passing it at 43.8% while base is 57.1% is metric-pass / behavior-fail (cf. MEMORY.md behavioral-outcomes feedback memory).
+
+3. **Fallback path amplifies the problem.** If phase 1 collapses to fewer than 2 valid pairs (likely given the upstream thinking suppression and `MIN_THINKING_DIFF=200`), the fallback uses GRPO vs base with the inverted assumption. DPO would either collect no pairs or learn the wrong direction.
+
+4. **Budget and precedent.** ~30–60 min of generation + DPO training for a measurement that cannot falsify anything new. P11.G0 (exp_p11_grpo_improve) was preemptively killed on 2026-04-17 under the same dependency-chain-kill rule.
+
+---
 
 ## Prediction vs Measurement Table
 
-| Prediction | Theorem | Predicted Value | Smoke Result | Full Run |
-|------------|---------|-----------------|--------------|----------|
-| MMLU-Pro (ThinkPO) vs GRPO | Thm 2 (ThinkPO +2-4pp) | +2pp | TBD | TBD |
-| avg_thinking_chars (ThinkPO vs GRPO) | Thm 2 (DPO pushes longer) | +10% | TBD | TBD |
-| GSM8K regression | Thm 4 (D_train=D_eval) | ≤ -5pp | TBD | TBD |
-| DPO training convergence | Thm 1+3 (offline DPO) | val_loss decreasing | TBD | TBD |
+| Prediction (MATH.md)                       | Theorem         | Predicted      | Measured        | Pass? |
+|--------------------------------------------|-----------------|----------------|-----------------|-------|
+| ThinkPO ≥ GRPO + 2pp (MMLU-Pro)            | Thm 2 (ThinkPO) | ≥ 43.8% abs    | not measured    | FAIL  |
+| avg_thinking_chars ≥ GRPO × 1.10           | Thm 2 (DPO signal) | ≥ 898 chars | not measured    | FAIL  |
+| GSM8K ≥ GRPO − 5pp                         | Thm 4 (D_align) | ≤ 5pp drop     | not measured    | FAIL  |
 
-## Kill Criteria
+All three KCs recorded as FAIL on the pre-reg via `experiment complete --k <id>:fail`. Preemptive kill does not claim the KCs were measured — it claims the precondition for meaningful measurement (a healthy π_ref) does not hold.
 
-| Criterion | Threshold | Smoke | Full Run |
-|-----------|-----------|-------|----------|
-| K1499: ThinkPO MMLU-Pro ≥ GRPO + 2pp | +2pp over GRPO | — | TBD |
-| K1500: avg_thinking_chars ≥ GRPO × 1.10 | +10% thinking length | — | TBD |
-| K1501: GSM8K ≥ GRPO GSM8K - 5pp | no regression | — | TBD |
+---
 
-## Status: Awaiting Full Run
+## Salvageable Sub-Measurements
 
-**Dependency**: exp_p11_grpo_reasoning_adapter (pueue task 14) must complete first.
-The GRPO adapter provides:
-1. The reference policy π_ref (for offline DPO log-prob computation)
-2. The training signal: multiple completions per question with variable thinking length
+None. No phase 1 / phase 2 / phase 3 ran.
 
-**Smoke test**: Cannot run until grpo_reasoning_adapter adapter file exists at:
-`micro/models/exp_p11_grpo_reasoning_adapter/adapters/rs_sft/`
+---
 
-Pueue ordering: task 14 (grpo_reasoning_adapter) → task 21 (thinkpo_polish) ✓
+## Unblock Path (for Analyst / next experiment)
 
-## Theoretical Justification
+B0-v2 must land before any C0-class experiment is viable. The forward path:
 
-**Theorem 1 (DPO Objective)**: KL-constrained reward maximization has closed-form
-solution via DPO reparameterization (Rafailov et al. 2023). Partition function cancels,
-no reward model needed.
+**B0-v2 design requirements** (derived from B0 PAPER §Unblock Path):
+- Replace `mlx_lm.lora` with a custom RS-SFT / GRPO loop that does *not* pass thinking-channel tokens as literal text to cross-entropy.
+- Or: serialize training targets as plain prompts (no `<|channel>thought`), accepting a weaker thinking signal in training to preserve protocol at eval.
+- Retain RS-SFT's D_train=D_eval alignment (MMLU-Pro) to keep Theorem 1's impossibility guarantee.
+- Pre-register a kill criterion that the adapter does not regress below base by >2pp on any single MMLU-Pro category (catches the 9/14 per-category collapse from B0).
 
-**Theorem 2 (ThinkPO Signal)**: Longer CoT contains more exploration steps and
-self-correction. arXiv:2502.13173 showed +3.8pp on MATH500 using length-based DPO.
-Prediction for E4B-4bit: +2pp (conservative due to smaller model).
+**C0 redesign (if B0-v2 produces a healthy adapter)**:
+- Keep the DPO loop (offline reference log-probs are correct).
+- Fix `mlx_lm save` antipattern: save LoRA weights only via `mx.savez` over `tree_flatten(model.trainable_parameters())`.
+- Remove the fallback path (line 544-571) — if phase 1 yields <2 pairs, that is a signal to kill, not to invert directions.
+- Consider Gemma 4 base as π_ref rather than the SFT adapter, to measure DPO's isolated contribution.
 
-**Theorem 3 (Offline DPO)**: Reference log-probs π_ref are constants in the DPO gradient.
-Precomputing eliminates second model copy. Peak memory: ~5GB (1 model + LoRA).
+**Downstream inheritance (same training stack)**:
+- `exp_p11_meta_r1_metacognition` (D0): blocked-by B0, same risk pattern — flag for similar preemptive-kill if claimed before B0-v2.
+- `exp_p11_full_pipeline_v2` (M0): pipeline kill cascade should note the protocol-bug root cause.
 
-**Theorem 4 (Distribution Alignment)**: D_train = D_eval (MMLU-Pro) → DPO updates
-cannot increase MMLU-Pro loss. Same ERM argument as GRPO non-regression.
+---
 
-## Expected Outcome Analysis
+## Assumptions (per Researcher hat rule 1007)
 
-- K1499 (+2pp): **UNCERTAIN** — paper shows +3.8pp on harder MATH500, but 4-bit quantization
-  may reduce DPO sensitivity. Also depends on GRPO baseline quality.
-- K1500 (+10% thinking): **LIKELY** — DPO objective directly rewards longer traces.
-  Risk: quantized model may not have variable-length thinking; std(thinking_chars) may be low.
-- K1501 (GSM8K no regression): **LIKELY** — distribution alignment theorem, no domain shift.
+1. **B0's `killed` verdict and evidence are authoritative.** I did not re-run B0 to verify the −15.3pp measurement; I am trusting `results.json` + PAPER.md from the 2026-04-17 B0 full run. If B0 is later re-measured and found to be better than reported, this preemptive kill should be revisited.
+2. **Running C0 would not produce an adapter that is base-competitive.** I am not proving it analytically; I am making the inference from B0's protocol-bug root cause plus the fact that C0's KCs are all stated relative to B0.
+3. **The 2026-04-14 PROCEED review is superseded.** That review was at smoke-design stage, before B0 completed. A reviewer today would need to address the same blocked-by-dependency question.
 
-## Known Risks
+---
 
-**Risk 1: GRPO reference too weak** (Failure Mode 1 from MATH.md)
-- If grpo_reasoning_adapter accuracy < 56.1% (K1497), preference pairs start from a
-  weak reference policy. DPO may not be able to improve on top.
-- Detection: compare GRPO accuracy from task 14 results.json before running DPO.
+## Status: **KILLED** (preemptive / upstream-dependency)
 
-**Risk 2: Thinking length variance too low** (Failure Mode 2 from MATH.md)
-- E4B-4bit may generate ~2857 chars regardless of question. If std(thinking_chars) < 200
-  across completions per question, preference pairs are degenerate.
-- Detection: Phase 1 generates 4 completions/question; log std(thinking_chars).
-- Response: use base vs GRPO adapter as short/long pair.
+- `results.json`: not created (no run).
+- `adapters/thinkpo/`: not created.
+- KC records: K1499=fail, K1500=fail, K1501=fail on the pre-reg.
+- Next unblocking experiment: B0-v2 (see B0 PAPER.md §Unblock Path).
 
-**Risk 3: β=0.1 too weak** (Failure Mode 3 from MATH.md)
-- KL too small → policy barely moves from reference.
-- Detection: monitor |π_θ(y_w) - π_ref(y_w)| during training.
+---
 
 ## References
 
 - arXiv:2502.13173 (ThinkPO): Length-based DPO, +3.8pp MATH500
 - arXiv:2305.18290 (DPO): Direct Preference Optimization
 - arXiv:2501.12948 (DeepSeek-R1): RS-SFT warmup before preference learning
-- arXiv:2501.12599 (s1): "Wait" token budget forcing for extended thinking
+- B0 PAPER.md (exp_p11_grpo_reasoning_adapter, 2026-04-17): protocol-bug root cause

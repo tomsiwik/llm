@@ -1,44 +1,41 @@
 # LEARNINGS.md — P11.K0: CLoQ Calibrated LoRA Initialization
 
-**Status**: Pre-run context notes (experiment queued as pueue task 26 after bug fix)
+**Status**: KILLED (2026-04-17). Finding #556 logged.
 
-## Core Idea
-CLoQ (arXiv:2501.18475) initializes LoRA weights to exactly compensate quantization error
-(W_float - W_4) via Eckart-Young optimal low-rank approximation. Start at the right place
-instead of random zero — adapter capacity goes to reasoning, not artifact repair.
+## Core Finding
+CLoQ's theorem (Eckart-Young optimal low-rank init for W_float − W_4) is mathematically
+sound but operationally inapplicable to Gemma 4 4-bit. Top-8 SVs captured **3.3%** of
+||E||_F² (prediction: ≥70%). Quantization error is spread across ~1400 singular modes,
+so rank-8 CLoQ collapses to near-standard-init. K1537 FAIL (33.8% MMLU-Pro vs 66% target);
+K1535 FAIL (absolute accuracy below any plausible s1K baseline); K1536 PASS (28.9s).
+2-of-3 → KILLED.
 
-## Math Validity
-- Theorem algebraically correct, verified by reviewer
-- Eckart-Young is classical (1936), proof is tight
-- Adapter key format confirmed matches mlx_lm s1K output — no silent load failure
-- 8-bit proxy captures ≥15/16 of true quantization error (ratio bound 1/16)
-
-## Key Predictions to Verify in PAPER.md
-1. Top-8 SVs capture ≥70% of ||E||_F² energy (per-group quant structure)
-2. CLoQ calibration < 10 min (K1536)
-3. CLoQ-init training ≥ s1K + 2pp MMLU-Pro (K1535) — baseline TBD pending s1K result
-4. CLoQ + s1K data → ≥66% MMLU-Pro with thinking (K1537)
-
-## Primary Failure Mode
-Gemma 4's 4-bit model may already be near-float quality for reasoning tasks.
-If ||E||_F is small, CLoQ correction is negligible → K1535 fails (+2pp won't appear).
-K1536 (calibration speed) and K1537 (absolute accuracy) may still pass.
-
-## PAPER.md Must Include
-- Actual s1K baseline (pending task 0) — not 65% placeholder
-- Hyperparameter parity confirmation (rank=8, scale=1.0, lr=1e-5, 1000 steps)
-- Measured SVD energy capture per layer type (v_proj, o_proj)
-- delta_vs_s1K table (the core comparison)
-
-## Bug Fix Applied (2026-04-14)
-MLX 4-bit quantized weights dequantize to **bfloat16**, not float32. NumPy's PEP 3118 buffer
-protocol rejects bfloat16 (item size 2 maps to 'B' format → `RuntimeError: Item size 2 for
-PEP 3118 buffer B`). Fix: add `.astype(mx.float32)` before `np.array()` in both
-`dequantize_layer_weight()` and `get_raw_linear_weight()`. The cast is lossless (bfloat16 →
-float32 expands mantissa); SVD proceeds in float32 as designed. Task requeued as pueue task 26.
+## Why
+- **Theorem still holds.** E_r = U_r diag(Σ_r) V_r.T is Eckart-Young optimal. Verified.
+- **Precondition fails on this model.** Group-size=64 quantization + Gemma 4's
+  post-training decorrelates output rows, so the covariance structure CLoQ's motivating
+  analysis assumes is destroyed. ||E||_F² energy is ~uniform across modes, not
+  concentrated in a low-rank subspace.
+- **Rank doesn't rescue it.** 3.3% at r=8 extrapolates to ~20% at r=64 — still looks
+  like standard init. Scaling rank is not a fix.
+- **Training made it worse, not just flat.** 33.8% is ~28pp below the ~62% Gemma 4 4-bit
+  base (Finding #530). Likely rank-8 SFT on 1000 s1K examples overfits format and
+  regresses MMLU-Pro content. Answer-extractor fragility (greedy first A-J after
+  thought-strip) contributes but does not rescue the comparison (same extractor applies
+  to the s1K companion).
 
 ## Implications for Next Experiment
-If CLoQ works (+2pp): initialization quality matters more than architecture tweaks;
-apply CLoQ init to all future adapter training.
-If CLoQ fails (||E|| too small): Gemma 4's 4-bit quantization is already high-fidelity;
-focus on data quality and RL refinement (GRPO) rather than quantization compensation.
+- **Abandon CLoQ on Gemma 4 4-bit.** Not rank-32, not rank-64, not "more data". The
+  error structure is wrong for the method, not the budget.
+- **Route reasoning-SFT capacity to data-quality + on-policy methods.** LIMO, GRPO,
+  ThinkPO. Don't debug initialization when the base is already near-float quality.
+- **Before trusting any low-rank init method, measure top-r SV energy capture on the
+  target model first** — cheap SVD probe avoids wasting a 1000-step SFT run when the
+  precondition is already falsified. Add as pre-flight for future quantization-aware
+  adapter experiments.
+- **Rank-8 LoRA SFT on Gemma 4 can regress the base by ~28pp when init is bad.** Keep
+  this in mind before comparing any two LoRA recipes at this rank: absolute numbers can
+  be dominated by init quality, not recipe differences.
+- **Open question (non-blocking).** Why non-low-rank error on Gemma 4 4-bit specifically?
+  Likely group-quant + output-row decorrelation from post-training. Future finding
+  candidate; not on critical path.

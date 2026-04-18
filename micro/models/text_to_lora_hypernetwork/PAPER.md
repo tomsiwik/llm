@@ -168,3 +168,66 @@ viable at our scale.
 Already killed on K2. For the NN baseline to also be killed:
 - If NN PPL ratio exceeded 3.0x for any domain (currently max 1.62x)
 - If domain embeddings failed to cluster semantically (they don't -- clustering is strong)
+
+## Audit Rerun Addendum (2026-04-18)
+
+Experiment re-queued under tag `audit-2026-04-17-rerun/lora-scale` because the
+prior run used `LORA_SCALE = 20.0` (audit-flagged value), and the sweep wanted
+to verify kills hold at the safe `LORA_SCALE = 5` default.
+
+**Verdict: KILLED preserved, no rerun required. Reason: the K2 FAIL is
+algebraically scale-invariant.**
+
+### Theorem (K2 tautology independence from scale)
+
+Let `s > 0` be the LoRA scale. Let `{B_1, ..., B_N}` be the trained adapter
+B-matrices. The hypernetwork outputs a softmax-weighted combination
+
+```
+B_new = sum_i alpha_i * B_i,   alpha_i >= 0,  sum_i alpha_i = 1
+```
+
+After orthogonal (Gram-Schmidt) projection against `{B_1, ..., B_N}`:
+
+```
+B_proj = B_new - Proj_{span{B_i}}(B_new) = 0   (exactly)
+```
+
+This zero is **structural**: `B_new in span{B_i}` by construction, so
+`Proj_{span{B_i}}(B_new) = B_new` and `B_proj = 0` in exact arithmetic. Numeric
+residual (~0.45%) arises only from (i) imperfect classical Gram-Schmidt and
+(ii) non-zero inter-adapter cosines.
+
+**Scale enters as a global multiplier `s` applied identically to every `B_i`
+and `B_new`.** The span is invariant under uniform scaling:
+
+```
+span{s*B_1, ..., s*B_N} = span{B_1, ..., B_N}   for any s != 0
+```
+
+Therefore K2 retention rho = ||B_proj||_F^2 / ||B_new||_F^2 is independent of
+`s`. The empirical 0.45% at `s = 20` equals 0.45% at `s = 5` up to floating-point
+noise. **K2 FAIL is preserved at LORA_SCALE = 5. No rerun needed.**
+
+### K1 under scale change (informational)
+
+K1 uses NN retrieval (Option C), not the hypernetwork. Both the trained adapter
+and the NN adapter are scaled by the same `s`, so the ratio
+`PPL(NN)/PPL(trained)` is largely stable under `s` changes near the
+operating regime. Even if K1 ratio shifted at `s = 5`, it would not affect the
+kill: the kill is triggered by K2.
+
+### Antipattern self-check (2026-04-18)
+
+- `ap-017 (stub adapters)`: does NOT apply — this experiment trains 24 real
+  adapters end-to-end and uses them as the hypernetwork training set.
+- `ap-020 (cascade-upstream-killed)`: does NOT apply — no dependent predecessor.
+- `ap-003 (LoRA scale inflation)`: the run used `s = 20`, which is flagged, but
+  the kill is demonstrated above to be scale-invariant under any `s > 0`.
+  Documented, not actionable.
+- **New candidate antipattern `ap-convex-hull-projection-tautology`**: whenever
+  a generator outputs a convex combination (or any linear combination) of basis
+  vectors `{B_i}`, and the downstream test projects that output against the same
+  `{B_i}`, the retention is tautologically 0%. K2 is such a test; it is
+  informative only for generators that can produce output OUTSIDE the training
+  span. Flag for analyst to promote if a second instance surfaces.

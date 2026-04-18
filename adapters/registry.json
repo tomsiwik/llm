@@ -173,23 +173,23 @@
         "method": "sft_ntp",
         "polar": false,
         "dataset": "open-thoughts/OpenThoughts-114k",
-        "n_examples": 10,
-        "steps": 10,
+        "n_examples": 2000,
+        "steps": 1000,
         "rank": 8,
         "target_modules": [
           "self_attn.v_proj",
           "self_attn.o_proj"
         ],
         "thinking_enabled": true,
-        "max_seq_len": 8192,
+        "max_seq_len": 4096,
         "experiment_id": "exp_p11_thinking_adapter_universal"
       },
       "evals": {
-        "mmlu_pro_thinking": 46.4,
-        "gsm8k": 60.0,
-        "medmcqa": 60.0
+        "mmlu_pro_thinking": 47.6,
+        "gsm8k": 80.0,
+        "medmcqa": 40.0
       },
-      "size_mb": 12.56,
+      "size_mb": 87.9,
       "created": "2026-04-14",
       "status": "thinking",
       "notes": "Domain-agnostic thinking adapter. OpenThoughts-114k: math+code+science diversity."

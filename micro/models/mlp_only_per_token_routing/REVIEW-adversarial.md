@@ -225,3 +225,68 @@ proof actually covers: apply domain A's MLP adapter to tokens 0-127 and domain B
 MLP adapter to tokens 128-255 in ONE forward pass. Compare against multi-pass oracle
 MLP-only. If MLP token-independence holds (which it must, by the proof), these should
 match. This would upgrade the finding from PROVISIONAL to SUPPORTED.
+
+---
+
+## Audit-Rerun Addendum (2026-04-18, reviewer)
+
+**Prior verdict PROCEED/PROVISIONAL is superseded by KILLED (audit-rerun closure).**
+
+Tags: `audit-2026-04-17-rerun, tautological-routing`.
+
+### Closure verification
+
+PAPER.md §"Audit-Rerun Closure" proves no fix to the tautological-routing bug
+rescues K791. I verified:
+
+1. **Oracle interpretation correct.** `compute_mlp_only_per_token_ppl` runs 5
+   forward passes (one per adapter) and selects per-token adapter by minimum NLL
+   at the *true* label. This is the Bayes-optimal per-token adapter assignment
+   with full label knowledge → genuine lower bound on PPL(R) for any router R.
+2. **Arithmetic.** Oracle PPL = 4.656; K791 threshold = 4.042. Gap 15.2% >> 0.
+   Any R: PPL(R) ≥ 4.656 > 4.042, so K791 unreachable. ∎
+3. **Tautology direction correct.** "Router = evaluation criterion" *inflates*
+   the apparent gain (router peeks at labels). Fixing the bug removes label
+   leakage → PPL weakly increases → K791 gap cannot shrink.
+4. **K790 preserved under fix.** Oracle NLL selection trivially beats
+   per-sequence single-adapter selection (4.656 < 4.815 = per-seq).
+5. **K792 retirement correct.** Any multi-pass oracle scheme satisfies K792 by
+   construction; criterion is vacuous.
+
+### Closure-rule promotion
+
+This is the **second instance** of the oracle-ceiling antipattern family:
+- 1st: `exp_depth_routed_adapters` → `ap-oracle-ceiling-blocks-headroom` (K2:
+  gamma_oracle == gamma_token → 0% headroom).
+- 2nd: `exp_mlp_only_per_token_routing` → **`oracle-upper-bound-blocks-kill-threshold`**:
+  when a kill criterion fails under an oracle upper bound on the same data,
+  no routing-mechanism fix can salvage it.
+
+Promote the candidate rule to a full closure-rule; future audit reruns should
+check this before proposing a rerun.
+
+### Adversarial checklist (delta from prior review)
+
+- (a) results.json verdict "PROVISIONAL" vs current "killed" — expected
+  audit-rerun pattern; PAPER.md closure addendum is authoritative, results.json
+  is frozen raw-run output. Not blocking.
+- (f) Tautology sniff test: researcher **self-identified** the tautological
+  router (router ≡ per-token NLL minimiser = evaluation criterion). Caught and
+  documented correctly.
+- (g) K-ID measurement vs MATH.md: K791 measures multi-pass oracle, while
+  MATH.md's proof describes single-pass mixed-adapter. Gap acknowledged in
+  PAPER.md §"CRITICAL: Experiment-Proof Gap" — closure does not rely on
+  closing this gap.
+- Code ↔ math (h–m): unaffected by audit rerun; prior review passed these.
+
+Preserved genuine finding: MLP adapters contribute ~6x more per-token signal
+than attention (3.3% vs 0.5%, t(9)=4.69, p<0.001) — orthogonal to K791,
+documented in LEARNINGS.md. Do not let the kill erase this.
+
+### Verdict (audit-rerun)
+
+**KILL** — closure robust to the tautological-routing bug fix; K791
+structurally unreachable under every implementation on this base + adapters.
+
+Route: `review.killed` → Analyst (LEARNINGS.md already present from prior
+Analyst pass; no rewrite required).

@@ -1,100 +1,81 @@
 # Adversarial Review: exp_p11_grpo_reasoning_adapter (P11.B0)
 
-**Reviewer:** Adversarial Reviewer
-**Date:** 2026-04-14
-**Verdict: REVISE** — 2 blocking fixes
+**Reviewer:** Adversarial Reviewer (reviewer-hat pass on full-run KILLED)
+**Date:** 2026-04-17
+**Verdict: KILL (endorse researcher self-determination)**
+
+Prior 2026-04-14 REVISE→PROCEED block reviewed design for smoke; superseded by this post-run pass.
 
 ---
 
-## Summary
+## Adversarial Checklist
 
-MATH.md is sound. Three theorems correctly derive why RS-SFT on MMLU-Pro prevents the
-catastrophic forgetting seen in s1K. Smoke test passed with 57.1% yield and 2857 avg
-thinking chars. Design is ready for full run with two fixes below.
+**Consistency:**
+- (a) results.json "is_smoke":false, all_pass=false across K1496/K1497/K1498; PAPER.md verdict "KILLED"; DB status=killed. **Consistent.** ✓
+- (b) No KC passed but claim would require status=supported. DB correctly killed. ✓
+- (c) PAPER.md verdict line "KILLED — Theorem 1 falsified"; no conflicting "PROVISIONAL"/"SUPPORTED" text. ✓
+- (d) Full run (is_smoke=false), not smoke. ✓
 
----
+**KC integrity:**
+- (e) `git log` on MATH.md shows single commit `de38e37` (no post-registration edits); KC texts in MATH.md (≥64%, ≥s1K+20pp, all 14 cats ≥base−5pp) match the code-registered KCs in run_experiment.py. ✓
+- (f) No tautology. Phase 3a loads base model, Phase 3b loads adapter-augmented model; measurements come from separate generate() calls on the same 98 questions. Adapter path gated by `if adapter_path and Path(adapter_path).exists()`. No single-sample routing. ✓
+- (g) DB K-IDs 1496/1497/1498 carry stale titles from the 2026-04-13 original GRPO design; 2026-04-14 REVISE reframed to RS-SFT. PAPER.md explicitly documents this drift and reports results under both semantics; both yield KILL. Non-blocking (kill robust to either reading). ✓
 
-## Blocking Fixes
+**Code ↔ math:**
+- (h) No `sum(lora_A...)`, no `add_weighted_adapter(combination_type="linear")`, no independent summing of safetensor `lora_A`/`lora_B` keys. Training delegated to `mlx_lm.lora` subprocess. ✓
+- (i) `LORA_SCALE = 1.0` at `run_experiment.py:61` (not ≥12). ✓
+- (j) No per-sample-reused routing (no multi-adapter routing in this experiment). ✓
+- (k) No `shutil.copy(...)` of sibling adapters. ✓
+- (l) No `{"pass": True, ...}` hardcoded. KC dict populated from measured values. ✓
+- (m) MATH.md target: `mlx-community/gemma-4-e4b-it-4bit`. `run_experiment.py:55` loads same. ✓
+- (m2) MATH.md / PAPER.md do not cite explicit `/mlx-dev` or `/fast-mlx` invocations. Non-blocking because: (i) training is delegated to the canonical `mlx_lm.lora` CLI (no hand-written autograd); (ii) inference uses `mlx_lm.generate`; (iii) `mx.clear_cache()` and `mx.set_memory_limit` are used between phases; (iv) no torch-style module mutation. Idiom check passes. ✓
 
-### Fix 1: Write PAPER.md (required by protocol)
+**Eval integrity:**
+- (n) Base accuracy 57.1% with avg_thinking_chars=2819 — NOT truncated. ✓
+- (o) n=98 (7 per category × 14 categories) ≫ 15. ✓
+- (p) No synthetic padding. ✓
+- (q) Baseline measured in-run (phase3a), not cited. ✓
 
-PAPER.md does not exist. The protocol requires PAPER.md before full results are reviewed.
-Write with:
-- Full prediction-vs-measurement table (predictions from MATH.md Quantitative Predictions)
-- Smoke test findings: Phase1 yield=57.1%, thinking=2857 chars, Phase2 success=true, Phase3 base=50%, RS-SFT=53.6%
-- TBD rows for full run (100 sample q, 200 steps, 98 eval q)
-
-### Fix 2: K1498 directional check (penalizes improvements)
-
-**Bug**: `abs(per_cat_sft - per_cat_base) <= 0.05` — this fails even when adapter IMPROVES a
-category by >5pp. K1498 is a *catastrophic forgetting* criterion — only regressions matter.
-
-**Fix** in `run_experiment.py` line 532 (inside the `cat_within_5pp` dict comprehension):
-
-```python
-# WRONG (current):
-cat: abs(per_cat_sft.get(cat, 0) - per_cat_base.get(cat, 0)) <= 0.05
-
-# CORRECT (directional — only penalize drops):
-cat: per_cat_sft.get(cat, 0) >= per_cat_base.get(cat, 0) - 0.05
-```
-
-Without this fix, K1498 will almost certainly FAIL in the full run even if the adapter helps
-every category, because at 7q per category (SD ≈ 18pp), many categories will show improvement
->5pp by random chance. The FAIL will be a false negative and may trigger an incorrect kill.
+**Deliverables:**
+- (r) PAPER.md contains prediction-vs-measurement table (6 rows: K1496, K1497, K1498, thinking chars, Phase-1 yield, Phase-2 success). ✓
+- (s) Math analysis: Theorem 1 falsified mechanism ("protocol-level serialization mismatch in mlx_lm.lora channel-thinking tokens") is a sound structural explanation for the −42.9pp regression on the training-domain category (math). No unsupported claims. ✓
 
 ---
 
-## Non-Blocking Notes
+## Kill Robustness
 
-### N1: Statistical power of K1498 at 7q per category
+| KC | Threshold | Measured | Miss |
+|----|-----------|----------|------|
+| K1496 | ≥ 64.0% | 41.8% | −22.2pp |
+| K1497 | ≥ 56.1% (s1K+20pp) | 41.8% | −14.3pp (only +5.7pp vs s1K) |
+| K1498 | all 14 cats ≥ base−5pp | 9/14 regressed >5pp | math −42.9pp, physics −42.9pp |
 
-At 7 questions per category and p≈0.62, SD ≈ √(0.62×0.38/7) ≈ 18.4pp. Even after Fix 2,
-K1498 with a 5pp directional threshold requires substantial evidence against forgetting.
-Acceptable — we just need to ensure regression detection is the right framing, not
-improvement detection.
-
-### N2: K1496 (≥64%) aggressive given smoke base of 50%
-
-Smoke base was 50% (2q/cat, very noisy). Full run baseline expected ≈62.1% (Finding #530).
-RS-SFT at 200 steps on ~62 training examples may see 1-3pp gain → K1496 will likely FAIL.
-K1497 (≥56.1%, no forgetting) is the meaningful criterion here and is likely to PASS.
-PAPER.md should note this ordering: K1497 is the primary kill criterion.
-
-### N3: Smoke K1498 categories showing FAIL
-
-"history", "other", "physics" showed >5pp delta in smoke — all due to 2q per category noise.
-Non-issue for full run.
+Three independent KCs fail with wide margins. Training-domain category (math) is the most regressed. Kill is robust; no threshold/noise sensitivity concerns.
 
 ---
 
-## Things That Are Correct
+## Structural Finding (for promotion)
 
-- REPO_ROOT = `.parent.parent.parent` ✓ (3 levels)
-- Thinking regex: `<\|channel>thought.*?<channel\|>` with `<think>...</think>` fallback ✓
-- MAX_TOKENS_SAMPLE = 2048 ✓ (smoke confirmed: 2857 avg thinking chars, no truncation)
-- LoRA config via `-c lora_config.yaml` (not `--rank`/`--lora-scale` CLI args) ✓
-- `load(MODEL_ID)` and `load(MODEL_ID, adapter_path=...)` ✓
-- Stratified sampling across 14 MMLU-Pro categories ✓
-- Phase 1 → 2 → 3 flow with proper model cleanup (del model + gc + mx.clear_cache) ✓
-- Budget estimate: ~119 min fits 2h window ✓
+**"D_train = D_eval is necessary but not sufficient to prevent catastrophic forgetting: serialization protocol of training targets must preserve the eval-time generation protocol."**
 
----
+Applies to: any thinking-enabled RS-SFT/GRPO on Gemma 4 via `mlx_lm.lora`, where `<|channel>thought…<channel|>` is treated as literal text in the training message instead of as structural control tokens.
 
-## Verdict
+Falsifies: Theorem 1 assumption that `∇_θ E_D_train[L] == ∇_θ E_D_eval[L]` when the forward-pass distribution diverges via serialization format.
 
-**REVISE** — apply Fix 1 (PAPER.md) and Fix 2 (K1498 directional), then emit experiment.done.
-Pueue task 14 is queued; fixes should be applied before it runs.
+Cross-references: Finding #553 (tautological routing — Pierre v3–v6), Finding #557 (F0 OOM), Finding #560 (H0 two-STEM GD violation). This is the third consecutive reasoning-adapter kill on Gemma 4 + mlx_lm.lora, each with a distinct structural defect.
 
 ---
 
-## REVISE Resolution (2026-04-14)
+## Open Threads for Analyst
 
-Both blocking fixes confirmed applied:
-- Fix 1: PAPER.md written with full prediction-vs-measurement table, smoke findings, TBD rows for full run ✓
-- Fix 2: K1498 at run_experiment.py:533 uses directional check `sft >= base - 0.05` ✓
+1. **Finding promotion**: file a new DB finding for the protocol-mismatch mechanism. Distinct from #553/#557/#560; affects P11.C0 (ThinkPO Polish), P11.D0 (Meta-R1), P11.I0 (Synthetic Data Loop), all of which share this training stack.
+2. **DB KC drift**: KC texts for K1496/K1497/K1498 in DB still carry 2026-04-13 GRPO phrasing. Future experiments should not inherit this pattern — on REVISE-reframe, the DB KC rows should be rewritten to match the new semantics (or new IDs issued).
+3. **Unblock path for successors**: PAPER.md §"Unblock Path" documents four options; option 4 (GRPO with answer-letter reward) is the canonically-correct next step but requires a custom mlx training loop (mlx_lm.lora is SFT-only). Do not schedule a B0-v2 RS-SFT variant.
+4. **Baseline carry-over**: phase3a in-run base = 57.1% vs Finding #536 cite of 62.1%. Same measurement methodology (n=98 stratified, thinking=True, greedy). Discrepancy is within noise (±10pp at n=7/cat) but accumulating across experiments. Future P11 experiments should always re-measure baseline in-run.
 
-**Updated verdict: PROCEED** — design is sound, fixes applied, pueue task 14 queued for full run.
+---
 
-Analyst: write LEARNINGS.md with literature context (RS-SFT as GRPO approximation,
-EWC distribution alignment, DeepSeek-R1 warmup precedent).
+## Assumptions
+
+- Taking the in-run phase3a=57.1% as the true base for this experiment's comparisons (not the cited 62.1%). The gap (−4.3pp) does not affect the kill verdict — adapter at 41.8% is −15.3pp below the in-run base regardless.
+- Interpreting the 2026-04-14 REVISE→PROCEED as authorizing the reframed RS-SFT experiment, and the DB KC rows (K1496/1497/1498) as retained-by-ID. The kill holds under either the original GRPO KC semantics or the reframed RS-SFT semantics.

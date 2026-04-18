@@ -51,8 +51,10 @@ LORA_RANK = 8
 LORA_SCALE = 1.0
 LORA_DROPOUT = 0.0
 LORA_KEYS = ["self_attn.v_proj", "self_attn.o_proj"]
-MAX_SEQ_LEN = 8192
-MAX_TOTAL_CHARS = 32000
+# F0-precedent fix: sibling exp_p11_s1k_reasoning_train_eval crashed at 1854s with
+# MAX_SEQ_LEN=8192 and OpenThoughts traces are longer than s1K. Drop to 4096.
+MAX_SEQ_LEN = 4096
+MAX_TOTAL_CHARS = 16000
 
 # Stratified sample from OpenThoughts-114k (math:1000, code:600, science:400)
 N_MATH = 5 if IS_SMOKE else 1000
@@ -445,15 +447,19 @@ def phase_train():
         "--batch-size", str(BATCH_SIZE),
         "--learning-rate", str(LR),
         "--adapter-path", str(ADAPTER_DIR),
-        "--save-every", "200" if not IS_SMOKE else "5",
+        "--save-every", "50" if not IS_SMOKE else "5",
         "--max-seq-length", str(MAX_SEQ_LEN),
         "--grad-checkpoint",
         "-c", str(lora_config_path),
     ]
 
-    log(f"  Running: {' '.join(cmd[:6])} ...")
+    # F0-precedent fix: capture stderr to file so postmortem is possible
+    # (sibling F0 lost stderr to pueue rotation with capture_output=False)
+    train_log = EXPERIMENT_DIR / "train_stderr.log"
+    log(f"  Running: {' '.join(cmd[:6])} ... (stderr → {train_log.name})")
     t0 = time.time()
-    result = subprocess.run(cmd, capture_output=False, text=True)
+    with open(train_log, "w") as logf:
+        result = subprocess.run(cmd, stdout=logf, stderr=subprocess.STDOUT, text=True)
     elapsed = time.time() - t0
 
     if result.returncode != 0:

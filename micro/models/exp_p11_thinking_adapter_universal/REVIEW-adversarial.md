@@ -1,118 +1,81 @@
 # REVIEW-adversarial.md — P11.H0: thinking-universal-v0
 
-**Reviewer**: Ralph (Adversarial)
-**Date**: 2026-04-14
-**Status**: PROCEED (round 2 — both blocking fixes verified)
+**Reviewer**: Ralph (reviewer hat, post-kill pass)
+**Date**: 2026-04-17
+**Verdict**: **KILL** (endorses researcher's self-kill)
 
 ---
 
-## Round 2 Summary (REVISE fixes verified)
+## Summary
 
-Both blocking fixes from round 1 have been applied correctly:
-
-**Fix 1 (PAPER.md)**: PAPER.md written with full prediction-vs-measurement table,
-smoke test findings (K1519 PASS ✓, K1517/K1518 deferred to full run), format mismatch
-note, adapter size (12.56 MB), and 2-domain correction. ✓
-
-**Fix 2 (2-domain correction)**: MATH.md Theorem 1 precondition updated from "|{D_i}| ≥ 3"
-to "|{D_i}| ≥ 2". Dataset section correctly states "math:1400, code:600, Science shard not loaded".
-Science→medical transfer claim removed from Theorem 2. FM4 updated accordingly.
-PAPER.md notes the correction under "2-domain design (corrected)". ✓
-
-Design is now internally consistent. Full run (pueue task 17) is ready to proceed.
+Full run completed (100.2 min training, 210 MMLU + 40 GSM8K + 40 MedMCQA eval).
+Adapter saved at `adapters/thinking-openthoughts-universal-v0/` (87.9 MB, 21 checkpoints).
+**Two of three KCs failed.** Kill is correct; Theorem 1's precondition (GD > 0.5) was
+violated by the 2-STEM-domain training distribution (math+code), producing catastrophic
+forgetting on humanities (engineering 13.3%, philosophy 20.0%).
 
 ---
 
-## Original Summary (Round 1)
+## Adversarial Checklist
 
-MATH.md is solid and the smoke test passed. The gradient diversity framing is sound
-in intent. Two blocking issues prevent PROCEED: PAPER.md is missing, and there is a
-silent mismatch between the declared 3-domain sampling strategy and the actual
-2-domain implementation.
+**Consistency**
+- (a) results.json per-KC pass booleans agree with DB `status=killed` and PAPER.md "Verdict: KILLED". ✓
+- (b) K1517=false, K1518=false, K1519=true; researcher proposes `killed`, consistent. ✓
+- (c) PAPER.md verdict line: "KILLED" — matches. ✓
+- (d) `is_smoke` NOT set in results.json; training ran 6012.6s / 1000 steps / 210 MMLU questions — full run confirmed. ✓
 
----
+**KC integrity**
+- (e) `git log MATH.md` → single commit `de38e37` (2026-04-16). No post-run relaxation of K1517/K1518/K1519. ✓
+- (f) No tautology: K1517 is accuracy-vs-threshold; K1518 is two independent accuracies; K1519 counts thinking chars. Each measures a real, non-self-identical quantity. ✓
+- (g) K1517 code (`run_experiment.py:856`) computes `mmlu_acc >= 65.1`, matches MATH.md row "MMLU-Pro+thinking ≥ 65.1%". K1518/K1519 likewise match. ✓
 
-## Blocking Issues
+**Code ↔ math**
+- (h) No `sum(lora_A`, `add_weighted_adapter`, or independent key summing — single-adapter SFT, not composition. ✓
+- (i) `LORA_SCALE=1.0` at `:51` — safe. ✓
+- (j) No routing (single-domain adapter). ✓
+- (k) No `shutil.copy`. ✓
+- (l) No hardcoded `pass: True` — all three pass booleans computed from metric comparisons (`:856-858`). ✓
+- (m) MATH.md target ≡ code target: `mlx-community/gemma-4-e4b-it-4bit`. ✓
+- (m2) Skill invocation evidence absent from MATH.md/PAPER.md. **Non-blocking** because training is delegated to the `mlx_lm.lora` CLI (no hand-written MLX autograd) — the `/mlx-dev` skill risk surface is small here. Flag for future experiments that add custom MLX code.
 
-### Fix 1: PAPER.md missing
+**Eval integrity**
+- (n) Base eval 62.1% (Finding #536) with thinking — not a truncated-thought-channel artefact. ✓
+- (o) n=210 (MMLU), 40 (GSM8K), 40 (MedMCQA). Above 15 threshold. ✓
+- (p) No synthetic padding.
+- (q) Baseline cited from Finding #536 (62.1%), but `exp_p11_baseline_eval` re-measured 40.7% on the same model. PAPER.md flags this under Root Cause #3; does not change the kill (adapter under-performs either baseline). **Non-blocking flag.**
 
-PAPER.md is required by protocol and must contain:
-- Prediction-vs-measurement table (smoke test findings + TBD full-run rows)
-- Smoke test evidence (K1519 PASS, K1517/K1518 deferred to full run)
-- Notes on format mismatch (DeepSeek tags → `<think>` wrapper) and size (12.56 MB)
-
-Write a skeleton PAPER.md now; full-run rows filled in after task 17 completes.
-
-### Fix 2: Science domain silently folded into math
-
-**MATH.md claims**: "2000 examples stratified by domain (math:1000, code:600,
-science:400)" and Theorem 1 requires "|{D_i}| ≥ 3 diverse domains".
-
-**Code does** (`run_experiment.py:314`):
-```python
-n_math = min(N_MATH + N_SCIENCE, len(math_examples))  # fold science budget into math
-```
-Only 2 domains are loaded: code (shard 0) + math (shard 2). No science data.
-
-**Consequences**:
-1. Theorem 1's precondition "|{D_i}| ≥ 3" is violated.
-2. Theorem 2's prediction "MedMCQA ≥ 55% (science→medical transfer)" is unsupported
-   since there are no science examples in training.
-
-**Fix**: Either:
-a) Download a science shard and keep the 3-domain design, OR
-b) Amend MATH.md to say "2 diverse domains (code + math)" and update Theorem 1
-   precondition, remove science→medical transfer claim from Theorem 2 predictions.
-
-Option (b) is faster and still valid: code + math gradients ARE diverse enough.
-Remove K1518's MedMCQA sub-criterion or lower it to "expected uncertain" with
-justification that no medical/science training data was used.
+**Deliverables**
+- (r) PAPER.md has prediction-vs-measurement table. ✓
+- (s) No math errors; Theorem 1's Cauchy-Schwarz bound step still hand-waved (carryover from prior REVIEW non-blocking #1) — tolerable.
 
 ---
 
-## Non-Blocking Issues (noted, no REVISE required)
+## Structural Finding
 
-1. **Theorem 1 proof step is hand-wavy**: The Cauchy-Schwarz bound gives
-   |⟨Δh_i, x_j⟩| ≤ ‖Δh_i‖·‖x_j‖·(1-GD/2), but the jump to
-   FG ≤ FG_single × (1-GD) is not derived — it's asserted. Acceptable for a
-   guided-exploration experiment; full derivation would require empirical GD
-   measurement (which we don't have). Note in MATH.md as assumption.
+**Insight**: Training on two STEM domains (math + code) does NOT satisfy Theorem 1's
+precondition GD > 0.5. STEM gradients are correlated (both produce procedural,
+token-structure-similar traces), so the LoRA aligned with the dominant subspace and
+destroyed humanities knowledge.
 
-2. **K1517 +3pp threshold**: The "+3pp" prediction is hand-waved
-   ("thinking quality × 14 categories"). It's not derived from the theorem.
-   K1517 is set at 65.1% = 62.1% + 3pp. This is fine but should be noted as
-   a heuristic estimate, not a theorem prediction.
+**Measurement evidence**:
+- MMLU-Pro mean 47.6% (−14.5pp) with STEM categories (physics 66.7%, economics 73.3%) roughly preserved
+- Humanities and applied categories collapsed: engineering 13.3%, philosophy 20.0%, math 33.3%, business/law/chemistry 40.0%
+- The "diversity" came from within-STEM token distributions, insufficient for off-subspace preservation
 
-3. **Smoke K1517 = 46.4%**: This is 28 questions, 2 per category. High variance
-   is expected. Not a signal of failure — full run uses 210 questions. Noted.
+**Implication for v2**: need ≥5 domains spanning STEM + humanities + social science + medical + legal. Two STEM shards ≠ diverse distribution.
 
 ---
 
-## Verdict (Round 2)
+## Assumptions / Judgment Calls
 
-**PROCEED** — Both blocking fixes applied. Design is consistent. Full run (pueue task 17) approved.
-
-**Kill criteria expectations** (for analyst):
-- K1517 (MMLU-Pro+thinking ≥ 65.1%): UNCERTAIN — smoke at 46.4% (28q noise) is uninformative
-- K1518a (GSM8K ≥ 80%): LIKELY — math is directly in training data  
-- K1518b (MedMCQA ≥ 55%): UNCERTAIN — no medical/science data; explicitly noted as conditional
-- K1519 (thinking > 0 chars): EXPECTED PASS — 3202 chars/q in smoke confirms thinking channel active
-
-**Remaining non-blocking issues** (from round 1, no action required):
-1. Theorem 1 Cauchy-Schwarz bound → FG scaling step is asserted not derived (acceptable for guided exploration)
-2. K1517 +3pp threshold is a heuristic, not theorem-derived (noted in PAPER.md)
-3. Smoke K1517 = 46.4% is expected noise — not a failure signal
+- Accepted Finding #536 baseline (62.1%) as the gate reference despite `exp_p11_baseline_eval` re-measuring 40.7%. Kill verdict is robust to either baseline: 47.6% < 65.1% (F#536+3pp) AND 47.6% > 40.7% (baseline_eval) — so the "adapter degraded MMLU-Pro" framing in PAPER.md is only true under F#536. The finding should be re-framed as "adapter failed relative to its own kill criterion" not "adapter degraded MMLU-Pro absolute". Flagged for Analyst.
 
 ---
 
-## Round 1 Verdict (superseded)
+## Verdict
 
-**REVISE** — Apply fixes 1 and 2, then re-emit experiment.done.
+**KILL** — KC failures are real (K1517 fails by 17.5pp, K1518 by 15pp on MedMCQA). No REVISE path: root cause is in the training distribution design (two STEM domains), not a bug in code or KC. Re-running with the same recipe would re-produce the same failure. v2 must restructure the domain mix before another iteration.
 
-Both fixes are fast:
-- Fix 1: Write skeleton PAPER.md (~10 min)
-- Fix 2b: Edit MATH.md 3-domain claim + remove science→medical Theorem 2 prediction
-  + edit run_experiment.py comment to remove misleading "science:400" from docstring (~10 min)
+**Next experiment**: v2 with ≥5 domains (per PAPER.md "Next Experiment"). Gate should be against a locally-measured baseline, not Finding #536.
 
-Do NOT restart the full run. Fixes are documentation-only (task 17 hasn't run yet,
-so the code fix prevents the misleading claim from persisting into full results).
+**No REVISE-round-2 needed.** Researcher's kill is endorsed; artefacts complete and consistent.

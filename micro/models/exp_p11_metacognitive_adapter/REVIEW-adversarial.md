@@ -1,115 +1,112 @@
 # REVIEW-adversarial.md — P11.H1: thinking-metar1-metacognitive-v0
 
-**Reviewer**: Adversarial  
-**Date**: 2026-04-14  
-**Round**: 2 of 2  
-**Verdict**: PROCEED
+**Reviewer**: Adversarial
+**Date**: 2026-04-17 (post-kill determination — supersedes 2026-04-14 PROCEED draft)
+**Round**: Post-cascade (1 round; no rerun intended)
+**Verdict**: **KILL** (endorses preemptive kill; all three KCs fail as reported)
 
 ---
 
-## Round 2 Verification (2026-04-14)
+## Trigger
 
-Both blocking fixes from Round 1 are confirmed applied:
-
-1. **PAPER.md exists** — prediction-vs-measurement table present with TBD full-run rows.
-   Data leakage fix and Theorem 1 framing caveat documented. ✓
-
-2. **Phase 3 seed fixed** — run_experiment.py line 449 uses `np.random.default_rng(SEED + 1000)`.
-   Phase 1 uses `SEED` (line 211), Phase 3 uses `SEED + 1000` — disjoint samples. ✓
-
-Non-blocking issues remain acceptable as documented in PAPER.md.
+`experiment.done exp_p11_metacognitive_adapter: KILLED (preemptive)` —
+sixth consecutive `mlx_lm.lora` Gemma-4 reasoning-adapter kill today
+(F0 → H0 → B0 → C0 → D0 → H1).
 
 ---
 
-## Original Round 1 Review
+## Adversarial checklist
 
-**Round**: 1 of 2  
-**Verdict**: REVISE (2 blocking fixes)
+| Item | Check | Status |
+|------|-------|--------|
+| (a) `results.json.verdict` vs DB status | results.json absent (preemptive kill); DB = killed; PAPER.md = KILLED. Consistent. | ✓ |
+| (b) `all_pass` vs claim | n/a (not run) | n/a |
+| (c) PAPER.md verdict line | "KILLED — preemptively, before run" at §1. | ✓ |
+| (d) `is_smoke` vs full | Explicit "not run"; no false-full claim. | ✓ |
+| (e) MATH.md KC drift | `git log MATH.md` = single commit `de38e37`. No post-reg edit. | ✓ |
+| (f) Tautology sniff | K1520/21/22 all measure distinct quantities. No algebraic identity. | ✓ |
+| (g) K-ID text ↔ code ↔ DB | K1520/1521/1522 text matches DB text. | ✓ |
+| (h) Composition math bug | Single-adapter continuation from H0; no `sum(lora_A)` / `add_weighted_adapter`. | ✓ |
+| (i) `LORA_SCALE≥12` | L64 = `LORA_SCALE = 1.0`. | ✓ |
+| (j) Per-sample routing | No routing in H1. | n/a |
+| (k) `shutil.copy` adapter-as-new | Not present. Real `mlx_lm.lora` training. | ✓ |
+| (l) Hardcoded `"pass": True` | Not present; KCs computed from measurements. | ✓ |
+| (m) Target model ≠ loaded model | Same Gemma 4 4-bit base in train + eval. | ✓ |
+| (m2) Skill invocation evidence | Not applicable — no new MLX code authored in this iteration; experiment was preemptively killed before run. | n/a |
+| (n) Base = 0% + avg_thinking = 0 | n/a (not run). | n/a |
+| (o) Headline n<15 | n/a (not run). | n/a |
+| (p) Synthetic padding | n/a. | n/a |
+| (q) Cited-vs-measured baseline drift | **Flagged:** MATH.md §Theorem 2 cites Q_base=62.1% (F#530) but baseline_eval 2026-04-17 measured 40.7% on same model. PAPER.md §2(d) acknowledges. Non-blocking: the kill does not depend on which baseline is canonical. | ℹ |
+| (r) PAPER prediction-vs-measurement table | Present (§3 Kill Criteria table). All rows have both predicted and measured/failure-reason columns. | ✓ |
+| (s) Math errors / unsupported claims | Theorem 1 (orthogonal composition) and Theorem 2 (Q_H0 > Q_base) both superseded; PAPER.md §2(d) updates the premises against measured values. Honest. | ✓ |
 
----
-
-## Summary
-
-The experiment design is sound: start from H0's checkpoint, fine-tune on H0-generated
-metacognitive traces, measure thinking token reduction and accuracy preservation.
-The MATH.md has reasonable theorems and the implementation is mostly correct.
-
-Two blocking issues prevent proceeding:
-1. PAPER.md is missing (required by proof-first protocol)
-2. Data leakage: training and eval use the same seed, causing eval questions to be a
-   subset of training questions — K1521 (H1 >= H0 accuracy) is therefore invalid
-
----
-
-## Blocking Issues
-
-### Fix 1: PAPER.md missing
-
-Protocol requires PAPER.md with prediction-vs-measurement table before the experiment
-is marked ready to run. Write the skeleton now (TBD rows for full-run measurements):
-
-Required columns: Metric | Predicted | Measured (full run) | Source  
-Rows: MMLU-Pro H0 acc, MMLU-Pro H1 acc, H0 thinking chars, H1 thinking chars,
-structured trace %, training time
-
-Also record smoke test status: "No smoke test possible — H0 adapter not yet available
-(task 17 in queue). Design-only review."
-
-### Fix 2: Data leakage — same RNG seed for training and eval samples
-
-**Bug location**: run_experiment.py lines 212 and 447
-
-Both `phase1_generate_traces()` and `phase3_evaluate()` call:
-```python
-rng = np.random.default_rng(SEED)  # SEED=42
-```
-and iterate over the same `df["category"].unique()` in the same order, sampling
-from the same parquet file.
-
-Phase 1 samples `per_cat = 14` per category; Phase 3 samples `EVAL_PER_CAT = 7`.
-
-With numpy's `choice(..., replace=False)`, the partial Fisher-Yates shuffle means the
-first 7 indices selected for size=7 ARE the same as the first 7 of the 14 selected for
-size=14 when starting from the same seed. The model is trained on exactly the questions
-it is evaluated on — K1521 (H1 >= H0) becomes vacuous.
-
-**Fix**: Change Phase 3 to use `np.random.default_rng(SEED + 1000)`, OR explicitly
-exclude Phase 1 indices from the eval pool.
+**Protocol-bug confirmation (reviewer independent grep):**
+- `run_experiment.py:259-261` — `f"<|channel>thought\n{structured_thinking}\n<channel|>..."`
+  becomes `assistant.content` at L278.
+- B0 `run_experiment.py:267` — same pattern, measured −15.3pp MMLU-Pro, −71% thinking.
+- D0 `run_experiment.py:267` — same pattern, preemptively killed same day.
+- H1 is byte-identical in intent. Kill is robust to retry without harness fix.
 
 ---
 
-## Non-Blocking Issues
+## Verdict: KILL
 
-### Theorem 1 notation mismatch
-
-Theorem 1 is framed as composition of two independently-trained adapters
-`f(W + ΔW_H0 + ΔW_meta)`, but the implementation does sequential fine-tuning:
-H1 is initialized from H0's weights and trained further. These are not the same
-operation, and the orthogonality bound (r²/d² ≈ 10⁻⁵) applies to independently
-random adapters, not to a fine-tuned extension of H0.
-
-The experiment is still valid — this is transfer learning theory (fine-tuning from
-a better initialization → better convergence). But the composition framing overstates
-the math. Acceptable as-is if annotated; does not block the experiment.
-
-### K1521 circular dependency
-
-K1521 requires knowing H0's accuracy at inference time, which is unknown until H0
-completes (task 17). The check at inference time is correct — K1521 compares H1 to
-the empirically measured H0 in the same run. Acceptable.
-
-### No smoke test
-
-H0 adapter doesn't exist yet, so Phase 1 fails fast (exit code 1). No empirical
-smoke test is possible at this stage. The design has a clean prerequisite check
-(line 540). Acceptable — experiment won't start until H0 is done.
+All three KCs genuinely fail. The preemptive designation is honest per PLAN.md §1008
+(anti-stuck): retrying the same harness-level failure is compute spent reproducing a
+known bug.
 
 ---
 
-## Verdict
+## DB status
 
-**REVISE** — Apply 2 fixes:
-1. Write PAPER.md with prediction table + smoke test note
-2. Change Phase 3 seed to `SEED + 1000` (avoids leakage into eval set)
+Already `status=killed`, K1520/1521/1522=fail, evidence row written by researcher.
+No reviewer DB mutation needed.
 
-After fixes are applied, emit experiment.done and the next review pass should PROCEED.
+---
+
+## No new finding added
+
+The structural lesson (channel-text-as-`mlx_lm.lora`-SFT-target protocol bug) is already
+captured in the B0 kill chain (B0 PAPER.md 2026-04-17). The cascade pattern
+(preemptive-kill-on-harness-failure) is documented in C0 and D0 LEARNINGS today.
+Adding a fourth finding for the same mechanism would duplicate without adding signal.
+
+Finding #530 baseline-reconciliation (62.1% vs 40.7%) remains open across the H0/D0/H1
+chain and should be closed by the P11.HARNESS experiment's re-measurement.
+
+---
+
+## Open threads for Analyst
+
+1. **P11.HARNESS (unblock candidate)**: shared training harness that either
+   (i) strips `<|channel>thought...<channel|>` tokens from training targets, gating
+   thinking purely as eval protocol; (ii) switches to `<think>...</think>` text format
+   (H0 used this successfully — K1519 PASS); or (iii) trains via a custom MLX SFT loop
+   that respects the Gemma 4 chat template. Acceptance: MMLU-Pro-with-thinking
+   ≥ base − 2pp on a 50-trace pilot.
+2. **H1-v2 redesign (post-harness)**: locally-measured H0-v2 baseline (NOT F#530);
+   non-vacuous K1521 (H1-v2 ≥ base − 2pp, not vs regressed H0); K1520 on answer-parseable
+   subset only (excludes protocol-failure responses).
+3. **Theorem 2 premise**: recompute Q_H0/Q_base from harness-fix run; re-prove (or
+   falsify) before re-claiming H1.
+4. **LEARNINGS.md**: should note the KC design lesson — KCs phrased "≥ upstream-H0" become
+   vacuous the moment upstream regresses; better framing is "≥ base − ε" (absolute, against
+   in-run measurement).
+
+---
+
+## Assumptions logged
+
+- A1 (reviewer): Researcher's claim that preemptive-kill avoids ~2h of compute is plausible
+  (Phase 1 ~1h trace generation + Phase 2 ~1h training on H0 checkpoint); not independently
+  timed but not load-bearing for the KILL verdict.
+- A2 (reviewer): The 2026-04-14 REVIEW-adversarial.md Round 2 PROCEED is explicitly
+  superseded — it was a design-only review under the assumption that H0 would land ≥65.1%
+  MMLU-Pro. That assumption was falsified 2026-04-17.
+- A3 (reviewer): No tool-call budget violation; 6 file reads + 3 bash calls + 1 write.
+
+---
+
+## Superseded
+
+- 2026-04-14 REVIEW-adversarial.md Round 2 (PROCEED) — obsolete post-H0/B0/D0 kills.

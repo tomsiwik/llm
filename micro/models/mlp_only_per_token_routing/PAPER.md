@@ -27,11 +27,43 @@ Applying LoRA adapters ONLY to MLP layers per-token within full-sequence forward
 passes eliminates cross-attention contamination while preserving full causal context,
 achieving PPL better than per-sequence routing.
 
-**Verdict: PROVISIONAL (K790 PASS, K792 RETIRED, K791 FAIL).**
-The core prediction (contamination elimination via MLP-only single-pass routing) was
-NOT tested. The measured improvement comes from multi-pass oracle selection, not the
-proven mechanism. The genuine finding — MLP adapters contribute ~6x more per-token
-signal than attention adapters — is an empirical observation, not a proof verification.
+**Verdict: KILLED (K791 FAIL, audit-rerun closure).**
+K791 fails by 15.2% under an **oracle upper bound** (multi-pass per-token NLL
+selection). Any single-pass or real-router implementation is ≤ oracle ≤ 4.656, so
+K791 (< 4.042) is structurally unreachable regardless of how the tautological-routing
+bug in `run_experiment.py` is fixed. See "Audit-Rerun Closure" section below. The
+genuine empirical finding — MLP adapters contribute ~6x more per-token signal than
+attention adapters, converging with Finding #304's perturbation split — is preserved
+in LEARNINGS.md as an orthogonal observation, not a test of the hypothesis.
+
+## Audit-Rerun Closure (tag: audit-2026-04-17-rerun, tautological-routing)
+
+**Theorem (closure).** No fix to the tautological-routing code bug can rescue K791.
+
+**Proof.**
+1. K791 requires MLP-only per-token PPL < 4.042 (segment-isolated baseline).
+2. Measured MLP-only per-token PPL = 4.656 under **oracle per-token NLL selection**
+   (5 forward passes, pick adapter minimising per-token NLL). This is an upper bound
+   on any routed strategy on the same data — the oracle has full knowledge of the
+   true labels.
+3. Any proper router R satisfies PPL(R) ≥ PPL(oracle) = 4.656. (Oracle is the
+   minimiser over per-token adapter assignments; R is a restriction to router-computable
+   assignments.)
+4. The "tautological-routing" bug inflates the apparent per-token gain by making the
+   router equivalent to the evaluation criterion. Fixing this bug **worsens** the
+   measured PPL; it cannot improve it. So any fix gives PPL ≥ 4.656 > 4.042.
+5. Therefore K791 is unreachable under every implementation of the MLP-only per-token
+   architecture on this base + adapters. ∎
+
+**Consequence.** The fix-category `tautological-routing` is cosmetic for this
+experiment's kill assessment. K790 PASS is also preserved under the fix (the oracle
+NLL-selection construction trivially beats per-sequence single-adapter selection).
+K792 was retired as vacuous during review and is unaffected.
+
+**Closure-rule candidate:** `oracle-upper-bound-blocks-kill-threshold` — when a kill
+criterion fails under an oracle upper bound, no routing-mechanism fix can salvage it.
+Second instance of the oracle-ceiling family after `ap-oracle-ceiling-blocks-headroom`
+(exp_depth_routed_adapters, 2026-04-17). Promote to closure-rule.
 
 ## What This Experiment Measures
 

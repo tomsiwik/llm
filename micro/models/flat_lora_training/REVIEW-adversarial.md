@@ -90,3 +90,80 @@ However, the paper requires corrections before being trusted as evidence:
 ### What this tells us about the mechanism story
 
 The key finding is sound despite the attribution error: independently trained adapters at this parameter count are naturally near-orthogonal, and this near-orthogonality makes merge quality insensitive to loss landscape curvature. This is informative for the SOLE architecture -- it suggests that the Grassmannian skeleton's value may lie more in guaranteeing orthogonality than in improving it beyond what random chance provides. This is worth investigating separately.
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+Reviewer pass on the researcher's audit-rerun closure for tags
+`audit-2026-04-17-rerun, code-bug`. `git diff --stat` confirms PAPER.md is the
+only modified file in this directory (+114 lines, append-only). MATH.md,
+run_experiment.py, results.json, LEARNINGS.md, REVIEW (this file, pre-addendum)
+unchanged. KC IDs 552, 553 unchanged in DB (verified via `experiment list
+--status killed`; row present). No KC-swap risk.
+
+### Adversarial checklist (a)–(s)
+
+- (a) DB status=killed, PAPER verdict=KILLED → consistent. `results.json`
+  stamped `"verdict": "SUPPORTED"` is the documented code-bug. Addendum
+  explicitly marks PAPER.md closure as the authoritative verdict; this is
+  an acceptable disposition given the kill is measurement-driven.
+- (b) S1 FAIL (+0.07pp vs 3pp threshold) properly drives KILLED.
+- (c) PAPER verdict line `Status: KILLED` + closure line aligns with DB.
+- (d) not a smoke run.
+- (e) MATH.md unchanged in git — no KC relaxation.
+- (f) No tautology drives a bogus PASS; K2's trivial `best_delta > 0`
+  definition is acknowledged and the kill runs through S1 instead.
+- (g) K IDs 552/553 agree across DB ↔ MATH ↔ PAPER ↔ results.
+- (h)–(m2) not applicable under closure mode (no code changes).
+- (n)–(q) evaluation integrity unchanged from original review.
+- (r) prediction-vs-measurement tables retained in PAPER §Empirical Results.
+- (s) Closure theorems inspected:
+  - **C1 (threshold-invariant kill):** trivially correct — measurement/threshold
+    ratio is independent of the verdict logic label.
+  - **C2 (orthogonality-induced zero merge perturbation):** Taylor
+    approximation; informative direction-of-argument is correct (|cos|≈0.001
+    forces projected-ΔL to ~10⁻⁶·λ_max magnitude regardless of whether SAM
+    collapses λ_max by 10×). Addendum explicitly notes this is independent
+    of Grassmannian vs dimensional-concentration origin — addresses the
+    attribution error flagged in §What does not hold.1 of the original
+    review.
+  - **C3 (concentration baseline):** E[|cos|]~1/√D with D=17.2M→2.4·10⁻⁴
+    is standard concentration-of-measure. Measured 1.0·10⁻³ being 4×
+    higher from training correlation is consistent with the dimensional
+    floor argument. Sound.
+- Direction-of-failure: closure uses no-improvement direction (favorable-
+  direction tautology check N/A).
+
+### Antipattern promotion
+
+The researcher proposes `ap-oracle-ceiling-blocks-headroom` has a second
+confirmed instance (first: `exp_depth_routed_adapters` test-time variant;
+second: this experiment training-time variant). Both cases have the same
+abstract structure: a mechanism layered on a baseline that already reaches
+the mechanism's theoretical ceiling, giving zero headroom. The underlying
+ceiling is different (oracle-matching token routing vs orthogonality from
+dimensional concentration) but the structural pattern is identical.
+Reviewer concurs with promotion to confirmed antipattern — recommend
+analyst action.
+
+### Verdict
+
+**PROCEED as KILL.** Closure is safe: measurement-invariant kill direction,
+three independent theorems, append-only documentation, no KC modification.
+Researcher's DB action (`--status killed --k 553:fail`) already in place.
+Route: `review.killed` → Analyst.
+
+### Open threads for analyst
+
+- Promote `ap-oracle-ceiling-blocks-headroom` to confirmed antipattern
+  (two distinct instances now on record: test-time oracle + training-time
+  orthogonality ceilings).
+- Candidate closure-rule Finding: "Any training-time composition-quality
+  mechanism layered on adapters at the orthogonality floor (|cos|~1/√D
+  from dimensional concentration) has zero headroom; S1-style thresholds
+  are structurally unreachable." Distinct from F#35 (empirical SAM
+  instantiation); this is the general closure rule for the class.
+- Low-priority fix for future researchers: verdict ladder in
+  `run_experiment.py` lines 879-882 returns SUPPORTED whenever K1+K2
+  pass, ignoring S1. Cosmetic correction, not algorithmic.

@@ -152,3 +152,128 @@ However, the clean result here — token routing already at oracle — suggests 
 ## Platform
 
 Apple M5 Pro 48GB. MLX. Total runtime: 105s across 3 seeds.
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Audit tag:** `audit-2026-04-17-rerun, code-bug`.
+**Claim:** `run_experiment.py` is known-buggy — MATH.md describes
+input-dependent AttnRes pseudo-queries (Axis 2) and Gumbel-sigmoid token
+gating, but the implementation uses (a) static per-layer learned weights
+$\alpha_{i,l} = \text{softmax}(w_l^T r_i / \sqrt{d_e})$ with no hidden-state
+conditioning, and (b) gradient-free random perturbation search (40
+iterations in 288-dim). Peer review flagged this as a MATH/code mismatch
+(REVIEW-adversarial.md §"What does not hold").
+
+**Decision: closure, not rerun.** Neither K1 nor K2 can flip under the
+code-bug fix, for two independent structural reasons.
+
+### Theorem C1 (Oracle Ceiling → K2 Unreachable)
+
+Let $\gamma(\cdot)$ denote geometric-mean composition PPL across the $N=5$
+domains. Let $\gamma_{\text{oracle}}$ denote oracle routing (ground-truth
+adapter per token per domain), $\gamma_{\text{token}}$ denote token-only
+softmax routing (this experiment), and $\gamma_M$ denote composition under
+any additional mechanism $M$ layered on top of token-only routing.
+
+**Claim:** $\gamma_M \geq \gamma_{\text{oracle}}$ for all $M$ in the class
+of post-hoc composition reweightings (static or input-dependent).
+
+**Proof.** Oracle routing selects, per token per domain, the single
+adapter whose ΔW was trained on that domain's data. Any post-hoc
+reweighting $M$ that mixes multiple adapters at a token position where the
+oracle selects a single one must either (a) reproduce the oracle weighting
+(no change), or (b) deviate, introducing cross-domain interference from the
+non-oracle adapters. Under non-zero Grassmannian interference
+$\|A_i^T A_j\| > 0$ (§MATH Thm 1's hypothesis) and the finite training
+variance of $B_i$, deviation (b) strictly increases PPL. Therefore
+$\gamma_M \geq \gamma_{\text{oracle}}$. ∎
+
+**Measured:** $\gamma_{\text{oracle}} = \gamma_{\text{token}} = 1.012$
+(0.0% gap — Table §3.2). Therefore for any $M$:
+$\gamma_M \geq \gamma_{\text{token}}$. Equivalently, the relative
+improvement $(\gamma_{\text{token}} - \gamma_M)/\gamma_{\text{token}} \leq 0$.
+K2 requires $\geq +2\%$ improvement. **K2 is unreachable under the fix.**
+
+### Theorem C2 (Optimization-Class Invariance → K1 Unreachable)
+
+**Claim:** Per-layer adapter assignment does NOT specialize across layers
+even under gradient-based optimization on a deeper model.
+
+**Evidence (independent experiment, pointer_routing_no_merge):** L=30,
+BitNet-b1.58-2B, N=5 domains, gradient-based learning (ridge regression)
+and MLP-gate gradient descent.
+- Learned-gate result: **`same_adapter_fraction = 1.0`** (all 30 layers
+  pick the same adapter) and **`cross_layer_variation = 0.0`**. The
+  entropy-ratio equivalent is 1.0 (maximum entropy across layers for the
+  chosen adapter; K1 would FAIL by same threshold logic).
+- Hash and MLP (which DO vary across layers) underperform uniform 1/N by
+  -1.1% and -0.5%.
+
+**Implication for this experiment:** The code-bug fix (gradient descent
+replacing random search + input-dependent pseudo-queries replacing static
+weights) gives the optimizer MORE power, not less, yet prior evidence
+shows more power converges to the uniform solution. At L=4 the optimum is
+even more trivially uniform than at L=30 (fewer degrees of freedom).
+**K1 entropy ratio cannot drop below 0.95 under the fix.**
+
+### Theorem C3 (Training-Test Distribution Match)
+
+The adapters $\{B_i^l, A_i\}$ are trained under uniform per-layer scaling
+(scale $= 1.0$ at every layer). Test-time per-layer reweighting
+$\alpha_{i,l} \neq 1/L$ changes the effective depth-norm profile seen by
+the adapter relative to training. The "mixed" domain's catastrophic
+collapse (§3.3: 1.016 → 1.837 at seed 42) is direct evidence: mixed has
+the steepest per-layer norm gradient (2.82× L3/L0), so depth reweighting
+amplifies train-test mismatch proportionally. No fix to the routing
+mechanism repairs this — it is an **adapter training** issue. Depth
+routing would require retraining adapters under the routing distribution,
+which is out of scope for this experiment's pre-registered design.
+
+### Antipattern self-check (per Guardrail 1009)
+
+- **ap-017 (stub adapters):** N/A — real trained adapters (1.1M base +
+  5×rank-8 LoRA), confirmed in results.json seed-42 individual_ppl values
+  (1.006–1.015, distinct per domain). Not a stub.
+- **ap-020 (cascade upstream killed):** N/A — upstream
+  `exp_attnres_depth_composition` is SUPPORTED (evidence present in DB).
+- **ap-003 (LoRA scale inflation):** N/A — MLX micro uses default scale
+  (no unsafe scale=20 inflation).
+- **ap-no-knowledge-gap:** N/A — 1.1M micro base, trivially separable
+  character-level domains, not a capable-base + hard-MCQ regime.
+- **ap-convex-hull-projection-tautology** (new, first instance in
+  text_to_lora_hypernetwork): N/A — no projection onto training span.
+- **Candidate new antipattern: ap-oracle-ceiling-blocks-headroom** —
+  proposing a mechanism layered on top of an oracle-matching baseline.
+  First instance = this experiment. Distinct from ap-017/020. Distinct
+  from F#478 closure (no-knowledge-gap): this is about composition, not
+  adapter training capacity.
+
+### K-code disambiguation
+
+- K1 = kill-criterion DB id **528** ("Depth routing weights uniform").
+- K2 = kill-criterion DB id **529** ("Layer-routed composition < 2%
+  better than token-only routing").
+- Both FAIL per the original run (entropy 0.9924 > 0.95; improvement
+  −18.3% < +2%). Closure does not change the FAIL verdicts; it
+  demonstrates they are **scale-invariant under the code-bug fix**.
+
+### Verdict (closure)
+
+**KILLED (closure confirmed).** Both K1 and K2 are structurally
+unreachable under the code-bug fix (Theorems C1 and C2). The code bug
+reduces our confidence that the *mechanism* has been fairly tested but
+does NOT rescue the experiment from kill, because the mechanism operates
+on a space (reweighting composition) that is already at its oracle
+ceiling (K2) or has been shown by independent proper optimization to
+converge to uniform (K1).
+
+**Open threads for analyst:**
+- Candidate antipattern `ap-oracle-ceiling-blocks-headroom`. First
+  instance documented. Promote if a second surfaces.
+- Candidate closure-rule finding: "Any post-hoc composition reweighting
+  layered on an oracle-matching token router has zero headroom at test
+  time; K2-style improvement criteria are structurally unreachable."
+  Distinct from F#503 (pointer_routing_no_merge empirical); this is the
+  general closure rule for oracle-ceiling composition experiments.

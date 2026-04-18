@@ -167,3 +167,112 @@ becomes a COMPETITION problem that requires centralized arbitration.
 5. **Overhead at N=24 is acceptable** (6.80%) -- the bottleneck is accuracy, not speed.
 6. **Energy gap routing (8.3%) and learned routing (39.6%) both fail at N=24** --
    the problem is structural, not just about the routing method.
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Tags at claim:** `audit-2026-04-17-rerun, code-bug`. This section documents
+the closure analysis — no rerun performed.
+
+### Identified code bug
+
+`run_experiment.py` line 331:
+```python
+return nn.losses.binary_cross_entropy(mx.sigmoid(logit), target, reduction="mean")
+```
+MLX `nn.losses.binary_cross_entropy` defaults to `with_logits=True` (expects
+logits, not probabilities). Passing `mx.sigmoid(logit)` double-applies sigmoid:
+the loss computes `log(σ(σ(logit)))` rather than `log(σ(logit))`. At logit=5
+(confident positive), the bug yields ~45× the correct loss; the network sees
+medium-magnitude loss signals regardless of how confident the logit is. This
+partially explains the 7 heads that learned "reject everything" (own-domain
+accuracy <50%): gradient compression at confident predictions biases toward
+the flat prior.
+
+**Correct form:** `nn.losses.binary_cross_entropy(logit, target, reduction="mean")`
+(keep default `with_logits=True`), or pass `with_logits=False` if keeping
+the manual sigmoid.
+
+### Decision: closure (no rerun). Rationale — three theorems.
+
+**Thm C1 (K585 zero-headroom — FORMAL, kill-invariant).**
+Let PPL_base = 10.06 (avg over 24 domains). Individual adapter PPL = 10.09
+(avg), i.e. individual adapters are *worse* than base on average. Any
+composition in adapter space (uniform 1/N or routed top-k) is a convex
+interpolation between base behavior and individual adapters. Hence:
+
+- Upper bound on routable improvement over uniform: the magnitude of
+  adapter specialization signal = |PPL_individual − PPL_base| ≈ 0.03
+  (or ~0.3%).
+- Measured routed−uniform gap: 10.13 − 10.08 = 0.05, dominated by PPL
+  estimation noise over 20 validation samples per domain.
+- Signal-to-noise < 1 by construction.
+
+K585 ("routed PPL < uniform PPL") is therefore structurally unreachable.
+*No routing mechanism* — BCE-fixed or otherwise — can produce routed
+PPL meaningfully below uniform PPL when the underlying adapters provide
+~0 PPL headroom. KILL direction on K585 is invariant under any
+in-experiment code modification.
+
+**Thm C2 (K584 plausibility — directional, not formally invariant).**
+If BCE fix lifts per-head accuracy from 87.2% to ~90% and per-head FPR
+from 0.13 to ~0.10 (optimistic — consistent with eliminating ~half of
+the reject-everything heads), expected false positives per query =
+23 × 0.10 = 2.3. Under uniform-score argmax, top-1 accuracy is bounded
+roughly by 1/(1 + 2.3·score_ratio). For score_ratio ≈ 1 (uncalibrated
+independent heads produce comparable score magnitudes across domains),
+top-1 ≈ 0.30−0.50. Still below K584 = 60% with high probability.
+Failure direction — no optimistic tautology. Not formally invariant
+(BCE fix *could* in principle push K584 past 60% if score calibration
+were accidentally restored, which is unlikely).
+
+**Thm C3 (Structural uncalibration — referencing reviewer).**
+REVIEW-adversarial.md §"The Impossibility Structure Is Correctly
+Identified" already formalized: *independent binary classifiers cannot
+solve competitive ranking without calibration*. The BCE fix addresses
+*detection* (per-head loss curvature) but does not introduce cross-head
+*calibration*. The cited MoE scaling literature (DeepSeekMoE's normalized
+sigmoid, Expert Threshold's shared-reference calibration) all demonstrate
+that truly-decentralized independent scoring fails at scale regardless
+of per-head quality. This is the LEARNINGS.md "Four routing kills share
+no cross-expert calibration" conclusion.
+
+### Antipattern self-check
+
+- **mem-021 (CEILING-HEADROOM COLLAPSE):** APPLIES. **Third distinct
+  instance** of the pattern:
+  - (1) `exp_depth_routed_adapters`: oracle-router ceiling (test-time).
+  - (2) `exp_flat_lora_training`: orthogonality ceiling (training-time).
+  - (3) This experiment: adapter-specialization ceiling (behavioral-metric).
+  Abstract structure identical: a mechanism M is proposed to improve
+  metric µ layered on baseline B_0 that has no headroom in µ. K585
+  here = behavioral analog of zero-headroom. Promotes to 3-instance
+  confidence.
+- **mem-008 (thinking truncation):** N/A (BitNet base, no thinking mode).
+- **mem-003 (LORA_SCALE=20):** N/A (routing heads, not adapter scale).
+- **mem-001 (composition math bug):** N/A (single-adapter routing, no
+  summation).
+- **Verdict-DB mismatch:** N/A (results.json verdict "KILLED" and PAPER
+  verdict KILLED match; no mismatch to fix).
+
+### KC disambiguation
+
+| KC ID | Label | Threshold | Measured | Pass? | Fix-invariant? |
+|---|---|---|---|---|---|
+| 584 | K1: Top-1 < 60% → KILL | 60% | 39.6% | FAIL | Directional (C2) |
+| 585 | K2: Routed PPL ≥ uniform → KILL | Routed<Uniform | 10.13 vs 10.08 | FAIL | Formal (C1) |
+| 586 | K3: Overhead > 10% → KILL | 10% | 6.8% | PASS | — |
+
+KC IDs/text in MATH.md unchanged since 2026-03-29 (see `git log MATH.md`).
+No KC-swap.
+
+### Verdict
+
+**KILLED** — reaffirmed under audit-rerun closure. K585 failure is
+formally invariant under any code fix (zero-headroom). K584 failure is
+directionally invariant. The identified BCE-with-logits bug is
+acknowledged but kill-direction-preserving; fix deferred to
+`exp_followup_bce_with_logits_routing` which is the correct venue for
+measuring a clean BCE-fix ablation in isolation (per experiment DB
+search).

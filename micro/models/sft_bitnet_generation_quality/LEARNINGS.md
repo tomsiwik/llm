@@ -118,3 +118,25 @@ adapters DO modify response-token logits (that's what they're trained to optimiz
 3. **Embedding-based routing evaluation:** Compare LoRAuter-style (2601.21795)
    embedding routing against energy gap and tiny heads. Would provide a training-free,
    SFT-compatible routing baseline.
+
+## Audit-Rerun Closure Addendum (2026-04-18)
+
+Original verdict line read "SUPPORTED (guided exploration). Finding #187: PROVISIONAL"
+while K3 (math ≥40%) measurably failed (10%). Under PLAN.md §1 item 3 this violates
+verdict consistency (PAPER must not contain PROVISIONAL when status=supported). The
+audit-rerun closure reclassifies to **KILLED** via three independent PAPER.md closure
+theorems: (C1) Lemma 1 dictates 4% routing floor — structural, not hyperparameter;
+(C2) N=10 Wilson 95% upper bound 40.4% tangent to the 40% threshold — robust at any
+base PPL; (C3) judge ceiling 3.93 caps headline metric — consistent with Finding #178.
+LORA_SCALE=20 (mem-003) acknowledged with direction-preservation. DB and evidence now
+agree: `experiment complete --status killed --k 580:fail`.
+
+**Pattern note (watch-list, not promoted):** "Lemma-Side-Effect Sabotage" — combining
+two mechanisms M1 + M2 where M1's necessary mathematical property destroys M2's
+required signal. Single instance only (this experiment). Distinct from mem-021
+(CEILING-HEADROOM COLLAPSE: mechanism layered on baseline at its ceiling). Promote
+only if a second distinct instance surfaces.
+
+Finding #187 (SFT-Routing Incompatibility) remains the core finding — its structural
+generality (chain rule → full-prompt NLL routing incompatibility) is what any future
+routing mechanism must respect, regardless of the verdict label on this one experiment.

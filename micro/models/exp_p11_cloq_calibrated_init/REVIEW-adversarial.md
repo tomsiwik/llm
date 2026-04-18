@@ -65,3 +65,47 @@ The mathematical foundation is sound. Eckart-Young is classical, the proof is ti
 **Fix correctness**: ✓ The cast is lossless in the sense that bfloat16 → float32 expands mantissa precision; SVD is done in float32 anyway so no information is lost. The math is unchanged.
 
 **PROCEED verdict unchanged.**
+
+---
+
+## Post-Run Review (2026-04-17)
+
+**Verdict: KILL** (confirms researcher's proposed KILLED status)
+
+### Adversarial checklist — all gates pass for KILL
+
+| # | Check | Result |
+|---|-------|--------|
+| a | results.json (k1535=false, k1537=false) ↔ PAPER verdict KILLED | ✓ consistent |
+| b | all_pass / kill_criteria: 2/3 fail | ✓ killed |
+| c | PAPER.md verdict line: "**Verdict: KILLED**" | ✓ |
+| d | is_smoke=false, n_steps=1000, N=260 MMLU-Pro items | ✓ full run |
+| e | MATH.md KCs unchanged post-hoc (no git diff) | ✓ |
+| f | No tautological passes | ✓ |
+| g | K-IDs measure correct quantities (SVD energy, wall-clock, MMLU-Pro acc) | ✓ |
+| h | No composition bug (not applicable) | ✓ |
+| i | LORA_SCALE=1.0 (safe) | ✓ |
+| j | Routing not applicable | ✓ |
+| k | No `shutil.copy` adapter-as-new-domain | ✓ |
+| l | Phase-skip hardcodes `k1536_pass=True, 0.033, 28.9s` when adapter exists — not load-bearing for KILL (K1536 is the passing criterion; the failing K1535/K1537 are freshly measured). Flagged, non-blocking. | ⚠ soft |
+| m | Target: Gemma 4 4-bit loaded = MATH.md target | ✓ |
+| m2 | No explicit `/mlx-dev` / `/fast-mlx` skill-invocation note in MATH/PAPER; non-blocking for KILL (no code being promoted). | ⚠ soft |
+| n | Measured 33.8% with avg 1002 thinking chars — not empty-string pathology | ✓ |
+| o | N=260 ≫ 15 | ✓ |
+| p/q | s1K baseline absent; PAPER is honest (one-sided fail on absolute acc, not a bogus delta) | ✓ |
+| r | Prediction-vs-measurement table present | ✓ |
+| s | Math unchanged; Eckart-Young application still correct | ✓ |
+
+### Load-bearing finding
+Eckart-Young theorem is sound; its **operational precondition fails on Gemma 4 4-bit**:
+top-8 SV capture = 3.3% of ||E||_F² vs predicted ≥70%. Error is spread across ~1400 modes.
+Even rank-64 would capture only ~20%, so CLoQ is not rescuable on this model by increasing rank.
+
+### Implications
+- Do NOT resurrect CLoQ on Gemma 4 with higher rank.
+- Reasoning-SFT capacity should route to data-quality / on-policy methods (LIMO, GRPO, ThinkPO).
+- Open question (non-blocking, for future finding): why is Gemma 4 4-bit group-quant error non-low-rank? Likely group_size=64 + output-row decorrelation from post-training destroys the covariance structure assumed in CLoQ's motivating analysis.
+
+### Route
+→ `review.killed` — experiment complete, finding logged, handoff to Analyst.
+

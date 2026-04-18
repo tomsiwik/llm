@@ -95,3 +95,30 @@ None of these held.
 2. Verify each adapter improves its domain PPL over base (prerequisite)
 3. Re-run this experiment with the new adapters and corrected K799 threshold
 4. Implement per-token routing OR formalize segment-level majority vote as the design
+
+## Audit-Rerun Closure (2026-04-18)
+
+This experiment was retagged `audit-2026-04-17-rerun, lora-scale` during the
+2026-04-17 audit sweep. The fix-category `lora-scale` assumes that adjusting
+LORA_SCALE would rescue the kill. Three independent closure theorems (see
+PAPER.md) show this is false:
+
+- **C1 adapter-quality ceiling:** 8/10 pairs have oracle_ppl ≥ base_ppl. Scale=20
+  adapters on `real_data_domain_experts` are harmful. In-place LORA_SCALE change
+  cannot make harmful adapter deltas beneficial without retraining — that is a
+  new experiment, not a fix.
+- **C2 routing-decoupling invariance:** Segment majority vote with L=128 at
+  p=0.897 has error ≤ 10⁻¹⁷ by Hoeffding → oracle_ppl == ridge_ppl by construction,
+  independent of LORA_SCALE. K799 is decoupled from K800 architecturally.
+- **C3 two-pass architectural bound:** 254.2/109.3 = 2.326x. Ratio > 2 for any
+  LORA_SCALE that retains a second forward pass. Theorem 3's 1.013x is for a
+  1-pass pipeline (different architecture).
+
+**Closure-rule promoted:** `base-ceiling-blocks-routing` — if oracle PPL ≥ base
+PPL, no routing can improve. Third oracle-ceiling closure (after depth_routed and
+mlp_only_per_token_routing), same family, different mechanism. The generalisation:
+inspect the oracle before analysing the router.
+
+**Status:** KILLED (closure, not rerun). Final artifacts: MATH.md, run_experiment.py,
+results.json, PAPER.md (with Audit-Rerun Closure addendum), REVIEW-adversarial.md,
+LEARNINGS.md.

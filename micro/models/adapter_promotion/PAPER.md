@@ -116,3 +116,70 @@ If you have 5 non-commuting LoRA perturbations each with Frobenius norm ~σ, the
 **Experiment Status:** KILLED — The adapter promotion approach (NRE composition of equally-trained adapters) does not preserve the medical adapter's utility and causes severe cross-domain degradation.
 
 **Next Steps:** Explore pre-merger approach (merge medical into base, then train 4 others) or switch to learned composition (Room Model).
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Tags under rerun audit:** `audit-2026-04-17-rerun, lora-scale`.
+The recovery plan prescribes reducing `LORA_SCALE=20` to a safe value (≤8). Three
+independent closure theorems show the kill is **robust to the scale fix** —
+rerunning at a lower scale cannot flip this verdict to `supported`.
+
+### C1 — Orthogonality ceiling blocks K828 at every scale
+
+MATH.md Section II derives, under orthogonal adapters (Finding #126: cos ≪ 0.03,
+17–69× below the Welch bound):
+
+```
+η_i = ⟨ΔW_composed, ê_i⟩ / σ_i ≈ 1/√N
+```
+
+For N=5, η ≤ 1/√5 = 0.447. K828 requires retained benefit ≥ 0.70. Therefore K828
+is unreachable under the stated orthogonality premise **regardless of LORA_SCALE**:
+scale enters as a common multiplicative factor on all ΔW_i, and the retention
+ratio η cancels out. To satisfy K828, either (a) σ_medical ≫ σ_mean (medical norm
+dominates all others) or (b) adapters share a medical subspace (non-orthogonal).
+Both contradict Findings #126 (near-orthogonal by geometric guarantee) and #275
+(NRE rescales to σ_mean, not σ_medical). The fix cannot change this structural
+bound.
+
+### C2 — The "correct" architecture already tested in a sibling experiment
+
+The mechanism MATH.md sketches as the true fix (Section V: "merge ΔW_medical into
+W_base before further composition") is **not what this experiment tests**. This
+experiment uses uniform NRE averaging of all 5 adapters. The merge-then-compose
+mechanism is tested by `exp_expert_promotion` (Finding #333, SUPPORTED at
+scale=5): 92% → 92% MMLU preservation, medical PPL 6.058 → 5.249 (−13.4%).
+
+Lowering LORA_SCALE here moves the experiment closer to `expert_promotion`'s
+regime but still tests a distinct (and inferior) averaging mechanism. The
+research question ("can adapter promotion grow the effective base?") already
+has a SUPPORTED answer via a different, architecturally superior mechanism.
+Rerunning uniform NRE at scale=5 would at best recover ~45% of a much smaller
+solo benefit — far below K828's 70% threshold.
+
+### C3 — K829 empirics at scale=20 are consistent with non-linear regime (#328)
+
+K829 measures cross-domain catastrophe (composed PPL ≤ 1.5× base). At scale=20,
+all domains degrade 2.08–2.45× (PAPER.md table). Finding #328 shows scale=20
+overwhelms base representations by 55% behavioral degradation; Finding #330
+shows scale=13 is safe, scale=20 is catastrophic. Reducing scale to 5–8 would
+likely satisfy K829, but that alone cannot upgrade the experiment to `supported`
+because K828 remains blocked by C1. Partial satisfaction of only K829 is not
+a pass (`all_pass` requires both).
+
+### Closure verdict
+
+- K828 FAIL (id 828): retained benefit 0.0% (threshold 70%). Structurally
+  unreachable under Finding #126 — closure by C1.
+- K829 FAIL (id 829): all 4 non-medical domains 2.08–2.45× base PPL (threshold
+  1.5×). Scale-fix might recover K829 alone, but K828 still fails — closure by
+  the conjunction of C1 + C2.
+
+**This is the fourth oracle-/orthogonality-ceiling closure of this sweep**
+(after `exp_depth_routed_adapters`, `exp_mlp_only_per_token_routing`,
+`exp_ridge_router_single_pass_e2e`). Closure-rule `base-ceiling-blocks-routing`
+(Finding #563) and the `ap-oracle-ceiling-blocks-headroom` family both apply:
+when a structural upper bound on the composition operator sits below the kill
+threshold, no hyperparameter fix can rescue the kill.

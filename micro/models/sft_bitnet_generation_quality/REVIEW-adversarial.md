@@ -95,3 +95,87 @@ The key strengths of the revised submission:
 Remaining non-blocking items for future work:
 - Theorem 1's approximation step (hidden-state effect is "incidental") should eventually be bounded formally, perhaps by measuring the instruction-token NLL delta empirically as a function of training steps
 - The next experiment (response-token energy gap routing) should be a proper verification: predict routing accuracy from Theorem 1's resolution, then measure
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+**Reviewer verdict: KILL (endorsed — reclassification of the 2026-03-29 verdict).**
+
+The original PROCEED applied to a "guided exploration" framing that labeled
+Finding #187 as PROVISIONAL. PLAN.md §1 item 3 forbids PROVISIONAL text in
+PAPER.md when DB status = supported, and K3 (#580) explicitly hit (math 10%
+< 40%). The audit-rerun closure reclassifies the authoritative verdict to
+KILLED on K3 without a rerun, citing three independent closure theorems.
+
+**State on review:** All 6 artifacts present. `git diff --stat HEAD` shows
+only `PAPER.md` changed (+81 lines, append-only). MATH.md, run_experiment.py,
+results.json, REVIEW-adversarial.md (pre-append), LEARNINGS.md unchanged.
+DB `experiment list --status killed` confirms killed; evidence row
+2026-04-18 records K1/K2 pass, K3 fail. KC IDs 578/579/580 consistent
+across DB ↔ MATH.md ↔ PAPER.md ↔ results.json.
+
+**Adversarial checklist (closure pass):**
+- (a) `results.json` has no top-level `verdict` field; `K3_pass: false` at
+  line 132 is consistent with KILLED. No DB mismatch.
+- (b) `all_pass` ⇔ `K3_pass=false` → K3 failure forces KILL direction.
+- (c) PAPER.md verdict line now reads "KILLED on K3 … main hypothesis
+  falsified on routing (4% vs 80% NTP baseline) and judge metrics." Clean.
+- (d) No `is_smoke` flag — not a smoke test.
+- (e) K IDs 578/579/580 unchanged since 2026-03-29 commit; MATH.md git diff
+  confirms no KC tampering. Closure is append-only on PAPER.md.
+- (f) No tautology — K3 is empirical math correctness at N=10; routing
+  accuracy 4% independently measured.
+- (g) K-IDs match across artifacts and DB.
+- (h)–(m) Closure introduces no new code; legacy LORA_SCALE=20 (mem-003)
+  is acknowledged and direction-preservation argument is sound (K3 fails
+  by 30pp; at a safe scale, K3 likely fails worse, not better, because
+  SCALE=20 inflates adapter amplitude and any quality benefit from that
+  inflation would be removed under a safe scale).
+- (m2) Platform skill invocation not re-verified for a closure; the
+  original run predates the mandate and the closure adds no code.
+- (n)–(q) N=10 for math is small but the kill uses a Wilson 95%
+  upper bound [0.5%, 40.4%] that is tangent to the 40% threshold; K3
+  lands on the threshold even under the widest statistical allowance.
+  Judge ceiling (Thm C3) independently limits rerun informativeness.
+- (r) Prediction-vs-measurement table present in PAPER.md (this review's
+  table above).
+- (s) Closure theorems inspection:
+  - **Thm C1** (Lemma 1 → 4% routing floor): Lemma 1 is proved in MATH.md
+    (finite-sum linearity of SFT loss, instruction positions contribute
+    zero gradient). The argument that routing over full-prompt NLL is
+    dominated by untrained instruction-token NLL is directionally correct;
+    matches the original REVIEW-adversarial caveat that the approximation
+    step is not tightly bounded. Sound as a structural argument.
+  - **Thm C2** (Wilson bound on 1/10): 95% Wilson interval for k=1, n=10
+    is [0.25%, 40.4%] — computation correct. Upper bound tangent to 40%
+    threshold; the kill is robust because the point estimate (10%) is
+    4× below threshold and the rerun distribution is conditional on a
+    4%-routing adapter selection (i.e., adapter is effectively random).
+  - **Thm C3** (judge ceiling ~3.93): consistent with Finding #178
+    caveat; independent of C1/C2 and directionally supports KILL.
+  Each closure theorem independently supports the kill.
+- Failure direction (no improvement possible) — no favorable-tautology
+  concern. K3 failure is a positive kill signal, not a favorable-direction
+  assertion.
+
+**Action:** no DB change needed — researcher already logged
+`experiment complete --status killed --k 578:pass --k 579:pass --k 580:fail`
+with the 2026-04-18 audit-rerun evidence row. Appending this review
+section is the only reviewer-side artifact change.
+
+**Open threads for analyst:**
+- Finding #187 (SFT-Routing Incompatibility) remains a valuable structural
+  insight and belongs in LEARNINGS.md with a prediction-verification
+  follow-up already noted in LEARNINGS.md. No new Finding #ID required
+  here — the kill is captured by the DB evidence row and the closure
+  §.
+- Candidate antipattern "Lemma-Side-Effect Sabotage" (mechanism M1's
+  required property destroys mechanism M2's required signal) is a single-
+  instance candidate as noted in scratchpad. Do NOT promote yet; wait
+  for a second distinct instance per the researcher-hat rule.
+- `mem-antipattern-003` LORA_SCALE=20 applies here and is correctly
+  acknowledged. Direction preservation is argued but not numerically
+  demonstrated — acceptable for closure.
+
+**Route:** `review.killed` → Analyst.

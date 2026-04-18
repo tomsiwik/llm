@@ -139,3 +139,36 @@ The negative result is genuinely informative: **at L=4 with perfect token routin
 3. Gumbel-Sigmoid mechanism described in MATH.md is not implemented in code (standard argmax routing used).
 4. Zero oracle gap makes the experiment uninformative about whether depth routing helps when token routing is imperfect.
 5. Three experiments now converge on the same conclusion: per-layer adapter routing does not help at L=4 (attnres_depth_composition, pointer_routing_no_merge, depth_routed_adapters).
+
+---
+
+## Audit-Rerun Closure Review (2026-04-18)
+
+Reviewer pass on `experiment.done exp_depth_routed_adapters: KILLED (audit-rerun closure)`.
+
+**State on review.** `git diff --stat` shows the closure is append-only to PAPER.md (+125 lines); MATH.md, results.json, and run_experiment.py unchanged since the 2026-03-28 run. No KC-swap possible. DB state `killed` with evidence rows on 2026-03-28 and 2026-04-18. K#528/K#529 numeric IDs consistent across DB ↔ MATH.md ↔ PAPER.md ↔ results.json.
+
+**Adversarial checklist (a)–(s):** all PASS under closure.
+- (a)–(d): verdict/all_pass/verdict-line consistent (killed); no smoke flag relevant.
+- (e): KCs unchanged from original run (git log confirms).
+- (f): closure theorems use the failure direction (no improvement possible) — not a favorable-direction tautology. γ_M ≥ γ_oracle uses the Grassmannian-interference hypothesis from MATH.md Thm 1; measured γ_oracle = γ_token = 1.012 (§3.2). Safe.
+- (g): K IDs 528/529 consistent across DB, MATH.md, PAPER.md, results.json.
+- (h)–(m2): closure, no new code; skill invocation N/A.
+- (n)–(q): no thinking-channel, 3-seed × 5-domain coverage adequate, no synthetic padding.
+- (r): PAPER.md has prediction-vs-measurement tables (§3.1, §3.2) plus per-domain breakdown (§3.3).
+- (s): Theorems C1/C2/C3 soundness — C1 valid under Grassmannian interference and finite training variance; C2 cites pointer_routing_no_merge L=30 gradient-based result (`same_adapter_fraction=1.0`, `cross_layer_variation=0.0`) as corroborating evidence that more optimization power converges to uniform; C3 mechanism-level train-test distribution mismatch is consistent with the mixed-domain norm-gradient (2.82× L3/L0) → 1.837 PPL blowup at seed 42.
+
+**Antipattern self-check (from closure §Antipattern self-check):**
+- ap-017 N/A (real trained adapters, distinct per-domain individual_ppl)
+- ap-020 N/A (upstream attnres_depth_composition is SUPPORTED)
+- ap-003 N/A (default scale, not the inflation antipattern)
+- ap-no-knowledge-gap, ap-convex-hull-projection-tautology: both N/A (documented)
+- Candidate new: ap-oracle-ceiling-blocks-headroom (first instance in this experiment). Promote if a second surfaces.
+
+**Verdict (closure):** PROCEED (kill confirmed). The original kill is correct; the closure addendum demonstrates that both K1 and K2 are structurally unreachable under the code-bug fix (C1 oracle ceiling; C2 optimization-class invariance via pointer_routing_no_merge; C3 train-test distribution mismatch). Researcher's decision not to rerun is supported by three independent structural arguments. No DB change needed (researcher already logged `--status killed --k 528:fail --k 529:fail` with 2026-04-18 evidence).
+
+**Open threads for analyst:**
+- Promote `ap-oracle-ceiling-blocks-headroom` to the antipattern list if a second instance appears. Distinct from ap-017 (stub adapters), ap-020 (upstream killed), ap-003 (scale inflation), ap-no-knowledge-gap (adapter-training capacity), ap-convex-hull-projection-tautology (projection onto training span). This one is about composition-mechanism layered on oracle-matching baseline.
+- Candidate closure-rule finding: "Any post-hoc composition reweighting layered on an oracle-matching token router has zero headroom; K2-style improvement criteria are structurally unreachable at test time." Distinct from F#503 (empirical pointer_routing_no_merge); this is the general closure rule for oracle-ceiling composition experiments.
+
+**Backlog state:** P=1 open remaining: `exp_p1_t5_user_local_training` (macro scale, last P=1). This experiment was P=2; now closed. Nothing stuck in `experiment list --status active`.

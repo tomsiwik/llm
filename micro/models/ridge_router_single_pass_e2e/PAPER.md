@@ -210,3 +210,87 @@ To achieve the 95% accuracy target on mixed-domain sequences, the router would n
 - **Test Sequences:** 100 mixed-domain (10 per pair), 256 tokens each
 - **Date:** 2026-04-07
 - **Status:** KILLED — Proof assumptions refuted
+
+---
+
+## Audit-Rerun Closure (tags: audit-2026-04-17-rerun, lora-scale)
+
+**Closure verdict: KILL is robust to the `lora-scale` fix-category remedy.** Three
+independent theorems — each sufficient — make the K799/K800/K801 triple unreachable
+under any rerun that only changes `LORA_SCALE`. The original kill stands; no rerun is
+indicated.
+
+### Closure Theorem C1 — Adapter-quality ceiling blocks K799
+
+**Statement.** On `real_data_domain_experts` (rank=16, scale=20) adapters, oracle PPL
+≥ base PPL in 8/10 domain pairs. Routing to harmful adapters cannot beat base PPL,
+so any router R satisfies PPL(R) ≥ min(PPL_base, PPL_oracle) ≥ PPL_base ≈ PPL_oracle
+for this adapter set. K799 threshold 4.778 was derived from Finding #313's
+`tiny_routing_heads` oracle PPL 4.684 — a different adapter provenance. Under this
+experiment's adapter set, the true oracle baseline is 7.598, and K799 was never
+achievable as written. Changing LORA_SCALE in-place retrains no new adapters; it
+scales the existing (harmful) `real_data_domain_experts` deltas. The scale-harm
+finding (Findings #328, #330, #337, #338) implies the correct remedy is to train
+new adapters at scale≤5 — which produces a new experiment, not a fix to this one.
+
+### Closure Theorem C2 — Majority-vote decoupling makes K800 irrelevant to K799
+
+**Statement.** The PPL pipeline (code lines 1031–1043) selects two adapters per
+mixed-domain sequence via segment-level majority vote. Let p = per-token accuracy
+on a segment of length L=128. By Hoeffding, P(majority-vote error) ≤
+exp(−2 L (p−0.5)²). For p = 0.897, this is ≤ exp(−2·128·0.397²) ≈ 10⁻¹⁸. Hence the
+majority-vote adapter choice matches the oracle's choice on all 10 pairs with
+probability ≥ 1 − 10⁻¹⁷, and **oracle_ppl == ridge_ppl is enforced by construction**.
+Varying LORA_SCALE does not reduce L or change the majority-vote operator;
+K799 remains decoupled from K800. Salvage requires replacing segment majority vote
+with per-token adapter selection inside the MLP forward — an architecture change,
+not a hyperparameter fix.
+
+### Closure Theorem C3 — Two-pass architecture bounds K801 away from 2x
+
+**Statement.** Measured pipeline runs base forward (109.3 ms) **then** single-pass
+forward with mixed LoRA (145 ms), totalling 254.2 ms → ratio 2.326x. The MLX
+forward-pass cost per token is bounded below by the non-adapter compute. Therefore
+ratio ≥ (base_ms + adapter_ms) / base_ms > 2 for any LORA_SCALE that retains a
+second forward pass. Theorem 3's 1.013x prediction applies to a 1-pass pipeline
+sharing embeddings — a different architecture. K801 < 2.0x is unreachable in
+this 2-pass implementation regardless of scale; the fix is to merge the passes.
+
+### Why the `lora-scale` fix-category is cosmetic here
+
+The audit cluster assumed LORA_SCALE=20 was the proximate failure. Under C1–C3
+simultaneously, **every** kill criterion has a failure mode orthogonal to scale:
+- K799 fails because the threshold uses the wrong adapter family AND because
+  majority vote enforces oracle==ridge AND because scale=20 adapters are harmful.
+- K800 fails because of context-induced distribution shift in the ridge router,
+  invariant to adapter scale.
+- K801 fails because the pipeline is 2-pass by construction.
+
+Rerunning with a different LORA_SCALE would produce a new oracle baseline and
+a new K799 number, but would not address C2 (majority vote) or C3 (2-pass). At
+most one of the three criteria could flip, and only by retraining adapters —
+which is a new experiment, not a rerun.
+
+### Closure-rule candidate
+
+**`base-ceiling-blocks-routing`** — when oracle (correct-adapter) PPL is ≥ base
+(no-adapter) PPL, no routing mechanism can beat base; all routing-level kill
+criteria (PPL-over-base, PPL-under-threshold) are unreachable on that adapter set.
+Third instance of the oracle-ceiling family after:
+- `ap-oracle-ceiling-blocks-headroom` (exp_depth_routed_adapters, 2026-04-17)
+- `oracle-upper-bound-blocks-kill-threshold` (exp_mlp_only_per_token_routing, 2026-04-17)
+
+Different mechanism (C1 here compares oracle to *base*; the prior two compare
+oracle to the *kill threshold*), same family: the oracle is the upper bound on
+what routing can achieve, so inspecting the oracle decides the kill before the
+router is analysed. Promote to general closure-rule for future audit triage.
+
+### Preserved empirical findings (orthogonal to K799/K800/K801)
+
+- Per-token ridge-router accuracy drop 98.3% → 89.67% on mixed-domain concatenation
+  is a genuine context-induced distribution shift. Distributed across both segments,
+  not boundary-localised. Would matter if per-token routing were implemented AND
+  adapters helped. Worth investigating under proper C2/C1 conditions.
+- Segment-level majority vote at L=128 is effectively lossless at p=0.897 — this
+  is an actionable production hint, not a flaw of the experiment (it only becomes
+  a flaw when PPL is asked to measure per-token effects).

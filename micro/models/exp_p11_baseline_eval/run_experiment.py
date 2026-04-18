@@ -38,8 +38,10 @@ MODEL_ID = "mlx-community/gemma-4-e4b-it-4bit"
 SEED = 42
 
 IS_SMOKE = os.environ.get("SMOKE_TEST", "0") == "1"
+BASE_ONLY = os.environ.get("BASE_ONLY", "0") == "1"
 EVAL_PER_CAT = 2 if IS_SMOKE else 20
 GSM8K_N = 5 if IS_SMOKE else 50
+THINKING_MAX_TOKENS = 2048
 
 MMLU_PATH = REPO_ROOT / "micro/models/exp_bench_mmlu_pro/data/test.parquet"
 
@@ -97,11 +99,20 @@ def cleanup(*objects):
 
 
 def strip_thinking(response):
+    # Gemma 4 thinking: <|channel>thought\n...<channel|> (primary)
+    # Fallback: <think>...</think> (generic)
+    if not response:
+        return response or "", 0
     thinking_len = 0
-    m = re.search(r'<think>(.*?)</think>', response, re.DOTALL)
+    m = re.search(r'<\|channel>thought.*?<channel\|>', response, flags=re.DOTALL)
     if m:
-        thinking_len = len(m.group(1))
-    cleaned = re.sub(r'<think>.*?</think>', '', response, flags=re.DOTALL).strip()
+        thinking_len = len(m.group(0))
+    cleaned = re.sub(r'<\|channel>thought.*?<channel\|>', '', response, flags=re.DOTALL)
+    if thinking_len == 0:
+        m2 = re.search(r'<think>(.*?)</think>', cleaned, flags=re.DOTALL)
+        if m2:
+            thinking_len = len(m2.group(1))
+    cleaned = re.sub(r'<think>.*?</think>', '', cleaned, flags=re.DOTALL).strip()
     return cleaned, thinking_len
 
 
@@ -151,34 +162,40 @@ def eval_mmlu_pro(model, tokenizer, thinking: bool) -> dict:
             option_text = "\n".join(f"{OPTION_LETTERS[i]}. {opt}" for i, opt in enumerate(options))
             correct_letter = OPTION_LETTERS[int(row["answer_index"])]
 
-            user_content = (
-                f"Answer the following multiple choice question. "
-                f"Select the single best answer letter "
-                f"(A through {OPTION_LETTERS[n_opts-1]}).\n\n"
-                f"Question: {row['question']}\n\n"
-                f"Options:\n{option_text}\n\n"
-                f"Answer:"
-            )
+            if thinking:
+                user_content = (
+                    f"Answer the following multiple choice question. "
+                    f"Select the single best answer letter "
+                    f"(A through {OPTION_LETTERS[n_opts-1]}).\n\n"
+                    f"Question: {row['question']}\n\n"
+                    f"Options:\n{option_text}\n\n"
+                    f"Answer:"
+                )
+            else:
+                user_content = (
+                    f"The following is a multiple choice question. "
+                    f"Answer with ONLY the letter of the correct option "
+                    f"(A through {OPTION_LETTERS[n_opts-1]}). "
+                    f"Do not explain.\n\n"
+                    f"Question: {row['question']}\n\n"
+                    f"Options:\n{option_text}\n\n"
+                    f"Answer:"
+                )
 
             messages = [{"role": "user", "content": user_content}]
             try:
-                if thinking:
-                    prompt = tokenizer.apply_chat_template(
-                        messages, tokenize=False,
-                        add_generation_prompt=True, enable_thinking=True,
-                    )
-                else:
-                    prompt = tokenizer.apply_chat_template(
-                        messages, tokenize=False,
-                        add_generation_prompt=True,
-                    )
+                prompt = tokenizer.apply_chat_template(
+                    messages, tokenize=False,
+                    add_generation_prompt=True,
+                    enable_thinking=thinking,
+                )
             except Exception:
                 prompt = tokenizer.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True,
                 )
 
             try:
-                response = generate(model, tokenizer, prompt=prompt, max_tokens=2048 if thinking else 512)
+                response = generate(model, tokenizer, prompt=prompt, max_tokens=THINKING_MAX_TOKENS if thinking else 16)
                 predicted, t_chars = parse_mcq_answer(response)
                 cat_thinking += t_chars
                 if predicted == correct_letter:
@@ -283,7 +300,7 @@ def eval_gsm8k(model, tokenizer, thinking: bool) -> dict:
 
         try:
             response = generate(model, tokenizer, prompt=prompt,
-                                max_tokens=2048 if thinking else 512)
+                                max_tokens=THINKING_MAX_TOKENS if thinking else 512)
             _, t_chars = strip_thinking(response)
             total_thinking += t_chars
             predicted = extract_number(response)
@@ -414,7 +431,10 @@ def main():
 
     all_results = []
 
-    for adapter_info in ADAPTERS:
+    adapters_to_run = [a for a in ADAPTERS if a["name"] == "base"] if BASE_ONLY else ADAPTERS
+    log(f"Running {len(adapters_to_run)} adapter(s); BASE_ONLY={BASE_ONLY}, IS_SMOKE={IS_SMOKE}")
+
+    for adapter_info in adapters_to_run:
         t_start = time.time()
         result = eval_adapter(adapter_info)
         result["elapsed_s"] = round(time.time() - t_start, 1)

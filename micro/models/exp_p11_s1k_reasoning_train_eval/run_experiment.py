@@ -535,6 +535,19 @@ def main():
             json.dump(results, f, indent=2)
         return
 
+    # Pre-flight: adapter weights present after training (mem-antipattern-017).
+    st_files = list(ADAPTER_DIR.glob("*.safetensors"))
+    st_size_mb = sum(f.stat().st_size for f in st_files) / 1e6
+    if not st_files or st_size_mb < 0.1:
+        log(f"FATAL: no usable adapters.safetensors after training "
+            f"({len(st_files)} files, {st_size_mb:.2f} MB)")
+        results["killed"] = True
+        results["kill_reason"] = "adapter_weights_missing_post_save"
+        with open(RESULTS_FILE, "w") as f:
+            json.dump(results, f, indent=2)
+        return
+    log(f"[Pre-flight] adapter weights present: {len(st_files)} files, {st_size_mb:.2f} MB")
+
     # Phase 4a: Eval base MMLU-Pro (for delta computation)
     log("\n[Phase 4a] Base model eval — MMLU-Pro")
     mmlu_base = phase_eval_mmlu_pro(adapter_path=None, label="BASE")
