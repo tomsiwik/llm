@@ -102,90 +102,38 @@ def _generate_synthetic(
     return embeddings.astype(np.float32), adapters.astype(np.float32)
 
 
-class _NumpyMLPHyper:
-    """Pure-numpy 3-layer MLP trained with full-batch Adam.
+def _train_ridge_hyper(
+    X_train: np.ndarray,
+    Y_train: np.ndarray,
+    X_test: np.ndarray,
+    alpha: float = 1e-2,
+) -> tuple[np.ndarray, float]:
+    """Closed-form ridge regression: Y = X @ W + b.
 
-    We use numpy instead of MLX here because the synthetic test is
-    small (24 x ~41K target) and numpy gives deterministic, dependency-
-    free results. MLX is reserved for the BitNet path (vacated here).
+    A linear hypernetwork (0-hidden-layer MLP, universal at linear
+    scale). If ridge fails to recover the mapping under a known-linear
+    generative model, the residual-hypernetwork mechanism cannot
+    generalise at N=24 regardless of nonlinearity.
+
+    Returns (prediction_on_X_test, train_MSE).
     """
+    n, d_in = X_train.shape
+    # Centre inputs; keep outputs as-is (intercept handled separately)
+    x_mean = X_train.mean(0, keepdims=True)
+    y_mean = Y_train.mean(0, keepdims=True)
+    Xc = X_train - x_mean
+    Yc = Y_train - y_mean
 
-    def __init__(self, d_in: int, d_hidden: int, d_out: int, seed: int = SEED):
-        rng = np.random.default_rng(seed)
-        # He init for GELU-ish
-        s1 = math.sqrt(2.0 / d_in)
-        s2 = math.sqrt(2.0 / d_hidden)
-        s3 = math.sqrt(2.0 / d_hidden)
-        self.W1 = rng.standard_normal((d_in, d_hidden)) * s1
-        self.b1 = np.zeros(d_hidden)
-        self.W2 = rng.standard_normal((d_hidden, d_hidden)) * s2
-        self.b2 = np.zeros(d_hidden)
-        self.W3 = rng.standard_normal((d_hidden, d_out)) * s3
-        self.b3 = np.zeros(d_out)
+    # W = (Xc^T Xc + alpha I)^-1 Xc^T Yc
+    gram = Xc.T @ Xc + alpha * np.eye(d_in)
+    W = np.linalg.solve(gram, Xc.T @ Yc)
+    # Predict on test
+    pred = (X_test - x_mean) @ W + y_mean
 
-    @staticmethod
-    def _gelu(x: np.ndarray) -> np.ndarray:
-        return 0.5 * x * (1.0 + np.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * x ** 3)))
-
-    @staticmethod
-    def _gelu_grad(x: np.ndarray) -> np.ndarray:
-        c = math.sqrt(2 / math.pi)
-        t = np.tanh(c * (x + 0.044715 * x ** 3))
-        dt = (1 - t ** 2) * c * (1 + 3 * 0.044715 * x ** 2)
-        return 0.5 * (1 + t) + 0.5 * x * dt
-
-    def forward(self, X: np.ndarray):
-        z1 = X @ self.W1 + self.b1
-        h1 = self._gelu(z1)
-        z2 = h1 @ self.W2 + self.b2
-        h2 = self._gelu(z2)
-        out = h2 @ self.W3 + self.b3
-        return out, (X, z1, h1, z2, h2)
-
-    def train_mse(
-        self, X: np.ndarray, Y: np.ndarray, steps: int = 600, lr: float = 1e-3,
-    ) -> float:
-        # Adam state
-        m = {k: np.zeros_like(v) for k, v in self.params().items()}
-        v = {k: np.zeros_like(v) for k, v in self.params().items()}
-        beta1, beta2, eps = 0.9, 0.999, 1e-8
-
-        best = float("inf")
-        for step in range(1, steps + 1):
-            out, (X_, z1, h1, z2, h2) = self.forward(X)
-            diff = out - Y
-            loss = float(np.mean(diff ** 2))
-            if loss < best:
-                best = loss
-
-            dout = (2.0 / diff.size) * diff
-            dW3 = h2.T @ dout
-            db3 = dout.sum(0)
-            dh2 = dout @ self.W3.T
-            dz2 = dh2 * self._gelu_grad(z2)
-            dW2 = h1.T @ dz2
-            db2 = dz2.sum(0)
-            dh1 = dz2 @ self.W2.T
-            dz1 = dh1 * self._gelu_grad(z1)
-            dW1 = X.T @ dz1
-            db1 = dz1.sum(0)
-
-            grads = {"W1": dW1, "b1": db1, "W2": dW2, "b2": db2, "W3": dW3, "b3": db3}
-            params = self.params()
-            for k_ in params:
-                m[k_] = beta1 * m[k_] + (1 - beta1) * grads[k_]
-                v[k_] = beta2 * v[k_] + (1 - beta2) * grads[k_] ** 2
-                m_hat = m[k_] / (1 - beta1 ** step)
-                v_hat = v[k_] / (1 - beta2 ** step)
-                params[k_] -= lr * m_hat / (np.sqrt(v_hat) + eps)
-        return best
-
-    def params(self) -> dict:
-        return {
-            "W1": self.W1, "b1": self.b1,
-            "W2": self.W2, "b2": self.b2,
-            "W3": self.W3, "b3": self.b3,
-        }
+    # Training MSE
+    train_pred = Xc @ W + y_mean
+    train_mse = float(np.mean((train_pred - Y_train) ** 2))
+    return pred, train_mse
 
 
 def run_synthetic_proxy(seed: int = SEED) -> dict:
@@ -222,26 +170,14 @@ def run_synthetic_proxy(seed: int = SEED) -> dict:
         d_t_std = float(delta_train.std()) + 1e-8
         d_train_n = delta_train / d_t_std
 
-        # Reduce output dim via random projection for tractable MLP
-        # (k_out should be >= k=8 to preserve the signal)
-        k_out = 32
-        rng = np.random.default_rng(seed + t_idx)
-        P = rng.standard_normal((dim_b, k_out)) / math.sqrt(dim_b)
-        d_train_proj = d_train_n @ P                        # (n-1, k_out)
-
-        # Train MLP: emb -> projected residual
-        net = _NumpyMLPHyper(d_in=X.shape[1], d_hidden=128, d_out=k_out, seed=seed + t_idx)
-        best_loss = net.train_mse(X_train_n, d_train_proj, steps=600, lr=5e-3)
-
-        # Predict, unproject with pseudo-inverse
-        pred_proj_n, _ = net.forward(X_test_n)              # (1, k_out)
-        # P is tall; P_pinv = (P.T @ P)^-1 @ P.T, but k_out << dim_b so
-        # we invert the small side: delta_pred_n = pred_proj_n @ P_pinv,
-        # where P_pinv = (P^T P)^-1 P^T applied to the right gives
-        # delta_pred_n ≈ pred_proj_n @ inv(P^T P) @ P^T
-        gram = P.T @ P
-        gram_inv = np.linalg.inv(gram + 1e-6 * np.eye(k_out))
-        delta_pred_n = pred_proj_n @ gram_inv @ P.T         # (1, dim_b)
+        # Linear hypernetwork via closed-form ridge on full-dim targets.
+        # (Random projection would push the prediction into a k_out-dim
+        # subspace near-orthogonal to the true rank-k signal subspace —
+        # destructive. Direct full-dim ridge is tractable: 23 x 40960
+        # targets, W ~ 64 x 40960 ~ 10 MB.)
+        delta_pred_n, best_loss = _train_ridge_hyper(
+            X_train_n, d_train_n, X_test_n, alpha=1e-2,
+        )
         delta_pred = delta_pred_n * d_t_std
 
         # Metrics
