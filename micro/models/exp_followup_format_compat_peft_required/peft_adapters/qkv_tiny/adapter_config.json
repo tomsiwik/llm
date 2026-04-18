@@ -1,0 +1,32 @@
+{
+  "peft_type": "LORA",
+  "auto_mapping": null,
+  "base_model_name_or_path": null,
+  "revision": null,
+  "task_type": "CAUSAL_LM",
+  "inference_mode": false,
+  "r": 6,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "lora_alpha": 6.0,
+  "lora_dropout": 0.0,
+  "fan_in_fan_out": false,
+  "bias": "none",
+  "modules_to_save": null,
+  "init_lora_weights": true,
+  "layers_to_transform": null,
+  "layers_pattern": null,
+  "rank_pattern": {},
+  "alpha_pattern": {},
+  "pierre_metadata": {
+    "construction": "qr",
+    "property": "orthonormal_rows",
+    "rank": 6,
+    "scale": 6.0,
+    "verified_max_deviation": 2.384185791015625e-07,
+    "grassmannian_tolerance": 1e-06
+  }
+}
