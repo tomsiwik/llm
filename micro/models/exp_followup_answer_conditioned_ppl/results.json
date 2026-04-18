@@ -1,0 +1,116 @@
+{
+  "seed": 42,
+  "n_queries_per_domain": 200,
+  "n_domains": 5,
+  "domains": [
+    "arithmetic",
+    "reverse",
+    "repeat",
+    "sort",
+    "parity"
+  ],
+  "top1_full": 0.984,
+  "top1_ans": 0.978,
+  "per_domain_top1_full": {
+    "arithmetic": 1.0,
+    "reverse": 0.935,
+    "repeat": 1.0,
+    "sort": 0.985,
+    "parity": 1.0
+  },
+  "per_domain_top1_ans": {
+    "arithmetic": 1.0,
+    "reverse": 0.95,
+    "repeat": 1.0,
+    "sort": 0.94,
+    "parity": 1.0
+  },
+  "confusion_full": [
+    [
+      200,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      187,
+      0,
+      13,
+      0
+    ],
+    [
+      0,
+      0,
+      200,
+      0,
+      0
+    ],
+    [
+      0,
+      3,
+      0,
+      197,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      200
+    ]
+  ],
+  "confusion_ans": [
+    [
+      200,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      190,
+      0,
+      10,
+      0
+    ],
+    [
+      0,
+      0,
+      200,
+      0,
+      0
+    ],
+    [
+      0,
+      12,
+      0,
+      188,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      200
+    ]
+  ],
+  "kill_criteria": {
+    "K1567": {
+      "description": "answer-only top-1 >= 0.85 AND full-seq top-1 < 0.85",
+      "top1_ans": 0.978,
+      "top1_full": 0.984,
+      "pass_ans": true,
+      "pass_full_failed": false,
+      "pass": false
+    }
+  },
+  "verdict": "KILLED",
+  "all_pass": false,
+  "is_smoke": false,
+  "runtime_s": 425.69917392730713
+}
