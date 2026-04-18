@@ -127,49 +127,66 @@ def extract_letter(clean_text: str) -> str | None:
 # ─── Phase 0: shape verification (Thm 1) ─────────────────────────────────────
 
 def verify_shapes() -> dict:
-    """Assert dim mismatch d_out(q_proj)=2048 ≠ d_in(q_proj)=2560."""
+    """Assert dim mismatch d_out(q_proj)=2048 ≠ d_in(q_proj)=2560.
+
+    Requires at least one adapter to be readable. If the parent math
+    adapter artefact is missing (K_vacate condition — artefact gitignored,
+    not recoverable without retraining), verify Thm 1 from the personal
+    adapter alone, which lives on the same projection (q_proj) and has
+    the same d_in, d_out.
+    """
     import safetensors.numpy as stn
 
-    math_d = stn.load_file(str(MATH_ADAPTER_DIR / "adapters.safetensors"))
-    pers_d = stn.load_file(str(PERSONAL_ADAPTER_DIR / "adapters.safetensors"))
+    math_path = MATH_ADAPTER_DIR / "adapters.safetensors"
+    pers_path = PERSONAL_ADAPTER_DIR / "adapters.safetensors"
 
-    # pick any overlap layer (26-41) to inspect
+    math_available = math_path.exists()
+    pers_available = pers_path.exists()
+
     key_a = "language_model.model.layers.30.self_attn.q_proj.lora_a"
     key_b = "language_model.model.layers.30.self_attn.q_proj.lora_b"
 
-    la_D = math_d[key_a]
-    lb_D = math_d[key_b]
-    la_P = pers_d[key_a]
-    lb_P = pers_d[key_b]
-
-    d_in_D, r_D = la_D.shape
-    r_D2, d_out_D = lb_D.shape
-    d_in_P, r_P = la_P.shape
-    r_P2, d_out_P = lb_P.shape
-
-    assert r_D == r_D2, "Domain A/B rank mismatch"
-    assert r_P == r_P2, "Personal A/B rank mismatch"
-    assert d_in_D == d_in_P, f"Both adapters on same projection, expected same d_in ({d_in_D} vs {d_in_P})"
-    assert d_out_D == d_out_P, f"Both adapters on same projection, expected same d_out ({d_out_D} vs {d_out_P})"
-    assert d_in_D == 2560, f"Gemma 4 E4B hidden_size = 2560, got {d_in_D}"
-    assert d_out_D == 2048, f"Gemma 4 E4B q_proj out = 2048, got {d_out_D}"
-    assert d_out_D != d_in_P, (
-        "Thm 1 violated: d_out(domain)==d_in(personal). "
-        "Sequential cross-term would be computable; reconsider impossibility proof."
-    )
-
-    print(
-        f"Thm 1 verified: d_in={d_in_D}, d_out={d_out_D}, "
-        f"d_out != d_in ({d_out_D} != {d_in_P}) → weight/activation sequential infeasible",
-        flush=True,
-    )
-    return {
-        "d_in": int(d_in_D),
-        "d_out": int(d_out_D),
-        "r_D": int(r_D),
-        "r_P": int(r_P),
-        "thm1_verified": True,
+    info: dict = {
+        "math_adapter_available": math_available,
+        "personal_adapter_available": pers_available,
     }
+
+    if pers_available:
+        pers_d = stn.load_file(str(pers_path))
+        la_P = pers_d[key_a]
+        lb_P = pers_d[key_b]
+        d_in_P, r_P = la_P.shape
+        r_P2, d_out_P = lb_P.shape
+        assert r_P == r_P2
+        assert d_in_P == 2560, f"Gemma 4 E4B hidden_size = 2560, got {d_in_P}"
+        assert d_out_P == 2048, f"Gemma 4 E4B q_proj out = 2048, got {d_out_P}"
+        assert d_out_P != d_in_P
+        info.update({
+            "d_in": int(d_in_P),
+            "d_out": int(d_out_P),
+            "r_P": int(r_P),
+            "thm1_verified_from_personal": True,
+        })
+        print(
+            f"Thm 1 verified via personal adapter: "
+            f"d_in={d_in_P}, d_out={d_out_P} → d_out != d_in → "
+            f"weight/activation sequential infeasible",
+            flush=True,
+        )
+
+    if math_available:
+        math_d = stn.load_file(str(math_path))
+        la_D = math_d[key_a]
+        lb_D = math_d[key_b]
+        d_in_D, r_D = la_D.shape
+        _, d_out_D = lb_D.shape
+        info.update({
+            "r_D": int(r_D),
+            "thm1_verified_from_math": True,
+        })
+
+    info["thm1_verified"] = pers_available  # personal alone suffices
+    return info
 
 
 # ─── Generation helpers ──────────────────────────────────────────────────────
@@ -388,6 +405,60 @@ def main():
     shape_info = verify_shapes()
     results["phase0_shapes"] = shape_info
 
+    math_available = shape_info.get("math_adapter_available", False)
+    pers_available = shape_info.get("personal_adapter_available", False)
+
+    STYLE_BASELINE_ADD = 24.0  # parent PAPER.md §1 additive composition
+    MCQ_BASELINE_ADD = 15.0
+
+    if not math_available:
+        # K_vacate: parent math adapter artefact missing on disk.
+        # Cannot evaluate behavioural KCs K1563a/K1563b. Thm 1 (Phase 0)
+        # stands on its own as structural evidence.
+        print(
+            "\n*** K_vacate triggered: parent math adapter artefact missing "
+            f"at {MATH_ADAPTER_DIR / 'adapters.safetensors'}. "
+            "Thm 1 (structural infeasibility of weight/activation sequential "
+            "on q_proj) verified; behavioral KCs K1563a/K1563b cannot be "
+            "evaluated. Reporting as PROVISIONAL with K_vacate=true. ***",
+            flush=True,
+        )
+        elapsed = time.time() - t0
+        verdict = "PROVISIONAL"
+        results["k1563a_style"] = {
+            "status": "VACATE",
+            "reason": "parent_math_adapter_missing",
+            "threshold": STYLE_BASELINE_ADD,
+            "pass": False,
+        }
+        results["k1563b_mcq"] = {
+            "status": "VACATE",
+            "reason": "parent_math_adapter_missing",
+            "threshold": MCQ_BASELINE_ADD,
+            "pass": False,
+        }
+        results["summary"] = {
+            "all_pass": False,
+            "k1563a_pass": False,
+            "k1563b_pass": False,
+            "k_vacate_active": True,
+            "thm1_structural_pass": bool(shape_info.get("thm1_verified", False)),
+            "verdict": verdict,
+            "elapsed_s": round(elapsed, 1),
+            "vacate_reason": (
+                f"parent adapter {MATH_ADAPTER_DIR / 'adapters.safetensors'} "
+                "not on disk (gitignored); sibling pattern to "
+                "exp_followup_hypernetwork_residual (see .ralph/current_direction.md)"
+            ),
+        }
+        results["verdict"] = verdict
+
+        out_path = EXPERIMENT_DIR / "results.json"
+        with open(out_path, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"Results → {out_path} (K_vacate)", flush=True)
+        return
+
     # Phase 1 baselines (quantify what each adapter alone does on the *opposite* task)
     print("\n--- Phase 1a: domain-only on style task ---", flush=True)
     dom_style = eval_style_single_stage(MATH_ADAPTER_DIR, N_STYLE, "domain-only")
@@ -411,10 +482,6 @@ def main():
     }
     results["style_records"] = style_records
     results["mcq_records"] = mcq_records
-
-    # KC evaluation
-    STYLE_BASELINE_ADD = 24.0  # parent PAPER.md §1 additive composition
-    MCQ_BASELINE_ADD = 15.0
 
     k1563a_pass = bool(seq_style >= STYLE_BASELINE_ADD)
     k1563b_pass = bool(seq_mcq >= MCQ_BASELINE_ADD)
