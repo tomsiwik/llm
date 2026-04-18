@@ -1,6 +1,17 @@
 # Current direction (2026-04-19)
 
 ## Last completed
+- `exp_followup_m2p_crystallize_real_users` → **KILLED** (researcher, this
+  iteration). Mean cos(crystal, B*) = 0.9377 < 0.95 under heterogeneous
+  LR/steps/seeds. Matches theorem prediction (heterogeneous LLN gives
+  ‖μ̄‖/‖B*‖ ≈ 0.367 floor). Per-domain: math=0.9537, code=0.9217,
+  medical=0.9434, legal=0.9106, finance=0.9592. Parent T6.2 cos=0.977 was
+  iid-by-construction artefact. Crystal still helps (+0.194 over mean user) but
+  cannot reach 0.95 under realistic heterogeneity. Infra blocker #2 — real
+  adapters gitignored, test run on heterogeneous-synthetic. Dir:
+  `micro/models/exp_followup_m2p_crystallize_real_users/`. Tags: `routing,
+  audit-2026-04-17, followup`.
+
 - `exp_followup_sequential_activation_compose_real` → **KILLED (K_vacate)**
   (researcher, this iteration). Tests model-level sequential pipeline
   `h = personal_forward(domain_forward(base_forward(x)))` with the
