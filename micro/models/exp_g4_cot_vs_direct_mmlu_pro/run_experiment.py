@@ -221,7 +221,7 @@ def main():
         f"({direct['total_correct']}/{direct['total']}) in {direct['elapsed_s']:.0f}s"
     )
 
-    mx.metal.clear_cache()
+    mx.clear_cache()
     gc.collect()
 
     # Phase 2: cot (thinking)
