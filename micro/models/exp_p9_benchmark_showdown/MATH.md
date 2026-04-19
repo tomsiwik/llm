@@ -140,9 +140,22 @@ paths that resolve to real weight files, and (c) not be contradicted by a prior
 `_reconstruction_note` flagging upstream toolchain incompat. If registry points to
 adapter paths with zero weight files → P3 FAIL (registry is stale).
 
-**Tripwire.** If all of P1, P2, P3 FAIL → K1390, K1391, K1392 all UNMEASURABLE →
-`status=killed`, `all_pass=false`. If ≥1 PASS, runner proceeds to fresh MLX
-measurement. Probe is pure filesystem + JSON reads (no MLX load, no network).
+**Tripwire (corrected 2026-04-19 — pre-run, pre-reg sharpening; KC text unchanged).**
+Originally drafted as "all three FAIL", but that is under-specified: K1390/K1391/K1392
+all reference math- or medical-domain adapter outputs, so **P2 is the binding
+precondition** (it is what Theorem 1 RHS requires to be non-empty). The correct
+tripwire semantics are:
+
+  - P2 FAIL alone → K1390/K1391/K1392 UNMEASURABLE → `status=killed, all_pass=false`.
+  - P2 PASS but P1 FAIL → reduced-confidence measurement (proceed without upstream
+    ratification), verdict determined by measured values.
+  - All three PASS → full measurement, verdict determined by measured values.
+
+P3 PASSING on a non-math, non-medical registry entry (e.g. a universal thinking
+adapter resolving to weight files) does NOT satisfy Theorem 1's RHS for the
+math/medical KCs, so P3 alone cannot lift the P2-binding tripwire. This correction
+is a sharpening of the tripwire predicate, not a change to the pre-registered kill
+criteria; K1390/K1391/K1392 text at DB layer is untouched.
 
 **Why this is honest and not trial-and-error.** The KCs demand `A_adapter(D) ≥
 threshold(D)`. Theorem 1's RHS requires I(ΔW; D) > 0, which requires ΔW to exist

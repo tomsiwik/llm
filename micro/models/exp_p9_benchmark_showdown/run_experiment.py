@@ -112,14 +112,19 @@ def main() -> int:
     }
     wall_s = time.perf_counter() - t0
 
-    any_pass = any(ok for ok, _ in probes.values())
-    verdict = "killed" if not any_pass else "supported"
-    all_pass = any_pass
+    # P2 is the binding precondition for K1390/K1391/K1392 (see MATH.md §P).
+    # P2 FAIL alone is sufficient to mark the KCs unmeasurable -> killed.
+    p2_ok = probes["P2_adapters_on_disk"][0]
+    p1_ok = probes["P1_upstream_supported"][0]
+    kcs_measurable = p2_ok  # math+medical weights on disk are required
+    verdict = "supported" if kcs_measurable and p1_ok else "killed"
+    all_pass = kcs_measurable and p1_ok
 
+    unmeasurable = not kcs_measurable
     kcs = {
-        "K1390_gsm8k_vs_27b":    "unmeasurable" if not any_pass else "untested",
-        "K1391_gain_vs_base":    "unmeasurable" if not any_pass else "untested",
-        "K1392_medmcqa_vs_base": "unmeasurable" if not any_pass else "untested",
+        "K1390_gsm8k_vs_27b":    "unmeasurable" if unmeasurable else "untested",
+        "K1391_gain_vs_base":    "unmeasurable" if unmeasurable else "untested",
+        "K1392_medmcqa_vs_base": "unmeasurable" if unmeasurable else "untested",
     }
 
     payload = {
@@ -149,7 +154,8 @@ def main() -> int:
     print(f"[probe] verdict={verdict} all_pass={all_pass} wall={wall_s:.3f}s")
     for name, (ok, detail) in probes.items():
         print(f"  {name}: {'PASS' if ok else 'FAIL'} - {detail}")
-    return 0 if verdict == "killed" else 1
+    # Exit 0 in both cases (probe ran successfully); verdict is in results.json.
+    return 0
 
 
 if __name__ == "__main__":
