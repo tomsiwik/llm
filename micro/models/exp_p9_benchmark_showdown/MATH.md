@@ -117,3 +117,35 @@ Published benchmarks from Google Gemma 4 Technical Report (April 2025):
 - Gemma 4 27B MMLU-Pro: ~79% (to be confirmed)
 
 These will be noted as EXTERNAL in PAPER.md. All local measurements run fresh in this experiment.
+
+---
+
+## §P — Precondition-probe tripwire (added 2026-04-19)
+
+**Motivation.** K1390/K1391/K1392 require real MLX measurements with on-disk adapter
+safetensors. Before spending hours of GPU time, verify preconditions hold. If they
+don't, the KCs are UNMEASURABLE and the experiment is mechanically `killed` — not
+a soft failure, but a structurally-guaranteed inability to evaluate.
+
+**P1 (upstream).** `exp_p9_full_stack_integration` status must be `supported` with
+`results.json` present. If `status != supported` or `results.json` absent → P1 FAIL.
+
+**P2 (adapters on disk).** `micro/models/exp_p1_t2_single_domain_training/adapters/
+{math,medical,code}/` must contain at least one of `*.safetensors`, `*.npz`, or
+`adapters.npz`. `adapter_config.json` alone is NOT sufficient — the weights are what
+the inference runner loads. If any required domain lacks weights → P2 FAIL.
+
+**P3 (registry consistency).** `adapters/registry.json` must (a) exist, (b) reference
+paths that resolve to real weight files, and (c) not be contradicted by a prior
+`_reconstruction_note` flagging upstream toolchain incompat. If registry points to
+adapter paths with zero weight files → P3 FAIL (registry is stale).
+
+**Tripwire.** If all of P1, P2, P3 FAIL → K1390, K1391, K1392 all UNMEASURABLE →
+`status=killed`, `all_pass=false`. If ≥1 PASS, runner proceeds to fresh MLX
+measurement. Probe is pure filesystem + JSON reads (no MLX load, no network).
+
+**Why this is honest and not trial-and-error.** The KCs demand `A_adapter(D) ≥
+threshold(D)`. Theorem 1's RHS requires I(ΔW; D) > 0, which requires ΔW to exist
+as measurable weights. Empty adapter directories ⇒ ΔW undefined ⇒ the inequality
+has no LHS ⇒ the criterion is not false, it is malformed. KILL with P-tripwire is
+the structurally-correct outcome, per guardrail 1000 (constructive mathematics).
