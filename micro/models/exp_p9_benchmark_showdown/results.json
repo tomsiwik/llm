@@ -1,0 +1,27 @@
+{
+  "experiment_id": "exp_p9_benchmark_showdown",
+  "verdict": "killed",
+  "all_pass": false,
+  "is_smoke": false,
+  "wall_s": 0.683,
+  "preconditions": {
+    "P1_upstream_supported": {
+      "pass": false,
+      "detail": "status_line='Status:   open', results_json_exists=False"
+    },
+    "P2_adapters_on_disk": {
+      "pass": false,
+      "detail": "weight_files_by_domain={'math': [], 'medical': []}"
+    },
+    "P3_registry_resolves": {
+      "pass": true,
+      "detail": "registry_entries=6, resolved=1, detail=[('math-gsm8k-knowledge-v0', 'no_weight_files'), ('code-codealpaca-knowledge-v0', 'no_weight_files'), ('medical-medmcqa-knowledge-v0', 'no_weight_files'), ('legal-mmlu-knowledge-v0', 'no_weight_files'), ('finance-mmlu-knowledge-v0', 'no_weight_files'), ('thinking-openthoughts-universal-v0', '21 weight files')]"
+    }
+  },
+  "kill_criteria": {
+    "K1390_gsm8k_vs_27b": "unmeasurable",
+    "K1391_gain_vs_base": "unmeasurable",
+    "K1392_medmcqa_vs_base": "unmeasurable"
+  },
+  "notes": "MATH.md \u00a7P precondition-probe tripwire. All-FAIL means math/medical adapter weights do not exist on disk despite registry entries claiming scores (e.g., math-gsm8k score=82.0). Upstream exp_p1_t2_single_domain_training verdict=killed with documented Python 3.14 datasets/dill incompat. Without weights, Theorem 1 RHS I(\u0394W; D) is undefined => K1390/K1391/K1392 malformed => status=killed per tripwire. Same upstream blocker as 17-member audit-2026-04-17 cohort; this P9-tagged experiment is NOT in that cohort but shares the root cause."
+}

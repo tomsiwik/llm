@@ -1,10 +1,21 @@
 # PAPER: P9.G1 — Benchmark Showdown: Pierre v3 vs Base vs Gemma 4 27B
 
+**Verdict: KILLED** (2026-04-19, precondition-probe via MATH.md §P tripwire)
+
 ## Summary
 
-Comprehensive comparison of Pierre v3 (Gemma 4 E4B 4-bit + domain adapters) against
-the base 4-bit model and published Gemma 4 27B numbers. The question: for which tasks
-does a specialized 4B model match or beat a dense 27B model at 14.8% the serving cost?
+Pre-registered as a real-measurement run of Pierre v3 (base Gemma 4 E4B 4-bit + math
++ medical adapters) against published Gemma 4 27B numbers. On 2026-04-19 the
+precondition probe (MATH.md §P, added pre-run) fired: the binding precondition P2
+(math + medical adapter weight files on disk) FAILED (0 weight files for both
+domains), so K1390/K1391/K1392 are structurally UNMEASURABLE. Upstream
+`exp_p1_t2_single_domain_training` is `killed` with a documented Python 3.14
+`datasets`/`dill` toolchain incompat in its reconstruction note — the same
+root-cause blocker that saturates the 17-member audit-2026-04-17 Gemma 4 cohort.
+This P9-tagged experiment is NOT in that cohort but shares the root cause.
+
+See §P in MATH.md for the tripwire derivation. Probe was pure filesystem + JSON
+reads; 0.683 s wall; no MLX, no network, no model load.
 
 ---
 
@@ -12,10 +23,21 @@ does a specialized 4B model match or beat a dense 27B model at 14.8% the serving
 
 | Kill | Criterion | MATH.md Prediction | Measured | Status |
 |------|-----------|--------------------|----------|--------|
-| K1390 | Math adapter GSM8K ≥ Gemma 4 27B (90%) | LIKELY FAIL (82% < 90%) | TBD | TBD |
-| K1391 | Math adapter GSM8K gain ≥ base + 20pp | EXPECTED PASS (~27pp if math=82%, base=55%) | TBD | TBD |
-| K1392 | Medical adapter MedMCQA ≥ base + 3pp | UNCERTAIN (registry=50%, base unknown) | TBD | TBD |
-| [INFO] | Serving cost ratio 4B/27B | PASS by math (14.8%) | 14.8% | Informational |
+| K1390 | Math adapter GSM8K ≥ Gemma 4 27B (90%) | LIKELY FAIL (82% < 90%) | UNMEASURABLE | P-tripwire fired (P2 FAIL) |
+| K1391 | Math adapter GSM8K gain ≥ base + 20pp | EXPECTED PASS (~27pp) | UNMEASURABLE | P-tripwire fired (P2 FAIL) |
+| K1392 | Medical adapter MedMCQA ≥ base + 3pp | UNCERTAIN | UNMEASURABLE | P-tripwire fired (P2 FAIL) |
+| [INFO] | Serving cost ratio 4B/27B | PASS by math (14.8%) | 14.8% | Informational (unchanged) |
+
+### Precondition probe outcome (MATH.md §P)
+
+| Probe | Result | Detail |
+|-------|--------|--------|
+| P1 upstream `exp_p9_full_stack_integration` supported + results.json | FAIL | status=`open`, `results.json` absent |
+| P2 math + medical adapter weight files on disk | FAIL | `{'math': [], 'medical': []}` — only `adapter_config.json` stubs exist |
+| P3 `adapters/registry.json` resolves to real weights | PASS (informational) | 6 entries, only `thinking-openthoughts-universal-v0` has weights (21 files); all 5 domain-knowledge entries point to empty dirs |
+
+P2 is the BINDING precondition for K1390/K1391/K1392 (see MATH.md §P sharpening). P3
+passing on a non-math/non-medical entry does not lift the tripwire.
 
 **Note on K1390**: MATH.md predicts K1390 will FAIL because Gemma 4 27B's published
 GSM8K score (~90-91%) exceeds our math adapter's 82%. This is the "scale debt" —
@@ -98,3 +120,24 @@ provides the competitive comparison against external reference points.
 
 4. **27B reference numbers**: Google's published benchmark conditions may differ from
    ours (prompt format, temperature, sampling strategy). Exact parity not guaranteed.
+
+5. **Why KILL instead of defer**: Per guardrail 1005, killed experiments are not
+   dead ends; the structural fix is identified (upstream T2.1 rerun after Python
+   3.14 `datasets`/`dill` toolchain fix + `experiment update --status open` on
+   `exp_p1_t2_single_domain_training`). Once weights land, K1390/K1391/K1392 become
+   measurable — re-claim this exp by ID and re-run the unmodified runner (§P PASS
+   path takes over). KILL is the honest current-state verdict, not the terminal
+   one.
+
+## Unblock path
+
+Identical to the 17-member audit-2026-04-17 cohort's unblock path (see
+`.ralph/current_direction.md`):
+
+1. Orchestrator-scope Python 3.14 toolchain fix for `datasets`/`dill` (or downgrade
+   to 3.12 temporarily).
+2. `experiment update --status open` (or v2 clone) on `exp_p1_t2_single_domain_training`.
+3. Rerun T2.1 at LORA_SCALE=5 (Finding #586 scale-safety bound) with disjoint
+   math/medical corpora.
+4. Rerun this experiment — §P probe auto-PASSES and runner flows through to MLX
+   measurement.
