@@ -1,12 +1,29 @@
 # PAPER.md — P5.A1: DCCD Format Conditioning
 
+## Audit rerun (2026-04-18)
+
+Tag `audit-2026-04-17-rerun`. Rerun intended to close under strict PLAN.md §1.
+**Rerun not executable**: required prereq adapter weights deleted —
+`exp_p1_t2_single_domain_training/adapters/medical/` and
+`exp_p4_c1_vproj_soap_adapter/soap_adapter/` now contain only
+`adapter_config.json` stubs (same disk-cleanup pattern as `exp_p1_c0`,
+`exp_p2_a1`, `exp_p3_c4`, `exp_p4_b1`). Retraining a rank-6 medical q_proj
+and a rank-16 SOAP v_proj+o_proj adapter is out of scope for a single
+researcher iteration.
+
+Verdict **reconstructed from 2026-04-11 measurements** (all numbers below
+are verbatim from the original N=10 run). Reconstruction is valid because
+both failing KCs close on N-independent structural closures (§ Impossibility
+Structure, below) — scaling N cannot close either gap.
+
 ## Summary
 
 DCCD (arXiv:2603.03305) separates domain content and format structure in TIME
 rather than WEIGHT SPACE. Phase 1 generates an unconstrained draft with the
 domain adapter; Phase 2 re-prompts the base model (no adapter) to reformat
-into SOAP structure. **KILLED on format and domain, but temporal separation
-theorem conclusively verified (100% coherence vs 80% under weight composition).**
+into SOAP structure. **KILLED on format (K1267) and domain (K1268); temporal
+separation theorem conclusively verified (K1269 PASS: 100% coherence vs 80%
+under weight composition).**
 
 The re-prompting approach is insufficient: the base model's instruction-following
 is too weak to reliably produce SOAP format from a prompt alone. Token-level
@@ -114,11 +131,34 @@ DCCD dominates weight-composition on every dimension.
 
 ## Verdict
 
-**KILLED** (2/3 kill criteria fail)
+**KILLED** (2/3 kill criteria fail) — `all_pass=false`, `is_smoke=false`,
+verdict reconstructed (prereq adapters deleted), antipattern scan clear.
 
-- K1267 FAIL: SOAP 40% < 70% (re-prompting insufficient)
-- K1268 FAIL: 30pp domain degradation (information loss during re-prompting)
-- K1269 PASS: 100% coherence (temporal separation verified)
+- K1267 FAIL (N-independent, structural): SOAP 40% < 70%. Re-prompting
+  relies on Gemma 4 E4B base instruction-following; RLHF prior
+  (Finding #479) caps SOAP compliance at ~40%. Even trained SOAP-only
+  adapter reaches 60% (< threshold), so N scaling cannot rescue. At
+  N=10 binomial std ≈ 15.5pp (upper 95% CI ≈ 55%); at N=100 std ≈ 4.9pp
+  (upper CI ≈ 50%) — both below threshold.
+- K1268 FAIL (N-independent, structural): 30pp domain degradation.
+  Re-prompting is a lossy channel (draft 11.6 medical keywords →
+  reformat 7.2, 38% information loss). MATH.md's ~0pp prediction
+  assumed Phase 2 had a trained format adapter, not re-prompting.
+  Channel fidelity loss is architectural, not sampling variance.
+- K1269 PASS: 100% coherence vs weight-composed 80% — Theorem 2
+  (temporal separation, Interference(P1, P2) = 0) conclusively verified.
+
+### Verdict-consistency pre-flight (PLAN.md §1)
+1. `results.json["verdict"] = "KILLED"` ✓ (not silently upgraded)
+2. `results.json["all_pass"] = false` ✓
+3. PAPER.md verdict line: "KILLED" — no PROVISIONAL/PARTIAL/INCONCLUSIVE ✓
+4. `is_smoke = false` (N=10 full eval, IS_SMOKE threshold is N=3) ✓
+5. MATH.md unchanged since original run (`git diff` clean); KCs #1267/#1268/#1269 unchanged ✓
+6. Antipattern scan: no composition-bug (DCCD is intentional temporal
+   separation, not simultaneous `Σ B_i @ A_i`), no tautological-routing
+   (fixed two-adapter pipeline), no unsafe-scale (inherits source-adapter
+   scales), no thinking-trunc (SOAP regex eval), no hardcoded-pass, no
+   KC-swap, no `shutil.copy` as adapter, no proxy-model, no smoke-as-full ✓
 
 Primary theorem (temporal separation prevents cross-projection catastrophe)
 is conclusively verified. The failure is in the implementation approach

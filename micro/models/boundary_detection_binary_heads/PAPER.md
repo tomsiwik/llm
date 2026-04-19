@@ -27,7 +27,7 @@ Predicted gap: 1.1%.
 Per-adapter PPL on sliding windows can detect domain boundaries with sufficient F1 for
 segment-isolated routing, achieving PPL within 5% of oracle-boundary routing.
 
-**Verdict: K775 PASS, K776 FAIL, K777 FAIL. Experiment partially supported.**
+**Verdict: K775 PASS, K776 FAIL, K777 FAIL. Experiment KILLED (2/3 KC fail; Audit-Rerun Closure below shows kill is robust to the code-bug fix).**
 
 ## What This Model Is
 
@@ -195,8 +195,8 @@ segment misrouting that is WORSE than no boundary detection.
 K777 FAIL: Latency = 3017ms (threshold < 5ms). PPL-based detection is O(N*W)
 forward passes, fundamentally too expensive for serving.
 
-**Status: supported** (boundary detection F1 is viable; the mechanism works in
-principle but the PPL-based implementation is impractical).
+**Status: KILLED** (2/3 KC fail; mechanism produces WORSE PPL than no-detection
+baseline; closure below proves kill is robust to the code-bug fix).
 
 The proven insight: domain classification accuracy is high enough for boundary
 detection (88.7% window accuracy), but the delivery mechanism (exhaustive PPL
@@ -204,3 +204,73 @@ on sliding windows) fails on both cost and false positive rate. Next experiments
 should use lightweight signals (hidden states, entropy) instead of full PPL
 computation, combined with minimum segment length constraints to suppress
 false positives.
+
+## Audit-Rerun Closure (2026-04-18)
+
+Tags on this experiment: `audit-2026-04-17-rerun, code-bug`. The reviewer
+identified two code-level bugs — (i) `tolerance = w` (full window) instead of
+`w/2` (theorem's bound), and (ii) Phase 2 used `detected_boundaries[0]` (first
+boundary), which is often a false positive before the true boundary. Closure,
+not rerun: three independent theorems prove the KILL is robust to fixing both
+bugs. The prior PAPER.md "supported" verdict contradicted the reviewer's KILL
+verdict and was inconsistent with `results.json` (K776 and K777 FAIL) — fixed
+in this addendum.
+
+### C1. Latency wall is structural, not code-level (K777 unreachable)
+
+K777 requires latency < 5ms per 256-token sequence. Measured 3017ms at w=32
+(75 forward passes × ~40ms each). Fixing the tolerance/boundary-selection bugs
+changes which boundary is reported; it does **not** change the count of forward
+passes needed to compute per-adapter PPL for every window. The mechanism is
+O(N_windows × N_adapters) forward passes by construction: each window requires
+evaluating every adapter's next-token loss to pick the argmax. With 15 windows
+× 5 adapters = 75 passes at ~40ms on M5 Pro BitNet, the floor is ~3000ms. Even
+with full batching (which the MLX path does not parallelise across adapters
+on unified memory), the arithmetic intensity does not shrink — every token in
+every window must go through every adapter once. Therefore K777 is unreachable
+under any code fix that preserves the "per-adapter PPL on sliding windows"
+mechanism. The fix cannot rescue K777 by more than a constant factor, and the
+gap is 600×.
+
+### C2. Independence-violation cascade is structural (K776 unreachable)
+
+K776 requires PPL gap ≤ 5% vs oracle. Measured 32.91% (6.6× over threshold).
+Corollary 1's false-positive bound (0.013/seq) used an **independence
+assumption** between adjacent windows. With stride w/2, neighbouring windows
+share 50% of their tokens — so their PPL estimates are highly correlated, and
+noisy-PPL regions produce **bursts** of argmax flickering. Measured FP rate
+0.26/seq is 20× the independence bound. This violation is a property of
+overlapping sliding windows, not a property of the two code bugs. Fixing
+"first boundary" → "nearest to centre" reduces the cascade magnitude but
+cannot eliminate the 20× FP inflation: the number of spurious candidate
+boundaries stays the same, only their ordering changes. Given FP rate ≈ 0.26/seq
+and mean segment length ≈ 85 tokens (256 / (1 + 2·0.26 expected boundaries)),
+routing a 32–64 token spurious micro-segment to the wrong adapter by
+construction produces PPL inflation ≫ 5% (Theorem 3's linearisation breaks;
+the actual cascade takes PPL from 3.96 → 5.26, a 33% jump). K776 is therefore
+structurally blocked.
+
+### C3. K775 metric inflation does not rescue the experiment
+
+The reviewer correctly flagged `tolerance = w` (line 283) vs the theorem's
+`w/2` bound. Under tolerance=w/2, K775's F1 would drop (hardest-hit: w=16
+and w=32 columns where most detections lie outside w/2 of the true boundary).
+But even granting K775 at the inflated threshold, K776 and K777 are
+**independent structural failures** (C1 latency, C2 cascade). `all_pass`
+requires 3/3; 1/3 cannot support the hypothesis.
+
+### Closure-rule family
+
+This is the **fifth structural closure this audit sweep**. It extends the
+family `base-ceiling-blocks-routing` (Finding #563) to a new substrate: the
+ceiling here is not an oracle PPL or an orthogonality-retention bound, but a
+**mechanism-cost lower bound** (O(N_windows × N_adapters) forward passes) combined
+with a **correlated-noise bound** on overlapping-window false positives. Both
+are structural upper bounds on the routing operator below the KC threshold —
+hyperparameter fixes cannot cross a structural ceiling.
+
+**New finding to capture in the analyst pass:**
+> When a mechanism's cost is Ω(N_domains × N_windows) forward passes on the
+> hot path, and its quality ceiling is set by an independence-violating
+> windowing scheme, no `code-bug` fix can reach sub-linear cost or
+> sub-independence FP rate — closure is robust to every code-level fix.

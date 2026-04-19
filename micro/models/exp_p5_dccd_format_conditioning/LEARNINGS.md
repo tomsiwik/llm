@@ -1,5 +1,31 @@
 # LEARNINGS — exp_p5_dccd_format_conditioning
 
+## V2 Audit Closure (2026-04-18) — KILLED verdict confirmed
+
+Tag `audit-2026-04-17-rerun`. Rerun not executable (prereq adapters
+deleted: medical q_proj + SOAP v_proj+o_proj). Verdict reconstructed
+from 2026-04-11 N=10 measurements; both failing KCs close on
+N-independent structural bounds — scaling N cannot rescue. Review V2
+PROCEED with KILLED. MATH.md git-clean, antipattern scan clear.
+
+**Distinction to preserve:** the KILL is on the re-prompting *implementation*
+of Phase 2, not on DCCD's temporal-separation *principle*. Theorem 2
+(Interference(P1,P2)=0) is conclusively verified by K1269 PASS
+(100% coherence vs weight-composed 80%; #483 eliminated). Separate
+finding-add recommended so Theorem 2 survives the top-level KILL.
+
+**Structural closures (N-independent):**
+- K1267 — RLHF ceiling + adapter ceiling: SOAP-only trained adapter
+  reaches only 60% < 70%, so re-prompting (instruction-following through
+  RLHF-suppressed SOAP prior, Finding #479) cannot exceed ~40%.
+- K1268 — lossy re-prompting channel: draft 11.6 medical keywords →
+  reformat 7.2 (38% information loss). MATH.md's ~0pp prediction assumed
+  Phase 2 had a trained format adapter, not re-prompting.
+
+---
+
+## V1 Analyst (2026-04-11)
+
 **Status:** KILLED (2/3 fail) | Finding: supported
 
 ## Core Finding

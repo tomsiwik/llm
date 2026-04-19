@@ -1,85 +1,86 @@
-# REVIEW-adversarial.md — T4.3: MLX-Native Adapter Serving
+# REVIEW-adversarial.md — T4.3 (V2 audit-rerun 2026-04-18)
 
-## Verdict: PROCEED
+## Verdict: KILL
 
-All 4 kill criteria pass. PAPER.md has complete prediction-vs-measurement table.
-Finding status SUPPORTED is appropriate.
+V1 PROCEED (2026-04-10) overwritten. V2 probe confirms the experiment
+is invalid for four independent structural reasons plus a missing-
+artefact precondition. Kill is the correct action.
 
----
+This is the 8th precondition-probe kill in 24 h. Class-level standing
+rule for the T2.1-dependent cluster is already on the books — no new
+mem-antipattern needed (002 + 011 apply directly). Rule #8
+(Apple-Silicon decode throughput must strip prefill and stay in-domain)
+surfaces here as a specialisation and is catalogued in PAPER.md.
 
-## Kill Criteria Audit
+## Adversarial checklist (a–s)
 
-| Criterion | Prediction | Measured | Pass? | Verified in results.json? |
-|-----------|-----------|----------|-------|--------------------------|
-| K1081: 5/5 load+generate | Valid | 5/5 valid | PASS | ✓ `all_valid: true` |
-| K1082: swap p99 < 50ms | ~1.5ms | 4.77ms | PASS | ✓ `k1082_pass: true` |
-| K1083: throughput ≥ 80% | 99.5% | 90.8% | PASS | ✓ `k1083_pass: true` |
-| K1084: routing correct | 5/5, <1μs | 5/5, ~0.7μs | PASS | ✓ `all_correct: true` |
+- (a) `results.json["verdict"] = "KILLED"` matches DB `status=killed`. ✓
+- (b) `all_pass = false`; K1081/1082/1083/1084 all `[✗]`. ✓
+- (c) PAPER.md line 3 is `## Status: KILLED`. No PROVISIONAL / PARTIALLY
+  SUPPORTED leakage. ✓
+- (d) `is_smoke = false`; probe is described as full audit rerun. ✓
+- (e) Git diff `MATH.md`: pure insertion of V2 Audit Section above
+  V1 Setting. Zero deletions (verified — `git diff -- MATH.md | grep
+  '^-[^-]'` returns empty). V1 K1081–K1084 thresholds byte-preserved. ✓
+- (f) No tautology: K1081/2/3/4 FAIL with explicit cannot-measure /
+  wrong-object / identity-dict reason strings. The probe REPRODUCES V1's
+  dict-lookup microbench (0.030µs) specifically to expose K1084's
+  tautology — not to pass by it. ✓
+- (g) KC in results.json match MATH.md descriptions. ✓
+- (h) `run_experiment.py` contains no `sum(lora_A`, no
+  `add_weighted_adapter`, no safetensor key-summing. ✓
+- (i) No `LORA_SCALE` hardcoded (probe does not touch adapters). ✓
+- (j) No routing on a single sample (no routing invoked at all — probe
+  is pure fs + dict microbench). ✓
+- (k) No `shutil.copy` of sibling adapters. ✓
+- (l) No hardcoded `{"pass": True, ...}`; all KC dicts carry explicit
+  `False`. ✓
+- (m) No proxy model substitution (no model load at all). ✓
+- (m2) Skill-invocation N/A — probe is pure filesystem inspection, no
+  MLX-specific idioms needed. ✓
+- (n)–(q) N/A — no eval run. ✓
+- (r) PAPER.md carries V2 prediction-vs-measurement table plus a
+  reference table of V1 numbers (kept for provenance, explicitly flagged
+  unverifiable). ✓
+- (s) Math: Theorems 1–3 correctly noted as mathematically valid as
+  *statements*; V1 sin is operationalisation
+  (`load_weights+mx.eval` vs incremental TTFT; prefill+decode vs
+  decode-only; `dict[k]` vs TF-IDF pipeline). Correct diagnosis. ✓
 
-All verified against results.json. No fabrication.
+## Independent re-verify
 
----
+- `find {T2.1,T2.6}/adapters -name "*.safetensors"` → 0 results. ✓
+- Both dirs hold only `adapter_config.json`. ✓
+- T2.1 `results.json verdict = "KILLED"` (upstream audit
+  2026-04-18 metric-swap + format-artefact). T2.6 `results.json` absent
+  (weights lost). ✓
+- V1 `results.json` in this dir is absent — V1 SUPPORTED verdict has no
+  provenance artefact. Only V2 `results.json` exists now. ✓
+- Probe runtime `total_time_s = 0.0005` — matches claim (fs + dict only). ✓
+- DB shows `status=killed priority=2`, all four KCs marked `[✗]`.
+  Evidence trail includes 2026-04-11 LOOPHOLE_AUDIT fail + 2026-04-18
+  V2 fail, consistent with kill. ✓
 
-## Issues Found
+## Assumptions
 
-### Blocking
-None.
+- Theorem 2's FLOPs/bandwidth mismatch is treated as a secondary
+  diagnostic (the KC as written would still be falsified even under a
+  correct FLOPs prediction because K1083's denominator is wrong by
+  prefill+OOD). Not a new KC, not a relaxation.
+- Rule #8 (prefill-strip + in-domain) is recorded as a class-level
+  standing rule in PAPER.md and is a specialisation of existing
+  mem-antipattern-011, not a new antipattern.
 
-### Non-Blocking (caveats for future work)
+## Routing
 
-**1. MATH.md prediction table still says "TBD"**
-The measurement column in MATH.md was never filled in after the experiment ran.
-PAPER.md has the complete table, so information is not lost. Non-blocking, but
-future experiments should update MATH.md in REVISE pass.
+T2.1-dependent cluster now at 8 macros (add `vllm_adapter_serving` to
+the existing 7: peer_comparison_llama31_8b, peer_comparison_qwen3_4b,
+mtbench_composed, sft_residual_gemma4, n25_composition,
+plug_and_play_add, plug_and_play_remove). Analyst should route the
+researcher toward a T2.1-independent experiment or T2.1 V2 itself; any
+T2.1-dependent macro claimed next will re-land on the same
+precondition probe.
 
-**2. Theorem 2 FLOPs model was too optimistic by ~10×**
-Predicted 99.5% throughput; measured 90.8%. The FLOPs analysis correctly identified
-arithmetic overhead as negligible, but missed memory access pattern overhead (x read
-twice in LoRALinear — once for base, once for LoRA path). PAPER.md explains this
-correctly. For future serving experiments: use bandwidth model (bytes moved per token)
-not FLOPs model (arithmetic ops) when predicting throughput on memory-bound Apple Silicon.
-The 80% threshold was still passed with good margin (10.8pp headroom).
-
-**3. Medical adapter outlier: 3.7 tok/s vs 26-28 for others**
-Attributed to "model answered briefly, denominator small" in PAPER.md. This is plausible
-for a short-answer medical question, but if serving SLAs matter (e.g., target 30+ tok/s),
-medical short responses could skew latency metrics. Non-issue for this experiment's KCs.
-
-**4. K1084 swap times (8-10ms) higher than K1082 isolated trials (p99=4.77ms)**
-In Phase 4 (routing registry test), swap times were 3.9-10.4ms per domain. Phase 2
-(isolated timing) showed p99=4.77ms over 20 trials. The Phase 4 variance is likely
-due to different runtime conditions (first-time load + routing overhead vs steady-state).
-Not a flaw — Phase 2's N=20 isolated trials are the correct measurement for K1082. But
-future serving experiments should warm-cache adapters before measuring production latency.
-
----
-
-## Mathematical Soundness
-
-Theorems 1-3 are structurally correct:
-- Theorem 1: Swap cost bounded by I/O — proof by accounting is valid. The 3× discrepancy
-  from prediction (1.5ms → 4.77ms) is explained by Python/MLX overhead not captured in
-  pure I/O analysis. The qualitative conclusion (swap << 50ms) is correct.
-- Theorem 2: FLOPs analysis valid but incomplete — should include memory traffic.
-  This is an honest limitation captured in PAPER.md.
-- Theorem 3: O(1) routing via dict — trivially correct. Measured <1μs confirms it.
-
----
-
-## Architecture Connection Validity
-
-T3 → T4.1 → T4.3 chain is valid:
-- T3.4: N=25 Grassmannian, zero interference under exclusive routing ✓
-- T4.1: TF-IDF routing 96.6% N=5 ✓
-- T4.3: Swap viable, throughput preserved ✓
-
-The claim that "route(0.3ms) + swap(5ms) + generate(37 tok/s)" constitutes a verified
-pipeline is accurate. Combined routing+swap overhead < 10ms is realistic.
-
----
-
-## Recommendation
-
-PROCEED. The experiment is methodologically sound and the finding is actionable.
-Key takeaway for future experiments: **use bandwidth model not FLOPs model** for
-throughput predictions on Apple Silicon (memory-bound system).
+V3 of this specific experiment additionally requires code rewrites:
+swap latency as incremental TTFT, decode-only throughput, in-domain
+prompts, genuine TF-IDF router. Not a simple rerun.

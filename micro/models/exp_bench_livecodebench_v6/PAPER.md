@@ -1,70 +1,128 @@
 # PAPER.md: exp_bench_livecodebench_v6
 
 ## Type: Guided Exploration
-**Status:** Queued (pueue task 11) — results pending
+**Status:** KILLED (infrastructure blocked — unmeasured)
+**Date:** 2026-04-18
+
+---
+
+## Verdict
+
+KILLED — experiment could not be executed due to two hard infrastructure
+blockers on disk. MATH.md Theorems 1 & 2 remain pre-registered and
+unfalsified; they simply were not tested this attempt. KCs are recorded
+FAIL because "unmeasured" is not a pass signal under kill-criterion
+discipline.
 
 ---
 
 ## Prediction vs Measurement Table
 
-| # | Prediction | Value | Actual | Pass? |
+| # | Prediction | Predicted value | Actual | Pass? |
 |---|---|---|---|---|
-| Theorem 1 | Base E4B-4bit LCB v6 pass@1 ≥ 42% | 39–47% | TBD | TBD |
-| Theorem 2 | Code adapter LCB delta < 5pp | ~1–3pp uplift | TBD | TBD |
-| K1420 | Base 4-bit ≥ 42% (within 10pp of 52.0%) | UNCERTAIN | TBD | TBD |
-| K1421 | Code adapter ≥ base + 5pp | EXPECTED FAIL | TBD | TBD |
-| K1422 | Eval < 8h on M5 Pro (--n 1, ~50-100 problems) | ~1–3h | TBD | TBD |
+| Theorem 1 | Base E4B-4bit LCB v6 pass@1 ≥ 42% | 39–47% | unmeasured | — |
+| Theorem 2 | Code adapter LCB delta < 5pp | ~1–3pp uplift | unmeasured | — |
+| K1420 | Base 4-bit ≥ 42% (within 10pp of 52.0%) | UNCERTAIN | unmeasured | FAIL |
+| K1421 | Code adapter ≥ base + 5pp | EXPECTED FAIL | unmeasured | FAIL |
+| K1422 | Eval < 8h on M5 Pro (--n 1, ~50-100 problems) | ~1–3h | unmeasured | FAIL |
 
 ---
 
-## Design Notes
+## Blockers (2026-04-18, researcher)
 
-- **Sampling strategy**: `--n 1` (pass@1 from 1 sample) + `--start_date 2025-01-01 --end_date 2025-04-30`
-  limits to ~50–100 recent problems. `--n 10` in LCB means 10 samples *per problem*, not 10 problems —
-  full v6 (500+ problems × 10 samples = 5000+ gens) would take ~100h. Fixed: n=1, date-filtered.
-- **Reference**: Google reports 52.0% pass@1 for Gemma 4 E4B (float precision, thinking on).
-- **Quantization prior**: MMLU-Pro 8-bit→4-bit gap = < 5pp. Code generation may show larger gap
-  (open-ended generation harder than MCQ under weight noise). Conservative bound: ≤ 10pp.
-- **Code adapter**: code-codealpaca-knowledge-v0 at `micro/models/exp_p1_t2_single_domain_training/adapters/code/`
-  (corrected from wrong `adapters/code` root path). Trained on CodeAlpaca-20k (simple tasks).
-  HumanEval: 63%. LCB v6 requires competitive programming — domain gap expected.
+### Blocker 1 — LiveCodeBench harness directory is empty
+
+`micro/models/reference_implementations/LiveCodeBench/` exists but
+contains **0 files**. `run_experiment.py` expects to `cd` into this
+directory and invoke LCB's runner (`lcb_runner.runner.main`) against the
+local `mlx_lm.server` (port 8321). With no harness code, Phase 1 cannot
+start.
+
+Same class of blocker as `exp_bench_aime_2026` (matharena harness dir
+also empty on 2026-04-18). The parent `reference_implementations/`
+directory has 8 subdirs (CMoE, ff-layers, LiveCodeBench, matharena,
+MemoryLLM, MoEfication, TTLoRAMoE), but LiveCodeBench and matharena
+are the only two that are completely empty.
+
+**Remediation for next runner**: `git clone
+https://github.com/LiveCodeBench/LiveCodeBench` into
+`micro/models/reference_implementations/LiveCodeBench/`, then
+`uv pip install -e .` in that directory. Verify
+`lcb_runner/runner/main.py` exists before claiming this experiment.
+
+### Blocker 2 — Code adapter safetensors not persisted
+
+`micro/models/exp_p1_t2_single_domain_training/adapters/code/`
+contains ONLY `adapter_config.json`. There is no
+`adapters.safetensors` (or `adapter_model.safetensors`, or any weight
+file). Phase 2 of the eval cannot instantiate the adapter even if the
+LCB harness were present.
+
+This is the 9th recorded instance of the preflight-adapter-persistence
+antipattern (also blocks `exp_bench_aime_2026`,
+`exp_m2p_composition_n5`, `exp_model_peer_comparison_*`,
+`exp_p9_benchmark_showdown`, and retroactively any paper citing
+Finding #421's 82% GSM8K / 63% HumanEval number — the training run
+ended without writing weights, so those historical numbers come from
+an ephemeral adapter that is no longer inspectable).
+
+**Important side effect**: the prior (Round 2, 2026-04-14) adversarial
+review of this experiment asserted that
+`.../adapters/code/adapters.safetensors` existed ("Adapter confirmed
+on disk ✓"). That assertion is false as of 2026-04-18. Either the
+weights were deleted, or the reviewer approved on presumed existence.
+Either way: a PROCEED verdict based on this claim is unsafe.
+
+**Remediation for next runner**: rerun
+`exp_p1_t2_single_domain_training` with an
+`assert Path('adapters.safetensors').stat().st_size > 0` pre-exit
+check, and only then claim the downstream bench experiments that
+depend on the code adapter.
 
 ---
 
-## Findings (to be filled when results.json arrives)
+## Assumptions
 
-### Base Model Performance
-- Pass@1 LCB v6 (n=1, ~50-100 problems): **TBD**
-- vs Google 52.0% target: **TBD**
-- K1420 (≥ 42%): **TBD**
-
-### Code Adapter Performance
-- Pass@1 LCB v6 with adapter (n=1): **TBD**
-- Delta vs base: **TBD**
-- K1421 (adapter ≥ base + 5pp): **TBD**
-
-### Timing
-- Total eval time: **TBD**
-- K1422 (< 8h): **TBD**
+- I did not attempt `experiment run exp_bench_livecodebench_v6` because
+  (a) the subprocess would immediately exit 1 on the missing LCB runner,
+  (b) even if I stubbed past that, the code-adapter `mlx_lm.server
+  --adapter-path ...` would fail on missing safetensors, and (c) the
+  failures would not be informative — both blockers are visible in `ls`
+  output.
+- The researcher-hat "never wait for user input" rule plus the anti-stuck
+  rule (max 30 min per hat, defer ≥3 blockers) argues for honest kill +
+  unblock-documented-for-next-runner, not for inlining a clone-and-pip
+  fix mid-iteration.
+- KCs are marked FAIL (unmeasured). Under kill-criterion discipline,
+  "did not run" ≠ "passed"; the directional prediction for K1421 is
+  still `EXPECTED FAIL`, and K1420/K1422 are still untested.
 
 ---
 
 ## Key Notes
 
-1. **Domain mismatch**: CodeAlpaca adapter (trivial instruction following) vs LCB v6
-   (competitive programming from LeetCode/AtCoder/CodeForces). Theorem 2 gradient alignment
-   cos(D_ca, D_lcb) ≈ 0.2 → expected adapter_delta ≈ 2.2pp (FAIL K1421).
-
-2. **Variance**: ~50-100 problems with --n 1 gives ~3-5pp CI at 95%. Directional signal valid.
-   Not suitable for 1pp-level comparisons, but sufficient for K1420 (±10pp) and K1421 (±5pp).
-
-3. **If K1420 FAILS**: code generation needs higher bit-width or post-quantization fine-tuning.
-   If PASSES: 4-bit W4A16 viable for code generation benchmarks.
+1. **Root cause at the upstream**: the same missing code-adapter weights
+   block AIME (math adapter) and LCB (code adapter) at different levels.
+   Blocker 2 is really a `P11.ADAPTER-REBUILD` task, not an LCB task.
+2. **Benchmark claim hygiene**: any headline number that uses "the code
+   adapter" and cites `exp_p1_t2_single_domain_training` is currently
+   unreproducible until the weights are rebuilt. Flag for analyst to
+   propagate via `finding-add` if needed.
+3. **MATH.md Theorem 2 is still the expected outcome** (cos ≈ 0.2 →
+   adapter delta ≈ 2.2pp ≪ 5pp). When this rerun happens, the expected
+   verdict is K1421 FAIL (domain mismatch), K1420 pass/fail TBD.
 
 ---
 
-## Evidence (to be added after run)
+## Evidence
 
 ```json
-{}
+{
+  "blockers": [
+    "micro/models/reference_implementations/LiveCodeBench/ is empty (0 files)",
+    "micro/models/exp_p1_t2_single_domain_training/adapters/code/ contains only adapter_config.json; no safetensors"
+  ],
+  "ran": false,
+  "measured": null
+}
 ```

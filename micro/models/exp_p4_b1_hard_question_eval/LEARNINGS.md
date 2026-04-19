@@ -1,5 +1,19 @@
 # LEARNINGS.md — P4.B1: Gap-Targeted Evaluation — Hard Domain Questions
 
+## V2 Audit Closure (2026-04-18)
+
+- Audit tags `audit-2026-04-17-rerun` + `smoke-to-full`. Full N=15 rerun blocked:
+  all 5 P1 T2 adapter weight files deleted (only `adapter_config.json` stubs survive).
+- Closed structurally: (C1) K1227 is N-independent — Gemma 4 E4B base 0.43-0.63 >>
+  0.25 threshold; (C2) K1228 is training-data-limited (V_train disjoint from V_hard
+  on advanced subdomain content); (C3) K1229 marginal PASS does not rescue all_pass.
+- Finding #478 and Impossibility Theorem preserved; V2 adds explicit closure
+  theorems + `_reconstruction_note` to `results.json`.
+- Joins prior V2 closures this sweep: `exp_p1_c0`, `exp_p2_a1`, `exp_p3_c4`
+  (same `audit-2026-04-17-rerun` pattern, same deleted-prereq disk state).
+
+**V1 status below (unchanged):**
+
 **Status:** KILLED — Finding #478
 **Date:** 2026-04-11
 

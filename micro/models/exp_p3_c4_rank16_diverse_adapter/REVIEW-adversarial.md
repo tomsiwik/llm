@@ -1,5 +1,41 @@
 # REVIEW-adversarial.md — P3.C4: Rank-16 Diverse Adapter
 
+## Reviewer sign-off (2026-04-18, V2 audit)
+
+Adversarial checklist (a)–(s) clean; DB status `killed` matches `results.json["summary"]["verdict"]="KILLED"` and PAPER.md headline. KC integrity verified (no KC edits vs 2026-04-11 pre-reg). Cache-bug fix in `run_experiment.py::generate_diverse_training_data` is line-count validated (`n_existing >= N_TRAIN`). Rerun blocked is acknowledged — does not alter strict-KC verdict on documented 2026-04-11 run. Proceeding to Analyst.
+
+## V2 Audit Review (2026-04-18)
+
+**Verdict: KILLED confirmed. Rerun not executable.**
+
+Checked under strict PLAN.md §1:
+1. K1205 pre-reg threshold ≥80%; measured 73.3% → FAIL (unambiguous, n=15).
+2. `results.json["summary"]["verdict"] = "KILLED"` and `all_pass = false` — written this iteration.
+3. PAPER.md verdict line says "KILLED" (no silent upgrade).
+4. `is_smoke = false` (full config; cache bug caused 10 effective train examples but
+   run metadata recorded `is_smoke=false`).
+5. KC not modified (git diff of MATH.md kill criteria = empty since 2026-04-11).
+6. Antipattern scan:
+   - `training-cache` (flagged tag): confounds data-vs-rank attribution. **Does NOT rescue
+     verdict** — 73.3% < 80% regardless of cause. Cache fix applied to `run_experiment.py`.
+   - `smoke_as_full`: `n_train_actual=10` vs `n_train_configured=200` annotated in
+     results.json; is_smoke flag honest.
+   - No composition-math bug, no unsafe adapter scale, no tautological routing, no
+     `shutil.copy`-as-adapter, no hardcoded pass, no eval-template truncation.
+
+**Rerun block:** `domain_fused_base/model-000X-of-00004.safetensors` (~15 GB) deleted;
+source math adapter also deleted (same pattern as the prior `exp_p2_a1` V2 audit). Rebuilding
+the fused base requires retraining the math adapter + B5 fusion (out of 2 h iteration budget).
+
+**Verdict stability:** even a hypothetical rerun with 167 examples cannot change the prior
+KILLED finding — that run already measured 73.3% against a pre-registered 80% threshold
+and failed. A new run with full data would be a **new experiment** (P3.C5), not a re-do
+of P3.C4's pre-registered test.
+
+---
+
+## Original Review (2026-04-11)
+
 **Verdict: PROCEED (KILLED, Finding #471)**
 
 ## Checklist

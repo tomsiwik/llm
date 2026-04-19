@@ -504,7 +504,23 @@ def main():
 
     k1011 = hra_gsm8k >= lora_gsm8k
     k1012 = hra_mmlu  >= lora_mmlu
-    k1013 = conv_ratio <= 2.0 or (hra_conv > TRAIN_STEPS and lora_conv > TRAIN_STEPS)
+    # K1013 sentinel fix: TRAIN_STEPS+1 means "never converged".
+    # Only PASS if ratio<=2.0 AND HRA actually converged. If only HRA is DNF,
+    # treating 1.254 (=301/240) as "within 2x" is a false positive — the prior
+    # code-bug caught by audit 2026-04-17.
+    hra_converged  = hra_conv  <= TRAIN_STEPS
+    lora_converged = lora_conv <= TRAIN_STEPS
+    if not hra_converged and not lora_converged:
+        # Both DNF → cannot measure convergence ratio; test not applicable (FAIL).
+        k1013 = False
+    elif not hra_converged and lora_converged:
+        # HRA DNF, LoRA converged → HRA did NOT converge within 2× LoRA (FAIL).
+        k1013 = False
+    elif hra_converged and not lora_converged:
+        # HRA converged, LoRA DNF → HRA is definitively faster (PASS).
+        k1013 = True
+    else:
+        k1013 = conv_ratio <= 2.0
     k1014 = time_ratio <= 3.0
 
     results.update({
@@ -513,10 +529,19 @@ def main():
         "k1012": {"pass": k1012, "hra_mmlu": hra_mmlu, "lora_mmlu": lora_mmlu,
                   "delta_pp": round((hra_mmlu - lora_mmlu) * 100, 2)},
         "k1013": {"pass": k1013, "hra_conv_step": hra_conv, "lora_conv_step": lora_conv,
-                  "ratio": round(conv_ratio, 2)},
+                  "ratio": round(conv_ratio, 2),
+                  "hra_converged": bool(hra_converged),
+                  "lora_converged": bool(lora_converged),
+                  "train_steps": TRAIN_STEPS,
+                  "conv_threshold": LOSS_CONV_THRESH},
         "k1014": {"pass": k1014, "hra_step_time": round(hra_step, 4),
                   "lora_step_time": round(lora_step, 4), "ratio": round(time_ratio, 2)},
     })
+
+    all_pass = k1011 and k1012 and k1013 and k1014
+    results["all_pass"] = bool(all_pass)
+    results["verdict"] = "SUPPORTED" if all_pass else "KILLED"
+    results["ran"] = True
 
     # Save results
     results_path = EXPERIMENT_DIR / "results.json"
@@ -543,8 +568,8 @@ def main():
     print(f"K1014 (time<=3×LoRA):    {'PASS' if k1014 else 'FAIL'} "
           f"(ratio={time_ratio:.2f})")
 
-    all_pass = k1011 and k1012 and k1013 and k1014
-    print(f"\nOverall: {'ALL PASS' if all_pass else 'SOME FAIL'}")
+    print(f"\nOverall: {'ALL PASS' if all_pass else 'SOME FAIL'} "
+          f"(verdict={results['verdict']})")
     return results
 
 

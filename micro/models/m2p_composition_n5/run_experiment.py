@@ -663,18 +663,22 @@ def composed_forward(base: ToyGPT, tokens: mx.array,
     pos = mx.arange(T)
     x = base.wte(tokens) + base.wpe(pos)
 
+    # FIX (REVIEW Issue 1, 2026-04-18): router train/test distribution mismatch.
+    # Router was trained on base-model LAST-LAYER hidden states. Previously this
+    # function called router(x) at every block on perturbed intermediate states —
+    # a different distribution than training. Pre-compute routing ONCE from the
+    # base model's last-layer hidden state via a stop-gradient prefix pass.
+    base_hidden_list = base.get_hidden_states(tokens)
+    base_last_hidden = mx.stop_gradient(base_hidden_list[-1])  # (B, T, D)
+    mx.eval(base_last_hidden)
+    router_logits = router(base_last_hidden)                    # (B, T, N_DOMAINS)
+    routing_weights = mx.softmax(router_logits, axis=-1)        # stable across layers
+
     for li, block in enumerate(base.blocks):
         x_norm = block.norm1(x)
         B_b, T_b, C = x_norm.shape
         attn = block.attn
         h, hd = attn.n_heads, attn.head_dim
-
-        # Get routing weights from current hidden state
-        # Use the last-layer hidden state from a previous pass, or use current x
-        # For simplicity: route based on current pre-norm hidden state
-        # (in production: cache base-model hidden states from a prefix pass)
-        router_logits = router(x)  # (B, T, N_DOMAINS)
-        routing_weights = mx.softmax(router_logits, axis=-1)  # (B, T, N_DOMAINS)
 
         # Compute weighted sum of LoRA corrections for each module
         def _apply_composed_lora(linear_fn, x_in, li, mi):

@@ -1,6 +1,66 @@
 # PAPER.md: M2P Composition at N=5 with Grassmannian Guarantee
 
-## Abstract
+## V2 Rerun — 2026-04-18
+
+**Trigger:** `audit-2026-04-17-rerun` + `code-bug` tags. REVIEW-adversarial.md
+Issue 1 (BLOCKING) flagged a router train/test distribution mismatch:
+the router was trained on base-model **last-layer** hidden states but called
+on **perturbed intermediate** hidden states inside `composed_forward` at every
+layer. The two distributions differ; this alone could explain the routing
+collapse to 36.6% in the v1 run.
+
+**Surgical fix applied** (`run_experiment.py:666–675`): pre-compute routing
+**once** from a stop-gradient prefix pass through the base model, take the
+last-layer hidden state (matches training distribution exactly), then reuse
+the resulting `routing_weights` at every layer. No KC modification, no
+hyperparameter change, no `--status` upgrade — pure code-bug fix per
+audit guidance.
+
+### V2 Prediction-vs-Measurement (run 2026-04-18, 12.6s, full-scale)
+
+| KC | Source | Threshold | v1 | v2 | Status |
+|----|--------|-----------|----|----|--------|
+| K851 general degradation ≤ 10pp | Theorem 3 | ≤ 10pp | -14.4pp | **-23.3pp** | **PASS** (improvement) |
+| K852 routing accuracy ≥ 50% | Theorem 2 | ≥ 50% | 36.6% | **41.2%** | **FAIL** |
+| P1 \|cos\|_max (Grassmannian) | Theorem 1 (exact) | 0 | 1e-8 | **1e-8** | PASS |
+| P2 mean PPL ratio (comp/SFT) | Theorem 3 (under 80% routing) | ≤ 1.20 | 3.32 | **2.91** | FAIL |
+
+**Verdict (v2): KILLED.** K852 still fails (41.2% < 50%). The fix moved
+routing from 36.6% → 41.2% (+4.6pp), confirming the train/test mismatch was
+**a real bug** but not the dominant cause. The remaining gap is consistent
+with the secondary issues REVIEW flagged but did not block on:
+
+- **Issue 2 (domain overlap):** sort/reverse/repeat share the `"abcdefgh"`
+  alphabet; per-token signal is fundamentally weak for an MLP router.
+- **Router capacity:** 64-dim MLP, 300 steps, 738 train tokens — under-
+  parametrised for a 5-way per-token classification on a toy GPT.
+
+### What this rerun proves and does not prove
+
+- **Proves:** Theorem 1 (parameter orthogonality) is exact, reproducibly,
+  on a fresh seed/run. K851 holds even more strongly (composition still
+  improves general quality). The router train/test fix is correct
+  (modest improvement, no regression).
+- **Does not prove:** Theorem 2 (routing) — falsified again. The Grassmannian
+  guarantee is intact but unusable without a routing mechanism that crosses
+  50% on this domain set. Theorem 3 prediction was conditional on routing
+  ≥ 80%; that precondition was never met, so the bound was never tested.
+
+### Permanently learned, propagate to siblings
+
+The v1→v2 delta isolates the train/test mismatch from the
+domain-overlap/router-capacity issues. Future composition experiments must:
+
+1. Always route from base-model hidden states (not from composed activations)
+   — encode this as a structural rule in `composed_forward` templates.
+2. Choose domain sets with disjoint token alphabets, not just disjoint
+   logical structure, when validating routing on small models.
+3. Stop interpreting routing-accuracy <50% as "router needs more steps";
+   the dominant failure mode here is signal-level, not optimisation-level.
+
+---
+
+## Abstract (v1, retained for context)
 
 This experiment tested whether independent M2P adapters trained per-domain, when composed via Grassmannian orthogonal A-matrices, maintain quality and can be routed correctly to the target domain. Theorem 1 predicted parameter-space orthogonality (|cos| ≈ 0), and Theorem 2 predicted routing accuracy ≥ 80% based on linear separability of domain representations (Finding #310). The experiment confirmed Theorem 1 exactly (|cos|_max = 1e-08), demonstrating that QR-based Grassmannian orthogonality eliminates parameter-space interference. However, K852 failed: routing accuracy was 36.6%, only 73% of the random baseline for 5 domains (20%), indicating that domain-specific vocabulary is insufficient to guide the router. General quality actually improved by 14.5pp (PASS K851), but the composed model did not route to the correct adapter, limiting per-domain quality. The result is **KILLED**: Grassmannian parameter orthogonality works, but routing is the bottleneck preventing multi-adapter composition on distinct domains.
 

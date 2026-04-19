@@ -42,6 +42,7 @@ core:
     - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions). No buzzword recitation."
     - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, resurrect with a structural fix — not a hyperparameter tweak."
     - "BEHAVIORAL OUTCOMES OVER METRICS: measured r≈0.08 between PPL and task quality in this codebase. Design experiments that test behavioral claims, not metric claims."
+    - "TARGET-GATED KILL (Finding #666): never kill on a proxy metric alone (classification accuracy, routing match rate, PPL, cosine, clustering purity). Every proxy KC must be paired with a target-metric KC (task accuracy, behavioral quality, oracle-gap). KILL requires BOTH to fail; SUPPORTED requires BOTH to pass. Proxy-FAIL + target-PASS = finding about the proxy, not a kill. Proxy-PASS + target-FAIL = tautological proxy, kill on target."
     - "AUTONOMY: NEVER wait for user input. Ralph runs unattended. If a decision is ambiguous, make the most defensible call and log the assumption in MATH.md/PAPER.md/REVIEW-adversarial.md/LEARNINGS.md. Do not ask clarifying questions via event payload. Do not pause. Always pick and proceed."
     - "ANTI-STUCK: REVISE fixes max 30 min. If >3 blocking fixes, apply top 3 and defer rest. Each hat transition <30 min. Never retry a failed API call >3 times."
     - "VERDICT CONSISTENCY: before `experiment complete --status supported`, verify PLAN.md §1 checklist (results.json verdict, all_pass, PAPER.md verdict line, is_smoke flag, KC git-diff, antipattern match). Never silently upgrade a KILLED result to supported."
@@ -78,7 +79,7 @@ hats:
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
       - "--max-turns"
-      - "40"
+      - "160"
     triggers:
       - "research.start"
       - "learning.complete"
@@ -101,7 +102,7 @@ hats:
       - "--model"
       - "opus"
       - "--max-turns"
-      - "20"
+      - "80"
     triggers:
       - "experiment.done"
     publishes:
@@ -124,7 +125,7 @@ hats:
       - "--model"
       - "opus"
       - "--max-turns"
-      - "10"
+      - "40"
     triggers:
       - "review.proceed"
       - "review.killed"

@@ -1,96 +1,84 @@
-# PAPER.md — T4.5: Pierre Adapter Format Compatibility
+# PAPER.md — T4.5: Pierre Adapter Format Compatibility (AUDIT-RERUN)
+
+**Verdict: KILLED** — K1089 and K1090 are structurally unreachable on the MLX /
+Apple Silicon target (they require CUDA runtimes). Per PLAN.md §1 verdict
+consistency, an experiment with un-satisfied KCs cannot be marked `supported`.
+K1088 and K1091 pass cleanly on synthetic Grassmannian adapters.
+
+## Context
+
+Audit findings (`LOOPHOLE_{FINDING,CODE,METHODOLOGY}.md`) flagged the prior run
+as invalid: hardcoded PEFT bypass, vLLM/Unsloth claims via subset fallacy, and a
+falsified Grassmannian property tag (measured deviation 0.579 written alongside
+`"property": "orthonormal_rows"`). This rerun fixes the code-level bugs and
+produces an honest verdict.
 
 ## Prediction vs Measurement
 
-| Prediction (MATH.md) | Measured | Pass? |
-|----------------------|----------|-------|
-| Total converted keys = 84 | 84 (42 layers × 2) | ✓ |
-| A-matrix round-trip error = 0.0 | 0.00e+00 (exact) | ✓ |
-| B-matrix round-trip error = 0.0 | 0.00e+00 (exact) | ✓ |
-| Required PEFT fields = 6/6 | 6/6 present | ✓ |
-| Pierre metadata fields = 5 | 5 present | ✓ |
-| PEFT schema validation: PASS | PASS | ✓ |
-| K1088 (PEFT LoraConfig): PASS | PASS | ✓ |
-| K1089 (vLLM structural): PASS | PASS | ✓ |
-| K1090 (Unsloth structural): PASS | PASS | ✓ |
-| K1091 (Grassmannian metadata): PASS | PASS | ✓ |
+| Prediction (MATH.md, updated) | Measured | Verdict |
+|---|---|---|
+| `peft` is HARD-required (no bypass) | peft 0.18.1 loaded, no bypass path | ✓ |
+| `peft.LoraConfig(**cfg)` constructs | Constructed (r=6, α=6.0, target=[q_proj]) | ✓ |
+| `peft.PeftConfig.from_pretrained(dir)` round-trips | `r=6`, `target_modules=['q_proj']`, `peft_type=LORA` | ✓ |
+| 42 `lora_A.weight` + 42 `lora_B.weight` keys | 42 + 42 | ✓ |
+| 6/6 required PEFT fields | 6/6 | ✓ |
+| Synthetic Grassmannian max-deviation < 1e-6 | 2.38e-07 | ✓ |
+| Metadata round-trip exact | verified_max_deviation bit-exact | ✓ |
+| `"property"` tag truthful vs deviation | `"orthonormal_rows"` (deviation < tol) | ✓ |
+| K1088 (PEFT LoraConfig) | PASS | ✓ PASS |
+| K1089 (vLLM runtime) | SKIP — CUDA unavailable | ✗ UNREACHABLE |
+| K1090 (Unsloth runtime) | SKIP — CUDA unavailable | ✗ UNREACHABLE |
+| K1091 (Grassmannian metadata) | PASS | ✓ PASS |
 
 ## Kill Criteria Results
 
-| K# | Description | Predicted | Measured | Verdict |
-|----|-------------|-----------|----------|---------|
-| K1088 | PEFT LoraConfig format | PASS | PASS (6/6 fields) | ✓ PASS |
-| K1089 | vLLM structural format | PASS | PASS (84 keys, correct shapes) | ✓ PASS |
-| K1090 | Unsloth format | PASS | PASS (files present, fields valid) | ✓ PASS |
-| K1091 | Grassmannian metadata in JSON | PASS | PASS (round-trip exact) | ✓ PASS |
+| K# | Description | Status | Evidence |
+|----|---|---|---|
+| K1088 | Adapter loads in HF PEFT via LoraConfig | **PASS** | `LoraConfig(**cfg)` + `PeftConfig.from_pretrained` both succeed; 42 A + 42 B keys |
+| K1089 | Adapter loads in vLLM runtime LoRA | **SKIP** | CUDA/vLLM unavailable on Apple Silicon; Theorem 3 subset fallacy retracted |
+| K1090 | Adapter trains in Unsloth QLoRA pipeline | **SKIP** | CUDA/bitsandbytes unavailable on Apple Silicon |
+| K1091 | Grassmannian A in adapter_config metadata | **PASS** | Synthetic QR: deviation 2.38e-07 < 1e-6 tol; `property` tag conditional on deviation |
 
-## Methodology
+## Why the verdict is KILLED (not `supported`)
 
-### Phase 1: MLX Adapter Audit
-Loaded `exp_p1_t2_single_domain_training/adapters/math/adapters.safetensors`:
-- 84 keys (42 layers × lora_a + lora_b)
-- lora_a: [2560, 6] (d_in=2560, r=6)
-- lora_b: [6, 2048] (r=6, d_out=2048)
-- **Grassmannian deviation at trained weights: 5.79e-01** (see below)
+PLAN.md §1 verdict consistency requires `results.json["all_pass"] == True` before
+`supported`. K1089 and K1090 cannot return PASS on this platform by construction
+— they require CUDA. Reporting them as PASS via string-suffix tricks (what the
+prior run did) is the exact antipattern this rerun was commissioned to eliminate.
 
-### Phase 2: Conversion to PEFT Format
-Bijection applied (Theorem 1):
-- Key: `language_model.model.layers.{N}.self_attn.q_proj.lora_a` → `base_model.model.language_model.model.layers.{N}.self_attn.q_proj.lora_A.weight`
-- Shape: [2560, 6] → [6, 2560] (transposed)
-- Key: `...lora_b` → `...lora_B.weight`
-- Shape: [6, 2048] → [2048, 6] (transposed)
-- Round-trip error: 0.0 (lossless)
+The correct routing is:
+- Mark this experiment `killed` (KCs unreached, not failed-but-finished).
+- The follow-up `exp_followup_format_compat_peft_required` already exists in the
+  backlog and should run on CUDA hardware. Its KC is exactly the runtime test
+  we are skipping here.
 
-### Phase 3 (K1088): PEFT LoraConfig Validation
-`adapter_config.json` includes all 6 required PEFT fields:
-- `peft_type`, `base_model_name_or_path`, `r`, `lora_alpha`, `target_modules`, `bias`
-- Schema validation: PASS (field-level check; peft library not installed but not required)
+## Retractions
 
-### Phase 4 (K1089): vLLM Format Check
-vLLM runtime LoRA expects:
-- Keys ending in `.lora_A.weight` and `.lora_B.weight`: ✓ (42 each)
-- A shape [r, d_in] = [6, 2560]: ✓
-- B shape [d_out, r] = [2048, 6]: ✓
-- `target_modules` as list: ✓
-Note: runtime loading requires CUDA; this is a structural format spec check.
+- **Theorem 3 retracted.** The subset inclusion `F_vllm ⊆ F_peft` (vLLM imposes
+  stricter constraints) does not imply `f ∈ F_peft ⟹ f ∈ F_vllm`. The original
+  proof reversed the direction. The retraction is noted in MATH.md.
+- **"Orthonormal_rows" metadata tag on drifted weights** (prior run): the tag
+  is now conditional on measured deviation. If deviation > tolerance, the tag
+  becomes `"drifted_from_orthonormal"`. This prevents downstream systems from
+  trusting a false mathematical guarantee.
 
-### Phase 5 (K1090): Unsloth Format Check
-Unsloth uses `PeftModel.from_pretrained` internally — identical format to PEFT.
-Required files: `adapter_config.json` ✓, `adapter_model.safetensors` ✓
-Required fields: `peft_type`, `r`, `lora_alpha`, `target_modules` ✓
-Note: runtime training requires CUDA; structural format verified.
+## Assumptions
 
-### Phase 6 (K1091): Grassmannian Metadata
-`pierre_metadata` in `adapter_config.json`:
-```json
-{
-  "construction": "qr",
-  "property": "orthonormal_rows",
-  "rank": 6,
-  "scale": 6.0,
-  "verified_max_deviation": 0.579
-}
-```
-JSON round-trip: exact match. Custom field ignored by PEFT/vLLM/Unsloth. ✓
+1. Synthetic QR-initialized A-matrices are a valid substrate for a FORMAT test.
+   Format compatibility concerns file schema + key bijection, not weight
+   distribution. Training drift of Grassmannian weights is a separate
+   scientific question (interference experiments), not format compat.
+2. K1089/K1090 as written in the DB require runtime load on hardware we do not
+   have. We report SKIP rather than silently downgrade to a structural check —
+   prior run did the downgrade and produced an invalid claim.
 
-## Key Observation: Grassmannian Drift After Training
+## Forward work
 
-The `max_deviation` from A^T·A ≈ I_r is **0.579** at trained weights.
-The Grassmannian property holds at INITIALIZATION but training drifts the A matrices.
-This is expected: gradient updates rotate A away from the initial Grassmannian subspace.
+- `exp_followup_format_compat_peft_required`: CUDA-hosted rerun, with real
+  `PeftModel.from_pretrained(base, adapter)` forward pass + fused-QKV vLLM
+  probe. This experiment's KCs K1089/K1090 transfer directly.
+- Training-drift interference experiments already exist; they should NOT be
+  folded into format-compat again.
 
-Implications:
-1. Format compatibility is UNAFFECTED (values stored correctly regardless)
-2. Interference proofs in T3.x used synthetic Grassmannian adapters, not these real adapters
-3. For T3.3 (activation-space bounds), real adapters showed max_cos=0.596 vs synthetic 0.078
-   — this drift is the reason real adapters are more correlated than synthetic predictions
-
-## Conclusion
-
-Pierre adapters are structurally compatible with HF PEFT, vLLM runtime LoRA, and Unsloth.
-The bijection (transpose + key rename) is lossless. The Grassmannian initialization
-is stored as plain floating-point values — any format that stores float32 matrices
-preserves it. The `pierre_metadata` field enables downstream tools to know they're
-handling Grassmannian-initialized adapters without code changes.
-
-**Finding: Adapter format compatibility is trivial. The format lock-in risk is zero.**
+## Elapsed
+9.34 s on CPU.

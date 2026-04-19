@@ -1,5 +1,52 @@
 # Peer Review: M2P Composition at N=5 with Grassmannian Guarantee
 
+## V2 Rerun — 2026-04-18 (addendum)
+
+**Trigger:** V2 surgical fix for v1 Issue 1 (BLOCKING — router train/test mismatch).
+
+**Scope of v2 code delta (git diff):**
+- `run_experiment.py:663-675`: pre-compute routing ONCE from base-model last-layer hidden state via stop-gradient prefix pass; reuse `routing_weights` at every block.
+- `PAPER.md`: prepended V2 section; v1 abstract retained.
+- **MATH.md: unchanged** — no post-hoc KC modification.
+
+**Adversarial checklist (a)–(s), v2 run:**
+- (a) verdict consistency: DB=killed, results.json all_pass=false, PAPER.md "Verdict (v2): KILLED." ✓
+- (b) K852 fails → not claiming `supported` ✓
+- (c) PAPER.md verdict line matches DB status ✓
+- (d) `smoke_test=false`, 738 tokens, honest full run ✓
+- (e) MATH.md untouched in git diff → no KC relaxation ✓
+- (f) tautology: K851 (-23.3pp measured against 10pp threshold) and K852 (41.2% vs 50%) are real FP measurements, not identities ✓
+- (g) K851/K852 in code measure exactly what MATH.md and DB describe ✓
+- (h) composition form (`run_experiment.py:692`): `LORA_SCALE * (x_in @ A) @ B` per-adapter, then routing-weighted sum. NO `sum(lora_A)` bug ✓
+- (i) `LORA_SCALE=2.0` ≪ 12 ✓
+- (j) per-token, per-sample routing: `base_last_hidden` shape (B,T,D), `routing_weights` (B,T,N_DOMAINS); no `route(val[d][0])` broadcast ✓
+- (k) no `shutil.copy` of sibling adapter ✓
+- (l) no hardcoded `{"pass": True}` in KC dict ✓
+- (m) MATH.md target = ToyGPT d=256 r=4 N=5 = code ✓
+- (m2) MLX skill evidence: `mx.stop_gradient`, `mx.eval`, `mx.softmax`, `base.get_hidden_states` used idiomatically; fix respects lazy evaluation (explicit `mx.eval(base_last_hidden)` before reusing across layers) ✓
+- (n) `base_gen_loss=10.0087` is a real loss, not truncation artifact ✓
+- (o) n=738 tokens ≫ 15 ✓
+- (r) prediction-vs-measurement table present in PAPER.md V2 section with v1/v2 columns ✓
+- (s) Theorem 1 exact (|cos|=1e-8), Theorem 2 falsified honestly, Theorem 3 never tested (routing precondition unmet) — all stated ✓
+
+**Fix efficacy:**
+- v1 routing 36.6% → v2 41.2% (+4.6pp). Real signal, not noise (mean PPL ratio also improved 3.32 → 2.91).
+- Fix was correct — Issue 1 WAS a real bug — but not sufficient to rescue KC852.
+- Residual gap attributable to secondary v1 Issues 2 & 3 (domain vocabulary overlap `abcdefgh` shared by sort/reverse/repeat; 64-dim MLP router trained 300 steps on 738 tokens).
+
+**v2 verdict: KILL (confirmed).**
+
+Root-cause refinement over v1: KC852 fails for **structural** reasons (signal-level domain overlap + router underparametrisation), not merely for the incidental train/test code bug. This is a stronger kill than v1 — the v2 rerun eliminates the leading alternative explanation.
+
+### Routing signal for analyst
+1. The three permanently-learned rules in PAPER.md §"Permanently learned, propagate to siblings" should be encoded as pattern memories (route from base hidden states; disjoint token alphabets; <50% routing is signal-level, not optimization-level).
+2. v2 closes the "did we just have a code bug?" question — the Grassmannian composition stack at this scale is routing-limited, not parameter-limited. Downstream `exp_m2p_teacher_distillation` and `exp_m2p_tfidf_routing_n5` inherit this constraint; treat routing architecture (not LoRA composition) as the next open problem.
+3. No new mem-antipattern — the reviewer's own v1 Issue 1 was handled correctly by the researcher. Process working.
+
+---
+
+## V1 Review (original, retained for context)
+
 ## Experiment Type
 Verification (Type 1)
 

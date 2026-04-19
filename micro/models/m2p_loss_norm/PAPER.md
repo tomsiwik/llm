@@ -1,6 +1,57 @@
-# PAPER: M2P Distillation Toy (Revision 1 — LoRA bug fix)
+# PAPER: M2P Distillation Toy — V2 Rerun (Loss Normalization, strict K859)
 
-## A. Experiment Summary
+## V2 Rerun Summary (2026-04-18, audit-2026-04-17-rerun)
+
+**Verdict: KILLED** (K859 FAIL). Rerun of `exp_m2p_loss_norm` with the existing per-domain loss-normalization training objective (`loss / base_loss[domain]`) under the strict audit-2026-04-17 kill criterion K859 (repeat-domain B-matrix cosine ≤ 0.6). K859 FAIL confirms the MATH.md pre-registered prediction: loss normalization alone does not break centroid collapse.
+
+### V2 Prediction vs Measurement
+
+| Metric | Predicted (MATH.md §F) | V2 Measured | V1 Measured (rev-1) | Pass/Fail |
+|--------|------------------------|-------------|---------------------|-----------|
+| Grassmannian \|cos\| | ≤ 1e-5 | **0.000000** | 0.000000 | **PASS (K848)** |
+| Median M2P quality ratio | 0.30–0.70 | **31.8%** | 21.9% | **PASS (K847)** |
+| Mean M2P quality ratio | 0.30–0.70 | -67.6% | -41.2% | informational |
+| Repeat-domain B-matrix cos | FAIL (> 0.6) | **mean 0.9943, max 0.9979** | cos_all=0.9945 | **FAIL (K859)** |
+| All-pairs B-matrix cos | — | 0.9923 | 0.9945 | — |
+| Repeat domain quality | — | **-466.3%** | -329.4% | catastrophic |
+
+### V2 Interpretation
+
+1. **K847 PASS is an artefact of median robustness**, not real improvement. Loss normalization does rescale gradient magnitudes, which slightly raises the bar of the 2nd-best domain — enough to push the median over 25%. But the catastrophic repeat outlier actually *worsened* (-466% vs -329%), because loss-norm inflates the gradient weight of the already-lowest-loss domain ("repeat", base=1.1) and the M2P, still forced to emit a single B-matrix centroid, cannot honor repeat's demand for near-zero delta.
+2. **K859 FAIL decisively confirms the mode-collapse hypothesis**: repeat_max_cos = 0.9979 (essentially 1.0) across all pairs involving the repeat domain. The M2P is emitting nearly identical B-matrices for every domain, regardless of the loss-normalization weighting. The B-output manifold is single-mode.
+3. **The impossibility structure identified in revision 1 (PAPER.md §F) persists:** without explicit domain conditioning in the M2P input, per-domain loss reweighting cannot produce distinct B-matrices. The M2P sees only mean-pooled hidden states, which for short synthetic sequences ("ab>ba", "3*2=33", …) carry insufficient discriminative signal.
+
+### V2 Verdict Reasoning
+
+- K847: PASS (median 0.318 ≥ 0.25)
+- K848: PASS (structural, 0.000000)
+- K859: **FAIL** (0.9979 > 0.6, strictly worse than threshold by 0.4)
+- all_pass = False → **KILLED**
+
+K847's PASS is not a rescue: the experiment title is "M2P Loss Normalization against Gradient Homogenization", so K859 — which directly tests whether loss-norm prevents B-matrix homogenization — is the decisive criterion. It fails emphatically. Loss normalization is disqualified as a sufficient mechanism.
+
+### V2 Next Steps (Propagate)
+
+Two mechanisms are structurally capable of breaking centroid collapse; neither is tested here:
+
+1. **Domain conditioning**: concatenate a learned `(N_domains, D_model)` embedding to the M2P input (one-hot or dense). Cheapest and most direct; empirically known to work in MoE gating.
+2. **Per-domain M2P heads**: separate output head per domain, gated by routing. Larger capacity cost; higher interpretability.
+
+These are sibling follow-up experiments, not revisions to this one. **Do not re-open `exp_m2p_loss_norm`** — the question it asks (does loss-norm alone fix mode collapse?) is conclusively answered: no.
+
+### V2 Antipattern Scan (clean)
+
+- Composition form: per-adapter `(x @ A_i) @ B_i` with α=2.0 (no v1 bug).
+- No tautological routing: no routing at all — each domain has dedicated A-matrix slots.
+- No LORA_SCALE inflation (scale=2.0, safe).
+- No hardcoded `"pass": True` — K859 verdict is computed from measured `repeat_max_cos`.
+- No KC mutation between MATH.md and results.json.
+- is_smoke=false, ran=true (7.6s toy-GPT run).
+- No thinking-mode proxy (no Gemma 4; toy d=64 GPT).
+
+---
+
+## A. Experiment Summary (Revision 1, retained for context)
 
 This experiment validates the Grassmannian A-slot orthogonality theorem for zero-interference LoRA composition while diagnosing why M2P-generated adapters underperform SFT baselines on synthetic domains. The core fix was correcting the LoRA forward path: M2P now generates B-matrices with correct output dimensions (expanded from fixed 64 to match module outputs up to 256 for fc1), and M2P memory was doubled from 16 to 32 tokens to accommodate these larger B-matrices. K848 (structural guarantee) **PASSES**: Grassmannian A-matrices are perfectly orthogonal (|cos|=0.000000), ensuring zero parameter-space interference by construction. K847 (quality threshold) **FAILS narrowly**: median_quality=21.9% < 25%, driven by a negative outlier in the repeat domain (-329%) where M2P adapters catastrophically degrade easy tasks. The orthogonality guarantee is correct, but the M2P training protocol remains problematic for heterogeneous domains.
 

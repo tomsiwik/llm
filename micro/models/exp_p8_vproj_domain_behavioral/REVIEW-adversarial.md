@@ -1,6 +1,53 @@
 # REVIEW — exp_p8_vproj_domain_behavioral
 
-**Verdict: PROCEED**
+## Round 2 (audit-rerun, 2026-04-18) — **Verdict: KILLED (supersedes Round 1)**
+
+This experiment was tagged `audit-2026-04-17-rerun` + `tautological-routing`
+in the 2026-04-17 repo-wide audit. Re-review findings:
+
+1. **K1315 is tautological (antipattern #6 — KC measures wrong object).**
+   Pre-registered KC: "5-adapter **Grassmannian composition** retains ≥80% of
+   solo behavioral quality". Code (`phase_composition_test`, lines 536–578):
+   each adapter loaded independently via hot-swap, evaluated against its own
+   domain queries at temperature 0.0. `comp_rate == solo_rate` by construction,
+   retention=1.00 is a mechanical artifact. Round 1 of this review already
+   flagged this ("K1315 composition test is trivially satisfied"), but
+   Round 1 labelled it *non-blocking* and verdict remained PROCEED. Under
+   PLAN.md §1 pre-flight item 6 (antipattern check), this is blocking.
+
+2. **Re-classified KC tally**: K1312 FAIL, K1313 FAIL, K1314 PASS,
+   K1315 FAIL on pre-reg KC → 1/4 pass → verdict **KILLED**.
+
+3. **No re-execution.** The antipattern is structural (KC-vs-measurement
+   mismatch), not a transient bug — re-running the same code produces the
+   same tautological number. Following the pattern used for
+   `exp_p7_null_space_adapter_quality` and `exp_p6_lingering_adapter_online`,
+   we reconstruct `results.json` from the existing measurements in PAPER.md
+   with `verdict=KILLED`, `all_pass=false`, and preserve behavioral findings
+   in LEARNINGS.md.
+
+4. **MATH.md is git-clean** since pre-reg commit 78538d2 — no KC swap.
+   KC stands as pre-registered; the measurement is what diverges.
+
+5. **Behavioral finding preserved** (not credited as supported KC closure):
+   v_proj+o_proj adapters strictly dominate q_proj adapters on vocabulary
+   improvement across 5 domains. Directional claim holds; absolute 60%
+   thresholds were not met for math/code and K1315 did not test composition.
+
+**V2 path.** `exp_p8_vproj_vs_qproj_v2` should (a) drop or reformulate K1315
+to a true parameter-merge composition test (ΔW = Σ B_i A_i^T, single forward
+per query, Grassmannian-orthogonal A via QR on random Gaussian, per-layer
+cross-talk measurement max |cos(A_vi·x, A_vj·x)| ≤ 0.30 as KC), (b) pre-measure
+base model vocabulary baseline per domain and pre-register per-domain
+thresholds at base + Δ rather than a flat 60%, (c) train on >100 unique
+examples per domain to avoid the 80-cycle ceiling effect acknowledged in
+Round 1.
+
+---
+
+## Round 1 (2026-04-12) — historical, verdict SUPERSEDED
+
+**Verdict: PROCEED** (superseded by Round 2 above)
 
 ## Summary
 

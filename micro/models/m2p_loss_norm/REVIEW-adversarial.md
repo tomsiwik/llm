@@ -154,3 +154,46 @@ Unchanged from prior review. The decoupled architecture (frozen Grassmannian A f
 ### Finding Status Recommendation
 
 **Status: killed** (K847 FAIL, impossibility structure well-characterized, next steps identified). The Grassmannian orthogonality guarantee (K848 PASS) should be recorded as a separate supported/conclusive finding if not already captured elsewhere.
+
+---
+
+## V2 Rerun Review (2026-04-18, audit-2026-04-17-rerun)
+
+### Verdict: KILL (confirmed)
+
+### Adversarial checklist (a)-(s)
+
+- (a) results.json verdict=KILLED ↔ claim=KILLED. OK.
+- (b) all_pass=false ↔ status=killed. OK.
+- (c) PAPER.md V2 verdict line: "Verdict: KILLED". OK.
+- (d) is_smoke=false, ran=true, 7.6s toy-GPT run — legitimate full measurement. OK.
+- (e) MATH.md diff: K859 added with **FAIL pre-registered** ("mode collapse persists under loss-norm"). This is stricter, not relaxed; the prediction was confirmed. Not a KC-relaxation antipattern.
+- (f) Tautology: K859 computes `repeat_max_cos` from measured M2P outputs (code line ~548), threshold 0.6. K848 is the Theorem 1 structural guarantee (honestly labeled "by construction"). K847 is measured median quality. No single-expression identity.
+- (g) K859 in code (max cos across pairs involving repeat domain) matches MATH.md §F description ("Repeat-domain B-matrix cos ≤ 0.6"). OK.
+- (h) Composition form: per-adapter `(x @ A_i) @ B_i * scale` applied inside attention q/k/v/wo and fc1. No sum-then-project, no `add_weighted_adapter`, no independent safetensor key summing. OK.
+- (i) scale=2.0 (inside Finding #337 safe band ≤5–13). OK.
+- (j) No routing — each domain has dedicated A-slot columns; no val[d][0] broadcasting. OK.
+- (k) No shutil.copy. OK.
+- (l) KCs computed from measurements, not hardcoded `{"pass": True}`. OK.
+- (m) Target MATH.md = toy GPT (d=64, 4 layers), code = toy GPT same dims. OK. No proxy substitution.
+- (m2) NA — pure MLX toy, no Gemma 4 thinking-mode, no complex eval harness requiring /mlx-dev skill.
+- (n) NA — no thinking channel.
+- (o) N=5 domains by design (synthetic toy) — not a headline accuracy claim, so STATS_ERROR does not apply.
+- (p) No padding — all 5 domains are real toy tasks with measured quality; none are B=0 or random.
+- (r) PAPER.md §V2 contains prediction-vs-measurement table. OK.
+- (s) Math: Theorem 1 unchanged from revision-1 (sound). §F impossibility analysis consistent with V2 measurements (repeat cos=0.9979 is direct evidence of centroid collapse predicted by §F).
+
+### Consistency with V1 KILL
+
+The V2 rerun tightens the criterion (K859 added as a direct test of the centroid-collapse hypothesis) and confirms the same failure mechanism with a more specific metric. `repeat_max_cos = 0.9979` is quantitatively worse than the V1 all-pairs cos (0.9945), matching PAPER.md §V2 claim that loss-normalization *inflates* the gradient weight on the low-loss domain and makes repeat-domain collapse more severe, not less.
+
+### Routing signal for analyst
+
+- Do NOT reopen `exp_m2p_loss_norm`. Question is conclusively answered.
+- Next experiments (domain conditioning, per-domain heads) are sibling follow-ups, not revisions.
+- Impossibility structure is fully characterized: three mechanisms contribute to B-matrix centroid collapse (missing domain conditioning, heterogeneous base losses, insufficient M2P capacity). Loss-norm addresses only the second.
+- No new mem-antipattern-* warranted — this is the same `centroid-collapse` structural finding already implied by revision-1 REVIEW-adversarial.md.
+
+### Finding to add
+
+Loss normalization alone is insufficient to break M2P B-matrix centroid collapse (K859 FAIL, repeat_max_cos=0.9979 >> 0.6 threshold; mean M2P quality -67.6% worse than V1's -41.2%). Impossibility: without domain conditioning in the M2P input, per-domain gradient reweighting cannot produce distinct B-matrices. Sibling mechanism test: concatenate learned domain embedding to M2P input.

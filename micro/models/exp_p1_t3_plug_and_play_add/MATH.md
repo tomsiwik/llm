@@ -1,5 +1,80 @@
 # MATH.md — T3.6: Hot-Add Adapter Without Retraining
 
+---
+
+## V2 Audit Section (2026-04-18, tautological-routing + audit-2026-04-17-rerun)
+
+V1 (2026-04-17) claimed `supported`. On audit that verdict is retroactively invalid for
+two independent reasons that together yield a precondition failure on K1067/K1068/K1069.
+
+### Audit finding A1 — Upstream chain broken
+
+T3.6 `depends_on: exp_p1_t3_pairwise_interference`. That experiment is `killed`
+with K1050 FAIL (max|cos_F| = 0.1705, 1.7e4× the 1e-5 orthogonality threshold;
+medical/finance cluster, Finding #425). Theorem 1 below sidesteps interference
+via exclusive routing, but every claim requiring real adapter behaviour (K1068)
+inherits T2.1 / T2.6 missing-weight flags.
+
+### Audit finding A2 — Tautological routing invalidates K1067 by construction
+
+V1 `run_experiment.py` line 64 declared:
+
+```python
+REAL_ADAPTER_PATHS = {"math": ..., "code": ..., "medical": ..., "legal": ..., "finance": ...}
+```
+
+and at line 452 iterated `for domain, path in REAL_ADAPTER_PATHS.items()`, loading
+the single matched adapter per domain-labelled query.
+
+Under that design K1067 ("existing domain outputs bit-identical after hot-add")
+is trivially true *regardless of Theorem 1*: the new adapter is never applied to
+existing-domain queries. What V1 measured was a dict key miss, not an absence of
+interference. `max_token_diff = 0` is a statement about the harness, not about
+the mathematical content of Theorem 1.
+
+The genuine K1067 test requires **either** simultaneous activation of the N+1
+adapters, **or** a per-sample routing function `route(q)` whose output is not
+a fixed function of the test label. Neither was implemented.
+
+### Audit finding A3 — No upstream weights on disk
+
+`adapter_preconditions` probe (2026-04-18): 0 / 5 expected `.safetensors` present.
+All five directories contain only `adapter_config.json` stubs. Local geography
+stub and `synthetic_adapter_geography` also lack weights.
+
+### V2 Precondition-probe Kill Criteria
+
+| KC | Precondition | Measured (2026-04-18) | Route |
+|----|-------------|----------------------|-------|
+| K1067 (existing outputs unchanged) | Non-tautological router present AND ≥1 upstream adapter loadable | No router distinct from `REAL_ADAPTER_PATHS[domain]`; 0 / 5 safetensors | **FAIL** (unmeasurable) |
+| K1068 (new adapter functional) | geography adapter weights on disk OR source adapter (finance) weights on disk to clone from | geography safetensors absent; finance safetensors absent | **FAIL** |
+| K1069 (hot-add latency < 100ms) | Actual weight load I/O measured, not dict update alone | Only dict update timed (mean ≈ 8e-5 ms) — no weights to load | **FAIL** (moot) |
+
+V1 thresholds below are **byte-preserved** — no post-hoc KC relaxation. The V2
+route is precondition-driven, not threshold-driven.
+
+### Theorem revision note
+
+Theorems 1–3 below remain mathematically correct. What V1 got wrong was the
+**operationalization**: Theorem 1 is about `W_merged = W_base + Σ Δ_i` being
+never formed, which requires a *router* that can *choose* to include Δ_{N+1}.
+A lookup table keyed by ground-truth domain label is not a router — it is an
+oracle. Any future V3 must implement an actual router (TF-IDF / logistic /
+embedding-similarity) before Theorem 1 can be claimed verified.
+
+### V2 blockers for a legitimate V3
+
+1. T2.1 rebuild with MedQA USMLE 5-choice (DB KC #1030), max_tokens ≥ 512,
+   persisted `.safetensors` on disk, `adapters/code/` directory created.
+2. T2.6 rebuild (or recovered weights) — legal + finance safetensors needed.
+3. T3.1 (pairwise_interference) re-verification with orthogonal adapters.
+4. `run_experiment.py` rewrite: replace `REAL_ADAPTER_PATHS[domain]` with a
+   router `route(query) -> adapter_id` that ingests only the query text.
+
+Until 1–4 hold, any rerun will land in the same precondition-probe KILL.
+
+---
+
 ## Setting
 
 Let the system at time t have N domain adapters registered:

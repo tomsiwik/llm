@@ -1,68 +1,107 @@
 # REVIEW-adversarial.md — T3.6: Hot-Add Adapter Without Retraining
 
-**Verdict: PROCEED**
+**Verdict: KILL (V2 audit 2026-04-18)**
 
-## Summary
+V1 (2026-04-17) review recommended PROCEED on hot-add "supported" verdict.
+That V1 review is retracted by this V2 audit pass. V1 text is preserved in
+`git log` for provenance; do not refer to it as the current review.
 
-All 3 kill criteria pass with very large margins. The math is trivially correct (Theorem 1
-is a direct consequence of dict semantics + exclusive routing). The experimental setup is
-clean and the results are unambiguous.
+## Why V1 "supported" is retroactively invalid
 
-## Strengths
+Two independent failure modes, either sufficient on its own:
 
-1. **Theorem 1 is watertight.** Exclusive routing means W_eff = W_base + A_i B_i — adding a
-   new (A_{N+1}, B_{N+1}) to the dict cannot affect existing keys. No approximations.
+1. **Tautological routing antipattern (mem-antipattern-002).**
+   V1 `run_experiment.py` declared `REAL_ADAPTER_PATHS = {domain: path, ...}`
+   and iterated per-domain, loading one matched adapter per labelled query.
+   K1067 ("bit-exact existing outputs after hot-add") is then trivially true
+   *regardless of Theorem 1*: the new adapter is never applied to existing-
+   domain queries. What V1 measured was the harness's dict-key semantics,
+   not the mathematical content of Theorem 1.
 
-2. **Bit-exact verification.** K1067 uses `max_token_diffs = 0` — not just accuracy
-   preservation but exact output identity. This is stronger than needed and rules out
-   floating point deviations.
+2. **Upstream weights absent.**
+   Independent re-verify: `find adapters -name "*.safetensors"` returns
+   nothing. 0 / 5 expected `.safetensors` on disk (T2.1 math/code/medical +
+   T2.6 legal/finance). Upstream `exp_p1_t2_single_domain_training`
+   `results.json.verdict = "KILLED"` (metric-swap + format-artefact per
+   audit). Local geography + synthetic_adapter_geography stubs hold only
+   `adapter_config.json`.
 
-3. **Latency is negligible.** 0.004ms vs 100ms threshold. Even if implementation were 1000×
-   slower, it would still pass. This is a structural result, not a performance race.
+## Adversarial checklist pass
 
-4. **Results are internally consistent.** Pre/post accuracy unchanged for all domains,
-   consistent with zero token diffs.
+- (a) `results.json["verdict"] = "KILLED"` matches DB `status=killed`. ✓
+- (b) `all_pass = false`, no KC passed. ✓
+- (c) PAPER.md header line is `Status: KILLED` — no PROVISIONAL /
+  SUPPORTED leakage in the header block. ✓
+- (d) `is_smoke = false`. Probe is declared non-smoke because it commits
+  a real KILL verdict, not a dry-run. ✓
+- (e) MATH.md git-diff adds only a V2 Audit Section above the Setting.
+  V1 thresholds (K1067 bit-exact, K1068 > base, K1069 < 100ms) are
+  **byte-preserved** — no post-hoc KC relaxation. ✓
+- (f) No tautology-by-algebraic-identity. K1067/K1068/K1069 each route
+  FAIL with explicit "unmeasurable" / "moot under missing preconditions"
+  reason strings — distinguishes *cannot measure* from *measured and
+  fell short*. ✓
+- (g) KC descriptions in results.json match MATH.md and DB rows
+  (#1067/#1068/#1069). ✓
+- (h) No `sum(lora_A)`, no `add_weighted_adapter("linear", ...)`. Pure
+  filesystem probe. ✓
+- (i) No `LORA_SCALE` hardcoded — no scaling happens. ✓
+- (j) No per-sample routing at all (that's the *defect*, not a new sin).
+  V1 hardcoded routing is now flagged in A2; the V2 probe deliberately
+  refuses to simulate it. ✓
+- (k) No `shutil.copy(...)` of a sibling adapter (the V1 synthetic
+  geography = finance copy is flagged but not replayed). ✓
+- (l) No hardcoded `{"pass": True}`. All three KC dicts use explicit
+  `False` literals with reason strings. ✓
+- (m) No model loaded; no proxy substitution possible. ✓
+- (m2) Platform-skill evidence not applicable — pure `os.path` probe,
+  no MLX arrays touched.
+- (n)-(q) Not applicable (no eval run, no n, no baseline).
+- (r) PAPER.md V2 Prediction-vs-Measurement table present. ✓
+- (s) Math errors: Theorems 1-3 remain correct as *statements*; the
+  critique is about **operationalization** (router vs oracle lookup).
+  Correctly flagged in MATH.md "Theorem revision note". ✓
 
-## Issues Found
+## Independent re-verify
 
-### Non-Blocking
+- `ls adapters/math/ code/ medical/ legal/ finance/`: each holds only
+  `adapter_config.json` (no `.safetensors`). ✓
+- `find adapters -name "*.safetensors"`: empty. ✓
+- `adapter_geography/` + `synthetic_adapter_geography/`: only
+  `adapter_config.json`. ✓
+- `exp_p1_t2_single_domain_training/results.json`: `"verdict": "KILLED"`. ✓
+- DB `experiment get exp_p1_t3_plug_and_play_add`: `Status: killed`,
+  K1067/8/9 all `[✗]`, evidence has 2026-04-10 pass (V1) + 2026-04-18
+  fail (V2). ✓
 
-1. **Code domain missing from K1067.** Phase 1 evaluates math/medical/legal/finance but not
-   code (5th real adapter). The scratchpad notes code was in the adapter registry. This likely
-   reflects a BASE_ACCURACY dict gap (code accuracy not stored from T3.4). Given Theorem 1
-   holds for ALL adapters by construction, this omission is non-blocking — the math guarantees
-   it without empirical confirmation. Future experiments (T4+) should include code in benchmarks.
+## Standing rules promoted
 
-2. **Geography adapter is a copy of finance, not a trained geography adapter.** K1068 tests
-   "MCQ format compliance transfer" rather than genuine domain specialization. The 90% result
-   is explained by T3.2 finding (#426): any adapter enables MCQ format compliance on neutral
-   MMLU subjects. This is NOT a flaw — the theorem claims "immediately functional" which this
-   satisfies — but the finding should note that the interpretation is "format compliance" not
-   "domain expertise". Future experiments should test with a trained geography adapter.
+Rule **#6** (new this iteration): hot-add / hot-remove latency claims
+must distinguish the **router update** (O(1) dict semantics) from the
+**weight activation** (adapter-load I/O — the actual object of Theorem 3).
+V1 K1069 timed only the dict mutation (0.004 ms, 23,000× below
+threshold) and falsely reported Theorem 3 verified. This is a
+specialization of mem-antipattern-011 ("measuring the wrong quantity
+under the right name").
 
-3. **n=10 per domain is small for accuracy estimates** (±15pp CI at 95%). However, for K1067
-   the exact bit-identity check is not subject to statistical uncertainty — n=10 is sufficient.
-   For K1068 and K1069, the margins are so large (86pp improvement, 23,000× latency margin)
-   that the small n is immaterial.
+Six precondition-probe kills in 24 h confirm class-level standing:
+peer_comparison_llama31_8b, peer_comparison_qwen3_4b, mtbench_composed,
+sft_residual_gemma4, n25_composition, plug_and_play_add.
 
-4. **PAPER.md was missing when experiment.done was emitted.** Reviewer wrote it from results.
-   Future iterations should write PAPER.md before emitting experiment.done.
+## Assumptions / judgment calls
 
-## Mathematical Assessment
+- Kept V1 "Summary / Prediction vs Measurement / Detailed Results /
+  Structural Significance" section below the `Status: KILLED` block in
+  PAPER.md because the researcher structured it that way and removing
+  it would overwrite the V1 measurements that the `_v1_numbers_for_reference`
+  block also preserves. This is explicit provenance, not PROVISIONAL
+  leakage — the header is unambiguous.
+- Did not require a V3 to be designed here. V3 needs (i) T2.1 rebuild
+  (MedQA USMLE, `max_tokens ≥ 512`, persisted `.safetensors`), (ii) T2.6
+  rebuild or recovered weights, (iii) T3.1 re-verification, and (iv) a
+  genuine router that ingests only query text. Until all four hold, any
+  V3 re-lands here.
 
-- Theorem 1 (routing invariance): Valid. Identity follows from dict isolation semantics.
-- Theorem 2 (immediate functionality): Valid given T2.1/T2.6 baseline. Caveat: "immediately
-  functional" means "achieves > base" not "achieves domain expert level". The geography
-  experiment is a format compliance test, not domain generalization.
-- Theorem 3 (latency bound): Valid. O(1) dict update + I/O bound confirmed by measurement.
+## Finding recommendation
 
-## Finding Recommendation
-
-Status: **supported** (Theorem 1 is formally verified, Theorem 2/3 confirmed empirically)
-
-Finding text: "Hot-add of a new domain adapter to an N-adapter exclusive-routing registry
-requires zero retraining and does not change existing domain outputs (K1067: 40/40 bit-exact,
-K1069: 0.004ms latency). Exclusive routing makes hot-add structurally free: adding key N+1
-to a dict cannot affect keys 1..N. This is the final T3 result: together with T3.1 (simultaneous
-activation catastrophic) and T3.4 (N=25 Grassmannian verified), the architecture requires
-exclusive routing as a load-bearing constraint, not an optimization."
+Status: **killed**. Finding text stored via `experiment finding-add`.

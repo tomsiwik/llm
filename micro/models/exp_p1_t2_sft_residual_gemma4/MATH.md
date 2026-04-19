@@ -1,5 +1,30 @@
 # MATH.md — T2.5: SFT-Residual M2P on Gemma 4
 
+## V2 Audit Rerun (2026-04-18, audit-2026-04-17-rerun + code-bug tags)
+
+V1 theorems unchanged. V2 adds precondition pre-registration per the class-level
+standing rule (4th instance this loop — see PAPER.md V2 section for context).
+
+**Preconditions pre-registered BEFORE probe:**
+
+| ID | Precondition | Source |
+|---|---|---|
+| P1 | T2.1 math adapter `.safetensors` on disk | Theorem 1 requires B_sft to compute B_applied = B_sft + ΔB |
+| P2 | T2.1 `data/math/train.jsonl` on disk | Training loop feeds samples |
+| P3 | Upstream T2.1 verdict ≠ `KILLED` | B_sft validity inherited from T2.1 SFT phase |
+
+If any precondition fails, K1044/K1045/K1046 route FAIL as *unmeasurable*
+(honest cannot-measure; distinguishes from measured-and-fell-short). This is
+the pre-registered routing — no KC text changed from V1 thresholds.
+
+**MATH.md git-diff check (PLAN.md §1 item 5):** V1 KCs unchanged. V2 adds only
+precondition structure above the KC table. No threshold was relaxed. No KC
+removed. V1 measurements (QR=0.707 < 0.738) are preserved in PAPER.md V1.
+
+---
+
+## V1 (unchanged below this line)
+
 ## Experiment Type: Verification
 
 ## Problem

@@ -1,5 +1,81 @@
 # PAPER.md — T2.5: SFT-Residual M2P on Gemma 4
 
+**Status: KILLED** | V2 Audit Rerun | 2026-04-18
+
+## V2 Audit Rerun (audit-2026-04-17-rerun + code-bug tags)
+
+V1 ran with T2.1 adapter weights that existed at that time (acc_step0=80%,
+acc_final=58%, QR=0.707, KILLED via gradient-identity forgetting). Audit tagged
+this experiment `audit-2026-04-17-rerun + code-bug` — expected rerun after
+applying cluster-level code-bug fix.
+
+V2 rerun blocked by two missing preconditions. Applying class-level standing
+rule (precondition-probe before macro rerun; now 4th instance this loop after
+peer_comparison_llama31_8b, peer_comparison_qwen3_4b, mtbench_composed).
+
+### V2 Prediction vs Measurement
+
+| Precondition | Predicted | Measured | Pass? |
+|---|---|---|---|
+| P1 T2.1 adapter `.safetensors` on disk | FAIL (audit-observed from prior iters) | `adapters.safetensors` missing; only `adapter_config.json` stub present | FAIL |
+| P2 T2.1 train.jsonl | PASS | `data/math/train.jsonl` 1800 lines | PASS |
+| P3 T2.1 upstream verdict ≠ KILLED | FAIL (T2.1 killed 2026-04-18) | T2.1 verdict=KILLED (metric-swap MedQA vs MedMCQA + format-artefact max_tokens=256 CoT truncation) | FAIL |
+
+### V2 KC Routing
+
+| KC | Threshold | Measured | Status | Reason |
+|---|---|---|---|---|
+| K1044 M2P GSM8K | ≥ 73.8% | — | FAIL | unmeasurable (no B_sft) |
+| K1045 B_applied compute | < 10ms | — | FAIL | unmeasurable (no B_sft to add ΔB to) |
+| K1046 zero-init Frob | < 1e-6 | — | FAIL | unmeasurable (no 42-layer shape list) |
+
+All FAIL → `all_pass=False` → KILLED. `results.json.verdict=KILLED` matches DB.
+
+### Why the verdict classifies as KILL not PROVISIONAL
+
+The V1 KILL already documented a real impossibility structure (gradient identity
+∂L/∂ΔB = ∂L/∂B_applied — see §Why It Failed below). V2 cannot *disprove* V1, so
+the reasonable verdicts are:
+
+- KILLED (current): V1 evidence stands, V2 cannot overturn it, preconditions
+  block rerun. Honest.
+- PROVISIONAL: would require PAPER.md to claim a future rerun will flip the
+  verdict — it won't, because the V1 mechanism (gradient identity) is
+  mathematical, not a code bug. code-bug tag may reduce the gap, but not
+  eliminate it.
+
+V2 remains KILLED. The `code-bug` tag is a decoy on this experiment: the
+failure mode is a mathematical property of gradient descent, not an
+implementation defect. If the code-bug fix refers to EWC regularization or
+data-separation (see §Implications below), that is a DIFFERENT experiment
+scope; rerunning v1 with the same scope will reproduce the v1 KILL regardless
+of bug fixes.
+
+### Permanently learned (V2)
+
+Class-level standing rules (now 4 instances confirmed):
+
+1. **Precondition-probe before macro rerun.** Any `audit-2026-04-17-rerun`
+   experiment whose preconditions are blocked (missing weights, killed
+   upstream) is a precondition-probe KILL, not a code-fix-and-retry. Skip
+   heavy training unless preconditions all pass.
+2. **Adapter registry ≠ adapter artefacts.** `adapter_config.json` stub is not
+   evidence the model weights ever existed on disk; only `.safetensors` is.
+   Directory existence corollary also applies if the domain subdir is absent
+   entirely.
+3. **Downstream P1/P2 macros inherit upstream audit flags.** T2.1's
+   2026-04-18 metric-swap + format-artefact kill propagates to every
+   experiment that loads B_sft from T2.1. At least 4 downstream experiments
+   killed this loop via this pattern.
+4. **`code-bug` tag may be a decoy when the failure is mathematical.** If V1
+   KILL was driven by a gradient-identity or continuity property (not a coding
+   defect), V2 rerun with a code fix cannot recover the verdict. Classify the
+   V1 mechanism before assuming the fix-category tag applies.
+
+---
+
+## V1 (unchanged below this line)
+
 **Status: KILLED** | K1044 FAIL
 
 ## Abstract

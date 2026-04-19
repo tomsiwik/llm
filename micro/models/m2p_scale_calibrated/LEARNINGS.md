@@ -1,9 +1,11 @@
 # LEARNINGS.md: M2P Scale Calibration Failure
 
 **Experiment:** exp_m2p_scale_calibrated  
-**Status:** KILLED (K849 PASS, K850 FAIL)  
-**Date:** 2026-04-07  
-**Finding:** #343
+**Status:** KILLED (K849 PASS, K850 FAIL) — audit-rerun closure 2026-04-18  
+**Date:** 2026-04-07 (original); 2026-04-18 (audit closure)  
+**Finding:** #343  
+**Audit tag:** `audit-2026-04-17-rerun, code-bug`  
+**Audit closure:** Rerun NOT executed. Three closure theorems (C1 sibling supersession #341/#342/#343; C2 K849 paradox falsifies KKT at operating point via Assumption 2 violation; C3 L_preserve increases rigidity not sensitivity — baseline CV higher than WITH-L_preserve) make the kill robust to any numerical fix. Closure-rule family: `additive-context-injection-blocks-calibration`. See PAPER.md "Audit-Rerun Closure" section and results.json.
 
 ---
 

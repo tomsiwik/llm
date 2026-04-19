@@ -1,26 +1,37 @@
 # LEARNINGS: exp_bench_livecodebench_v6
 
-**Status**: Design approved (PROCEED). Results pending (pueue task 11).
+**Status**: KILLED (infrastructure blocked — did not run).
 
----
-
-## Core Finding (Design)
-LiveCodeBench v6 benchmark for Gemma 4 E4B-4bit requires `--n 1` + date filter
-(2025-01-01/2025-04-30) to fit within M5 Pro 8h budget (~50-100 problems, ~1-3h).
-`--n 10` would require 5000+ generations (~100h) — not viable.
+## Core Finding
+LCB v6 eval for Gemma 4 E4B 4-bit was blocked by two upstream gaps:
+(B1) `reference_implementations/LiveCodeBench/` empty — no harness;
+(B2) `exp_p1_t2_single_domain_training/adapters/code/` has only
+`adapter_config.json`, no `adapters.safetensors`. Phase 1 (base) and
+Phase 2 (adapter) both unreachable. K1420/1421/1422 FAIL (unmeasured).
 
 ## Why
-LCB `--n` = samples *per problem* (not total problems). Date filter limits scope to recent
-competitive programming problems. Code adapter is CodeAlpaca-trained (trivial instruction
-following), not competitive programming — domain gap cos≈0.2 → K1421 (adapter +5pp) expected
-to FAIL.
+Same-day, identical cause as exp_bench_aime_2026. Shared upstream:
+`exp_p1_t2_single_domain_training` never persisted adapter weights —
+every bench citing "the code/math adapter" inherits unreproducibility,
+including Finding #421 (HumanEval 63% / GSM8K 82%). Compounding:
+2026-04-14 Round 2 review asserted "adapters.safetensors ✓" — false
+on 2026-04-18. Presence-checks must be live `ls`, not cached claims.
 
-## Key Predictions
-- K1420: base 4-bit ≥ 42% — UNCERTAIN (Google 52% in float; 4-bit gap ~5-10pp expected)
-- K1421: code adapter ≥ base +5pp — EXPECTED FAIL (CodeAlpaca vs competitive programming gap)
-- K1422: eval < 8h — EXPECTED PASS (~1-3h at n=1, ~100 problems)
+## What still stands
+MATH.md Theorem 1 (W4A16 bound) and Theorem 2 (CodeAlpaca→LCB cos≈0.2
+→ Δ≈2.2pp ≪ 5pp) pre-registered, unfalsified, untested. Expected rerun
+verdict: K1420 TBD, K1421 FAIL (domain mismatch).
 
 ## Implications for Next Experiment
-If K1420 PASSES: 4-bit W4A16 viable for code generation benchmarks (supports P0 pipeline).
-If K1420 FAILS: either need higher bit-width or code-generation-specific post-quant fine-tuning.
-Adapter delta signal (K1421) will characterize domain-mismatch penalty for LCB-class tasks.
+- Upstream unblock = **P11.ADAPTER-REBUILD**: rerun
+  `exp_p1_t2_single_domain_training` with an exit-guard
+  `assert Path('adapters.safetensors').stat().st_size > 0`. Prereq for
+  LCB, AIME, MMLU-Pro-code, exp_m2p_composition_n5, peer_comparison_*,
+  p9_benchmark_showdown.
+- One-shot clone for empty `reference_implementations/LiveCodeBench/`
+  and `.../matharena/`.
+- Do NOT re-claim this experiment until both clear.
+
+## Antipattern match
+9th instance of **preflight-adapter-persistence** (memories.md:86-87).
+No duplicate `mem-antipattern-*` per analyst rule.

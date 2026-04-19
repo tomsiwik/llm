@@ -109,10 +109,43 @@ collapse.
 
 ### Kill Criteria Assessment
 
-| Criterion | Threshold | Measured | Verdict |
-|-----------|-----------|----------|---------|
-| KC1: skip composition gap vs flat | >3pp worse | **-1.20pp (better)** | **PASSES** |
-| KC2: level-weight collapse | <10% above L0 | **97.2% above L0** | **PASSES** |
+| Criterion | Threshold | Measured | Verdict (as-formulated) | Behavioral verdict |
+|-----------|-----------|----------|-------------------------|--------------------|
+| KC1: skip composition gap vs flat | >3pp worse | -1.20pp (better) | PASSES | **FAIL — mechanism-level** |
+| KC2: level-weight collapse | <10% above L0 | 97.2% above L0 | PASSES | **FAIL — mechanism-level** |
+
+### Verdict: KILLED (preempt — behavioral-mechanism-failure)
+
+Both pre-registered KC pass as numerically formulated, but REVIEW-adversarial.md
+identified that these passes occur via **degenerate routing collapse**, not via
+the hypothesized adaptive multi-resolution routing. Per-seed L3 (coarsest)
+weight: 80.0% (seed 42), 90.9% (seed 123), 35.2% (seed 777). In 2/3 seeds the
+model routes 80-91% of token-weight to a single coarsest "expert" that is the
+uniform mean of all averaged leaf experts. This is uniform averaging
+masquerading as routing — the proposed "adaptive depth" mechanism is inactive.
+
+**Antipattern match (researcher hat Step 5 pre-flight #6): "KC measures wrong
+object."** KC2 was designed to detect L0-collapse (fine-grained dominance),
+but the actual failure mode is L3-collapse (coarsest dominance). KC2 as
+formulated is vacuously satisfied by the exact degeneracy it should catch.
+
+**Cascade to F#664 (fixed-algebraic-blend family, iter-44, 2026-04-19):** when
+the routing collapses to a single coarsest level whose weights are the
+data-agnostic uniform mean of domain-averaged leaf experts, the composition
+reduces to an identically-weighted linear blend — the F#664 kill family.
+Under F#157 (equal-hierarchical: -7.29%, unequal: -7.05% at rank-matched
+budget), uniform-averaging compositions are killed at ≥5pp degradation.
+The -1.20pp "better than flat" number reflects that `mean(all averaged
+experts)` happens to be a competent generalist on a character-level binary
+domain split (a-m vs n-z are similar), not that skip-list multi-resolution
+routing works under composition.
+
+**Guardrail 1006 (behavioral outcomes over metrics):** the metric (composition
+gap) passed, but the behavioral claim (multi-resolution adaptive routing
+survives composition) is empirically falsified by the observed L3-collapse.
+
+Both K#477 and K#478 are marked `fail` at the mechanism level despite passing
+numerically, per the antipattern-match + behavioral-falsification rule.
 
 ---
 

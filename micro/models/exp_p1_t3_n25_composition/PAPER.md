@@ -1,6 +1,78 @@
 # PAPER.md — T3.4: N=25 Domain Composition on Gemma 4 (Grassmannian Stress Test)
 
-## Summary
+## V2 Audit (2026-04-18) — Status: KILLED
+
+**V1 "supported" verdict retroactively invalid.** Two independent structural reasons:
+
+1. **Adapters missing on disk.** All 5 `adapters.safetensors` files referenced
+   by V1 Phase 2/3 (math, code, medical in T2.1; legal, finance in T2.6) are
+   absent. Only `adapter_config.json` stubs remain. Upstream T2.1
+   (exp_p1_t2_single_domain_training) is KILLED 2026-04-18 (metric-swap +
+   format-artefact). T2.6 (exp_p1_t2_multi_domain_5) weights lost.
+2. **V1 design is tautological routing (`mem-antipattern-002`).** V1's
+   Phase 2/3 hardcodes `REAL_ADAPTER_PATHS[domain]` — each adapter is
+   loaded exclusively for its matched domain test set. This tests
+   single-adapter-on-matched-domain, not composition. Theorem 3 ("exclusive
+   routing → zero interference") is proven but never *exercised*: the
+   routing function in V1 code is `R(x) = ground_truth_domain(x)`.
+
+This is the **5th precondition-probe kill** this loop. Rule standing.
+
+### V2 Prediction vs. Measurement
+
+| KC | Prediction | Measurement | Result |
+|---|---|---|---|
+| K1059: max\|cos\| < 1e-5 | ~1e-7 (Theorem 1, float32) | **2.165e-8** (42 layers × 300 pairs) | **PASS** (genuine) |
+| K1060: 0/25 degraded | 0/25 (Theorem 3) | **FAIL**: 0/5 adapter .safetensors on disk + V1 design tautological | **FAIL** |
+| K1061: MMLU >= base-2pp | all >40% (V1 claim) | **FAIL**: adapters missing + V1 design conflates format transfer with composition | **FAIL** |
+| K1062: <1 GB | ~48 MB (V1 claim) | **110.74 MB theoretical** (float32 formula); real size **0 MB** (no weights) | **PASS theoretical, moot** |
+
+Verdict: **KILLED.** `all_pass=false`. No thresholds changed between V1 MATH.md
+and V2; KCs are routed honestly based on what is genuinely measurable.
+
+### Permanently learned (class-level standing rules — 5 instances this loop)
+
+1. **Precondition-probe before macro sweep.** Before running any N-domain
+   composition / peer-comparison / composed-benchmark sweep, probe the
+   filesystem for adapter .safetensors and probe critical imports. Costs
+   seconds; saves hours when upstream is broken.
+2. **Registry ≠ artefacts + directory-existence corollary.** Adapter
+   registry JSON claiming scores is not the same as weights on disk.
+   Check `.safetensors` existence. Also check directory existence — some
+   adapter dirs don't exist at all (not just empty stubs).
+3. **Downstream P1 macros inherit upstream audit flags.** When an upstream
+   experiment flips supported → killed (e.g., T2.1 metric-swap audit),
+   every dependent macro must re-verify preconditions before any claim of
+   "supported" can stand.
+4. **`code-bug` tag may be decoy.** When V1 failure mechanism is
+   mathematical (e.g. gradient identity, proof-level structural flaw),
+   code fixes don't unblock the experiment. The V1 was conceptually
+   wrong, not typo-wrong.
+5. **NEW — Composition claims require genuine routing.** Hardcoding
+   `ADAPTER_PATHS[domain]` in test loops is tautological routing
+   (antipattern #2). True composition requires either (a) simultaneous
+   N-way activation with accuracy measured per domain, or (b) a real
+   router deciding which adapter fires from input features (not domain
+   labels). Any "composition supported" claim whose code loads one
+   adapter per eval is single-adapter eval mislabeled.
+
+### Unblocker for V3
+
+V3 is **blocked**. Researcher MUST NOT auto-spawn. Required:
+
+- T2.1 rebuild with MedQA USMLE 5-choice (DB KC #1030), max_tokens ≥ 512,
+  adapter `.safetensors` persisted, `adapters/code/` directory created.
+- T2.6 adapters rebuilt or recovered.
+- `run_experiment.py` Phase 2/3 rewritten to exercise genuine composition:
+  - Option (a): load all 25 adapters simultaneously, measure per-domain
+    accuracy, test Theorem 3 on real hardware.
+  - Option (b): implement a real router (e.g. T4.1 TF-IDF + hidden-state
+    ridge) and measure mixed-domain test-set accuracy.
+- Drop the `REAL_ADAPTER_PATHS[domain]` hardcoded map.
+
+---
+
+## V1 Summary (superseded — kept for provenance)
 
 N=25 domain adapters compose without interference on Gemma 4 E4B when using Grassmannian
 (QR-constructed) A-matrices and exclusive routing. All 4 kill criteria PASS.

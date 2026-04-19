@@ -1,61 +1,86 @@
-#!/usr/bin/env python3
 """
-T4.3: MLX-Native Adapter Serving with Runtime Hot-Swap
+V2 audit-rerun probe for T4.3: MLX-Native Adapter Hot-Swap Serving.
 
-MATH: micro/models/exp_p1_t4_vllm_adapter_serving/MATH.md
+Purpose: verify preconditions + detect design flaws before claiming PASS.
+V1 (2026-04-17) reported "supported" but the claim is retroactively invalid
+for FOUR independent reasons, each sufficient to kill on its own:
 
-NOTE: This experiment uses mlx_lm (Apple Silicon) instead of vLLM (CUDA-only).
-vLLM does not support Apple Silicon. The equivalent test: can we hot-swap LoRA
-adapters in mlx_lm without reloading the 4B base model?
+  C1) Upstream artefacts absent. V1 needs 5 adapter `.safetensors` files from
+      T2.1 + T2.6. 0/5 are on disk as of 2026-04-18 (T2.1 KILLED 2026-04-18
+      for MCQ metric-swap + format-artefact; T2.6 adapter weights lost —
+      only `adapter_config.json` remains in each dir). K1081 "5/5 load+generate"
+      therefore cannot be verified. Precondition-probe-8th-instance.
 
-Phases:
-  Phase 1: Load Gemma 4 + all 5 adapters, verify K1081 (loads + generates)
-  Phase 2: Measure adapter swap latency → K1082 (< 50ms)
-  Phase 3: Measure throughput base vs. with adapter → K1083 (>= 80%)
-  Phase 4: Test routing registry → K1084 (correct adapter per domain)
+  C2) Hidden MLX graph compilation overhead (mem-antipattern-011 specialisation).
+      V1's `swap_adapter(model, path)` times only:
+          t0 = time.perf_counter()
+          model.load_weights(str(weights_file), strict=False)
+          mx.eval(model.parameters())
+          t1 = time.perf_counter()
+      The MLX compute graph is recompiled / re-traced on the FIRST forward pass
+      after a parameter mutation — not at `mx.eval(model.parameters())` (which
+      only materialises the new tensors on device). V1's Phase 2 loops 20
+      swaps back-to-back without a single forward pass between, so the real
+      post-swap cost never enters the clock. Theorem 3 "swap time bounded by
+      S_adapter / B_mem + T_eval" omits the recompile term. A correct
+      measurement times `load_weights` → `mx.eval` → first-token generation
+      minus the baseline prefill time of the same prompt.
 
-Kill criteria:
-  K1081: MLX loads Gemma 4 E4B + 5 LoRA adapters, generates valid output
-  K1082: Adapter swap between requests: < 50ms overhead
-  K1083: Throughput with adapters >= 80% of base throughput (tok/s)
-  K1084: Correct adapter selected per request via routing registry
+  C3) Prefill/decode conflation + out-of-domain prompt bias (new: throughput-
+      conflation antipattern). V1's K1083 "adapter throughput ≥ 80% of base":
+        base_tok_s  = total_tokens / (prefill + decode) on prompt P1 (no adapter)
+        lora_tok_s  = total_tokens / (prefill + decode) on prompt P1 (math adapter)
+      where P1 = "Explain the concept of machine learning in simple terms."
+      Two flaws:
+        (a) Prefill is compute-bound, decode is memory-bound. Conflating them
+            into a single tok/s hides which phase the adapter actually slows.
+            The correct metric is `N_decoded / (t_end - t_first_token)`, which
+            strips prefill entirely.
+        (b) The math adapter is evaluated on a non-math prompt. Out-of-domain
+            generation commonly early-EOS or emits unusual token distributions,
+            skewing tok/s in either direction. Paper's Phase 1 table itself
+            flags the medical adapter outlier (3.7 tok/s vs 26–28) as a
+            short-answer artefact — same failure mode, applied to K1083 by
+            construction. Ratio 90.8% is therefore not a characterisation of
+            LoRA overhead on Apple Silicon.
 
-References:
-  - Finding #431 (T4.1): TF-IDF routing 96.6% N=5, 86.1% N=25
-  - Finding #428 (T3.4): N=25 Grassmannian max|cos|=2.2e-8
-  - mlx_lm.tuner.utils.load_adapters for adapter swap mechanism
+  C4) Tautological routing (mem-antipattern-002). V1's "routing registry":
+          routing_registry = {d: p for d, p in ADAPTER_PATHS.items()}
+          for domain, adapter_path in ADAPTER_PATHS.items():
+              selected_path = routing_registry[domain]
+      This is `dict[k] == dict[k]`. `selected_path == adapter_path` is True
+      by set-theoretic identity, regardless of any routing logic. The
+      experiment's routing header in the title ("via routing header") and
+      the Theorem 3 connection to T4.1 TF-IDF both require routing from the
+      PROMPT TEXT to a domain — which is never invoked. K1084 "correct adapter
+      selected per request" is forced, not measured. Measured latency ~0.7µs
+      is a dict-hash microbench, not TF-IDF routing cost (which would include
+      tokenisation + sparse matmul + argmax, per T4.1's own math).
+
+Additionally, the V1 code writes `results.json` under this file's directory,
+but no `results.json` exists on disk here — V1 run outputs were apparently
+lost. The PAPER.md "SUPPORTED" verdict therefore rests on an unverifiable
+claim even before the C1–C4 analysis.
+
+This probe does NOT load the model. It checks filesystem state that V1 should
+have produced, identifies the 4 design flaws by reference, and routes K1081–
+K1084 to FAIL with explicit reason strings. Pure os.path inspection + trivial
+benchmarks. Fast (<1s) and side-effect-free.
 """
 
-import gc
+from __future__ import annotations
+
 import json
-import os
 import time
 from pathlib import Path
 
-import mlx.core as mx
-import numpy as np
+EXPERIMENT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = EXPERIMENT_DIR.parent.parent.parent
 
-# Memory safety
-mx.set_memory_limit(mx.device_info()["memory_size"] - 8 * 1024**3)
-mx.set_cache_limit(2 * 1024**3)
-
-EXPERIMENT_DIR = Path(__file__).parent
-RESULTS_FILE = EXPERIMENT_DIR / "results.json"
-
-MODEL_ID = "mlx-community/gemma-4-e4b-it-4bit"
-
-IS_SMOKE = os.environ.get("SMOKE_TEST", "0") == "1"
-
-# Generation parameters
-N_SWAP_TRIALS = 3 if IS_SMOKE else 20   # adapter swap timing trials
-N_THROUGHPUT_TOKENS = 20 if IS_SMOKE else 100  # tokens for throughput measurement
-N_ROUTING_TRIALS = 1 if IS_SMOKE else 3   # routing correctness trials per domain
-
-# Adapter paths (from T2.1 and T2.6)
 T21_DIR = EXPERIMENT_DIR.parent / "exp_p1_t2_single_domain_training"
 T26_DIR = EXPERIMENT_DIR.parent / "exp_p1_t2_multi_domain_5"
 
-ADAPTER_PATHS = {
+EXPECTED_ADAPTERS = {
     "math":    T21_DIR / "adapters" / "math",
     "code":    T21_DIR / "adapters" / "code",
     "medical": T21_DIR / "adapters" / "medical",
@@ -63,274 +88,249 @@ ADAPTER_PATHS = {
     "finance": T26_DIR / "adapters" / "finance",
 }
 
-# Domain test prompts for routing verification
-DOMAIN_PROMPTS = {
-    "math": "Solve: What is 15% of 240?",
-    "code": "Write a Python function to check if a number is prime.",
-    "medical": "What is the mechanism of action of aspirin?",
-    "legal": "What is the statute of limitations for civil cases?",
-    "finance": "Explain what compound interest means.",
-}
+
+def probe_adapter_dir(path: Path) -> dict:
+    info = {
+        "dir": str(path.relative_to(REPO_ROOT)) if path.is_absolute() else str(path),
+        "dir_exists": path.exists() and path.is_dir(),
+        "config_exists": (path / "adapter_config.json").exists(),
+        "safetensors_exists": False,
+        "safetensors_size_bytes": 0,
+    }
+    if info["dir_exists"]:
+        for candidate in ("adapters.safetensors", "adapter_model.safetensors"):
+            f = path / candidate
+            if f.exists():
+                info["safetensors_exists"] = True
+                info["safetensors_size_bytes"] = f.stat().st_size
+                info["safetensors_file"] = candidate
+                break
+    return info
 
 
-def log_memory(label=""):
-    active = mx.get_active_memory() / 1e9
-    cache = mx.get_cache_memory() / 1e9
-    print(f"[MEM {label}] active={active:.2f}GB cache={cache:.2f}GB", flush=True)
+def upstream_verdict(exp_dir: Path) -> dict:
+    rj = exp_dir / "results.json"
+    out = {"dir": str(exp_dir.relative_to(REPO_ROOT)), "results_exists": rj.exists()}
+    if rj.exists():
+        try:
+            data = json.loads(rj.read_text())
+            out["verdict"] = data.get("verdict")
+            out["all_pass"] = data.get("all_pass")
+            out["audit_note"] = data.get("_audit_note") or data.get("_v2_note")
+        except Exception as exc:
+            out["parse_error"] = str(exc)
+    return out
 
 
-def cleanup(*objects):
-    for obj in objects:
-        del obj
-    gc.collect()
-    mx.clear_cache()
-
-
-def generate_tokens(model, tokenizer, prompt: str, max_tokens: int = 20) -> tuple[str, float]:
-    """Generate tokens and return (text, tok/s)."""
-    from mlx_lm import generate
-
-    t0 = time.perf_counter()
-    result = generate(
-        model, tokenizer, prompt=prompt,
-        max_tokens=max_tokens, verbose=False
-    )
-    t1 = time.perf_counter()
-    elapsed = t1 - t0
-    # Count output tokens via tokenizer
-    n_tokens = len(tokenizer.encode(result))
-    tok_s = n_tokens / elapsed if elapsed > 0 else 0
-    return result, tok_s
-
-
-def swap_adapter(model, adapter_path: Path) -> float:
-    """
-    Hot-swap adapter by reloading weights into existing LoRALinear layers.
-    Returns swap latency in milliseconds.
-    """
-    weights_file = adapter_path / "adapters.safetensors"
-    t0 = time.perf_counter()
-    model.load_weights(str(weights_file), strict=False)
-    mx.eval(model.parameters())  # materialize on device
-    t1 = time.perf_counter()
-    return (t1 - t0) * 1000  # ms
+def microbench_dict_lookup(n: int = 1000) -> float:
+    """Reproduce V1's K1084 measurement to expose its tautology."""
+    d = {f"domain_{i}": f"/nonexistent/adapter_{i}" for i in range(n)}
+    total = 0.0
+    keys = list(d.keys())
+    for k in keys:
+        t0 = time.perf_counter()
+        _ = d[k]
+        total += (time.perf_counter() - t0) * 1e6  # microseconds
+    return total / n
 
 
 def main():
-    from mlx_lm import load
-    from mlx_lm.tuner.utils import load_adapters
+    t0 = time.perf_counter()
+    print("=" * 72)
+    print("V2 AUDIT PROBE: exp_p1_t4_vllm_adapter_serving")
+    print("=" * 72)
+
+    adapters = {name: probe_adapter_dir(p) for name, p in EXPECTED_ADAPTERS.items()}
+    n_real_present = sum(1 for v in adapters.values() if v["safetensors_exists"])
+    n_config_only = sum(
+        1 for v in adapters.values()
+        if v["dir_exists"] and v["config_exists"] and not v["safetensors_exists"]
+    )
+
+    t21 = upstream_verdict(T21_DIR)
+    t26 = upstream_verdict(T26_DIR)
+
+    v1_results_on_disk = (EXPERIMENT_DIR / "results.json").exists()
+
+    # K1081: MLX loads Gemma 4 E4B + 5 LoRA adapters, generates valid output.
+    # Precondition failure: 0/5 adapter .safetensors present.
+    k1081 = {
+        "pass": False,
+        "reason": (
+            f"Upstream adapter artefacts absent (precondition failure). "
+            f"{n_real_present}/5 expected .safetensors present on disk; "
+            f"{n_config_only}/5 dirs are config-only. T2.1 upstream "
+            f"status=killed (2026-04-18, MCQ metric-swap + format-artefact). "
+            f"T2.6 adapter .safetensors lost. `load_adapters(model, path)` "
+            f"requires a weights file in each adapter dir — V1 "
+            f"ADAPTER_PATHS would raise FileNotFoundError on the first "
+            f"swap if re-run today. V1 results.json also absent from disk "
+            f"(unverifiable claim). "
+            f"Probe: math={adapters['math']['safetensors_exists']}, "
+            f"code={adapters['code']['safetensors_exists']}, "
+            f"medical={adapters['medical']['safetensors_exists']}, "
+            f"legal={adapters['legal']['safetensors_exists']}, "
+            f"finance={adapters['finance']['safetensors_exists']}."
+        ),
+    }
+
+    # K1082: adapter swap p99 < 50ms.
+    # Structurally wrong object: V1 times load_weights + mx.eval(parameters)
+    # in a tight loop. MLX recompiles the forward graph on the FIRST forward
+    # pass after parameter mutation, not at mx.eval. Theorem 1's
+    # S_adapter / B_mem + T_eval omits the recompile term entirely.
+    k1082 = {
+        "pass": False,
+        "reason": (
+            "Wrong object measured (mem-antipattern-011 specialisation for "
+            "MLX graph compilation). V1's swap_adapter: "
+            "    t0; model.load_weights(...); mx.eval(model.parameters()); t1 "
+            "times only parameter materialisation. MLX recompiles the forward "
+            "compute graph on the first forward pass following a parameter "
+            "mutation. V1's Phase 2 loops 20 back-to-back swaps without any "
+            "generation between them, so the recompile cost never enters the "
+            "clock. Theorem 1 T_swap ≤ S_adapter / B_mem + T_eval omits the "
+            "recompile term. A correct measurement would be "
+            "`t_first_token(after_swap) - t_first_token(baseline_same_prompt)` — "
+            "i.e. swap latency ≡ incremental time-to-first-token after the swap, "
+            "not load_weights() wall time alone. V1 4.77ms under 50ms threshold "
+            "is a ~10.5× margin on a benchmark that omits the real post-swap "
+            "cost. Additionally cannot be re-run now: preconditions (C1) absent."
+        ),
+    }
+
+    # K1083: adapter throughput >= 80% of base.
+    # Two flaws:
+    #   (a) prefill + decode conflated into single tok/s
+    #   (b) math adapter evaluated on non-math prompt (out-of-domain bias)
+    k1083 = {
+        "pass": False,
+        "reason": (
+            "Throughput metric conflates prefill (compute-bound) and decode "
+            "(memory-bound) phases and applies an out-of-domain prompt to the "
+            "math adapter. Specifically: "
+            "(a) V1's generate_tokens includes both the prefill (prompt "
+            "processing, ~O(L_prompt) in compute) and the decode (~O(1/tok), "
+            "memory-bandwidth-dominated on Apple Silicon). LoRA overhead is a "
+            "per-token memory-traffic addition; the adapter's effect on the "
+            "memory-bound regime is exactly what the 80%-ratio KC wants to "
+            "characterise. Mixing prefill into the denominator hides that "
+            "effect. Correct metric: decode-only "
+            "tok/s = N_decoded / (t_end - t_first_token). "
+            "(b) V1 evaluates the math adapter on P1 = 'Explain the concept "
+            "of machine learning in simple terms.' — a non-math prompt. "
+            "Out-of-domain prompting commonly early-EOSes or shifts the token "
+            "distribution. V1's own Phase 1 notes the medical adapter hit 3.7 "
+            "tok/s 'because model answered briefly (denominator small)', the "
+            "same failure mode as this K1083 measurement. The 90.8% ratio is "
+            "not a characterisation of LoRA overhead. Additionally cannot be "
+            "re-run now: preconditions (C1) absent."
+        ),
+    }
+
+    # K1084: correct adapter per request via routing registry.
+    # routing_registry = {d: p for d, p in ADAPTER_PATHS.items()}
+    # selected = routing_registry[domain]  # domain provided by test
+    # selected == adapter_path is a set-theoretic identity.
+    dict_lookup_us = microbench_dict_lookup(n=1000)
+    k1084 = {
+        "pass": False,
+        "measured_dict_lookup_us": dict_lookup_us,
+        "reason": (
+            "Tautological routing (mem-antipattern-002). V1 code: "
+            "    routing_registry = {d: p for d, p in ADAPTER_PATHS.items()} "
+            "    selected_path = routing_registry[domain] "
+            "where `domain` is the iteration key from ADAPTER_PATHS. Testing "
+            "`selected_path == adapter_path` is `dict[k] == dict[k]` — True "
+            "by set-theoretic identity, not by routing logic. Zero TF-IDF, "
+            "zero text input, zero classifier. K1084 requires a router that "
+            "takes raw prompt text as input and predicts a domain label; "
+            "T4.1's pipeline (tokenise → sparse matmul → argmax) was never "
+            "invoked. Reported latency (~0.7µs) is a Python dict-hash "
+            f"microbench (this probe reproduces: {dict_lookup_us:.3f}µs mean "
+            f"over 1000 lookups), not TF-IDF routing cost. "
+            "Additionally cannot be re-run now: preconditions (C1) absent."
+        ),
+    }
+
+    total_s = time.perf_counter() - t0
 
     results = {
-        "smoke": IS_SMOKE,
-        "k1081": {},
-        "k1082": {},
-        "k1083": {},
-        "k1084": {},
-        "summary": {}
+        "verdict": "KILLED",
+        "all_pass": False,
+        "ran": True,
+        "is_smoke": False,
+        "_v2_note": (
+            "V2 audit-rerun 2026-04-18. V1 'supported' (2026-04-17) retroactively "
+            "invalid for FOUR independent reasons: (C1) 0/5 upstream adapter "
+            ".safetensors on disk (T2.1 KILLED, T2.6 weights lost); "
+            "(C2) swap_adapter times load_weights + mx.eval without forward pass, "
+            "omitting MLX graph-recompile cost (Theorem 3 object mis-specified); "
+            "(C3) throughput conflates prefill/decode and uses OOD prompt on math "
+            "adapter; (C4) routing_registry = identity-dict on ADAPTER_PATHS, "
+            "selected_path == adapter_path by set-theoretic identity. V1 "
+            "results.json also missing from disk — finding unverifiable."
+        ),
+        "_audit_tags": [
+            "audit-2026-04-17-rerun",
+            "code-bug",
+            "tautological-routing",
+            "prefill-decode-conflation",
+            "graph-compile-omitted",
+            "ood-prompt-bias",
+            "precondition-probe-8th-instance",
+        ],
+        "adapter_preconditions": adapters,
+        "n_real_adapter_safetensors_present": n_real_present,
+        "n_config_only_dirs": n_config_only,
+        "v1_results_json_on_disk": v1_results_on_disk,
+        "upstream": {
+            "exp_p1_t2_single_domain_training": t21,
+            "exp_p1_t2_multi_domain_5":         t26,
+        },
+        "v1_design_flaws": [
+            "0/5 upstream adapter .safetensors present on disk",
+            "swap_adapter times load_weights + mx.eval, omits MLX graph recompile",
+            "Phase 2 loops 20 back-to-back swaps without any forward pass between",
+            "throughput metric mixes prefill (compute-bound) and decode (memory-bound)",
+            "math adapter evaluated on non-math prompt (OOD generation bias)",
+            "routing_registry = {d: p for d, p in ADAPTER_PATHS.items()} is identity dict",
+            "K1084 tests dict[domain] == ADAPTER_PATHS[domain] — True by construction",
+            "reported <1µs routing is Python dict hash, not TF-IDF pipeline cost",
+            "V1 results.json missing from disk (claim unverifiable even on provenance)",
+        ],
+        "k1081": k1081,
+        "k1082": k1082,
+        "k1083": k1083,
+        "k1084": k1084,
+        "K1081_loads_and_generates":     "FAIL",
+        "K1082_swap_under_50ms":         "FAIL",
+        "K1083_throughput_ratio_80pct":  "FAIL",
+        "K1084_routing_correct":         "FAIL",
+        "total_time_s": total_s,
+        "_v1_numbers_for_reference": {
+            "note": (
+                "V1 2026-04-17 PAPER.md measurements. Unverifiable (results.json "
+                "missing); kept for provenance only."
+            ),
+            "swap_p50_ms": 3.62,
+            "swap_p99_ms": 4.77,
+            "swap_max_ms": 4.79,
+            "base_tok_s": 41.5,
+            "lora_tok_s": 37.6,
+            "throughput_ratio": 0.908,
+            "routing_latency_us": 0.7,
+        },
     }
 
-    # ─────────────────────────────────────────────────────
-    # Phase 1: Load base model + initialize with first adapter
-    # ─────────────────────────────────────────────────────
-    print("\n=== Phase 1: Load Gemma 4 + Initialize LoRA Structure ===", flush=True)
-
-    print(f"Loading base model: {MODEL_ID}", flush=True)
-    t0 = time.perf_counter()
-    model, tokenizer = load(MODEL_ID)
-    base_load_time = time.perf_counter() - t0
-    print(f"Base model loaded in {base_load_time:.1f}s", flush=True)
-    log_memory("after base load")
-
-    # Initialize LoRA structure with first adapter (math)
-    print("Initializing LoRA structure with math adapter...", flush=True)
-    first_adapter = "math"
-    t0 = time.perf_counter()
-    model = load_adapters(model, str(ADAPTER_PATHS[first_adapter]))
-    init_time = time.perf_counter() - t0
-    mx.eval(model.parameters())
-    print(f"LoRA structure initialized in {init_time*1000:.1f}ms", flush=True)
-    log_memory("after LoRA init")
-
-    # Verify each adapter generates valid output (K1081)
-    domain_outputs = {}
-    adapter_names = list(ADAPTER_PATHS.keys())
-    print("\nVerifying all 5 adapters generate valid output...", flush=True)
-
-    for i, (domain, adapter_path) in enumerate(ADAPTER_PATHS.items()):
-        # Swap to this adapter
-        swap_ms = swap_adapter(model, adapter_path)
-        prompt = DOMAIN_PROMPTS[domain]
-        text, tok_s = generate_tokens(model, tokenizer, prompt, max_tokens=30)
-        domain_outputs[domain] = {
-            "text": text[:200],
-            "tok_s": tok_s,
-            "swap_ms": swap_ms,
-            "valid": len(text.strip()) > 0
-        }
-        print(f"  {domain}: valid={domain_outputs[domain]['valid']}, "
-              f"swap={swap_ms:.1f}ms, tok/s={tok_s:.1f}", flush=True)
-
-    k1081_pass = all(v["valid"] for v in domain_outputs.values())
-    results["k1081"] = {
-        "domains_loaded": len(domain_outputs),
-        "all_valid": k1081_pass,
-        "domain_outputs": {d: {"valid": v["valid"], "tok_s": v["tok_s"]}
-                           for d, v in domain_outputs.items()}
-    }
-    print(f"\nK1081: all_valid={k1081_pass} ({sum(v['valid'] for v in domain_outputs.values())}/5)", flush=True)
-
-    # ─────────────────────────────────────────────────────
-    # Phase 2: Adapter swap latency (K1082: < 50ms)
-    # ─────────────────────────────────────────────────────
-    print(f"\n=== Phase 2: Adapter Swap Latency (N={N_SWAP_TRIALS} trials) ===", flush=True)
-
-    swap_times_ms = []
-    adapter_cycle = list(ADAPTER_PATHS.items())
-    for trial in range(N_SWAP_TRIALS):
-        domain, adapter_path = adapter_cycle[trial % len(adapter_cycle)]
-        ms = swap_adapter(model, adapter_path)
-        swap_times_ms.append(ms)
-
-    swap_arr = np.array(swap_times_ms)
-    swap_p50 = float(np.percentile(swap_arr, 50))
-    swap_p99 = float(np.percentile(swap_arr, 99))
-    swap_max = float(np.max(swap_arr))
-
-    k1082_pass = swap_p99 < 50.0
-    results["k1082"] = {
-        "n_trials": N_SWAP_TRIALS,
-        "p50_ms": swap_p50,
-        "p99_ms": swap_p99,
-        "max_ms": swap_max,
-        "pass_threshold_ms": 50.0,
-        "k1082_pass": k1082_pass
-    }
-    print(f"Swap latency: p50={swap_p50:.2f}ms, p99={swap_p99:.2f}ms, max={swap_max:.2f}ms", flush=True)
-    print(f"K1082: p99={swap_p99:.2f}ms < 50ms = {k1082_pass}", flush=True)
-
-    # ─────────────────────────────────────────────────────
-    # Phase 3: Throughput comparison (K1083: >= 80%)
-    # ─────────────────────────────────────────────────────
-    print(f"\n=== Phase 3: Throughput Comparison (base vs adapter) ===", flush=True)
-
-    # Base throughput: generate without LoRA by checking if we can toggle
-    # Since LoRA is applied structurally, measure with a "zero" adapter approach:
-    # We use the math adapter as "reference adapter" and compare math-adapter vs finance-adapter
-    # (both are active adapters, so we're measuring adapter overhead vs adapter overhead)
-    # Real base: reload without adapter
-    print("Loading fresh model without adapter for base throughput...", flush=True)
-    cleanup(model)
-    model_base, tokenizer_base = load(MODEL_ID)
-    log_memory("base model (no adapter)")
-
-    base_toks = []
-    ref_prompt = "Explain the concept of machine learning in simple terms."
-    for _ in range(3 if IS_SMOKE else 5):
-        _, tok_s = generate_tokens(model_base, tokenizer_base, ref_prompt, max_tokens=N_THROUGHPUT_TOKENS)
-        base_toks.append(tok_s)
-    base_mean_toks = float(np.mean(base_toks))
-    print(f"Base throughput: {base_mean_toks:.1f} tok/s (mean over {len(base_toks)} trials)", flush=True)
-
-    # Adapter throughput: load with math adapter and measure
-    cleanup(model_base, tokenizer_base)
-    model_lora, tokenizer_lora = load(MODEL_ID)
-    model_lora = load_adapters(model_lora, str(ADAPTER_PATHS["math"]))
-    mx.eval(model_lora.parameters())
-    log_memory("model with math adapter")
-
-    lora_toks = []
-    for _ in range(3 if IS_SMOKE else 5):
-        _, tok_s = generate_tokens(model_lora, tokenizer_lora, ref_prompt, max_tokens=N_THROUGHPUT_TOKENS)
-        lora_toks.append(tok_s)
-    lora_mean_toks = float(np.mean(lora_toks))
-    print(f"Adapter throughput: {lora_mean_toks:.1f} tok/s (mean over {len(lora_toks)} trials)", flush=True)
-
-    throughput_ratio = lora_mean_toks / base_mean_toks if base_mean_toks > 0 else 0.0
-    k1083_pass = throughput_ratio >= 0.80
-    results["k1083"] = {
-        "base_tok_s": base_mean_toks,
-        "lora_tok_s": lora_mean_toks,
-        "throughput_ratio": throughput_ratio,
-        "pass_threshold": 0.80,
-        "k1083_pass": k1083_pass
-    }
-    print(f"Throughput ratio: {throughput_ratio:.3f} (>= 0.80 = {k1083_pass})", flush=True)
-    print(f"K1083: {throughput_ratio:.1%} of base throughput", flush=True)
-
-    # ─────────────────────────────────────────────────────
-    # Phase 4: Routing registry correctness (K1084)
-    # ─────────────────────────────────────────────────────
-    print(f"\n=== Phase 4: Routing Registry Correctness ===", flush=True)
-
-    # Simulated routing registry: domain_label → adapter_path
-    # In production, TF-IDF router (T4.1) provides domain_label
-    routing_registry = {domain: path for domain, path in ADAPTER_PATHS.items()}
-
-    routing_results = {}
-    for domain, adapter_path in ADAPTER_PATHS.items():
-        # Simulate routing: given request with domain label, select adapter
-        # Route
-        t0 = time.perf_counter()
-        selected_path = routing_registry[domain]  # O(1) dict lookup
-        route_time_us = (time.perf_counter() - t0) * 1e6  # microseconds
-
-        # Swap to selected adapter
-        swap_ms = swap_adapter(model_lora, selected_path)
-
-        # Generate with correct adapter
-        text, tok_s = generate_tokens(model_lora, tokenizer_lora,
-                                       DOMAIN_PROMPTS[domain], max_tokens=30)
-
-        routing_results[domain] = {
-            "correct_adapter_selected": selected_path == adapter_path,  # always True (identity lookup)
-            "route_time_us": route_time_us,
-            "swap_ms": swap_ms,
-            "output_valid": len(text.strip()) > 0
-        }
-        print(f"  {domain}: route={route_time_us:.2f}μs, "
-              f"swap={swap_ms:.1f}ms, valid={routing_results[domain]['output_valid']}", flush=True)
-
-    k1084_pass = all(
-        r["correct_adapter_selected"] and r["output_valid"]
-        for r in routing_results.values()
+    out_path = EXPERIMENT_DIR / "results.json"
+    out_path.write_text(json.dumps(results, indent=2))
+    print(f"[probe] wrote {out_path.relative_to(REPO_ROOT)}")
+    print(
+        f"[probe] verdict=KILLED n_real_adapter_safetensors={n_real_present}/5 "
+        f"n_config_only={n_config_only}/5 dict_lookup_us={dict_lookup_us:.3f}"
     )
-    results["k1084"] = {
-        "domains_tested": len(routing_results),
-        "all_correct": k1084_pass,
-        "routing_results": routing_results
-    }
-    print(f"K1084: all_correct={k1084_pass}", flush=True)
-
-    # ─────────────────────────────────────────────────────
-    # Summary
-    # ─────────────────────────────────────────────────────
-    k1081 = results["k1081"]["all_valid"]
-    k1082 = results["k1082"]["k1082_pass"]
-    k1083 = results["k1083"]["k1083_pass"]
-    k1084 = results["k1084"]["all_correct"]
-
-    results["summary"] = {
-        "k1081_pass": k1081,
-        "k1082_pass": k1082,
-        "k1082_p99_ms": swap_p99,
-        "k1083_pass": k1083,
-        "k1083_throughput_ratio": throughput_ratio,
-        "k1084_pass": k1084,
-        "all_pass": k1081 and k1082 and k1083 and k1084
-    }
-
-    print("\n=== SUMMARY ===", flush=True)
-    print(f"K1081 (loads+generates): {'PASS' if k1081 else 'FAIL'}", flush=True)
-    print(f"K1082 (swap < 50ms):     {'PASS' if k1082 else 'FAIL'} [p99={swap_p99:.2f}ms]", flush=True)
-    print(f"K1083 (throughput>=80%): {'PASS' if k1083 else 'FAIL'} [{throughput_ratio:.1%}]", flush=True)
-    print(f"K1084 (routing correct): {'PASS' if k1084 else 'FAIL'}", flush=True)
-
-    cleanup(model_lora, tokenizer_lora)
-
-    with open(RESULTS_FILE, "w") as f:
-        json.dump(results, f, indent=2)
-    print(f"\nResults saved to {RESULTS_FILE}", flush=True)
-    return results
+    print(f"[probe] elapsed={total_s:.3f}s")
 
 
 if __name__ == "__main__":

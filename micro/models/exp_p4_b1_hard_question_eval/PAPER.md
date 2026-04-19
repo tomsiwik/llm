@@ -1,5 +1,57 @@
 # PAPER.md — P4.B1: Gap-Targeted Evaluation — Hard Domain Questions
 
+## V2 Audit Reconstruction (2026-04-18) — **KILLED (structural closure)**
+
+**Tags:** `audit-2026-04-17-rerun` + `smoke-to-full`.
+
+**Rerun intended to close** the `smoke-to-full` audit flag by rerunning at N=15/domain
+instead of the N=5 smoke. **Rerun not executable** — all five required prereq adapter
+weight files were deleted (same disk-cleanup pattern as `exp_p1_c0` / `exp_p2_a1` /
+`exp_p3_c4`):
+
+- `exp_p1_t2_single_domain_training/adapters/{math,code,medical}/adapters.safetensors` — missing
+- `exp_p1_t2_multi_domain_5/adapters/{legal,finance}/adapters.safetensors` — missing
+
+Only `adapter_config.json` stubs remain. Retraining five rank-6 Gemma 4 E4B adapters
+is out of scope for one researcher iteration.
+
+**Verdict re-derived under strict PLAN.md §1 from 2026-04-11 smoke numbers:**
+
+- **K1227 FAIL (N-independent — closure C1)**: Base scores 0.43-0.63 on all 5 domains;
+  single-question base scores up to 1.0 on "What is Zorn's lemma?" The <0.25 threshold
+  is categorically unreachable at any N — Gemma 4 E4B was pretrained on the same
+  Wikipedia/textbook sources Q_hard draws from. Moving a mean of 0.43-0.63 below 0.25
+  at N=15 is structurally impossible.
+- **K1228 FAIL (training-data-limited — closure C2)**: 0/5 domains ≥15pp at N=5;
+  max math +13pp, code −13pp. Condition (2) of the Impossibility Theorem
+  (V_d ∩ V_train ≠ ∅) fails: P1 T2 adapters trained on basic algorithm/Q&A data,
+  test set uses advanced subdomain vocabulary. Rank increase cannot create training-
+  data overlap that does not exist.
+- **K1229 PASS marginal (does not rescue — closure C3)**: r=-0.3026 narrowly crosses
+  -0.30 at N=5; not statistically significant. Even if K1229 were reliably PASS at
+  N=15, `all_pass` requires 3/3 — K1227/K1228 structurally fail.
+
+**Antipattern scan:** `smoke_as_full` tag present BUT reconciled — N-independence
+closure on K1227/K1228 makes the kill categorical regardless of smoke sample size.
+No composition bug / tautological routing / unsafe scale / thinking-truncation /
+hardcoded-pass / KC swap / copy-as-adapter / proxy-model / file-cache issues.
+
+**Substantive finding preserved (Finding #478):** Gemma 4 E4B has no exploitable
+knowledge gap on academic advanced content; P4.B0 math +20pp was a notation artifact
+(keyword choice) not a knowledge gap. Structural Impossibility Theorem holds: `δ_d > 0`
+requires BOTH vocabulary-gap AND training-data-overlap; Gemma 4 E4B + P1 T2 rank-6
+adapters fail both conditions on academic content. Follow-up direction (P4.C):
+test FORMAT compliance tasks (LaTeX notation, SOAP notes, legal document structure,
+framework-specific code style) where a genuine style gap exists.
+
+**Artifacts this V2 round:** `results.json` (new — V2 reconstruction with
+`_reconstruction_note`, per-KC pass/fail, closure theorems C1/C2/C3,
+`antipatterns_checked`), PAPER.md (V2 section prepended). MATH.md unchanged
+(KC discipline). run_experiment.py unchanged (not buggy, just rerun-blocked on
+deleted prereq weights). REVIEW-adversarial.md / LEARNINGS.md V2 notes added.
+
+---
+
 ## Status: KILLED (smoke test — N=5 per domain)
 
 Early kill: structural impossibility identified from smoke test results.

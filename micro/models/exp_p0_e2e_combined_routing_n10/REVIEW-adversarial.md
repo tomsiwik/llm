@@ -1,6 +1,69 @@
 # Adversarial Review: exp_p0_e2e_combined_routing_n10
 
-## Verdict: PROCEED (SUPPORTED)
+## Round 2 — Audit Re-review (2026-04-18) — VERDICT FLIP: KILLED
+
+This experiment was flagged in the 2026-04-17 audit with tags
+`audit-2026-04-17-rerun` and `tautological-routing`. The 2026-04-13 Round 1
+review (retained below) explicitly noted the experiment-name-vs-measurement
+mismatch as a "Non-Blocking Issue". Under PLAN.md §1 pre-flight item 6 and
+antipattern #6 (KC measures wrong object), it is **blocking**, not
+non-blocking.
+
+### What the Round 1 review missed
+
+Round 1 correctly identified:
+> "Experiment name mismatch. Name says 'n10' but tests N=3 (3 domains).
+>  Original design likely intended N=10; scoped down for verification.
+>  Does not affect results."
+
+"Does not affect results" is wrong for K1481. The kill criterion
+"Routing-induced quality loss <= 5pp vs oracle routing" is a hypothesis
+about combined-logistic-routing *in a regime where routing can err*. At
+N=3 with maximally-separated domains, the router hits 100% accuracy on
+routable queries (1 MedMCQA query misrouted to code, but still answered
+correctly). Routed == oracle on every correctly-answered query, so the
+0.0pp loss is forced by the N=3 protocol, not achieved by the combined
+logistic router.
+
+### Re-classified KC table
+
+| ID    | Original threshold            | Measured (N=3) | Valid at N=3? | Counts against pre-reg? |
+|-------|-------------------------------|----------------|---------------|--------------------------|
+| K1478 | GSM8K >= 65%                  | 77.0%          | Yes           | PASS                     |
+| K1479 | HumanEval >= 50%              | 57.0%          | Yes           | PASS                     |
+| K1480 | MedMCQA >= 40%                | 58.0%          | Yes           | PASS                     |
+| K1481 | Routing loss <= 5pp vs oracle | 0.0pp          | Tautological  | FAIL_RECLASSIFIED        |
+
+3/4 KC pass on their surface threshold, but K1481 measures the wrong object
+under the experiment's stated hypothesis (N=10 combined-logistic behavior).
+Per pre-flight rules, a single blocking antipattern → verdict KILLED.
+
+### What is preserved
+
+- E2E pipeline mechanics are verified at N=3: router trains in 4.3s, batch
+  routing adds ~140ms at N=100, no pipeline bugs observed.
+- Adapter deltas (+62/+39/+30pp over base) replicate Finding #508
+  directionally.
+- MATH.md is unchanged and git-clean from pre-registration; no KC swap.
+
+### V2 requirements (before resurrecting the hypothesis)
+
+1. Use ≥10 distinct domain adapters (not 3 reused). Candidates: train fresh
+   per `exp_p0_ttlora_n10_scaling`, or expand the `exp_p0_e2e_benchmark`
+   adapter bank.
+2. Pre-register K1481 as a conditional KC: require measured router accuracy
+   on the benchmark queries to fall in [85%, 95%]. If routing is ≥99% the
+   experiment is vacated, not passed.
+3. Predict quality loss from Theorem 1 at the measured p: compare measured
+   Δ against (1 − p)(A_oracle − A_base) within ±2pp.
+4. Separately report combined-logistic vs TF-IDF-only routing so the
+   combined-router *value proposition* is the quantity being tested.
+
+---
+
+## Round 1 — Initial Review (2026-04-13) — SUPERSEDED BY ROUND 2
+
+### Verdict: PROCEED (SUPPORTED)
 
 ## Summary
 

@@ -1,5 +1,38 @@
 # Adversarial Review: P7.A1 Null-Space Adapter Quality
 
+## Reviewer stamp (2026-04-18): KILLED — audit confirmed
+Checklist pass: (a) results.json.verdict=KILLED matches DB status=killed; (b) all_pass=false; (c) PAPER.md verdict=KILLED; (d) is_smoke=false (reconstruction explicitly flagged); (e) MATH.md git-clean since 78538d2 (single commit, no post-hoc KC swap — verified via `git log`); (f) tautology correctly identified — loss ratio at PPL=1.03 both adapters is mechanically ~1.0; (g) K1297/K1298 measure different quantity than DB KC (GSM8K/MMLU) → metric-swap antipattern #6. Behavioral findings preserved (K1299 exact orthogonality; Gemma 4 KV-sharing discovery) are genuinely reusable. Non-blocking: `LORA_SCALE=20` still hardcoded in run_experiment.py — V2 must address per Findings #328/#330. Route: `review.killed`.
+
+## Audit Round 3 (2026-04-17 rerun, metric-swap): VERDICT REVISED → KILLED
+
+The audit flagged this experiment with `audit-2026-04-17-rerun`, `metric-swap`. On re-review the DB-registered kill criteria pre-register GSM8K accuracy (K1297) and MMLU accuracy (K1298) as behavioral metrics. The code + MATH.md measure a training-loss ratio on 20 memorized math texts and PPL on 5 hand-curated general-text snippets.
+
+**Why the original Round-2 PROCEED was wrong:** Round 2 accepted the MATH.md "Kill Criteria Mapping" section (loss ratio as GSM8K proxy; general PPL as MMLU proxy) as a pre-registered proxy choice. Per PLAN.md §1 pre-flight rule #6 (auto-injected type: fix antipattern — "KC measures wrong object"), this is not a valid proxy choice but a metric-swap: the proxy was never validated against the target metric, and at memorization scale (PPL=1.03 on train data) the proxy is mechanically degenerate. Round 2 itself flagged K1298 as "vacuously satisfied" (base PPL=8154 → any adapter trivially passes) and K1297 as "at memorization scale, may not generalize", but still routed PROCEED. The audit correction routes KILLED.
+
+**KC verdicts under audit:**
+- K1297: **FAIL** (metric-swap: pre-registered GSM8K accuracy; measured training-loss ratio at memorization)
+- K1298: **FAIL** (metric-swap: pre-registered MMLU; measured PPL on 5 general-knowledge prose snippets; Round 2 already flagged vacuous)
+- K1299: **PASS** (orthogonality correctly measured; exact by Theorem 1 construction)
+
+**Pre-flight rule #6 (antipattern #6, "KC measures wrong object") blocks `supported`.** Pre-flight rule #5 does not trigger: MATH.md is git-clean since commit 78538d2, so no post-hoc KC swap occurred. MATH.md's self-described proxy choices are the pre-registered design; they are simply wrong as proxies for the DB KC.
+
+**Preserved behavioral findings (credited to LEARNINGS.md only, NOT credited as KC pass):**
+1. Null-space reparameterization achieves exact orthogonality to W_v (1.33e-5 across 8 non-shared layers). Genuinely novel and reusable.
+2. Gemma 4 E4B KV-sharing discovery: layers 24-41 receive pre-computed KV from 22/23 via `shared_kv`; v_proj is dead code on those layers. Mandatory architectural check for all future Gemma 4 v_proj/k_proj adapter work. Caught the first-run vacuous result.
+3. At memorization scale, null-space restriction converges as fast as unrestricted with 20% fewer parameters.
+
+**NOT credited:**
+- "Null-space LoRA preserves 98.7% of unrestricted quality" — this claim needs GSM8K (or equivalent behavioral eval), not loss-ratio at memorization.
+- "Base model output preserved" — this claim needs MMLU, not PPL on 5 hand-picked texts.
+
+**V2 path:** file `exp_p7_null_space_adapter_quality_v2` with MATH.md pre-registering lm-eval-harness GSM8K (N>=100) and MMLU-Pro (N>=200); train on non-trivial domain data (GSM8K train split, 1000+ steps); keep K1299 orthogonality check.
+
+**Artifacts added/updated this audit:** `results.json` (newly written reconstruction with verdict=KILLED, K1297/K1298 marked metric_swap=true), `PAPER.md` (audit-rerun header prepended), `REVIEW-adversarial.md` (this section), `LEARNINGS.md` (metric-swap note, behavioral findings preserved, V2 requirements).
+
+---
+
+## Round 2 (2026-04-11): PROCEED — SUPERSEDED BY AUDIT ABOVE
+
 ## Verdict: PROCEED
 
 ## Round 2 (post-REVISE)

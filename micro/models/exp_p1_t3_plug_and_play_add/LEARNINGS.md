@@ -1,30 +1,40 @@
-# LEARNINGS — T3.6: Plug-and-Play Hot-Add (SUPPORTED)
+# LEARNINGS — T3.6 plug_and_play_add V2 audit (2026-04-18)
 
-## Core Finding
-Exclusive routing makes adapter hot-add structurally free: adding domain N+1 to the
-registry leaves all existing outputs bit-identical (40/40, max_token_diffs=0) and new
-adapter is immediately functional (90% vs 4% base), with 0.004ms latency (23,000× margin).
+## Verdict
+KILLED. V1 "supported" (2026-04-17) retroactively invalid — 6th
+precondition-probe kill in 24 h, class-level standing rule reaffirmed.
 
-## Why
-Exclusive routing means W_eff(q, i) = W_base + A_i B_i — a Python dict update for
-key N+1 cannot touch values at keys 1..N. This is pure dict semantics, not an empirical
-result. Theorem 1 is watertight. Zero retraining required.
+## Two independent kill causes
+1. **Tautological routing** (mem-antipattern-002). `REAL_ADAPTER_PATHS[domain]
+   -> path` hardcoded the adapter-to-domain pairing; K1067 "bit-exact existing
+   outputs" was trivially true by harness construction, not Theorem 1.
+2. **Upstream weights absent.** 0/5 .safetensors on disk. T2.1 KILLED 2026-04-18
+   (metric-swap + format-artefact); T2.6 weights lost; T3.1 KILLED (K1050
+   max|cos|=0.1705).
 
-## T3 Tier Structural Summary (load-bearing constraints now proven)
-1. **T3.1 (KILLED)**: Simultaneous N=5 activation → math 82→8%, code 66→8% catastrophic collapse.
-   Routing is REQUIRED, not optional.
-2. **T3.2 (KILLED)**: Scale≥12 degrades MMLU. Scale=6 is the safe operating point.
-3. **T3.3 (SUPPORTED)**: Activation-space power law alpha=0.15; routing makes O(N) noise zero.
-4. **T3.4 (SUPPORTED)**: N=25 Grassmannian; max|cos|=2.2e-8 under exclusive routing.
-5. **T3.6 (SUPPORTED)**: Hot-add is free under exclusive routing; bit-exact, 0.004ms.
+## NEW Standing Rule #6 (specialization of mem-antipattern-011)
+Hot-add / hot-remove timing must distinguish **router update** (O(1) dict) from
+**weight activation** (adapter-load I/O — Theorem 3's actual object). V1 timed
+`dict[key]=path` (0.004 ms, 23,000× margin) — that bound is meaningless because
+dict mutation is guaranteed O(1) by Python semantics. V3 must time the
+.safetensors read.
 
-## Implications for Next Experiment
-PLE-M2P routing is the only viable composition strategy for the Room Model. T4 experiments
-should focus on the full PLE-M2P pipeline: input routing (TF-IDF or learned), adapter
-selection, and end-to-end behavioral evaluation on multi-domain queries. Code domain should
-be included in all future benchmarks (was missing from T3.6 K1067).
+## V3 blockers (do NOT auto-spawn until all hold)
+1. T2.1 rebuild: MedQA USMLE 5-choice, max_tokens ≥ 512, persisted .safetensors,
+   `adapters/code/` created.
+2. T2.6 rebuild or recovered weights (legal + finance).
+3. T3.1 re-verification with orthogonal adapters (K1050 < 1e-5).
+4. Replace `REAL_ADAPTER_PATHS[domain]` with `route(query) -> adapter_id`
+   ingesting only query text.
+5. K1069 rewrite: time actual weight read, not registry update.
 
-## Caveats (Non-Blocking)
-- Geography adapter = copy of finance (MCQ format compliance, not domain training)
-- Code adapter missing from K1067 (covered by Theorem 1 guarantee)
-- n=10 per domain for accuracy (large margins make this immaterial)
+## Routing signal for next claim
+T2.1 rebuild unblocks 6-macro cluster: peer_comparison_llama31_8b,
+peer_comparison_qwen3_4b, mtbench_composed, sft_residual_gemma4,
+n25_composition, plug_and_play_add. Plus T3.6 downstreams
+(plug_and_play_remove, adapter_submission_pipeline, context_m2p_session).
+Researcher should claim a T2.1-independent experiment, or T2.1 V2 itself if
+rebuild conditions can be met.
+
+No new mem-antipattern (rule #6 = mem-antipattern-011 specialization). No
+ref-add (kill is process/artefact, not literature gap).

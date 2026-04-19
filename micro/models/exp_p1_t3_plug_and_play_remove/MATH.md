@@ -1,5 +1,77 @@
 # T3.7: Hot-Remove Adapter Without Affecting Remaining Adapters
 
+## V2 Audit Section (2026-04-18) — supersedes V1 verdict only
+
+The V1 Setting + Theorems 1–3 below are **byte-preserved** from the original
+pre-registration (KCs unchanged: K1070 bit-exact, K1071 new-adapter > base,
+K1072 p99 < 10ms). V1's "supported" (2026-04-10) is retroactively invalid
+for three independent reasons; this section does not weaken any KC, it
+documents why the V1 measurement apparatus could not have tested the stated
+theorems.
+
+### Structural precondition on K1070
+
+Theorem 1 quantifies over queries x routed to domain j ≠ k. For the test to
+discriminate Theorem 1 from triviality, the *routing function* for j must be
+capable of selecting different paths as a function of registry state. V1's
+routing is a hardcoded `REAL_ADAPTER_PATHS[domain]` lookup — a constant
+function of domain, not a function of registry. Removing key k ≠ j never
+reaches the `R[j]` path in the first place; identical outputs are forced by
+Python dict semantics, not by exclusive routing + remove invariance.
+A genuine K1070 test requires either
+
+  (a) simultaneous N≥2 adapter activation (so removal could change which
+      adapters fire together), or
+  (b) per-sample routing r: X → 2^Domains where r(x) is computed on the
+      registry-and-x, so removing k could change r(x) for some x.
+
+Absent either, K1070 is a statement about `dict.__getitem__`, not about
+Theorem 1.
+
+### Structural precondition on K1071
+
+Theorem 2 claims the freed label k is reusable by a *new* adapter m. V1
+instantiated "geography" as `shutil.copy(finance_adapter_dir)` and "history"
+as a second `shutil.copy(finance_adapter_dir)`. Under byte-identical copies:
+
+  weights(history) = weights(geography) = weights(finance)
+
+K1071's "history = 100% on high_school_european_history vs base = 4%"
+measures finance-weights answering MCQ *letters* (format-transfer of the
+MCQ letter-space), not a novel adapter occupying a freed slot. The kill
+threshold (> 4% base) was designed to rule out "adapter had no effect";
+a byte-copy of a trained adapter trivially clears it.
+
+### Structural precondition on K1072
+
+Theorem 3 states `hot-remove latency ~= O(1) dict deletion`, but the
+*operationally meaningful* remove object is release of adapter weights
+from GPU memory / closure of mmap / drop of model reference — the I/O
+inverse of hot-add. V1's 0.0009 ms p99 benchmarks `del d[k]` on a Python
+dict, which is O(1) amortised by hash-table construction. A 10 ms
+threshold on a nanosecond operation cannot fail and cannot discriminate
+any implementation.
+
+### Upstream artefact precondition
+
+All five upstream adapter `.safetensors` files are absent from disk
+(T2.1 `single_domain_training` status=KILLED 2026-04-18; T2.6
+`multi_domain_5` weights lost per audit). Even a correctly-designed
+V3 probe cannot verify K1070 without the weights that the theorem
+quantifies over.
+
+### V2 result (this audit section only)
+
+K1070 FAIL — cannot-measure (structural tautology + weights absent)
+K1071 FAIL — adapter copy forgery (history = finance bytes) + weights absent
+K1072 FAIL — wrong object (dict delete, not weight unload)
+
+V1 KC thresholds are unchanged. No KC relaxation; no post-hoc redefinition;
+the verdict flips from supported to killed because the V1 tests did not
+measure the objects the theorems quantify over.
+
+---
+
 ## Setup
 
 Registry R = {domain_k → path_k}_{k=1}^{N}.  

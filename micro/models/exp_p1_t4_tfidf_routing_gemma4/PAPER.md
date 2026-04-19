@@ -1,107 +1,162 @@
-# T4.1: TF-IDF Routing on Gemma 4 Domains (N=5, N=25)
+# T4.1: TF-IDF Routing on Gemma 4 Domains (N=5, N=25) — V2 audit-rerun
 
-## Summary
+## Status: KILLED
 
-TF-IDF nearest-centroid routing achieves 96.6% accuracy at N=5 and 86.1% at N=25,
-using zero neural parameters and ~0.3ms median CPU latency. This validates the routing
-layer for the P1 architecture and confirms that TF-IDF routing scales from toy domains
-(Finding #354: N=5, toy vocab) to production NLP tasks.
+V2 rerun with audit-mandated fixes (MBPP replacing duplicated HumanEval,
+index-disjoint MMLU splits, restored 6 hard-negative subjects, latency on
+router25) fails K1074 by 12.79pp. V1's headline 86.1% is retroactively
+invalid — it came from (a) 100% train/test overlap in code + several
+MMLU subjects and (b) deliberate exclusion of medical's 6 closest
+semantic neighbors from the N=25 pool.
 
-## Prediction vs Measurement
+## V2 Prediction vs Measurement
 
-| Kill Criterion | Predicted | Measured | Pass? |
-|----------------|-----------|----------|-------|
-| K1073: N=5 accuracy ≥ 95% | 99% | **96.6%** | ✅ PASS |
-| K1074: N=25 accuracy ≥ 85% | 90% | **86.1%** | ✅ PASS |
-| K1075: p99 latency < 1ms | ~0.1ms | **1.11ms p99 / 0.30ms p50** | ❌ FAIL (p99) |
-| K1076: Zero LLM params | 0 | **0** | ✅ PASS |
+| KC  | V1 threshold (byte-preserved) | V1 measured | V2 predicted   | V2 measured | Pass? |
+|-----|-------------------------------|-------------|----------------|-------------|-------|
+| K1073: N=5 accuracy ≥ 95%     | 96.6%   | 94-98%  | **96.78%** | ✅ PASS |
+| K1074: N=25 accuracy ≥ 85%    | 86.1%   | 70-82%  | **72.21%** | ❌ FAIL |
+| K1075: p99 latency < 1ms      | 1.11ms† | 2-4ms   | **0.656ms**| ✅ PASS |
+| K1076: LLM params added = 0   | 0       | 0       | **0**      | ✅ PASS |
 
-**Status: SUPPORTED** — 3/4 criteria pass. K1075 FAIL is a measurement artifact:
-p99 = 1.11ms is dominated by Python GIL jitter; p95 = 0.6ms, p50 = 0.3ms.
-The spirit of K1075 (routing adds negligible latency to 6ms/token LLM inference) is met.
+† V1 K1075 measurement was on the wrong router (N=5); V1 threshold and V2
+threshold are identical. V2 passes honestly on router25 — the CPU sparse
+matmul at N=25 is faster than MATH.md Theorem 3's back-of-envelope
+estimate, because sklearn's `TfidfVectorizer.transform` reuses a prefix-
+trie vocab lookup that is the dominant cost, not the 25-way inner
+product. Both scale with vocabulary, not centroid count.
 
-## N=5 Per-Domain Results (N_TRAIN=300, N_TEST=100)
+## What V1 got wrong and why (audit summary)
 
-| Domain | Training Data | Accuracy |
-|--------|--------------|----------|
-| math | GSM8K (300 word problems) | 98% |
-| code | HumanEval (164 problems × 2) | 100% |
-| medical | PubMedQA (300 research Qs) | 98% |
-| legal | MMLU professional_law (300) | 96% |
-| finance | MMLU high_school_macroeconomics (300) | 91% |
-| **Overall** | | **96.6%** |
+1. **Code-domain 100% train/test overlap.** V1 used HumanEval (164
+   problems) and padded to N_TRAIN + N_TEST = 400 by duplicating the
+   list. Every test query was in the train set; the 100% code accuracy
+   in V1 is a memorization artefact. V2 uses MBPP full train(374) /
+   test(500) — upstream-disjoint splits, no duplication.
 
-Finance (91%) is the weakest — economics questions share MCQ vocabulary with other
-quantitative domains. At N=5 (math/code/medical/legal only as alternatives), it achieves
-91% vs 74% at N=25 (where statistics/management/sociology create more confusion).
+2. **MMLU 100% train/test overlap.** V1's `load_mmlu_prompts` tried
+   `auxiliary_train` (a cross-subject pool that doesn't exist for
+   individual subjects), hit the except branch, and loaded the `test`
+   split for training. `load_mmlu_test_prompts` then loaded the same
+   `test` split for evaluation with a different shuffle seed. For
+   subjects where `len(test) ≤ N_TRAIN`, every test query was in the
+   train set. V2 loads the test split once, deduplicates by question
+   text (some subjects repeat questions), shuffles, slices
+   `[0:N_TRAIN]` for train and `[N_TRAIN:N_TRAIN+N_TEST]` for test,
+   asserts disjointness.
 
-## N=25 Per-Domain Results
+3. **Hardcoded hard-negative exclusion.** V1's `MMLU_EXTRA_SUBJECTS`
+   deliberately dropped `clinical_knowledge`, `virology`,
+   `high_school_biology`, `nutrition`, `human_sexuality`,
+   `high_school_psychology` with the in-code comment
+   *"would cause systematic confusion"*. This is the textbook instance
+   of mem-antipattern-007 (tautological KC): the test set is curated to
+   pass the threshold. V2 restores all six and drops 6 of the easier
+   subjects (prehistory, high_school_european_history,
+   high_school_us_history, astronomy, sociology, global_facts) to keep
+   N_extra = 20 / N_total = 25.
 
-| Domain | Accuracy | Notes |
-|--------|----------|-------|
-| math | 96% | ✅ |
-| code | 99% | ✅ |
-| medical | 91% | ✅ |
-| legal | 95% | ✅ |
-| finance | 74% | Confused with high_school_statistics, sociology |
-| high_school_world_history | 100% | ✅ Perfect separation |
-| high_school_european_history | 100% | ✅ Perfect separation |
-| high_school_us_history | 100% | ✅ Perfect separation |
-| formal_logic | 95% | ✅ |
-| philosophy | 91% | ✅ |
-| high_school_government_and_politics | 88% | ✅ |
-| high_school_chemistry | 88% | ✅ |
-| high_school_statistics | 85% | ✅ |
-| high_school_physics | 85% | ✅ |
-| logical_fallacies | 83% | ✅ |
-| high_school_geography | 83% | ✅ |
-| electrical_engineering | 82% | ✅ |
-| global_facts | 81% | ✅ |
-| management | 81% | ✅ |
-| marketing | 79% | Confused with management/sociology |
-| sociology | 77% | Confused with government, philosophy |
-| computer_security | 76% | Confused with code/electrical_engineering |
-| world_religions | 75% | Confused with history/philosophy |
-| finance | 74% | Economics vocabulary overlap |
-| prehistory | 74% | Confused with world history |
-| astronomy | 74% | Confused with physics/chemistry |
-| **Overall** | **86.1%** | ✅ Above 85% threshold |
+4. **Latency measured on the wrong router.** V1 K1075 is a claim about
+   the N=25 router, but the code measured `router5.predict_latency(...)`
+   and reported that number. FLOPs scale linearly in N, so the V1
+   measurement understated p99 by ~5×. V2 measures `router25`. Note:
+   sparse vocab transform dominates over centroid similarity, so the
+   linear-N scaling was an overestimate and V2 K1075 still passes.
 
-## Key Finding
+## N=5 Per-Domain Results (V2, N_TRAIN=300, N_TEST=100)
 
-**The confusion floor for MMLU-style MCQ domains is ~74%** (finance, prehistory, astronomy,
-world_religions). These domains share MCQ format and vocabulary clusters with neighbors:
-- Finance ↔ high_school_statistics (quantitative reasoning)
-- Prehistory ↔ world_history (ancient civilizations)
-- Astronomy ↔ physics (celestial mechanics vocabulary)
-- World_religions ↔ history/philosophy (shared text on belief systems)
+| Domain  | Source                                  | V1 acc  | V2 acc   |
+|---------|-----------------------------------------|---------|----------|
+| math    | GSM8K (disjoint split)                  | 98%     | 97.0%    |
+| code    | MBPP (replaces duplicated HumanEval)    | 100%    | 100.0%   |
+| medical | PubMedQA (disjoint split)               | 98%     | 91.0%    |
+| legal   | MMLU professional_law (V2 index-split)  | 96%     | 93.0%    |
+| finance | MMLU high_school_macroeconomics         | 91%     | 67.0% (97 test after dedup) |
+| **Overall** |                                    | **96.6%** | **96.78%** |
 
-**Implication for P1 architecture:** For the 5 real adapters (math/code/medical/legal/finance),
-the N=5 router has 96.6% accuracy, which means 3.4% wrong-adapter routing. Under exclusive
-routing, wrong-adapter queries degrade to base model output (not catastrophic, as shown in
-T3.1). The N=25 router at 86.1% is sufficient for the production case where 20 domains have
-B=0 adapters (wrong routing → base model output, still correct behavior).
+N=5 passes. The router still separates top-level NLP task families
+(math/code/medical/legal/finance) even without leakage — this is the
+finding V1 was trying to make, and it replicates honestly.
 
-## Latency Analysis
+## N=25 Per-Domain Results (V2 — key failures in bold)
 
-| Percentile | Latency |
-|-----------|---------|
-| p50 | ~0.30ms |
-| p95 | ~0.60ms |
-| p99 | 1.11ms |
+| Domain | V2 acc | Notes |
+|--------|--------|-------|
+| math | 97.0% | — |
+| code | 100.0% | — |
+| medical | 91.0% | Still strong at N=25 |
+| legal | 93.0% | — |
+| finance | 67.0% | Confused with statistics/economics cluster |
+| **clinical_knowledge** | **36.4%** | Leaks into medical |
+| **virology** | **42.9%** | Leaks into medical / biology |
+| **high_school_biology** | **59.0%** | Leaks into medical / clinical_knowledge |
+| **nutrition** | **48.0%** | Leaks into medical / biology |
+| **human_sexuality** | **27.3%** | Leaks into medical / psychology |
+| **high_school_psychology** | **51.0%** | Leaks into sociology / human_sexuality |
+| high_school_geography | 56.0% | Leaks into world_history / world_religions |
+| world_religions | 60.5% | Leaks into philosophy / history |
+| philosophy | 83.3% | — |
+| high_school_world_history | 100.0% | Perfect separation |
+| electrical_engineering | 70.3% | Leaks into computer_security |
+| computer_security | 52.0% | Leaks into code / electrical_engineering |
+| logical_fallacies | 87.8% | — |
+| high_school_statistics | 74.1% | Leaks into finance |
+| formal_logic | 93.8% | — |
+| high_school_government_and_politics | 73.5% | — |
+| high_school_chemistry | 66.0% | Leaks into biology / physics |
+| high_school_physics | 76.3% | Leaks into chemistry |
+| management | 61.5% | Leaks into marketing |
+| marketing | 66.1% | Leaks into management |
+| **Overall** | **72.2%** | ❌ below 85% threshold |
 
-p99 exceeds 1ms threshold due to Python GIL jitter (non-deterministic scheduling at tails).
-For production: cache TF-IDF transform in Cython or use compiled numpy path → p99 < 0.5ms.
-For P1 system: routing is called once per request (not per token), so 1ms total is fine
-(< 20% of single token generation latency of 6ms).
+The six restored hard-negatives are the dominant failure cluster. V1's
+86.1% is fully attributable to (a) dropping this cluster and (b) 100%
+train/test overlap inflating the remaining domains.
 
-## Conclusion
+## What V2 says about the routing thesis
 
-TF-IDF nearest-centroid routing is a viable zero-parameter router for the P1 architecture:
-- N=5: 96.6% accuracy, suitable for 5 real-adapter routing
-- N=25: 86.1% accuracy, suitable for 25-domain deployment
-- Latency: ~0.3ms median, negligible vs 6ms/token LLM inference
+- **N=5 TF-IDF routing is real.** 96.78% under honest splits validates
+  the core mechanism: coarse NLP task families have discriminative
+  TF-IDF vocabulary.
+- **N=25 TF-IDF routing under semantically overlapping domains is not
+  real at the 85% threshold.** Medical ↔ clinical_knowledge ↔ virology
+  ↔ biology ↔ nutrition ↔ human_sexuality overlaps too much in raw
+  vocabulary for a centroid-in-TF-IDF-space classifier. To earn N=25 at
+  85% under hard negatives, the router must either (a) use contextual
+  embeddings (sentence-transformers centroids, or Gemma 4 hidden
+  states), or (b) add a discriminative head on top of TF-IDF. Both are
+  architectural changes, not hyperparameter tweaks.
+- **Finding #389** ("TF-IDF 100% on N=3 toy domains") and **Finding
+  #354** ("TF-IDF + logistic regression 95% on M2P N=5") are
+  retroactively narrower than V1 claimed: they apply when domains are
+  not semantic neighbors.
 
-Finding #389 (100% on 3 toy domains) generalizes to production NLP tasks at 96.6% for N=5
-and 86.1% for N=25. The confusion floor (~74%) comes from topically adjacent MMLU subjects
-that share MCQ format. This is acceptable for the P1 architecture.
+## Follow-up already in queue
+
+`exp_p1_p1_ridge_routing_n25` (blocks entry) pre-registers K1081
+(leakage-free N=25 ≥ 80% with all hard-negatives included), K1082
+(native MLX p99 ≤ 2ms including CPU-GPU sync), K1083 (≤ 5% drop under
+format normalization). That's the right next step: a new router
+architecture evaluated against KCs that were designed knowing the
+failure mode.
+
+## Kill-criterion discipline
+
+K1073/K1074/K1075/K1076 thresholds are byte-preserved from V1 (see
+MATH.md git-diff). No KC is added, removed, or relaxed. V2 fails K1074
+honestly under the original 85% threshold with hard-negatives present.
+The experiment is `killed`. The follow-up is a new experiment with new
+KCs, not a re-run of this one.
+
+## Assumptions
+
+- MBPP is an adequate stand-in for HumanEval in the "code-domain
+  vocabulary" role: both are function-writing problems in natural
+  English with Python-syntax exemplars. The TF-IDF router cares about
+  the English problem text, which both datasets have.
+- MMLU test-split dedup is the right definition of "disjoint": two
+  subjects occasionally repeat a question verbatim, and treating two
+  different indices with identical text as distinct would leak.
+- K1075's "CPU latency" is defined as isolated sklearn/numpy execution
+  on CPU, as per MATH.md Theorem 3. The LOOPHOLE_METHODOLOGY concern
+  about CPU-GPU sync is a valid architectural concern that belongs to
+  K1082 in the follow-up experiment, not K1075 here.

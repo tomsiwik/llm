@@ -1,0 +1,37 @@
+{
+  "restate": {
+    "n": 5,
+    "sig_hits": 1,
+    "signature_rate": 0.2,
+    "gate_pass": false,
+    "cached": false
+  },
+  "numbered": {
+    "n": 5,
+    "sig_hits": 2,
+    "signature_rate": 0.4,
+    "gate_pass": false,
+    "cached": false
+  },
+  "verify": {
+    "n": 5,
+    "sig_hits": 2,
+    "signature_rate": 0.4,
+    "gate_pass": false,
+    "cached": false
+  },
+  "principle": {
+    "n": 5,
+    "sig_hits": 1,
+    "signature_rate": 0.2,
+    "gate_pass": false,
+    "cached": false
+  },
+  "tldr": {
+    "n": 5,
+    "sig_hits": 2,
+    "signature_rate": 0.4,
+    "gate_pass": false,
+    "cached": false
+  }
+}

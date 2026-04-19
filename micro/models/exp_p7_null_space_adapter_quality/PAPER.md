@@ -1,6 +1,28 @@
 # P7.A1: Adapter Restricted to Null Space — Quality Preserved?
 
-## Result: SUPPORTED (3/3 kill criteria pass)
+## Audit Rerun (2026-04-17): Verdict revised to KILLED on metric-swap grounds
+
+**Original verdict (2026-04-11):** SUPPORTED (3/3 kill criteria pass).
+**Audit verdict (2026-04-17):** **KILLED** (1/3 pass; K1297 and K1298 fail structurally on pre-flight antipattern #6 — "KC measures wrong object").
+
+**Why KILLED:** The DB-registered kill criteria pre-register GSM8K accuracy (K1297) and MMLU accuracy (K1298) as the behavioral metrics. The code and MATH.md instead measure training-loss ratio on 20 memorized math texts (K1297) and next-token PPL on 5 hand-curated general-knowledge prose snippets (K1298). Training loss at memorization scale (both adapters reach PPL=1.03) is not a proxy for GSM8K accuracy — the ratio is mechanically ~1.0 regardless of null-space effect. PPL on 5 hand-picked texts is not a proxy for MMLU multi-task accuracy. Per PLAN.md §1 pre-flight rule #6 (antipattern: KC measures wrong object), `supported` is blocked.
+
+**Code was NOT re-executed.** The antipattern is structural — a metric re-specification, not a transient bug. Re-running the existing code would reproduce the same mis-measured numbers. A v2 experiment (`exp_p7_null_space_adapter_quality_v2` to be filed) must pre-register GSM8K + MMLU eval harnesses at MATH.md time and train on non-trivial data (not 20 memorized texts) so the loss ratio is informative.
+
+**K1299 (orthogonality) PASS is preserved.** Orthogonality was correctly measured and the proof (Theorem 1) is exact by construction; the 1.33e-5 violation is 100x below threshold. This is the only behavioral claim credited by this audit.
+
+**Reusable behavioral findings (preserved in LEARNINGS.md, not credited as KC pass):**
+- Null-space reparameterization achieves exact orthogonality to W_v across 8 non-shared layers.
+- Gemma 4 E4B KV-sharing: layers 24-41 receive pre-computed KV from layers 22/23; v_proj is dead code on those layers. Future Gemma 4 v_proj/k_proj adapters MUST target layers 16-23. (Reusable architectural check.)
+- At memorization scale, null-space restriction does not slow convergence vs unrestricted (both reach loss 0.037 in 500 steps).
+
+**Artifacts:** MATH.md (git-clean since 78538d2, no KC swap post-hoc), run_experiment.py (unchanged, known-buggy under metric-swap tag), results.json (newly written reconstruction with verdict=KILLED), REVIEW-adversarial.md (audit section added), LEARNINGS.md (metric-swap note added).
+
+---
+
+## Original report (2026-04-11 — now SUPERSEDED, retained for reference)
+
+## Result: SUPPORTED (3/3 kill criteria pass) — SUPERSEDED BY AUDIT ABOVE
 
 Null-space LoRA achieves 98.7% of unrestricted LoRA quality while maintaining
 strict orthogonality to W_v (max violation 1.33e-5). The null-space restriction

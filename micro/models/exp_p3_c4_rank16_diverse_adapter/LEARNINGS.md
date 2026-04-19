@@ -1,6 +1,16 @@
 # LEARNINGS.md — P3.C4: Rank-16 Diverse Adapter
 
-**Finding #471 | Status: KILLED | Date: 2026-04-11**
+**Finding #471 | Status: KILLED | Date: 2026-04-11 | V2 audit confirmed: 2026-04-18**
+
+## V2 Audit Note (2026-04-18)
+
+Rerun requested via `audit-2026-04-17-rerun` + `training-cache` tags is **not executable** —
+`domain_fused_base` weight shards and the source math adapter were deleted during disk
+cleanup. Cache-bug fix applied to `run_experiment.py` for future reruns; verdict re-derived
+from strict PLAN.md §1 on the 2026-04-11 measurements: **K1205 FAIL (73.3% < 80%) stands.**
+Cache bug does not rescue the verdict — 73.3% fails the pre-registered 80% threshold
+regardless of data volume. See PAPER.md "V2 Audit" section and REVIEW-adversarial.md
+"V2 Audit Review".
 
 ## What We Learned
 

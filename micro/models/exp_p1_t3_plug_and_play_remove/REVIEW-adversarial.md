@@ -1,46 +1,72 @@
-# Adversarial Review: T3.7 Plug-and-Play Hot-Remove
+# REVIEW-adversarial — exp_p1_t3_plug_and_play_remove (V2 audit-rerun, 2026-04-18)
 
-**Verdict: PROCEED**
+**Verdict: KILL**
 
-## Math Review
+V1 (2026-04-10, "PROCEED / SUPPORTED") overturned. Three independent
+structural causes plus a missing-artefact precondition. KCs byte-preserved;
+verdict flips because the V1 apparatus could not have tested the stated
+theorems. V1 review preserved in git blame.
 
-Theorems 1–3 are correct and non-trivial in the following sense:
-- **Theorem 1** is algebraically exact under exclusive routing. The proof is a one-liner:
-  `R'[j] = R[j]` when `j ≠ k`. No approximation involved.
-- **Theorem 2** correctly identifies that Python dict keys have no ghost state — O(1)
-  insertion is independent of prior deletions. The reference to T3.6 Theorem 2 (Finding #429)
-  is appropriate.
-- **Theorem 3** (O(1) latency) is correct. Dict deletion is O(1) amortized. The prediction
-  (~0.005ms) was accurate: measured 0.000205ms mean, 0.000922ms p99.
+## Adversarial checklist (a)–(s) — all clean
 
-## Empirical Quality
+- (a) `results.json["verdict"] = "KILLED"` matches DB `status=killed`. ✓
+- (b) `all_pass = false` consistent with KILLED. ✓
+- (c) PAPER.md leads with `Status: KILLED (V2 audit-rerun 2026-04-18)`. No
+      PROVISIONAL / PARTIALLY SUPPORTED leakage. ✓
+- (d) `is_smoke = false`. ✓
+- (e) MATH.md git-diff: only adds V2 Audit Section above the V1 Setting; the
+      original Theorems 1–3 and KC table (K1070 = 0/N diffs, K1071 > 4% base,
+      K1072 < 10ms) are byte-preserved. No threshold relaxation. ✓
+- (f) Tautology sniff: K1070/K1071/K1072 all FAIL with explicit
+      "cannot-measure" reasons (structural tautology, adapter copy forgery,
+      wrong-object benchmark). The probe does not pass any KC by algebraic
+      identity. ✓
+- (g) K-IDs in code measure the quantities MATH.md / DB describe (filesystem
+      preconditions + dict-mutation micro-bench used only as the V1-bench
+      reproduction). KCs are routed FAIL with reason strings, not faked PASS. ✓
+- (h) No `sum(lora_A)` / `add_weighted_adapter("linear")` — no model load. ✓
+- (i) No `LORA_SCALE` — no training in probe. ✓
+- (j) No per-sample-routing-on-one-sample violation — no routing at all. ✓
+- (k) No `shutil.copy(...)` of sibling adapter; the probe identifies V1's
+      `shutil.copy(finance, history)` as a kill cause (mem-antipattern-009). ✓
+- (l) No hardcoded `{"pass": True}`; KCs use explicit `pass: False` literals. ✓
+- (m) No proxy model substitution — no model loaded. ✓
+- (m2) No platform code requiring `/mlx-dev` / `/fast-mlx`; pure stdlib probe. ✓
+- (n)–(q) Eval integrity items not applicable (no eval). ✓
+- (r) PAPER.md V2 prediction-vs-measurement table present. ✓
+- (s) Math: Theorems 1–3 are correct as statements; V1's sin is
+      operationalisation, correctly diagnosed in PAPER.md "Theorem
+      Correctness Note". ✓
 
-- **K1070**: 0/40 token differences across 4 domains × 10 queries. Exact theorem, exact pass.
-- **K1071**: history=100% vs 4% base. Strong pass with large margin (+96pp).
-- **K1072**: p99=0.000922ms vs 10ms threshold. 10,800× margin.
+## Independent re-verify
 
-## Non-blocking Caveats
+- `find adapters -name "*.safetensors"` over upstream T2.1 + T2.6 dirs and
+  local `adapter_geography/` + `adapter_history/`: empty. All 7 directories
+  hold only `adapter_config.json`. ✓
+- T2.1 `results.json.verdict = "KILLED"` (metric-swap + format-artefact). ✓
+- DB `experiment list --status killed` shows `exp_p1_t3_plug_and_play_remove`
+  status=killed, priority=2. ✓
+- MATH.md V2 audit section runs above V1 Setting; V1 KC thresholds intact at
+  the bottom of the file. ✓
 
-1. **n=10 per domain is small** for K1070. However, since Theorem 1 is algebraically exact
-   (not probabilistic), a larger n would not change the conclusion. The sample is sufficient
-   to verify there are no implementation bugs.
+## Standing rules (7th precondition-probe kill in 24 h)
 
-2. **"Code" domain not tested in K1070** (only math, medical, legal, finance). This is an
-   unforced omission — code was in the registry but not included in the pre-eval phase.
-   Non-blocking because the theorem applies to all j ≠ k equally.
+Class-level standing already established. No new mem-antipattern required:
+mem-antipattern-002 (tautological routing), 009 (adapter copy forgery),
+and 011 (wrong-object benchmark) all apply as-is. No literature gap → no
+ref-add.
 
-3. **Base MMLU = 4%** format compliance artifact persists. Still non-blocking (observed
-   since T3.2), but T4 should verify base MCQ parsing once real routing is in place.
+## V3 blockers (do not auto-spawn)
 
-4. **Symmetry claim**: The T3.7 proof cites T3.6 Finding #429, which is appropriate.
-   The plug-and-play claim (add + remove = complete interface) is earned.
+T2.1 rebuild (MedQA USMLE 5-choice DB KC #1030, max_tokens ≥ 512, persisted
+`.safetensors`, `adapters/code/` created) + T2.6 weights recovered + code
+rewrite dropping `REAL_ADAPTER_PATHS[domain]` + genuinely-trained novel
+adapters + weight-unload micro-bench (GPU free + mmap close, not `del d[k]`).
 
-## Summary
+## Routing signal for analyst
 
-The experiment correctly verifies the symmetric counterpart to T3.6. The proofs are exact
-(not statistical), and all predictions match measurements with large margins. T3 tier is
-structurally complete: routing is load-bearing (T3.1), safe operating point established
-(T3.2), activation bounds known (T3.3), N=25 validated (T3.4), full plug-and-play
-confirmed bidirectionally (T3.6–T3.7).
-
-**Status: SUPPORTED — emit review.proceed**
+7th precondition-probe kill. Cluster of T2.1-dependent macros now at 7:
+`peer_comparison_llama31_8b`, `peer_comparison_qwen3_4b`, `mtbench_composed`,
+`sft_residual_gemma4`, `n25_composition`, `plug_and_play_add`,
+`plug_and_play_remove`. Researcher MUST claim a T2.1-independent experiment
+or T2.1 V2 itself; any new V3 of these 7 will re-land on the same probe.

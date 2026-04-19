@@ -1,6 +1,100 @@
-# Adversarial Review: exp_p1_c0_composition_port_gemma4 (C0.1) — Round 3 (Final)
+# Adversarial Review: exp_p1_c0_composition_port_gemma4 (C0.1)
 
-**Verdict: PROCEED with caveats**
+## V2 — Audit Reconstruction Re-review (2026-04-18)
+
+**Verdict: KILL** (supersedes the v1 "PROCEED with caveats" block below).
+
+### What changed since v1
+
+The `audit-2026-04-17-rerun + tautological-routing` tag required a rerun under
+the already-corrected TF-IDF routing code. The rerun **could not be executed**:
+the five prerequisite `adapters.safetensors` files (math/code/medical under
+`exp_p1_t2_single_domain_training/`, legal/finance under
+`exp_p1_t2_multi_domain_5/`) have been deleted — only `adapter_config.json`
+stubs remain. A live `experiment run` attempt on 2026-04-18 aborted in Phase 1
+with `ERROR: math adapter not found`. The researcher retained the Round 3
+2026-04-10 numbers verbatim in `results.json._reconstruction_note` and
+re-derived the verdict under strict PLAN.md §1 KC discipline.
+
+### Adversarial checklist (V2)
+
+- (a) verdict=KILLED in `results.json`, DB status=killed — consistent ✓
+- (b) `all_pass=false`, `ran=false` — matches KILLED ✓
+- (c) PAPER.md V2 section explicitly overrides the Round 3 "SUPPORTED with
+      caveat" to **KILLED**; Round 3 body is preserved verbatim as context ✓
+- (d) `is_smoke=false` — not applicable
+- (e) `git log --all -- MATH.md` shows single commit; KC list unchanged ✓
+- (f) No tautology — KC02 (Frobenius off-diag), KC03 (quality_ratio), KC04
+      (per-domain retention), KC01 (TF-IDF cosine over raw text) measure four
+      distinct quantities
+- (g) K-IDs 1140–1143 align with MATH.md
+- (h) `run_experiment.py`: no `sum(lora_A)`, no `add_weighted_adapter`; uses
+      single `B_j @ A'_j` per routed domain
+- (i) `LORA_SCALE = 6.0` — safe
+- (j) Per-sample routing via `vectorizer.transform(text)` — no single-sample
+      propagation
+- (k) No `shutil.copy` of sibling adapters
+- (l) No hardcoded `{"pass": True}`
+- (m) Target model `mlx-community/gemma-4-e4b-it-4bit` consistent between
+      MATH.md and code
+- (r) PAPER.md has the prediction-vs-measurement table with Round 1/2/3 ✓
+
+### Why this is KILL, not PROCEED-with-caveat
+
+v1 (2026-04-10) signed off with "PROCEED with caveats" by appealing to the
+anti-stuck round-3 rule and reframing KC01's 93.2% < 95% miss as a "corpus
+problem, not an algorithm problem." Under the 2026-04-17 audit taxonomy this
+is the `kc_swap_after_failure` antipattern: KC01 is a numeric threshold
+pre-registered in MATH.md (≥ 95%), not a qualitative attribution of blame.
+Reclassifying a miss as an impossibility-structure observation does not make
+it pass. The anti-stuck rule pre-dates the antipattern taxonomy and does not
+override PLAN.md §1 verdict-consistency — reviewer cannot upgrade KC01 FAIL
+into an overall PROCEED when three KCs pass and one fails on its numeric
+threshold.
+
+### What remains supported (substantive finding for analyst to preserve)
+
+KC02/KC03/KC04 all pass cleanly on Gemma 4 E4B with large margins:
+- KC02 `max|A'_i^T A'_j|_F = 5.19e-14` vs threshold 1e-4 (14 orders under)
+- KC03 quality_ratio = 0.9024 vs 0.90
+- KC04 math = 90.2% of solo vs 70% floor
+
+The load-bearing P0 claim — Grassmannian isolation + exclusive routing gives
+≤ linear-in-routing-error quality loss — **transfers to Gemma 4 E4B**. Analyst
+should record this via `experiment finding-add` with explicit KC01-fail
+caveat so C1.1 (PoLAR on Gemma 4) is not orphaned under the top-level KILL.
+
+### Non-blocking concerns (record for analyst)
+
+1. The reconstruction cites 2026-04-10 numbers; future re-verification of
+   KC02/03/04 requires retraining the five deleted adapters. C1.1 should not
+   plan around a live composed-GSM8K number until adapters are rebuilt.
+2. KC01 miss is corpus-driven (MMLU `high_school_macroeconomics` lexically
+   adjacent to statistics/math); the follow-up `exp_p1_p0_finance_routing_fix`
+   is correctly scoped to swap in Bloomberg/SEC/earnings corpora.
+3. `signal_retention` range 1.39–1.52 is a QR normalization artifact (columns
+   unit-norm after Gram-Schmidt; ||A'||_F = √r), correctly explained in
+   PAPER.md — not informative and not a defect.
+
+### Assumptions (judgement calls, per hat discipline)
+
+- Accepted Round 3 2026-04-10 measurements at face value; V2 does not
+  re-examine the numbers, only the verdict derivation.
+- Deferred the retraining-and-rerun obligation to `exp_p1_p0_finance_routing_fix`
+  and future C1 work rather than blocking this review on it.
+- Did not require explicit `/mlx-dev` invocation evidence in the V2 section
+  because V2 is a verdict correction, not new MLX code.
+
+### Routing
+
+Emit `review.killed`. Analyst writes LEARNINGS.md V2 + runs `finding-add` to
+preserve the substantive Grassmannian-on-Gemma-4 result.
+
+---
+
+## v1 — Round 3 (Final, 2026-04-10; SUPERSEDED by V2 above)
+
+**Verdict: PROCEED with caveats** (superseded — see V2 above)
 
 This is round 3. Per anti-stuck rules, round 3 = PROCEED regardless. Both blocking fixes
 from Round 2 were applied. KC01 remains FAIL but the impossibility structure is documented.

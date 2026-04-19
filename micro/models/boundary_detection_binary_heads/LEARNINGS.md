@@ -145,3 +145,32 @@ Why it fixes our failure: Routes at task/segment level via embedding similarity
 - arXiv:2510.14077 — ERGO: Entropy-guided temporal signal for context degradation
 - arXiv:2601.21795 — LoRAuter: Task-level routing via embeddings
 - arXiv:2510.17898 — L-MoE: Lightweight gating for LoRA expert composition
+
+## Closure-Rule Family Membership (2026-04-18)
+
+**Fifth structural closure this audit sweep** (after `depth_routed_adapters`,
+`mlp_only_per_token_routing`, `ridge_router_single_pass_e2e`, `adapter_promotion`).
+Extends closure-rule family `base-ceiling-blocks-routing` (Finding #563) to a
+new substrate: **mechanism-cost floor × correlated-noise ceiling**.
+
+Prior family members used a single structural bound (oracle PPL ≥ base PPL, or
+orthogonal-retention η ≈ 1/√N). This experiment adds a *two-axis* closure:
+
+1. **Cost floor** (C1): the hot path is Ω(N_windows × N_adapters) forward passes
+   by mechanism construction. K777 gap = 600× — unreachable under any code fix.
+2. **Quality ceiling** (C2): overlapping windows (stride w/2) violate the
+   independence assumption required for Corollary 1's FP bound. Correlated
+   PPL noise produces burst argmax flickering, cascading into misrouted
+   micro-segments. K776 gap = 6.6× — unreachable without changing the windowing
+   scheme.
+
+Generalisation for future closures:
+> When a routing/detection mechanism's cost is Ω(N_domains × N_windows) forward
+> passes on the hot path, **and** its quality ceiling is set by an
+> independence-violating windowing scheme, no `code-bug` fix can reach
+> sub-linear cost or sub-independence FP rate. Closure is robust to every
+> code-level fix.
+
+This is distinct from ap-021 (ceiling-headroom collapse on a layered mechanism):
+here the mechanism itself has the structural floor + ceiling, not a baseline
+it was layered on.

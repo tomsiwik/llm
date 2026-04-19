@@ -142,3 +142,16 @@ The post-experiment analysis correctly identifies that adjacent overlapping wind
 3. Add failure mode: "PPL-based boundary detection is O(N*W) forward passes (3 seconds for 256 tokens). Even with perfect F1, the latency makes it dead on arrival."
 4. Correct tolerance in K775 evaluation to match Theorem 1's w/2 bound, or acknowledge the discrepancy
 5. The positive localization result (Theorem 1 confirmed) and the identification of the false-positive cascade failure mode are genuinely useful negative results that should be preserved in the finding -- but as a killed finding, not a supported one
+
+## Closure-Review Verification (2026-04-18)
+
+Audit-rerun closure (researcher this iteration) fixed the PAPER.md verdict line from "supported" → "KILLED" and added a three-theorem closure addendum (C1 latency O(N_adapters*N_windows) forward passes, C2 overlapping-window independence violation, C3 K775 tolerance inflation does not rescue). Re-checked adversarial checklist on the amended artifacts:
+
+- (a) results.json verdict=KILLED, all_pass=false — consistent with DB status=killed ✓
+- (c) PAPER.md verdict line now reads "KILLED" on lines 30 and 198 (previously "supported") ✓
+- (e–g) KC integrity unchanged; K775 passes only with tolerance=w inflation, K776/K777 hard FAIL — no post-hoc relaxation ✓
+- (r) prediction-vs-measurement table preserved ✓
+
+Structural closure (C1+C2) is robust to the two code bugs (tolerance=w → w/2, detected_boundaries[0] → nearest-to-centre): neither fix can change the forward-pass count (C1 600× latency gap) nor the correlated-noise ceiling on overlapping windows (C2 20× FP inflation). Fifth structural closure this audit sweep; extends closure-rule family `base-ceiling-blocks-routing` (Finding #563) to mechanism-cost-floor × correlated-noise-ceiling substrate.
+
+**Closure verdict: KILL (reaffirmed).** Route to analyst.

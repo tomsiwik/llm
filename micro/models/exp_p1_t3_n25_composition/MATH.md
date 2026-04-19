@@ -1,5 +1,100 @@
 # MATH.md — T3.4: N=25 Domain Composition on Gemma 4 (Grassmannian Stress Test)
 
+## V2 Audit Section (audit-2026-04-17-rerun, tautological-routing) — 2026-04-18
+
+**V1 verdict retroactively invalid for TWO independent reasons.**
+
+### Failure 1: Adapters missing on disk (precondition probe)
+
+V1 PAPER.md claims rely on 5 real adapters at:
+  - `micro/models/exp_p1_t2_single_domain_training/adapters/{math,code,medical}/`
+  - `micro/models/exp_p1_t2_multi_domain_5/adapters/{legal,finance}/`
+
+Direct filesystem verification (2026-04-18): every directory contains only
+`adapter_config.json` stubs. Zero `adapters.safetensors` weights. All five
+behavioral numbers in PAPER.md §"Phase 2" and §"Phase 3" are therefore
+**unverifiable** at this audit horizon.
+
+Upstream status:
+  - exp_p1_t2_single_domain_training (T2.1) = **KILLED 2026-04-18**
+    (metric-swap: DB-tracked K1030 = MedQA, measured MedMCQA;
+    format-artefact: max_tokens=256 truncated Gemma 4 CoT).
+  - exp_p1_t2_multi_domain_5 (T2.6) = supported but weights lost.
+
+5th instance of class-level precondition-probe pattern this loop
+(peer_comparison_llama31_8b, peer_comparison_qwen3_4b, mtbench_composed,
+sft_residual_gemma4, this). Rule is standing.
+
+### Failure 2: Tautological routing by design (pre-existing, audit-flagged)
+
+run_experiment.py v1 hardcodes `REAL_ADAPTER_PATHS[domain]` for Phase 2/3:
+each adapter is loaded exclusively for its matched domain's test set.
+`eval_gsm8k(REAL_ADAPTER_PATHS["math"], ...)` etc. That is **not composition** —
+it is single-adapter eval on a per-domain subset.
+
+True composition under N=25 requires one of:
+  (a) **Simultaneous activation** — all 25 adapters add into the forward pass,
+      test whether any domain degrades (this is what T3.1 tested and killed
+      for N=5; routing was posed as the fix).
+  (b) **Per-sample routing** — a router R: input → domain decides which
+      adapter fires, test set includes inputs from multiple domains mixed,
+      accuracy measures routing quality × adapter quality jointly.
+
+Neither happens in V1. `mem-antipattern-002` (tautological routing) applies:
+headline accuracy is single-adapter accuracy by construction. The Theorem 3
+"Zero Interference Under Exclusive Routing" proof is valid mathematically
+but V1 doesn't *exercise* it — the routing function is `R(x) = ground_truth_domain(x)`.
+
+### V2 structural invariants
+
+- K1059 (Grassmannian orthogonality) is **pure math** on random numpy
+  matrices, independent of adapter weights. V1 measurement 2.165e-8 is
+  reproducible and genuine. V2 reruns this phase.
+- K1060 (0/25 degraded under composition) is **structurally unmeasurable**
+  without (i) adapter weights and (ii) either simultaneous activation or
+  per-sample routing. Both preconditions fail.
+- K1061 (MMLU preservation under composition) is **structurally
+  unmeasurable** for the same reason; additionally, V1 measured
+  per-domain-adapter-on-neutral-subject, which conflates MCQ-format-transfer
+  with composition behavior.
+- K1062 (25 adapters < 1 GB) is theoretical: per-layer size
+  42 × (2560 × 6 + 6 × 2048) × 4 B (float32) = 4.6 MB per adapter.
+  25 × 4.6 MB = 115 MB < 1 GB by formula. V2 reports this as
+  theoretical-only; moot without real adapter weights.
+
+### V2 Kill Criteria routing
+
+| KC | Outcome | Reason |
+|---|---|---|
+| K1059 | PASS (genuine) | QR orthogonality is pure numpy math, reproducible |
+| K1060 | FAIL | Adapters missing on disk + V1 design is tautological routing |
+| K1061 | FAIL | Adapters missing on disk + V1 design conflates format transfer with composition |
+| K1062 | PASS (theoretical, moot) | Formula holds but no real adapters to measure |
+
+**Verdict: KILLED.** `all_pass=false`. No thresholds were changed — V2 keeps the
+exact thresholds from V1 MATH.md and routes KCs honestly based on what is
+measurable.
+
+### Unblocker for V3
+
+V3 of this experiment requires:
+  1. T2.1 rebuild with MedQA USMLE 5-choice (DB KC #1030), max_tokens ≥ 512,
+     adapter .safetensors persisted to disk, `adapters/code/` directory
+     created.
+  2. T2.6 adapters rebuilt or recovered from backup.
+  3. run_experiment.py rewritten to exercise genuine composition:
+     - Phase 2 option (a): load all 25 adapters simultaneously and measure
+       per-domain accuracy under simultaneous activation.
+     - Phase 2 option (b): implement a real router (e.g. TF-IDF +
+       hidden-state ridge from T4.1) and measure cross-domain mixed
+       test set accuracy (routing quality × adapter quality).
+  4. Drop `REAL_ADAPTER_PATHS[domain]` hardcoded map from phase 2/3 —
+     routing must be decided from input features, not domain labels.
+
+Until those unblock, V3 cannot be claimed. Researcher MUST NOT auto-spawn.
+
+---
+
 ## Problem Statement
 
 T3.1 proved that simultaneous activation of N=5 LoRA adapters destroys math/code accuracy

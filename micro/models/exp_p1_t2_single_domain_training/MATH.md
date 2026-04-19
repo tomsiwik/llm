@@ -79,8 +79,9 @@ This is 400× below the 1 GPU-hour threshold. **QED**
 
 ## Theorem 3: Expressivity Lower Bound (from Li et al. 2018)
 
-**Claim:** LoRA r=6 on q_proj across 42 layers is sufficient to achieve ≥ 5pp improvement 
-on GSM8K, HumanEval, and MedMCQA relative to the instruction-tuned base.
+**Claim:** LoRA r=6 on q_proj across 42 layers is sufficient to achieve ≥ 5pp improvement
+on GSM8K, HumanEval, and MedQA (USMLE-style, 4-option; dataset
+`GBaker/MedQA-USMLE-4-options`) relative to the instruction-tuned base.
 
 **Proof sketch:**
 
@@ -140,6 +141,33 @@ At N = 5 (T2.6 goal): bound = C × sqrt(5×6) × 1.19e-7 ≈ 3e-7 (algebraically
 |----|-------------|-----------|-------|
 | K1028 | Math GSM8K ≥ +5pp | PASS (≥ +7pp) | Theorem 3, T1.6 extrapolation |
 | K1029 | Code HumanEval ≥ +5pp | PASS (≥ +5pp) | Theorem 3, CodeAlpaca training |
-| K1030 | Medical MedMCQA ≥ +3pp | PASS (≥ +5pp) | Theorem 3, MCQ specialization |
+| K1030 | Medical MedQA ≥ +3pp | PASS (≥ +5pp) | Theorem 3, MCQ specialization |
 | K1031 | Training < 1 GPU-hour/domain | PASS (~3 min) | Theorem 2 |
 | K1032 | Adapter < 50MB | PASS (≈ 2.5 MB) | Theorem 1 |
+
+---
+
+## Audit-2026-04-17 Reconciliation (pre-rerun)
+
+Two code-scoped fixes applied to `run_experiment.py` BEFORE the rerun. Canonical DB
+KC text is unchanged (guardrail 1009); only implementation aligned to it.
+
+1. **K1030 metric-swap (tag: `metric-swap`).** Original `run_experiment.py` and the
+   MATH.md §Theorem 3 claim + KC table referenced `MedMCQA` (openlifescienceai/medmcqa,
+   4-option, Indian). DB KC for K1030 is canonical and always read
+   "Medical adapter: MedQA improves >= 3pp over base" (USMLE-style). MATH.md Theorem 3
+   claim and the K1030 prediction row now reference `GBaker/MedQA-USMLE-4-options`
+   (USMLE, 4-option). Runner `prepare_medical_data` and `eval_medqa` now train on and
+   evaluate that dataset. No KC text in the DB was added, modified, or relaxed.
+
+2. **K1028 format-artifact.** `eval_gsm8k` now uses `max_tokens=1024` (was 256).
+   Gemma 4-it emits long CoT before the `#### <answer>` sentinel; 256 tokens truncates
+   before the answer on typical completions, producing `base_gsm8k_pct=0.0` — a
+   measurement error, not a capability measurement. K1028's +5pp threshold is evaluated
+   against the corrected non-zero base. This prediction is sharpened from the original
+   +82pp (inflated by format-adaptation) to a conservative +10pp over the corrected base,
+   which still clears the threshold.
+
+Both fixes touch `run_experiment.py` / MATH.md predictions only. KC text in the DB is
+frozen, and MATH.md row K1030 had previously been out of sync with the DB (documentation
+bug) — now reconciled.

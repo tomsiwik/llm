@@ -1,5 +1,51 @@
 # PAPER.md — T3.6: Hot-Add Adapter Without Retraining
 
+## Status: KILLED (V2 audit, 2026-04-18)
+
+V1 "supported" (2026-04-17) retroactively invalidated by audit-2026-04-17-rerun.
+Two independent failure modes, either sufficient on its own:
+
+1. **Tautological routing** (mem-antipattern-002). V1 `REAL_ADAPTER_PATHS[domain]`
+   hardcoded the adapter-to-domain pairing. K1067 "bit-exact existing outputs"
+   is trivially true because the new adapter is never applied to existing-domain
+   queries — the harness, not the mathematics, produced the match.
+2. **Upstream preconditions absent**. 0 / 5 expected `.safetensors` present
+   (T2.1 KILLED 2026-04-18 with metric-swap + format-artefact; T2.6 weights lost).
+   Upstream dependency exp_p1_t3_pairwise_interference also KILLED (K1050 FAIL,
+   max|cos|=0.1705).
+
+### V2 Prediction vs Measurement (precondition probe)
+
+| KC | V2 Prediction | V2 Measurement | Result |
+|----|---------------|----------------|--------|
+| K1067 existing outputs unchanged | Unmeasurable: requires non-tautological router + loadable adapters | 0 routers present; 0/5 safetensors | **FAIL** |
+| K1068 new adapter functional | Unmeasurable: requires geography or finance safetensors on disk | Both absent | **FAIL** |
+| K1069 hot-add latency < 100ms | Moot: dict update trivially O(1), but no weight load to time | dict update ≈ 8e-5 ms (no weights) | **FAIL** (moot) |
+
+### Permanently learned (class-level standing rules, 6 instances this audit pass)
+
+1. **Precondition-probe before macro sweep.** 6 probe-class kills in 24 h — peer_
+   comparison_llama31_8b, peer_comparison_qwen3_4b, mtbench_composed,
+   sft_residual_gemma4, n25_composition, plug_and_play_add.
+2. **Registry ≠ artefacts + directory-existence corollary.** A dir with only
+   `adapter_config.json` is not a ready adapter. A dir that does not exist at
+   all is a stronger miss (e.g. `adapters/code/` in some siblings).
+3. **Downstream P1 macros inherit upstream audit flags.** T2.1 metric-swap and
+   format-artefact propagate to every comparison / composition / plug-and-play
+   built on its adapters — 6 kills so far, no exceptions.
+4. **`code-bug` tag may be a decoy when V1 failure is mathematical.** In
+   sft_residual_gemma4 the V1 failure was gradient-identity (∂L/∂ΔB = ∂L/∂B_applied),
+   a property of gradient descent; the tag suggested a coding defect. Triaging
+   V1 mechanism first prevents a wasted code-fix loop.
+5. **Composition claims require genuine routing or simultaneous activation.**
+   `REAL_ADAPTER_PATHS[domain] -> path` is the tautological-routing fingerprint.
+   Applies here (K1067) exactly as it did for n25_composition (K1060/K1061).
+6. **Hot-add / hot-remove claims require a distinction between router update
+   and weight activation.** V1 timed only the dict mutation (0.004 ms), which is
+   guaranteed O(1) by Python dict semantics — it says nothing about the
+   adapter-load I/O Theorem 3 is actually about. Any future V3 must time the
+   weight read, not the registry update.
+
 ## Summary
 
 Verified that adding a new domain adapter to an N-adapter registry using exclusive routing:

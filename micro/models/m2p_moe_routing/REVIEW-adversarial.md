@@ -1,4 +1,59 @@
-# Peer Review: M2P Domain Conditioned
+# Peer Review: M2P MoE Routing
+
+## V2 Rerun Review (audit-2026-04-17, metric-swap) — 2026-04-18
+
+### Verdict: KILL
+
+### Adversarial checklist (a)–(s)
+
+| Check | Result |
+|---|---|
+| (a) results.json `verdict`=KILLED vs DB status `killed` | consistent ✓ |
+| (b) `all_pass=false` with DB=killed | consistent ✓ |
+| (c) PAPER.md verdict line ("KILLED. Closing on K860") — no PROVISIONAL/etc. | ✓ |
+| (d) `is_smoke=false` + `ran=true` — full run, not smoke | ✓ |
+| (e) MATH.md git diff: §K (K860 spec) appended. KC #860 was already registered on the DB row (2026-04-07 evidence) — §K formalises, does not add or relax | ✓ no retroactive KC change |
+| (f) Tautology sniff: K860 measures `mean_d max_e softmax(router(d))[e]` — a real learned parameter, not identity | ✓ |
+| (g) K860 in code (`mean_max_route_weight ≥ 0.50`) matches MATH.md §K.1 definition and DB KC title | ✓ |
+| (h) Composition form: `expert_outputs[e]` computed per-expert then `Σ w_e · expert_outputs[e]` (soft-MoE), B-matrices decoded from mixed memory — no `sum(lora_A)` cross-product | ✓ |
+| (i) `scale=2.0` (lines 460, 480) — well below the 12/20 unsafe range | ✓ |
+| (j) Per-sample domain_id passed through training/eval loops; no `route(val[d][0])` shortcut | ✓ |
+| (k) No `shutil.copy` of a sibling adapter | ✓ |
+| (l) No hardcoded `{"pass": True, ...}` in KC dict | ✓ |
+| (m) MATH.md target (toy GPT d=64 N=4) matches model actually loaded in code | ✓ no proxy substitution |
+| (m2) Skill evidence: code uses `mx.eval`, `mx.clear_cache`, `mx.reset_peak_memory`, `nn.value_and_grad`, phased execution, `mx.set_memory_limit`/`set_cache_limit`. Idiomatic MLX; no torch-style module mutation | ✓ |
+| (n) Not a thinking-mode MCQ eval; N/A | N/A |
+| (o) n=5 domains on K860 (mean over domains) | small but matches MATH.md §K.1 |
+| (p) No synthetic padding | ✓ |
+| (q) Baseline cos 0.9956 cited from Finding #341 (not drift-prone; measured this run 0.9774) | ✓ |
+| (r) PAPER.md V2 prediction-vs-measurement table present | ✓ |
+| (s) Math sound. Predicted m̄ ≈ 0.25 ± 0.10; measured 0.3432 (edge of predicted band, matches FAIL side) | ✓ |
+
+### Why this kill is load-bearing
+
+Pre-registered prediction (MATH.md §K.2 — committed before the run per git diff) stated K860 FAIL with m̄ ≈ 0.25 ± 0.10. Measured m̄ = 0.3432 — inside the predicted band. Auxiliary diagnostics reinforce the kill: H̄/ln(4) = 0.966 (96.6% of uniform entropy), 3/4 unique argmax experts (expert_3 ignored), B-matrix |cos| = 0.9774 (unchanged from baseline 0.9956). Soft routing without auxiliary load-balance/entropy loss collapses under round-robin shared-gradient training — the same mode-collapse pattern as Finding #341, just expressed in the router degree of freedom.
+
+### Propagation
+
+- **Finding #574** (see below) — soft-router collapse generalises the Finding #341 mode-collapse pattern to a new degree of freedom.
+- Sibling `exp_m2p_hard_moe` (P2, open) directly addresses permanent-learning #1 (hard top-k Gumbel routing for gradient isolation). Do not auto-spawn — analyst gates.
+- `exp_m2p_teacher_distillation` / `exp_m2p_tfidf_routing_n5` inherit "routing as an open problem" — downstream constraint.
+
+### Permanently-learned rules (confirmed, propagate via analyst memory)
+
+1. Any "free" DOF under shared-gradient training collapses to centroid (B-matrix → embeddings → router). Fix must **force** domain identity, not "provide available signal".
+2. Soft routing without aux load-balance / entropy-penalising loss = saddle-minimiser uniform.
+3. metric-swap audit rule: always extract the DB-tracked KC in code, not just the script's internal heuristics.
+
+### Assumptions (for audit)
+
+- Interpreting `all_pass = k860` (MATH.md §K.4 explicitly promotes K860 to sole gate; DB row confirms it tracks only KC #860). K855/K856/K857 retained as auxiliary diagnostics only — this is correct.
+
+---
+
+## V1 Review (Domain Conditioned, retained for context)
+
+> Reviews the earlier "domain conditioning" experiment (additive embedding injection), not the MoE routing variant the DB tracks. Retained because the failure mechanism (gradient homogenisation under round-robin training) is the same.
 
 ## Experiment Type
 

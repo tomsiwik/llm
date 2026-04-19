@@ -47,6 +47,7 @@ Review `MATH.md`, `PAPER.md`, and `results.json` directly. Write `REVIEW-adversa
    - (o) Headline n < 15 → STATS_ERROR.
    - (p) Synthetic padding — if "N=25 domains" includes B=0 or random-Gaussian adapters, effective N is much smaller → REVISE the claim.
    - (q) Cited baseline (not measured in this run) + baseline drifted vs prior finding → flag.
+   - (t) **Target-gated kill (Finding #666)**: if the kill KC measures a proxy (classification accuracy, routing match, PPL, cosine, clustering purity) with NO paired target-metric KC (task accuracy, behavioral quality, oracle-gap), the kill is not safe. REVISE: add a target-metric KC. A proxy-FAIL with target-PASS is a finding about the proxy, not a kill. Before emitting `review.killed`, confirm both proxy AND target failed. Before emitting `review.proceed`, confirm a target metric exists and passed (not just the proxy).
 
    **Deliverables:**
    - (r) PAPER.md missing prediction-vs-measurement table → REVISE.

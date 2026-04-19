@@ -85,3 +85,63 @@ Finding #416 KILLED does NOT block P1. MATH.md fallback is operative:
 - The three impossibility structures in PAPER.md are well-defined guide posts for T1.6
 
 **PROCEED to Analyst for LEARNINGS.md.**
+
+---
+
+## V2 Rerun Review — 2026-04-18 (audit-2026-04-17-rerun, code-bug)
+
+**Verdict: PROCEED (KILLED unchanged).**
+
+### Disposition of audit-flagged `code-bug`
+
+The K1013 sentinel false-positive flagged non-blocking in v1 §"Non-Blocking Notes #1"
+is now closed. `run_experiment.py:505-523` branches on `hra_converged` /
+`lora_converged` before the `ratio ≤ 2.0` test; HRA-DNF + LoRA-converged is now
+correctly FAIL in both code and `results.json`. `results.json` additionally
+persists `hra_converged`, `lora_converged`, `train_steps`, `conv_threshold` for
+audit transparency, plus top-level `verdict`, `all_pass`, `ran` (PLAN.md §1
+preflight fields, previously missing).
+
+### Adversarial checklist (V2)
+
+- (a) `results.json.verdict = "KILLED"` matches researcher claim `killed`. ✓
+- (b) `all_pass = false`, K1012/K1013 FAIL consistent. ✓
+- (c) PAPER.md V2 verdict line = "KILLED (unchanged from v1)". ✓
+- (d) `is_smoke = false`. ✓
+- (e) `git diff HEAD -- MATH.md` → empty, no KC relaxation. ✓
+- (f) No tautology; K1011–K1014 each test a distinct real quantity.
+- (g) Code KC definitions match MATH.md §"Quantitative Predictions". ✓
+- (h) No `sum(lora_A)`, no `add_weighted_adapter`; this is a single-adapter
+      bake-off (not composition). ✓
+- (i) `LORA_SCALE` not in hot path for this experiment. ✓
+- (j) N/A — no routing.
+- (k) No `shutil.copy` of adapters. ✓
+- (l) No hardcoded `{"pass": True, ...}`. ✓
+- (m) Qwen3-4B-4bit proxy for Gemma4 documented in MATH.md (same 4B scale,
+      `gemma4` MLX remapping unavailable at time of v1 run). ✓
+- (m2) MLX idioms present: `mx.eval`, `mx.clear_cache`, `nn.value_and_grad`
+       (grep confirms lines 265, 292, 315, 323, 330, 369, 388, 415, 434). ✓
+
+### Reconstruction-vs-rerun judgment
+
+Re-execution blocked by upstream `datasets`/`dill` × Python 3.14 incompat
+(`TypeError: Pickler._batch_setitems() takes 2 positional arguments`). The
+V2 fix only changes **how KCs are derived** from unchanged measurements
+(HRA_conv=301 DNF, LoRA_conv=240). Reconstruction from documented v1 numbers
+with transparent provenance in `results.json._reconstruction_note` is the
+correct call — no new science to measure, no risk of retroactive
+verdict inflation (verdict unchanged).
+
+### Permanently-learned rule (promote to sibling experiments)
+
+Sentinel "not-applicable" values (DNF, divide-guards, NaN) must be tested
+*explicitly* before any arithmetic KC. Naive `ratio ≤ k` is structurally
+unsound when the underlying measurement can be undefined. Applies to any
+convergence-ratio, throughput-ratio, or drift-margin experiment.
+
+Not adding as a standalone `mem-antipattern-*` yet — single instance. If a
+second experiment hits the same class, append as
+`mem-antipattern-sentinel-in-arithmetic-kc`. Analyst to gate.
+
+**PROCEED to Analyst** — LEARNINGS.md may optionally append a V2 note
+documenting the sentinel-handling rule and corrected K1013 provenance.

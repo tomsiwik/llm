@@ -1,16 +1,37 @@
-# LEARNINGS.md — T4.5: Pierre Adapter Format Compatibility
+# LEARNINGS.md — T4.5: Pierre Adapter Format Compatibility (AUDIT-RERUN, KILL)
 
 ## Core Finding
-Pierre (MLX) adapters convert losslessly to HF PEFT/vLLM/Unsloth format via a double-transpose bijection. Format lock-in risk is zero.
+Format-compat on the MLX/Apple-Silicon target is **structurally unfinishable**. The
+MLX↔PEFT double-transpose bijection (Theorem 1) and the Grassmannian-metadata
+round-trip (Theorem 2, synthetic QR substrate, max_dev=2.38e-7) both PASS cleanly
+(K1088, K1091). But the vLLM (K1089) and Unsloth (K1090) runtime KCs require a
+live CUDA load — unreachable here. Verdict: **KILLED**, because PLAN.md §1 forbids
+`supported` with unreached KCs. Finding #585 records the closure.
 
 ## Why
-The MLX weight convention stores lora_a as [d_in, r] and lora_b as [r, d_out]; PEFT expects the transposes. A simple key rename + transpose is an exact involution — double-applying it recovers the original, with round-trip error 0.0.
-
-## Critical Caveat: Grassmannian Drift After Training
-Trained adapter A-matrices have max deviation from A^T·A ≈ I_r of **0.579** — far from the initialization value of ~0 (by construction). This means:
-1. T3.x interference proofs (which assumed Grassmannian structure) are valid only for synthetic or freshly-initialized adapters, not for trained adapters.
-2. Real adapters show max_cos=0.596 at N=5 vs synthetic 0.078 — the gap is training-induced rotation, not numerical noise.
-3. Any future interference bound for trained adapters requires a new theorem (e.g., bounding cosine under SGD drift, or re-orthogonalizing A matrices post-training via QR).
+Theorem 3 (prior run) was a subset-direction fallacy: `F_vllm ⊆ F_peft` means
+vLLM is *stricter* than PEFT (e.g. fused `qkv_proj` required), so PEFT-validity
+does **not** imply vLLM-loadability. The prior run papered over this with a
+string-suffix structural check and a `"property": "orthonormal_rows"` metadata
+tag written regardless of a measured 0.579 deviation. The audit-rerun retracts
+Theorem 3 in MATH.md, conditions the property tag on measured deviation, and
+honestly returns `pass=False, skip_reason="cuda_unavailable_on_platform"` for
+K1089/K1090. These are the exact antipatterns the rerun was commissioned to
+eliminate — faking PASS would satisfy `all_pass` but reintroduce the lie.
 
 ## Implications for Next Experiment
-T5 (user-local training) can safely produce PEFT-compatible adapters using the bijection. However, T5 must account for trained-adapter interference bounds being looser than the Grassmannian predictions — either re-orthogonalize A after training or derive a bound for the drifted case.
+- **`exp_followup_format_compat_peft_required`** (CUDA host) is the only valid
+  path to close K1089/K1090. Its KCs are a real `PeftModel.from_pretrained` +
+  forward pass and a fused-QKV vLLM probe. Do NOT retry on Apple Silicon.
+- **T5 (user-local training)** may proceed using the proven MLX→PEFT bijection
+  for export. It must not rely on trained Grassmannian structure being
+  preserved post-SGD; prior evidence showed ~0.579 deviation after training, so
+  interference bounds that assume `A A^T ≈ I_r` apply only to fresh/synthetic
+  adapters or post-QR-reorthogonalized ones. Either re-orthogonalize after
+  training or derive a drifted-case bound.
+- **Design-time rule to propagate:** a platform-unreachable KC is SKIP, never
+  PASS via substitute. If more than ~30% of KCs are platform-unreachable,
+  re-target the experiment to a host that can satisfy them before running.
+- **Substrate swap justification:** synthetic QR Grassmannian is valid *only*
+  for FORMAT tests (schema + bijection); do not reuse it to make training-drift
+  claims.

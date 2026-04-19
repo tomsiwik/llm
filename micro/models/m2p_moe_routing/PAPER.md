@@ -1,3 +1,83 @@
+# PAPER.md: M2P MoE Routing — V2 Rerun (audit-2026-04-17, metric-swap)
+
+## V2 Rerun (this run) — Verdict: KILLED on K860
+
+The DB row tracks **K860** ("Router falls back to uniform allocation across all
+domains"). The rev-1 code never extracted router weights — it reported only
+K855/K856/K857 (quality + Grassmannian). This V2 closes the audit gap by
+adding a router-uniformity measurement and gating the verdict on K860 (per
+MATH.md §K.4: DB-tracked KC is ground truth).
+
+### Pre-Registered Predictions vs. Measured (V2)
+
+| KC (locked in MATH.md §K) | Predicted | Measured | Status |
+|---------------------------|-----------|----------|--------|
+| **K860**: m̄_route ≥ 0.50 | FAIL: m̄ ≈ 0.25 ± 0.10 | **m̄ = 0.3432** | **FAIL** |
+| Aux: H̄ / ln(n_experts) ≈ 1.0 (uniform) | ≈ 1.0 | **0.9663** (96.6% of uniform) | matches FAIL |
+| Aux: K855_aux median quality ≥ 25% | improvement vs rev-1 (39.1%) NOT predicted | **12.1%** | FAIL |
+| Aux: K856_aux min quality ≥ −10% | rev-1 was −322% | **−377.0%** (repeat) | FAIL |
+| Aux: K857_aux Grassmannian \|cos\| ≤ 1e-5 | structural PASS | **0.0** | PASS |
+
+K860 measurement details:
+- Per-domain max route weight: arithmetic=0.2796, reverse=0.3826, repeat=0.4077, sort=0.3162, parity=0.3301
+- Mean across domains: **m̄ = 0.3432** (only 9pp above the uniform 0.25 baseline; threshold for PASS was 0.50)
+- Mean entropy H̄ = 1.3396 / max ln(4) = 1.3863 → **96.6% of uniform-maximum entropy**
+- 3 unique argmax experts out of 4 → **expert_3 receives no domain's argmax** (degenerate)
+
+### Conclusion (V2)
+
+The pre-registered prediction in MATH.md §K.2 is confirmed: the soft router
+collapses to near-uniform allocation under round-robin shared-gradient
+training. The MoE Routing variant of M2P does **not** rescue B-matrix
+centroid collapse — the routing degree of freedom collapses for the same
+information-theoretic reason as the B-output degree of freedom (Finding #341).
+B-matrix |cos| = 0.9774 is essentially unchanged from the unconditioned
+baseline (0.9956); centroid_destabilized = False.
+
+**Verdict: KILLED.** Closing on K860.
+
+### Permanently Learned (propagate to siblings)
+
+1. **Soft routing without auxiliary loss collapses.** A learned router with
+   no load-balancing or entropy-penalising loss term has no gradient
+   incentive to specialise — uniform allocation is a saddle minimiser of the
+   round-robin sum. Any future MoE-style M2P variant must include either
+   (a) hard top-k gating with Gumbel noise, or (b) an explicit
+   load-balance / entropy-regularising auxiliary loss (Switch Transformer
+   §2.2; arXiv:2101.03961).
+2. **Mode collapse generalises across degrees of freedom.** Whichever
+   parameter is "free" under shared-gradient training will collapse —
+   B-matrices in rev-1 of m2p_distillation_toy, embeddings in
+   m2p_domain_conditioned, router weights here. The fix must inject
+   **forced** domain identity, not "available" domain signal.
+3. **Audit pattern: always extract the DB-tracked KC.** The rev-1 code
+   measured everything except K860, the one criterion the DB uses to gate
+   the verdict. metric-swap audits are always real bugs even when the run
+   "works" — verdict and KC must be tied to the DB row, not to the script's
+   internal heuristics. (Same lesson as exp_m2p_loss_norm V2 K859.)
+
+### Sibling Work (do not auto-spawn — analyst gates)
+
+- `exp_m2p_hard_moe` (already open in DB, P2): hard top-1 Gumbel routing
+  for absolute gradient isolation between experts. Directly addresses
+  permanent-learning #1.
+- A "K860 v2" experiment with switch-style load-balancing loss would be
+  the minimum-mechanism follow-up if hard top-1 is too aggressive.
+
+---
+
+## Original V1 Material (retained for context — describes a stale "domain
+## conditioning" run, NOT the MoE routing variant the DB tracks)
+
+> NOTE: The text below was authored before the audit; it describes an
+> earlier "domain conditioning" experiment (additive embedding injection)
+> whose code was later replaced by the MoE Routing variant
+> (`M2PTransformerMoE`) in `run_experiment.py`. K855/K856/K857 numbers
+> below come from the prior run, not this V2 rerun. Retained as context
+> because the failure mechanism (gradient homogenisation under round-robin
+> training) is the same — only the degree of freedom that collapses
+> changes (embeddings → router weights).
+
 # PAPER.md: M2P with Domain Conditioning Experiment Results
 
 ## Experiment Summary

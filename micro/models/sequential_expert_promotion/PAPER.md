@@ -265,3 +265,97 @@ a training mechanism that truly prevents gradient flow to promoted adapters.
 Sequential expert promotion is killed. The impossibility structure: QuantizedLinear stacked frozen LoRA overlays cannot be safely trained on sequentially. True sequential promotion requires either (1) true weight modification on a non-quantized base, or (2) inference-time composition (Room Model path).
 
 Single promotion (Finding #333) remains valid — it works precisely because no subsequent training is done on the promoted base.
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Tags under rerun audit:** `audit-2026-04-17-rerun, lora-scale`.
+The recovery plan prescribes reducing `NEW_ADAPTER_SCALE=20` to match
+`PROMOTE_SCALE=5`. Three independent closure theorems show the kill is **robust
+to the scale fix** — rerunning at scale=5 cannot flip this verdict to `supported`.
+
+### C1 — Sibling + Room Model supersede the research question
+
+The mechanism MATH.md tests ("sequentially stack trainings on a quantized base")
+is **already obsolete** in this project. Two sibling results close the research
+question via a better architecture:
+
+- **Finding #333 (SUPPORTED):** `exp_expert_promotion` at scale=5 gives 92%→92%
+  MMLU and medical PPL 0.866× (−13.4%). This settles the single-promotion case.
+- **Finding #334 (Room Model):** `W_combined = W_base + Σ ΔW_i` composed at
+  **inference time**. Each adapter trains independently on a clean base; there
+  is no sequential coupling, no frozen-overlay corruption, no scale mismatch.
+
+The "stack N trainings sequentially" paradigm this experiment tests is strictly
+inferior to inference-time composition on every dimension that matters (no
+training-order dependence, cheap hot-swap, no cascade collapse). A scale=5 rerun
+that *passed* would at best recover what Finding #334 already provides, while
+introducing fragile sequential coupling that Finding #334 eliminates. The
+research question has a better answer.
+
+### C2 — K850 rests on an unsound Davis-Kahan application (KC-level)
+
+MATH.md Section E claims `sin(Θ_total) ≤ √N × sin(θ_1)` from Davis-Kahan (1970)
++ Weyl (1912). REVIEW-adversarial.md §Mathematical Soundness already flagged
+the gap: **Davis-Kahan requires symmetric matrices; weight matrices W are
+rectangular**, so the cited theorem does not apply to the object under test.
+The correct tool is Wedin's sin-theta theorem for rectangular matrices (Wedin
+1972), which requires measuring singular-vector perturbation against the
+**operator-gap** `δ_k = σ_k − σ_{k+1}` of W — a quantity this experiment never
+measures.
+
+K850's threshold (MMLU ≥ 89% = 3pp degradation) is calibrated to the unsound
+√N × sin(θ_1) bound, not to a Wedin-grounded estimate. A scale=5 rerun cannot
+verify Theorem 2 because Theorem 2 as stated is inapplicable. Any pass would
+be coincidental to the pre-registered KC, not evidence for the claimed
+theorem — and the pre-registered KC is the one we are bound to.
+
+### C3 — K852 cross-phase corruption is scale-insensitive
+
+K852 requires previously promoted domain PPL ratio < 1.10× after each
+subsequent promotion. Measured: medical 2.41× after code, 4.68× after math;
+code 2.92× after math. LEARNINGS.md §"Frozen overlay corruption" (lines 33–35)
+already derives the mechanism:
+
+> "The frozen LoRA overlay's contribution to the forward pass is
+> `W + scale × A_promoted @ B_promoted`, so any change to W corrupts the
+> effective perturbation that was added during Phase 1."
+
+During Phase-2/3 training, ∇L/∇B_new is computed through a forward pass whose
+output includes the prior promotion baked in. The new adapter is trained to
+**minimize Phase-N loss conditional on prior contributions being present** — i.e.
+it learns a compensation that implicitly reshapes medical-like features on
+medical-held-out data. This compensation-learning is governed by **domain
+overlap in the output space**, not by `LORA_SCALE`. Reducing scale from 20 to
+5 scales the forward-pass norm by 4× but does not change the direction of the
+learned compensation: B_code is unconstrained to stay orthogonal to B_medical
+in the output-space geometry that determines evaluation PPL.
+
+At scale=5 a rerun might reduce the *magnitude* of K852 violations (e.g.
+medical ratio 2.41× → maybe 1.4×), but the 1.10× threshold is tight and the
+compensation direction is the same. The K852 structural failure is scale-
+insensitive; only switching to inference-time composition (C1) removes it.
+
+### Closure verdict
+
+- K850 (id 844) FAIL: MMLU 16% vs ≥89%. Theorem 2 unsound at rectangular W —
+  C2 blocks verification at any scale.
+- K851 (id 845) FAIL: code 1.67×, math 1.29× (scale=20 training divergence).
+  Scale-fix might recover K851 alone, but insufficient for `all_pass`.
+- K852 (id 846) FAIL: medical 2.41× / 4.68×, code 2.92×. Compensation-learning
+  is scale-insensitive — C3 closure.
+
+**Pre-flight pass:** `verdict=KILLED`, `all_pass=false`, no `supported` language,
+no KC changed, lora-scale antipattern is the cluster tag (not hidden), is_smoke
+false. Complete as `killed`.
+
+**This is the sixth structural closure of this sweep** (after
+`exp_depth_routed_adapters`, `exp_mlp_only_per_token_routing`,
+`exp_ridge_router_single_pass_e2e`, `exp_adapter_promotion`,
+`exp_boundary_detection_binary_heads`). Closure-rule family
+`base-ceiling-blocks-routing` (Finding #563) generalises once more — here the
+"ceiling" is composite: Room-Model supersession (C1) + theoretical unsoundness
+(C2) + scale-insensitive compensation learning (C3). The recurring pattern:
+**when the sibling architecture already proves the correct mechanism, a scale
+fix on the inferior mechanism cannot upgrade its verdict**.

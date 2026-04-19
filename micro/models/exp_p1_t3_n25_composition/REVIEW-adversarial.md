@@ -1,60 +1,54 @@
-# REVIEW-adversarial.md — T3.4: N=25 Grassmannian Composition
+# REVIEW-adversarial.md — exp_p1_t3_n25_composition (V2 audit-rerun + tautological-routing)
 
-**Verdict: PROCEED**
+**Verdict: KILL** (2026-04-18)
 
-## Summary
-All 4 kill criteria PASS, results.json confirms measurements, PAPER.md has the
-prediction-vs-measurement table. Math is sound. PROCEED with 2 non-blocking caveats.
+## Supersedes
 
-## Positive Assessment
+The V1 PROCEED verdict below (2026-04-10) is retroactively invalid for two independent reasons:
+1. All 5 adapter `.safetensors` referenced by V1 Phase 2/3 are absent from disk — only `adapter_config.json` stubs remain. Upstream T2.1 (exp_p1_t2_single_domain_training) is KILLED 2026-04-18 (metric-swap + format-artefact); T2.6 adapter weights lost.
+2. V1's `run_experiment.py` hardcodes `REAL_ADAPTER_PATHS[domain]` in Phase 2/3, testing each adapter on its matched domain test set only — that is single-adapter eval, not composition. `mem-antipattern-002` applies. Theorem 3 ("exclusive routing → zero interference") is proven but never *exercised*: the routing function in V1 code reduces to `R(x) = ground_truth_domain(x)`.
 
-**K1059 (cosine < 1e-5)**: 2.2e-8 measured vs ≲6e-6 predicted. Using float64 QR →
-float32 downcast gives near-exact orthogonality. Theorem 1 construction is correct.
-This tightens Finding #406 (1.38e-5) by 630×.
+## V2 Adversarial Checklist (a)–(s)
 
-**K1060 (0/25 degraded)**: 0/25 degraded. The 20 synthetic B=0 domains are trivially
-interference-free by construction. The 5 real domains show positive gain over base.
-Theorem 3 (exclusive routing → zero interference) is correctly stated and verified.
+- **(a–d) Consistency:** results.json `verdict="KILLED"` matches DB `status=killed`; `all_pass=false`; PAPER.md "Status: KILLED" — no PROVISIONAL / PARTIALLY SUPPORTED leakage; `is_smoke=false`. ✓
+- **(e) KC integrity:** MATH.md git-diff adds only a V2 Audit Section *above* the V1 block. V1 Theorems 1–3 and the four thresholds (K1059 < 1e-5; K1060 0/25; K1061 base−2pp; K1062 < 1 GB) are byte-preserved. No post-hoc relaxation. ✓
+- **(f) Tautology sniff:** K1059 PASS is genuine math on random numpy QR (2.165e-8 across 42 layers × 300 pairs, seed=42) — not `e=0→0`. K1060/K1061 FAIL honestly flag "object unproducible" (cannot-measure), not `0==0`. K1062 PASS is explicitly annotated "moot" because no real weights exist. ✓
+- **(g) K-ID ↔ MATH ↔ DB:** K1059/K1060/K1061/K1062 in results.json match MATH.md §"V2 Kill Criteria routing" match DB kill criteria. ✓
+- **(h–m) Code↔math:** Pure numpy precondition probe. No `sum(lora_A...)`, no `add_weighted_adapter("linear")`, no `LORA_SCALE ≥ 12` (no training), no per-sample routing bug (no routing performed), no `shutil.copy`, no hardcoded `{"pass": True}` (`k1060_pass=False`, `k1061_pass=False` are explicit literals in code and results.json), no proxy-model substitution (no model loaded). ✓
+- **(m2) Skill invocation:** N/A — pure numpy + filesystem probe, no MLX code. ✓
+- **(n–q) Eval integrity:** No eval run, so n/base-accuracy/synthetic-padding/baseline-drift criteria do not bind. ✓
+- **(r) Deliverables:** PAPER.md V2 prediction-vs-measurement table present. ✓
+- **(s) Math:** Theorem 1 QR construction remains correct. Author's critique of V1 Theorem 3 *usage* (routing function = ground-truth-domain) is mathematically sound — single-adapter eval ≠ composition. ✓
 
-**K1061 (MMLU ≥ base-2pp)**: 56-88% on neutral subjects vs 4% base. The universal MCQ
-format transfer finding is behaviorally significant — adapters teach output format, not
-just domain knowledge. This is a genuine new insight, not just a metric.
+## Independent Re-verification
 
-**K1062 (< 1 GB)**: 48.45 MB vs 1 GB limit. 22× headroom.
+- `ls` confirms all 5 adapter directories contain only `adapter_config.json` — zero `.safetensors`. `adapters/code/` directory itself exists (unlike the sibling peer-comparison cases where it was absent).
+- DB entry for `exp_p1_t3_n25_composition` shows `status=killed` with K1059 ✓, K1060 ✗, K1061 ✗, K1062 ✓, plus 2026-04-18 fail evidence appended.
+- Upstream `exp_p1_t2_single_domain_training` DB verdict = `KILLED` (2026-04-18, metric-swap + format-artefact), consistent with PAPER.md / MATH.md claims.
+- Phase 1 Grassmannian measurement reproduces V1's 2.165e-8 exactly (deterministic seed=42, float64 QR → float32).
 
-## Non-Blocking Caveats
+## What's Genuinely New
 
-**Caveat 1 — Code base discrepancy in PAPER.md table:**
-Table shows "0%*" for Code base but results.json shows `"base": 20.0` (MMLU CS proxy).
-The asterisk note is misleading: the actual base in this run was 20% (MMLU CS), not 0%
-(HumanEval). K1060 still PASS (72% >> 20%), but the table entry is technically wrong.
-Correct fix: change table to "20%*" for Code base, update asterisk to note proxy metric.
-Non-blocking because K1060 criterion holds regardless.
+- **5th precondition-probe kill in 24 h.** Pattern now class-level standing (llama31_8b, qwen3_4b, mtbench_composed, sft_residual_gemma4, this).
+- **NEW standing rule #5 — Composition tests require genuine routing.** Hardcoding `ADAPTER_PATHS[domain]` in per-domain test loops is single-adapter eval mislabeled as composition. Genuine composition requires (a) simultaneous N-way activation with per-domain accuracy, or (b) a real router on mixed-domain test inputs. Specialization of `mem-antipattern-002` to composition experiments; useful as a standalone lint target.
+- V1 "supported" retroactively invalidated for two *independent* reasons — either alone sufficient.
 
-**Caveat 2 — MATH.md K1062 size prediction mismatch:**
-MATH.md predicts ~55-117MB (assuming full A+B per domain), actual is 48.45MB because
-synthetic adapters store only A (B=0). This is correct engineering but MATH.md doesn't
-acknowledge the mixed storage strategy. Non-blocking: measurement confirms the criterion.
+## Propagation Signal for Analyst
 
-## Structural Soundness
+- T2.1 rebuild (MedQA USMLE 5-choice, `max_tokens ≥ 512`, persisted `.safetensors`, `adapters/code/` artefacts) + T2.6 adapter recovery unblocks a **5-macro cluster** (peer_comparison_llama31_8b, peer_comparison_qwen3_4b, mtbench_composed, sft_residual_gemma4, n25_composition).
+- V3 of *this* experiment additionally requires a **code rewrite** dropping `REAL_ADAPTER_PATHS[domain]` and implementing genuine simultaneous-activation or per-sample routing — not a simple rerun even after adapters exist.
 
-- Theorems 1-3 are correctly stated and proven
-- HRA (2405.17484) citation is appropriate for orthogonal construction
-- Experiment correctly identifies that routing + orthogonality are BOTH necessary
-  (T3.1 KILLED showed orthogonality alone doesn't prevent simultaneous-activation collapse)
-- N=25 at 5.9% capacity (150/2560 dimensions) leaves substantial headroom to N_max=426
+## Assumptions / Judgment Calls
 
-## Behavioral Claim Validity
+- Accepted Phase 1 K1059 PASS as genuine inside a KILLED experiment. Rationale: QR orthogonality on a random matrix is independent of adapter state; the finding (2.165e-8, 3× better than Theorem 1's float32 bound) is a legitimate reusable math result. PAPER.md's prediction-vs-measurement table makes the mixed routing explicit, which is the honest disclosure.
+- Did not demand V1's ~75 MB of weights be recovered before KILL. Upstream T2.1 is itself killed; waiting for that rebuild is the correct next step, not re-litigation here.
 
-The "universal MCQ format transfer" finding is the most interesting behavioral claim:
-adapters teach format compliance that transfers across ALL MMLU subjects. This explains
-T3.2's base=4% (no MCQ formatting) vs adapter=62-77%. Valid observation, cites T3.2.
+## Antipattern Match
 
-## No Math Errors Found
+No **new** `mem-antipattern` warranted. `mem-antipattern-002` (tautological routing) correctly flagged the V1 design; the researcher's NEW rule #5 is a composition-specific specialization, not a new failure class.
 
-QR construction proof is standard linear algebra. Capacity bound (⌊d/r⌋ = 426) is
-correct. Exclusive routing interference-free proof is trivially correct.
+---
 
-## Verdict: PROCEED
+## V1 Review Archive (2026-04-10) — Superseded
 
-Experiment is clean. T3 tier is complete. Ready for T4 (production tier).
+Original V1 verdict was PROCEED based on all 4 KCs passing. Superseded by V2 audit above; V1 details retained in git history.

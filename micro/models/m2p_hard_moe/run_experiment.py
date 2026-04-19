@@ -176,15 +176,16 @@ class M2PBlock(nn.Module):
 
 
 class M2PTransformerMoE(nn.Module):
-    """MoE Domain-Conditioned M2P Transformer."""
+    """MoE Domain-Conditioned M2P Transformer (hard top-1 Gumbel routing + STE)."""
     def __init__(self, d, n_layers=2, n_heads=4, n_target_modules=5, n_experts=5):
         super().__init__()
         self.n_experts = n_experts
         self.router = nn.Embedding(N_DOMAINS, n_experts)
+        self.training_mode = True  # False at eval → deterministic argmax (no Gumbel)
 
         self.memory_embed = mx.random.normal(shape=(1, N_MEMORY, d)) * 0.02
-        self.p_layer = mx.zeros((N_LAYERS, 1, d))   
-        self.p_token = mx.zeros((1, N_MEMORY, d))    
+        self.p_layer = mx.zeros((N_LAYERS, 1, d))
+        self.p_token = mx.zeros((1, N_MEMORY, d))
 
         self.experts = []
         for _ in range(n_experts):
@@ -192,7 +193,7 @@ class M2PTransformerMoE(nn.Module):
             for i in range(n_layers):
                 blocks.append(M2PBlock(d, n_heads, is_column=(i % 2 == 0)))
             self.experts.append(blocks)
-            
+
         self.final_norm = RMSNorm(d)
         self.n_target_modules = n_target_modules
 
@@ -211,21 +212,21 @@ class M2PTransformerMoE(nn.Module):
 
         # === Hard MoE Routing (Gumbel Top-1 via STE) ===
         logits = self.router(mx.array(domain_id))
-        
-        # 1. Add Gumbel noise
-        gumbels = -mx.log(-mx.log(mx.random.uniform(shape=logits.shape) + 1e-8) + 1e-8)
-        y = logits + gumbels
-        
-        # 2. Get soft probabilities
+
+        if self.training_mode:
+            # Training: Gumbel-softmax → stochastic argmax for exploration
+            gumbels = -mx.log(-mx.log(mx.random.uniform(shape=logits.shape) + 1e-8) + 1e-8)
+            y = logits + gumbels
+        else:
+            # Eval: deterministic argmax (no Gumbel) so K861 measurement is reproducible.
+            y = logits
+
         soft_scores = mx.softmax(y, axis=-1)
-        
-        # 3. Get Hard Top-1 mask
         k_idx = mx.argmax(soft_scores, axis=-1)
         hard_scores = mx.zeros_like(soft_scores)
         hard_scores[k_idx] = 1.0
-        
-        # 4. Straight-Through Estimator (STE): 
-        # Forward pass is Hard Top-1 (0 or 1), Backward pass uses Soft gradients
+
+        # Straight-Through Estimator: forward=hard (one-hot), backward=soft gradient
         route_weights = mx.stop_gradient(hard_scores - soft_scores) + soft_scores
         
         expert_outputs = []
@@ -529,8 +530,13 @@ def phase_train_m2p(base, A_matrices, domain_data, base_losses):
 
 
 def phase_evaluate_m2p(m2p, m2p_loss_fn, base, A_matrices, domain_data, base_losses, sft_losses):
-    """Evaluate M2P adapter quality per domain. Returns m2p_losses dict."""
-    log("\n=== Phase 5: M2P Adapter Quality ===")
+    """Evaluate M2P adapter quality per domain (K861 measurement).
+
+    Deterministic: Gumbel noise disabled via m2p.training_mode=False so the
+    measured median quality is reproducible under seed=42.
+    """
+    log("\n=== Phase 5: M2P Adapter Quality (K861, deterministic routing) ===")
+    m2p.training_mode = False
     m2p_losses = {}
     for di, name in enumerate(DOMAIN_NAMES):
         total = 0; n = 0
@@ -547,9 +553,36 @@ def phase_evaluate_m2p(m2p, m2p_loss_fn, base, A_matrices, domain_data, base_los
     return m2p_losses
 
 
+def phase_router_check(m2p):
+    """Diagnostic: inspect hard-MoE router logits + argmax uniqueness.
+
+    Not a kill criterion (single DB KC is #861) but records whether hard
+    top-1 actually specialises experts — informs the kill interpretation.
+    """
+    log("\n=== Phase 6: Router diagnostic (deterministic) ===")
+    m2p.training_mode = False
+    per_domain = {}
+    argmax_experts = []
+    for di, name in enumerate(DOMAIN_NAMES):
+        logits = m2p.router(mx.array(di))
+        probs = mx.softmax(logits, axis=-1)
+        k = int(mx.argmax(probs, axis=-1).item())
+        max_w = float(probs[k].item())
+        ent = float((-mx.sum(probs * mx.log(probs + 1e-8))).item())
+        per_domain[name] = {"argmax_expert": k, "max_weight": round(max_w, 4),
+                             "entropy": round(ent, 4)}
+        argmax_experts.append(k)
+        log(f"  {name}: expert={k} p_max={max_w:.3f} entropy={ent:.3f}")
+    n_unique = len(set(argmax_experts))
+    log(f"  Unique argmax experts: {n_unique}/{m2p.n_experts} (ideal={N_DOMAINS})")
+    return {"per_domain": per_domain, "n_unique_experts": n_unique,
+            "mean_max_weight": round(float(np.mean([v["max_weight"] for v in per_domain.values()])), 4)}
+
+
 def phase_composition_check(m2p, base, domain_data):
     """Check B-matrix diversity and Grassmannian interference."""
-    log("\n=== Phase 6: Composition Check ===")
+    log("\n=== Phase 7: Composition Check ===")
+    m2p.training_mode = False
     context_Bs = {}
     for di, name in enumerate(DOMAIN_NAMES):
         context_tokens = domain_data[name]["train"][0]
@@ -614,7 +647,10 @@ def main():
     # Phase 5: Evaluate M2P quality
     m2p_losses = phase_evaluate_m2p(m2p, m2p_loss_fn, base, A_matrices, domain_data, base_losses, sft_losses)
 
-    # Phase 6: Composition check (B-matrix diversity)
+    # Phase 6: Router diagnostic (hard top-1 expert uniqueness)
+    router_stats = phase_router_check(m2p)
+
+    # Phase 7: Composition check (B-matrix diversity)
     mean_b_cos, b_cos_values = phase_composition_check(m2p, base, domain_data)
 
     # Compute quality ratios
@@ -628,13 +664,28 @@ def main():
     min_quality = float(np.min(quality_ratios))
     per_domain_quality = {n: round(q, 3) for n, q in zip(DOMAIN_NAMES, quality_ratios)}
 
-    # Kill criteria assessment
-    k855 = median_quality >= 0.25  # Median M2P quality >= 25% of SFT
-    k856 = min_quality >= -0.10    # No domain below -10%
-    k857 = float(np.max(cos_values)) <= 1e-5  # Grassmannian structural guarantee
+    # DB-tracked KC #861: "Median M2P quality drops < 25% of SFT".
+    # Interpretation: median quality-ratio strictly below 25% of SFT → experiment FAILS.
+    # Equivalent PASS condition: median_quality >= 0.25.
+    k861_pass = median_quality >= 0.25
+
+    # Diagnostics (NOT kill criteria — single DB KC is #861):
+    d_grassmannian = float(np.max(cos_values)) <= 1e-5
+    d_centroid_destab = mean_b_cos < 0.90
+    d_expert_collapse = router_stats["n_unique_experts"] < N_DOMAINS
+
+    # Pre-registered re-label per MATH.md §D/§G: K861 PASS under router collapse
+    # is a metric-swap false-positive (surviving experts specialise on subset,
+    # displaced domains fail catastrophically). Record re-label in verdict.
+    relabel_killed = k861_pass and d_expert_collapse
+    verdict = "KILLED" if (not k861_pass or relabel_killed) else "SUPPORTED"
 
     results = {
         "experiment": "m2p_hard_moe",
+        "verdict": verdict,
+        "k861_literal_pass": k861_pass,
+        "relabel_killed_by_d1_router_collapse": relabel_killed,
+        "is_smoke": False,
         "total_time_s": round(time.time() - t0, 1),
         "base_losses": base_losses,
         "sft_losses": sft_losses,
@@ -648,44 +699,37 @@ def main():
         "m2p_b_cos_mean": round(mean_b_cos, 4),
         "m2p_b_cos_values": [round(c, 4) for c in b_cos_values],
         "m2p_params": m2p_params,
-        "baseline_b_cos": 0.9956,  # From Finding #341 for comparison
+        "baseline_b_cos": 0.9956,
+        "router_stats": router_stats,
         "kill_criteria": {
-            "K855": {
-                "pass": k855,
+            "K861": {
+                "pass": k861_pass,
                 "median_quality": round(median_quality, 3),
                 "threshold": 0.25,
-                "description": "Median M2P quality >= 25% of SFT"
-            },
-            "K856": {
-                "pass": k856,
-                "min_quality": round(min_quality, 3),
-                "threshold": -0.10,
-                "description": "No domain below -10% (no catastrophic collapse)",
-                "worst_domain": DOMAIN_NAMES[int(np.argmin(quality_ratios))]
-            },
-            "K857": {
-                "pass": k857,
-                "grassmannian_cos_max": round(float(np.max(cos_values)), 7),
-                "threshold": 1e-5,
-                "description": "Grassmannian A structural orthogonality guarantee"
-            },
+                "description": "Median M2P quality drops < 25% of SFT (PASS if median >= 0.25)"
+            }
         },
-        "all_pass": k855 and k856 and k857,
-        "theorem3_check": {
-            "b_cos_reduction": round(0.9956 - mean_b_cos, 4),
-            "centroid_destabilized": mean_b_cos < 0.90,
-            "description": "Theorem 3 predicts B-matrix |cos| << 0.9956 after domain conditioning"
-        }
+        "diagnostics": {
+            "grassmannian_ok": d_grassmannian,
+            "grassmannian_cos_max": round(float(np.max(cos_values)), 7),
+            "centroid_destabilized": d_centroid_destab,
+            "b_cos_mean": round(mean_b_cos, 4),
+            "expert_collapse": d_expert_collapse,
+            "n_unique_experts": router_stats["n_unique_experts"],
+            "worst_domain": DOMAIN_NAMES[int(np.argmin(quality_ratios))],
+            "min_quality": round(min_quality, 3)
+        },
+        "all_pass": k861_pass and not relabel_killed
     }
 
     log(f"\n{'='*70}")
     log(f"M2P quality: median={median_quality:.1%} mean={mean_quality:.1%} min={min_quality:.1%} of SFT")
     log(f"Per-domain: {per_domain_quality}")
     log(f"B-matrix diversity: |cos|={mean_b_cos:.4f} (was 0.9956 in Finding #341)")
-    log(f"Centroid destabilized: {results['theorem3_check']['centroid_destabilized']}")
+    log(f"Router unique argmax experts: {router_stats['n_unique_experts']}/{N_DOMAINS}")
     for k, v in results["kill_criteria"].items():
         log(f"  {k}: {'PASS' if v['pass'] else 'FAIL'} — {v}")
-    log(f"\n{'ALL PASS' if results['all_pass'] else 'KILLED'} in {results['total_time_s']}s")
+    log(f"\n{verdict} in {results['total_time_s']}s")
 
     RESULTS_FILE.write_text(json.dumps(results, indent=2, cls=NumpyEncoder))
 

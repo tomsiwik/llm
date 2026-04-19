@@ -1,5 +1,63 @@
 # C0.1: Port P0 Grassmannian + TF-IDF Composition to Gemma 4 E4B
 
+## V2 — Audit Reconstruction (2026-04-18, verdict: KILLED)
+
+**Trigger.** The `audit-2026-04-17-rerun` + `tautological-routing` tag required this
+experiment to be re-executed under the corrected-code regime. The current
+`run_experiment.py` already uses real TF-IDF routing (not the tautological
+`route(val[d][0])` pattern that flagged the audit tag), so the fix category was
+already applied before this iteration. **However, the rerun itself is not
+executable**: the prerequisite LoRA adapter weights
+(`adapters.safetensors` for math/code/medical under
+`exp_p1_t2_single_domain_training/` and for legal/finance under
+`exp_p1_t2_multi_domain_5/`) have been deleted; only `adapter_config.json` stubs
+remain. A live `experiment run` on 2026-04-18 exited immediately in Phase 1 with
+`ERROR: math adapter not found`. Retraining five Gemma 4 E4B adapters is far
+outside the scope of one researcher iteration.
+
+**Verdict correction under strict PLAN.md §1 KC discipline.**
+KC01 was measured at **93.2% < 95% threshold — FAIL**. The original Round 3
+PAPER.md below labeled this outcome `SUPPORTED with caveat`, arguing that the
+miss is a "corpus problem, not an algorithm problem." That reframing is the
+`kc_swap_after_failure` antipattern: the kill criterion explicitly specifies an
+accuracy number, not a qualitative attribution of fault. Reclassifying a miss as
+an impossibility-structure observation does not make it pass. **Corrected top-
+level verdict: KILLED.**
+
+**What is genuinely supported.** KC02, KC03, KC04 all passed cleanly with
+machine-precision margins. The load-bearing P0 composition math (Grassmannian
+isolation + exclusive routing preserves ≥ 90% solo quality) **does** transfer
+to Gemma 4 E4B; that substantive result should be preserved as a separate
+finding (see `finding-add` recommendation below) even though the overall
+experiment is killed on KC01.
+
+**Assumptions (explicit).**
+- The Round 3 measurements in the original PAPER.md are accepted at face value;
+  the only change in V2 is the verdict derivation, not the numbers.
+- No KC was silently relaxed between MATH.md and now; the KC list in MATH.md is
+  identical to the evaluation above.
+- The composition math is not retroactively re-examined here — KC02/03/04 pass
+  with margins of 14 orders of magnitude (KC02), 0.0024 (KC03), and 0.20 (KC04),
+  so the supported-substantive-finding claim does not hinge on precision edge
+  cases.
+
+**Next steps (for C1 and downstream).**
+1. Run `experiment finding-add` to record "P0 Grassmannian composition transfers
+   to Gemma 4 E4B (KC02/03/04 verified)" as `status=supported` with explicit
+   KC01-fail caveat, so C1.1 (PoLAR Gemma 4) and the Grassmannian-orthogonality
+   claim on Gemma 4 are not lost by the top-level KILL.
+2. A new `exp_p1_p0_finance_routing_fix` experiment (already in blocks list)
+   should use domain-specific production corpora (Bloomberg/SEC/earnings
+   transcripts) instead of MMLU `high_school_macroeconomics`, and re-measure
+   KC01.
+3. Reproduction of the KC02/03/04 verification will require retraining the five
+   adapter weights that were deleted; `exp_p1_t2_multi_domain_5` has `status=
+   supported` and `exp_p1_t2_single_domain_training` is `killed` (on medical
+   KC). If C1 needs the composed-GSM8K number re-verified, that retraining
+   must happen first.
+
+---
+
 ## Abstract
 
 This experiment ports the proven P0 composition pipeline (Grassmannian A-matrices + TF-IDF

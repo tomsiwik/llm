@@ -128,6 +128,9 @@ Note: The code uses a flat reshape to extract B values from memory (`flat = memo
 |-----------|-------------|-------------------|-----------|
 | K847 | M2P quality ≥ 25% of SFT | c ∈ [0.30, 0.70] | ≥ 0.25 |
 | K848 | Grassmannian A orthogonality | cos ≤ 1e-5 (float32 precision) | Structural guarantee |
+| K859 | Repeat-domain B-matrix cos ≤ 0.6 (no mode collapse) | FAIL predicted (mode collapse persists under loss-norm) | ≤ 0.6 |
+
+**K859 rationale (audit-2026-04-17 strict KC):** The entire hypothesis of this experiment is that **per-domain loss normalization** prevents the gradient-homogenization → B-matrix centroid-collapse failure mode identified in Finding #341. If the fix works, the M2P should emit distinctly different B-matrices across domains, and the repeat-domain (lowest base loss, previously the catastrophic outlier at -329%) should have cos ≤ 0.6 with the other domains. If cos > 0.6, loss normalization is insufficient to break centroid collapse and a stronger mechanism (domain conditioning, per-domain M2P heads) is required. Prior evidence (2026-04-07 run, evidence #859): cos = 0.9785 → K859 FAIL. **Prediction for this rerun: K859 FAIL again** — loss normalization alone rescales gradient magnitudes but does not inject domain identity into the M2P input, so the B-output manifold remains single-mode.
 
 **K847 reasoning:** Finding #339 achieved 66.6% with harder (real) data. Synthetic patterns are more compressible. Expect PASS.
 
@@ -143,6 +146,7 @@ Note: The code uses a flat reshape to extract B values from memory (`flat = memo
 | Mean M2P quality ratio | 0.30–0.70 | **11.5%** (outlier: repeat = -146.8%) | **FAIL** |
 | K847 (quality ≥ 25%) | PASS | **FAIL** (dominated by repeat outlier) | — |
 | K848 (Grassmannian orthogonality) | PASS | **PASS** | — |
+| K859 (repeat B-matrix cos ≤ 0.6) | FAIL | see V2 results | — |
 
 ---
 

@@ -1,5 +1,44 @@
 # REVIEW — exp_p5_dccd_format_conditioning
 
+## V2 Audit Review (2026-04-18) — PROCEED maintained
+
+Tag `audit-2026-04-17-rerun`. Rerun not executable (prereq adapter weights
+deleted: medical q_proj and SOAP v_proj+o_proj). Researcher reconstructed
+`results.json` + PAPER.md audit header from 2026-04-11 N=10 measurements
+(verbatim). MATH.md unchanged (single commit in git, no KC swap).
+
+**Adversarial checklist (all clear):**
+- (a) `results.json.verdict = "KILLED"` matches DB `--status killed` ✓
+- (b) `all_pass = false` with 2/3 KC fail ✓
+- (c) PAPER.md verdict line "KILLED" (no PROVISIONAL/PARTIAL) ✓
+- (d) `is_smoke = false` (N=10 full spec, smoke threshold N=3) ✓
+- (e) MATH.md git-clean, KCs #1267/#1268/#1269 unmodified post-run ✓
+- (f) No tautological KC — pass/fail computed from measurements ✓
+- (h) No buggy composition op in run_experiment.py (grep clean for
+  `sum(lora_A`, `add_weighted_adapter`, `combination_type`) ✓
+- (i) No unsafe LORA_SCALE ≥ 12 (inherits scale 2 from both source
+  adapters) ✓
+- (j) No routing (fixed two-phase pipeline) ✓
+- (k) No `shutil.copy` of sibling adapter as new domain ✓
+- (m) Target Gemma 4 E4B 4-bit matches MATH.md ✓
+- (r) Prediction-vs-measurement table present in PAPER.md ✓
+
+**Closure soundness (N-independence):** K1267 closure anchored in Finding
+#479 (RLHF prior caps SOAP re-prompting ≤ 40%; SOAP-only adapter itself
+reaches only 60% < 70%). K1268 closure anchored in lossy re-prompting
+channel (38% keyword loss is architectural, not sampling). Neither gap
+closes at N=100. Structural, not statistical.
+
+**Substantive finding preserved:** DCCD temporal separation conclusively
+eliminates #483 cross-projection catastrophe (K1269 PASS, Theorem 2
+verified). The kill is on the *re-prompting implementation* of Phase 2,
+not the temporal-separation principle — Analyst should surface this
+distinction so the theorem is not lost under the top-level KILL.
+
+V1 review below stands as-is.
+
+---
+
 ## Verdict: PROCEED (KILLED experiment, findings valid)
 
 ## Summary

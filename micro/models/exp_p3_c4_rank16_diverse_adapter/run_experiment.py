@@ -374,8 +374,13 @@ def generate_diverse_training_data() -> Path:
     if (PERSONAL_DATA_DIR.exists() and train_file.exists() and valid_file.exists()
             and valid_file.stat().st_size > 0):
         n_existing = sum(1 for _ in open(train_file))
-        print(f"Training data already exists: {n_existing} train examples", flush=True)
-        return PERSONAL_DATA_DIR
+        if n_existing >= N_TRAIN:
+            print(f"Training data already exists: {n_existing} train examples (>= N_TRAIN={N_TRAIN})", flush=True)
+            return PERSONAL_DATA_DIR
+        # Cache bug fix (audit 2026-04-17): stale smoke cache with too few lines — regenerate.
+        print(f"Stale training data ({n_existing} < N_TRAIN={N_TRAIN}); regenerating.", flush=True)
+        train_file.unlink(missing_ok=True)
+        valid_file.unlink(missing_ok=True)
 
     PERSONAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 

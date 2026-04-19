@@ -210,3 +210,46 @@ experiments' functional forward pattern.
 5. **[ADVISORY] Per-layer structure:** Replace mean-pooling with layer positional
    embeddings per SHINE architecture.
 6. **[ADVISORY] LR warmup:** Add 100-200 step linear warmup; reduce LR to 5e-5.
+
+---
+
+## V2 Finalize Review (2026-04-18, reconstruction-only)
+
+Researcher re-finalized this experiment today to attach a results.json. No re-run.
+Original 876s run executed 2026-04-07; all 5 MD artifacts were committed in 7b1cd80
+but the results.json was never committed (`micro/**/results.json` is in `.gitignore`).
+Researcher reconstructed it from PAPER.md's prediction-vs-measurement table and
+attached an explicit `_reconstruction_note` for audit transparency.
+
+Adversarial checklist for the reconstruction:
+
+- (a) results.json `verdict=KILLED` matches DB `status=killed` and `--status killed` claim → clean
+- (b) `all_pass=false`, K911/K912 both fail, consistent with KILLED → clean
+- (c) PAPER.md verdict context contains no PROVISIONAL / PARTIALLY / INCONCLUSIVE
+  (word "degenerate" appears only in root-cause prose, not in verdict) → clean
+- (d) `is_smoke=false`, full N=200 eval, 1000 training steps → clean
+- (e) `git diff HEAD -- MATH.md` empty → no KC drift since reg → clean
+- (f) No tautology — K911 is M2P acc vs SFT acc (real measurement); K912 is
+  a threshold trigger on the same ratio → clean
+- (g) Code at run_experiment.py:715-716 implements the `layer.self_attn.{q,v}_proj.lora_b
+  = b_by_key[...]` mutation that PAPER.md names as the root cause; K909-K912 measure
+  the quantities MATH.md §D and DB rows describe → clean
+- (h)–(m) same as original review → clean (single-domain GSM8K, no composition
+  math; LORA_SCALE=5.0; no shutil.copy; no hardcoded pass dict; model matches)
+- (r) PAPER.md prediction-vs-measurement table present → clean
+
+Numerical cross-check (results.json vs PAPER.md):
+- base_accuracy: 0.20 ↔ 20.0% (40/200) ✓
+- sft_accuracy: 0.26 ↔ 26.0% (52/200) ✓
+- m2p_accuracy: 0.00 ↔ 0.0% (0/200) ✓
+- sft_final_loss: 0.9607 ↔ 0.9607 ✓
+- m2p_final_loss: 11.93 ↔ ~11.93 ✓
+- quality_ratio: -3.333 ↔ -3.33 ✓
+- total_time_s: 876 ↔ 876s ✓
+
+All numbers reconcile. Verdict **KILL** stands, unchanged from original review.
+
+**Finding recommendation:** add a finding capturing the MLX autodiff gradient-flow
+failure mode (module attribute mutation inside `nn.value_and_grad`-traced function).
+This is a novel architectural lesson, not a simple metric miss, and should
+propagate to any future hypernetwork-in-MLX experiment design.

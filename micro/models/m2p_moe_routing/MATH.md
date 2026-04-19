@@ -303,3 +303,64 @@ Effectively 0 new hyperparameters requiring tuning: the embedding table uses sta
 
 **Q6. Hack check: Am I adding fix #N to an existing stack?**
 No. The original experiment (Finding #341) had one mechanism (Grassmannian A + M2P B). Domain conditioning replaces the assumption that mean-pooled hidden states carry sufficient domain signal — it adds 320 parameters and zero extra loss terms. The number of mechanisms stays at one: "frozen Grassmannian A provides composition guarantee; M2P generates domain-specific B via conditioned forward pass." Not a stack.
+
+---
+
+## K. Audit-2026-04-17 Strict KC: K860 — Router Uniform-Fallback Test
+
+### Background
+
+This experiment is the **MoE Routing** variant (`M2PTransformerMoE`): the M2P body is replaced by N=4 expert sub-blocks selected via a learned per-domain router `nn.Embedding(N_DOMAINS, n_experts)`. Forward path:
+
+```
+route_weights[d, :] = softmax(router(d))     # (n_experts,)
+mem_d  = Σ_e route_weights[d, e] · expert_e(memory)
+B_d    = decode(mem_d)
+```
+
+The DB row tracks one strict pre-registered KC, derived from the prior 2026-04-07 evidence:
+
+> **K860**: "Router falls back to uniform allocation across all domains" (FAIL = catastrophic; PASS = router specializes by domain).
+
+The earlier rev-1 code measured K855/K856/K857 (quality and Grassmannian-cos) but **never extracted router weights**. That is the audit gap (`metric-swap` tag).
+
+### K.1 K860 Definition
+
+For each domain d ∈ {0, …, N_DOMAINS-1}, let `r_d := route_weights[d, :] ∈ ℝ^n_experts` (n_experts = 4 by construction).
+
+Let `m_d := max_e r_d[e]` and `m̄ := mean_d m_d`.
+
+```
+K860 PASS  iff  m̄ ≥ 0.50
+K860 FAIL  iff  m̄ ≤ 0.50
+```
+
+Uniform fallback gives r_d = (¼, ¼, ¼, ¼) so m_d = 0.25 and m̄ = 0.25. PASS requires the router to put ≥ 50% of its mass on a single expert per domain on average — i.e., genuine specialization, not weak preference.
+
+Auxiliary diagnostic (reported, not used as KC): `H̄ := mean_d entropy(r_d)`. Uniform = ln(4) ≈ 1.386; one-hot = 0.
+
+### K.2 Pre-Registered Prediction
+
+Prior evidence on the DB row (2026-04-07): `"K860 FAIL: MoE gating did not achieve domain-specific routing. Median quality 39.1%, repeat domain -322%. B-matrix centroid collapse unchanged."`
+
+The router is a `nn.Embedding(N_DOMAINS=5, n_experts=4)` with **no auxiliary load-balancing or entropy-penalising loss**, no top-k gating, and no Gumbel noise. Under the same gradient-homogenisation regime that produces B-matrix centroid collapse (Finding #341, repeated in rev-1), the soft router has **no incentive to specialise**: every expert sees gradient through every domain, and the equal-mass uniform distribution is a saddle minimiser of the round-robin loss landscape.
+
+**Predicted result:** K860 FAIL. Specifically, m̄ ≈ 0.25 ± 0.10 (within 10pp of the uniform 1/n_experts).
+
+This is consistent with the broader Finding #341 mode-collapse pattern: any degree of freedom that is **not directly forced** to be domain-specific (B-matrix outputs, memory tokens, router weights) collapses to a centroid under shared-gradient training.
+
+### K.3 What Would Falsify the Prediction
+
+- m̄ ≥ 0.50 with monotonically decreasing entropy over training would indicate the soft router specialised on its own — a positive surprise that would warrant follow-up to test whether the routed-expert architecture also breaks B-matrix collapse.
+- Per-domain m_d ∈ {0.5, 0.5, 0.5, 0.5, 0.5} with all five domains preferring the same expert would be PASS by m̄ but expose a degenerate "single-expert" failure mode — captured by the auxiliary `n_unique_argmax_experts` diagnostic.
+
+### K.4 Verdict-Consistency Note
+
+The rev-1 code's all_pass field combined K855/K856/K857. Since the DB tracks **only K860**, the experiment-level verdict in this V2 rerun is determined by K860 alone:
+
+```
+verdict = "ALL_PASS" if k860_pass else "KILLED"
+all_pass = k860_pass
+```
+
+K855/K856/K857 are retained as auxiliary diagnostics in `results.json` but do not gate the verdict. This matches the audit principle: the DB-tracked KC is the ground-truth contract.

@@ -111,3 +111,19 @@ The experiment has valid and useful findings (softmax eliminates binary head col
 4. **Remove or qualify the Grassmannian interchangeability explanation.** A-matrix orthogonality does not imply B-matrix interchangeability. Either derive the connection formally or present it as a hypothesis rather than an established root cause.
 
 5. **Add a random-adapter baseline.** If truly any adapter is interchangeable, then selecting a random adapter should give the same gamma as the softmax router. This is the cheapest possible falsification test and it is missing.
+
+## Closing Ratification (2026-04-19, DB-completion ratify)
+
+Researcher iter 55 marked the experiment killed (K#540 fail / K#541 pass) after the artifacts had pre-existed since 2026-03-28 with no DB-status update. All five REVISE fixes from the original review were addressed inline in PAPER.md "Phase 4: REVISE Fixes":
+
+1. LoRA activation magnitudes measured (in-domain 28,470 vs OOD 26,406, ratio 1.08×) — disproves "adapters do nothing" hypothesis.
+2. Centroid (45.8%) vs per-sample (40.2%) accuracy reported separately; both still < 50% threshold, K1 fails.
+3. Random-routing baseline (gamma 0.697) vs softmax (0.625) = 11.6% gap — softmax adds genuine value despite mediocre classification accuracy.
+4. Grassmannian "interchangeability" claim qualified to "semantic-cluster routing" — empirically grounded by activation+random-baseline data.
+5. Training-step ablation deferred (acknowledged limitation).
+
+Adversarial checklist: results.json verdict KILLED ↔ DB status killed ↔ PAPER "KILLED (K1 FAIL)" all consistent. KCs (#540/#541) pre-registered 2026-03-06; no relaxation. Non-tautological (K1 measures classification accuracy, K2 measures gamma — distinct quantities). LORA_SCALE=20.0 (antipattern (i)) is non-blocking for the kill since Phase 4 activation magnitudes refute scale-collapse explanation. No shutil.copy / no sum-LoRA bug / no thinking-suppression / N=24 domains × 50 val samples sufficient.
+
+**Verdict: PROCEED-WITH-KILL** (ratify existing 2026-03-28 REVISE → addressed → kill stands on K1 fail).
+
+Mechanistic finding worth preserving: softmax router achieves gamma_top1 = gamma_oracle (0.0% gap) via semantic-cluster routing — within-cluster misclassification is quality-benign. KCs tied to proxy metrics (classification accuracy) can produce "kill" verdict while the target metric (gamma vs oracle) is fully achieved through a different mechanism than the KC assumed. Reusable rule for future routing experiments: pair classification-accuracy KCs with target-metric oracle-gap KCs to avoid mechanism/measurement mismatch.

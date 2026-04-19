@@ -122,3 +122,40 @@ For T5.1 (300 iters, 16 layers, batch_size=2, seq_len≤256):
 - K1097 FAIL: if 300 iters insufficient → increase to 500 (still < 10 min)
 - K1096 FAIL: if model loading > 10 min (unlikely; measured ~60s in T4.3)
 - Style injection harder than rank-1 → increase rank to 8 (adapter still < 10MB)
+
+---
+
+## V2 Revision (2026-04-18, `thinking-mode` audit fix)
+
+Round-1 run (2026-04-10, 76pp gain) is retained as provenance but triggers
+antipattern `mem-antipattern-008` (`type: fix`): `MAX_TOKENS=120` truncated
+Gemma 4 E4B mid-`<|channel>thought...`, so base never reached any answer and
+scored 0% for the wrong reason. The 76pp gain then conflates style injection
+with thinking-suppression.
+
+**Surgical fix (does not change the theorem, only the measurement):**
+- `MAX_TOKENS` 120 → 4096 (antipattern-008 minimum: ≥4096).
+- `split_thinking()` added to record `avg_thinking_chars` on the base run.
+- K1097 now requires **both** `improvement_pp ≥ 5.0` **and**
+  `base_avg_thinking_chars > 0` — if base never entered thinking mode the
+  comparison is uninformative and K1097 fails regardless of pp-gain.
+
+**Predicted V2 numbers (after fix):**
+- Base compliance: still ~0% — the phrase "Hope that helps, friend!" remains
+  vanishingly rare in the pre-training distribution regardless of token budget.
+  Base will now emit a full answer (post-thought), so any 0% result is
+  pure absence-of-marker, not truncation.
+- Adapter compliance: ≥60% (training objective still applies; training data
+  contained no `<|channel>` tokens so adapter should continue to emit the
+  direct `answer + marker` format).
+- Improvement: ≥50pp expected; K1097 threshold 5pp is easily cleared if the
+  style-injection effect is real (as Theorem 1 predicts) rather than an
+  artifact of truncation.
+
+If after the fix `improvement_pp < 5pp` OR `base_avg_thinking_chars == 0`,
+K1097 is FAIL — Theorem 1's low-rank style-injection claim is not supported
+on this benchmark and a v2 experiment with a different preference marker is
+required. This keeps the KC falsifiable under the corrected measurement.
+
+Other KCs (K1096 training time, K1098 size, K1099 line count) are unaffected
+by the MAX_TOKENS fix (fix is eval-only).

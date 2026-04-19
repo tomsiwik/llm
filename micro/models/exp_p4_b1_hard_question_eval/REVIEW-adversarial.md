@@ -1,6 +1,29 @@
 # REVIEW-adversarial.md — P4.B1: Gap-Targeted Evaluation
 
-## Verdict: PROCEED (killed, structural analysis complete)
+## V2 Audit Reconstruction Review (2026-04-18)
+
+**V2 scope:** Audit tag `smoke-to-full` intended full N=15 rerun; rerun blocked by
+deleted P1 T2 adapter weights (all 5 domains). V2 closes on structural grounds.
+
+**Reviewer concerns against V2 closure:**
+
+1. *"Smoke kill should not block a full rerun."* Reconciled via closure C1/C2:
+   K1227 is N-independent (base 0.43-0.63, threshold 0.25 — cannot be moved by
+   sampling 15 questions instead of 5). K1228 is training-data-limited (V_train
+   disjoint from V_hard on advanced subdomain content), not rank- or N-limited.
+2. *"K1229 PASS at N=5 — maybe gap hypothesis survives."* Marginal pass (r=-0.3026)
+   does not rescue `all_pass=false` from K1227+K1228 FAIL. Even steel-manned to
+   reliable PASS at N=15, verdict stays KILLED.
+3. *"Reconstruction substitutes narrative for measurement."* Numbers (`base_scores`,
+   `adapted_scores`, per-question arrays) are the original smoke measurements from
+   2026-04-11 PAPER.md, preserved verbatim; V2 adds only derivation transparency
+   and `_reconstruction_note` provenance.
+
+**V2 verdict: PROCEED (KILLED, closure holds).** Finding #478 unchanged.
+
+---
+
+## Original Verdict: PROCEED (killed, structural analysis complete)
 
 ---
 

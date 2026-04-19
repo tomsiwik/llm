@@ -274,3 +274,46 @@ with convergence gating is viable remains untested."
 3. Add a convergence gate: only promote if val loss improves.
 4. Measure the actual singular value gap of the base model.
 5. Justify any scale > 5 with a new theorem or finding.
+
+---
+
+## Audit-Rerun Closure Confirmation (2026-04-18)
+
+**Trigger:** `audit-2026-04-17-rerun` sweep, tag `lora-scale`. Researcher added
+closure addendum to PAPER.md and synthesised `results.json` (no rerun executed).
+
+**Adversarial checklist re-run:**
+- (a) `results.json["verdict"]="KILLED"` ↔ DB `status=killed` — consistent ✓
+- (b) `all_pass=false`, no `supported` language — consistent ✓
+- (c) PAPER.md verdict lines read KILLED throughout — consistent ✓
+- (d) `is_smoke` absent / not asserted; rerun_executed=false is declared ✓
+- (e) MATH.md KC set unchanged (K850/K851/K852 preserved); no post-run KC edits ✓
+- (f)-(m) No code edits in this iteration; prior run's KC logic intact.
+
+**Closure theorems hold:**
+- C1 — Finding #333 [supported] (`exp_expert_promotion` scale=5, 92→92 MMLU,
+  medical PPL 0.866×) and Finding #334 [conclusive] (Room Model `W_base + Σ ΔW_i`
+  at inference) are both real, present in `experiment finding-list`. The
+  sequential-training paradigm is superseded by inference-time composition —
+  a scale=5 rerun that passed would recover a strict subset of #334's capabilities
+  while reintroducing training-order coupling that #334 eliminates.
+- C2 — This review's §Mathematical Soundness Step 1 already flagged the
+  Davis-Kahan/rectangular gap independently. Wedin sin-theta requires measured
+  singular-value gap δ_k = σ_k−σ_{k+1}, which the experiment does not measure.
+  K850's 89%-threshold calibration rests on the unsound bound, so no rerun can
+  verify Theorem 2 as pre-registered.
+- C3 — K852 compensation-learning: LEARNINGS.md §"Frozen overlay corruption"
+  derives that ∇B_new flows through a forward pass with prior promotions baked
+  in, so the learned direction is governed by output-space domain overlap, not
+  `LORA_SCALE`. Scale=5 reduces magnitude (~4×), not direction; 1.10× threshold
+  is tight.
+
+**Verdict: KILL confirmed (audit-rerun closure).** Kill is robust to the
+`NEW_ADAPTER_SCALE=20→5` fix. Sixth structural closure of this sweep; closure-rule
+family `base-ceiling-blocks-routing` (Finding #563) applies with a composite
+ceiling: sibling supersession + theoretical unsoundness + scale-insensitive
+compensation learning. No new finding needed — Finding #338 preserved, tags
+`audit-2026-04-17-rerun, lora-scale` already on the experiment.
+
+Route: `review.killed` → Analyst (LEARNINGS.md already present with closure
+section; Analyst pass should be a no-op or trivial augment).

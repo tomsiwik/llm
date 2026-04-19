@@ -1,5 +1,40 @@
 # PAPER.md — P8: v_proj+o_proj Domain Adapters for Behavioral Text Quality
 
+> ### AUDIT RE-CLASSIFICATION (2026-04-18) — verdict KILLED
+>
+> This experiment carries `audit-2026-04-17-rerun` + `tautological-routing` tags.
+> The original 2026-04-12 run was recorded as SUPPORTED in LEARNINGS.md on the
+> strength of K1314 (medical) and K1315 (composition). Re-review finds:
+>
+> - **K1315 is structurally tautological.** The pre-registered KC reads
+>   "5-adapter Grassmannian composition retains ≥80% of solo behavioral quality
+>   per domain." But `run_experiment.py::phase_composition_test` measures
+>   *sequential hot-swap serving* — each adapter loaded independently, evaluated
+>   against its own domain, at temperature 0.0. Under this protocol
+>   `comp_rate == solo_rate` by construction, so retention=1.00 is a mechanical
+>   artifact of the protocol, not evidence for Theorem 3 (parameter-space
+>   composition). The code comments even acknowledge "For true N=5 composition,
+>   Grassmannian A-matrices would be needed." Antipattern #6 — KC measures
+>   wrong object.
+> - **Re-classified KC results**: K1312 FAIL (math 0.55 < 0.60), K1313 FAIL
+>   (code 0.50 < 0.60), K1314 PASS (medical 0.70), K1315 FAIL on pre-reg KC
+>   (tautological). 1/4 pass → verdict KILLED.
+> - **What is preserved as a behavioral finding** (see LEARNINGS.md): v_proj+o_proj
+>   adapters strictly dominate q_proj adapters on behavioral vocabulary
+>   improvement across all 5 domains (math 30→55, code 20→50, medical 60→70,
+>   legal 20→35). The directional claim "output-path targets behavior, query-path
+>   targets attention" is supported by the data, but not credited against the
+>   pre-registered 60% absolute thresholds.
+> - **results.json** was reconstructed from the measurements in this PAPER.md
+>   without re-executing code, because the antipattern is structural
+>   (KC-vs-measurement mismatch), not a transient bug. No MATH.md edits were
+>   made — KC remains as pre-registered (commit 78538d2).
+> - **V2 path**: an `exp_p8_vproj_vs_qproj_v2` that (a) pre-registers K1315 as
+>   an actual parameter-space composition test (ΔW = Σ B_i A_i^T merged into
+>   weights, then single forward pass per query), or drops K1315, and
+>   (b) uses behavior-appropriate domain thresholds (pre-measure base model
+>   competence; predict ceiling effects prospectively rather than post-hoc).
+
 ## Summary
 
 v_proj+o_proj LoRA adapters consistently improve behavioral text quality over base

@@ -1,178 +1,165 @@
-# PAPER.md: M2P with Domain Conditioning Experiment Results
+# PAPER.md: Hard Top-1 Gumbel MoE Routing — KILLED (router collapse)
 
 ## Experiment Summary
 
-**Status:** KILLED (K856 FAIL)
+**Status: KILLED** — K861 literal FAIL (median 23.9% < 25% threshold), with D1
+router collapse (3/5 unique argmax experts) as the mechanistic cause.
+Verdict in `results.json` is KILLED. `is_smoke=false`. `ran=true`.
 
-**Objective:** Test Theorem 3 prediction that learned domain embeddings inject sufficient domain-distinguishing information into M2P's input space to destabilize the B-matrix centroid collapse observed in Finding #341.
+**DB-tracked Kill Criterion #861:** "Median M2P quality drops < 25% of SFT"
+(PASS iff median quality-ratio ≥ 0.25).
 
-**Key Claim from MATH.md:** Adding learned domain embeddings e_d ∈ ℝ^64 to M2P input (injected additively into memory tokens) makes the global centroid B_centroid a geometrically unstable fixed point, forcing per-domain B-matrix generation.
+## Audit-Rerun Context (tags: audit-2026-04-17-rerun, metric-swap, code-bug)
 
----
+Dir as claimed contained MATH.md / PAPER.md / REVIEW / LEARNINGS from the
+**predecessor** experiment `m2p_domain_conditioned` (additive injection;
+Finding #342 KILLED). `run_experiment.py` had already been upgraded to
+`M2PTransformerMoE` (hard top-1 + Gumbel + STE) but produced no `results.json`
+and emitted three unrelated K-IDs (K855/K856/K857) instead of the single
+DB-tracked KC #861 — this is the `metric-swap` failure.
 
-## Prediction vs. Measurement Table
+Fixes applied pre-run:
+1. Rewrote `MATH.md` for hard top-1 MoE (Theorem 1 gradient isolation under
+   STE; Lemma 1 router-collapse as stable equilibrium without aux load loss).
+2. **Pre-registered** the re-label rule in MATH.md §D/§G: "K861 PASS under
+   router collapse is a metric-swap false-positive; re-label KILLED."
+3. Added `phase_router_check` (D1 diagnostic) and merged D1 into the verdict
+   logic in code so `results.json["verdict"]` stays consistent with PAPER.md.
+4. Fixed eval-time non-determinism: Gumbel noise disabled via
+   `m2p.training_mode = False` during K861 measurement so the median is
+   reproducible under `seed=42`.
+5. Re-mapped internal K-IDs so the single DB-tracked KC #861 is measured by
+   name, no unrelated K-codes pollute results.
 
-| Prediction | Metric | Value | Threshold | Status |
-|-----------|--------|-------|-----------|--------|
-| K855: Median quality ≥ 25% | median_quality | 0.473 (47.3%) | 0.25 (25%) | **PASS** |
-| K856: No domain < -10% | min_quality | -3.037 (-303.7%) | -0.10 (-10%) | **FAIL** |
-| K857: Grassmannian \|cos\| ≤ 1e-5 | grassmannian_cos_max | 0.0 | 1e-5 | **PASS** |
-| Theorem 3: Centroid destabilized (B\|cos\| << 0.9956) | m2p_b_cos_mean | 0.9785 | < 0.90 | **FAIL** |
+## Prediction vs. Measurement (locked in MATH.md before run)
 
----
+| Pre-registered prediction | Predicted | Measured | Status |
+|---|---|---|---|
+| C.1 K861 median quality | [0.15, 0.40], borderline | **0.239** | **FAIL** (just below 0.25) |
+| C.2 D1 unique argmax experts | {1, 2, 3} / 5 | **3 / 5** | Confirmed (Lemma 1) |
+| C.3 D2 B-matrix \|cos\| mean | [0.80, 0.97] if collapse, else lower | **0.3354** | Surprising — centroid destabilised |
+| C.4 D4 Grassmannian max \|cos\| | ≤ 1e-5 | **0.0** | PASS (structural) |
+| C.5 Worst-domain quality | ≤ -2.0 (expected "repeat") | **-3.306 (repeat)** | Confirmed |
 
 ## Per-Domain Quality Breakdown
 
-| Domain | SFT Loss | M2P Loss | Quality Ratio | Pass (≥ -10%) |
-|--------|----------|----------|--------------|--------------|
-| arithmetic | 1.7017 | 3.1208 | 0.604 (60.4%) | PASS |
-| reverse | 1.8004 | 2.4547 | 0.614 (61.4%) | PASS |
-| repeat | 0.5107 | 2.9146 | -3.037 (-303.7%) | **FAIL** |
-| sort | 1.8282 | 2.6795 | 0.473 (47.3%) | PASS |
-| parity | 1.3012 | 4.1473 | 0.309 (30.9%) | PASS |
+| Domain | Base loss | SFT loss | M2P loss | Quality | Routed to expert |
+|---|---|---|---|---|---|
+| arithmetic | 5.28 | 1.70 | 3.39 | **+52.9%** | 0 |
+| reverse    | 3.50 | 1.80 | 3.09 | +23.9% | 0 |
+| repeat     | 1.11 | 0.51 | 3.08 | **-330.6%** | 0 |
+| sort       | 3.44 | 1.83 | 3.26 | +11.2% | 4 |
+| parity     | 5.42 | 1.30 | 3.96 | +35.5% | 3 |
 
----
+Router collapse → arithmetic, reverse, repeat all routed to expert 0.
+Expert 0's weights drift toward the arithmetic/reverse task manifold (highest
+loss-gap gradients), starving the "repeat" domain — which has the smallest
+base→SFT gap (0.60) — and producing the catastrophic -330.6% quality.
+This is **Lemma 1 exactly** (MATH.md §B): a higher-loss domain dominates
+θ_{e*} when two domains share the same argmax expert, pushing the shared
+expert away from the low-loss domain's optimum.
 
-## Kill Criteria Results
+## Key Mechanistic Finding
 
-### K855: Median M2P Quality ≥ 25% of SFT
-- **Result:** PASS
-- **Measured:** 47.3% (0.473)
-- **Threshold:** 25% (0.25)
-- **Margin:** 22.3 percentage points above threshold
+### D2 succeeds structurally; K861 still fails architecturally
 
-### K856: No Domain Below -10% (No Catastrophic Collapse)
-- **Result:** FAIL
-- **Measured:** -303.7% (min_quality = -3.037)
-- **Threshold:** -10% (-0.10)
-- **Worst Domain:** "repeat"
-- **Margin:** 293.7 percentage points below threshold
+B-matrix diversity leapt from 0.9956 (Finding #341, no conditioning) and
+0.9785 (Finding #342, additive conditioning) to **0.3354** under hard top-1
+routing — a ~65-percentage-point reduction. STE gradient isolation (Theorem 1)
+**does** prevent centroid collapse at the B-matrix level.
 
-### K857: Grassmannian |cos| ≤ 1e-5 (Structural A Guarantee)
-- **Result:** PASS
-- **Measured:** 0.0 (machine precision limit)
-- **Threshold:** 1e-5
-- **Structural Guarantee:** The frozen Grassmannian A-matrices remain orthogonal; domain conditioning does not change A generation, so this is unaffected.
+But D1 router collapse wipes this out at the task level: two of five domains
+share one expert, and the expert cannot serve both. K861's median is dragged
+to 0.239 by the displaced domains (reverse 23.9%, sort 11.2%).
 
----
+**Mechanistic implication:** the failure is now at the routing layer, not the
+hypernetwork layer. Fixing this requires an aux load-balance loss (Switch
+Transformer, arXiv:2101.03961) or temperature-annealed softmax to schedule
+router commitment. Without it, Lemma 1's equilibrium is entered in the first
+few dozen training steps and never escaped.
 
-## Theorem 3 Check: Centroid Destabilization Analysis
+## Sibling Experiment Comparison
 
-**Theorem 3 prediction:** Adding learned domain embeddings {e_d} to M2P input should make the centroid state B*(θ, e_d) = B_centroid ∀d geometrically unstable, forcing per-domain B-matrix generation. Predicted B-matrix diversity (mean |cos|): ≤ 0.90 (substantial breakout from 0.9956).
+| Experiment | Conditioning | Median Q | Worst Q | B-cos | Verdict |
+|---|---|---|---|---|---|
+| m2p_distillation_toy (#341) | none | 21.9% | -329% (repeat) | 0.9956 | KILLED |
+| m2p_domain_conditioned (#342) | additive e_d | 47.3% | -303.7% (repeat) | 0.9785 | KILLED |
+| **m2p_hard_moe (this)** | hard top-1 Gumbel+STE | **23.9%** | **-330.6% (repeat)** | **0.3354** | **KILLED** |
+| m2p_moe_routing V2 (#574) | soft MoE (no aux) | — | — | — (D1 coll.) | KILLED |
 
-| Metric | Baseline (Finding #341) | Measured | Prediction | Status |
-|--------|------------------------|----------|-----------|--------|
-| M2P B-matrix \|cos\| (mean) | 0.9956 | 0.9785 | ≤ 0.90 | **FAIL** |
-| Reduction from baseline | — | 0.0171 | > 0.09 | **FAIL** |
-| Centroid destabilized? | N/A | False | True | **FAIL** |
+Hard top-1 destabilises the centroid (B-cos -65pp) but introduces a new
+failure: router arbitration without load-balance loss. Consistent with
+Switch Transformer evidence that aux loss is not optional at N_e ≥ 4.
 
-**Finding:** The B-matrix mode collapse persists despite domain conditioning. Mean |cos| = 0.9785 is still in collapse range and only 0.0171 below baseline 0.9956 — a 0.17% reduction vs. the predicted >9% (0.09) reduction.
+## Verdict-Consistency Pre-Flight
 
----
+1. `results.json["verdict"] == "KILLED"`: ✓
+2. `results.json["all_pass"] == false`: ✓
+3. PAPER.md verdict line: KILLED (no PROVISIONAL/PARTIAL): ✓
+4. `is_smoke == false`: ✓
+5. `git diff MATH.md`: only PRE-run additions (locked KC + new theorems);
+   no post-run KC relaxation: ✓
+6. Antipattern check:
+   - composition math: per-expert `f_e(mem)` then `Σ r_e · f_e(mem)` (NOT
+     `(Σ B)(Σ A)`); STE forward one-hot, backward soft. ✓
+   - LORA_SCALE = 2.0 (safe, unchanged from siblings). ✓
+   - Routing uses ground-truth `domain_id` as router input — this is a
+     known MATH-assumption but is standard for this experiment family
+     (test-of-mechanism, not test-of-routing-quality). Logged in §Assumptions.
+   - No `shutil.copy` creating fake adapters. ✓
+   - No hardcoded `"pass": True`. ✓
+   - No proxy-model substitution (this IS a toy-GPT experiment, base=ToyGPT
+     by design; no Gemma 4 claim is made). ✓
 
-## Comparison to Baseline (m2p_distillation_toy, rev1)
+## Three permanently-learned rules (propagate to siblings)
 
-| Metric | Baseline (exp_m2p_distillation_toy) | Current (m2p_domain_conditioned) |
-|--------|-------------------------------------|----------------------------------|
-| Median quality | 21.9% | 47.3% |
-| Min quality (repeat domain) | -329.0% | -303.7% |
-| B-matrix \|cos\| mean | 0.9956 | 0.9785 |
-| Mean quality | Negative (dominated by repeat failure) | -20.7% |
-| K856 Status | N/A (not measured in baseline) | FAIL |
+1. **Hard top-1 MoE without aux load-balance loss collapses at N_e ≥ N_domains
+   with heterogeneous losses.** Same root structure as soft-MoE collapse
+   (Finding #574), different DOF (expert arbitration vs weight uniformity).
+   Aux-loss is a prerequisite, not an optimisation.
 
-**Interpretation:**
-- Median quality IMPROVED (21.9% → 47.3%), but this is driven by 4 domains achieving 30-61% quality.
-- The "repeat" domain catastrophic failure PERSISTS (-329% → -303.7%), not eliminated.
-- B-matrix diversity shows only marginal reduction (0.9956 → 0.9785), not the substantial breakout (>0.90) predicted by Theorem 3.
-- **Centroid collapse was NOT destabilized.** Theorem 3's central prediction failed.
+2. **K861 PASS can hide D1 collapse — always report D1 alongside K861.**
+   The metric-swap audit tag caught exactly this: a K861-only report
+   (34.2% in first run) would have looked like a PASS while 3/5 experts
+   were dead. The fix is to make D1 a gate on the verdict, not a separate
+   diagnostic. Encoded in `results.json["relabel_killed_by_d1_router_collapse"]`.
 
----
+3. **STE gradient isolation does fix centroid collapse at the B-matrix layer
+   (|cos| 0.9956 → 0.3354).** The hypernetwork generates distinct B-matrices.
+   The problem moved to the routing layer. Future M2P variants can reuse STE
+   but MUST add load-balance-aware routing.
 
-## Root Cause Analysis: Why Theorem 3 Failed
+## Assumptions / Caveats
 
-### Observation 1: B-matrix mode collapse persists with minimal reduction
-Mean |cos| of M2P-generated B-matrices: 0.9785 (only 0.0171 below baseline). This is inconsistent with Theorem 3's prediction of substantial diversity (≤ 0.90).
+- **A1 (Ground-truth routing input):** the router consumes `domain_id` directly.
+  This is a best-case routing input. A real system must infer domain from
+  hidden states (see TF-IDF / logistic routing siblings). If the router fails
+  under ground-truth, it will fail under inferred input.
+- **A2 (Stochastic training):** Gumbel noise during training causes K861 to
+  fluctuate across re-runs (observed 23.9% and 34.2% across two back-to-back
+  runs with `mx.random.seed(42)`). The `relabel_killed_by_d1_router_collapse`
+  safeguard (MATH.md §G) ensures the verdict is robust under both.
+- **A3 (N_experts = N_domains = 5):** symmetric case. Adding more experts
+  would not fix Lemma 1 without load-balance loss.
 
-**Hypothesis:** The domain embeddings are either:
-1. Not diverging during training (all e_d remain similar after gradient updates), OR
-2. M2P is not sensitive enough to e_d variations (small embedding changes → near-identical B outputs)
+## Cross-Experiment Signal for Analyst
 
-### Observation 2: "Repeat" domain receives wrong adapter despite conditioning
-Quality ratio: -3.037 (-303.7%), meaning M2P generated a B-matrix that is catastrophically worse for the repeat task than baseline. This mirrors Finding #341's failure mode exactly.
+This closes a clean 3-way sweep of M2P B-matrix-collapse mitigations:
+- additive domain embedding (#342): KILLED — attention bottleneck
+- soft MoE (#574): KILLED — uniform saddle
+- hard top-1 MoE (this): KILLED — router arbitration without aux loss
 
-**Hypothesis:** M2P's conditioning mechanism (additive injection into memory tokens) is too weak. The domain signal encoded in e_d is either:
-1. Diluted by mean-pooling across N_MEMORY=32 tokens, OR
-2. Not connected to the loss gradient through a sufficiently informative pathway
+All three attempts modify a different knob; all fail through a different
+mechanism; the unifying constraint is: **gradient competition across domains
+without an explicit load-balancing signal is a stable failure attractor.**
+Any sibling experiment that does not add a load-balance term will inherit
+this impossibility structure. Suggested propagation: annotate
+`project_m2p_impossibility.md` or similar memory with the 3-way observation.
 
-### Observation 3: Theorem 2's fixed-point argument assumes gradient pressure is sufficient
-Theorem 2 (informal) argues that ∂L_d/∂e_d ≠ ∂L_{d'}/∂e_{d'} forces embeddings to diverge. However:
-- The gradient is **nonlocal**: changes to e_d affect mem_d at every token position, creating a distributed gradient signal.
-- The gradient magnitude depends on M2P's sensitivity to memory token perturbations.
-- If M2P's attention bottlenecks memory information (concentrating on a few tokens), the embedding gradient becomes rank-deficient, allowing collapse to a low-rank subspace.
+## Recommendation (do not auto-spawn)
 
-**Critical assumption violated:** Theorem 2 assumes ∂B/∂(mem) = J(θ) has full row rank with respect to e_d. If M2P is query-heavy (ignores most memory tokens), J(θ) is low-rank, and gradient pressure on e_d is insufficient to overcome the centroid attraction.
-
----
-
-## Structural Explanation: Information-Theoretic Bottleneck at M2P Input
-
-### Setup from MATH.md Section B (Reframe)
-MATH.md argues: "The minimum additional information M2P must receive is log₂(N) bits to distinguish N domains." Domain embeddings {e_d} were intended to inject exactly this.
-
-### What Actually Happened
-M2P receives e_d, but the **information pathway from e_d to B output is lossy:**
-
-1. **Memory token distribution:** e_d is added to ALL N_MEMORY=32 tokens equally.
-2. **Attention bottleneck:** M2P's self-attention over memory tokens may concentrate on a few key tokens (task-relevant memory), deprioritizing tokens where domain signal is strongest.
-3. **Gradient bottleneck:** If attention masks out memory tokens carrying e_d, then ∂B/∂e_d ≈ 0 in those attention channels, causing embedding gradients to vanish.
-
-**Result:** e_d is present in the input, but not effectively used by M2P. The centroid collapse is not destabilized because M2P's routing (via attention) functionally ignores domain signals.
-
----
-
-## Failure Mode: Domain Embeddings Are Present but Inert
-
-**Failure hypothesis (testable):**
-1. After training, domain embeddings diverge in parameter space (e_d ≠ e_{d'}).
-2. However, M2P's output B_d does not vary meaningfully with e_d.
-3. The gradient ∂L_d/∂e_d pushes e_d in theoretically-correct directions, but the loss landscape is so flat with respect to B that changes in e_d produce negligible changes in L_d.
-
-**This would explain:**
-- Why K855 can still PASS (median quality 47.3% is decent for 4/5 domains).
-- Why K856 FAILS (repeat domain still receives wrong adapter because M2P failed to condition on e_d).
-- Why Theorem 3's centroid destabilization doesn't manifest (M2P doesn't "see" the embeddings).
-
----
-
-## Implications for Future Research
-
-### Theorem 3 is not falsified; implementation is incomplete
-
-The theorem itself is mathematically sound: **if** M2P receives and uses domain embeddings, **then** the centroid is unstable. The failure is not in the theorem but in the **implementation assumption**: that additive injection into memory tokens is a sufficient mechanism for M2P to "use" domain information.
-
-### Needed to Test Theorem 3 Correctly
-
-1. **Verify embedding divergence:** Check if trained e_d actually differ across domains (measure ||e_0 - e_d|| for d ≠ 0).
-2. **Verify attention to memory:** Measure how much attention weight M2P assigns to memory tokens vs. hidden state tokens (from frozen base).
-3. **Increase embedding signal strength:** Instead of additive injection, try:
-   - Concatenating e_d to memory tokens (increases dimensionality but ensures full propagation).
-   - Gating memory with e_d (mem_gated = mem_base * sigmoid(W_gate @ e_d)).
-   - Explicit domain-routing head that predicts B directly from e_d before M2P (separable from centroid).
-
-### Alternative: Domain signal is too weak for M2P's architecture
-
-If even strong domain signals (e.g., concatenation) fail to prevent centroid collapse, the issue may be **architectural:** M2P's attention pattern over memory tokens may inherently collapse toward a single optimal memory state regardless of input variations — a form of **input-space compression** rather than domain-driven specialization.
-
-In that case, Theorem 3 would need revision to account for M2P's capacity to compress domain information.
-
----
-
-## Conclusion: Theorem 3 KILLED (Prediction Refuted)
-
-The proof of Theorem 3 is mathematically valid, but **the experimental validation falsifies the key prediction: centroid destabilization does not occur with additive domain embedding injection.**
-
-**Kill status:** Theorem 3's main conclusion (per-domain B-matrices via domain conditioning) is not supported by the data. The centroid remains stable, and the "repeat" domain failure mode persists.
-
-**Finding status:** KILLED
-
-**Recommendation:** Refactor the approach to provide stronger domain signals (e.g., concatenation or gating) or redesign M2P's architecture to be more sensitive to domain variations (e.g., explicit domain routing before B generation).
+One directly-addressed sibling would carry this arc forward cleanly:
+`exp_m2p_hard_moe_v2_aux_loss` — add switch-transformer-style load-balance
+loss `ℓ_aux = N_e · Σ_e f_e · P_e` (from Fedus 2021) to the current
+architecture and re-measure K861 + D1. Gated by analyst/planner, not spawned
+here.

@@ -1,4 +1,7 @@
 {
+  "verdict": "KILLED",
+  "all_pass": false,
+  "closure": "audit-rerun closure 2026-04-18: kill robust to code-bug fix. C1 latency wall O(N_adapters*N_windows) forward passes = 600x over 5ms budget by construction; C2 overlapping-window independence violation inflates FP rate 20x regardless of boundary-selection heuristic; C3 K775 tolerance=w inflation does not rescue independent K776/K777 failures.",
   "experiment": "boundary_detection_binary_heads",
   "model": "microsoft/BitNet-b1.58-2B-4T",
   "n_domains": 5,

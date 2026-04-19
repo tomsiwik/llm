@@ -2,12 +2,16 @@
 """
 T2.1: Train single domain adapter on Gemma 4 E4B (math, code, medical)
 
-Kill criteria:
-  K1028: Math adapter GSM8K >= +5pp over base
-  K1029: Code adapter HumanEval pass@1 >= +5pp over base
-  K1030: Medical adapter MedMCQA >= +3pp over base
-  K1031: Training < 1 GPU-hour per domain (~2.5 min on M5 Pro)
-  K1032: Adapter size < 50MB per domain (predicted ~2.5MB)
+Kill criteria (canonical KC text from DB — do not edit):
+  K1028: Math adapter: GSM8K accuracy improves >= 5pp over base
+  K1029: Code adapter: HumanEval improves >= 5pp over base
+  K1030: Medical adapter: MedQA improves >= 3pp over base
+  K1031: Training cost < 1 GPU-hour per domain on A100/H100
+  K1032: Adapter size < 50MB per domain (compressed)
+
+Audit-2026-04-17-rerun fixes applied:
+  - metric-swap: MedMCQA → GBaker/MedQA-USMLE-4-options (K1030 now measures canonical KC metric)
+  - format-artifact: eval_gsm8k max_tokens 256 → 1024 (prevents Gemma 4 CoT truncation before '#### answer')
 """
 
 import gc
@@ -115,29 +119,32 @@ def prepare_code_data(data_dir: Path, n_train: int):
 
 
 def prepare_medical_data(data_dir: Path, n_train: int):
-    """Prepare MedMCQA training JSONL for medical adapter."""
+    """Prepare MedQA (USMLE, 4-option) training JSONL for medical adapter.
+
+    Canonical KC text (K1030): 'Medical adapter: MedQA improves >= 3pp over base'.
+    Dataset GBaker/MedQA-USMLE-4-options is USMLE-style with A/B/C/D options.
+    """
     from datasets import load_dataset
 
-    ds = load_dataset("openlifescienceai/medmcqa", split="train")
+    ds = load_dataset("GBaker/MedQA-USMLE-4-options", split="train")
     ds = ds.shuffle(seed=SEED).select(range(min(n_train, len(ds))))
 
     data_dir.mkdir(parents=True, exist_ok=True)
     train_file = data_dir / "train.jsonl"
     valid_file = data_dir / "valid.jsonl"
 
-    option_map = {0: "A", 1: "B", 2: "C", 3: "D"}
-
     records = []
     for ex in ds:
+        opts = ex["options"]  # dict {'A': ..., 'B': ..., 'C': ..., 'D': ...}
         question = (
             f"{ex['question']}\n"
-            f"(A) {ex['opa']}\n"
-            f"(B) {ex['opb']}\n"
-            f"(C) {ex['opc']}\n"
-            f"(D) {ex['opd']}"
+            f"(A) {opts['A']}\n"
+            f"(B) {opts['B']}\n"
+            f"(C) {opts['C']}\n"
+            f"(D) {opts['D']}"
         )
-        answer_letter = option_map.get(ex["cop"], "A")
-        answer_text = [ex["opa"], ex["opb"], ex["opc"], ex["opd"]][ex["cop"]]
+        answer_letter = ex["answer_idx"]  # 'A'|'B'|'C'|'D'
+        answer_text = ex["answer"]
         msg = {
             "messages": [
                 {"role": "user", "content": f"Answer this medical multiple choice question. Respond with only the letter (A/B/C/D).\n\n{question}"},
@@ -149,7 +156,7 @@ def prepare_medical_data(data_dir: Path, n_train: int):
     n_val = max(1, len(records) // 10)
     train_file.write_text("\n".join(records[n_val:]))
     valid_file.write_text("\n".join(records[:n_val]))
-    print(f"MedMCQA: {len(records)-n_val} train, {n_val} val", flush=True)
+    print(f"MedQA: {len(records)-n_val} train, {n_val} val", flush=True)
 
 
 # ─────────────────────────────────────────────
@@ -251,10 +258,12 @@ def eval_gsm8k(adapter_path=None, n_eval=50) -> float:
         else:
             formatted = prompt
 
+        # max_tokens=1024 to accommodate Gemma 4 CoT reasoning before the '#### <answer>'
+        # sentinel; prior 256 truncated CoT → base_gsm8k=0% format-artifact (audit).
         response = generate(
             model, tokenizer,
             prompt=formatted,
-            max_tokens=256,
+            max_tokens=1024,
             verbose=False,
         )
 
@@ -348,12 +357,15 @@ def eval_humaneval(adapter_path=None, n_eval=50) -> float:
     return acc
 
 
-def eval_medmcqa(adapter_path=None, n_eval=50) -> float:
-    """Evaluate MedMCQA accuracy. Returns accuracy 0-100."""
+def eval_medqa(adapter_path=None, n_eval=50) -> float:
+    """Evaluate MedQA (USMLE, 4-option) accuracy. Returns accuracy 0-100.
+
+    Canonical KC text (K1030): 'Medical adapter: MedQA improves >= 3pp over base'.
+    """
     from datasets import load_dataset
     from mlx_lm import generate, load
 
-    ds = load_dataset("openlifescienceai/medmcqa", split="validation")
+    ds = load_dataset("GBaker/MedQA-USMLE-4-options", split="test")
     ds = ds.shuffle(seed=SEED).select(range(min(n_eval, len(ds))))
 
     if adapter_path is not None:
@@ -361,18 +373,18 @@ def eval_medmcqa(adapter_path=None, n_eval=50) -> float:
     else:
         model, tokenizer = load(MODEL_ID)
 
-    log_memory(f"medmcqa-eval-loaded{'(adapter)' if adapter_path else ''}")
+    log_memory(f"medqa-eval-loaded{'(adapter)' if adapter_path else ''}")
 
-    option_map = {0: "A", 1: "B", 2: "C", 3: "D"}
     correct = 0
 
     for ex in ds:
+        opts = ex["options"]
         question = (
             f"{ex['question']}\n"
-            f"(A) {ex['opa']}\n"
-            f"(B) {ex['opb']}\n"
-            f"(C) {ex['opc']}\n"
-            f"(D) {ex['opd']}"
+            f"(A) {opts['A']}\n"
+            f"(B) {opts['B']}\n"
+            f"(C) {opts['C']}\n"
+            f"(D) {opts['D']}"
         )
         prompt = f"Answer this medical multiple choice question. Respond with only the letter (A/B/C/D).\n\n{question}"
 
@@ -391,8 +403,7 @@ def eval_medmcqa(adapter_path=None, n_eval=50) -> float:
             verbose=False,
         )
 
-        gt = option_map.get(ex["cop"], "A")
-        # Extract letter from response
+        gt = ex["answer_idx"]
         pred = response.strip().upper()
         pred_letter = None
         for letter in ["A", "B", "C", "D"]:
@@ -400,7 +411,6 @@ def eval_medmcqa(adapter_path=None, n_eval=50) -> float:
                 pred_letter = letter
                 break
         if pred_letter is None:
-            # Try to find letter anywhere in response
             m = re.search(r"\b([ABCD])\b", pred)
             if m:
                 pred_letter = m.group(1)
@@ -409,7 +419,7 @@ def eval_medmcqa(adapter_path=None, n_eval=50) -> float:
             correct += 1
 
     acc = correct / len(ds) * 100
-    print(f"MedMCQA accuracy: {correct}/{len(ds)} = {acc:.1f}%", flush=True)
+    print(f"MedQA accuracy: {correct}/{len(ds)} = {acc:.1f}%", flush=True)
 
     cleanup(model, tokenizer)
     return acc
@@ -459,10 +469,10 @@ def main():
     base_humaneval = eval_humaneval(adapter_path=None, n_eval=N_EVAL)
     log_memory("after-base-humaneval")
 
-    base_medmcqa = eval_medmcqa(adapter_path=None, n_eval=N_EVAL)
-    log_memory("after-base-medmcqa")
+    base_medqa = eval_medqa(adapter_path=None, n_eval=N_EVAL)
+    log_memory("after-base-medqa")
 
-    print(f"\nBase accuracy: GSM8K={base_gsm8k:.1f}%, HumanEval={base_humaneval:.1f}%, MedMCQA={base_medmcqa:.1f}%", flush=True)
+    print(f"\nBase accuracy: GSM8K={base_gsm8k:.1f}%, HumanEval={base_humaneval:.1f}%, MedQA={base_medqa:.1f}%", flush=True)
 
     # ── Phase 3: Train math adapter ───────────────────────
     print("\n=== Phase 3: Train math adapter ===", flush=True)
@@ -497,10 +507,10 @@ def main():
 
     # ── Phase 8: Evaluate medical adapter ─────────────────
     print("\n=== Phase 8: Eval medical adapter ===", flush=True)
-    med_medmcqa = eval_medmcqa(adapter_path=med_adapter, n_eval=N_EVAL)
+    med_medqa = eval_medqa(adapter_path=med_adapter, n_eval=N_EVAL)
     log_memory("after-medical-eval")
 
-    med_delta = med_medmcqa - base_medmcqa
+    med_delta = med_medqa - base_medqa
     print(f"Medical delta: {med_delta:+.1f}pp (K1030: {'PASS' if med_delta >= 3 else 'FAIL'})", flush=True)
 
     # ── Phase 9: Measure adapter sizes ────────────────────
@@ -527,12 +537,12 @@ def main():
         # Base accuracy
         "base_gsm8k_pct": round(base_gsm8k, 1),
         "base_humaneval_pct": round(base_humaneval, 1),
-        "base_medmcqa_pct": round(base_medmcqa, 1),
+        "base_medqa_pct": round(base_medqa, 1),
 
         # Adapter accuracy
         "math_gsm8k_pct": round(math_gsm8k, 1),
         "code_humaneval_pct": round(code_humaneval, 1),
-        "med_medmcqa_pct": round(med_medmcqa, 1),
+        "med_medqa_pct": round(med_medqa, 1),
 
         # Deltas
         "math_delta_pp": round(math_delta, 1),
@@ -552,7 +562,7 @@ def main():
         # Kill criteria
         "K1028_math_gsm8k": "PASS" if math_delta >= 5 else "FAIL",
         "K1029_code_humaneval": "PASS" if code_delta >= 5 else "FAIL",
-        "K1030_med_medmcqa": "PASS" if med_delta >= 3 else "FAIL",
+        "K1030_med_medqa": "PASS" if med_delta >= 3 else "FAIL",
         "K1031_train_cost": "PASS" if k1031_pass else "FAIL",
         "K1032_adapter_size": "PASS" if max(math_size_mb, code_size_mb, med_size_mb) < 50 else "FAIL",
 
@@ -567,7 +577,7 @@ def main():
     print("="*60, flush=True)
     print(f"K1028 Math GSM8K  {base_gsm8k:.1f}% → {math_gsm8k:.1f}% ({math_delta:+.1f}pp): {results['K1028_math_gsm8k']}", flush=True)
     print(f"K1029 Code HumanEval {base_humaneval:.1f}% → {code_humaneval:.1f}% ({code_delta:+.1f}pp): {results['K1029_code_humaneval']}", flush=True)
-    print(f"K1030 Med MedMCQA {base_medmcqa:.1f}% → {med_medmcqa:.1f}% ({med_delta:+.1f}pp): {results['K1030_med_medmcqa']}", flush=True)
+    print(f"K1030 Med MedQA   {base_medqa:.1f}% → {med_medqa:.1f}% ({med_delta:+.1f}pp): {results['K1030_med_medqa']}", flush=True)
     print(f"K1031 Train cost  {max_train_time_s:.0f}s max: {results['K1031_train_cost']}", flush=True)
     print(f"K1032 Adapter size {max(math_size_mb, code_size_mb, med_size_mb):.2f}MB max: {results['K1032_adapter_size']}", flush=True)
     print(f"Total time: {results['total_time_s']:.0f}s", flush=True)

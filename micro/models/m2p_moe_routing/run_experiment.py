@@ -557,6 +557,61 @@ def phase_composition_check(m2p, base, domain_data):
     return mean_cos, delta_cos
 
 
+def phase_router_check(m2p):
+    """K860 (audit-2026-04-17 strict KC): test whether router specialises by domain.
+
+    For each domain d, compute route_weights[d, :] = softmax(router(d)).
+    Report:
+      - max_route_weight per domain (m_d)
+      - mean across domains (m̄) — the K860 test statistic
+      - argmax expert per domain (degenerate-collapse diagnostic)
+      - entropy per domain (uniform = ln(n_experts) ≈ 1.386)
+
+    K860 PASS iff m̄ ≥ 0.50 (router specialises);  FAIL iff m̄ ≤ 0.50.
+    Pre-registered prediction (MATH.md §K.2): FAIL — router falls back to
+    uniform allocation (m̄ ≈ 0.25 ± 0.10).
+    """
+    log("\n=== Phase 7: Router Uniform-Fallback Check (K860) ===")
+    n_experts = m2p.n_experts
+    uniform = 1.0 / n_experts
+    per_domain_route = {}
+    per_domain_max = []
+    per_domain_argmax = []
+    per_domain_entropy = []
+    for di, name in enumerate(DOMAIN_NAMES):
+        logits = m2p.router(mx.array(di))
+        weights = nn.softmax(logits, axis=-1)
+        mx.eval(weights)
+        w = np.array(weights).astype(np.float64)
+        m_d = float(np.max(w))
+        am_d = int(np.argmax(w))
+        # Stable entropy: -Σ p log p with safe clip
+        ent_d = float(-np.sum(w * np.log(np.clip(w, 1e-12, 1.0))))
+        per_domain_route[name] = [round(float(x), 4) for x in w.tolist()]
+        per_domain_max.append(m_d)
+        per_domain_argmax.append(am_d)
+        per_domain_entropy.append(ent_d)
+        log(f"  {name}: route={per_domain_route[name]} max={m_d:.4f} argmax=expert_{am_d} H={ent_d:.4f}")
+    mean_max = float(np.mean(per_domain_max))
+    mean_entropy = float(np.mean(per_domain_entropy))
+    n_unique_argmax = int(len(set(per_domain_argmax)))
+    max_entropy = float(np.log(n_experts))
+    log(f"  Summary: m̄={mean_max:.4f} (uniform={uniform:.4f})  H̄={mean_entropy:.4f}/{max_entropy:.4f}  unique_argmax_experts={n_unique_argmax}/{n_experts}")
+    return {
+        "n_experts": n_experts,
+        "uniform_weight": round(uniform, 4),
+        "max_entropy": round(max_entropy, 4),
+        "per_domain_route_weights": per_domain_route,
+        "per_domain_max": [round(x, 4) for x in per_domain_max],
+        "per_domain_argmax": per_domain_argmax,
+        "per_domain_entropy": [round(x, 4) for x in per_domain_entropy],
+        "mean_max_route_weight": round(mean_max, 4),
+        "mean_entropy": round(mean_entropy, 4),
+        "entropy_uniform_ratio": round(mean_entropy / max_entropy, 4),
+        "n_unique_argmax_experts": n_unique_argmax,
+    }
+
+
 # ── Main ─────────────────────────────────────────────────────────────────
 
 def main():
@@ -601,6 +656,9 @@ def main():
     # Phase 6: Composition check (B-matrix diversity)
     mean_b_cos, b_cos_values = phase_composition_check(m2p, base, domain_data)
 
+    # Phase 7: Router uniform-fallback check (K860 — DB-tracked KC)
+    router_stats = phase_router_check(m2p)
+
     # Compute quality ratios
     quality_ratios = [
         (base_losses[n] - m2p_losses[n]) / (base_losses[n] - sft_losses[n])
@@ -613,13 +671,22 @@ def main():
     per_domain_quality = {n: round(q, 3) for n, q in zip(DOMAIN_NAMES, quality_ratios)}
 
     # Kill criteria assessment
-    k855 = median_quality >= 0.25  # Median M2P quality >= 25% of SFT
-    k856 = min_quality >= -0.10    # No domain below -10%
-    k857 = float(np.max(cos_values)) <= 1e-5  # Grassmannian structural guarantee
+    # K860 (audit-2026-04-17 strict KC, DB-tracked): router specialises by domain
+    #   PASS iff mean_max_route_weight >= 0.50 (router puts ≥50% mass on one expert per domain on average)
+    #   FAIL iff mean_max_route_weight <= 0.50 (uniform-fallback collapse)
+    k860_stat = router_stats["mean_max_route_weight"]
+    k860 = bool(k860_stat >= 0.50)
+
+    # Auxiliary diagnostics (not gating verdict — DB tracks K860 only)
+    k855 = bool(median_quality >= 0.25)
+    k856 = bool(min_quality >= -0.10)
+    k857 = bool(float(np.max(cos_values)) <= 1e-5)
 
     results = {
         "experiment": "m2p_moe_routing",
         "total_time_s": round(time.time() - t0, 1),
+        "is_smoke": False,
+        "ran": True,
         "base_losses": base_losses,
         "sft_losses": sft_losses,
         "m2p_losses": m2p_losses,
@@ -633,43 +700,56 @@ def main():
         "m2p_b_cos_values": [round(c, 4) for c in b_cos_values],
         "m2p_params": m2p_params,
         "baseline_b_cos": 0.9956,  # From Finding #341 for comparison
+        "router_stats": router_stats,
         "kill_criteria": {
-            "K855": {
+            "K860": {
+                "pass": k860,
+                "mean_max_route_weight": k860_stat,
+                "threshold": 0.50,
+                "uniform_baseline": router_stats["uniform_weight"],
+                "n_unique_argmax_experts": router_stats["n_unique_argmax_experts"],
+                "mean_entropy": router_stats["mean_entropy"],
+                "max_entropy": router_stats["max_entropy"],
+                "description": "Router specialises by domain (DB-tracked strict KC, audit-2026-04-17)"
+            },
+            "K855_aux": {
                 "pass": k855,
                 "median_quality": round(median_quality, 3),
                 "threshold": 0.25,
-                "description": "Median M2P quality >= 25% of SFT"
+                "description": "AUX: Median M2P quality >= 25% of SFT (not verdict-gating)"
             },
-            "K856": {
+            "K856_aux": {
                 "pass": k856,
                 "min_quality": round(min_quality, 3),
                 "threshold": -0.10,
-                "description": "No domain below -10% (no catastrophic collapse)",
+                "description": "AUX: No domain below -10% (not verdict-gating)",
                 "worst_domain": DOMAIN_NAMES[int(np.argmin(quality_ratios))]
             },
-            "K857": {
+            "K857_aux": {
                 "pass": k857,
                 "grassmannian_cos_max": round(float(np.max(cos_values)), 7),
                 "threshold": 1e-5,
-                "description": "Grassmannian A structural orthogonality guarantee"
+                "description": "AUX: Grassmannian A structural orthogonality (not verdict-gating)"
             },
         },
-        "all_pass": k855 and k856 and k857,
+        "all_pass": k860,  # DB tracks K860 only — verdict gated by K860 alone (MATH.md §K.4)
+        "verdict": "ALL_PASS" if k860 else "KILLED",
         "theorem3_check": {
             "b_cos_reduction": round(0.9956 - mean_b_cos, 4),
-            "centroid_destabilized": mean_b_cos < 0.90,
+            "centroid_destabilized": bool(mean_b_cos < 0.90),
             "description": "Theorem 3 predicts B-matrix |cos| << 0.9956 after domain conditioning"
         }
     }
 
     log(f"\n{'='*70}")
+    log(f"K860 (DB-tracked): m̄_route={k860_stat:.4f}  {'PASS' if k860 else 'FAIL'} (threshold ≥ 0.50; uniform = {router_stats['uniform_weight']:.4f})")
     log(f"M2P quality: median={median_quality:.1%} mean={mean_quality:.1%} min={min_quality:.1%} of SFT")
     log(f"Per-domain: {per_domain_quality}")
     log(f"B-matrix diversity: |cos|={mean_b_cos:.4f} (was 0.9956 in Finding #341)")
     log(f"Centroid destabilized: {results['theorem3_check']['centroid_destabilized']}")
     for k, v in results["kill_criteria"].items():
         log(f"  {k}: {'PASS' if v['pass'] else 'FAIL'} — {v}")
-    log(f"\n{'ALL PASS' if results['all_pass'] else 'KILLED'} in {results['total_time_s']}s")
+    log(f"\nVerdict: {results['verdict']} in {results['total_time_s']}s")
 
     RESULTS_FILE.write_text(json.dumps(results, indent=2, cls=NumpyEncoder))
 

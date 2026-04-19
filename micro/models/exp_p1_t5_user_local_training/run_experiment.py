@@ -60,7 +60,10 @@ N_TRAIN = 10 if IS_SMOKE else 40
 N_VALID = 3 if IS_SMOKE else 5
 N_TEST_MLX = 2 if IS_SMOKE else 5  # for mlx_lm test.jsonl (separate from compliance eval)
 N_TEST = 5 if IS_SMOKE else 25
-MAX_TOKENS = 120
+# Per antipattern-008: max_tokens ≥ 4096 so base model completes thinking chain
+# + final answer. At 120 base was truncated mid-<|channel>thought and gave
+# 0% compliance for the wrong reason (truncation, not absence of marker).
+MAX_TOKENS = 4096
 
 # Memory safety
 mx.set_memory_limit(mx.device_info()["memory_size"] - 8 * 1024**3)
@@ -277,12 +280,30 @@ def has_preference(text: str) -> bool:
     return PREFERENCE_MARKER in text
 
 
+def split_thinking(text: str) -> tuple[str, str]:
+    """Split Gemma 4 output into (thinking_chars, post_thinking_text).
+
+    Gemma 4 E4B emits `<|channel>thought\n...<channel|>actual answer`.
+    Returns the thinking portion (for sanity logging) and the portion after
+    the thinking channel closes (where the user-facing answer lives)."""
+    if text.startswith("<|channel>"):
+        for close in ("<channel|>", "</channel>"):
+            if close in text:
+                thought, rest = text.split(close, 1)
+                return thought, rest.strip()
+        # Thinking chain never closed — response was all thought
+        return text, ""
+    return "", text
+
+
 def evaluate_model(model, tokenizer, test_questions: list, label: str) -> dict:
     """Run inference on test questions and measure preference compliance."""
     from mlx_lm import generate
 
     compliant = 0
     outputs = []
+    thinking_chars_total = 0
+    thinking_closed = 0
     for q in test_questions:
         # Build chat-formatted prompt
         messages = [{"role": "user", "content": q}]
@@ -293,14 +314,33 @@ def evaluate_model(model, tokenizer, test_questions: list, label: str) -> dict:
             model, tokenizer, prompt=prompt,
             max_tokens=MAX_TOKENS, verbose=False
         )
+        thought, post = split_thinking(response)
+        thinking_chars_total += len(thought)
+        if thought and post:
+            thinking_closed += 1
         has_marker = has_preference(response)
         compliant += int(has_marker)
-        outputs.append({"q": q, "response": response[:200], "compliant": has_marker})
+        outputs.append({
+            "q": q,
+            "response": response[:400],
+            "thinking_chars": len(thought),
+            "post_thinking_preview": post[:200],
+            "compliant": has_marker,
+        })
 
-    rate = compliant / len(test_questions) if test_questions else 0
-    print(f"  {label}: {compliant}/{len(test_questions)} = {rate:.1%}", flush=True)
-    return {"compliance_rate": rate, "n_compliant": compliant, "n_total": len(test_questions),
-            "outputs": outputs}
+    n = len(test_questions)
+    rate = compliant / n if n else 0
+    avg_think = thinking_chars_total / n if n else 0
+    print(f"  {label}: {compliant}/{n} = {rate:.1%}, "
+          f"avg_thinking_chars={avg_think:.0f}, closed={thinking_closed}/{n}", flush=True)
+    return {
+        "compliance_rate": rate,
+        "n_compliant": compliant,
+        "n_total": n,
+        "avg_thinking_chars": avg_think,
+        "thinking_closed": thinking_closed,
+        "outputs": outputs,
+    }
 
 
 def log_memory(label: str) -> None:
@@ -436,16 +476,23 @@ def main():
     mx.clear_cache()
 
     # K1097: improvement >= 5pp
+    # Antipattern-008 sanity: base must have been given room to think.
+    # If base avg_thinking_chars == 0, the model likely never entered thinking
+    # mode and the comparison is uninformative about style injection.
     base_rate = base_results["compliance_rate"]
     adapter_rate = adapter_results["compliance_rate"]
     improvement_pp = (adapter_rate - base_rate) * 100
-    k1097_pass = improvement_pp >= 5.0
+    base_had_thinking = base_results["avg_thinking_chars"] > 0
+    k1097_pass = improvement_pp >= 5.0 and base_had_thinking
 
     results["k1097"] = {
         "base_compliance": base_rate,
         "adapter_compliance": adapter_rate,
         "improvement_pp": improvement_pp,
         "threshold_pp": 5.0,
+        "base_avg_thinking_chars": base_results["avg_thinking_chars"],
+        "base_thinking_closed": base_results["thinking_closed"],
+        "base_had_thinking": base_had_thinking,
         "k1097_pass": k1097_pass,
         "base_detail": base_results,
         "adapter_detail": adapter_results,
@@ -477,6 +524,9 @@ def main():
         "improvement_pp": round(improvement_pp, 1),
         "script_lines": script_lines,
     }
+    results["all_pass"] = all_pass
+    results["verdict"] = "SUPPORTED" if all_pass else "KILLED"
+    results["ran"] = True
 
     print("\n=== SUMMARY ===", flush=True)
     print(f"  K1096 (< 10min train): {'PASS' if results['k1096']['k1096_pass'] else 'FAIL'} "

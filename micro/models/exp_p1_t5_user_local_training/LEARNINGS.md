@@ -1,43 +1,54 @@
 # LEARNINGS.md — T5.1: User Local Training
 
-**Status:** SUPPORTED (Finding #436)
-**Date:** 2026-04-10
+**Status:** SUPPORTED (Finding #436, V2 strengthened)
+**Date:** 2026-04-18 (V2 audit-rerun; V1 2026-04-10)
 
 ---
 
 ## Core Finding
 
-Personal stylistic adapters are viable on consumer hardware: rank-4 LoRA on Gemma 4 E4B
-trained for 1.2 min on 40 synthetic examples achieves 76% compliance with a user-specific
-phrase vs 0% base — within the predicted 60-80pp range.
+Personal stylistic adapters are viable on consumer hardware. Rank-4 LoRA on
+Gemma 4 E4B 4-bit trained for 1.3 min on 40 synthetic examples achieves
+**60%** suffix-phrase compliance vs 0% base — a 60pp behavioral lift at
+2.44 MB and < 2 min wall time on M5 Pro 48 GB.
 
 ## Why It Works
 
-Low-rank sufficiency (Hu et al. 2021 + Aghajanyan et al. 2020): suffix injection is
-effectively rank-1 in task space, so rank-4 provides ample capacity. The adapter captures
-the stylistic direction with minimal parameters (3.67MB, ~64 float32 matrices).
+Low-rank sufficiency (Hu 2021 + Aghajanyan 2020): a single-phrase suffix
+lives in an effectively rank-1 task direction, so rank-4 LoRA on the last
+16 layers (q/k/v/o_proj) has ample capacity. The adapter injects a
+direction the base distribution does not produce — confirmed by
+`base avg_thinking = 2687 chars, 25/25 closed` (base genuinely reasoned
+and answered without emitting the target phrase; V2 falsifies the V1
+truncation-as-cause story).
 
-## Key Numbers
+## V1 → V2 Correction (mem-antipattern-008)
 
-| Metric | Value |
-|--------|-------|
-| Training time | 1.2 min (cold: ~2-3 min) |
-| Compliance gain | 76pp (0% → 76%) |
-| Adapter size | 3.67MB |
-| Script size | 127 lines |
-| Peak GPU memory | 4.885 GB |
+V1 measured 76pp with `MAX_TOKENS=120` — conflated style injection with
+thinking-mode truncation. V2 surgical eval-only fix (`MAX_TOKENS` 120→4096,
+`split_thinking()` instrumentation, K1097 gated on
+`base_thinking_chars > 0`) recovered the pure style-injection effect:
+**60pp (16pp was the confound)**. Theorems unchanged. Headline lift
+drops but now reflects the real mechanism.
 
-## Confound to Resolve in T5.2
+## Retained Caveat for T5.2 / Composition
 
-K1097's 76pp gain conflates two effects: (1) style injection AND (2) thinking suppression
-(base model fills MAX_TOKENS=120 with `<thought>` traces, never reaching the suffix).
-T5.2 must test with MAX_TOKENS >> 120 to isolate pure style injection from format change.
-Expected: compliance will drop from 76% but still show clear lift over base.
+Adapter `avg_thinking_chars = 0` — the adapter suppresses Gemma 4's
+native `<|channel>` thinking because the training corpus contains no
+thinking tokens. Not a confound for T5.1 (marker-presence KC is
+orthogonal), but **any downstream routing / composition experiment
+inherits a latent "kill-thinking" side-effect** unless user adapters are
+trained with thinking-aware data or evaluated only on the post-thinking
+slice.
 
 ## Implications for Next Experiment
 
-T5.2 (User Adapter Validation) should: (a) use MAX_TOKENS=512+ to allow full responses,
-(b) evaluate on held-out style targets the adapter wasn't trained on, and (c) test
-coexistence with domain adapters to confirm T3.6/T3.7 hot-add/remove invariance holds
-for user-trained (non-Grassmannian) adapters. The size budget ($0, < 2 min, < 4MB) is
-proven viable — the next question is behavioral isolation and multi-adapter coexistence.
+T5.2 (user adapter validation / multi-adapter coexistence) must: (a)
+train with thinking-aware conversation data *or* deterministically keep
+`<|channel>` traces in gold answers so the adapter learns to preserve
+them; (b) measure `adapter_thinking_chars` and treat a drop to 0 as a
+blocking side-effect, not a benign artifact; (c) confirm T3.6/T3.7
+hot-add/remove invariance with the corrected adapter and re-test under
+safety-composition (exp_prod_safety_under_composition). Size/time
+budget ($0, < 2 min, < 3 MB) is locked in; remaining open question is
+behavioral coexistence without collateral thinking suppression.

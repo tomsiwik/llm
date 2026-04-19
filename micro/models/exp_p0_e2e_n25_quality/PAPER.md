@@ -1,6 +1,19 @@
 # E2E N=25 Quality Validation — Results
 
-## Summary
+## Verdict: KILLED (audit re-classification 2026-04-18 — tautological-routing antipattern)
+
+K1489 ("max routing loss ≤ 10pp vs oracle") is structurally tautological:
+the run uses 3 adapters in a 25-domain space where 22 domains have no
+adapter, so every misrouted query falls back to base. Wrong-adapter
+collisions — the actual failure mode the KC was supposed to probe — are
+unreachable by construction. See LEARNINGS.md for full reasoning and v2
+requirements.
+
+The surface-level results below replicate cleanly (pipeline has no bugs at
+N=25), but cannot discharge the pre-registered hypothesis. Treat the PASS
+margins as **protocol artifacts**, not evidence of routing robustness.
+
+## Summary (superseded)
 
 The E2E pipeline scales from N=10 to N=25 with **zero quality degradation**.
 All 4 kill criteria PASS. Maximum routing loss is 2.0pp (MedMCQA), half of
@@ -107,9 +120,14 @@ global_facts (1). All go to base model fallback — no wrong-adapter risk.
    With 25 trained adapters, wrong-adapter routing could degrade quality
    below base. This requires a separate experiment.
 
-## Conclusion
+## Conclusion (superseded — see Verdict at top)
 
 The E2E pipeline is validated at N=25 — the target domain count for P0.
 Routing, adapter selection, and generation work together with ≤2pp quality
 loss. The combined logistic router scales gracefully; quality tracks Theorem 1.
 P0 "25 domains" gate is effectively CLOSED by this result.
+
+**Reclassified 2026-04-18:** P0 "25 domains" gate is **NOT closed** — the
+surface PASS is a protocol artifact (22 MMLU safety-moat domains make
+wrong-adapter risk unreachable). Gate reopens pending v2 with ≥10 distinct
+adapters and a conditional K1489 vacate-clause.

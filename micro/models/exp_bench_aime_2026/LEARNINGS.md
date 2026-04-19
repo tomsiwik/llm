@@ -1,34 +1,38 @@
 # LEARNINGS.md: exp_bench_aime_2026
 
-**Status:** Queued — results pending (pueue task 9)
+**Status:** KILLED — infrastructure-blocked (not a falsification of Theorems 1–2)
 
 ---
 
 ## Core Finding
 
-Design complete. Using MathArena harness to benchmark E4B-4bit on AIME 2026 (30 olympiad problems).
-Predicted base pass@2 ≈ 35–38% (10–18% relative quantization loss from Google's 42.5% pass@4).
-Math adapter expected to show negligible uplift (<5pp) due to GSM8K ↔ AIME domain gap.
+AIME 2026 was not measured. Three on-disk blockers prevented any evaluation:
+(1) `reference_implementations/matharena/` empty — harness entry point `scripts/run.py` absent;
+(2) `exp_p1_t2_single_domain_training/adapters/math/adapters.safetensors` missing (only `adapter_config.json`);
+(3) `run_experiment.py` `find_math_adapter()` iterates the registry dict's top-level keys instead of `registry["adapters"]`.
+K1417/K1418/K1419 marked FAIL (unmeasured) per PLAN.md §1. Theorems 1–2 remain pre-registered, not falsified.
 
 ## Why
 
-Theorem 1 grounds the 4-bit quantization penalty in our MMLU-Pro calibration (10.5% relative, Finding #530).
-Theorem 2 formalizes the domain transfer bound: GSM8K trains on arithmetic patterns absent from olympiad proofs.
-Finding #179 already showed math adapter has ~0pp delta on MMLU-Pro MCQ — AIME expected similar.
+Blockers #1 and #2 are environment-level (external harness + persisted weights), not research bugs.
+Blocker #3 is a local code defect that would surface only after #1 and #2 are fixed.
+Blocker #2 has a systemic echo: it is the 9th confirmed instance of the preflight-adapter-persistence
+antipattern (memories.md line 86; existing sources list 8 prior experiments). **Finding #421's 82%
+GSM8K headline cites weights that are not currently persisted anywhere in the repo.** Every downstream
+experiment that loads "the math adapter" inherits this gap.
 
 ## Implications for Next Experiment
 
-1. If K1417 PASSES (~37% within 10pp of 42.5%): 4-bit quantization is not the bottleneck for olympiad reasoning.
-   The gap to frontier is architectural/data, not precision. Informs P1 priority.
-2. If K1417 FAILS (<27.5%): quantization degrades multi-step symbolic reasoning disproportionately.
-   W4A16 verification (task 4) would become higher priority — need 8-bit for olympiad-class tasks.
-3. K1418 (adapter uplift) expected FAIL: confirms domain-specific adapters need domain-matched training data.
-   To improve AIME, need AIME-class traces (e.g., AoPS problems, not GSM8K).
-
-## Reviewer Issues (resolved/noted)
-
-- **Fix 1 (applied):** Crash guard for `pass_at_n=None` — `pct = "N/A" if None` already in run_experiment.py:167
-- **Fix 2 (applied):** K1417 relabeled EXPECTED PASS in MATH.md (~37% is within 10pp of 42.5%)
-- **Fix 3 (applied):** PAPER.md skeleton written (this iteration)
-- **Non-blocking A:** Theorem 3 per-problem timing inconsistency — accepted, conclusion unaffected
-- **Non-blocking B:** MathArena model config model field — may need verification at runtime
+1. **Do not re-claim `exp_bench_aime_2026` until blockers #1–#3 clear.** Post-fix rerun is a NEW
+   claim (PLAN.md §1 "no silent upgrades"); MATH.md predictions stay, `results.json` is rewritten.
+2. **Batch the fix via `P11.ADAPTER-REBUILD` or equivalent retraining of `exp_p1_t2_single_domain_training`
+   with post-save `stat().st_size > 0` assertion** — rerunning AIME alone leaves 5 other downstream
+   experiments (`exp_m2p_composition_n5`, `exp_model_peer_comparison_llama31_8b`,
+   `exp_model_peer_comparison_qwen3_4b`, `exp_p9_benchmark_showdown`, `exp_p1_t2_sft_residual_gemma4`,
+   `exp_p1_c0_composition_port_gemma4`) still broken.
+3. **Researcher preflight must assert** (a) `scripts/run.py --help` exits 0 for any cited harness and
+   (b) `Path(adapter_dir, "adapters.safetensors").stat().st_size > 0` for every cited adapter —
+   before any run time is spent. The review protocol at memories.md:86 is already mandatory;
+   this experiment confirms it still catches real instances.
+4. **If weights cannot be recovered**, retract Finding #421's headline number before any new
+   experiment cites the math adapter — prevents further downstream propagation.

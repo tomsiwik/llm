@@ -1,6 +1,65 @@
 # E2E N=25 Quality Validation — Learnings
 
-## Outcome: All kill criteria PASS. P0 "25 domains" gate CLOSED.
+## AUDIT RE-CLASSIFICATION (2026-04-18) — verdict KILLED
+
+Tags: `audit-2026-04-17-rerun`, `tautological-routing`.
+
+Same antipattern as sibling `exp_p0_e2e_combined_routing_n10`. The title
+promises "routing at scale" with N=25 domains, but `run_experiment.py` reuses
+only the **3 adapters** (math/code/medical) from `exp_p0_e2e_benchmark/`.
+The 22 non-adapter domains form a structural safety net — every misrouted
+query falls back to the base model, never to a wrong adapter. K1489
+("max routing loss ≤ 10pp vs oracle") is tautological under this protocol:
+
+- Theorem 1 bound: `loss ≤ (1 − α)·(Q_oracle − Q_base)`.
+- Max delta in this run: 62pp (GSM8K oracle 77 vs base 15).
+- Measured adapter α: math 98%, code 100%, medical 88% → max theoretical
+  loss ≈ 0.12·(58−28) = 3.6pp on medical. K1489's 10pp threshold cannot
+  fail unless α drops below ~83%, which the 22-MMLU safety moat makes
+  structurally impossible.
+
+The hypothesis promised — "combined logistic routing tolerates misrouting
+across 25 real adapters at scale" — was **not tested**. Wrong-adapter
+collisions (the actual failure mode) are unreachable by construction.
+
+Re-classified KC under pre-reg:
+- K1486 PASS_SURFACE (GSM8K 76% ≥ 68% — held, but via tautology protocol)
+- K1487 PASS_SURFACE (HumanEval 57% ≥ 46%)
+- K1488 PASS_SURFACE (MedMCQA 56% ≥ 44%)
+- K1489 FAIL_RECLASSIFIED (antipattern #6 — KC measures wrong object)
+
+Verdict: KILLED on pre-registered intent. Same cluster-level remedy as the
+N=10 sibling: v2 requires ≥10–25 distinct trained adapters + conditional
+K1489 vacate-clause (router accuracy ∈ [85%, 95%] on benchmark queries).
+
+Re-run not executed — this is a **structural** antipattern, not a code bug.
+Running the same code again with the same 3 adapters reproduces the same
+tautology. MATH.md preserved git-clean as pre-registered; no KC swap.
+
+## V2 path
+
+A follow-up `..._n25_v2` experiment must:
+1. Use ≥10 distinct trained adapters (expand `exp_p0_e2e_benchmark/` bank,
+   or reuse `exp_p0_ttlora_n10_scaling` adapters).
+2. Pre-register K1489 as conditional: require measured router accuracy on
+   adapter-domain benchmark queries ∈ [85%, 95%]; if ≥99% the run is
+   vacated, not passed.
+3. Include ≥1 **near-neighbor adapter pair** (e.g., math + high_school_statistics,
+   or medical + high_school_chemistry) so wrong-adapter routing is geometrically
+   possible.
+4. Compare measured Δ against Theorem 1's prediction within ±2pp.
+
+## Cross-reference
+
+Same audit pattern as `exp_p0_e2e_combined_routing_n10` (N=10 sibling,
+documented above) and `exp_p8_vproj_domain_behavioral` (Round 2 review,
+2026-04-18).
+
+---
+
+## Original (2026-04-17) — SUPERSEDED
+
+### Outcome: All kill criteria PASS. P0 "25 domains" gate CLOSED.
 
 ### What We Proved
 Theorem 1 (Q_routed = α·Q_oracle + (1−α)·Q_base) holds at N=25 with ≤1.6pp

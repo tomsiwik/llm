@@ -1,5 +1,40 @@
 # PAPER: P11.A0 — Reasoning SFT on s1K Dataset
 
+## Verdict (audit-2026-04-17 rerun, 2026-04-18): **KILLED — structural antipattern**
+
+**Re-classification**: `audit-2026-04-17-rerun` + `code-bug`. The original 2026-04-14
+run is retained below as evidence. Re-run not executed this iteration — the
+code-bug fix (strip_thinking regex → channel-aware) only corrects the corrupted
+base eval (Phase 4a) back to 62.1% (Finding #536), which does NOT change the
+adapter's 36.1% measurement or the catastrophic-forgetting finding.
+
+**Structural issues confirmed by audit**:
+1. **strip_thinking regex bug (code-bug)** — original matched `<think>...</think>` only;
+   Gemma 4 emits `<|channel>thought...<channel|>`. Base eval Phase 4a measured
+   12.5% because thinking content leaked into MCQ answer parsing. **FIXED** in
+   `run_experiment.py` this iteration (channel-aware, with `<think>` fallback).
+2. **Training format mismatch (design-level)** — training data used literal
+   `<think>{thinking}</think>\n\n{attempt}` strings. mlx_lm.lora treated those
+   as literal assistant text rather than Gemma 4 channel tokens. So the adapter
+   learned to EMIT literal `<think>` scaffolding, not to USE the channel. K1492's
+   "pass" (avg_thinking_chars=1641) measured literal text, not real channel use.
+3. **GSM8K API rot** — datasets-server HTTP 422 made K1491 untestable
+   (not fail). Separate infrastructure issue, not specific to this experiment.
+
+**Why re-run is not required**: The core finding (adapter 36.1% vs real base 62.1%,
+–26pp catastrophic forgetting) is structurally confirmed by:
+- Finding #538 recorded in DB.
+- Downstream `exp_p11_reasoning_sft_limo` preemptively killed citing the s1K
+  impossibility structure (competition math SFT ⊥ MMLU-Pro breadth distribution).
+- Sibling `exp_p11_s1k_reasoning_train_eval` (P11.F0) ran into training failure
+  on the same pipeline (all three KCs #1508/1509/1510 FAIL).
+
+**Antipattern tag**: same cluster as Finding #587 (strip_thinking regex brittleness)
+and `exp_p11_grpo_reasoning_adapter` (mlx_lm.lora treats channel tokens as literal
+text).
+
+---
+
 ## Prediction vs Measurement
 
 | Kill Criterion | Metric | MATH.md Prediction | Measured | Status |

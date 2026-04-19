@@ -79,49 +79,58 @@ The Grassmannian property can be annotated as metadata:
 This metadata is stored in adapter_config.json as a custom field.
 PEFT, vLLM, and Unsloth all ignore unknown fields in adapter_config.json. ∎
 
-## Theorem 3 (vLLM/Unsloth Format Equivalence)
+## Theorem 3 (RETRACTED — subset-direction fallacy)
 
-**Claim:** If an adapter file passes PEFT format validation (correct adapter_config.json
-schema + correct safetensors key structure), it will also satisfy vLLM and Unsloth
-format requirements, which are strict supersets of PEFT format.
+**Original (wrong) claim:** "If f ∈ F_peft and F_vllm ⊆ F_peft, then f is vLLM-compatible."
 
-**Evidence (from vLLM source):**
-- vLLM runtime LoRA loading code calls `LoraConfig.from_pretrained(path)` from peft
-- Key renaming: vLLM maps `lora_A.weight` → internal representation
-- Format spec: https://github.com/vllm-project/vllm/blob/main/vllm/lora/utils.py
+**Why it was wrong:** F_vllm ⊆ F_peft means every vLLM-valid file is PEFT-valid, i.e. vLLM
+imposes stricter structure. It does NOT imply the converse (f ∈ F_peft ⟹ f ∈ F_vllm).
+In practice vLLM often requires fused `qkv_proj` weights while PEFT accepts separate
+`q_proj` / `k_proj` / `v_proj`, so a PEFT-valid adapter that is not fused will crash at
+vLLM load. The same direction reversal applied to the Unsloth claim.
 
-**Evidence (from Unsloth source):**
-- Unsloth's `FastLanguageModel.get_peft_model` returns standard PEFT LoraModel
-- Adapter saving: `model.save_pretrained(path)` → standard PEFT safetensors
-- Loading: `PeftModel.from_pretrained(base, adapter_path)` → standard PEFT format
+**Consequence for this experiment:** We cannot conclude vLLM or Unsloth runtime compat
+from PEFT compat alone. K1089 and K1090, as written in the DB, require a real runtime
+load on CUDA — unreachable on the MLX/Apple-Silicon target (PLAN.md Part 2, "MLX only").
+These two KCs are therefore marked `skip (platform-unavailable)` for this rerun and
+their verification is delegated to the follow-up `exp_followup_format_compat_peft_required`
+(to be run on a CUDA machine).
 
-**Proof sketch:**
-Let F_peft be the set of files passing PEFT validation.
-Let F_vllm ⊆ F_peft and F_unsloth ⊆ F_peft (both require PEFT format as baseline).
-Therefore: f ∈ F_peft ⟹ structural format is compatible with vLLM and Unsloth.
-Runtime execution (K1089, K1090) requires CUDA hardware unavailable on Apple Silicon;
-structural format verification (K1088) is sufficient to confirm format spec compliance. ∎
+## Substrate Note (audit-rerun)
 
-## Kill Criteria Predictions
+The dependency `exp_p1_t2_single_domain_training` was killed and its
+`adapters.safetensors` was not retained. For a FORMAT test this is acceptable:
+we build synthetic Grassmannian A-matrices via QR decomposition (known to satisfy
+A^T·A = I_r up to float32 noise). This isolates K1091 from training-drift (see
+prior run's 0.579 deviation) and is a valid substrate for bijection + schema
+tests. Training-drift of Grassmannian weights is a distinct scientific question
+handled by interference experiments, not here.
+
+## Kill Criteria Predictions (audit-rerun)
 
 **K1088 (PEFT LoraConfig):** PASS
-- Our adapter_config.json will include all required PEFT fields
-- lora_a/lora_b transposition produces correct shapes for PEFT
-- Prediction: peft.LoraConfig.from_pretrained validates without error
-  (alternatively: manual JSON schema validation passes)
+- `peft` is HARD-required (no ImportError bypass). Experiment fails outright if
+  the library is missing.
+- `peft.LoraConfig(**cfg)` must construct cleanly.
+- `peft.PeftConfig.from_pretrained(dir)` must round-trip `r`, `target_modules`,
+  `peft_type`.
+- 42 `.lora_A.weight` + 42 `.lora_B.weight` keys must be present.
 
-**K1089 (vLLM format):** PASS (structural)
-- Converted PEFT format matches vLLM's expected file structure
-- Key names match vLLM's internal mapping (lora_A.weight, lora_B.weight)
-- Note: runtime loading requires CUDA; structural check is the testable claim
+**K1089 (vLLM runtime):** SKIP (cuda_unavailable_on_platform)
+- Theorem 3 subset fallacy retracted; PEFT compat does not imply vLLM compat.
+- Runtime test requires CUDA + vLLM — not available on MLX target. Marked SKIP,
+  not PASS. Verdict cannot be `supported` while this KC is unreached.
 
-**K1090 (Unsloth format):** PASS (structural)
-- Standard PEFT format = Unsloth's input format (same save/load API)
-- If K1088 passes, K1090 follows by Theorem 3
+**K1090 (Unsloth runtime):** SKIP (cuda_unavailable_on_platform)
+- Unsloth requires CUDA + bitsandbytes. Same reasoning as K1089.
 
-**K1091 (Grassmannian metadata):** PASS
-- JSON serialization of pierre_metadata → load → verify round-trip
-- Downstream tools ignore unknown fields (PEFT spec allows custom fields)
+**K1091 (Grassmannian metadata):** PASS iff max_deviation < 1e-6
+- Metadata round-trip through `adapter_config.json`.
+- `"property": "orthonormal_rows"` is only written when the measured deviation
+  satisfies the tolerance; otherwise `"drifted_from_orthonormal"` is written.
+  The prior run wrote `"orthonormal_rows"` regardless of a 0.579 deviation —
+  that antipattern is now structurally impossible via `property_claim_truthful`
+  check.
 
 ## Quantitative Predictions
 

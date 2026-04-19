@@ -276,9 +276,22 @@ def phase_train():
 # ─────────────────────────────────────────────
 
 def strip_thinking(response):
-    """Extract thinking chars and clean answer from Gemma 4 response."""
+    """Extract thinking chars and clean answer from Gemma 4 response.
+
+    CRITICAL (audit-2026-04-17 fix): Gemma 4 emits `<|channel>thought...<channel|>`
+    NOT `<think>...</think>`. Original regex missed the channel format and left
+    thinking content in the answer text, causing base MMLU-Pro to measure 12.5%
+    (should be 62.1% — Finding #536). Both patterns supported.
+    """
+    if not response:
+        return response or "", 0
     thinking_len = 0
-    m = re.search(r'<think>(.*?)</think>', response, re.DOTALL)
+    m = re.search(r'<\|channel>thought.*?<channel\|>', response, flags=re.DOTALL)
+    if m:
+        thinking_len = len(m.group(0))
+        cleaned = re.sub(r'<\|channel>thought.*?<channel\|>', '', response, flags=re.DOTALL).strip()
+        return cleaned, thinking_len
+    m = re.search(r'<think>(.*?)</think>', response, flags=re.DOTALL)
     if m:
         thinking_len = len(m.group(1))
     cleaned = re.sub(r'<think>.*?</think>', '', response, flags=re.DOTALL).strip()

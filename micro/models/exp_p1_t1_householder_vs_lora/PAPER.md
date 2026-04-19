@@ -4,6 +4,58 @@
 
 ---
 
+## V2 Rerun (2026-04-18) — audit-2026-04-17-rerun, code-bug
+
+**Verdict: KILLED (unchanged from v1).**
+
+Disposition of the audit-flagged `code-bug`:
+
+**Bug.** Original `run_experiment.py:507` computed K1013 as
+`conv_ratio <= 2.0 or (both_DNF)`. When HRA hit the sentinel conv_step=
+`TRAIN_STEPS + 1 = 301` and LoRA converged at step 240, the ratio
+301/240 = 1.254 ≤ 2.0 → **false PASS**. Reviewer caught this in v1
+REVIEW-adversarial §2 (non-blocking) and manually overrode to FAIL in
+v1 PAPER.md; the `results.json` however still carried the false PASS.
+
+**Fix.** `run_experiment.py:505-519` now branches on `hra_converged` and
+`lora_converged` explicitly. Only HRA-converged AND ratio ≤ 2.0 is PASS;
+HRA DNF is FAIL regardless of LoRA state. `results.json` additionally
+persists `hra_converged`, `lora_converged`, `train_steps`, and
+`conv_threshold` for audit transparency, plus top-level `verdict`,
+`all_pass`, and `ran` fields.
+
+**Applied to v1 measurements** (HRA_conv=301, LoRA_conv=240):
+- `hra_converged = False` (DNF), `lora_converged = True` → K1013 **FAIL**.
+- K1011 PASS, K1012 FAIL, K1014 PASS all unchanged by the code fix.
+- Overall verdict KILLED — same as v1. The `results.json` now correctly
+  reflects K1013=FAIL (was PASS+manual-override in v1).
+
+**Why no fresh measurement.** Re-running under the current platform
+state (Python 3.14, `datasets` library) fails with
+`TypeError: Pickler._batch_setitems() takes 2 positional arguments but
+3 were given` in `datasets/utils/_dill.py:Hasher.hash` before any
+MLX code executes. This is a `datasets`/`dill` upstream incompat with
+Python 3.14, not an experimental issue. Per the researcher hat rule
+"Do not re-run the experiment for documentation-only fixes", and
+because the K1013 fix only changes how KCs are *derived* from
+measurements (not the measurements themselves), `results.json` is
+reconstructed from the documented v1 numbers with the corrected K1013
+logic applied retroactively. Provenance recorded in
+`results.json._reconstruction_note`.
+
+**Permanently learned — propagate to sibling convergence-ratio
+experiments.** The sentinel pattern `conv_step = TRAIN_STEPS + 1 when
+threshold-never-crossed` combined with a naive `ratio <= k` test is a
+specific instance of a broader antipattern: **when a measurement uses
+a sentinel "not-applicable" value, any downstream KC that just
+arithmetically compares must first branch on whether the sentinel was
+hit**. In T1.2 this was the DNF case; in general it applies anywhere
+a metric can be "undefined" (divide-by-zero guards, early-stopping
+skips, NaN from empty batches). The fix is structural (explicit
+branches), not cosmetic (`(both_DNF)` edge-case OR).
+
+---
+
 ## Prediction vs Measurement
 
 | Metric | Prediction | Measured | K | Pass? |

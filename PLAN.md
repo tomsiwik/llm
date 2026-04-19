@@ -43,6 +43,18 @@ Three experiment types:
 ### Behavioral outcomes over metrics
 PPL, cosine, accuracy are proxies. PPL does not predict task quality in this project (measured r≈0.08). The real questions: does the system produce useful output? does it advance the vision? A metric improving without behavioral progress is not a finding.
 
+### Target-gated kill rule (Finding #666)
+A kill criterion on a **proxy metric** (classification accuracy, routing match rate, PPL, cosine, clustering purity) does **not** alone justify killing an experiment. Every proxy-metric KC must be **paired with an explicit target-metric KC** that measures the actual downstream claim (task accuracy, behavioral quality, oracle-gap, benchmark score).
+
+- **KILL** requires: proxy-KC FAIL **AND** target-KC FAIL.
+- **SUPPORTED** requires: proxy-KC PASS **AND** target-KC PASS.
+- **Proxy FAIL + target PASS** = finding about the proxy (the proxy is mis-calibrated for this mechanism), not a kill. File a follow-up that replaces the proxy with a better one.
+- **Proxy PASS + target FAIL** = proxy passed by construction; kill with the target reason and flag the proxy as tautological.
+
+Origin: `exp_softmax_router_scaling` (Finding #666, conclusive). Softmax router scored 40% per-sample classification accuracy (proxy FAIL at 50% threshold) but achieved oracle γ exactly (target PASS at 0% gap) via semantic-cluster routing — within-cluster misclassification is quality-benign. Without the paired target-KC the experiment would have been wrongly killed; with it, the mechanism became discoverable.
+
+**Retroactive implication:** any prior killed experiment where the kill KC was a proxy without a target-metric control may be a false kill; re-review on request.
+
 ### Kill-criteria discipline
 Pre-register K1/K2/K3 in `MATH.md` before the first run. If v1 data falsifies a KC, the status is `killed` — not "criterion reformulated". If the KC needs to change, design a v2 experiment with the new KC; don't edit the old one in place.
 
@@ -84,8 +96,21 @@ A coding agent where every conversation trains a composable domain expert (adapt
 
 ### Platform
 - **Target hardware**: Apple M5 Pro 48GB. **MLX only — no CUDA, no RunPod, no torch on GPU.** The machine is unified-memory Metal-optimized; MLX is the native path and produces dramatically better code and runtime behaviour on this hardware.
-- **Base model**: `mlx-community/gemma-4-e4b-it-4bit` (dev) / `mlx-community/gemma-4-26b-a4b-it-4bit` (prod).
+- **Base model**: `mlx-community/gemma-4-e4b-it-4bit` (dev) / `mlx-community/gemma-4-26b-a4b-it-4bit` (prod). BitNet-2B-4T is retained only as a tok/s speed-ceiling reference (165.6 tok/s), not as product base.
 - **Adapter approach**: PoLAR r=6 on `v_proj+o_proj`; Grassmannian A-matrices; exclusive routing.
+
+### Adapter vocabulary (glossary)
+Pierre uses three distinct adapter kinds. They share LoRA shape but train and compose differently. Use the matching tag when filing experiments.
+
+| Kind | Indexes over | Purpose | Trains on | Tag |
+|---|---|---|---|---|
+| **Domain adapter** | semantic specialty (math, code, medical, legal, finance) | amplify domain-specific factual/behavior patterns already in base | per-domain corpus | (default `p1`) |
+| **Method adapter** | procedural skill (decompose subgoals, diagnose differentially, plan-then-solve) | amplify how-to, not what-to — generalizes across domains | cross-domain traces of the same method | `method-adapter` |
+| **Loop adapter** | depth iteration t in a recurrent-depth block | differentiate iterations of weight-shared looped transformer (Bae 2024) | reasoning-heavy corpus; only loop-LoRA + LTI injection train | `loop-adapter` / `rdt` |
+
+Pierre-internal shorthand:
+- **Room Model** = `W_combined = Σ ΔW_i` pre-summed composition matrix. External literature term: LoRA merging / task arithmetic (Ilharco et al. 2022, arxiv:2212.04089).
+- **Grassmannian A** = orthogonal A matrix constructed via partitioned QR; structural orthogonality verified at Gemma 4 native dims (Finding #562).
 
 ### Required skills (MUST invoke before writing any MLX code)
 The hat loop has specialised skills that enforce idiomatic MLX and catch common mistakes. Invoke them **before coding**, not after.

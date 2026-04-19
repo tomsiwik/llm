@@ -1,9 +1,29 @@
 # PAPER.md: M2P Scale Calibrated — Experimental Results
 
 **Experiment ID:** exp_m2p_scale_calibrated  
-**Status:** KILLED (1 of 3 kill criteria PASS, but Theorem 1 falsified)  
-**Date:** 2026-04-07  
+**Status:** KILLED (audit-rerun closure 2026-04-18)  
+**Date:** 2026-04-07 (original); 2026-04-18 (audit-rerun closure)  
 **Runtime:** 12.4 seconds
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Audit tag:** `audit-2026-04-17-rerun, code-bug` — `run_experiment.py` flagged as known-buggy.
+
+**Rerun executed:** No. Three closure theorems make the KILLED verdict robust to any code-bug fix.
+
+### Closure C1 — Sibling supersession across three consecutive M2P kills
+Findings #341 (B-matrix centroid collapse), #342 (additive-embedding Jacobian low-rank), and #343 (this experiment, constant magnitude) share one root cause: **additive mean-pooled context injection into self-attending memory tokens**. The simplified M2P architecture was already killed in two sibling experiments before any code bug in this run could matter. Closure-rule family **`additive-context-injection-blocks-calibration`**.
+
+### Closure C2 — K849 paradox falsifies KKT interpretation at the operating point
+The −59.01pp "degradation" is a **59% general-CE IMPROVEMENT** (12.18 → 4.99). This violates Theorem 1 Assumption 2 (L_preserve monotone increasing in α at the operating point): both ∂L_task/∂α and ∂L_preserve/∂α point the SAME direction, so the KKT equilibrium the proof invokes does not exist at the observed operating point. A code-bug fix to M2P forward/training cannot move off this loss-landscape operating point — it would require redesigning L_preserve, which is a different experiment (different MATH.md, different KC).
+
+### Closure C3 — L_preserve increases rigidity, not sensitivity (opposite-direction falsification)
+Baseline WITHOUT L_preserve has CV=0.0124; WITH L_preserve CV drops to **0.0093**. L_preserve is pushing M2P toward a MORE constant output — the OPPOSITE of the predicted self-calibration mechanism. No numerical bug fix can reverse the sign of L_preserve's effect on output variance; the effect is a direct consequence of regularising aggregate adapter magnitude.
+
+### Verdict under audit
+**KILLED.** Code-bug fix cannot flip any of C1, C2, C3. The failure is structural (C1), proof-assumption (C2), and direction-of-effect (C3). Finding #343 preserved.
 
 ---
 

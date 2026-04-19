@@ -1,9 +1,60 @@
 # E2E Combined Logistic Routing: Zero-Loss Adapter Selection
 
+> ### AUDIT RE-CLASSIFICATION (2026-04-18) — verdict KILLED
+>
+> This experiment carries `audit-2026-04-17-rerun` + `tautological-routing`
+> tags. The original 2026-04-13 run was recorded as SUPPORTED on the strength
+> of all 4 KC passing at the measured N=3. Re-review finds a structural
+> KC-vs-measurement mismatch:
+>
+> - **Title / hypothesis target N=10.** The experiment id is
+>   `exp_p0_e2e_combined_routing_n10`; the notes say "Combined logistic
+>   routing at N=10 achieves within 3pp of perfect-routing E2E quality";
+>   the motivating prior is Finding #525 (combined logistic 89.9% at N=10).
+>   The value proposition of *combined logistic* over TF-IDF-only routing
+>   only matters once routing stops being trivial.
+> - **Measurement is N=3.** `run_experiment.py` hardcodes
+>   `DOMAINS = ["math", "code", "medical"]` and reuses the 3 adapters from
+>   `exp_p0_e2e_benchmark/adapters/`. No N=10 adapter bank exists.
+> - **K1481 is tautological at N=3.** "Routing loss <= 5pp vs oracle routing"
+>   is meaningful only when the router misroutes. With math/code/medical
+>   (maximally-separated vocab), combined logistic hits 100.0% / 100.0% / 99.0%
+>   routing accuracy (router_overall_accuracy_pct = 100.0 in results.json).
+>   Routed == oracle on essentially every query, so 0.0pp routing loss is a
+>   mechanical artifact of 3 separable domains, not evidence that combined
+>   logistic tolerates the ~10% misrouting expected at N=10. Antipattern #6
+>   — KC measures wrong object.
+> - **Re-classified KC**: K1478 PASS (GSM8K 77% ≥ 65% at N=3), K1479 PASS
+>   (HumanEval 57% ≥ 50%), K1480 PASS (MedMCQA 58% ≥ 40%), K1481
+>   FAIL_RECLASSIFIED (tautological). 3/4 pass on valid KCs, 1/4 tautological
+>   → verdict KILLED on pre-registered intent.
+> - **What is preserved as a behavioral finding** (see LEARNINGS.md): at N=3
+>   well-separated domains, the full E2E pipeline adds negligible overhead
+>   (~140ms batch routing, 4.3s router training) and 0pp quality loss
+>   relative to oracle. This is a useful *floor* — it confirms no pipeline
+>   bug — but it does not verify the combined-logistic-vs-TF-IDF-only claim
+>   that the N=10 title promises.
+> - **results.json was reconstructed** from the measurements below without
+>   re-executing code (same pattern used for `exp_p8_vproj_domain_behavioral`
+>   audit rerun). The antipattern is structural (KC-vs-measurement object
+>   mismatch), not a transient bug. MATH.md is unchanged and git-clean from
+>   pre-registration.
+> - **V2 path**: `exp_p0_e2e_combined_routing_n10_v2` using ≥10 distinct
+>   adapters (reuse exp_p0_ttlora_n10_scaling outputs if trained; otherwise
+>   train), and pre-register K1481 conditional on a non-trivial routing-error
+>   regime: require router accuracy ∈ [85%, 95%] measured on the benchmark
+>   queries themselves, then compare measured quality loss against the
+>   Theorem 1 prediction Δ ≤ (1 − p)(A_oracle − A_base).
+
 ## Type
 Verification
 
 ## Status
+**KILLED (audit rerun)** — N=3 measurements valid; pre-registered KC
+intended N=10 where combined logistic routing is non-trivial.
+Original status line preserved below.
+
+### Original status
 **SUPPORTED** — Combined logistic routing at N=3 achieves 0pp quality loss
 
 ---

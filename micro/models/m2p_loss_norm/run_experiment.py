@@ -535,6 +535,8 @@ def main():
 
     # Pairwise delta cosine (should be ~0 due to Grassmannian A)
     delta_cos = []
+    repeat_cos = []  # K859: pairs involving repeat domain (idx 2)
+    REPEAT_IDX = DOMAIN_NAMES.index("repeat")
     for i in range(N_DOMAINS):
         for j in range(i+1, N_DOMAINS):
             # Compute full delta for each: delta_i = B_i @ A_i for all modules
@@ -542,8 +544,13 @@ def main():
             cos = mx.abs(mx.sum(context_Bs[DOMAIN_NAMES[i]] * context_Bs[DOMAIN_NAMES[j]]) /
                         (mx.linalg.norm(context_Bs[DOMAIN_NAMES[i]]) * mx.linalg.norm(context_Bs[DOMAIN_NAMES[j]]) + 1e-8)).item()
             delta_cos.append(cos)
+            if i == REPEAT_IDX or j == REPEAT_IDX:
+                repeat_cos.append(cos)
     mean_cos = float(np.mean(delta_cos))
+    repeat_mean_cos = float(np.mean(repeat_cos))
+    repeat_max_cos = float(np.max(repeat_cos))
     log(f"  M2P adapter B-matrix |cos|: mean={mean_cos:.4f}")
+    log(f"  Repeat-domain B-matrix |cos|: mean={repeat_mean_cos:.4f}, max={repeat_max_cos:.4f}")
     log(f"  (Note: Grassmannian A ensures delta orthogonality regardless of B)")
 
     # Results
@@ -567,18 +574,29 @@ def main():
         "median_quality_ratio": round(median_quality, 3),
         "grassmannian_cos": round(float(np.mean(cos_values)), 6),
         "m2p_b_cos": round(mean_cos, 4),
+        "m2p_b_cos_repeat_mean": round(repeat_mean_cos, 4),
+        "m2p_b_cos_repeat_max": round(repeat_max_cos, 4),
         "m2p_params": m2p_params,
+        "is_smoke": False,
+        "ran": True,
     }
 
-    # K847 uses median (robust to single outlier domain)
+    # K859 (audit-2026-04-17 strict KC): Repeat domain B-matrix cosine > 0.6 means mode collapse persists → FAIL
+    # Use the max cos between repeat and any other domain (worst-case) as the test statistic
+    k859_measurement = repeat_max_cos
+    k859_pass = k859_measurement <= 0.6  # PASS if cos <= 0.6 (no mode collapse on repeat)
+
+    # K847 uses median (robust to single outlier domain) — kept for historical continuity
     k847 = median_quality >= 0.25
     k848 = True  # Grassmannian A guarantees orthogonality — check is structural
 
     results["kill_criteria"] = {
         "K847": {"pass": k847, "median_quality": round(median_quality, 3), "mean_quality": round(mean_quality, 3), "threshold": 0.25, "note": "median used (robust to outlier domains)"},
         "K848": {"pass": k848, "detail": f"Grassmannian |cos|={np.mean(cos_values):.6f} (guaranteed by construction)"},
+        "K859": {"pass": k859_pass, "repeat_max_cos": round(repeat_max_cos, 4), "repeat_mean_cos": round(repeat_mean_cos, 4), "threshold": 0.6, "note": "FAIL if repeat-domain B-matrix cos > 0.6 (mode collapse)"},
     }
-    results["all_pass"] = k847 and k848
+    results["all_pass"] = k847 and k848 and k859_pass
+    results["verdict"] = "ALL_PASS" if results["all_pass"] else "KILLED"
 
     log(f"\n{'='*60}")
     log(f"M2P quality: median={median_quality:.1%} mean={mean_quality:.1%} of SFT quality")

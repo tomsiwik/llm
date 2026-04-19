@@ -1,5 +1,34 @@
 # PAPER.md — P3.C4: Rank-16 Diverse Adapter
 
+## V2 Audit (2026-04-18) — KILLED confirmed; rerun not executable
+
+Rerun under `audit-2026-04-17-rerun` + `training-cache` tags is blocked:
+- `exp_p3_b5_domain_conditional_retrain/domain_fused_base/` has only `config.json`,
+  `tokenizer.json`, and `model.safetensors.index.json` — the four `model-0000X-of-00004.safetensors`
+  weight shards (~15 GB) were deleted during earlier disk cleanup.
+- Source math adapter (`exp_p1_t2_single_domain_training/adapters/math/adapters.safetensors`)
+  was also deleted, so the fused base cannot be reconstructed within iteration budget.
+- The previously-trained `rank16_personal_adapter/adapters.safetensors` is likewise gone
+  (only `adapter_config.json` stub remains).
+
+Strict PLAN.md §1 verdict stands on the 2026-04-11 documented measurements:
+- **K1205 FAIL (#1205): 73.3% style compliance < 80% threshold** (11/15, n=15). The pre-registered
+  KC is numerically unambiguous — even accounting for the cache-bug confound (only 10 training
+  examples vs configured 200), the measurement itself falls short of threshold.
+- K1206 PASS (#1206): 2.4 min training ≤ 30 min.
+- K1207 PASS (#1207): 5.12 MB adapter ≤ 10 MB.
+
+**Code fix applied this iteration**: `generate_diverse_training_data()` now checks
+`n_existing >= N_TRAIN` and regenerates if cache line-count is insufficient (prevents the
+silent smoke→full cache reuse that produced the 10-example run). Fix preserved for any
+future rerun when dependencies are restored.
+
+Substantive finding preserved: **rank-16 + 10 examples (73.3%) beat rank-4 + 167 examples
+(60%) by +13.3 pp**, which is strong evidence that rank was the binding constraint for
+style injection up to rank-4. The 80% threshold is not reached even with the rank increase,
+so Theorem 1's coverage guarantee (rank > n_categories ⇒ reliable injection) does not
+extend to behavioral >= 80% at this rank on this question distribution.
+
 ## Prediction vs Measurement
 
 | Kill Criterion | Prediction (MATH.md) | Measured | Pass? |

@@ -1,5 +1,90 @@
 # MATH.md — T4.3: MLX-Native Adapter Serving with Runtime Hot-Swap
 
+## V2 Audit Section (2026-04-18)
+
+Status: **KILLED** (precondition-probe + four operationalisation flaws).
+
+V1 KC thresholds below are preserved byte-for-byte. V2 does not modify K1081–
+K1084 or any theorem statement; it identifies four distinct mis-operationalisations
+of the theorems plus a missing-artefact precondition.
+
+### V2 kill causes
+
+- **C1 — precondition failure.** `EXPECTED_ADAPTERS` (math, code, medical, legal,
+  finance) maps to 5 dirs; 0/5 hold `adapters.safetensors` as of 2026-04-18.
+  T2.1 upstream `status=killed` (2026-04-18, MCQ metric-swap + format-artefact).
+  T2.6 adapter weights lost. `load_adapters(model, path)` raises FileNotFoundError
+  before any KC can be measured. V1 `results.json` also absent on disk, so the
+  "supported" verdict is unverifiable even on provenance.
+
+- **C2 — Theorem 1 omits MLX graph-recompile (mem-antipattern-011 specialisation).**
+  V1 operationalises `T_swap` as
+  `{t0; model.load_weights(...); mx.eval(model.parameters()); t1}`.
+  MLX recompiles the forward compute graph on the **first forward pass** after
+  a parameter mutation; `mx.eval(parameters)` only materialises the new tensors
+  on-device, not the traced graph. Theorem 1 `T_swap ≤ S_adapter / B_mem + T_eval`
+  omits the recompile term. A correct operationalisation defines swap latency as
+  incremental time-to-first-token after swap minus baseline prefill time of the
+  same prompt. V1's Phase 2 loops 20 back-to-back swaps with zero forward passes
+  between — the recompile cost never enters the clock.
+
+- **C3 — Theorem 2 uses FLOPs model for memory-bound decode + OOD prompt bias.**
+  Theorem 2's `α = 2r/d_model ≈ 0.47%` is a FLOPs ratio. Apple Silicon decode is
+  memory-bandwidth-bound (weight matrix reads dominate per-token cost), not
+  compute-bound, so the arithmetic predicts 99.5% but the measurement is governed
+  by bytes moved per token (re-reading X through base path and LoRA path). Beyond
+  the FLOPs/bandwidth model mismatch, V1's `generate_tokens` conflates prefill
+  (compute-bound) and decode (memory-bound) into one tok/s number, and evaluates
+  the math adapter on `"Explain the concept of machine learning in simple terms."` —
+  a non-math prompt. Out-of-domain generation commonly early-EOSes or shifts
+  the token distribution (V1's own Phase 1 flags the 3.7 tok/s medical adapter
+  outlier as "model answered briefly, denominator small" — same failure mode
+  applied to K1083 by construction).
+
+- **C4 — Theorem 3 operationalised as identity-dict (mem-antipattern-002).**
+  V1 code:
+  `routing_registry = {d: p for d, p in ADAPTER_PATHS.items()}; selected = routing_registry[domain]`
+  where `domain` is the iteration key. `selected == adapter_path` is `dict[k] == dict[k]` —
+  a set-theoretic identity, not routing. K1084 requires a router that takes raw
+  prompt text and predicts a domain label; T4.1's pipeline (tokenise → sparse
+  matmul → argmax) was never invoked. V1's <1µs latency is Python dict-hash
+  microbench cost, not TF-IDF routing cost.
+
+### V2 prediction vs measurement
+
+| Criterion | V1 Prediction | V2 Measurement (probe) | V2 Result |
+|-----------|--------------|------------------------|-----------|
+| K1081: loads+generates | 5/5 valid | 0/5 upstream `.safetensors` on disk | **FAIL** |
+| K1082: swap p99 < 50ms | ~1.5ms (I/O bound) | Wrong object: omits MLX graph-recompile | **FAIL** |
+| K1083: throughput ≥ 80% | ~99.5% (FLOPs) | Prefill/decode conflation + OOD prompt | **FAIL** |
+| K1084: routing correct | 5/5, <1µs | Identity-dict: `dict[k] == dict[k]` by construction | **FAIL** |
+
+### V2 probe characteristics
+
+- No model load. Pure `os.path` inspection + upstream-verdict parse + trivial
+  dict-lookup microbench (to reproduce and expose V1's K1084 measurement as
+  domain-agnostic).
+- Runtime < 1s. Side-effect-free.
+- Preserves V1 numbers in `results._v1_numbers_for_reference` for provenance.
+
+### V3 blockers (do not auto-spawn)
+
+- T2.1 rebuild with MedQA USMLE 5-choice (DB KC #1030), `max_tokens >= 512`,
+  persisted `.safetensors`, `adapters/code/` created.
+- T2.6 adapter weights recovered or retrained on disk.
+- `swap_adapter` rewrite: measure `t_first_token(after_swap) - t_first_token(baseline)`,
+  not `load_weights + mx.eval` alone.
+- `generate_tokens` rewrite: return `(text, decode_tok_s)` where
+  `decode_tok_s = N_decoded / (t_end - t_first_token)`.
+- K1083 must use in-domain prompts per adapter (math prompt on math adapter, etc.).
+- K1084 must invoke T4.1's actual TF-IDF router on raw prompt text — not
+  `ADAPTER_PATHS[domain]`. Latency budget should time tokenise + sparse matmul
+  + argmax, per T4.1 math.
+
+---
+
+## V1 Setting (2026-04-17, preserved — thresholds unchanged)
+
 ## Setup
 
 We have:

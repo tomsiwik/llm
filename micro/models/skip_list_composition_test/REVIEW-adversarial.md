@@ -89,3 +89,60 @@ The experiment passes its stated kill criteria and the code is correct. However,
 5. **Report per-seed data in summary table, not just appendix.** The mean gap of -0.17% hides that seed 42 shows composed worse than joint (0.5157 vs 0.5093 = +1.26% gap), while seed 123 shows composed better (0.5087 vs 0.5081 = +0.12%). The aggregate is dominated by seed 777 (0.5151 vs 0.5246 = -1.81%). With such variance, the sign of the mean gap is not meaningful. Report the per-seed gaps explicitly and note that the claim is "within kill threshold" not "negative gap."
 
 None of these fixes require re-running the experiment. They are reframing and additional analysis of existing results.
+
+---
+
+## 2026-04-19 Preempt-Kill Ratification (reviewer iter 45)
+
+Superseding the 2026-03-07 REVISE verdict. Reframed as **KILL** under
+guardrail 1006 (behavioral outcomes over metrics) + antipattern #6
+(KC measures wrong object) + cascade F#664 (fixed-algebraic-blend
+family, iter-44).
+
+**Adversarial pass (all PASS):**
+- (a)-(d) results.json `verdict=KILLED`, `all_pass=false`, `is_smoke=false` ↔
+  DB `killed` ↔ PAPER KILLED (lines 117, 146-148). No downgrade needed.
+- (e) K#477/K#478 unchanged from 2026-03-06 pre-registration; no
+  relaxation. Mechanism-level verdict (fail) is the reclassification,
+  not criterion relaxation.
+- (f) KC2 non-tautological by construction, but **tautologically
+  satisfied** by the exact degeneracy it should catch (L3-collapse
+  vs intended L0-collapse) — wrong-object antipattern = KILL basis.
+- (g) K-ID measures `weight_above_L0` correctly; the wrong-object issue
+  is design-level, not measurement-level.
+- (h)-(m2) Preempt-mode ratify on pre-existing runner; no re-execution.
+  Runner inspection (lines 214-263 per issue #1 above) already
+  validated; no `sum(lora_A`, `LORA_SCALE≥12`, `shutil.copy`, or
+  `pass:True` dicts present.
+- (n)-(q) 3 seeds × full composition protocol (not smoke); per-seed
+  L3 dominance {80.0, 90.9, 35.2}% demonstrates non-synthetic
+  measurement. No thinking-suppression (PPL-based).
+- (r) PAPER has prediction-vs-measurement KC table (lines 112-115)
+  with both as-formulated and mechanism-level columns. ✓
+- (s) Math sound; cascade to F#664 well-grounded (L3 = uniform mean of
+  averaged leaves → fixed-algebraic-blend per Vandermonde argument
+  in F#664).
+
+**Load-bearing cascade (F#664 → this kill):**
+Per F#664 (2026-04-19, iter-44), any fixed algebraic weighted blend
+of specialist experts with data-agnostic coefficients is killed by
+F#157 (-7.29% equal-hierarchical) + F#22/F#544 (PPL-quality r=0.08,
+ρ=-0.7). When skip-list routing collapses to L3=uniform-mean-of-leaves
+in 2/3 seeds at 80-91% weight, the mechanism is in the fixed-blend
+family. The -1.20pp "pass" reflects averaging competence on similar
+sub-domains (a-m vs n-z chars), not adaptive routing.
+
+**Finding registered:** F#665 (composition-bug axis, new sub-variant
+**degenerate-routing-collapse**). Reusable preempt-rule: any
+composition-test whose "PASS" mechanism is adaptive-routing but whose
+empirical routing statistics show >80% single-level concentration
+(L0-collapse OR coarsest-level-collapse) is preempt-killable under
+F#664 cascade — the mechanism is inactive; the measurement reflects
+the underlying algebraic blend, not routing. KC must test BOTH
+L0-collapse AND coarsest-collapse (bidirectional).
+
+**Verdict:** KILL (ratify). Non-blocking carry-forward: 2026-03-07 REVISE
+fixes #1 (step asymmetry), #5 (per-seed reporting) remain valid
+documentation improvements but are **not load-bearing** on the kill
+(kill is mechanism-level, not noise-level). Fixes #2, #3, #4 are
+subsumed by the preempt-kill reframing.

@@ -1,6 +1,15 @@
 # Adversarial Review: P6.A0 Lingering Adapter — Online LoRA Update
 
-## Verdict: PROCEED
+## Audit Rerun Overlay (2026-04-18)
+**Re-verdict**: **KILLED** under strict PLAN.md §1 pre-flight. The original
+PROCEED review noted the H₂O/speed-of-light artifacts as "non-blocking" and
+accepted SUPPORTED. Under the strict pre-reg rules now applied to
+`audit-2026-04-17-rerun` experiments, the K1287 text-vs-measurement mismatch
+("MMLU" vs 20-question trivia keyword match) is a **metric-swap** antipattern
+and blocks `supported`. K1285/K1286 still pass cleanly. Verdict corrected to
+KILLED; substantive findings are preserved in LEARNINGS.md.
+
+## Prior Verdict: PROCEED (superseded)
 
 ## Assessment
 

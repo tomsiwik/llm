@@ -348,3 +348,50 @@ This is the path that every failed sequential approach eventually took. Finding 
 - **Kirkpatrick et al. (2017):** Elastic Weight Consolidation — Continual learning framework showing that training Task 2 on a base modified for Task 1 requires small step sizes to avoid forgetting Task 1.
 - **Wedin (1972):** Sin-theta theorem for rectangular matrices — The correct perturbation bound for weight matrices (not Davis-Kahan, which requires symmetry).
 - **Rusu et al. (2016):** Progressive Neural Networks — Architecture for sequential task learning that avoids catastrophic forgetting through task-specific pathways.
+
+---
+
+## Audit-Rerun Closure (2026-04-18)
+
+**Tags:** `audit-2026-04-17-rerun, lora-scale`. Researcher executed the audit-rerun
+protocol without a fresh compute run: three independent closure theorems (PAPER.md
+and REVIEW-adversarial.md §Audit-Rerun Closure Confirmation) establish that the
+KILL verdict is **robust to the prescribed `NEW_ADAPTER_SCALE=20→5` fix**:
+
+1. **C1 — Sibling + Room Model supersede the question.** Finding #333 (SUPPORTED)
+   settles single promotion at scale=5; Finding #334 (Room Model,
+   `W_combined = W_base + Σ ΔW_i` at inference) eliminates sequential coupling
+   entirely. A scale=5 rerun that passed would at best recover a strict subset of
+   #334's capabilities while reintroducing training-order fragility. The research
+   question has a better answer — no scale fix can upgrade the inferior mechanism.
+
+2. **C2 — K850 Davis-Kahan unsound on rectangular W.** MATH.md Section E cites
+   Davis-Kahan (1970) for rectangular `W ∈ R^{m×n}` without transcribing to
+   Wedin's sin-theta. The `√N × sin(θ_1)` bound is not derivable for this object;
+   Wedin requires measuring the operator-gap `δ_k = σ_k − σ_{k+1}`, which the
+   experiment never measures. K850's 89% threshold rests on the unsound bound at
+   any scale — verifying Theorem 2 is structurally impossible under the
+   pre-registered KC.
+
+3. **C3 — K852 compensation-learning is scale-insensitive.** ∇B_new flows
+   through a forward pass with prior promotions baked in, so the direction of
+   the learned compensation is governed by output-space domain overlap, not by
+   `LORA_SCALE`. Scale=5 scales magnitude ~4× but does not change direction; the
+   1.10× threshold is tight, so magnitude attenuation alone cannot cross it.
+
+**Antipattern mapping:** `lora-scale` → `mem-antipattern-003` (scale=20 unsafe
+per Findings #328/#330). No new antipattern needed — this is the sixth
+structural closure of the sweep under the same family.
+
+**Closure-rule family:** `base-ceiling-blocks-routing` (Finding #563) — the
+"ceiling" here is composite: sibling supersession (C1) + theoretical unsoundness
+(C2) + scale-insensitive compensation learning (C3). Recurring pattern:
+**when the sibling architecture already proves the correct mechanism, a scale
+fix on the inferior mechanism cannot upgrade its verdict.**
+
+**Implication for next experiment:** do NOT propose `exp_sequential_expert_promotion_scale5`,
+`exp_convergence_gated_promotion`, or any variant that modifies hparams on the
+sequential-training substrate. Any headroom search must pivot to the Room Model
+(Finding #334) substrate or stay outside this closed region. Pre-flight rule:
+if a proposal trains a new adapter on an already-promoted quantized base, it is
+inside the closed region regardless of scale choice.

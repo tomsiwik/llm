@@ -132,3 +132,42 @@ The experiment is correctly killed (the mechanism does not work), and the analys
 ### Classification Note
 
 If this experiment is to be re-run with fixes, it should be classified as **Type 2 (guided exploration)** within the proven framework of per-module linearity (Finding #302). The unknown to explore would be: "What is the gap between `f(x; W + sum(delta_i))` and `mean_i(f(x; W + delta_i))` as a function of adapter norm, number of adapters, and model depth?" This would require MATH.md to state the proven linearity framework and identify the unknown (the nonlinear amplification factor) precisely.
+
+---
+
+## 2026-04-19 Ratify (Reviewer iter 50, post-MATH.md)
+
+**Verdict: PROCEED-WITH-KILL** (supersedes prior REVISE).
+
+The prior REVISE (above) demanded MATH.md, code-doc reconciliation, and a derivation that no fix changes the verdict. Researcher iter 59 has now satisfied all blockers via structural-reuse argument:
+
+- **MATH.md present** with two formal theorems:
+  - Theorem 1 (as-coded all-layer pre-sum): KILLED by Finding #303 (inter-layer nonlinearity compounding).
+  - Theorem 2 (as-intended Layer-0-only pre-sum): KILLED by Finding #334 (pre-sum without routing = unrouted mixture, derived from this very experiment).
+  - Corollary: no `for li in range(N_LAYER)` → `li=0` edit produces a distinct kill outcome. F#571 (Room Model N>1 closed 4×) provides a fourth independent structural kill.
+- **Code-doc mismatch acknowledged** in MATH.md §Context and `results.json["antipattern_flags"]["composition_bug"]`. Both paths covered.
+- **No-rerun justification** (results.json: `no_rerun_justification`): as-coded path already produced K#823 FAIL at 10.32%>5% (F#303 regime); fixing to Layer-0-only would only reconfirm F#334.
+
+Adversarial checklist (a)-(s):
+- (a-d) Consistency: results.json verdict=KILLED, all_pass=false, is_smoke=false, K#823 fail in DB matches results.json. ✓
+- (e) KCs unchanged from 2026-04-04 pre-reg. ✓
+- (f) K#823 measures real PPL gap, not algebraic identity. ✓
+- (g) K-IDs match the measured quantity. ✓
+- (h) `delta_sum += B@A` with `m.weight = m.weight + delta_sum` IS the F#157-family pre-sum bug — but this experiment is **intended** to test pre-summing; the bug IS the hypothesis. Kill stands. ✓
+- (i) `LORA_SCALE` not set ≥ 12 (results.json: scale=1.0). ✓
+- (j-l) No per-sample-routing-on-one-sample, no shutil.copy, no hardcoded pass dict. ✓
+- (m) Toy GPT in MATH.md ↔ Toy GPT in run_experiment.py. Consistent. ✓
+- (m2) MLX skill: toy GPT eval uses `mx.eval` and `nn.value_and_grad` correctly; non-blocking on toy.
+- (n-q) Eval integrity items not applicable (no thinking channel; toy random data already flagged in prior REVISE — non-blocking for kill).
+- (r) Prediction-vs-measurement table present in PAPER.md (Phase 2 results) and MATH.md (P1-P4). ✓
+- (s) Math sound — Theorems 1+2 are proper finding reuse, not new derivation that needs adversarial verification.
+
+**Antipattern dispositions:**
+- F#157 family (composition-bug pre-sum) — confirmed but **non-blocking** because the kill is structural at both paths regardless of code-fix; pre-summing IS the intended hypothesis being tested.
+- F#303 (all-layer) and F#334 (Layer-0-only routing-absent) family reuse, no new sub-variant.
+
+**Findings:** No new finding registration; F#303 + F#334 + F#571 family reuse. Confirmed via `experiment finding-show 303 334 571` (cited in results.json).
+
+**Drain count:** 48th preempt-kill (8th non-preempt = 56 total drain). LEARNINGS.md pre-existed (6/6 docs complete). Cap unchanged.
+
+**Cohort branch:** none (pure family reuse).
