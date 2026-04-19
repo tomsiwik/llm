@@ -55,8 +55,9 @@ Review `MATH.md`, `PAPER.md`, and `results.json` directly. Write `REVIEW-adversa
 
 4. Write `REVIEW-adversarial.md`.
    - max 1 page
-   - verdict must be one of: `PROCEED`, `REVISE`, `KILL`
+   - verdict must be one of: `PROCEED`, `REVISE`, `KILL`, `PROVISIONAL`
    - if `REVISE`, include at most 3 blocking fixes
+   - `PROVISIONAL` applies when: `is_smoke: true` in results.json, OR structural-KC PASS with target-KC `not_measured` (per Finding #666 target-gated rule — `not_measured` is NOT `FAIL`, so KILL is unjustified)
 
 5. Route:
    - `REVISE`:
@@ -68,6 +69,15 @@ Review `MATH.md`, `PAPER.md`, and `results.json` directly. Write `REVIEW-adversa
    - `PROCEED`:
      - run `experiment finding-add ...`
      - emit `review.proceed`
+   - `PROVISIONAL`:
+     - **Do NOT use `experiment complete --status provisional`** — the `complete` CLI only accepts `supported|proven|killed`. Attempting it will error or (worse) tempt you to mislabel as `killed`.
+     - Use the two-step workaround:
+       1. `experiment update <id> --status provisional --dir <path>`
+       2. `experiment evidence <id> --claim "<summary>" --source results.json --verdict inconclusive`
+       3. `experiment finding-add --status provisional ...`
+     - File the full-scale follow-up experiment (`exp_<id>_full` convention) with target KCs inherited + any new caveat KCs from review
+     - Emit `review.proceed` with payload prefixed `PROVISIONAL:` and include the follow-up experiment ID
+     - **Antipattern: "provisional-as-killed"** — marking a smoke-PROVISIONAL disk verdict as `killed` in the DB because the `complete` CLI won't accept `provisional` is a **false kill**. First instance: `exp_rdt_loop_lora_gemma4` (reviewer iter 60, Finding #673). Use the workaround above.
 
 ## REVISE discipline
 - Max 3 blocking fixes per revise cycle.
