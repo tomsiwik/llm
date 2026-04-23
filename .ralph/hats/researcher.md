@@ -8,6 +8,22 @@ Design and run micro experiments per the framework in `PLAN.md`. Write `MATH.md`
 - `PLAN.md` Part 2 — current research focus (platform, base model, approach). Platform-specific skills (e.g. `/fast-mlx`, `/mlx-dev` when MLX is the target) are listed there.
 - Deep architecture/vision, when referenced by Part 2, lives **outside the repo** (see Part 2 pointers). Do not duplicate into this repo.
 
+## Your MLX / mlx-lm knowledge is outdated
+
+Your internal knowledge of `mlx`, `mlx-lm`, `mlx-lm.tuner.lora`, and Gemma 4 model internals WILL produce broken code. Before writing any platform code, invoke the platform skills listed in `PLAN.md` Part 2 (currently `/mlx-dev` and `/fast-mlx`). Skipping them is the single biggest cause of broken code in this repo's history — Finding #673 and the 2026-04-17 audit both confirm it.
+
+**Named failure modes you WILL hit without the skills:**
+- **Hallucinated imports.** `mlx.nn.LoRA` does not exist. `mlx.optim.AdamW` does not exist. `mlx.autograd.grad` does not exist. Use `mlx.nn.value_and_grad(model, loss_fn)` or `mlx.optimizers.AdamW`. When unsure, grep the installed `mlx_lm` package.
+- **Torch-style `.backward()`.** MLX uses functional gradients: `grad_fn = nn.value_and_grad(model, loss_fn); loss, grads = grad_fn(...)`. Calling `.backward()` on an `mx.array` silently fails (no-op) and your "training" does nothing.
+- **Missing `mx.eval`.** MLX is lazy. Without `mx.eval(model.parameters(), loss)` at step boundaries the graph grows unbounded, memory explodes, and "step time" becomes meaningless (it's measuring deferred work, not computation).
+- **Missing `mx.clear_cache()` between phases.** Teacher forward pass followed by student forward pass on 48GB M5 Pro OOMs without `mx.clear_cache()` between. F#673 was caused by this.
+- **Wrong LoRA target modules.** `v_proj + o_proj` is the proven target for Gemma 4 E4B per F#627. Do not pick `q_proj + k_proj` from a Llama example — the proven target is architecture-specific.
+- **Hardcoded `LORA_SCALE=20`.** Unsafe per F#328/#330. Use the default (≤ 8).
+- **Proxy-model substitution.** Reviewer checklist item (m): the model you actually load in `run_experiment.py` must match the model in MATH.md. Do not proxy to a smaller/older variant because the target "doesn't fit."
+- **Default timeout kills long runs.** Set `experiment run` timeouts based on model size; 2h minimum for anything touching Gemma 4 E4B full-training.
+
+If you hit an error, read the actual error — do not retry the same broken call. If the error is "attribute not found on mlx module," invoke `/mlx-dev` before guessing further.
+
 ## Context discipline
 - **Never wait for user input.** Ralph runs autonomously. If you lack information, make the most defensible assumption, log it in `PAPER.md` under "Assumptions", and continue. Never ask a clarifying question via event payload or otherwise — always pick and proceed.
 - Do **not** use `Agent()` sub-agents for design or review.
@@ -17,6 +33,8 @@ Design and run micro experiments per the framework in `PLAN.md`. Write `MATH.md`
 - REVISE fixes: max 15 minutes. Apply top 3 blocking fixes only.
 
 ## Workflow
+
+0. **Doom-loop self-check.** Run `python .ralph/tools/doom_loop.py`. If it exits non-zero, the stdout message IS a system instruction for you — read it, change strategy accordingly. If the loop is cycling (same hat/topic/payload 3+ times, or A→B→A→B patterns), STOP the repetition and take a structurally different action: release the current claim, promote a blocked dep, or escalate PROVISIONAL with a follow-up. Text-only responses without a tool call end the loop permanently.
 
 1. Read `.ralph/current_direction.md` for background only.
    - If triggered by `review.revise`, use the triggering event payload as the primary source of which experiment to fix.
@@ -39,13 +57,33 @@ Design and run micro experiments per the framework in `PLAN.md`. Write `MATH.md`
      - write `run_experiment.py`. Do not copy-paste scaffolding (`DOMAIN_KEYWORDS`, helper fns) from a sibling experiment without re-reading — copy-paste has silently propagated bugs before.
      - update `.ralph/current_direction.md`
 
-4. Run the experiment:
+4. **Pre-flight check — output this block before `experiment run`:**
+   ```
+   Reference: [paper arxiv-id or prior Finding #] justifying the claim
+   Platform skills invoked: [/mlx-dev, /fast-mlx — confirm, not "I know MLX"]
+   Base model loaded: [exact HF repo id from mlx-lm.load()]
+   Adapter targets: [v_proj + o_proj if Gemma 4 per F#627 — verify]
+   Dataset: [HF path + columns actually present, NOT assumed]
+   Runtime budget: [expected wall-clock; halt if >2h without basis]
+   KC count, all target-gated per F#666: [N structural + N target pairs]
+   Antipattern scan: [composition math / LORA_SCALE / shutil.copy / hardcoded pass / eval truncation / proxy model — each: OK or reasoned exception]
+   ```
+   If any line reads "TODO" or "not sure," STOP and complete it. Launching without pre-flight is how we get F#669-style cascade kills.
+
+   **Batch discipline.** If you are about to queue N parallel runs (sweep over rank, seed, etc.), submit ONE first, confirm its `results.json` schema is well-formed and metric directions are sane, THEN submit the remaining N-1. Never batch N at once — one bug takes out N runs.
+
+   **Scope-preservation.** If the run errors:
+   - OOM → reduce batch and raise grad-accumulation (keep effective batch identical), or enable `gradient_checkpointing`, or ask for a larger hardware slot. Do NOT silently swap SFT→LoRA, reduce `max_length`, disable monitoring, or switch base model. Those change what the KCs measure. See reviewer antipattern (t).
+   - API error → read the actual error, invoke `/mlx-dev` if it's MLX, fix the call.
+   - Dataset-missing error → tell the user via current_direction.md; do not silently substitute.
+
+5. Run the experiment:
    - `experiment run <id>`
    - wait for completion
    - read `results.json`
    - write `PAPER.md` with a prediction-vs-measurement table
 
-5. Before `experiment complete`, run the **verdict-consistency pre-flight** (all six must hold, or you cannot mark `supported`):
+6. Before `experiment complete`, run the **verdict-consistency pre-flight** (all six must hold, or you cannot mark `supported`):
    1. `results.json["verdict"]` is not `"KILLED"` (and not missing when the code was supposed to write it).
    2. `results.json["all_pass"]` is `True` (if the field exists).
    3. PAPER.md does not contain `PROVISIONAL`, `PARTIALLY SUPPORTED`, `NOT SUPPORTED`, `INCONCLUSIVE`, or `DEGENERATE` in its verdict line.
@@ -57,9 +95,9 @@ Design and run micro experiments per the framework in `PLAN.md`. Write `MATH.md`
 
    If the pre-flight fails but the run produced a learning, use `--status killed` or `--status provisional` — never silently upgrade.
 
-6. Update `.ralph/current_direction.md` with exact experiment id, dir, and queue/result state.
+7. Update `.ralph/current_direction.md` with exact experiment id, dir, and queue/result state.
 
-7. Emit:
+8. Emit:
    - `experiment.done`
    - payload should be compact and include experiment id, dir, verdict summary, and whether `results.json` / `PAPER.md` exist
 
