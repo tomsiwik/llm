@@ -45,8 +45,8 @@ If you hit an error, read the actual error — do not retry the same broken call
 2. Claim work — handle the three outcomes:
    - `experiment claim researcher`
    - **If claim returns an experiment**: proceed to step 3.
-   - **If claim returns nothing and `experiment list --status open` has no entries with `priority <= 2`**: the backlog is drained. Print the literal string `RESEARCH_BACKLOG_DRAINED` (exact match — this is the orchestrator's termination signal per `ralph.yml: event_loop.completion_promise`). Do not emit any further events.
-   - **If claim returns nothing but priority > 2 experiments remain**: print `RESEARCH_BACKLOG_DRAINED` anyway — the configured drain threshold is priority ≤ 2. Low-priority work is explicitly out of scope for this loop.
+   - **If claim returns nothing and `experiment list --status open` returns empty**: the backlog is fully drained. Print the literal string `RESEARCH_BACKLOG_DRAINED` (exact match — this is the orchestrator's termination signal per `ralph.yml: event_loop.completion_promise`). Do not emit any further events.
+   - **If claim returns nothing but open experiments remain at higher priority**: those are all claimed by other workers or blocked. Check `experiment list -s open`. If non-empty, try `experiment claim researcher` again once — the queue may have just released. Only print `RESEARCH_BACKLOG_DRAINED` if truly zero open experiments.
 
 3. Check tags on the experiment (from `experiment get <id>`):
    - **If `audit-2026-04-17-rerun` tag is present**: `run_experiment.py` exists but is KNOWN-BUGGY. Read `.audit/RECOVERY_PLAN.md` (if present) for the specific fix. Apply the fix to `run_experiment.py` **before** running. Do NOT just re-run the existing code — it will reproduce the wrong result. The fix-category tag (e.g. `composition-bug`, `tautological-routing`, `lora-scale`, `thinking-mode`, `code-bug`) indicates the cluster-level remedy.
