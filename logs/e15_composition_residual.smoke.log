@@ -1,0 +1,59 @@
+E15: Composition Residual Decomposition
+SMOKE_TEST=True
+Layers: [0, 6, 20], N_ADAPTERS=3
+RANK=6, LORA_SCALE=6
+Rank sweep: [2, 4, 6]
+
+Loading model...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 89958.26it/s]
+Model loaded in 3.2s
+
+=== Phase 0: Base GSM8K accuracy ===
+  Base accuracy: 10.00% (N=10)
+
+=== Phase 1: SVD Spectrum Analysis ===
+
+--- Layer 0 ---
+  v_proj: (512, 2560)
+  Mean top-3 SV energy fraction: 0.5503
+  Mean cross-adapter U spectral norm: 0.2119
+  Collected 10 hidden states
+  Rank 2: mean|cos|=0.0638, mean||δ||=93.4354
+  Rank 4: mean|cos|=0.0510, mean||δ||=135.7730
+  Rank 6: mean|cos|=0.0256, mean||δ||=232.0820
+
+--- Layer 6 ---
+  v_proj: (512, 2560)
+  Mean top-3 SV energy fraction: 0.5611
+  Mean cross-adapter U spectral norm: 0.2315
+  Collected 10 hidden states
+  Rank 2: mean|cos|=0.0298, mean||δ||=23.2293
+  Rank 4: mean|cos|=0.0444, mean||δ||=37.1314
+  Rank 6: mean|cos|=0.0451, mean||δ||=40.0333
+
+--- Layer 20 ---
+  v_proj: (512, 2560)
+  Mean top-3 SV energy fraction: 0.5528
+  Mean cross-adapter U spectral norm: 0.1779
+  Collected 10 hidden states
+  Rank 2: mean|cos|=0.0260, mean||δ||=12.5048
+  Rank 4: mean|cos|=0.0421, mean||δ||=18.5119
+  Rank 6: mean|cos|=0.0304, mean||δ||=23.8686
+
+=== Phase 3: Kill Criteria Evaluation ===
+K2045 (top-3 energy ≥ 0.60): 0.5547 → FAIL
+K2045_target (ratio < 0.70 at some k): best_k=6, ratio=1.0000 → FAIL
+K2046 (best coupling < 0.030): best_cos=0.0337 at k=6 → FAIL
+K2046_quality (norm retention ≥ 0.50): 1.0000 → PASS
+
+============================================================
+RESULTS SUMMARY
+============================================================
+K2045 (spectrum concentration): FAIL — top-3 energy 0.5547
+K2045_target (coupling reduction): FAIL — ratio 1.0000 at k=6
+K2046 (coupling level): FAIL — mean|cos| 0.0337
+K2046_quality (norm retention): PASS — retention 1.0000
+Verdict: KILLED
+Total time: 14.0s
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e15_composition_residual_decomposition/results.json

@@ -1,0 +1,63 @@
+E14: Grassmannian ⟹ Activation-Space Orthogonality
+SMOKE_TEST=True
+Layers: [0, 20, 41], N_ADAPTERS=3, N_PROMPTS=10
+RANK=6, LORA_SCALE=6
+
+Loading model...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 62484.98it/s]
+mx.metal.clear_cache is deprecated and will be removed in a future version. Use mx.clear_cache instead.
+Model loaded in 2.8s
+
+=== Layer 0 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.157660
+  σ_max(B_grass^T B_grass) mean: 47.0414
+  σ_max(B_rand^T B_rand) mean: 52.1886
+  Collecting hidden states...
+  Got 10 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 0 done in 0.5s
+  Grassmannian mean |cos|: 0.0256, signed mean: 0.0040
+  Random mean |cos|: 0.0537, signed mean: -0.0126
+  Bound violation rate: 0.00% (0/30)
+  Decorrelation benefit: 0.0281
+
+=== Layer 20 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.142026
+  σ_max(B_grass^T B_grass) mean: 38.9626
+  σ_max(B_rand^T B_rand) mean: 48.6823
+  Collecting hidden states...
+  Got 10 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 20 done in 0.5s
+  Grassmannian mean |cos|: 0.0304, signed mean: 0.0180
+  Random mean |cos|: 0.0557, signed mean: 0.0244
+  Bound violation rate: 0.00% (0/30)
+  Decorrelation benefit: 0.0253
+
+=== Layer 41 ===
+  v_proj: (1024, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.323718
+  σ_max(B_grass^T B_grass) mean: 29.5917
+  σ_max(B_rand^T B_rand) mean: 33.5402
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 41
+
+============================================================
+RESULTS SUMMARY
+============================================================
+K2043 (bound holds): PASS
+  Mean violation rate 0.00% vs ≤10% threshold
+K2044 (decorrelation): PASS
+  Mean decorrelation benefit 0.0267 vs ≥0.01 threshold
+Verdict: SUPPORTED
+Total time: 4.5s
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e14_grassmannian_activation_orthogonality/results.json

@@ -1,0 +1,57 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+E6: Systematic Decomposition Strategy Adapter (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_STEPS=30, N_EVAL=20
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8
+
+=== Loading Gemma 4 E4B + manual LoRA attach ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 96420.78it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+  attached 84 LoRA modules across 42 layers
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (systematic decomposition) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1084 (4.69 step/s, 0.2s)
+  step 11/30 loss=0.0679 (5.58 step/s, 2.0s)
+  step 21/30 loss=0.0425 (5.67 step/s, 3.7s)
+  step 30/30 loss=0.0439 (5.70 step/s, 5.3s)
+
+=== Phase C: structural cos-sim (held-out) ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=== Phase D: math eval (N=20) ===
+  math 10/20 base=1/10 adapter=0/10 (4.8s)
+  math 20/20 base=3/20 adapter=0/20 (9.4s)
+Generating train split:   0%|          | 0/1119 [00:00<?, ? examples/s]Generating train split:  89%|████████▉ | 1000/1119 [00:00<00:00, 2401.12 examples/s]Generating train split: 100%|██████████| 1119/1119 [00:00<00:00, 2677.46 examples/s]
+Generating test split:   0%|          | 0/1172 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 1172/1172 [00:00<00:00, 252489.82 examples/s]
+Generating validation split:   0%|          | 0/299 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 299/299 [00:00<00:00, 121485.70 examples/s]
+
+=== Phase D: science eval (N=20) ===
+  science 10/20 base=8/10 adapter=6/10 (3.8s)
+  science 20/20 base=17/20 adapter=14/20 (7.4s)
+
+=== Phase D: stem eval (N=20) ===
+  stem 10/20 base=8/10 adapter=8/10 (3.7s)
+  stem 20/20 base=16/20 adapter=15/20 (7.5s)
+
+=== Phase D: general eval (N=20) ===
+  general 10/20 base=8/10 adapter=6/10 (4.1s)
+  general 20/20 base=15/20 adapter=13/20 (8.1s)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K_struct_cos_gt_0_85": "pass", "K2028_any_domain_gt_3pp": "fail", "K2029_2plus_domains_gt_3pp": "fail", "MMLU_general_drop_lt_5pp": "fail"}
+K_struct cos=0.9587
+math: base=0.15 adapter=0.0 delta=-15.0pp
+science: base=0.85 adapter=0.7 delta=-15.0pp
+stem: base=0.8 adapter=0.75 delta=-5.0pp
+general: base=0.75 adapter=0.65 delta=-10.0pp
+Improved domains: []
+Blockers: ["smoke_gate FAILED: ['A3_gsm8k_base_acc_geq_0_20']"]
+Total time: 51.9s

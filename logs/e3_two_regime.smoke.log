@@ -1,0 +1,90 @@
+=== E3: Two-Regime Unification ===
+Smoke: True, N_prompts: 5, Scales: [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 12.0, 16.0, 20.0]
+
+Phase 1: Loading model + adapter...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 86037.01it/s]
+mx.metal.clear_cache is deprecated and will be removed in a future version. Use mx.clear_cache instead.
+  Scale 0.0...
+    Done. Layer 0 head norms: ['432.23', '327.12', '366.42', '328.46', '474.05', '494.85', '573.96', '494.47']
+  Scale 1.0...
+    Done. Layer 0 head norms: ['432.55', '326.78', '365.97', '328.78', '474.02', '494.43', '573.76', '494.97']
+  Scale 2.0...
+    Done. Layer 0 head norms: ['432.97', '326.46', '365.62', '329.20', '474.04', '494.07', '573.73', '495.58']
+  Scale 3.0...
+    Done. Layer 0 head norms: ['433.41', '326.32', '365.39', '329.68', '474.18', '493.83', '573.82', '496.19']
+  Scale 4.0...
+    Done. Layer 0 head norms: ['433.89', '326.23', '365.22', '330.25', '474.37', '493.64', '573.87', '496.88']
+  Scale 5.0...
+    Done. Layer 0 head norms: ['434.46', '326.21', '365.15', '330.91', '474.59', '493.56', '574.07', '497.65']
+  Scale 6.0...
+    Done. Layer 0 head norms: ['435.06', '326.27', '365.19', '331.70', '474.89', '493.51', '574.40', '498.49']
+  Scale 8.0...
+    Done. Layer 0 head norms: ['436.39', '326.64', '365.51', '333.42', '475.75', '493.89', '575.27', '500.40']
+  Scale 12.0...
+    Done. Layer 0 head norms: ['439.68', '328.48', '367.25', '337.77', '478.09', '495.15', '578.03', '505.05']
+  Scale 16.0...
+    Done. Layer 0 head norms: ['443.77', '331.60', '370.48', '343.44', '481.31', '497.82', '582.25', '510.81']
+  Scale 20.0...
+    Done. Layer 0 head norms: ['448.58', '336.08', '375.12', '350.24', '485.67', '501.73', '587.74', '517.51']
+Saved head norms to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e3_two_regime_unification/head_norms.json
+
+Phase 2: GSM8K accuracy at each scale...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 28055.55it/s]
+  Scale 0.0...
+    Accuracy: 2/5 = 40.00%
+  Scale 1.0...
+    Accuracy: 1/5 = 20.00%
+  Scale 2.0...
+    Accuracy: 1/5 = 20.00%
+  Scale 3.0...
+    Accuracy: 1/5 = 20.00%
+  Scale 4.0...
+    Accuracy: 2/5 = 40.00%
+  Scale 5.0...
+    Accuracy: 2/5 = 40.00%
+  Scale 6.0...
+    Accuracy: 4/5 = 80.00%
+  Scale 8.0...
+    Accuracy: 2/5 = 40.00%
+  Scale 12.0...
+    Accuracy: 2/5 = 40.00%
+  Scale 16.0...
+    Accuracy: 0/5 = 0.00%
+  Scale 20.0...
+    Accuracy: 0/5 = 0.00%
+Saved accuracy to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e3_two_regime_unification/gsm8k_accuracy.json
+
+Phase 3: Analysis...
+
+--- Head Classification ---
+Total heads: 336
+Sigmoid (R²>0.9): 282 (83.9%)
+  In range [3,7]: 6 (1.8%)
+Linear (R²>0.9): 11 (3.3%)
+
+Sigmoid inflection distribution:
+  Mean: 16.41
+  Std: 8.05
+  Median: 17.44
+
+Full-attention sigmoid in-range: 1/56 (1.8%)
+Sliding-attention sigmoid in-range: 5/280 (1.8%)
+
+--- Behavioral Correlation ---
+Spearman ρ (flipped-heads vs GSM8K accuracy): -0.1887 (p=0.5784)
+Scales:        [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 12.0, 16.0, 20.0]
+Flipped heads: [0.0, 33.0, 35.0, 41.0, 43.0, 43.0, 47.0, 51.0, 60.0, 86.0, 185.0]
+GSM8K acc:     [0.4, 0.2, 0.2, 0.2, 0.4, 0.4, 0.8, 0.4, 0.4, 0.0, 0.0]
+
+Median inflection: 5.34
+Acc at median inflection scale: 40.00% (peak: 80.00%)
+
+--- Kill Criteria ---
+K2022 (structural bifurcation ≥20% heads sigmoid in [3,7]): FAIL (6/336)
+K2023 (correlation ρ≥0.7): FAIL (ρ=-0.1887)
+K_target (behavioral): PASS
+
+Verdict: KILLED
+Saved results to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e3_two_regime_unification/results.json
+
+Total time: 265s (4.4min)

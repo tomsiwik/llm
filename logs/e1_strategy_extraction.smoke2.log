@@ -1,0 +1,144 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Loading Gemma 4 E4B 4-bit...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 52675.72it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+Model loaded: 42 layers
+[MEM hooks_installed] active=4.27GB cache=0.00GB
+
+============================================================
+STRATEGY: systematic
+============================================================
+
+  Extracting 'systematic_p0' vectors from 1 prompts...
+
+  Extracting 'systematic_p1' vectors from 1 prompts...
+
+  Extracting 'systematic_p2' vectors from 1 prompts...
+
+  Extracting 'systematic_p3' vectors from 1 prompts...
+
+  Extracting 'systematic_p4' vectors from 1 prompts...
+
+  Extracting 'systematic_p5' vectors from 1 prompts...
+
+  Extracting 'systematic_p6' vectors from 1 prompts...
+
+  Extracting 'systematic_p7' vectors from 1 prompts...
+
+  Extracting 'systematic_p8' vectors from 1 prompts...
+
+  Extracting 'systematic_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'systematic' ===
+  Best layer: 41 (cos=0.9652)
+  Mean across layers: 0.8106
+
+  Extracting 'systematic' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+============================================================
+STRATEGY: step_by_step
+============================================================
+
+  Extracting 'step_by_step_p0' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p1' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p2' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p3' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p4' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p5' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p6' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p7' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p8' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'step_by_step' ===
+  Best layer: 41 (cos=0.9534)
+  Mean across layers: 0.7918
+
+  Extracting 'step_by_step' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+============================================================
+STRATEGY: conservative
+============================================================
+
+  Extracting 'conservative_p0' vectors from 1 prompts...
+
+  Extracting 'conservative_p1' vectors from 1 prompts...
+
+  Extracting 'conservative_p2' vectors from 1 prompts...
+
+  Extracting 'conservative_p3' vectors from 1 prompts...
+
+  Extracting 'conservative_p4' vectors from 1 prompts...
+
+  Extracting 'conservative_p5' vectors from 1 prompts...
+
+  Extracting 'conservative_p6' vectors from 1 prompts...
+
+  Extracting 'conservative_p7' vectors from 1 prompts...
+
+  Extracting 'conservative_p8' vectors from 1 prompts...
+
+  Extracting 'conservative_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'conservative' ===
+  Best layer: 41 (cos=0.9537)
+  Mean across layers: 0.7653
+
+  Extracting 'conservative' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+=== K3: Cross-prompt consistency for 'systematic' ===
+
+  Extracting 'systematic_A' vectors from 5 prompts...
+    5/5 prompts processed
+
+  Extracting 'systematic_B' vectors from 5 prompts...
+    5/5 prompts processed
+  Best layer: 6 cos=0.9922
+  Mean cos: 0.9459
+
+============================================================
+INJECTING: systematic (best K1, layer=41)
+============================================================
+
+--- Baseline GSM8K ---
+
+=== K2: GSM8K eval (adapter=OFF) ===
+  10/10 accuracy=30.0%
+
+=== Phase 3: Injecting 'systematic' as LoRA ===
+  Injected into 3 layers
+
+--- GSM8K with injected adapter ---
+
+=== K2: GSM8K eval (adapter=ON) ===
+  10/10 accuracy=30.0%
+
+=== Cross-strategy interference ===
+  Cross-strategy cos: {'systematic_vs_step_by_step': 0.9922, 'systematic_vs_conservative': 0.9883, 'step_by_step_vs_conservative': 0.9883}
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Best strategy: systematic (layer 41)
+Baseline GSM8K: 30.0%
+Adapted GSM8K: 30.0%
+Delta: +0.00pp
+KCs: {"K2017_strategy_vector_cos_gt_0_1": "untested", "K2018_gsm8k_improvement_gt_2pp": "fail", "K2019_cross_prompt_cos_gt_0_3": "pass", "K2017_systematic_cos_gt_0_1": "pass", "K2017_step_by_step_cos_gt_0_1": "pass", "K2017_conservative_cos_gt_0_1": "pass"}
+Verdict: KILLED
+Time: 43.6s

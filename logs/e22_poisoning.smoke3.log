@@ -1,0 +1,65 @@
+============================================================
+E22: Adapter Poisoning Robustness
+Mode: SMOKE
+Layers: [0, 6, 20]
+Clean adapters: 3, QA questions: 20
+Poison multipliers: [1, 5, 10, 20]
+============================================================
+
+--- Phase 1: Load model ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 73908.44it/s]
+Model loaded in 3.2s
+
+--- Phase 2: Baseline QA ---
+Baseline accuracy: 85.0% (25.8s)
+
+--- Phase 3: Create adapter components ---
+  Layer 0: clean_mag=36.00, W_norm=31.8
+  Layer 6: clean_mag=36.00, W_norm=31.2
+  Layer 20: clean_mag=36.00, W_norm=26.0
+
+--- Phase 4: Poison magnitude sweep ---
+
+  Evaluating: Grassmannian clean-only
+  Grassmannian clean-only: 85.0%
+
+  Evaluating: Random clean-only
+  Random clean-only: 85.0%
+
+  --- Poison multiplier: 1× ---
+  Grassmannian+poison: 85.0% (drop=0.0pp)
+  Random+poison:      85.0% (drop=0.0pp)
+  Protection margin:  0.0pp
+
+  --- Poison multiplier: 5× ---
+  Grassmannian+poison: 85.0% (drop=0.0pp)
+  Random+poison:      80.0% (drop=5.0pp)
+  Protection margin:  5.0pp
+
+  --- Poison multiplier: 10× ---
+  Grassmannian+poison: 80.0% (drop=5.0pp)
+  Random+poison:      25.0% (drop=60.0pp)
+  Protection margin:  55.0pp
+
+  --- Poison multiplier: 20× ---
+  Grassmannian+poison: 60.0% (drop=25.0pp)
+  Random+poison:      10.0% (drop=75.0pp)
+  Protection margin:  50.0pp
+
+--- Phase 5: Analysis ---
+
+Base accuracy:        85.0%
+Grass clean-only:     85.0%
+Random clean-only:    85.0%
+
+Sweep summary:
+    1×: grass=85.0% rand=85.0% margin=0.0pp
+    5×: grass=85.0% rand=80.0% margin=5.0pp
+   10×: grass=80.0% rand=25.0% margin=55.0pp
+   20×: grass=60.0% rand=10.0% margin=50.0pp
+
+K2055 (worst grass drop < 30pp): PASS (25.0pp)
+K2056 (best protection margin > 2pp): PASS (55.0pp)
+Verdict: PROVISIONAL
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e22_adapter_poisoning_robustness/results.json

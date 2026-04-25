@@ -1,0 +1,49 @@
+============================================================
+E22: Adapter Poisoning Robustness
+Mode: SMOKE
+Layers: [0, 6, 20]
+Clean adapters: 3, QA questions: 20
+============================================================
+
+--- Phase 1: Load model ---
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 40427.03it/s]
+Model loaded in 3.1s
+
+--- Phase 2: Baseline QA ---
+Baseline accuracy: 85.0% (24.9s)
+
+--- Phase 3: Create adapters ---
+  Layer 0: adapters created (clean mag=36.00)
+  Layer 6: adapters created (clean mag=36.00)
+  Layer 20: adapters created (clean mag=36.00)
+
+--- Phase 4: Evaluate conditions ---
+
+  Evaluating: Grassmannian clean-only
+  Grassmannian clean-only: 85.0% (39.1s)
+
+  Evaluating: Grassmannian + poison
+  Grassmannian + poison: 85.0% (34.4s)
+
+  Evaluating: Random clean-only
+  Random clean-only: 85.0% (36.1s)
+
+  Evaluating: Random + poison
+  Random + poison: 85.0% (35.5s)
+
+--- Phase 5: Analysis ---
+Base accuracy:              85.0%
+Grassmannian clean:         85.0%
+Grassmannian + poison:      85.0%
+Grassmannian degradation:   0.0pp
+Random clean:               85.0%
+Random + poison:            85.0%
+Random degradation:         0.0pp
+Protection margin (Grass):  0.0pp
+Base→poison drop (Grass):   0.0pp
+
+K2055 (no catastrophic drop < 30pp): PASS (0.0pp)
+K2056 (protection margin > 2pp): FAIL (0.0pp)
+Verdict: KILLED
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e22_adapter_poisoning_robustness/results.json

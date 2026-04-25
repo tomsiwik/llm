@@ -1,0 +1,109 @@
+E2: Null-Space Composition Theorem
+Model: mlx-community/gemma-4-e4b-it-4bit
+Smoke test: False
+Layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+mlx-lm version: 0.31.2
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 121135.13it/s]
+mx.metal.clear_cache is deprecated and will be removed in a future version. Use mx.clear_cache instead.
+
+=== PHASE 1: Effective Rank & Null-Space Fraction ===
+  Layer  0 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7964
+  Layer  1 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7989
+  Layer  2 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7995
+  Layer  3 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8014
+  Layer  4 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7997
+  Layer  5 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.5997
+  Layer  6 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8000
+  Layer  7 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7977
+  Layer  8 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7967
+  Layer  9 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7998
+  Layer 10 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7984
+  Layer 11 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.6002
+  Layer 12 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7998
+  Layer 13 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7997
+  Layer 14 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8051
+  Layer 15 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7978
+  Layer 16 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8021
+  Layer 17 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.5992
+  Layer 18 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7996
+  Layer 19 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8007
+  Layer 20 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7970
+  Layer 21 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7980
+  Layer 22 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8031
+  Layer 23 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.6058
+  Layer 24 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7998
+  Layer 25 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8006
+  Layer 26 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7986
+  Layer 27 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8020
+  Layer 28 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7997
+  Layer 29 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.5992
+  Layer 30 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7978
+  Layer 31 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7983
+  Layer 32 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8011
+  Layer 33 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7973
+  Layer 34 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8021
+  Layer 35 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.5971
+  Layer 36 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7989
+  Layer 37 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8034
+  Layer 38 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8003
+  Layer 39 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.8000
+  Layer 40 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7976
+  Layer 41 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.6019
+  Layer  0 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer  1 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer  2 o_proj: shape=[2560, 2048], r_eff(0.01)=2045, null_frac=0.0011
+  Layer  3 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer  4 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer  5 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3739
+  Layer  6 o_proj: shape=[2560, 2048], r_eff(0.01)=1974, null_frac=0.0386
+  Layer  7 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer  8 o_proj: shape=[2560, 2048], r_eff(0.01)=2047, null_frac=0.0006
+  Layer  9 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 10 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 11 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3740
+  Layer 12 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 13 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 14 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 15 o_proj: shape=[2560, 2048], r_eff(0.01)=2037, null_frac=0.0053
+  Layer 16 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 17 o_proj: shape=[2560, 4096], r_eff(0.01)=2559, null_frac=0.3767
+  Layer 18 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 19 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 20 o_proj: shape=[2560, 2048], r_eff(0.01)=2036, null_frac=0.0061
+  Layer 21 o_proj: shape=[2560, 2048], r_eff(0.01)=2016, null_frac=0.0146
+  Layer 22 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 23 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3753
+  Layer 24 o_proj: shape=[2560, 2048], r_eff(0.01)=2044, null_frac=0.0024
+  Layer 25 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 26 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 27 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 28 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 29 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3733
+  Layer 30 o_proj: shape=[2560, 2048], r_eff(0.01)=2043, null_frac=0.0024
+  Layer 31 o_proj: shape=[2560, 2048], r_eff(0.01)=2043, null_frac=0.0027
+  Layer 32 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 33 o_proj: shape=[2560, 2048], r_eff(0.01)=2045, null_frac=0.0011
+  Layer 34 o_proj: shape=[2560, 2048], r_eff(0.01)=2047, null_frac=0.0005
+  Layer 35 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3761
+  Layer 36 o_proj: shape=[2560, 2048], r_eff(0.01)=2037, null_frac=0.0056
+  Layer 37 o_proj: shape=[2560, 2048], r_eff(0.01)=2038, null_frac=0.0052
+  Layer 38 o_proj: shape=[2560, 2048], r_eff(0.01)=2034, null_frac=0.0066
+  Layer 39 o_proj: shape=[2560, 2048], r_eff(0.01)=2030, null_frac=0.0080
+  Layer 40 o_proj: shape=[2560, 2048], r_eff(0.01)=2026, null_frac=0.0099
+  Layer 41 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3750
+
+=== PHASE 2: Projection Residual Summary ===
+  v_proj: mean_null_frac=0.7665, mean_row_frac=0.2335, K2020=FAIL
+  o_proj: mean_null_frac=0.0651, mean_row_frac=0.9349, K2020=FAIL
+
+=== PHASE 3: Composition Quality (tau) ===
+  tau (standard Grassmannian): 0.067284
+  tau (null-projected):        0.068855
+  tau reduction:               -0.0233 (-2.3%)
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e2_null_space_composition_theorem/results.json
+
+Verdict: KILLED
+K2020 (null-space): FAIL
+K2021 (tau reduction): FAIL
+Elapsed: 45.6s

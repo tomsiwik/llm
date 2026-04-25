@@ -1,0 +1,72 @@
+E16: Tight Bounds for NRE Composition Error
+SMOKE_TEST=True
+Layers: [0, 6, 20]
+N_VALUES=[2, 5, 10], N_PROMPTS=5, N_GSM8K=10
+RANK=6, LORA_SCALE=6.0
+
+Loading model...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 106861.25it/s]
+Model loaded in 3.1s
+Constructing Grassmannian adapters...
+Adapters constructed for 3 layers, 10 adapters each
+
+=== Phase 1: Theoretical Bounds ===
+  Layer 0: GELU'' mean=0.0671
+    N=2: cross-term mean=2348.080249, max=2989.422607
+    N=5: cross-term mean=24174.703638, max=32224.759216
+    N=10: cross-term mean=128588.969629, max=150293.124390
+  Layer 6: GELU'' mean=0.3055
+    N=2: cross-term mean=171.220847, max=266.494232
+    N=5: cross-term mean=2379.909526, max=3538.334229
+    N=10: cross-term mean=11284.292586, max=14636.185989
+  Layer 20: GELU'' mean=0.5914
+    N=2: cross-term mean=269.985617, max=320.226532
+    N=5: cross-term mean=3264.576160, max=3943.076523
+    N=10: cross-term mean=17506.130447, max=21039.071274
+
+Predicted NRE (sum of per-layer cross-terms, kappa=1):
+  N=2: 2789.286713
+  N=5: 29819.189323
+  N=10: 157379.392662
+
+=== Phase 2: Measure Output NRE ===
+  Prompt 2/5 done
+  Prompt 4/5 done
+  N=2: NRE mean=0.123685, max=0.204066
+  N=5: NRE mean=0.472073, max=0.955016
+  N=10: NRE mean=1.064524, max=1.712264
+
+=== Phase 3: GSM8K Behavioral ===
+  Base accuracy: 0.0% (0/10)
+  N=2 composed accuracy: 0.0% (0/10)
+  N=5 composed accuracy: 10.0% (1/10)
+  N=10 composed accuracy: 0.0% (0/10)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+K2047 (non-vacuous bound): FAIL
+  N=2: pred=2789.286713, meas=0.123685, ratio=22551.5x (FAIL)
+  N=5: pred=29819.189323, meas=0.472073, ratio=63166.5x (FAIL)
+  N=10: pred=157379.392662, meas=1.064524, ratio=147840.2x (FAIL)
+K2048 (N² scaling): FAIL
+  N=5: NRE/NRE(2)=3.82, expected=10.0, deviation=0.38x (PASS)
+  N=10: NRE/NRE(2)=8.61, expected=45.0, deviation=0.19x (FAIL)
+K2047_target (behavioral): PASS
+  N=2: comp_acc=0.0%, base*0.5=0.0% (PASS)
+  N=5: comp_acc=10.0%, base*0.5=0.0% (PASS)
+  N=10: comp_acc=0.0%, base*0.5=0.0% (PASS)
+
+Verdict: KILLED
+Total time: 93.4s
+
+Predicted vs Measured NRE:
+  N= 2: predicted=2789.286713, measured=0.123685, ratio=22551.5x
+  N= 5: predicted=29819.189323, measured=0.472073, ratio=63166.5x
+  N=10: predicted=157379.392662, measured=1.064524, ratio=147840.2x
+
+N² Scaling Check (NRE(N)/NRE(2) vs N(N-1)/2):
+  N= 5: actual=3.82, expected=10.0, ratio=0.38x
+  N=10: actual=8.61, expected=45.0, ratio=0.19x
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e16_perturbation_bounds/results.json

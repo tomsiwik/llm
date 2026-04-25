@@ -1,0 +1,490 @@
+E14: Grassmannian ⟹ Activation-Space Orthogonality
+SMOKE_TEST=False
+Layers: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 36, 37, 38, 39, 40], N_ADAPTERS=5, N_PROMPTS=50
+RANK=6, LORA_SCALE=6
+
+Loading model...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 106861.25it/s]
+Model loaded in 3.0s
+
+=== Layer 0 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.157660
+  σ_max(B_grass^T B_grass) mean: 45.4763
+  σ_max(B_rand^T B_rand) mean: 46.1551
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 0 done in 2.6s
+  Grassmannian mean |cos|: 0.0434, signed mean: 0.0042
+  Random mean |cos|: 0.0426, signed mean: -0.0033
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0008
+
+=== Layer 1 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.166100
+  σ_max(B_grass^T B_grass) mean: 39.0558
+  σ_max(B_rand^T B_rand) mean: 46.7675
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 1 done in 2.6s
+  Grassmannian mean |cos|: 0.0358, signed mean: 0.0046
+  Random mean |cos|: 0.0452, signed mean: 0.0062
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0094
+
+=== Layer 2 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.166100
+  σ_max(B_grass^T B_grass) mean: 41.8198
+  σ_max(B_rand^T B_rand) mean: 50.7654
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 2 done in 2.6s
+  Grassmannian mean |cos|: 0.0325, signed mean: -0.0093
+  Random mean |cos|: 0.0442, signed mean: 0.0031
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0117
+
+=== Layer 3 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.166100
+  σ_max(B_grass^T B_grass) mean: 43.8211
+  σ_max(B_rand^T B_rand) mean: 42.1938
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 3 done in 2.6s
+  Grassmannian mean |cos|: 0.0332, signed mean: -0.0085
+  Random mean |cos|: 0.0424, signed mean: 0.0066
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0092
+
+=== Layer 4 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.142877
+  σ_max(B_grass^T B_grass) mean: 40.2325
+  σ_max(B_rand^T B_rand) mean: 45.5439
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 4 done in 2.6s
+  Grassmannian mean |cos|: 0.0409, signed mean: -0.0016
+  Random mean |cos|: 0.0452, signed mean: -0.0247
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0043
+
+=== Layer 6 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.200052
+  σ_max(B_grass^T B_grass) mean: 41.7429
+  σ_max(B_rand^T B_rand) mean: 44.3240
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 6 done in 2.6s
+  Grassmannian mean |cos|: 0.0400, signed mean: -0.0023
+  Random mean |cos|: 0.0453, signed mean: 0.0036
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0053
+
+=== Layer 7 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.165431
+  σ_max(B_grass^T B_grass) mean: 40.9731
+  σ_max(B_rand^T B_rand) mean: 44.3829
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 7 done in 2.6s
+  Grassmannian mean |cos|: 0.0349, signed mean: 0.0153
+  Random mean |cos|: 0.0383, signed mean: -0.0101
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0033
+
+=== Layer 8 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.317113
+  σ_max(B_grass^T B_grass) mean: 44.2521
+  σ_max(B_rand^T B_rand) mean: 42.1273
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 8 done in 2.6s
+  Grassmannian mean |cos|: 0.0369, signed mean: 0.0229
+  Random mean |cos|: 0.0415, signed mean: 0.0168
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0047
+
+=== Layer 9 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.317113
+  σ_max(B_grass^T B_grass) mean: 36.9702
+  σ_max(B_rand^T B_rand) mean: 43.0101
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 9 done in 2.6s
+  Grassmannian mean |cos|: 0.0249, signed mean: -0.0033
+  Random mean |cos|: 0.0324, signed mean: -0.0089
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0075
+
+=== Layer 10 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.383462
+  σ_max(B_grass^T B_grass) mean: 39.3051
+  σ_max(B_rand^T B_rand) mean: 43.2357
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 10 done in 2.6s
+  Grassmannian mean |cos|: 0.0415, signed mean: -0.0068
+  Random mean |cos|: 0.0306, signed mean: 0.0035
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0109
+
+=== Layer 12 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.383462
+  σ_max(B_grass^T B_grass) mean: 39.2450
+  σ_max(B_rand^T B_rand) mean: 44.5001
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 12 done in 2.6s
+  Grassmannian mean |cos|: 0.0320, signed mean: -0.0050
+  Random mean |cos|: 0.0345, signed mean: -0.0155
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0025
+
+=== Layer 13 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.198161
+  σ_max(B_grass^T B_grass) mean: 41.7189
+  σ_max(B_rand^T B_rand) mean: 40.9371
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 13 done in 2.6s
+  Grassmannian mean |cos|: 0.0337, signed mean: -0.0016
+  Random mean |cos|: 0.0291, signed mean: -0.0006
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0047
+
+=== Layer 14 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.162722
+  σ_max(B_grass^T B_grass) mean: 41.6712
+  σ_max(B_rand^T B_rand) mean: 47.5510
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 14 done in 2.8s
+  Grassmannian mean |cos|: 0.0338, signed mean: 0.0048
+  Random mean |cos|: 0.0329, signed mean: 0.0011
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0009
+
+=== Layer 15 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.083227
+  σ_max(B_grass^T B_grass) mean: 40.4890
+  σ_max(B_rand^T B_rand) mean: 47.4581
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 15 done in 2.9s
+  Grassmannian mean |cos|: 0.0415, signed mean: -0.0216
+  Random mean |cos|: 0.0525, signed mean: 0.0123
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0110
+
+=== Layer 16 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.142065
+  σ_max(B_grass^T B_grass) mean: 47.8805
+  σ_max(B_rand^T B_rand) mean: 49.9386
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 16 done in 2.9s
+  Grassmannian mean |cos|: 0.0278, signed mean: 0.0028
+  Random mean |cos|: 0.0292, signed mean: 0.0076
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0014
+
+=== Layer 18 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.262356
+  σ_max(B_grass^T B_grass) mean: 41.0604
+  σ_max(B_rand^T B_rand) mean: 47.5491
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 18 done in 2.8s
+  Grassmannian mean |cos|: 0.0541, signed mean: 0.0115
+  Random mean |cos|: 0.0394, signed mean: 0.0166
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0147
+
+=== Layer 19 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.326680
+  σ_max(B_grass^T B_grass) mean: 45.5076
+  σ_max(B_rand^T B_rand) mean: 46.1841
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 19 done in 2.9s
+  Grassmannian mean |cos|: 0.0420, signed mean: -0.0215
+  Random mean |cos|: 0.0345, signed mean: -0.0214
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0075
+
+=== Layer 20 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.326680
+  σ_max(B_grass^T B_grass) mean: 38.8358
+  σ_max(B_rand^T B_rand) mean: 48.5146
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 20 done in 2.8s
+  Grassmannian mean |cos|: 0.0463, signed mean: 0.0232
+  Random mean |cos|: 0.0566, signed mean: 0.0228
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0104
+
+=== Layer 21 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.326680
+  σ_max(B_grass^T B_grass) mean: 38.7327
+  σ_max(B_rand^T B_rand) mean: 44.3355
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 21 done in 2.8s
+  Grassmannian mean |cos|: 0.0425, signed mean: 0.0011
+  Random mean |cos|: 0.0518, signed mean: -0.0215
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: 0.0093
+
+=== Layer 22 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.256438
+  σ_max(B_grass^T B_grass) mean: 47.4654
+  σ_max(B_rand^T B_rand) mean: 48.2617
+  Collecting hidden states...
+  Got 50 hidden states
+  Computing Grassmannian interference...
+  Computing random interference...
+  Layer 22 done in 2.8s
+  Grassmannian mean |cos|: 0.0523, signed mean: -0.0051
+  Random mean |cos|: 0.0378, signed mean: -0.0085
+  Bound violation rate: 0.00% (0/500)
+  Decorrelation benefit: -0.0145
+
+=== Layer 24 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.215644
+  σ_max(B_grass^T B_grass) mean: 38.1008
+  σ_max(B_rand^T B_rand) mean: 47.7589
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 24
+
+=== Layer 25 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.215644
+  σ_max(B_grass^T B_grass) mean: 34.7071
+  σ_max(B_rand^T B_rand) mean: 45.5669
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 25
+
+=== Layer 26 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.263943
+  σ_max(B_grass^T B_grass) mean: 37.1647
+  σ_max(B_rand^T B_rand) mean: 42.8074
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 26
+
+=== Layer 27 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.263943
+  σ_max(B_grass^T B_grass) mean: 38.4965
+  σ_max(B_rand^T B_rand) mean: 44.3094
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 27
+
+=== Layer 28 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.263943
+  σ_max(B_grass^T B_grass) mean: 39.0107
+  σ_max(B_rand^T B_rand) mean: 44.6107
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 28
+
+=== Layer 30 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.145162
+  σ_max(B_grass^T B_grass) mean: 37.5666
+  σ_max(B_rand^T B_rand) mean: 47.1077
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 30
+
+=== Layer 31 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.140094
+  σ_max(B_grass^T B_grass) mean: 37.8019
+  σ_max(B_rand^T B_rand) mean: 41.7836
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 31
+
+=== Layer 32 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.184874
+  σ_max(B_grass^T B_grass) mean: 39.4739
+  σ_max(B_rand^T B_rand) mean: 42.7009
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 32
+
+=== Layer 33 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.202233
+  σ_max(B_grass^T B_grass) mean: 40.9536
+  σ_max(B_rand^T B_rand) mean: 43.8059
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 33
+
+=== Layer 34 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.202233
+  σ_max(B_grass^T B_grass) mean: 37.4503
+  σ_max(B_rand^T B_rand) mean: 43.0249
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 34
+
+=== Layer 36 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.202233
+  σ_max(B_grass^T B_grass) mean: 38.8092
+  σ_max(B_rand^T B_rand) mean: 44.7568
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 36
+
+=== Layer 37 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.161588
+  σ_max(B_grass^T B_grass) mean: 40.4468
+  σ_max(B_rand^T B_rand) mean: 42.8108
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 37
+
+=== Layer 38 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.317496
+  σ_max(B_grass^T B_grass) mean: 40.1841
+  σ_max(B_rand^T B_rand) mean: 44.9054
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 38
+
+=== Layer 39 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.323718
+  σ_max(B_grass^T B_grass) mean: 38.9255
+  σ_max(B_rand^T B_rand) mean: 45.0754
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 39
+
+=== Layer 40 ===
+  v_proj: (512, 2560)
+  Grassmannian A ortho check (max |A_i^T A_j|): 0.000000
+  Random A overlap (max |A_i^T A_j|): 0.323718
+  σ_max(B_grass^T B_grass) mean: 38.4149
+  σ_max(B_rand^T B_rand) mean: 43.5604
+  Collecting hidden states...
+  Got 0 hidden states
+  WARNING: No hidden states collected, skipping layer 40
+
+============================================================
+RESULTS SUMMARY
+============================================================
+K2043 (bound holds): PASS
+  Mean violation rate 0.00% vs ≤10% threshold
+K2044 (decorrelation): FAIL
+  Mean decorrelation benefit 0.0018 vs ≥0.01 threshold
+Verdict: KILLED
+Total time: 88.2s
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e14_grassmannian_activation_orthogonality_full/results.json

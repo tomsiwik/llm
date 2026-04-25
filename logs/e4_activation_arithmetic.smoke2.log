@@ -1,0 +1,84 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+E4: Activation Arithmetic Composition
+  smoke=True, N_extract=8, N_eval=20
+  layers_to_test=[7, 14, 21, 28, 35], alphas=[0.5, 1.0, 2.0, 4.0, 8.0]
+=== Phase A: Load model ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 44442.96it/s]
+  Model loaded: mlx-community/gemma-4-e4b-it-4bit
+  Layers: 42
+
+=== Phase B: Extract contrastive vectors (N=8) ===
+
+  Extracting 'decompose' vectors...
+    4/8 problems processed
+    8/8 problems processed
+
+  Extracting 'analogy' vectors...
+    4/8 problems processed
+    8/8 problems processed
+
+  Inter-strategy cosine (decompose vs analogy):
+    Layer 0: cos=0.8516
+    Layer 3: cos=0.1934
+    Layer 6: cos=0.5312
+    Layer 9: cos=0.6328
+    Layer 12: cos=0.7188
+    Layer 15: cos=0.7266
+    Layer 18: cos=0.8164
+    Layer 21: cos=0.8242
+    Layer 24: cos=0.9141
+    Layer 27: cos=0.8984
+    Layer 30: cos=0.9180
+    Layer 33: cos=0.9062
+    Layer 36: cos=0.8711
+    Layer 39: cos=0.8281
+  Mean inter-strategy cos: 0.7593
+  Vector norms (decompose): min=1.27, max=80.00
+
+=== Phase C: Layer x Alpha sweep (layers=5, alphas=5) ===
+  Computing base answers...
+  Base accuracy: 2/5 = 40%
+  Base answers: [18.0, 3.0, 130.0, 3.0, 2.0]
+  Expected: ['18', '3', '70000', '624', '20']
+    L= 7 α=0.5: 2/5 (Δ=+0.0pp, changed=2)
+    L= 7 α=1.0: 1/5 (Δ=-20.0pp, changed=4)
+    L= 7 α=2.0: 2/5 (Δ=+0.0pp, changed=3)
+    L= 7 α=4.0: 2/5 (Δ=+0.0pp, changed=2)
+    L= 7 α=8.0: 3/5 (Δ=+20.0pp, changed=3)
+    L=14 α=0.5: 2/5 (Δ=+0.0pp, changed=3)
+    L=14 α=1.0: 2/5 (Δ=+0.0pp, changed=2)
+    L=14 α=2.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=14 α=4.0: 2/5 (Δ=+0.0pp, changed=2)
+    L=14 α=8.0: 3/5 (Δ=+20.0pp, changed=3)
+    L=21 α=0.5: 2/5 (Δ=+0.0pp, changed=2)
+    L=21 α=1.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=21 α=2.0: 1/5 (Δ=-20.0pp, changed=4)
+    L=21 α=4.0: 1/5 (Δ=-20.0pp, changed=3)
+    L=21 α=8.0: 2/5 (Δ=+0.0pp, changed=4)
+    L=28 α=0.5: 2/5 (Δ=+0.0pp, changed=3)
+    L=28 α=1.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=28 α=2.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=28 α=4.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=28 α=8.0: 3/5 (Δ=+20.0pp, changed=3)
+    L=35 α=0.5: 2/5 (Δ=+0.0pp, changed=1)
+    L=35 α=1.0: 2/5 (Δ=+0.0pp, changed=1)
+    L=35 α=2.0: 2/5 (Δ=+0.0pp, changed=3)
+    L=35 α=4.0: 3/5 (Δ=+20.0pp, changed=2)
+    L=35 α=8.0: 2/5 (Δ=+0.0pp, changed=2)
+
+  Best: layer=7, alpha=8.0, delta=+20.0pp
+  Any output changed: True
+
+=== Phase D: Full eval at L=7, α=8.0 (N=20) ===
+  5/20: base=2 actadd=3 prompt=1 (96s)
+  10/20: base=2 actadd=3 prompt=2 (197s)
+  15/20: base=2 actadd=3 prompt=2 (301s)
+  20/20: base=5 actadd=4 prompt=2 (400s)
+
+============================================================
+VERDICT: KILLED
+  K_struct (cos<0.7): FAIL (cos=0.7593)
+  K2024 (>2pp change): PASS (delta=5.00pp)
+  K2025 (hybrid>NRE): DEFERRED
+  Wall time: 1228s
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e4_activation_arithmetic_composition/results.json

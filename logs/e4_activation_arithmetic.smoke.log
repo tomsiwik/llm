@@ -1,0 +1,51 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+E4: Activation Arithmetic Composition
+  smoke=True, N_extract=8, N_eval=20
+  layers_to_test=[7, 14, 21, 28, 35], alphas=[0.5, 1.0, 2.0, 4.0, 8.0]
+=== Phase A: Load model ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 57554.77it/s]
+  Model loaded: mlx-community/gemma-4-e4b-it-4bit
+  Layers: 42
+
+=== Phase B: Extract contrastive vectors (N=8) ===
+
+  Extracting 'decompose' vectors...
+    4/8 problems processed
+    8/8 problems processed
+
+  Extracting 'analogy' vectors...
+    4/8 problems processed
+    8/8 problems processed
+
+  Inter-strategy cosine (decompose vs analogy):
+    Layer 0: cos=0.8516
+    Layer 3: cos=0.1934
+    Layer 6: cos=0.5312
+    Layer 9: cos=0.6328
+    Layer 12: cos=0.7188
+    Layer 15: cos=0.7266
+    Layer 18: cos=0.8164
+    Layer 21: cos=0.8242
+    Layer 24: cos=0.9141
+    Layer 27: cos=0.8984
+    Layer 30: cos=0.9180
+    Layer 33: cos=0.9062
+    Layer 36: cos=0.8711
+    Layer 39: cos=0.8281
+  Mean inter-strategy cos: 0.7593
+  Vector norms (decompose): min=1.27, max=80.00
+
+=== Phase C: Layer x Alpha sweep (layers=5, alphas=5) ===
+  Computing base answers...
+  Base accuracy: 0/5 = 0%
+    L= 7 α=0.5: 0/5 (Δ=+0.0pp, changed=0)
+    L= 7 α=1.0: 0/5 (Δ=+0.0pp, changed=0)
+    L= 7 α=2.0: 0/5 (Δ=+0.0pp, changed=0)
+    L= 7 α=4.0: 0/5 (Δ=+0.0pp, changed=0)
+    L= 7 α=8.0: 0/5 (Δ=+0.0pp, changed=0)
+    L=14 α=0.5: 0/5 (Δ=+0.0pp, changed=0)
+    L=14 α=1.0: 0/5 (Δ=+0.0pp, changed=0)
+    L=14 α=2.0: 0/5 (Δ=+0.0pp, changed=0)
+    L=14 α=4.0: 0/5 (Δ=+0.0pp, changed=0)
+    L=14 α=8.0: 0/5 (Δ=+0.0pp, changed=0)
+    L=21 α=0.5: 0/5 (Δ=+0.0pp, changed=0)

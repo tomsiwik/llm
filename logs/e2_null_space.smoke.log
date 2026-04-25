@@ -1,0 +1,31 @@
+E2: Null-Space Composition Theorem
+Model: mlx-community/gemma-4-e4b-it-4bit
+Smoke test: True
+Layers: [0, 20, 41]
+mlx-lm version: 0.31.2
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 70640.91it/s]
+mx.metal.clear_cache is deprecated and will be removed in a future version. Use mx.clear_cache instead.
+
+=== PHASE 1: Effective Rank & Null-Space Fraction ===
+  Layer  0 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7964
+  Layer 20 v_proj: shape=[512, 2560], r_eff(0.01)=512, null_frac=0.7970
+  Layer 41 v_proj: shape=[1024, 2560], r_eff(0.01)=1024, null_frac=0.6019
+  Layer  0 o_proj: shape=[2560, 2048], r_eff(0.01)=2048, null_frac=-0.0000
+  Layer 20 o_proj: shape=[2560, 2048], r_eff(0.01)=2036, null_frac=0.0061
+  Layer 41 o_proj: shape=[2560, 4096], r_eff(0.01)=2560, null_frac=0.3750
+
+=== PHASE 2: Projection Residual Summary ===
+  v_proj: mean_null_frac=0.7318, mean_row_frac=0.2682, K2020=FAIL
+  o_proj: mean_null_frac=0.1270, mean_row_frac=0.8730, K2020=FAIL
+
+=== PHASE 3: Composition Quality (tau) ===
+  tau (standard Grassmannian): 0.067284
+  tau (null-projected):        0.068855
+  tau reduction:               -0.0233 (-2.3%)
+
+Results written to /Users/tom/Code/tomsiwik/llm/micro/models/exp_e2_null_space_composition_theorem/results.json
+
+Verdict: PROVISIONAL
+K2020 (null-space): FAIL
+K2021 (tau reduction): FAIL
+Elapsed: 6.7s

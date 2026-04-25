@@ -1,0 +1,8 @@
+{
+  "rank": 8,
+  "scale": 6.0,
+  "targets": [
+    "v_proj",
+    "o_proj"
+  ]
+}

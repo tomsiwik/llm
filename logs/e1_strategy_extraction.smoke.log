@@ -1,0 +1,158 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Loading Gemma 4 E4B 4-bit...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 67786.73it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+Model loaded: 42 layers
+[MEM hooks_installed] active=4.27GB cache=0.00GB
+
+============================================================
+STRATEGY: systematic
+============================================================
+
+  Extracting 'systematic_p0' vectors from 1 prompts...
+
+  Extracting 'systematic_p1' vectors from 1 prompts...
+
+  Extracting 'systematic_p2' vectors from 1 prompts...
+
+  Extracting 'systematic_p3' vectors from 1 prompts...
+
+  Extracting 'systematic_p4' vectors from 1 prompts...
+
+  Extracting 'systematic_p5' vectors from 1 prompts...
+
+  Extracting 'systematic_p6' vectors from 1 prompts...
+
+  Extracting 'systematic_p7' vectors from 1 prompts...
+
+  Extracting 'systematic_p8' vectors from 1 prompts...
+
+  Extracting 'systematic_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'systematic' ===
+  Best layer: 41 (cos=0.9652)
+  Mean across layers: 0.8106
+
+  Extracting 'systematic' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+============================================================
+STRATEGY: step_by_step
+============================================================
+
+  Extracting 'step_by_step_p0' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p1' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p2' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p3' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p4' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p5' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p6' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p7' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p8' vectors from 1 prompts...
+
+  Extracting 'step_by_step_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'step_by_step' ===
+  Best layer: 41 (cos=0.9534)
+  Mean across layers: 0.7918
+
+  Extracting 'step_by_step' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+============================================================
+STRATEGY: conservative
+============================================================
+
+  Extracting 'conservative_p0' vectors from 1 prompts...
+
+  Extracting 'conservative_p1' vectors from 1 prompts...
+
+  Extracting 'conservative_p2' vectors from 1 prompts...
+
+  Extracting 'conservative_p3' vectors from 1 prompts...
+
+  Extracting 'conservative_p4' vectors from 1 prompts...
+
+  Extracting 'conservative_p5' vectors from 1 prompts...
+
+  Extracting 'conservative_p6' vectors from 1 prompts...
+
+  Extracting 'conservative_p7' vectors from 1 prompts...
+
+  Extracting 'conservative_p8' vectors from 1 prompts...
+
+  Extracting 'conservative_p9' vectors from 1 prompts...
+
+=== K1: Strategy vector consistency for 'conservative' ===
+  Best layer: 41 (cos=0.9537)
+  Mean across layers: 0.7653
+
+  Extracting 'conservative' vectors from 10 prompts...
+    5/10 prompts processed
+    10/10 prompts processed
+
+============================================================
+INJECTING: systematic (best K1, layer=41)
+============================================================
+
+--- Baseline GSM8K ---
+
+=== K2: GSM8K eval (adapter=OFF) ===
+  10/10 accuracy=30.0%
+
+=== Phase 3: Injecting 'systematic' as LoRA ===
+  Injected into 3 layers
+
+--- GSM8K with injected adapter ---
+
+=== K2: GSM8K eval (adapter=ON) ===
+  10/10 accuracy=0.0%
+
+=== K3: Cross-prompt consistency for 'systematic' ===
+
+  Extracting 'systematic_A' vectors from 5 prompts...
+Traceback (most recent call last):
+  File "/Users/tom/Code/tomsiwik/llm/micro/models/exp_e1_function_vector_strategy_extraction/run_experiment.py", line 728, in <module>
+    main()
+  File "/Users/tom/Code/tomsiwik/llm/micro/models/exp_e1_function_vector_strategy_extraction/run_experiment.py", line 674, in main
+    k3 = measure_k3_cross_prompt(best_strategy, all_mean_diffs[best_strategy],
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/micro/models/exp_e1_function_vector_strategy_extraction/run_experiment.py", line 524, in measure_k3_cross_prompt
+    vecs_a = extract_strategy_vectors(model, tokenizer, f"{strategy_name}_A",
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/micro/models/exp_e1_function_vector_strategy_extraction/run_experiment.py", line 253, in extract_strategy_vectors
+    _ = model(s_ids[None, :])
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/models/gemma4.py", line 48, in __call__
+    return self.language_model(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/models/gemma4_text.py", line 587, in __call__
+    out = self.model(
+          ^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/models/gemma4_text.py", line 555, in __call__
+    h, kvs, offset = layer(
+                     ^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/models/gemma4_text.py", line 336, in __call__
+    h, shared_kv, offset = self.self_attn(
+                           ^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/models/gemma4_text.py", line 267, in __call__
+    return self.o_proj(output), (keys, values), offset
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/micro/models/exp_e1_function_vector_strategy_extraction/run_experiment.py", line 217, in __call__
+    out = self.inner(x)
+          ^^^^^^^^^^^^^
+  File "/Users/tom/Code/tomsiwik/llm/.venv/lib/python3.12/site-packages/mlx_lm/tuner/lora.py", line 97, in __call__
+    z = (self.dropout(x) @ self.lora_a) @ self.lora_b
+         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+ValueError: [matmul] Last dimension of first input with shape (1,42,2048) must match second to last dimension of second input with shape (256,8).
