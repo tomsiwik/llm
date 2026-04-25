@@ -1,0 +1,140 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog POLITENESS adapter FULL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=False, N_TRAIN=200, N_HELDOUT=50, N_JUDGE=50, N_STEPS=800, N_MMLU=100, GEN_MAX_TOKENS=1024, ENABLE_THINKING=False
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  source=ultrachat_filtered train=200 heldout=50 judge=50
+
+=== Loading Gemma 4 E4B + manual LoRA attach ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 56299.38it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+  attached 84 LoRA modules across 42 layers
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (politeness) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/800 loss=0.0219 (1.96 step/s, 0.5s)
+  step 11/800 loss=0.0249 (3.67 step/s, 3.0s)
+  step 21/800 loss=0.0177 (4.13 step/s, 5.1s)
+  step 31/800 loss=0.0288 (3.99 step/s, 7.8s)
+  step 41/800 loss=0.0249 (3.80 step/s, 10.8s)
+  step 51/800 loss=0.0190 (3.89 step/s, 13.1s)
+  step 61/800 loss=0.0126 (3.70 step/s, 16.5s)
+  step 71/800 loss=0.0132 (3.61 step/s, 19.7s)
+  step 81/800 loss=0.0200 (3.57 step/s, 22.7s)
+  step 91/800 loss=0.0095 (3.55 step/s, 25.6s)
+  step 101/800 loss=0.0118 (3.52 step/s, 28.7s)
+  step 111/800 loss=0.0084 (3.49 step/s, 31.8s)
+  step 121/800 loss=0.0144 (3.45 step/s, 35.0s)
+  step 131/800 loss=0.0077 (3.36 step/s, 38.9s)
+  step 141/800 loss=0.0131 (3.36 step/s, 42.0s)
+  step 151/800 loss=0.0059 (3.34 step/s, 45.2s)
+  step 161/800 loss=0.0115 (3.34 step/s, 48.1s)
+  step 171/800 loss=0.0074 (3.36 step/s, 50.8s)
+  step 181/800 loss=0.0093 (3.39 step/s, 53.3s)
+  step 191/800 loss=0.0118 (3.39 step/s, 56.4s)
+  step 201/800 loss=0.0103 (3.40 step/s, 59.2s)
+  step 211/800 loss=0.0079 (3.40 step/s, 62.0s)
+  step 221/800 loss=0.0077 (3.42 step/s, 64.6s)
+  step 231/800 loss=0.0118 (3.41 step/s, 67.8s)
+  step 241/800 loss=0.0103 (3.37 step/s, 71.5s)
+  step 251/800 loss=0.0087 (3.38 step/s, 74.4s)
+  step 261/800 loss=0.0063 (3.36 step/s, 77.7s)
+  step 271/800 loss=0.0053 (3.37 step/s, 80.5s)
+  step 281/800 loss=0.0115 (3.37 step/s, 83.4s)
+  step 291/800 loss=0.0045 (3.37 step/s, 86.3s)
+  step 301/800 loss=0.0103 (3.36 step/s, 89.5s)
+  step 311/800 loss=0.0085 (3.35 step/s, 92.8s)
+  step 321/800 loss=0.0087 (3.35 step/s, 95.7s)
+  step 331/800 loss=0.0060 (3.34 step/s, 99.2s)
+  step 341/800 loss=0.0079 (3.35 step/s, 101.7s)
+  step 351/800 loss=0.0034 (3.35 step/s, 104.9s)
+  step 361/800 loss=0.0082 (3.34 step/s, 108.0s)
+  step 371/800 loss=0.0059 (3.35 step/s, 110.6s)
+  step 381/800 loss=0.0082 (3.38 step/s, 112.8s)
+  step 391/800 loss=0.0091 (3.37 step/s, 115.9s)
+  step 401/800 loss=0.0091 (3.38 step/s, 118.8s)
+  step 411/800 loss=0.0056 (3.39 step/s, 121.3s)
+  step 421/800 loss=0.0055 (3.41 step/s, 123.5s)
+  step 431/800 loss=0.0082 (3.41 step/s, 126.3s)
+  step 441/800 loss=0.0077 (3.41 step/s, 129.5s)
+  step 451/800 loss=0.0056 (3.42 step/s, 131.8s)
+  step 461/800 loss=0.0049 (3.42 step/s, 134.9s)
+  step 471/800 loss=0.0030 (3.43 step/s, 137.4s)
+  step 481/800 loss=0.0080 (3.44 step/s, 140.0s)
+  step 491/800 loss=0.0025 (3.44 step/s, 142.9s)
+  step 501/800 loss=0.0089 (3.43 step/s, 145.9s)
+  step 511/800 loss=0.0069 (3.43 step/s, 149.1s)
+  step 521/800 loss=0.0070 (3.43 step/s, 151.8s)
+  step 531/800 loss=0.0051 (3.43 step/s, 155.0s)
+  step 541/800 loss=0.0060 (3.43 step/s, 157.5s)
+  step 551/800 loss=0.0030 (3.43 step/s, 160.6s)
+  step 561/800 loss=0.0065 (3.43 step/s, 163.5s)
+  step 571/800 loss=0.0045 (3.44 step/s, 166.2s)
+  step 581/800 loss=0.0058 (3.45 step/s, 168.5s)
+  step 591/800 loss=0.0069 (3.44 step/s, 171.7s)
+  step 601/800 loss=0.0076 (3.44 step/s, 174.5s)
+  step 611/800 loss=0.0050 (3.45 step/s, 177.2s)
+  step 621/800 loss=0.0042 (3.46 step/s, 179.4s)
+  step 631/800 loss=0.0052 (3.47 step/s, 182.1s)
+  step 641/800 loss=0.0060 (3.46 step/s, 185.2s)
+  step 651/800 loss=0.0047 (3.47 step/s, 187.5s)
+  step 661/800 loss=0.0040 (3.47 step/s, 190.6s)
+  step 671/800 loss=0.0021 (3.47 step/s, 193.2s)
+  step 681/800 loss=0.0060 (3.48 step/s, 195.8s)
+  step 691/800 loss=0.0019 (3.48 step/s, 198.7s)
+  step 701/800 loss=0.0087 (3.47 step/s, 201.8s)
+  step 711/800 loss=0.0050 (3.47 step/s, 204.8s)
+  step 721/800 loss=0.0051 (3.47 step/s, 207.6s)
+  step 731/800 loss=0.0028 (3.46 step/s, 211.0s)
+  step 741/800 loss=0.0049 (3.46 step/s, 213.9s)
+  step 751/800 loss=0.0022 (3.46 step/s, 217.0s)
+  step 761/800 loss=0.0054 (3.46 step/s, 220.0s)
+  step 771/800 loss=0.0036 (3.46 step/s, 222.7s)
+  step 781/800 loss=0.0043 (3.47 step/s, 225.2s)
+  step 791/800 loss=0.0067 (3.46 step/s, 228.3s)
+  step 800/800 loss=0.0030 (3.46 step/s, 230.9s)
+
+=== Phase C/K#2000: structural cos-sim (held-out) ===
+
+=== Phase C/K#2001: politeness judge ===
+  judge: heuristic_only
+  k2001 5/50 base_mean=22.0 student_mean=35.2 (141.1s)
+  k2001 10/50 base_mean=25.5 student_mean=41.2 (256.9s)
+  k2001 15/50 base_mean=25.0 student_mean=43.0 (408.6s)
+  k2001 20/50 base_mean=25.2 student_mean=43.1 (516.6s)
+  k2001 25/50 base_mean=26.1 student_mean=41.7 (614.3s)
+  k2001 30/50 base_mean=26.4 student_mean=41.4 (699.6s)
+  k2001 35/50 base_mean=27.1 student_mean=42.8 (833.1s)
+  k2001 40/50 base_mean=27.4 student_mean=41.8 (964.6s)
+  k2001 45/50 base_mean=27.5 student_mean=43.5 (1064.6s)
+  k2001 50/50 base_mean=27.6 student_mean=43.3 (1167.4s)
+
+=== Phase D/K#2002a: MMLU accuracy (enable_thinking=False) ===
+  mmlu 10/100 base=8/10 adapter=6/10 (4.3s)
+  mmlu 20/100 base=15/20 adapter=13/20 (9.1s)
+  mmlu 30/100 base=21/30 adapter=21/30 (13.8s)
+  mmlu 40/100 base=26/40 adapter=26/40 (17.9s)
+  mmlu 50/100 base=32/50 adapter=34/50 (22.2s)
+  mmlu 60/100 base=37/60 adapter=41/60 (26.5s)
+  mmlu 70/100 base=44/70 adapter=48/70 (30.8s)
+  mmlu 80/100 base=53/80 adapter=58/80 (35.0s)
+  mmlu 90/100 base=58/90 adapter=63/90 (39.0s)
+  mmlu 100/100 base=61/100 adapter=67/100 (43.6s)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PARTIALLY_SUPPORTED
+KCs: {"K2000_per_layer_cos_gt_0_85": "pass", "K2001_politeness_judge_delta_ge_20pp": "heuristic_only", "K2002a_mmlu_drop_lt_3pp": "pass", "K2002b_humaneval_drop_lt_3pp": "deferred_v2", "K2003_ablation_regression_ge_10pp": "deferred_v2"}
+Smoke gate: {"A1_phase_b_converges_2x": "pass", "A2_cos_sim_geq_0_85": "pass", "A3_mmlu_base_acc_geq_0_50": "pass", "A4_mmlu_non_degenerate": "pass", "A5_adapter_persists": "pass"}
+Smoke gate block_full: False
+K#2000 cos=0.9943
+K#2001 delta=15.72pp judge=heuristic_only
+K#2002a drop=-6.0pp base_acc=0.61 adapter_acc=0.67 distinct_base_letters=4
+Blockers (1):
+  - K#2001 (Claude judge) heuristic_only — needs ANTHROPIC_API_KEY for full SUPPORTED. K#2002b (HumanEval) + K#2003 (NEUTRAL ablation) deferred to v2.
+Total time: 1458.2s

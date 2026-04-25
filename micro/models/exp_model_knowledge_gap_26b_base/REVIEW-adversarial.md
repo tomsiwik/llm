@@ -1,46 +1,130 @@
 # REVIEW-adversarial — `exp_model_knowledge_gap_26b_base`
 
-> Self-adversarial review by the filing researcher. The formal reviewer hat should overwrite this file with an independent pass. Filed here so the reviewer starts from a concrete attack surface.
+> Independent reviewer-hat pass. Overwrites the prior self-review by the filing
+> researcher. Verdict: **PROVISIONAL** (BLOCKED-on-resource, macro-scope
+> design-only sub-case per reviewer.md).
 
-## What is claimed
-PROVISIONAL: blocked on base model not cached; F#478 monotonic prior strongly predicts kill; MoE-niche escape hatch requires a separate routing-distribution measurement.
+## Verdict
 
-## Attack surfaces
+**PROVISIONAL** — accept the filing.
 
-### A1. Is "blocked on resource" a legitimate PROVISIONAL?
-**Attack.** Filing PROVISIONAL without running smells like can-kicking. A future researcher will re-hit the same blocker.
-**Defense.** (a) The 40-tool-call / 30-min budget per researcher hat cannot absorb a 14 GB download + 2.5 h training. (b) MATH.md §3.1 derives a proof-first prior (monotonic extension of F#478) that predicts KILL, so pre-running without first measuring the §3.2 MoE-niche mechanism is epistemically wasteful. (c) PAPER.md documents an explicit follow-up path (routing-distribution measurement first, then targeted single-domain run).
-**Residual risk.** If no researcher picks up the follow-up, this experiment remains PROVISIONAL forever. Mitigation: file a routing-distribution follow-up experiment in the DB as a prerequisite.
+DB action: `experiment update --status provisional` + evidence (verdict
+inconclusive) + finding-add (status=provisional). Route `review.proceed` with
+`PROVISIONAL:` prefix to analyst.
 
-### A2. Is the "monotonic extension" derivation actually a proof?
-**Attack.** §3.1 cites scaling-law monotonicity but waves at "aligned training distribution." Gemma 4 4B vs 26B-A4B may have materially different pretraining mixes. The monotonic claim is then only directionally suggestive, not rigorously derived.
-**Defense.** The claim is indeed a *motivated prior*, not a strict proof. MATH.md labels it "strongly monotonically stronger" — informal language — and assumption A1 makes the data-alignment assumption explicit. This is why the experiment is filed PROVISIONAL, not KILLED.
-**Residual risk.** If a reviewer reads §3.1 as a proof, they may want to upgrade to KILLED. Recommendation: keep PROVISIONAL; KILLED requires either empirical evidence or a tighter derivation.
+## Adversarial checklist
 
-### A3. Is K1816 a legitimate addition or a KC-swap?
-**Attack.** The researcher added K1816 after MATH.md first draft; this could be KC-swap-after-failure.
-**Defense.** K1816 was added **before any run**, as a more concrete restatement of the already-pre-registered K1703 ("domain-specific behavioral improvement"). K1703 remains unmodified in the DB. K1816 is a tightening, not a swap. Researcher hat § 6.5 says "KC added/modified/relaxed between MATH.md and now" — K1816 was added in the same iteration as MATH.md, with no data yet collected, so the "after-failure" form of the antipattern does not fire.
-**Residual risk.** If the reviewer believes the addition broadened the proxy/target set, they may flag it. My defense: F#666 explicitly requires proxy + target pairing; K1703's text is vague ("behavioral improvement on held-out eval") without a numeric threshold. K1816 supplies the threshold (win-rate ≥60% on N=30 prompts). This is exactly what F#666 asks for.
+Consistency
+- (a) `results.json["verdict"]="PROVISIONAL"` matches proposed DB status
+  `provisional` ✓
+- (b) `all_pass=false` consistent with PROVISIONAL (every KC `untested`) ✓
+- (c) PAPER.md L3 verdict line `PROVISIONAL (BLOCKED on base model not cached;
+  F#478 monotonic prior strongly predicts kill)` ✓
+- (d) `is_smoke=false`; this is design-only-blocked, not a smoke run ✓
 
-### A4. Does refusing to proxy-to-4B look like obstruction?
-**Attack.** Running the experiment on 4B would at least produce signal. Refusing is "blocking."
-**Defense.** Researcher hat antipattern (m) explicitly forbids proxy-model substitution. F#478 already ran on 4B and killed it. Running again on 4B would reproduce F#478 with zero added information. Running on E4B or 8B-variant would not test the 26B claim.
-**Residual risk.** None. This is policy-aligned.
+KC integrity
+- (e) MATH.md K1702/K1703 + added K1816 match DB-registered text byte-for-byte
+  per `experiment get` output. K1816 was added pre-run as a numeric
+  threshold-supplier for the vague K1703 (per F#666); not a post-failure
+  swap. ✓
+- (f) No tautology: K1702 measures `δ_d ≥ 5pp` on MMLU-Pro; K1816 measures
+  `win_rate ≥ 60%` on N=30. F#666 paired proxy/target. ✓
+- (g) Code KC IDs in `run_experiment.py` L75-L79 (`K1702_structural_proxy`,
+  `K1703_target_behavioral`, `K1816_target_win_rate`) match MATH.md §5 ✓
 
-### A5. Could the experiment be closed as KILLED via F#478 extension?
-**Attack.** If you believe §3.1's monotonic extension, file KILLED now — don't leave an open loose end.
-**Defense.** §3.2 (MoE-niche) is a non-trivial, paper-grounded mechanism (Fedus 2022, Zhou 2022) that reopens the gap on a MoE architecture. Gemma 4 26B-A4B is MoE, so the monotonic extension does NOT strictly apply. PROVISIONAL is the correct status: the empirical question is still open, bottlenecked on the routing measurement + model cache.
+Code↔math
+- (h-l) Graceful-failure scaffold imports only `json`, `os`, `sys`, `time`,
+  `pathlib`. No composition math, no LORA_SCALE, no routing, no `shutil.copy`,
+  no hardcoded `pass: True` in KCs (all `"untested"`). ✓
+- (m) Target model in MATH.md §6 (`mlx-community/gemma-4-26b-a4b-it-4bit`)
+  matches `BASE_MODEL_ID` constant in `run_experiment.py` L35. The cache-check
+  branch refuses to proxy to 4B (researcher antipattern 'm'). ✓
+- (m2) MATH.md §6 cites `/mlx-dev` (phased-execution memory pattern) and
+  `/fast-mlx` (`mx.compile`). Code is design-only — no MLX training-loop
+  landed, so the (m2) antipattern about unidiomatic MLX does not apply. ✓
 
-### A6. Is the paired proxy/target pairing (F#666) actually fair?
-**Attack.** K1702 (MMLU-Pro +5pp) and K1816 (win-rate ≥60%) could both fail for different reasons — e.g., judge-model bias, MMLU-Pro noise.
-**Defense.** The KILL verdict requires BOTH to fail, matching F#666 semantics. SUPPORTED requires BOTH to pass. If one passes and the other fails, PAPER.md §5 spells out the interpretation (format-only lift vs. insufficient proxy), no forced kill.
-**Residual risk.** Adversarial-judge bias is real; MATH.md §6 should specify the judge (e.g., GPT-4 or an MLX local judge). Left as future-work detail.
+Eval integrity (N/A — no measurement performed)
+- (n-q) ✓
 
-## Reviewer recommendation
+Target-gated kill (F#666)
+- (t) **N/A** — verdict is PROVISIONAL, not KILL. F#666 paired
+  proxy (K1702) + target (K1816) preserved. ✓
 
-Accept PROVISIONAL. Request follow-up experiment for the routing-distribution measurement as a prerequisite to any future re-run of this experiment. Do NOT upgrade to KILLED or SUPPORTED without either (a) empirical data on 26B-A4B or (b) a tighter proof that accounts for the MoE-niche case.
+Scope-changing fix
+- (u) **N/A** — researcher explicitly refused to swap to a smaller variant
+  (4B / E4B / 8B). Scaffold raises `NotImplementedError` on the live path
+  guard, never falls back to a different base. ✓
 
-## What would change the verdict?
+Deliverables
+- (r) PAPER.md L11-L17 prediction-vs-measurement table present (3 rows:
+  P1/P2/P3, all "NOT MEASURED — untested"). ✓
+- (s) Math: §3.1 monotonic claim is acknowledged as a "motivated prior, not
+  a strict proof" (PAPER.md L37, MATH.md A1). §3.2 MoE-niche escape is
+  paper-grounded (Fedus 2022, Zhou 2022). Honest framing. ✓
 
-- **To KILLED**: prove that `M_eff(d) > 4B` for every domain d in the target set (rules out §3.2 escape), OR run empirically on 26B-A4B and observe `max_d δ_d < 5pp` with paired behavioral fail.
-- **To SUPPORTED**: empirically observe ≥1 domain with both K1702 PASS and K1816 PASS on 26B-A4B.
+## Why PROVISIONAL (and not KILLED via §3.1)
+
+The dense-capacity monotonic extension (§3.1) is *strongly* predictive but
+not a strict proof — Gemma 4 26B-A4B is **MoE**, and the §3.2 niche
+mechanism creates a non-monotonic capacity curve `M_eff(d)`. KILLED would
+discard the MoE-niche hypothesis prematurely; the proper response is to
+park as PROVISIONAL with an explicit unblock path (routing-distribution
+measurement first, then targeted single-domain run). This matches the
+"macro-scope design-only" PROVISIONAL sub-case in reviewer.md (Pattern 1:
+§0 skill citations ✓; Pattern 2: graceful-failure `main()` writing
+`results.json` ✓; Pattern 4: prediction-vs-measurement table all-rows
+"not measured" ✓). Pattern 3 (`_impl` companion at P3) is **not** required
+here because the unblock is external (14GB model cache + a separate routing
+experiment), not new code.
+
+## Doom-loop break verification
+
+Prior researcher iteration RELEASED-TO-OPEN (2026-04-25, scratchpad
+mid-stream). Same experiment was re-claimed this iteration. Per researcher
+hat §0 doom-loop guidance, the structurally-different action is to
+**escalate to PROVISIONAL via reviewer hat** rather than file a 2nd
+RELEASE-TO-OPEN. The current researcher pass took that action by emitting
+`experiment.done` with payload requesting reviewer escalation; this pass
+performs it.
+
+## Drain-scope note
+
+P=3 (already downgraded from P=1). `experiment update --status provisional`
+clears the experiment from `active` (where it is currently stuck), which
+satisfies success criterion 2 of the drain objective (`active` queue
+empty). It does **not** satisfy criterion 1 directly (P≤2 open queue still
+has 14 entries) — but does prevent the loop from re-claiming this exp.
+
+## Routing decision
+
+`review.proceed` with `PROVISIONAL:` prefix to analyst hat for LEARNINGS.md
+write (the only deliverable still missing per `ls -la`).
+
+## Attack surfaces I considered
+
+1. **"Could you upgrade to KILLED on the F#478 monotonic prior?"** — No.
+   The MoE-niche mechanism is non-trivial and paper-grounded. KILL would
+   need either (a) empirical 26B-A4B data or (b) a tighter proof
+   accounting for the routing-niche case.
+2. **"Could the experiment proceed at the platform's compute budget?"**
+   — No. 14GB download + ~2.5h training × 3 domains exceeds the
+   single-iteration 30-min/40-tool-call cap (guardrail 1009). Researcher
+   correctly refused to deferred-train silently.
+3. **"Is the MoE-niche §3.2 mechanism real or an excuse?"** — Real.
+   Fedus 2022 (Switch Transformer) and Zhou 2022 (MoE scaling) explicitly
+   discuss expert-routing variance creating per-domain effective-capacity
+   gaps. Whether Gemma 4 26B-A4B exhibits narrow routing on any of
+   {code, math, medical, legal, finance} is an empirical question
+   answered by the routing-distribution experiment named in PAPER.md §3.
+
+## Assumptions logged
+
+- A1. `mem-antipattern-blocked-on-resource-provisional` (if it exists) or
+  the macro-scope design-only sub-case is the correct routing precedent
+  for "BLOCKED on 14GB cache + multi-hour compute" experiments. The prior
+  researcher hedged on whether F#1629 is a finding-precedent; my check
+  shows F#1629 references K#1629 (kill ID), not a finding. So this
+  filing is the **first** finding-ledger record of the
+  "BLOCKED-on-resource + proof-first kill prior + non-trivial escape
+  mechanism" pattern combination — worth registering as a new
+  finding-status `provisional` to anchor future BLOCKED filings.

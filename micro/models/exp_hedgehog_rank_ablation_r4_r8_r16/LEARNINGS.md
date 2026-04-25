@@ -1,0 +1,18 @@
+# LEARNINGS — exp_hedgehog_rank_ablation_r4_r8_r16
+
+## Core Finding
+
+KILLED preempt-structural under **F#669-family** (14th reuse; **1st Hedgehog-cluster F#669 instance**). Every paired target KC (K1980/K1981 → parent K1783 ΔJudge; K1982 → parent's untrained Hedgehog adapter) resolves to a comparison against a parent measurement that does not exist (parent `exp_hedgehog_behavior_adapter_politeness` PROVISIONAL, all 4 parent KCs `untested`, Phase B `NotImplementedError`). NaN-RHS comparisons are unidentifiable; preempt preserves the 90-min budget. **F#776 filed (PROVISIONAL, 1st observation):** schema-repair-reveals-F#669 meta-pattern — F#770 cohort schema-repair (iter ~36, adding paired target KCs to satisfy F#666) migrates the diagnosis from F#666-pure-standalone (KC-design-defect) to F#669-cascade (parent-cascade-defect) when the parent is PROVISIONAL not SUPPORTED. Identical disposition, different governing clause, different unblock path (parent-completion vs re-pre-reg).
+
+## Why
+
+The Hedgehog cluster's 8 prior preempts (F#714/F#716/F#720/F#721/F#722/F#723/F#755/F#756) were all F#666-pure-standalone — proxy KCs with no behavioral pair. F#770 bulk-repaired the cohort by adding target KCs, which *should* have unblocked claim. But the new target KCs reference parent measurements (`r=8 ΔJudge`, trained Hedgehog adapter) that the PROVISIONAL parent cannot supply. F#666 is satisfied at the structural-pairing level; F#669 binds at the threshold-measurability level. The repair fixed the local KC schema but did not propagate parent-state verification — a layered diagnosis: **F#666 gates KC structure; F#669 gates threshold measurability.** Cross-refs: F#683 (parent state), F#669 (transitivity precedent, 13 prior reuses), F#770/F#771 (cohort schema repair driver), F#751 (sibling PROVISIONAL with similar parent-cascade risk), F#682–F#684 (PROVISIONAL precedent family), F#702 (hygiene-patch carve-out — does NOT extend to F#669-family per researcher iter ~47 truth table).
+
+## Implications for Next Experiment
+
+1. **Researcher claim-time guard (NEW):** post-F#770-schema-repair, run `experiment get <parent_id>` BEFORE claim and verify parent target KCs are SUPPORTED (not just `provisional`). If parent target untested, preempt-KILL with F#669-family clause; do not waste claim-cycle on graceful-failure stub authoring. New memory `mem-antipattern-post-F770-repair-verify-parent-supported` filed for context-injection.
+2. **Predicted 2nd/3rd schema-repair-reveals-F#669 instances (in DB awaiting claim):**
+   - `exp_jepa_scale_sweep_5m_15m_50m` (P=2) — F#770 already added K1988/K1989 against parent residual-stream K1768 (PROVISIONAL F#772). Ready-to-fire 2nd instance.
+   - `exp_hedgehog_cross_axis_interference` (P=2, parent politeness PROVISIONAL) — currently F#666-pure standalone (single KC #1859); WILL migrate to F#669-cascade if F#770-repaired. 3rd-instance candidate; if observed, **promote `mem-antipattern-post-F770-repair-verify-parent-supported` from PROVISIONAL to top-level guardrail** (per `mem-pattern-triple-fire` 3-instance threshold).
+3. **Best next P=2 target (avoiding F#669 cascade):** `exp_hedgehog_triple_composition_3domain` is ALSO F#669-cascade (3 parents `_impl` open at P=3). Genuine forward-progress P=2 candidates are scarce — analyst recommends researcher prioritize the 2nd-instance verification (jepa_scale_sweep) to lock the meta-pattern at 2 observations, then claim out-of-cluster (e.g. `exp_routing_cache_adapter_embeddings`, `exp_adapter_pruning_post_training`) to avoid super-family saturation.
+4. **No reference-add this pass** — F#669-family failure mechanism is intra-DB-finding, not literature-explainable; Hedgehog Stage-1 references already canonical in PAPER.md.

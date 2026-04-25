@@ -1,0 +1,35 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog CONCISENESS adapter IMPL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8 judge=8
+
+=== Loading Gemma 4 E4B + attaching LoRA ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 64652.08it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (conciseness) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1641 (3.99 step/s, 0.3s)
+  step 11/30 loss=0.0732 (4.68 step/s, 2.4s)
+  step 21/30 loss=0.0542 (4.64 step/s, 4.5s)
+  step 30/30 loss=0.0386 (4.65 step/s, 6.5s)
+
+=== Phase C/proxy: structural cos-sim sanity (held-out) ===
+
+=== Phase C/K#1965: deterministic length reduction ===
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K1965_length_reduction_ge_20pct": "pass", "K1966_mmlu_drop_le_3pp": "untested"}
+Blockers (3):
+  - linear_to_lora_layers failed: AttributeError("'ShimRoot' object has no attribute 'layers'")
+  - used manual LoRA attach fallback
+  - K#1966 deferred to follow-on _full iteration (MMLU harness)
+Total time: 85.2s

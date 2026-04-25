@@ -1,0 +1,15 @@
+[phase0] SMOKE_TEST=True n_prompts=2 t_sweep=[3]
+[phase1] loading mlx-community/gemma-4-e4b-it-4bit...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 31242.49it/s]
+[phase2] wiring loop-LoRA on layers 12..20 (v+o)...
+[phase2] wiring_ok=True
+[phase3] K1837 bit-exact verification on n=2 × T=[3]...
+  T=3 prompt[:20]='What is 12 plus 7?' ntok=25 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  T=3 prompt[:20]='If a train travels 6' ntok=35 max_diff=0.000000e+00 mean_diff=0.000000e+00
+
+=== SUMMARY (smoke=True) ===
+K1837: pass_smoke max_diff=0.000000e+00 (2/2 under 0.001)
+K1838: not_measured (deferred to _full)
+K1986: not_measured (deferred to _full)
+K1987: not_measured (deferred to _full)
+verdict=PROVISIONAL elapsed=1.8s

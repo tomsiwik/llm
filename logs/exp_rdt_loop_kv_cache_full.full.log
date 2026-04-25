@@ -1,0 +1,124 @@
+[phase0] SMOKE_TEST=False n_prompts=20 t_sweep=[1, 2, 3, 6] M=64
+[phase1] loading mlx-community/gemma-4-e4b-it-4bit...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 111107.39it/s]
+[phase2] wiring loop-LoRA on layers 12..20 (v+o)...
+[phase2] wiring_ok=True
+[phase3] K1837 bit-exact verification on n=20 × T=[1, 2, 3, 6]...
+  K1837 T=1 ntok=74 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=78 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=120 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=93 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=103 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=127 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=80 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=116 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=76 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=107 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=83 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=63 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=62 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=117 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=97 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=86 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=75 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=72 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=125 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=1 ntok=109 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=74 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=78 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=120 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=93 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=103 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=127 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=80 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=116 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=76 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=107 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=83 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=63 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=62 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=117 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=97 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=86 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=75 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=72 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=125 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=2 ntok=109 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=74 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=78 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=120 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=93 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=103 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=127 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=80 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=116 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=76 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=107 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=83 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=63 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=62 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=117 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=97 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=86 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=75 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=72 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=125 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=109 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=74 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=78 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=120 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=93 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=103 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=127 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=80 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=116 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=76 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=107 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=83 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=63 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=62 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=117 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=97 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=86 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=75 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=72 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=125 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=6 ntok=109 max_diff=0.000000e+00 mean_diff=0.000000e+00
+[phase4] K1838 + K1986 (shared gen, T=3, M=64) on n=20...
+  K1838/K1986 [0] ntok=74 M=64 t_c=1.92s t_u=9.23s speedup=4.80× agree=1.000 (64/64)
+  K1838/K1986 [1] ntok=78 M=64 t_c=1.68s t_u=8.61s speedup=5.12× agree=0.422 (27/64)
+  K1838/K1986 [2] ntok=120 M=64 t_c=2.87s t_u=11.14s speedup=3.88× agree=1.000 (64/64)
+  K1838/K1986 [3] ntok=93 M=64 t_c=1.94s t_u=8.62s speedup=4.46× agree=1.000 (64/64)
+  K1838/K1986 [4] ntok=103 M=64 t_c=1.67s t_u=9.49s speedup=5.68× agree=1.000 (64/64)
+  K1838/K1986 [5] ntok=127 M=64 t_c=1.73s t_u=10.02s speedup=5.80× agree=0.734 (47/64)
+  K1838/K1986 [6] ntok=80 M=64 t_c=1.98s t_u=8.19s speedup=4.14× agree=1.000 (64/64)
+  K1838/K1986 [7] ntok=116 M=64 t_c=1.73s t_u=9.88s speedup=5.72× agree=1.000 (64/64)
+  K1838/K1986 [8] ntok=76 M=64 t_c=1.70s t_u=7.84s speedup=4.60× agree=1.000 (64/64)
+  K1838/K1986 [9] ntok=107 M=64 t_c=1.68s t_u=9.66s speedup=5.75× agree=1.000 (64/64)
+  K1838/K1986 [10] ntok=83 M=64 t_c=1.72s t_u=7.85s speedup=4.56× agree=0.641 (41/64)
+  K1838/K1986 [11] ntok=63 M=64 t_c=1.64s t_u=6.71s speedup=4.09× agree=1.000 (64/64)
+  K1838/K1986 [12] ntok=62 M=64 t_c=1.68s t_u=6.74s speedup=4.01× agree=1.000 (64/64)
+  K1838/K1986 [13] ntok=117 M=64 t_c=1.70s t_u=9.28s speedup=5.46× agree=1.000 (64/64)
+  K1838/K1986 [14] ntok=97 M=64 t_c=1.64s t_u=8.26s speedup=5.04× agree=1.000 (64/64)
+  K1838/K1986 [15] ntok=86 M=64 t_c=1.70s t_u=8.06s speedup=4.73× agree=1.000 (64/64)
+  K1838/K1986 [16] ntok=75 M=64 t_c=1.64s t_u=7.48s speedup=4.56× agree=1.000 (64/64)
+  K1838/K1986 [17] ntok=72 M=64 t_c=1.63s t_u=7.46s speedup=4.57× agree=1.000 (64/64)
+  K1838/K1986 [18] ntok=125 M=64 t_c=1.85s t_u=10.00s speedup=5.39× agree=1.000 (64/64)
+  K1838/K1986 [19] ntok=109 M=64 t_c=1.63s t_u=8.72s speedup=5.34× agree=1.000 (64/64)
+[phase5] K1987 unlock-budget on n=199 × M=128...
+  K1987 [20/199] elapsed=65s est_total=642s budget=7200s
+  K1987 [40/199] elapsed=129s est_total=641s budget=7200s
+  K1987 [60/199] elapsed=194s est_total=642s budget=7200s
+  K1987 [80/199] elapsed=259s est_total=644s budget=7200s
+  K1987 [100/199] elapsed=324s est_total=644s budget=7200s
+  K1987 [120/199] elapsed=388s est_total=643s budget=7200s
+  K1987 [140/199] elapsed=452s est_total=643s budget=7200s
+  K1987 [160/199] elapsed=516s est_total=642s budget=7200s
+  K1987 [180/199] elapsed=580s est_total=642s budget=7200s
+
+=== SUMMARY (smoke=False) ===
+K1837: pass max_diff=0.000000e+00 (80/80 under 0.001)
+K1838: fail mean_speedup=4.885× (min=3.877, max=5.803)
+K1986: fail mean_agree=0.9398 min_agree=0.4219
+K1987: pass 641.74s of 7200.0s budget
+verdict=PARTIALLY_SUPPORTED elapsed=879.0s

@@ -1,0 +1,46 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog POLITENESS adapter FULL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30, N_MMLU=20, GEN_MAX_TOKENS=256, ENABLE_THINKING=False
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8 judge=8
+
+=== Loading Gemma 4 E4B + manual LoRA attach ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 31242.49it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+  attached 84 LoRA modules across 42 layers
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (politeness) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1064 (4.41 step/s, 0.2s)
+  step 11/30 loss=0.0581 (5.43 step/s, 2.0s)
+  step 21/30 loss=0.0371 (5.51 step/s, 3.8s)
+  step 30/30 loss=0.0410 (5.52 step/s, 5.4s)
+
+=== Phase C/K#2000: structural cos-sim (held-out) ===
+
+=== Phase C/K#2001: politeness judge ===
+  judge: heuristic_only
+  k2001 5/8 base_mean=28.0 student_mean=47.6 (33.1s)
+  k2001 8/8 base_mean=28.8 student_mean=47.2 (56.6s)
+
+=== Phase D/K#2002a: MMLU accuracy (enable_thinking=False) ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  mmlu 10/20 base=8/10 adapter=5/10 (4.6s)
+  mmlu 20/20 base=15/20 adapter=10/20 (9.3s)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K2000_per_layer_cos_gt_0_85": "pass", "K2001_politeness_judge_delta_ge_20pp": "heuristic_only", "K2002a_mmlu_drop_lt_3pp": "fail", "K2002b_humaneval_drop_lt_3pp": "deferred_v2", "K2003_ablation_regression_ge_10pp": "deferred_v2"}
+Smoke gate: {"A1_phase_b_converges_2x": "pass", "A2_cos_sim_geq_0_85": "pass", "A3_mmlu_base_acc_geq_0_50": "pass", "A4_mmlu_non_degenerate": "pass", "A5_adapter_persists": "pass"}
+Smoke gate block_full: False
+K#2000 cos=0.9603
+K#2001 delta=18.5pp judge=heuristic_only
+K#2002a drop=25.0pp base_acc=0.75 adapter_acc=0.5 distinct_base_letters=4
+Blockers (0):
+Total time: 79.1s

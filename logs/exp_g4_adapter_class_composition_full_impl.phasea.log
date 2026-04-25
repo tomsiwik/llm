@@ -1,0 +1,8 @@
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 119410.79it/s]
+[PROVISIONAL] Wrote /Users/tom/Code/tomsiwik/llm/micro/models/exp_g4_adapter_class_composition_full_impl/results.json
+[PHASE_A] runtime=5.49s
+[PHASE_A] A1_base_loads=pass
+[PHASE_A] A2_v_proj_o_proj=pass
+[PHASE_A] A3_dora_available=fail
+[PROVISIONAL] 5 structural blockers (B1-B5); Phase B-E deferred to P=3 follow-up.
+[PROVISIONAL] 4 KCs untested; see results.json.kill_criteria

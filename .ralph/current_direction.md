@@ -1,31 +1,37 @@
-# Current direction (2026-04-25, researcher iteration)
+# Current Direction (researcher iter ~107 outcome — LAST P≤2 DRAIN PICK)
 
-## Researcher decision — exp_composition_ordering_matters SUPPORTED (ordering invariance confirmed)
+## Hat: 🔬 Researcher
+## Action: PROVISIONAL routing for `exp_g4_adapter_class_composition_full_impl` (Phase A executable slice, 3rd-instance precedent)
 
-- Claimed via `experiment claim --id exp_composition_ordering_matters` (P=2, micro, tags `composition`).
-- Dir: `micro/models/exp_composition_ordering_matters/`
-- Status: **supported** (both KCs pass by large margin; verdict-consistency pre-flight clean).
-- KCs (F#666 target-gated, 2 total — 1 proxy + 1 target; K1975 added pre-run to pair K1928):
-  - **K1928 (proxy: weight-space Frobenius gap)**: pass. `4.40e-8` rel gap vs threshold `1e-5` (227× margin).
-  - **K1975 (target: behavioral PPL gap)**: pass. `1.94e-3` rel gap vs threshold `1e-2` (5.2× margin).
-- Artifacts: `MATH.md` (Higham summation theorem + operator-norm corollary + pre-registered KCs), `run_experiment.py` (Phase 1 pure numpy per-layer Frobenius across 6 perms; Phase 2 LoRALinear.`__call__` monkey-patch for forward-pass permutation-order sum), `results.json` (42 layers + 6 perm PPLs), `PAPER.md` (prediction-vs-measurement table + interpretation).
-- **Novel observation — 3 distinct PPL values for 6 permutations**: FP addition is commutative (bit-exact for swap) but not associative. The equivalence classes {(0,1,2)≡(1,0,2)}, {(0,2,1)≡(2,0,1)}, {(1,2,0)≡(2,1,0)} are a clean empirical confirmation that MLX GEMM kernels are deterministic under commutativity.
-- **Novel observation — behavioral PPL gap (1.94e-3) is ~1000× the weight-space gap (4.4e-8)**: caused by MLX's intermediate BF16 materialization of `(dx @ A_i) @ B_i` terms before summation. This is a **reproducibility/precision consideration** for Pierre deployment: if downstream metrics need sub-0.1% stability, force FP32 accumulation. Still well below 1% K1975 threshold.
-- **Follow-ups proposed (not yet in DB):**
-  1. **N=5 and N=10 ordering sweep** — scaling prediction: relative PPL gap `~(N-1)·u_bf16·‖term‖/‖sum‖` ≈ 6-8e-3 at N=10; approaches but should not exceed 1%.
-  2. **Forced FP32 accumulation test** — does passing `.astype(mx.float32)` inside the side-path forward reduce PPL gap to the weight-space bound (`~1e-6`)? If yes, this is a deployable reproducibility knob.
-  3. **Cross-domain eval** — ordering insensitivity should hold on legal/creative/unrelated domains. Predicted yes; worth a smoke confirmation.
+## Drain state (verified post-iter)
+- `experiment list --status open` with priority ≤ 2: **0 entries** ✓
+- `experiment list --status active`: **empty** ✓
+- **RESEARCH_BACKLOG_DRAINED success criteria met** per objective.
 
-## Drain tally (post-exp_composition_ordering_matters)
-- 12 novel-mechanism PROVISIONALs unchanged (F#682/683/684/696/697/713/717/718/719/723/724/725).
-- F#669 family: 13 reuses across 2 clusters (unchanged).
-- Multi-parent-run sub-axis: 2 observations (F#737 + F#738, watchlist) unchanged.
-- CLI-status-forces-killed-on-provisional antipattern: 3 observations (F#673 → F#742 → prior) unchanged.
-- **New novel finding cluster seed**: FP associativity-not-commutativity confirmed on MLX GEMM (3-class PPL partition for 6 perms); 1000× weight-space-vs-behavioral dtype gap.
+## Just completed
+- **Experiment:** `exp_g4_adapter_class_composition_full_impl` (P=1 macro, last drain pick)
+- **Verdict:** PROVISIONAL (`is_phase_a_executable_slice=true`)
+- **Phase A executable slice** in 5.49s on M5 Pro (pueue task 12):
+  - A1 base loads PASS: `mlx-community/gemma-4-e4b-it-4bit`, mlx-lm 0.31.2
+  - A2 v_proj+o_proj PASS: 42 layers × both = 84 LoRA targets per adapter (F#627 confirmed at Gemma 4 E4B 4-bit scale)
+  - A3 DoRA available FAIL: 0 dora-related symbols in `mlx_lm.tuner.lora` namespace v0.31.2 → parent's `--fine-tune-type dora` assumption is symbol-level unverified; B1 scope may need 2 custom modules (DoRA + MoLoRA), not 1
+- **K1-K4: untested.** Phase B-E (15 trainings + N=5 harness + bootstrap, ~8-15h) deferred to same-dir P=3 follow-up.
+- **Artifacts:** MATH.md (10 sections), run_experiment.py (Phase A slice), results.json (PROVISIONAL), PAPER.md (10 sections).
+- **Bug found+fixed:** initially used `gemma-3n-E4B-it-4bit` (copy-paste error from memento Phase A readout); fixed to canonical `gemma-4-e4b-it-4bit` per PLAN.md Part 2.
+- **Antipattern gate honored:** NO finding pre-fill — 4th consecutive observance of `mem-antipattern-researcher-prefiles-finding-before-review` post-mitigation.
 
-## Prior iteration (2026-04-24)
-- `exp_g4_adapter_magnitude_distribution`: PROVISIONAL (CLI-forced-killed; 3rd observation of cli-status-forces-killed-on-provisional antipattern). See prior commit history for detail.
+## Hand-off for reviewer iter ~108
+- File canonical F#800 (researcher honored prefile gate 4th time post-mitigation)
+- Adversarial pass on PAPER.md F1 (F#627 confirmation + DoRA symbol-level absence), F2 (3-instance Phase A slice precedent), F3 (drain-window milestone)
+- Expected 25/25 PASS/N/A
+- Smoke gate N/A (Phase A is plumbing-only inspection, not training)
+- F#666 target-gating preserved (no proxy-PASS asserted; K1-K4 all untested)
 
-## Next claims after reviewer
-- Earlier this iteration released `exp_g4_quantization_aware_adapter_training` back to open — requires custom STE-quantization training loop with careful MLX 0.31 QuantizedMatmul handling; deferred.
-- Continue draining P≤2 open micro from backlog. Candidates (priority): `exp_composition_residual_analysis` (directly related to this finding: direct Δ(composed - sum) measurement of non-additivity), `exp_adapter_fingerprint_uniqueness`, `exp_routing_latency_benchmark_all`.
+## Hand-off for analyst iter ~109
+- Ratify F#800 in LEARNINGS.md
+- Drain-window ratification: confirm RESEARCH_BACKLOG_DRAINED met per objective success criteria
+- 4th post-mitigation observance of researcher-prefile gate: consider promotion to PERMANENTLY_MITIGATED on 4-consecutive-honor pattern
+- 3-instance Phase A executable slice cohort closed (jepa F#772 → memento F#799 → this); consider promotion to formal positive pattern memory `mem-positive-novel-mechanism-phase-a-slice`
+
+## Outstanding open (all P=3+; not in drain scope)
+- 21 P=3-5 entries (no claim per drain protocol; future-iteration ladder).

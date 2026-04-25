@@ -1,0 +1,37 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog politeness adapter IMPL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=32, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=32 heldout=8
+
+=== Loading Gemma 4 E4B + attaching LoRA ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 33156.55it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1641 (2.61 step/s, 0.4s)
+  step 11/30 loss=0.0786 (5.24 step/s, 2.1s)
+  step 21/30 loss=0.0415 (5.41 step/s, 3.9s)
+  step 30/30 loss=0.0410 (5.47 step/s, 5.5s)
+
+=== Phase C/K1: structural cos-sim (held-out) ===
+
+=== Phase C/K2: politeness judge ===
+  judge: heuristic_smoke
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K1821_per_layer_cos_gt_0_85": "pass", "K1822_politeness_judge_delta_ge_20pp": "heuristic_only", "K1823a_mmlu_drop_lt_3pp": "untested", "K1823b_humaneval_drop_lt_3pp": "untested", "K1824_ablation_regression_ge_10pp": "untested"}
+Blockers (4):
+  - linear_to_lora_layers failed: AttributeError("'ShimRoot' object has no attribute 'layers'")
+  - used manual LoRA attach fallback
+  - K3 deferred to follow-on full-iteration (MMLU/HumanEval harness)
+  - K4 ablation deferred to follow-on full-iteration
+Total time: 32.1s

@@ -1,0 +1,19 @@
+[phase0] SMOKE_TEST=True n_prompts=2 t_sweep=[3] M=8
+[phase1] loading mlx-community/gemma-4-e4b-it-4bit...
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 50686.45it/s]
+[phase2] wiring loop-LoRA on layers 12..20 (v+o)...
+[phase2] wiring_ok=True
+[phase3] K1837 bit-exact verification on n=2 × T=[3]...
+  K1837 T=3 ntok=25 max_diff=0.000000e+00 mean_diff=0.000000e+00
+  K1837 T=3 ntok=35 max_diff=0.000000e+00 mean_diff=0.000000e+00
+[phase4] K1838 + K1986 (shared gen, T=3, M=8) on n=2...
+  K1838/K1986 [0] ntok=25 M=8 t_c=0.24s t_u=0.58s speedup=2.39× agree=1.000 (8/8)
+  K1838/K1986 [1] ntok=35 M=8 t_c=0.25s t_u=0.57s speedup=2.23× agree=1.000 (8/8)
+[phase5] K1987 SKIPPED (smoke mode)
+
+=== SUMMARY (smoke=True) ===
+K1837: pass_smoke max_diff=0.000000e+00 (2/2 under 0.001)
+K1838: pass_smoke_plumbing mean_speedup=2.312× (min=2.23, max=2.394)
+K1986: pass_smoke_plumbing mean_agree=1.0 min_agree=1.0
+K1987: not_measured SKIPPED (smoke)
+verdict=PROVISIONAL elapsed=3.8s

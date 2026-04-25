@@ -1,0 +1,41 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog FORMALITY adapter FULL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30, N_MMLU=20, GEN_MAX_TOKENS=256, ENABLE_THINKING=False
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8 judge=8
+
+=== Loading Gemma 4 E4B + manual LoRA attach ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 65664.25it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+  attached 84 LoRA modules across 42 layers
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (formality) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1011 (4.86 step/s, 0.2s)
+  step 11/30 loss=0.0464 (5.88 step/s, 1.9s)
+  step 21/30 loss=0.0386 (5.86 step/s, 3.6s)
+  step 30/30 loss=0.0291 (5.89 step/s, 5.1s)
+
+=== Phase C/proxy: structural cos-sim sanity (held-out) ===
+
+=== Phase C/K#2013: formality judge ===
+  judge: heuristic_smoke
+
+=== Phase D/K#2014: MMLU accuracy (enable_thinking=False) ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  mmlu 10/20 base=8/10 adapter=6/10 (4.3s)
+  mmlu 20/20 base=15/20 adapter=10/20 (8.6s)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K2013_formality_judge_delta_ge_10pp": "heuristic_only", "K2014_mmlu_drift_le_2pp": "fail"}
+Smoke gate: {"A1_phase_b_converges_2x": "pass", "A2_cos_sim_geq_0_85": "pass", "A3_mmlu_base_acc_geq_0_50": "pass", "A4_mmlu_non_degenerate": "pass", "A5_adapter_persists": "pass"}
+Smoke gate block_full: False
+Blockers (0):
+Total time: 78.9s

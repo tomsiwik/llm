@@ -1,0 +1,41 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog CONCISENESS adapter FULL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30, N_MMLU=20, GEN_MAX_TOKENS=512
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8 judge=8
+
+=== Loading Gemma 4 E4B + attaching LoRA ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 18558.87it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (conciseness) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1641 (4.64 step/s, 0.2s)
+  step 21/30 loss=0.0542 (5.48 step/s, 3.8s)
+  step 30/30 loss=0.0386 (5.47 step/s, 5.5s)
+
+=== Phase C/proxy: structural cos-sim sanity (held-out) ===
+
+=== Phase C/K#1965: deterministic length reduction (max_tokens=512) ===
+  k1965 8/8 base_mean=512 student_mean=216
+
+=== Phase D/K#1966: MMLU accuracy ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  mmlu 10/20 base=3/10 adapter=3/10 (6.4s)
+  mmlu 20/20 base=3/20 adapter=3/20 (12.3s)
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K1965_length_reduction_ge_20pct": "pass", "K1966_mmlu_drop_le_3pp": "pass"}
+K#1965 reduction=57.76%
+K#1966 drop=0.0pp
+Blockers (2):
+  - linear_to_lora_layers failed: AttributeError("'ShimRoot' object has no attribute 'layers'")
+  - used manual LoRA attach fallback
+Total time: 122.2s

@@ -1,0 +1,36 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog procedural-refactor adapter IMPL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=16, N_HELDOUT=8, N_JUDGE=6, N_STEPS=30
+mlx-lm version: 0.31.2
+
+=== Phase 0: Refactor pair curation ===
+  source=embedded_smoke train=16 heldout=8
+
+=== Loading Gemma 4 E4B + attaching LoRA ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 74731.47it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+  unfroze 84 LoRA modules
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (refactor) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.0825 (2.84 step/s, 0.4s)
+  step 11/30 loss=0.0413 (3.21 step/s, 3.4s)
+  step 21/30 loss=0.0339 (3.19 step/s, 6.6s)
+  step 30/30 loss=0.0312 (3.17 step/s, 9.5s)
+
+=== Phase C/K1: structural cos-sim (held-out refactor pres) ===
+
+=== Phase C/K2: refactor judge ===
+  judge: heuristic_smoke
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K1825_per_layer_cos_gt_0_80": "pass", "K1826_refactor_judge_ge_baseline": "heuristic_only", "K1827_humaneval_drop_lt_3pp": "untested", "K1828_nonrefactor_drop_lt_2pp": "untested"}
+Blockers (2):
+  - K3 deferred to follow-on full-iteration (HumanEval harness)
+  - K4 deferred to follow-on full-iteration (non-refactor gen-from-spec)
+Total time: 48.2s

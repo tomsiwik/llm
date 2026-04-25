@@ -1,0 +1,8 @@
+[A.1] Loading mlx-community/gemma-4-e4b-it-4bit
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 56299.38it/s]
+[A.2] baseline_vocab=262144 special=24
+[A.3] add_special_tokens added=4 new_vocab=262148
+[A.4] memento_token_ids={'<|block_start|>': 262144, '<|block_end|>': 262145, '<|summary_start|>': 262146, '<|summary_end|>': 262147}
+[A.5] embed_type=QuantizedEmbedding embed_shape=[262144, 320] cfg_vocab=262144
+[A.6] tie_word_embeddings=True lm_head_separate=False
+verdict=PROVISIONAL is_smoke=True phase_a_status=ok runtime=3.0s

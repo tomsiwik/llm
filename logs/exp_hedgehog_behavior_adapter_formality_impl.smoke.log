@@ -1,0 +1,36 @@
+mx.metal.device_info is deprecated and will be removed in a future version. Use mx.device_info instead.
+[MEM start] active=0.00GB cache=0.00GB
+Hedgehog FORMALITY adapter IMPL (Gemma 4 E4B 4-bit)
+SMOKE_TEST=True, N_TRAIN=24, N_HELDOUT=8, N_JUDGE=8, N_STEPS=30
+mlx-lm version: 0.31.2
+
+=== Phase 0: Neutral prompt curation ===
+  source=embedded_smoke train=24 heldout=8 judge=8
+
+=== Loading Gemma 4 E4B + attaching LoRA ===
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 28679.00it/s]
+[MEM model_loaded] active=4.27GB cache=0.00GB
+[MEM lora_attached] active=4.27GB cache=0.00GB
+
+=== Phase B: Hedgehog distillation (formality) ===
+[MEM phase_b_start] active=4.27GB cache=0.00GB
+  step 1/30 loss=0.1553 (4.57 step/s, 0.2s)
+  step 11/30 loss=0.0703 (4.86 step/s, 2.3s)
+  step 21/30 loss=0.0518 (4.88 step/s, 4.3s)
+  step 30/30 loss=0.0342 (4.87 step/s, 6.2s)
+
+=== Phase C/proxy: structural cos-sim sanity (held-out) ===
+
+=== Phase C/K#1963: formality judge ===
+  judge: heuristic_smoke
+
+============================================================
+RESULTS SUMMARY
+============================================================
+Verdict: PROVISIONAL
+KCs: {"K1963_formality_judge_delta_ge_10pp": "heuristic_only", "K1964_mmlu_drift_le_2pp": "untested"}
+Blockers (3):
+  - linear_to_lora_layers failed: AttributeError("'ShimRoot' object has no attribute 'layers'")
+  - used manual LoRA attach fallback
+  - K#1964 deferred to follow-on _full iteration (MMLU harness)
+Total time: 82.5s

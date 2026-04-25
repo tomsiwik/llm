@@ -73,9 +73,9 @@ hats:
     description: "Designs and runs micro experiments per PLAN.md. Writes MATH.md, implements, runs, writes PAPER.md."
     backend_args:
       - "--effort"
-      - "xhigh"
+      - "medium"
       - "--model"
-      - "opus"
+      - "claude-opus-4-6"
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
       - "--max-turns"
@@ -98,9 +98,9 @@ hats:
     description: "Reviews MATH.md + PAPER.md directly, writes REVIEW-adversarial.md, routes verdict."
     backend_args:
       - "--effort"
-      - "xhigh"
+      - "medium"
       - "--model"
-      - "opus"
+      - "claude-opus-4-6"
       - "--max-turns"
       - "80"
     triggers:
@@ -121,9 +121,9 @@ hats:
     description: "Writes LEARNINGS.md with literature context. Quick pass, max 10 min."
     backend_args:
       - "--effort"
-      - "xhigh"
+      - "medium"
       - "--model"
-      - "opus"
+      - "claude-opus-4-6"
       - "--max-turns"
       - "40"
     triggers:
