@@ -1947,6 +1947,8 @@ version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "autograd" },
+    { name = "datasets" },
+    { name = "huggingface-hub" },
     { name = "lm-eval", extra = ["api"] },
     { name = "mlx-lm" },
     { name = "numpy" },
@@ -1998,9 +2000,11 @@ requires-dist = [
     { name = "accelerate", marker = "extra == 'train'" },
     { name = "autograd", specifier = ">=1.8.0" },
     { name = "bitsandbytes", marker = "extra == 'train'" },
+    { name = "datasets", specifier = ">=4.3.0" },
     { name = "datasets", marker = "extra == 'micro'" },
     { name = "datasets", marker = "extra == 'train'" },
     { name = "httpx", marker = "extra == 'serverless'" },
+    { name = "huggingface-hub", specifier = ">=1.9.2" },
     { name = "lm-eval", marker = "extra == 'eval'", specifier = ">=0.4" },
     { name = "lm-eval", extras = ["api"], specifier = ">=0.4.11" },
     { name = "mlx", marker = "extra == 'micro'", specifier = ">=0.22" },

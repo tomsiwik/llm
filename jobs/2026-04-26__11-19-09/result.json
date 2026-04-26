@@ -1,0 +1,28 @@
+{
+    "id": "053c83fe-3e21-46b6-9ef5-9a77b1cb791f",
+    "started_at": "2026-04-26T11:19:18.041643",
+    "finished_at": null,
+    "n_total_trials": 89,
+    "stats": {
+        "n_trials": 1,
+        "n_errors": 1,
+        "evals": {
+            "mini-swe-agent__gpt-4__terminal-bench": {
+                "n_trials": 0,
+                "n_errors": 1,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "reward_stats": {},
+                "exception_stats": {
+                    "CancelledError": [
+                        "gpt2-codegolf__i6Xv7BK"
+                    ]
+                }
+            }
+        }
+    },
+    "trial_results": []
+}
