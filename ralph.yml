@@ -7,7 +7,6 @@
 #   review.proceed|review.killed -> Analyst -> learning.complete -> Researcher
 #
 # Start: ralph run -a -v
-# Manual event injection is available via `ralph emit`, but normal operation is event-driven from the loop.
 
 cli:
   backend: "claude"
@@ -15,50 +14,38 @@ cli:
 
 adapters:
   claude:
-    timeout: 3600  # 1h max per hat (covers experiment execution up to ~45min)
-    args:
-      - "--bare"
+    timeout: 3600
 
 event_loop:
-  # prompt_file removed — hat instructions are self-contained
-  # Framework + current focus: PLAN.md
   starting_event: "research.start"
   completion_promise: "RESEARCH_BACKLOG_DRAINED"
   max_iterations: 1000
   max_runtime_seconds: 86400
-  idle_timeout_secs: 1200  # 20 min idle = stuck (moved from cli: per docs)
+  idle_timeout_secs: 1200
   checkpoint_interval: 10
 
 core:
-  # Make Ralph's working files explicit instead of relying on defaults.
   scratchpad: ".ralph/agent/scratchpad.md"
   specs_dir: ".ralph/specs/"
   guardrails:
-    - "READ `PLAN.md` FIRST. Part 1 = framework principles (stable); Part 2 = current research focus (the 'what' for now). If Part 2 references parent-dir deep docs for architecture detail, read those too — do not duplicate them into the repo."
-    - "PROOF-FIRST RESEARCH (Constructive Mathematics): Every experiment requires a formal mathematical proof (Theorem/Proof/QED) BEFORE any code is written. The proof must: (1) identify the failure mode, (2) cite prior theorems, (3) derive a guarantee that makes failure impossible, (4) predict specific BEHAVIORAL outcomes the experiment will verify. Metrics (PPL, cosine, accuracy) are proxies. A metric improving without behavioral progress is not a finding."
+    - "READ `PLAN.md` Part 2 for base model, platform, adapter approach."
     - "Use `experiment claim <worker>` to pick work. Use `experiment complete <id> ...` to finish."
-    - "NEVER generate experiments from analogies. Every new experiment MUST cite an arxiv paper or prior finding."
-    - "Before implementing, check `experiment query` for prior results on the same topic."
-    - "MATH.md must explain mechanisms at the ATOMIC level: exact equations, why it works (theorem/lemma), what breaks it (derive failure conditions). No buzzword recitation."
-    - "KILLED experiments are not dead ends. Ask: 'What structure makes this failure impossible?' If you can derive a mathematical guarantee, resurrect with a structural fix — not a hyperparameter tweak."
-    - "BEHAVIORAL OUTCOMES OVER METRICS: measured r≈0.08 between PPL and task quality in this codebase. Design experiments that test behavioral claims, not metric claims."
-    - "TARGET-GATED KILL (Finding #666): never kill on a proxy metric alone (classification accuracy, routing match rate, PPL, cosine, clustering purity). Every proxy KC must be paired with a target-metric KC (task accuracy, behavioral quality, oracle-gap). KILL requires BOTH to fail; SUPPORTED requires BOTH to pass. Proxy-FAIL + target-PASS = finding about the proxy, not a kill. Proxy-PASS + target-FAIL = tautological proxy, kill on target."
-    - "AUTONOMY: NEVER wait for user input. Ralph runs unattended. If a decision is ambiguous, make the most defensible call and log the assumption in MATH.md/PAPER.md/REVIEW-adversarial.md/LEARNINGS.md. Do not ask clarifying questions via event payload. Do not pause. Always pick and proceed."
-    - "ANTI-STUCK: REVISE fixes max 30 min. If >3 blocking fixes, apply top 3 and defer rest. Each hat transition <30 min. Never retry a failed API call >3 times."
-    - "VERDICT CONSISTENCY: before `experiment complete --status supported`, verify PLAN.md §1 checklist (results.json verdict, all_pass, PAPER.md verdict line, is_smoke flag, KC git-diff, antipattern match). Never silently upgrade a KILLED result to supported."
-    - "Platform/model specifics (target hardware, base model, framework, required skills) live in PLAN.md Part 2, not here. Update Part 2 when the target changes; guardrails stay generic."
-    - "INVOKE REQUIRED SKILLS BEFORE WRITING CODE. PLAN.md Part 2 lists the skills required for the current target platform (e.g. `/mlx-dev`, `/fast-mlx` for MLX). Skipping them is the single biggest cause of broken code in this repo's history — the audit confirms it. If the skills aren't invoked, the code is not trusted; the reviewer will REVISE."
+    - "PROOF-FIRST: MATH.md with theorem + predictions before code. Cite arxiv or prior finding."
+    - "Every experiment needs at least one TARGET-METRIC KC (task accuracy, benchmark score). Proxy-only (cosine, PPL) is not enough."
+    - "NEVER wait for user input. NEVER spawn sub-agents. Always pick and proceed."
+    - "If an experiment needs adapter weights that don't exist, KILL in one line and move on. Do NOT write 6 files about it."
+    - "INVOKE `/mlx-dev` and `/fast-mlx` BEFORE writing MLX code. Skipping them is the #1 cause of broken experiments."
+    - "Composition math: `Σ (B_i @ A_i)` NOT `(ΣB) @ (ΣA)`. LORA_SCALE ≤ 8. Route per-sample, not per-domain."
+    - "ANTI-STUCK: Each hat < 30 min. REVISE max 3 fixes. Never retry > 3 times."
+    - "Do NOT accumulate antipattern memories. The memories file must stay under 50 lines. Only add a memory if it prevents a real code bug, not a process classification."
 
 features:
-  # Ralph worktree parallelism is counterproductive here:
-  # experiment claim + Turso DB already coordinate ownership, and pueue serializes actual runs.
-  # Keep one Ralph loop as the orchestrator of record.
   parallel: false
   auto_merge: false
 
 memories:
   inject: auto
-  budget: 2000
+  budget: 500
   file: ".ralph/agent/memories.md"
   filter:
     recent: 60
@@ -67,10 +54,9 @@ tasks:
   enabled: true
 
 hats:
-  # ── Researcher: design + run experiments ────────────────────────────────
   researcher:
     name: "🔬 Researcher"
-    description: "Designs and runs micro experiments per PLAN.md. Writes MATH.md, implements, runs, writes PAPER.md."
+    description: "Pick experiment, run it, measure results. Write MATH.md, implement, run, write PAPER.md."
     backend_args:
       - "--effort"
       - "medium"
@@ -79,7 +65,7 @@ hats:
       - "--append-system-prompt-file"
       - "EXPERIMENT.md"
       - "--max-turns"
-      - "160"
+      - "100"
     triggers:
       - "research.start"
       - "learning.complete"
@@ -88,37 +74,13 @@ hats:
       - "experiment.done"
     default_publishes: "experiment.done"
     instructions: |
-      Read `.ralph/hats/researcher.md` first and follow it for role-specific behavior.
-      Read `PLAN.md` for framework principles (Part 1) and current research focus (Part 2).
-      Use event payloads as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
+      Read `.ralph/hats/researcher.md` and follow it.
+      Read `PLAN.md` Part 2 for current research focus.
+      PRIORITY: experiments that TRAIN ADAPTERS or RUN REAL MLX CODE come first. Skip doc-only work.
 
-  # ── Reviewer: adversarial checklist, writes verdict ─────────────────────
   reviewer:
     name: "🔴 Reviewer"
-    description: "Reviews MATH.md + PAPER.md directly, writes REVIEW-adversarial.md, routes verdict."
-    backend_args:
-      - "--effort"
-      - "medium"
-      - "--model"
-      - "claude-opus-4-6"
-      - "--max-turns"
-      - "80"
-    triggers:
-      - "experiment.done"
-    publishes:
-      - "review.proceed"
-      - "review.revise"
-      - "review.killed"
-    default_publishes: "review.proceed"
-    instructions: |
-      Read `.ralph/hats/reviewer.md` first and follow it for role-specific behavior.
-      Review from disk directly, not via sub-agents.
-      Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
-
-  # ── Analyst: synthesis, appends antipatterns to memory ──────────────────
-  analyst:
-    name: "🧠 Analyst"
-    description: "Writes LEARNINGS.md with literature context. Quick pass, max 10 min."
+    description: "Review MATH.md + PAPER.md, write REVIEW-adversarial.md, route verdict."
     backend_args:
       - "--effort"
       - "medium"
@@ -127,6 +89,28 @@ hats:
       - "--max-turns"
       - "40"
     triggers:
+      - "experiment.done"
+    publishes:
+      - "review.proceed"
+      - "review.revise"
+      - "review.killed"
+    default_publishes: "review.proceed"
+    instructions: |
+      Read `.ralph/hats/reviewer.md` and follow it.
+      Review from disk directly. Max 15 min, max 20 tool calls.
+      Keep REVIEW-adversarial.md under 1 page. Do NOT create new antipattern memories.
+
+  analyst:
+    name: "🧠 Analyst"
+    description: "Write LEARNINGS.md — 30 lines max. Quick pass, max 10 min."
+    backend_args:
+      - "--effort"
+      - "low"
+      - "--model"
+      - "claude-opus-4-6"
+      - "--max-turns"
+      - "20"
+    triggers:
       - "review.proceed"
       - "review.killed"
     publishes:
@@ -134,6 +118,7 @@ hats:
     default_publishes: "learning.complete"
     max_activations: 50
     instructions: |
-      Read `.ralph/hats/analyst.md` first and follow it for role-specific behavior.
-      Keep this pass short and synthesis-focused.
-      Use the triggering event payload as the primary handoff signal; use `.ralph/current_direction.md` only as fallback.
+      Read `.ralph/hats/analyst.md` and follow it.
+      LEARNINGS.md: 30 lines max. Core finding, why, one implication.
+      Do NOT create or modify antipattern memories. Do NOT write taxonomies or sub-classifications.
+      Emit `learning.complete` and move on.

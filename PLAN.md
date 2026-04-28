@@ -97,7 +97,8 @@ A coding agent where every conversation trains a composable domain expert (adapt
 ### Platform
 - **Target hardware**: Apple M5 Pro 48GB. **MLX only — no CUDA, no RunPod, no torch on GPU.** The machine is unified-memory Metal-optimized; MLX is the native path and produces dramatically better code and runtime behaviour on this hardware.
 - **Base model**: `mlx-community/gemma-4-e4b-it-4bit` (dev) / `mlx-community/gemma-4-26b-a4b-it-4bit` (prod). BitNet-2B-4T is retained only as a tok/s speed-ceiling reference (165.6 tok/s), not as product base.
-- **Adapter approach**: PoLAR r=6 on `v_proj+o_proj`; Grassmannian A-matrices; exclusive routing.
+- **Adapter approach**: Standard LoRA r=6 via `mlx_lm.lora`. Current trained adapters (math, code, medical) are on `q_proj` per `exp_p1_t2_single_domain_training`. Future adapters should target `v_proj+o_proj` per F#627. Grassmannian A-matrices and PoLAR are research goals, not current reality.
+- **Trained adapter weights**: `adapters/{math,python,medical}/adapters.safetensors` (copied from `micro/models/exp_p1_t2_single_domain_training/adapters/`). Finance and legal are config-only stubs (no trained weights).
 
 ### Adapter vocabulary (glossary)
 Pierre uses three distinct adapter kinds. They share LoRA shape but train and compose differently. Use the matching tag when filing experiments.
