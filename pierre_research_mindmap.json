@@ -1,0 +1,195 @@
+{
+  "name": "LLM Alignment and Evaluation Datasets",
+  "children": [
+    {
+      "name": "Instruction and Dialogue Datasets",
+      "children": [
+        {
+          "name": "Anthropic HH-RLHF",
+          "children": [
+            {
+              "name": "Helpfulness Preference Data"
+            },
+            {
+              "name": "Harmlessness Preference Data"
+            },
+            {
+              "name": "Red Teaming Dialogues"
+            }
+          ]
+        },
+        {
+          "name": "OpenAssistant Conversations (OASST1)",
+          "children": [
+            {
+              "name": "Human-Generated Corpus"
+            },
+            {
+              "name": "35 Languages"
+            },
+            {
+              "name": "Crowd-Sourced Trees"
+            }
+          ]
+        },
+        {
+          "name": "LIMA",
+          "children": [
+            {
+              "name": "1,000 Curated Prompts"
+            },
+            {
+              "name": "Less Is More Principle"
+            },
+            {
+              "name": "Instruction Following"
+            }
+          ]
+        },
+        {
+          "name": "LMSYS-Chat-1M",
+          "children": [
+            {
+              "name": "Real-World User Prompts"
+            },
+            {
+              "name": "Chatbot Arena Conversations"
+            },
+            {
+              "name": "25 State-of-the-Art LLMs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reasoning and Coding Benchmarks",
+      "children": [
+        {
+          "name": "GSM8K",
+          "children": [
+            {
+              "name": "Grade School Math"
+            },
+            {
+              "name": "Multi-Step Reasoning"
+            },
+            {
+              "name": "Natural Language Solutions"
+            }
+          ]
+        },
+        {
+          "name": "HumanEval",
+          "children": [
+            {
+              "name": "164 Programming Problems"
+            },
+            {
+              "name": "Python Functions"
+            },
+            {
+              "name": "Unit Test Verification"
+            }
+          ]
+        },
+        {
+          "name": "FollowBench",
+          "children": [
+            {
+              "name": "Constraint Following"
+            },
+            {
+              "name": "Five Constraint Types"
+            },
+            {
+              "name": "Multi-Level mechanism"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Optimization Techniques",
+      "children": [
+        {
+          "name": "RLHF and PPO",
+          "children": [
+            {
+              "name": "Reinforcement Learning"
+            },
+            {
+              "name": "Outcome vs Process Supervision"
+            }
+          ]
+        },
+        {
+          "name": "DPO",
+          "children": [
+            {
+              "name": "Direct Preference Optimization"
+            },
+            {
+              "name": "Closed-Form Policy"
+            },
+            {
+              "name": "Simple Classification Loss"
+            }
+          ]
+        },
+        {
+          "name": "LoRA and QLoRA",
+          "children": [
+            {
+              "name": "Low-Rank Adaptation"
+            },
+            {
+              "name": "4-bit Quantization (NF4)"
+            },
+            {
+              "name": "Memory Efficient Finetuning"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Specialised Frameworks",
+      "children": [
+        {
+          "name": "OpenCodeInterpreter",
+          "children": [
+            {
+              "name": "Execution Feedback"
+            },
+            {
+              "name": "Iterative Refinement"
+            }
+          ]
+        },
+        {
+          "name": "X-LoRA",
+          "children": [
+            {
+              "name": "Mixture of Experts"
+            },
+            {
+              "name": "Protein Mechanics"
+            }
+          ]
+        },
+        {
+          "name": "LeJEPA",
+          "children": [
+            {
+              "name": "Joint-Embedding Architecture"
+            },
+            {
+              "name": "Self-Supervised Learning"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

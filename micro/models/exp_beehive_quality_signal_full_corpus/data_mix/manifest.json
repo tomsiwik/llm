@@ -1,0 +1,83 @@
+{
+  "filters": {
+    "quality": "balanced-mix"
+  },
+  "n_total": 48,
+  "n_train": 43,
+  "n_valid": 5,
+  "stratification": {
+    "train_by_type": {
+      "act": 16,
+      "full": 13,
+      "prepare": 8,
+      "integrate": 6
+    },
+    "valid_by_type": {
+      "act": 2,
+      "prepare": 1,
+      "integrate": 1,
+      "full": 1
+    },
+    "train_unique_skills": 29,
+    "valid_unique_skills": 5
+  },
+  "score_stats": {
+    "n_with_score": 42,
+    "min": 1,
+    "max": 90,
+    "mean": 13.476190476190476,
+    "median": 8
+  },
+  "valid_ids": [
+    "training-1629",
+    "training-1149",
+    "training-1665",
+    "training-1425",
+    "training-1360"
+  ],
+  "train_ids": [
+    "training-58",
+    "training-2098",
+    "training-1626",
+    "training-564",
+    "training-918",
+    "training-1577",
+    "training-1914",
+    "training-493",
+    "training-9",
+    "training-8",
+    "training-1773",
+    "training-1915",
+    "training-1351",
+    "training-2548",
+    "training-2096",
+    "training-57",
+    "training-1743",
+    "training-1676",
+    "training-1677",
+    "training-1998",
+    "training-1397",
+    "training-1662",
+    "training-1435",
+    "training-335",
+    "training-661",
+    "training-1056",
+    "training-59",
+    "training-1628",
+    "training-832",
+    "training-1907",
+    "training-12",
+    "training-637",
+    "training-2149",
+    "training-1395",
+    "training-1080",
+    "training-1708",
+    "training-1630",
+    "training-1",
+    "training-831",
+    "training-1913",
+    "training-10",
+    "training-1023",
+    "training-1675"
+  ]
+}

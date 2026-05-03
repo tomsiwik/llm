@@ -1,0 +1,120 @@
+{
+  "filters": {
+    "quality": "approved",
+    "type": "act",
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 34,
+  "n_train": 27,
+  "n_valid": 7,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "act": 27
+    },
+    "valid_by_type": {
+      "act": 7
+    },
+    "train_unique_skills": 27,
+    "valid_unique_skills": 7
+  },
+  "score_stats": {
+    "n_with_score": 34,
+    "min": 8,
+    "max": 9,
+    "mean": 8.029411764705882,
+    "median": 8
+  },
+  "train_ids": [
+    127,
+    112,
+    135,
+    150,
+    166,
+    141,
+    124,
+    85,
+    180,
+    121,
+    70,
+    94,
+    174,
+    101,
+    73,
+    67,
+    158,
+    2,
+    76,
+    177,
+    103,
+    153,
+    88,
+    97,
+    115,
+    163,
+    138
+  ],
+  "valid_ids": [
+    132,
+    144,
+    109,
+    130,
+    118,
+    79,
+    160
+  ],
+  "valid_meta": [
+    {
+      "id": 132,
+      "skill_name": "arize-ai-provider-integration",
+      "type": "act",
+      "score": 8,
+      "principle": "Troubleshoot and update Arize AI integrations by acting on the requested ax command first, then verifying with get/list output and preserving secrets through environment variables."
+    },
+    {
+      "id": 144,
+      "skill_name": "arize-instrumentation",
+      "type": "act",
+      "score": 8,
+      "principle": "Implement tracing as an additive, centralized setup that uses environment variables for credentials and preserves existing business logic."
+    },
+    {
+      "id": 109,
+      "skill_name": "anti-reversing-techniques",
+      "type": "act",
+      "score": 8,
+      "principle": "When a bypass crashes, debug the side effects of the skipped branch and repair with the smallest evidence-backed edit instead of broad NOPs."
+    },
+    {
+      "id": 130,
+      "skill_name": "architecture-patterns",
+      "type": "act",
+      "score": 8,
+      "principle": "When a dependency cycle crosses architecture layers, remove the outward dependency through a port and wire the concrete adapter at the edge."
+    },
+    {
+      "id": 118,
+      "skill_name": "apple-appstore-reviewer",
+      "type": "act",
+      "score": 8,
+      "principle": "When reviewing App Store findings, correct overclaims by re-checking cited files and downgrading unsupported blockers instead of preserving severe but false risks."
+    },
+    {
+      "id": 79,
+      "skill_name": "agent-owasp-compliance",
+      "type": "act",
+      "score": 8,
+      "principle": "When remediating ASI tool and policy gaps, patch the enforcement path itself: fail closed before tool execution, validate names and arguments deterministically, and prove denied cases with tests."
+    },
+    {
+      "id": 160,
+      "skill_name": "aspire",
+      "type": "act",
+      "score": 8,
+      "principle": "When Aspire reports missing service-discovery variables, correct AppHost resource relationships and rerun the same failing command before changing workload code."
+    }
+  ]
+}

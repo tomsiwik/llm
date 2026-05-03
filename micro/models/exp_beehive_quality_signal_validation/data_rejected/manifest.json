@@ -1,0 +1,239 @@
+{
+  "filters": {
+    "quality": "rejected",
+    "type": null,
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 77,
+  "n_train": 60,
+  "n_valid": 17,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "act": 22,
+      "full": 19,
+      "prepare": 1,
+      "integrate": 18
+    },
+    "valid_by_type": {
+      "act": 6,
+      "integrate": 5,
+      "full": 5,
+      "prepare": 1
+    },
+    "train_unique_skills": 25,
+    "valid_unique_skills": 13
+  },
+  "score_stats": {
+    "n_with_score": 77,
+    "min": 0,
+    "max": 90,
+    "mean": 3.8181818181818183,
+    "median": 0
+  },
+  "train_ids": [
+    30,
+    14,
+    22,
+    31,
+    170,
+    1,
+    5,
+    52,
+    23,
+    33,
+    54,
+    172,
+    81,
+    6,
+    28,
+    105,
+    9,
+    169,
+    37,
+    55,
+    41,
+    90,
+    50,
+    21,
+    34,
+    29,
+    20,
+    15,
+    47,
+    17,
+    39,
+    19,
+    63,
+    43,
+    38,
+    46,
+    92,
+    36,
+    83,
+    45,
+    147,
+    24,
+    91,
+    16,
+    62,
+    106,
+    64,
+    13,
+    27,
+    56,
+    44,
+    8,
+    58,
+    156,
+    51,
+    107,
+    173,
+    53,
+    11,
+    59
+  ],
+  "valid_ids": [
+    40,
+    82,
+    61,
+    10,
+    146,
+    57,
+    65,
+    12,
+    42,
+    148,
+    18,
+    49,
+    48,
+    26,
+    32,
+    25,
+    35
+  ],
+  "valid_meta": [
+    {
+      "id": 40,
+      "skill_name": "api-design-principles",
+      "type": "act",
+      "score": 0,
+      "principle": "When a contract test exposes verb-oriented read endpoints or unsafe methods, fix route shape, validation, and negative coverage together."
+    },
+    {
+      "id": 82,
+      "skill_name": "agent-supply-chain",
+      "type": "act",
+      "score": 0,
+      "principle": "During integrity verification, react to each concrete mismatch as evidence and fix the verifier or source state without regenerating a manifest that might hide tampering."
+    },
+    {
+      "id": 61,
+      "skill_name": "arize-ai-provider-integration",
+      "type": "act",
+      "score": 0,
+      "principle": "Troubleshoot Arize integration command failures only after observing the error, preserving existing integration IDs during credential or metadata updates."
+    },
+    {
+      "id": 10,
+      "skill_name": "add-educational-comments",
+      "type": "integrate",
+      "score": 90,
+      "principle": "The final response for educational commenting should report concrete edits and validation, plus any limitation such as a missing file or skipped 125% expansion for previously processed files, without dumping all comments back to the user."
+    },
+    {
+      "id": 146,
+      "skill_name": "arize-link",
+      "type": "full",
+      "score": 0,
+      "principle": "Validate Arize path IDs and time bounds before composing links, because syntactically plausible URLs can still 404 or show empty data."
+    },
+    {
+      "id": 57,
+      "skill_name": "architecture-patterns",
+      "type": "full",
+      "score": 5,
+      "principle": "Design clean architecture by keeping domain and use cases framework-free, crossing boundaries through ports, and proving the boundary with in-memory tests before wiring adapters."
+    },
+    {
+      "id": 65,
+      "skill_name": "arize-annotation",
+      "type": "integrate",
+      "score": 0,
+      "principle": "When reviewing annotation work, separate config schema, span-label upload, and UI-only queue workflows; block unsupported queue automation and unvalidated SDK updates."
+    },
+    {
+      "id": 12,
+      "skill_name": "agent-governance",
+      "type": "act",
+      "score": 1,
+      "principle": "During implementation, wrap tools with policy checks and verify denial, review, rate limit, and audit behavior from concrete test output."
+    },
+    {
+      "id": 42,
+      "skill_name": "appinsights-instrumentation",
+      "type": "full",
+      "score": 0,
+      "principle": "Instrument Azure-hosted web apps by first confirming framework and hosting, then choosing codeless App Service setup or repeatable resource plus SDK changes with the connection string in the hosted environment."
+    },
+    {
+      "id": 148,
+      "skill_name": "arize-link",
+      "type": "prepare",
+      "score": 0,
+      "principle": "Before making Arize links, classify the resource and inventory the exact identifiers needed so missing project, time, or base64 path IDs are caught early."
+    },
+    {
+      "id": 18,
+      "skill_name": "agent-supply-chain",
+      "type": "full",
+      "score": 0,
+      "principle": "Deterministic integrity gates should hash reviewed source files, exclude volatile artifacts, verify tamper signals, and only promote when manifest, required files, and pinned dependency checks all pass."
+    },
+    {
+      "id": 49,
+      "skill_name": "arch-linux-triage",
+      "type": "act",
+      "score": 0,
+      "principle": "When remediating Arch package-manager failures, prove ownership and trust state before deleting locks, refreshing keys, or completing a full upgrade."
+    },
+    {
+      "id": 48,
+      "skill_name": "arch-linux-triage",
+      "type": "full",
+      "score": 0,
+      "principle": "Confirm Arch environment and recent updates, then diagnose with systemctl, journalctl, and pacman before applying the smallest reversible fix."
+    },
+    {
+      "id": 26,
+      "skill_name": "ai-prompt-engineering-safety-review",
+      "type": "integrate",
+      "score": 0,
+      "principle": "Prompt safety integration should synthesize evidence by risk class, separate verified fixes from residual risks, and translate lessons into reusable review triggers and counterexamples."
+    },
+    {
+      "id": 32,
+      "skill_name": "algorithmic-art",
+      "type": "integrate",
+      "score": 0,
+      "principle": "Review algorithmic-art artifacts by mapping the philosophy, template contract, seeded randomness, and runtime UI evidence to concrete acceptance or fixes."
+    },
+    {
+      "id": 25,
+      "skill_name": "ai-prompt-engineering-safety-review",
+      "type": "act",
+      "score": 0,
+      "principle": "When prompt-safety verification fails, act on the failing risk class directly: inspect the failing fixture, patch the prompt or test expectation narrowly, rerun the focused command, and avoid unrelated prompt rewrites."
+    },
+    {
+      "id": 35,
+      "skill_name": "angular-migration",
+      "type": "integrate",
+      "score": 0,
+      "principle": "Review migration plans by checking strategy fit, interop sequencing, service and routing ownership, verification gates, and cleanup timing."
+    }
+  ]
+}

@@ -1,0 +1,294 @@
+{
+  "filters": {
+    "quality": "approved",
+    "type": null,
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 104,
+  "n_train": 83,
+  "n_valid": 21,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "act": 27,
+      "full": 28,
+      "integrate": 22,
+      "prepare": 6
+    },
+    "valid_by_type": {
+      "act": 7,
+      "full": 7,
+      "prepare": 1,
+      "integrate": 6
+    },
+    "train_unique_skills": 34,
+    "valid_unique_skills": 18
+  },
+  "score_stats": {
+    "n_with_score": 104,
+    "min": 8,
+    "max": 9,
+    "mean": 8.028846153846153,
+    "median": 8
+  },
+  "train_ids": [
+    121,
+    162,
+    70,
+    102,
+    112,
+    176,
+    100,
+    126,
+    86,
+    73,
+    171,
+    127,
+    88,
+    103,
+    177,
+    2,
+    178,
+    97,
+    166,
+    89,
+    141,
+    110,
+    67,
+    122,
+    164,
+    140,
+    7,
+    119,
+    71,
+    180,
+    131,
+    155,
+    120,
+    93,
+    95,
+    60,
+    76,
+    181,
+    167,
+    125,
+    101,
+    149,
+    174,
+    80,
+    75,
+    143,
+    69,
+    124,
+    115,
+    111,
+    142,
+    99,
+    74,
+    138,
+    154,
+    85,
+    94,
+    161,
+    153,
+    96,
+    150,
+    104,
+    72,
+    133,
+    117,
+    66,
+    108,
+    134,
+    157,
+    136,
+    159,
+    158,
+    129,
+    135,
+    175,
+    165,
+    98,
+    139,
+    87,
+    116,
+    123,
+    163,
+    179
+  ],
+  "valid_ids": [
+    130,
+    118,
+    79,
+    109,
+    160,
+    144,
+    78,
+    152,
+    3,
+    151,
+    84,
+    128,
+    4,
+    168,
+    137,
+    68,
+    113,
+    145,
+    132,
+    77,
+    114
+  ],
+  "valid_meta": [
+    {
+      "id": 130,
+      "skill_name": "architecture-patterns",
+      "type": "act",
+      "score": 8,
+      "principle": "When a dependency cycle crosses architecture layers, remove the outward dependency through a port and wire the concrete adapter at the edge."
+    },
+    {
+      "id": 118,
+      "skill_name": "apple-appstore-reviewer",
+      "type": "act",
+      "score": 8,
+      "principle": "When reviewing App Store findings, correct overclaims by re-checking cited files and downgrading unsupported blockers instead of preserving severe but false risks."
+    },
+    {
+      "id": 79,
+      "skill_name": "agent-owasp-compliance",
+      "type": "act",
+      "score": 8,
+      "principle": "When remediating ASI tool and policy gaps, patch the enforcement path itself: fail closed before tool execution, validate names and arguments deterministically, and prove denied cases with tests."
+    },
+    {
+      "id": 109,
+      "skill_name": "anti-reversing-techniques",
+      "type": "act",
+      "score": 8,
+      "principle": "When a bypass crashes, debug the side effects of the skipped branch and repair with the smallest evidence-backed edit instead of broad NOPs."
+    },
+    {
+      "id": 160,
+      "skill_name": "aspire",
+      "type": "act",
+      "score": 8,
+      "principle": "When Aspire reports missing service-discovery variables, correct AppHost resource relationships and rerun the same failing command before changing workload code."
+    },
+    {
+      "id": 144,
+      "skill_name": "arize-instrumentation",
+      "type": "act",
+      "score": 8,
+      "principle": "Implement tracing as an additive, centralized setup that uses environment variables for credentials and preserves existing business logic."
+    },
+    {
+      "id": 78,
+      "skill_name": "agent-owasp-compliance",
+      "type": "full",
+      "score": 8,
+      "principle": "Run ASI compliance as an evidence-first code audit across all ten risks, scoring only controls that are enforced before agent action and citing concrete files for every pass or gap."
+    },
+    {
+      "id": 152,
+      "skill_name": "arize-prompt-optimization",
+      "type": "full",
+      "score": 8,
+      "principle": "Use Arize trace and evaluation evidence to optimize the deployed LLM prompt, preserving runtime variables and validating with experiment metrics."
+    },
+    {
+      "id": 3,
+      "skill_name": "accessibility-compliance",
+      "type": "full",
+      "score": 9,
+      "principle": "Modal accessibility requires naming, focus entry, focus containment, dismissal, and focus return as a single behavior set."
+    },
+    {
+      "id": 151,
+      "skill_name": "arize-link",
+      "type": "prepare",
+      "score": 8,
+      "principle": "Before making Arize links, classify the resource and inventory the exact identifiers needed so missing project, time, or base64 path IDs are caught early."
+    },
+    {
+      "id": 84,
+      "skill_name": "agent-supply-chain",
+      "type": "full",
+      "score": 8,
+      "principle": "Deterministic integrity manifests should hash reviewed source files in stable order, exclude generated artifacts, and verify the recorded chain before promotion."
+    },
+    {
+      "id": 128,
+      "skill_name": "architecture-decision-records",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Skip or redirect ADR work for routine maintenance, but capture the rationale when the request is a near miss."
+    },
+    {
+      "id": 4,
+      "skill_name": "accessibility-compliance",
+      "type": "integrate",
+      "score": 9,
+      "principle": "Accessibility audit closure must distinguish code-owned fixes from content-owned blockers."
+    },
+    {
+      "id": 168,
+      "skill_name": "attack-tree-construction",
+      "type": "full",
+      "score": 8,
+      "principle": "Build attack trees from a clear attacker goal, preserving OR alternatives and AND dependencies before ranking leaves."
+    },
+    {
+      "id": 137,
+      "skill_name": "arize-evaluator",
+      "type": "full",
+      "score": 8,
+      "principle": "Verify Arize evaluator tasks from real data: resolve IDs, sample spans or runs, map every template variable, and treat run status as evidence."
+    },
+    {
+      "id": 68,
+      "skill_name": "arize-dataset",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Review dataset automation by grounding findings in concrete ax commands, schema handling, and export-count evidence rather than broad style preferences."
+    },
+    {
+      "id": 113,
+      "skill_name": "api-design-principles",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Review GraphQL API designs by grounding findings in schema shape, resolver behavior, pagination contracts, mutation payloads, and N plus one evidence."
+    },
+    {
+      "id": 145,
+      "skill_name": "arize-instrumentation",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Verification must distinguish local app success from Arize-side delivery failures, including missing project names, flush behavior, and credential or space mismatches."
+    },
+    {
+      "id": 132,
+      "skill_name": "arize-ai-provider-integration",
+      "type": "act",
+      "score": 8,
+      "principle": "Troubleshoot and update Arize AI integrations by acting on the requested ax command first, then verifying with get/list output and preserving secrets through environment variables."
+    },
+    {
+      "id": 77,
+      "skill_name": "agent-governance",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Synthesize governance reviews around pre-flight intent checks, tool-level enforcement, trust signals, and audit evidence, separating verified behavior from assumptions."
+    },
+    {
+      "id": 114,
+      "skill_name": "appinsights-instrumentation",
+      "type": "full",
+      "score": 8,
+      "principle": "Determine application stack and Azure hosting from evidence first, then choose App Insights instrumentation path that matches the hosting model and avoids unsupported configuration."
+    }
+  ]
+}

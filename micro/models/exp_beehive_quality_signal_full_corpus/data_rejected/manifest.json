@@ -1,0 +1,109 @@
+{
+  "filters": {
+    "quality": "rejected",
+    "type": null,
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 24,
+  "n_train": 18,
+  "n_valid": 6,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "integrate": 3,
+      "act": 7,
+      "full": 6,
+      "prepare": 2
+    },
+    "valid_by_type": {
+      "prepare": 1,
+      "full": 2,
+      "act": 2,
+      "integrate": 1
+    },
+    "train_unique_skills": 10,
+    "valid_unique_skills": 5
+  },
+  "score_stats": {
+    "n_with_score": 18,
+    "min": 1,
+    "max": 90,
+    "mean": 20.77777777777778,
+    "median": 8
+  },
+  "train_ids": [
+    "training-1665",
+    "training-9",
+    "training-1675",
+    "training-1914",
+    "training-1397",
+    "training-832",
+    "training-1998",
+    "training-12",
+    "training-8",
+    "training-1629",
+    "training-57",
+    "training-1913",
+    "training-1",
+    "training-831",
+    "training-59",
+    "training-1662",
+    "training-10",
+    "training-1677"
+  ],
+  "valid_ids": [
+    "training-1630",
+    "training-1628",
+    "training-58",
+    "training-1915",
+    "training-1676",
+    "training-1395"
+  ],
+  "valid_meta": [
+    {
+      "id": "training-1630",
+      "skill_name": "shadcn",
+      "type": "prepare",
+      "score": null,
+      "principle": "For preset switches, preserve customized components unless the user explicitly chooses overwrite."
+    },
+    {
+      "id": "training-1628",
+      "skill_name": "shadcn",
+      "type": "full",
+      "score": null,
+      "principle": "Use shadcn project context and docs before composing installed primitives; verify with real checks."
+    },
+    {
+      "id": "training-58",
+      "skill_name": "architecture-patterns",
+      "type": "act",
+      "score": 5,
+      "principle": "Repair dependency cycles by moving abstractions inward and concrete framework or storage implementations outward, then verify imports rather than relying on naming conventions."
+    },
+    {
+      "id": "training-1915",
+      "skill_name": "web-coder",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Integrate web changes from measured performance, accessibility, and browser-behavior evidence, separating supported improvements from release-blocking regressions."
+    },
+    {
+      "id": "training-1676",
+      "skill_name": "sql-optimization",
+      "type": "act",
+      "score": 8,
+      "principle": "When repairing a proposed SQL optimization, preserve semantics first and use plan/test feedback to distinguish real optimizer help from changes that merely look faster."
+    },
+    {
+      "id": "training-1395",
+      "skill_name": "python-mcp-server-generator",
+      "type": "full",
+      "score": null,
+      "principle": "Build complete Python MCP servers by matching transport to the client, using uv plus FastMCP, typed schemas, bounded access, and concrete verification."
+    }
+  ]
+}

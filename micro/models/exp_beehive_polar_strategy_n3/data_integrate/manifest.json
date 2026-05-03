@@ -1,0 +1,107 @@
+{
+  "filters": {
+    "quality": "approved",
+    "type": "integrate",
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 28,
+  "n_train": 22,
+  "n_valid": 6,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "integrate": 22
+    },
+    "valid_by_type": {
+      "integrate": 6
+    },
+    "train_unique_skills": 22,
+    "valid_unique_skills": 6
+  },
+  "score_stats": {
+    "n_with_score": 28,
+    "min": 8,
+    "max": 9,
+    "mean": 8.035714285714286,
+    "median": 8
+  },
+  "train_ids": [
+    95,
+    119,
+    4,
+    71,
+    164,
+    145,
+    77,
+    68,
+    131,
+    89,
+    104,
+    133,
+    125,
+    98,
+    116,
+    74,
+    113,
+    178,
+    110,
+    80,
+    175,
+    161
+  ],
+  "valid_ids": [
+    100,
+    122,
+    86,
+    136,
+    128,
+    181
+  ],
+  "valid_meta": [
+    {
+      "id": 100,
+      "skill_name": "algorithmic-art",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Review algorithmic-art artifacts by grounding findings in philosophy fit, template preservation, seeded determinism, parameter wiring, and verified behavior."
+    },
+    {
+      "id": 122,
+      "skill_name": "arch-linux-triage",
+      "type": "integrate",
+      "score": 8,
+      "principle": "A strong Arch triage answer ties remediation to observed service and journal evidence, includes reboot boundaries, and gives cleanup or rollback commands."
+    },
+    {
+      "id": 86,
+      "skill_name": "agent-supply-chain",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Supply-chain review synthesis should separate verified integrity evidence from unresolved provenance, dependency, or promotion-gate gaps and fail closed on unsupported claims."
+    },
+    {
+      "id": 136,
+      "skill_name": "arize-annotation",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Troubleshooting annotation-config failures should branch from the specific error and verify conflicts before reusing, deleting, or recreating schemas."
+    },
+    {
+      "id": 128,
+      "skill_name": "architecture-decision-records",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Skip or redirect ADR work for routine maintenance, but capture the rationale when the request is a near miss."
+    },
+    {
+      "id": 181,
+      "skill_name": "autoresearch",
+      "type": "integrate",
+      "score": 8,
+      "principle": "Autoresearch reporting must be bounded by results.tsv, git history, and measured benchmark output rather than memory or unsupported production claims."
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "filters": {
+    "quality": "approved",
+    "type": "prepare",
+    "skill_id": null,
+    "min_score": null
+  },
+  "n_total": 7,
+  "n_train": 6,
+  "n_valid": 1,
+  "val_frac": 0.2,
+  "seed": 42,
+  "balance_stratify": true,
+  "stratification": {
+    "train_by_type": {
+      "prepare": 6
+    },
+    "valid_by_type": {
+      "prepare": 1
+    },
+    "train_unique_skills": 6,
+    "valid_unique_skills": 1
+  },
+  "score_stats": {
+    "n_with_score": 7,
+    "min": 8,
+    "max": 8,
+    "mean": 8.0,
+    "median": 8
+  },
+  "train_ids": [
+    167,
+    157,
+    142,
+    7,
+    151,
+    154
+  ],
+  "valid_ids": [
+    139
+  ],
+  "valid_meta": [
+    {
+      "id": 139,
+      "skill_name": "arize-evaluator",
+      "type": "prepare",
+      "score": 8,
+      "principle": "For experiment evaluation, verify that experiment runs exist before creating tasks; datasets alone are not valid task targets."
+    }
+  ]
+}
